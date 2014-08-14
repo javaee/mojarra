@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:attribute="http://java.sun.com/jsf/composite/attribute">
+    <f:metadata>
+        <f:viewParam name="test" value="#{attributeTypeBean.test}" />
+    </f:metadata>
+    <h:head>
+        <title>Attribute type test</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <attribute:attributeType
+                untypedXliteral="literalValue"
+                untypedXwideEL="#{attributeTypeBean.animal}"
+                untypedXmediumEL="#{attributeTypeBean.dog}"
+                untypedXnarrowEL="#{attributeTypeBean.wienerdoodle}"
+                untypedXnullEL="#{attributeTypeBean.lostDog}"
+
+                typedXliteral="745"
+                typedXwideEL="#{attributeTypeBean.animal}"
+                typedXmediumEL="#{attributeTypeBean.dog}"
+                typedXnarrowEL="#{attributeTypeBean.wienerdoodle}"
+                typedXnullEL="#{attributeTypeBean.lostDog}"
+                />
+            <h:commandButton id="submit" value="reload" />
+        </h:form>
+    </h:body>
+</html>

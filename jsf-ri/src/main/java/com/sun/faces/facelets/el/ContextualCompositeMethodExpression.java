@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -70,8 +70,13 @@ import javax.el.ValueExpression;
 import javax.el.MethodInfo;
 import javax.el.ELContext;
 import javax.el.ELException;
+import javax.el.MethodNotFoundException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.validator.ValidatorException;
 import javax.faces.view.Location;
 
@@ -140,7 +145,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
     private final MethodExpression delegate;
     private final ValueExpression source;
     private final Location location;
-    private final transient UIComponent cc;
+    private String ccClientId;
 
 
     // -------------------------------------------------------- Constructors
@@ -153,8 +158,8 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
         this.source = source;
         this.location = null;
         FacesContext ctx = FacesContext.getCurrentInstance();
-        this.cc = UIComponent.getCurrentCompositeComponent(ctx);
-
+        UIComponent cc = UIComponent.getCurrentCompositeComponent(ctx);
+        cc.subscribeToEvent(PostAddToViewEvent.class, new SetClientIdListener(this));
     }
 
 
@@ -166,7 +171,8 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
         this.location = location;
         this.source = null;
         FacesContext ctx = FacesContext.getCurrentInstance();
-        this.cc = UIComponent.getCurrentCompositeComponent(ctx);
+        UIComponent cc = UIComponent.getCurrentCompositeComponent(ctx);
+        cc.subscribeToEvent(PostAddToViewEvent.class, new SetClientIdListener(this));
     }
 
 
@@ -200,7 +206,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
                 throw (ValidatorException) ele.getCause();
             }
             
-            if (source != null) {
+            if (source != null && ele instanceof MethodNotFoundException) {
                 // special handling when an ELException handling.  This is necessary
                 // when there are multiple levels of composite component nesting.
                 // When this happens, we need to evaluate the source expression
@@ -213,11 +219,26 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
 
                     }
 
-                } catch(Exception ex) {
+                } catch(ELException ex) {
+                    
+                    /*
+                     * If we got a validator exception it is actually correct to 
+                     * immediately bubble it up. 
+                     */
+                    if (ex.getCause() != null && ex.getCause() instanceof ValidatorException) {
+                        throw (ValidatorException) ex.getCause();
+                    }
+                    
                     if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING, ele.toString());
                         LOGGER.log(Level.WARNING,
-                            "jsf.facelets.el.method.expression.invoke.error:"+ex.toString(),
-                            new Object[] { source.getExpressionString() });
+                            "jsf.facelets.el.method.expression.invoke.error: {0} {1}",
+                                   new Object[] { ex.toString(),
+                                                  source.getExpressionString() });
+                    }
+                    
+                    if (!(ex instanceof MethodNotFoundException)) {
+                        throw ex;
                     }
                 }
             }
@@ -282,12 +303,10 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
             }
         }
         if (null == foundCc) {
-            foundCc = this.cc;
+            foundCc = ctx.getViewRoot().findComponent(ccClientId);
         }
 
-
         return manager.push(foundCc);
-
     }
 
 
@@ -297,6 +316,24 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
               CompositeComponentStackManager.getManager(ctx);
         manager.pop();
 
+    }
+
+    private class SetClientIdListener implements ComponentSystemEventListener {
+
+        private ContextualCompositeMethodExpression ccME;
+        
+        public SetClientIdListener() {
+        }
+        
+        public SetClientIdListener(ContextualCompositeMethodExpression ccME) {
+            this.ccME = ccME;
+        }
+
+        @Override
+        public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
+            ccME.ccClientId = event.getComponent().getClientId();
+            event.getComponent().unsubscribeFromEvent(PostAddToViewEvent.class, this);
+        }
     }
 
 } // END ContextualCompositeMethodExpression

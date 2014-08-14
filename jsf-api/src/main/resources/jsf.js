@@ -113,6 +113,23 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         var isIECache;
 
         /**
+         * Determine the version of IE.
+         * @ignore
+         */
+        var getIEVersion = function getIEVersion() {
+            if (typeof IEVersionCache !== "undefined") {
+                return IEVersionCache;
+            }
+            if (/MSIE ([0-9]+)/.test(navigator.userAgent)) {
+                IEVersionCache = parseInt(RegExp.$1);
+            } else {
+                IEVersionCache = -1;
+            }
+            return IEVersionCache;
+        }
+        var IEVersionCache;
+
+        /**
          * Determine if loading scripts into the page executes the script.
          * This is instead of doing a complicated browser detection algorithm.  Some do, some don't.
          * @returns {boolean} does including a script in the dom execute it?
@@ -197,7 +214,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             this.aborted = false;
             this.responseText = null;
             this.responseXML = null;
-            this.readyState = null;
+            this.readyState = 0;
             this.requestHeader = {};
             this.status = null;
             this.method = null;
@@ -245,8 +262,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         this.frame.width = "0";
                         this.frame.height = "0";
                         this.frame.style = "border:0";
-                        this.frame.onload = bind(this, this.callback);
+                        this.frame.frameBorder = 0;
                         document.body.appendChild(this.frame);
+                        this.frame.onload = bind(this, this.callback);
                     } else {
                         var div = document.createElement("div");
                         div.id = "frameDiv";
@@ -292,14 +310,22 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 this.requestParams = new Array();
                 for (var i=0; i<dataArray.length; i++) {
                     var nameValue = dataArray[i].split("=");
-                    input = document.createElement("input");
-                    input.setAttribute("type", "hidden");
-                    input.setAttribute("id", nameValue[0]);
-                    input.setAttribute("name", nameValue[0]);
-                    input.setAttribute("value", nameValue[1]);
-                    this.context.form.appendChild(input);
-                    this.requestParams.push(nameValue[0]);
+                    if (nameValue[0] === "javax.faces.source" ||
+                        nameValue[0] === "javax.faces.partial.event" ||
+                        nameValue[0] === "javax.faces.partial.execute" ||
+                        nameValue[0] === "javax.faces.partial.render" ||
+                        nameValue[0] === "javax.faces.partial.ajax" ||
+                        nameValue[0] === "javax.faces.behavior.event") {
+                        input = document.createElement("input");
+                        input.setAttribute("type", "hidden");
+                        input.setAttribute("id", nameValue[0]);
+                        input.setAttribute("name", nameValue[0]);
+                        input.setAttribute("value", nameValue[1]);
+                        this.context.form.appendChild(input);
+                        this.requestParams.push(nameValue[0]);
+                    }
                 }
+                this.requestParams.push(this.FRAME_PARTIAL_ID);
                 this.context.form.submit();
             },
             
@@ -340,8 +366,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     this.onreadystatechange(evt);                
                 } finally {
                     this.cleanupReqParams();
-                    this.frame = null;
-                    
                 }               
             },
             
@@ -349,31 +373,19 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              *@ignore
              */
             cleanupReqParams: function() {
-                var elements = this.context.form.childNodes;
-                
-                for (var i=0; i<elements.length; i++) {
-                    if (!elements[i].type === "hidden") {
-                        continue;
-                    }
-                    if (contains(this.requestParams, elements[i])) {
-                        var node = elements[i].parentNode.removeChild(elements[i]);
-                        node = null;                           
+                for (var i=0; i<this.requestParams.length; i++) {
+                    var elements = this.context.form.childNodes;
+                    for (var j=0; j<elements.length; j++) {
+                        if (!elements[j].type === "hidden") {
+                            continue;
+                        }
+                        if (elements[j].name === this.requestParams[i]) {
+                            var node = this.context.form.removeChild(elements[j]);
+                            node = null;                           
+                            break;
+                        }
                     }   
                 }
-                   
-                /**
-                 * @ignore
-                 */
-                function contains(arr, obj) {
-                    var returnVal = false;
-                    for(var i=0; i<arr.length; i++) {
-                        if (arr[i] === obj.id) {
-                            returnVal = true;
-                            break;
-                        } 
-                    } 
-                    return returnVal;
-                }               
             }
         };
         
@@ -820,7 +832,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          * @ignore
          */
         var isIE9Plus = function isIE9Plus() {
-            return typeof XDomainRequest !== "undefined" && typeof window.msPerformance !== "undefined";
+            var iev = getIEVersion();
+            if (iev >= 9) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
 
@@ -1178,6 +1195,29 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         };
 
         /**
+         * Find encoded url field for a given form.
+         * @param form
+         * @ignore
+         */
+        var getEncodedUrlElement = function getEncodedUrlElement(form) {
+            var encodedUrlElement = form['javax.faces.encodedURL'];
+
+            if (encodedUrlElement) {
+                return encodedUrlElement;
+            } else {
+                var formElements = form.elements;
+                for (var i = 0, length = formElements.length; i < length; i++) {
+                    var formElement = formElements[i];
+                    if (formElement.name && (formElement.name.indexOf('javax.faces.encodedURL') >= 0)) {
+                        return formElement;
+                    }
+                }
+            }
+
+            return undefined;
+        };
+
+        /**
          * Find view state field for a given form.
          * @param form
          * @ignore
@@ -1191,7 +1231,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var formElements = form.elements;
                 for (var i = 0, length = formElements.length; i < length; i++) {
                     var formElement = formElements[i];
-                    if (formElement.name == 'javax.faces.ViewState') {
+                    if (formElement.name && (formElement.name.indexOf('javax.faces.ViewState') >= 0)) {
                         return formElement;
                     }
                 }
@@ -1224,7 +1264,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // Now set the view state from the server into the DOM
                 // but only for the form that submitted the request.
 
-                stateForm = getFormForId(context.element.id);
+                if (typeof context.formid !== 'undefined' && context.formid !== null) {
+                    stateForm = getFormForId(context.formid);
+                } else {
+                    stateForm = getFormForId(context.element.id);
+                }
+
                 if (!stateForm || !stateForm.elements) {
                     // if the form went away for some reason, or it lacks elements 
                     // we're going to just return silently.
@@ -1237,7 +1282,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     field.name = "javax.faces.ViewState";
                     stateForm.appendChild(field);
                 }
-                field.value = state.nodeValue;
+                if (typeof state.wholeText !== 'undefined') {
+                    field.value = state.wholeText;
+                } else {
+                    field.value = state.nodeValue;
+                }
 
                 // Now set the view state from the server into the DOM
                 // for any form that is a render target.
@@ -1257,7 +1306,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                                     field.name = "javax.faces.ViewState";
                                     f.appendChild(field);
                                 }
-                                field.value = state.nodeValue;
+                                if (typeof state.wholeText !== 'undefined') {
+                                    field.value = state.wholeText;
+                                } else {
+                                    field.value = state.nodeValue;
+                                }
                             }
                         }
                     }
@@ -1529,15 +1582,13 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     } else if (name === 'style') {
                         target.style.setAttribute('cssText', value, 0);
                     } else if (name.substring(0, 2) === 'on') {
-                        /**
-                         * @ignore
-                         */
-                        var fn = function(value) {
-                            return function() {
-                                window.execScript(value);
-                            };
-                        }(value);
-                        target.setAttribute(name, fn, 0);
+                        var c = document.body.appendChild(document.createElement('span'));
+                        try {
+                            c.innerHTML = '<span ' + name + '="' + value + '"/>';
+                            target[name] = c.firstChild[name];
+                        } finally {
+                            document.body.removeChild(c);
+                        }
                     } else if (name === 'dir') {
                         if (jsf.getProjectStage() == 'Development') {
                             throw new Error("Cannot set 'dir' attribute in IE");
@@ -2362,14 +2413,20 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
                 var args = {};
 
-                args["javax.faces.source"] = element.id;
+                var namingContainerId = options["com.sun.faces.namingContainerId"];
+                
+                if (typeof(namingContainerId) === 'undefined' || options === null) {
+                	namingContainerId = "";
+                }                
+
+                args[namingContainerId + "javax.faces.source"] = element.id;
 
                 if (event && !!event.type) {
-                    args["javax.faces.partial.event"] = event.type;
+                    args[namingContainerId + "javax.faces.partial.event"] = event.type;
                 }
 
                 if ("resetValues" in options) {
-                    args["javax.faces.partial.resetValues"] = options.resetValues;
+                    args[namingContainerId + "javax.faces.partial.resetValues"] = options.resetValues;
                 }
 
                 // If we have 'execute' identifiers:
@@ -2393,11 +2450,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         } else {
                             options.execute = "@all";
                         }
-                        args["javax.faces.partial.execute"] = options.execute;
+                        args[namingContainerId + "javax.faces.partial.execute"] = options.execute;
                     }
                 } else {
                     options.execute = element.name + " " + element.id;
-                    args["javax.faces.partial.execute"] = options.execute;
+                    args[namingContainerId + "javax.faces.partial.execute"] = options.execute;
                 }
 
                 if (options.render) {
@@ -2410,7 +2467,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         } else {
                             options.render = "@all";
                         }
-                        args["javax.faces.partial.render"] = options.render;
+                        args[namingContainerId + "javax.faces.partial.render"] = options.render;
                     }
                 }
                 var explicitlyDoNotDelay = ((typeof options.delay == 'undefined') || (typeof options.delay == 'string') &&
@@ -2418,8 +2475,13 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var delayValue;
                 if (typeof options.delay == 'number') {
                     delayValue = options.delay;
-                } else if (!explicitlyDoNotDelay) {
-                    throw new Error('invalid value for delay option: ' + options.delay);
+                } else  {
+                    var converted = parseInt(options.delay);
+                    
+                    if (!explicitlyDoNotDelay && isNaN(converted)) {
+                        throw new Error('invalid value for delay option: ' + options.delay);
+                    }
+                    delayValue = converted;
                 }
 
                 // remove non-passthrough options
@@ -2432,16 +2494,18 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // copy all other options to args
                 for (var property in options) {
                     if (options.hasOwnProperty(property)) {
-                        args[property] = options[property];
+                        if (property != "com.sun.faces.namingContainerId") {
+                            args[namingContainerId + property] = options[property];
+                        }
                     }
                 }
 
-                args["javax.faces.partial.ajax"] = "true";
+                args[namingContainerId + "javax.faces.partial.ajax"] = "true";
                 args["method"] = "POST";
 
                 // Determine the posting url
 
-                var encodedUrlField = form.elements["javax.faces.encodedURL"];
+                var encodedUrlField = getEncodedUrlElement(form);
                 if (typeof encodedUrlField == 'undefined') {
                     args["url"] = form.action;
                 } else {
@@ -2454,7 +2518,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     ajaxEngine.context.onevent = onevent;
                     ajaxEngine.context.onerror = onerror;
                     ajaxEngine.context.sourceid = element.id;
-                    ajaxEngine.context.render = args["javax.faces.partial.render"];
+                    ajaxEngine.context.render = args[namingContainerId + "javax.faces.partial.render"];
                     ajaxEngine.sendRequest();
 
                     // null out element variables to protect against IE memory leak
@@ -2716,9 +2780,30 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var partialResponseId = partialResponse.getAttribute("id");
                 var responseType = partialResponse.firstChild;
 
+                for (var i = 0; i < partialResponse.childNodes.length; i++) {
+                    if (partialResponse.childNodes[i].nodeName === "error") {
+                        responseType = partialResponse.childNodes[i];
+                        break;
+                    }
+                }
+
                 if (responseType.nodeName === "error") { // it's an error
-                    var errorName = responseType.firstChild.firstChild.nodeValue;
-                    var errorMessage = responseType.firstChild.nextSibling.firstChild.nodeValue;
+                    var errorName = "";
+                    var errorMessage = "";
+                    
+                    var element = responseType.firstChild;
+                    if (element.nodeName === "error-name") {
+                        if (null != element.firstChild) {
+                            errorName = element.firstChild.nodeValue;
+                        }
+                    }
+                    
+                    element = responseType.firstChild.nextSibling;
+                    if (element.nodeName === "error-message") {
+                        if (null != element.firstChild) {
+                            errorMessage = element.firstChild.nodeValue;
+                        }
+                    }
                     sendError(request, context, "serverError", null, errorName, errorMessage);
                     sendEvent(request, context, "success");
                     return;
@@ -2873,6 +2958,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             }
             if (!el.disabled) {
                 switch (el.type) {
+                    case 'button':
                     case 'submit':
                     case 'reset':
                     case 'image':
@@ -2900,8 +2986,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         // this is for any input incl.  text', 'password', 'hidden', 'textarea'
                         var nodeName = el.nodeName.toLowerCase();
                         if (nodeName === "input" || nodeName === "select" ||
-                            nodeName === "button" || nodeName === "object" ||
-                            nodeName === "textarea") { 
+                            nodeName === "object" || nodeName === "textarea") { 
                             addField(el.name, el.value);
                         }
                         break;
@@ -2934,6 +3019,30 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         var FORM = "form";
         var WIN_ID = "javax.faces.ClientWindow";
 
+        /**
+         * Find javax.faces.ClientWindow field for a given form.
+         * @param form
+         * @ignore
+         */
+        var getWindowIdElement = function getWindowIdElement(form) {
+        	var windowIdElement = form['javax.faces.ClientWindow'];
+
+            if (windowIdElement) {
+                return windowIdElement;
+            } else {
+                var formElements = form.elements;
+                for (var i = 0, length = formElements.length; i < length; i++) {
+                    var formElement = formElements[i];
+                    console.log('!@#$ formElement.name=' + formElement.name);
+                    if (formElement.name.indexOf('javax.faces.ClientWindow') >= 0) {
+                        return formElement;
+                    }
+                }
+            }
+
+            return undefined;
+        };
+
         var fetchWindowIdFromForms = function (forms) {
             var result_idx = {};
             var result;
@@ -2941,7 +3050,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             for (var cnt = forms.length - 1; cnt >= 0; cnt--) {
                 var UDEF = 'undefined';
                 var currentForm = forms[cnt];
-                var windowId = currentForm[WIN_ID] && currentForm[WIN_ID].value;
+                var windowIdElement = getWindowIdElement(currentForm);
+                var windowId = windowIdElement && windowIdElement.value;
                 if (UDEF != typeof windowId) {
                     if (foundCnt > 0 && UDEF == typeof result_idx[windowId]) throw Error("Multiple different windowIds found in document");
                     result = windowId;

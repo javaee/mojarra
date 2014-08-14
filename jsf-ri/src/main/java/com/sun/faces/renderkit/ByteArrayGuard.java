@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -46,13 +46,15 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.faces.FacesException;
-
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.util.FacesLogger;
+import javax.crypto.spec.SecretKeySpec;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * <p>This utility class is to provide both encryption and
@@ -77,10 +79,6 @@ public final class ByteArrayGuard {
     private static final String KEY_ALGORITHM = "AES";
     private static final String CIPHER_CODE = "AES/CBC/PKCS5Padding";
     private static final String MAC_CODE = "HmacSHA256";
-    
-    private Mac encryptMac;
-    private Mac decryptMac;
-
     private SecretKey sk;
 
     // ------------------------------------------------------------ Constructors
@@ -123,6 +121,8 @@ public final class ByteArrayGuard {
             IvParameterSpec ivspec = new IvParameterSpec(iv);
             Cipher encryptCipher = Cipher.getInstance(CIPHER_CODE);
             encryptCipher.init(Cipher.ENCRYPT_MODE, sk, ivspec);
+            Mac encryptMac = Mac.getInstance(MAC_CODE);
+            encryptMac.init(sk);
             encryptMac.update(iv);
             // encrypt the plaintext
             byte[] encdata = encryptCipher.doFinal(bytes);
@@ -167,9 +167,11 @@ public final class ByteArrayGuard {
             decryptCipher.init(Cipher.DECRYPT_MODE, sk, ivspec);
 
             // verify MAC by regenerating it and comparing it with the received value
+            Mac decryptMac = Mac.getInstance(MAC_CODE);
+            decryptMac.init(sk);
             decryptMac.update(iv);
             decryptMac.update(encdata);
-            byte[] macBytesCalculated = decryptMac.doFinal();            
+            byte[] macBytesCalculated = decryptMac.doFinal();
             if (areArrayEqualsConstantTime(macBytes, macBytesCalculated)) {
                 // continue only if the MAC was valid
                 // System.out.println("Valid MAC found!");
@@ -184,7 +186,7 @@ public final class ByteArrayGuard {
             return null; // Signal to JSF runtime
         }
     }
-    
+
     private boolean areArrayEqualsConstantTime(byte[] array1, byte[] array2) {
         boolean result = true;
         for(int i=0; i<array1.length; i++) {
@@ -203,18 +205,32 @@ public final class ByteArrayGuard {
      */
     private void setupKeyAndMac() {
 
+        /*
+         * Lets see if an encoded key was given to the application, if so use
+         * it and skip the code to generate it.
+         */
         try {
-            KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
-            kg.init(KEY_LENGTH);   // 256 if you're using the Unlimited Policy Files
-            sk = kg.generateKey(); 
+            InitialContext context = new InitialContext();
+            String encodedKeyArray = (String) context.lookup("java:comp/env/jsf/ClientSideSecretKey");
+            byte[] keyArray = DatatypeConverter.parseBase64Binary(encodedKeyArray);
+            sk = new SecretKeySpec(keyArray, KEY_ALGORITHM);
+        }
+        catch(NamingException exception) {
+            if (LOGGER.isLoggable(Level.FINEST)) { 
+                LOGGER.log(Level.FINEST, "Unable to find the encoded key.", exception);
+            }
+        }
+        
+        if (sk == null) {
+            try {
+                KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
+                kg.init(KEY_LENGTH);   // 256 if you're using the Unlimited Policy Files
+                sk = kg.generateKey(); 
+//                System.out.print("SecretKey: " + DatatypeConverter.printBase64Binary(sk.getEncoded()));
 
-            encryptMac = Mac.getInstance(MAC_CODE);
-            decryptMac = Mac.getInstance(MAC_CODE);
-            encryptMac.init(sk);
-            decryptMac.init(sk);
-
-        } catch (Exception e) {
-            throw new FacesException(e);
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
         }
     }
 

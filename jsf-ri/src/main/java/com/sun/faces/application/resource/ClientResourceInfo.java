@@ -224,6 +224,7 @@ public class ClientResourceInfo extends ResourceInfo {
                "name='" + name + '\'' +
                ", version=\'" + ((version != null) ? version : "NONE") + '\'' +
                ", libraryName='" + libraryName + '\'' +
+               ", contractInfo='" + (contract != null ? contract.contract : "NONE") + '\'' +
                ", libraryVersion='" + ((library != null) ? library.getVersion() : "NONE") + '\'' +
                ", localePrefix='" + ((localePrefix != null) ? localePrefix : "NONE") + '\'' +
                ", path='" + path + '\'' +

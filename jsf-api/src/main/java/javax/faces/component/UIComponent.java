@@ -268,7 +268,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     List<String> attributesThatAreSet;
     ComponentStateHelper stateHelper = null;
     UIComponent compositeParent;
-
+    
+    private transient Boolean isSetCurrentComponent;
 
     // -------------------------------------------------------------- Attributes
 
@@ -704,7 +705,6 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     public void setInView(boolean isInView) {
         this.isInView = isInView;
     }
-
 
     /**
      * <p class="changed_added_2_0">Enable EL to access the <code>clientId</code>
@@ -1878,6 +1878,32 @@ private void doFind(FacesContext context, String clientId) {
       return elStack;
     }
     
+    // bugdb 18090503 
+    
+    /*
+     * Respecting the fact that someone may have decorated FacesContextFactory
+     * and thus skipped our saving of this init param, look for the init
+     * param and return its value.  The return is saved in a transient ivar
+     * to provide performance while not perturbing state saving.
+     */
+    
+    private boolean isSetCurrentComponent(FacesContext context) {
+        if (null != isSetCurrentComponent) {
+            return isSetCurrentComponent;
+        }
+        
+        
+        Boolean bool = (Boolean) context.getAttributes().get(HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
+        if (null != bool) {
+            isSetCurrentComponent = bool;
+        } else {
+            String val = context.getExternalContext().getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
+            isSetCurrentComponent = Boolean.valueOf(val);           
+        }
+        
+        return isSetCurrentComponent;  
+    }
+    
     //private UIComponent previouslyPushed = null;
     //private UIComponent previouslyPushedCompositeComponent = null;
     //private boolean pushed;
@@ -1933,9 +1959,7 @@ private void doFind(FacesContext context, String clientId) {
         component._isPushedAsCurrentRefCount++;
         
         // we only do this because of the spec
-        boolean setCurrentComponent = false;
-        String val = context.getExternalContext().getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
-        setCurrentComponent = Boolean.valueOf(val);
+        boolean setCurrentComponent = isSetCurrentComponent(context);
         if (setCurrentComponent) {
             contextAttributes.put(UIComponent.CURRENT_COMPONENT, component);
         }
@@ -2017,10 +2041,7 @@ private void doFind(FacesContext context, String clientId) {
       componentELStack.pop();
       _isPushedAsCurrentRefCount--;
 
-        boolean setCurrentComponent = false;
-        String val = context.getExternalContext().getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
-        setCurrentComponent = Boolean.valueOf(val);
-
+        boolean setCurrentComponent = isSetCurrentComponent(context);
       
       // update the current component with the new top of stack.  We only do this because of the spec
         if (setCurrentComponent) {

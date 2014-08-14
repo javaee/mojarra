@@ -83,12 +83,12 @@ public class Issue2606IT {
     @Test
     public void testArticle() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/article.xhtml");
-        HtmlElement article1 = page.getElementById("article1");
+        HtmlElement article1 = page.getHtmlElementById("article1");
         String xml = article1.asXml();
         assertTrue(xml.contains("<article"));
         assertTrue(xml.contains("id=\"" + "article1" + "\""));
 
-        HtmlElement article2 = page.getElementById("article2");
+        HtmlElement article2 = page.getHtmlElementById("article2");
         xml = article2.asXml();
         assertTrue(xml.contains("<article"));
         assertTrue(xml.contains("id=\"" + "article2" + "\""));
@@ -105,12 +105,12 @@ public class Issue2606IT {
     @Test
     public void testAside() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/aside.xhtml");
-        HtmlElement aside1 = page.getElementById("aside1");
+        HtmlElement aside1 = page.getHtmlElementById("aside1");
         String xml = aside1.asXml();
         assertTrue(xml.contains("<aside"));
         assertTrue(xml.contains("id=\"" + "aside1" + "\""));
 
-        HtmlElement aside2 = page.getElementById("aside2");
+        HtmlElement aside2 = page.getHtmlElementById("aside2");
         xml = aside2.asXml();
         assertTrue(xml.contains("<aside"));
         assertTrue(xml.contains("id=\"" + "aside2" + "\""));
@@ -127,12 +127,12 @@ public class Issue2606IT {
     @Test
     public void testNav() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/nav.xhtml");
-        HtmlElement nav1 = page.getElementById("nav1");
+        HtmlElement nav1 = page.getHtmlElementById("nav1");
         String xml = nav1.asXml();
         assertTrue(xml.contains("<nav"));
         assertTrue(xml.contains("id=\"" + "nav1" + "\""));
 
-        HtmlElement nav2 = page.getElementById("nav2");
+        HtmlElement nav2 = page.getHtmlElementById("nav2");
         xml = nav2.asXml();
         assertTrue(xml.contains("<nav"));
         assertTrue(xml.contains("id=\"" + "nav2" + "\""));
@@ -149,12 +149,12 @@ public class Issue2606IT {
     @Test
     public void testSection() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/section.xhtml");
-        HtmlElement section1 = page.getElementById("section1");
+        HtmlElement section1 = page.getHtmlElementById("section1");
         String xml = section1.asXml();
         assertTrue(xml.contains("<section"));
         assertTrue(xml.contains("id=\"" + "section1" + "\""));
 
-        HtmlElement section2 = page.getElementById("section2");
+        HtmlElement section2 = page.getHtmlElementById("section2");
         xml = section2.asXml();
         assertTrue(xml.contains("<section"));
         assertTrue(xml.contains("id=\"" + "section2" + "\""));
@@ -171,12 +171,12 @@ public class Issue2606IT {
     @Test
     public void testHeaders() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/h1h2h3h4h5h6.xhtml");
-        HtmlElement h1 = page.getElementById("header1");
+        HtmlElement h1 = page.getHtmlElementById("header1");
         String xml = h1.asXml();
         assertTrue(xml.contains("<h1"));
         assertTrue(xml.contains("id=\"" + "header1" + "\""));
 
-        HtmlElement h2 = page.getElementById("header2");
+        HtmlElement h2 = page.getHtmlElementById("header2");
         xml = h2.asXml();
         assertTrue(xml.contains("<h2"));
         assertTrue(xml.contains("id=\"" + "header2" + "\""));
@@ -189,22 +189,22 @@ public class Issue2606IT {
         assertTrue(page.asXml().contains("header2 Event: complete"));
         assertTrue(page.asXml().contains("header2 Event: success"));
 
-        HtmlElement h3 = page.getElementById("header3");
+        HtmlElement h3 = page.getHtmlElementById("header3");
         xml = h3.asXml();
         assertTrue(xml.contains("<h3"));
         assertTrue(xml.contains("id=\"" + "header3" + "\""));
 
-        HtmlElement h4 = page.getElementById("header4");
+        HtmlElement h4 = page.getHtmlElementById("header4");
         xml = h4.asXml();
         assertTrue(xml.contains("<h4"));
         assertTrue(xml.contains("id=\"" + "header4" + "\""));
 
-        HtmlElement h5 = page.getElementById("header5");
+        HtmlElement h5 = page.getHtmlElementById("header5");
         xml = h5.asXml();
         assertTrue(xml.contains("<h5"));
         assertTrue(xml.contains("id=\"" + "header5" + "\""));
 
-        HtmlElement h6 = page.getElementById("header6");
+        HtmlElement h6 = page.getHtmlElementById("header6");
         xml = h6.asXml();
         assertTrue(xml.contains("<h6"));
         assertTrue(xml.contains("id=\"" + "header6" + "\""));
@@ -213,7 +213,7 @@ public class Issue2606IT {
     @Test
     public void testHeaderGroup() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/hgroup.xhtml");
-        HtmlElement hgroup = page.getElementById("hgroup");
+        HtmlElement hgroup = page.getHtmlElementById("hgroup");
         String xml = hgroup.asXml();
         assertTrue(xml.contains("<hgroup"));
         assertTrue(xml.contains("id=\"" + "hgroup" + "\""));

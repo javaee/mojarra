@@ -204,7 +204,7 @@ public abstract class FacesContext {
             if (partialViewContextForInvalidFactoryConstruction == null) {
                 PartialViewContextFactory f = (PartialViewContextFactory)
                       FactoryFinder.getFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY);
-                partialViewContextForInvalidFactoryConstruction = f.getPartialViewContext(this);
+                partialViewContextForInvalidFactoryConstruction = f.getPartialViewContext(FacesContext.getCurrentInstance());
             }
             return partialViewContextForInvalidFactoryConstruction;
         }

@@ -41,21 +41,20 @@
 package com.sun.faces.renderkit.html_basic;
 
 
+import com.sun.faces.renderkit.Attribute;
+import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-
-import com.sun.faces.renderkit.Attribute;
-import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.util.Util;
 
 /** <p>Render a {@link UIData} component as a two-dimensional table.</p> */
 
@@ -266,6 +265,7 @@ public class TableRenderer extends BaseTableRenderer {
                 }
                 UIComponent facet = getFacet(column, "footer");
                 if (facet != null) {
+                    writer.writeText("", table, null);
                     encodeRecursive(context, facet);
                 }
                 writer.endElement("td");
@@ -415,10 +415,38 @@ public class TableRenderer extends BaseTableRenderer {
     		throws IOException {
     	
     	writer.startElement("tr", component);
-    	writer.startElement("td", component);
-    	writer.endElement("td");
+        List<UIColumn> columns = getColumns(component);
+        for (UIColumn column : columns) {
+            if (column.isRendered()) {
+                writer.startElement("td", component);
+                writer.endElement("td");
+            }
+        }
     	writer.endElement("tr");
-    
     }
 
+    /**
+     * <p>Return an Iterator over the <code>UIColumn</code> children of the
+     * specified <code>UIData</code> that have a <code>rendered</code> property
+     * of <code>true</code>.</p>
+     *
+     * @param table the table from which to extract children
+     *
+     * @return the List of all UIColumn children
+     */
+    private List<UIColumn> getColumns(UIComponent table) {
+        int childCount = table.getChildCount();
+        if (childCount > 0) {
+            List<UIColumn> results =
+                  new ArrayList<UIColumn>(childCount);
+            for (UIComponent kid : table.getChildren()) {
+                if ((kid instanceof UIColumn) && kid.isRendered()) {
+                    results.add((UIColumn) kid);
+                }
+            }
+            return results;
+        } else {
+            return Collections.emptyList();
+        }
+    }
 }

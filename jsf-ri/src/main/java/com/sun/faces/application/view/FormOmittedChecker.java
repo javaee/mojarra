@@ -119,7 +119,7 @@ class FormOmittedChecker {
      * @return true if it is a form, false otherwise.
      */
     private static boolean isForm(UIComponent component) {
-        return (component instanceof UIForm || component.getFamily().endsWith("Form"));
+        return (component instanceof UIForm || (component.getFamily() != null && component.getFamily().endsWith("Form")));
     }
 
     /**

@@ -57,6 +57,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIViewRoot;
 
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
@@ -71,9 +72,11 @@ import com.sun.faces.util.RequestStateManager;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.NamespaceParameters;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfLogicalViews;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfViews;
 import com.sun.faces.config.WebConfiguration;
+import java.util.Collections;
 import javax.faces.render.ResponseStateManager;
 
 /**
@@ -119,6 +122,12 @@ public class ServerSideStateHelper extends StateHelper {
 
 
     /**
+     * Flag determining whether or not javax.faces.ViewState should be namespaced.
+     */
+    protected boolean namespaceParameters;
+
+
+    /**
      * Used to generate unique server state IDs.
      */
     protected final Random random;
@@ -142,6 +151,7 @@ public class ServerSideStateHelper extends StateHelper {
         } else {
             random = null;
         }
+        namespaceParameters = webConfig.isOptionEnabled(NamespaceParameters);
 
     }
 
@@ -173,64 +183,71 @@ public class ServerSideStateHelper extends StateHelper {
 
         String id;
         
-        if (!ctx.getViewRoot().isTransient()) {
-            Util.notNull("state", state);
-            Object[] stateToWrite = (Object[]) state;
-            ExternalContext externalContext = ctx.getExternalContext();
-            Object sessionObj = externalContext.getSession(true);
-            Map<String, Object> sessionMap = externalContext.getSessionMap();
+        UIViewRoot viewRoot = ctx.getViewRoot();
 
-            //noinspection SynchronizationOnLocalVariableOrMethodParameter
-            synchronized (sessionObj) {
-                Map<String, Map> logicalMap = TypedCollections.dynamicallyCastMap(
-                      (Map) sessionMap
-                            .get(LOGICAL_VIEW_MAP), String.class, Map.class);
-                if (logicalMap == null) {
-                    logicalMap = new LRUMap<String, Map>(numberOfLogicalViews);
+        if (!viewRoot.isTransient()) {
+            if (!ctx.getAttributes().containsKey("com.sun.faces.ViewStateValue")) {
+                Util.notNull("state", state);
+                Object[] stateToWrite = (Object[]) state;
+                ExternalContext externalContext = ctx.getExternalContext();
+                Object sessionObj = externalContext.getSession(true);
+                Map<String, Object> sessionMap = externalContext.getSessionMap();
+
+                //noinspection SynchronizationOnLocalVariableOrMethodParameter
+                synchronized (sessionObj) {
+                    Map<String, Map> logicalMap = TypedCollections.dynamicallyCastMap(
+                          (Map) sessionMap
+                                .get(LOGICAL_VIEW_MAP), String.class, Map.class);
+                    if (logicalMap == null) {
+                        logicalMap = Collections.synchronizedMap(new LRUMap<String, Map>(numberOfLogicalViews));
+                        sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
+                    }
+
+                    Object structure = stateToWrite[0];
+                    Object savedState = handleSaveState(stateToWrite[1]);
+
+                    String idInLogicalMap = (String)
+                              RequestStateManager.get(ctx, RequestStateManager.LOGICAL_VIEW_MAP);
+                    if (idInLogicalMap == null) {
+                        idInLogicalMap = ((generateUniqueStateIds)
+                                              ? createRandomId()
+                                              : createIncrementalRequestId(ctx));
+                    }
+                    String idInActualMap = null;
+                    if(ctx.getPartialViewContext().isPartialRequest()){
+                        // If partial request, do not change actual view Id, because page not actually changed.
+                        // Otherwise partial requests will soon overflow cache with values that would be never used.
+                        idInActualMap = (String) RequestStateManager.get(ctx, RequestStateManager.ACTUAL_VIEW_MAP);
+                    }
+                    if (null == idInActualMap) {
+                            idInActualMap = ((generateUniqueStateIds) ? createRandomId()
+                                                        : createIncrementalRequestId(ctx));
+                    }
+                    Map<String, Object[]> actualMap =
+                          TypedCollections.dynamicallyCastMap(
+                                logicalMap.get(idInLogicalMap), String.class, Object[].class);
+                    if (actualMap == null) {
+                        actualMap = new LRUMap<String, Object[]>(numberOfViews);
+                        logicalMap.put(idInLogicalMap, actualMap);
+                    }
+
+                    id = idInLogicalMap + ':' + idInActualMap;
+
+                    Object[] stateArray = actualMap.get(idInActualMap);
+                    // reuse the array if possible
+                    if (stateArray != null) {
+                        stateArray[0] = structure;
+                        stateArray[1] = savedState;
+                    } else {
+                        actualMap.put(idInActualMap, new Object[]{ structure, savedState });
+                    }
+
+                    // always call put/setAttribute as we may be in a clustered environment.
                     sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
+                    ctx.getAttributes().put("com.sun.faces.ViewStateValue", id);
                 }
-
-                Object structure = stateToWrite[0];
-                Object savedState = handleSaveState(stateToWrite[1]);
-
-                String idInLogicalMap = (String)
-                          RequestStateManager.get(ctx, RequestStateManager.LOGICAL_VIEW_MAP);
-                if (idInLogicalMap == null) {
-                    idInLogicalMap = ((generateUniqueStateIds)
-                                          ? createRandomId()
-                                          : createIncrementalRequestId(ctx));
-                }
-                String idInActualMap = null;
-                if(ctx.getPartialViewContext().isPartialRequest()){
-                    // If partial request, do not change actual view Id, because page not actually changed.
-                    // Otherwise partial requests will soon overflow cache with values that would be never used.
-                    idInActualMap = (String) RequestStateManager.get(ctx, RequestStateManager.ACTUAL_VIEW_MAP);
-                }
-                if (null == idInActualMap) {
-                        idInActualMap = ((generateUniqueStateIds) ? createRandomId()
-                                                    : createIncrementalRequestId(ctx));
-                }
-                Map<String, Object[]> actualMap =
-                      TypedCollections.dynamicallyCastMap(
-                            logicalMap.get(idInLogicalMap), String.class, Object[].class);
-                if (actualMap == null) {
-                    actualMap = new LRUMap<String, Object[]>(numberOfViews);
-                    logicalMap.put(idInLogicalMap, actualMap);
-                }
-
-                id = idInLogicalMap + ':' + idInActualMap;
-                
-                Object[] stateArray = actualMap.get(idInActualMap);
-                // reuse the array if possible
-                if (stateArray != null) {
-                    stateArray[0] = structure;
-                    stateArray[1] = savedState;
-                } else {
-                    actualMap.put(idInActualMap, new Object[]{ structure, savedState });
-                }
-
-                // always call put/setAttribute as we may be in a clustered environment.
-                sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
+            } else {
+                id = (String) ctx.getAttributes().get("com.sun.faces.ViewStateValue");
             }
         } else {
             id = "stateless";
@@ -243,7 +260,16 @@ public class ServerSideStateHelper extends StateHelper {
 
             writer.startElement("input", null);
             writer.writeAttribute("type", "hidden", null);
-            writer.writeAttribute("name", ResponseStateManager.VIEW_STATE_PARAM, null);
+
+            String viewStateParam = ResponseStateManager.VIEW_STATE_PARAM;
+            
+            if ((namespaceParameters) && (viewRoot instanceof NamingContainer)) {
+                String namingContainerId = viewRoot.getContainerClientId(ctx);
+                if (namingContainerId != null) {
+            	    viewStateParam = namingContainerId + viewStateParam;
+                }
+            }
+            writer.writeAttribute("name", viewStateParam, null);
             if (webConfig.isOptionEnabled(EnableViewStateIdRendering)) {
                 String viewStateId = Util.getViewStateId(ctx);
                 writer.writeAttribute("id", viewStateId, null);
@@ -310,16 +336,21 @@ public class ServerSideStateHelper extends StateHelper {
                                             RequestStateManager.LOGICAL_VIEW_MAP,
                                             idInLogicalMap);
                     Object[] state = (Object[]) actualMap.get(idInActualMap);
+                    Object[] restoredState = new Object[2];
+                    
+                    restoredState[0] = state[0];
+                    restoredState[1] = state[1];
+                    
                     if(state != null){
                         RequestStateManager.set(ctx,
                                                 RequestStateManager.ACTUAL_VIEW_MAP,
                                                 idInActualMap);
                         if (state.length == 2 && state[1] != null) {
-                            state[1] = handleRestoreState(state[1]);
+                            restoredState[1] = handleRestoreState(state[1]);
                         }
                     }
 
-                    return state;
+                    return restoredState;
                 }
             }
         }

@@ -46,7 +46,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -132,5 +134,19 @@ public class Issue2641IT {
         webClient.getPage(webUrl + "faces/invalidatedPerform.xhtml");
         page = webClient.getPage(webUrl + "faces/invalidatedVerify.xhtml");
         assertTrue(page.asText().indexOf("true") != -1);
+    }
+    
+    @Test
+    public void testViewScopedInput() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/viewScopedInput.xhtml");
+        HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
+        String value = ""+System.currentTimeMillis();
+        input.setValueAttribute(value);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("stay");
+        page = button.click();
+        DomElement output = page.getElementById("output");
+        assertTrue(output.asText().contains(value));
+        
+        
     }
 }

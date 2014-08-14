@@ -65,7 +65,13 @@ public class UIViewRootTest {
         
         setFacesContext(facesContext);
 
+        expect(facesContext.getExternalContext()).andReturn(externalContext).anyTimes();
+        expect(externalContext.getApplicationMap()).andReturn(null).anyTimes();
+        replay(facesContext, externalContext);
         UIViewRoot viewRoot = new UIViewRoot();
+        verify(facesContext, externalContext);
+        
+        reset(facesContext, externalContext);
         expect(facesContext.getApplication()).andReturn(application).anyTimes();
         expect(application.getProjectStage()).andReturn(ProjectStage.UnitTest);
         application.publishEvent(facesContext, PostConstructViewMapEvent.class, viewRoot);
@@ -86,7 +92,13 @@ public class UIViewRootTest {
         
         setFacesContext(facesContext);
         
+        expect(facesContext.getExternalContext()).andReturn(externalContext).anyTimes();
+        expect(externalContext.getApplicationMap()).andReturn(null).anyTimes();
+        replay(facesContext, externalContext);
         UIViewRoot viewRoot = new UIViewRoot();
+        verify(facesContext, externalContext);
+        
+        reset(facesContext, externalContext);
         expect(facesContext.getApplication()).andReturn(application).anyTimes();
         expect(application.getProjectStage()).andReturn(ProjectStage.UnitTest);
         application.publishEvent(facesContext, PostConstructViewMapEvent.class, viewRoot);
@@ -115,9 +127,23 @@ public class UIViewRootTest {
         HttpSession httpSession = EasyMock.createMock(HttpSession.class);
         HashMap<Object, Object> attributes = new HashMap<Object, Object>();
         HashMap<String, Object> sessionMap = new HashMap<String, Object>();
-        UIViewRoot viewRoot1 = new UIViewRoot();
-        UIViewRoot viewRoot2 = new UIViewRoot();
+
         setFacesContext(facesContext);
+                
+        expect(facesContext.getExternalContext()).andReturn(externalContext).anyTimes();
+        expect(externalContext.getApplicationMap()).andReturn(null).anyTimes();
+        replay(facesContext, externalContext);
+        UIViewRoot viewRoot1 = new UIViewRoot();
+        verify(facesContext, externalContext);        
+        reset(facesContext, externalContext);
+        
+        expect(facesContext.getExternalContext()).andReturn(externalContext).anyTimes();
+        expect(externalContext.getApplicationMap()).andReturn(null).anyTimes();
+        replay(facesContext, externalContext);
+        UIViewRoot viewRoot2 = new UIViewRoot();
+        verify(facesContext, externalContext);        
+        reset(facesContext, externalContext);
+                
         expect(facesContext.getAttributes()).andReturn(attributes).anyTimes();
         expect(facesContext.getApplication()).andReturn(application).anyTimes();
         expect(application.getProjectStage()).andReturn(ProjectStage.UnitTest).anyTimes();

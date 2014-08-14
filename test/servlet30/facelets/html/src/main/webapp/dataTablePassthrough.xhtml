@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head />
+    <h:body>
+        <h:dataTable value="#{dataTablePassthroughBean.entities}" var="entity">
+            <h:column>
+                <f:facet name="footer">
+                    Name
+                </f:facet>
+                <f:passThroughAttribute name="data-order" value="#{entity.modifiedOn}" />
+                <h:outputText value="#{entity.name}" />
+            </h:column>
+        </h:dataTable>
+        <h:messages />
+    </h:body>
+</html>

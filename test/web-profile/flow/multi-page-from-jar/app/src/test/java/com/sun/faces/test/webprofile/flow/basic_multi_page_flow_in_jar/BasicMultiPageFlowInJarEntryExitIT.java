@@ -49,6 +49,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 public class BasicMultiPageFlowInJarEntryExitIT {
     /**

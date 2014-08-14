@@ -60,7 +60,7 @@ import javax.servlet.ServletContext;
 /**
  * Helper class to interface with the Groovy runtime.
  */
-class GroovyHelperImpl extends GroovyHelper {
+public class GroovyHelperImpl extends GroovyHelper {
 
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
@@ -192,7 +192,7 @@ class GroovyHelperImpl extends GroovyHelper {
 
     // ----------------------------------------------------------- Inner Classes
 
-    private static final class MojarraGroovyClassLoader extends URLClassLoader {
+    public static final class MojarraGroovyClassLoader extends URLClassLoader {
 
         private GroovyScriptEngine gse;
 

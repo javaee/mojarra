@@ -57,4 +57,11 @@ public @interface JsfTest {
      * @return the JSF version.
      */
     JsfVersion value();
+    
+    /**
+     * Determine the excludes 
+     * 
+     * @return the excludes.
+     */
+    JsfServerExclude[] excludes() default {};
 }

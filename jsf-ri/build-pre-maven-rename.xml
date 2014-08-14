@@ -95,6 +95,7 @@
     <property name="DocName" value="Mojarra Implementation Javadoc"/>
 
     <path id="impl.compile.classpath">
+        <path refid="cdi.classpath"/>
         <pathelement location="${jsf-api.jar}"/>
         <path refid="apache.commons.classpath"/>
         <path refid="compile.classpath"/>
@@ -816,12 +817,15 @@ ant -Dgpg.passphrase=PASSPHRASE HERE mvn.deploy.snapshot.local
         <javadoc packagenames="javax.*"
                  destdir="${build.javadocs.dir}"
                  private="${javadoc.private}"
-                 link="http://java.sun.com/javase/6/docs/api/"
                  protected="${javadoc.protected}"
                  windowtitle="${DocName} (${spec.version})"
                  source="1.5"
                  doctitle="${DocName} (${spec.version})"
                  bottom="Copyright &#169; 2002-2010 Oracle America, Inc. All Rights Reserved.">
+           <link offline="true"
+                 href="http://java.sun.com/javase/6/docs/api/package-list"
+                 packagelistloc="${jsf.build.home}/common/ant/package-list" />
+                 
             <fileset dir="${source.dir}">
                 <include name="com/sun/faces/spi/**/*.java"/>
             </fileset>

@@ -40,6 +40,7 @@
  */
 package com.sun.faces.flow;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -49,7 +50,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.flow.SwitchCase;
 import javax.faces.flow.SwitchNode;
 
-public class SwitchNodeImpl extends SwitchNode {
+public class SwitchNodeImpl extends SwitchNode implements Serializable {
+    
+    private static final long serialVersionUID = -9203493858518714933L;
         
     private final String id;
     private ValueExpression defaultOutcome;

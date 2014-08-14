@@ -413,6 +413,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                                           disableUnicodeEscaping,
                                           isPartial);
             responseWriter.dontEscape = this.dontEscape;
+            responseWriter.writingCdata = this.writingCdata;
             return responseWriter;
             
         } catch (FacesException e) {
@@ -551,6 +552,9 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
         isScript = false;
         isStyle = false;
+        
+        dontEscape = false;
+        
         if ("cdata".equalsIgnoreCase(name)) {
             endCDATA();
             return;
@@ -566,6 +570,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                 flushAttributes();
                 writer.write(" />");
                 closeStart = false;
+                popElementName(name);
                 return;
             }
             flushAttributes();
@@ -1169,8 +1174,9 @@ public class HtmlResponseWriter extends ResponseWriter {
                 Object valObj = entry.getValue();
                 String val = getAttributeValue(context, valObj);
                 String key = entry.getKey();
-
-                writeURIAttributeIgnoringPassThroughAttributes(key, val, key, true);
+                if (val != null) {
+                    writeURIAttributeIgnoringPassThroughAttributes(key, val, key, true);
+                }
             }
         }
 
@@ -1207,14 +1213,20 @@ public class HtmlResponseWriter extends ResponseWriter {
     private String getAttributeValue(FacesContext context, Object valObj) {
         String val;
         if (valObj instanceof ValueExpression) {
-            val = (String) ((ValueExpression) valObj).getValue(context.getELContext());
+            Object result = ((ValueExpression) valObj).getValue(context.getELContext());
+            val = result != null ? result.toString() : null;
         } else {
-            val = (String) valObj;
+            val = valObj.toString();
         }
         return val;
     }
 
     private String pushElementName(String original) {
+        
+        if (original.equals("option")) {
+            return original;
+        }
+        
         String name = getElementName(original);
 
         if(passthroughAttributes != null) {

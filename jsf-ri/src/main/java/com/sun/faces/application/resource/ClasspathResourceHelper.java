@@ -42,6 +42,7 @@ package com.sun.faces.application.resource;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.faces.component.UIViewRoot;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,7 +53,6 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 
-import java.util.Collections;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableMissingResourceLibraryDetection;
 
@@ -177,18 +177,18 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     
     /**
-     * @see ResourceHelper#findLibrary(String, String, javax.faces.context.FacesContext)
+     * @see ResourceHelper#findLibrary(String, String, String, javax.faces.context.FacesContext)
      */
     public LibraryInfo findLibrary(String libraryName,
                                    String localePrefix,
-                                   FacesContext ctx) {
+                                   String contract, FacesContext ctx) {
 
         ClassLoader loader = Util.getCurrentLoader(this);
         String basePath;
         if (localePrefix == null) {
-            basePath = getBaseResourcePath() + '/' + libraryName + '/';
+            basePath = getBasePath(contract) + '/' + libraryName + '/';
         } else {
-            basePath = getBaseResourcePath()
+            basePath = getBasePath(contract)
                        + '/'
                        + localePrefix
                        + '/'
@@ -205,20 +205,20 @@ public class ClasspathResourceHelper extends ResourceHelper {
             }
         }
 
-        return new LibraryInfo(libraryName, null, localePrefix, this);
+        return new LibraryInfo(libraryName, null, localePrefix, contract, this);
         
     }
 
     public LibraryInfo findLibraryWithZipDirectoryEntryScan(String libraryName,
-                                   String localePrefix,
-                                   FacesContext ctx, boolean forceScan) {
+                                                            String localePrefix,
+                                                            String contract, FacesContext ctx, boolean forceScan) {
 
         ClassLoader loader = Util.getCurrentLoader(this);
         String basePath;
         if (localePrefix == null) {
-            basePath = getBaseResourcePath() + '/' + libraryName + '/';
+            basePath = getBasePath(contract) + '/' + libraryName + '/';
         } else {
-            basePath = getBaseResourcePath()
+            basePath = getBasePath(contract)
                        + '/'
                        + localePrefix
                        + '/'
@@ -245,7 +245,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
             }
         }
 
-        return new LibraryInfo(libraryName, null, localePrefix, this);
+        return new LibraryInfo(libraryName, null, localePrefix, contract, this);
     }
 
 
@@ -355,11 +355,13 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      String [] outBasePath,
                                      FacesContext ctx) {
         UIViewRoot root = ctx.getViewRoot();
-        List<String> contracts = (null != root) ? 
-                ctx.getResourceLibraryContracts() : Collections.EMPTY_LIST;
+        List<String> contracts = null;
         URL result = null;
-
-        if (contracts.isEmpty()) {
+        
+        if (library != null) {
+        	contracts = new ArrayList<String>(1);
+        	contracts.add(library.getContract());
+        } else if (root == null) {
             String contractName = ctx.getExternalContext().getRequestParameterMap()
                   .get("con");
             if (null != contractName && 0 < contractName.length()) {
@@ -368,6 +370,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
             } else {
                 return null;
             }
+        } else {
+       		contracts = ctx.getResourceLibraryContracts();
         }
 
         String basePath = null;
@@ -375,7 +379,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
         for (String curContract : contracts) {
         
             if (library != null) {
-                basePath = library.getPath(localePrefix) + '/' + curContract + '/' + resourceName;
+                // PENDING(fcaputo) no need to iterate over the contracts, if we have a library
+                basePath = library.getPath(localePrefix) + '/' + resourceName;
             } else {
                 if (localePrefix == null) {
                     basePath = getBaseContractsPath() + '/' + curContract + '/' + resourceName;

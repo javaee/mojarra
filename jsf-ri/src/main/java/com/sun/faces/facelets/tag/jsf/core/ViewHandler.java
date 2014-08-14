@@ -76,6 +76,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.TagAttributeException;
 
@@ -140,22 +141,6 @@ public final class ViewHandler extends TagHandlerImpl {
             throws IOException {
         UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
         if (root != null) {
-            if (this.locale != null) {
-                try {
-                    root.setLocale(ComponentSupport.getLocale(ctx,
-                            this.locale));
-                } catch (TagAttributeException tae) {
-                    Object result = this.locale.getObject(ctx);
-                    if (null == result) {
-                        Locale l = Locale.getDefault();
-                        // Special case for bugdb 13582626
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING, "Using {0} for locale because expression {1} returned null.", new Object[]{l, this.locale.toString()});
-                        }
-                        root.setLocale(l);
-                    }
-                }
-            }
             if (this.renderKitId != null) {
                 String v = this.renderKitId.getValue(ctx);
                 root.setRenderKitId(v);
@@ -167,6 +152,7 @@ public final class ViewHandler extends TagHandlerImpl {
             if (this.encoding != null) {
                 String v = this.encoding.getValue(ctx);
                 ctx.getFacesContext().getAttributes().put(RIConstants.FACELETS_ENCODING_KEY, v);
+                root.getAttributes().put(RIConstants.FACELETS_ENCODING_KEY, v);
             }
             if (this.beforePhase != null) {
                 MethodExpression m = this.beforePhase
@@ -180,16 +166,21 @@ public final class ViewHandler extends TagHandlerImpl {
             }
 
             if (this.contracts != null) {
-                if (!ctx.getFacesContext().getAttributes().containsKey("com.sun.faces.uiCompositionCount")) {
-                    String contractsValue = this.contracts.getValue(ctx);
-                    if (contractsValue != null) {
-                        List<String> contractList = Arrays.asList(contractsValue.split(","));
-                        ctx.getFacesContext().setResourceLibraryContracts(contractList);
-                    }
-                } else {
-                    if (LOGGER.isLoggable(Level.INFO)) {
+                /*
+                 * JAVASERVERFACES-3139: We are relaxing when the contracts
+                 * attribute can be used. In Development mode we will still 
+                 * blurb a message that the user is not using it at the top
+                 * level, which could cause problems.
+                 */
+                if (ctx.getFacesContext().getAttributes().containsKey("com.sun.faces.uiCompositionCount") &&
+                        LOGGER.isLoggable(Level.INFO) && 
+                        ctx.getFacesContext().getApplication().getProjectStage().equals(ProjectStage.Development)) {
                         LOGGER.log(Level.INFO, "f:view contracts attribute found, but not used at top level");
-                    }
+                }
+                String contractsValue = this.contracts.getValue(ctx);
+                if (contractsValue != null) {
+                    List<String> contractList = Arrays.asList(contractsValue.split(","));
+                    ctx.getFacesContext().setResourceLibraryContracts(contractList);
                 }
             }
             
@@ -206,6 +197,30 @@ public final class ViewHandler extends TagHandlerImpl {
             assert(0 < viewId.length());
 
         }
+
+        /*
+         * Fixes https://java.net/jira/browse/JAVASERVERFACES-3021.
+         * 
+         * The rational behind moving this here is that we need to make sure
+         * we establish the locale in all cases.
+         */
+        if (this.locale != null && root != null) {
+            try {
+                root.setLocale(ComponentSupport.getLocale(ctx, this.locale));
+            } catch (TagAttributeException tae) {
+                Object result = this.locale.getObject(ctx);
+                if (null == result) {
+                    Locale l = Locale.getDefault();
+                    // Special case for bugdb 13582626
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING, 
+                                "Using {0} for locale because expression {1} returned null.", 
+                                new Object[]{l, this.locale.toString()});
+                    }
+                    root.setLocale(l);
+                }
+            }
+        }        
 
         this.nextHandler.apply(ctx, parent);
     }

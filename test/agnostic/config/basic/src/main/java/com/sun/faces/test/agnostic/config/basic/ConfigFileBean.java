@@ -140,7 +140,7 @@ public class ConfigFileBean {
         return "SUCCESS";
     }
 
-    public String getBoolean() throws Exception {
+    public String getBool() throws Exception {
         RenderKitFactory rkFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit rk =
@@ -169,7 +169,7 @@ public class ConfigFileBean {
     }
 
     // Test a webapp with a default faces-config.xml resource
-    public String getDefault() throws Exception {
+    public String getDef() throws Exception {
         // Validate standard configuration
         checkComponentsGeneric();
         checkComponentsHtml();

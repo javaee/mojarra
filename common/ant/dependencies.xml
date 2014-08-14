@@ -69,7 +69,7 @@
     <property name="jsdoc.version" value="2.0.2"/>
     <property name="servlet.api.version" value="2.5"/>
     <property name="javaee-api.version" value="6.0"/>
-    <property name="cdi-api.version" value="1.0"/>
+    <property name="cdi-api.version" value="1.1"/>
     <property name="newer.servlet.api.version" value="3.0"/>
     <property name="jsp.api.version" value="2.1"/>
     <property name="jstl.api.version" value="1.2"/>
@@ -79,8 +79,8 @@
     <property name="el.version" value="1.0"/>
     <property name="validation.version" value="1.0.0.GA" />
     <property name="bean-validator.version" value="3.0-JBoss-4.0.0.Beta3"/>
-    <property name="javax-inject.version" value="1.0-PFD-1"/>
-    <property name="javax-enterprise.version" value="1.0-SP1"/>
+    <property name="javax-inject.version" value="1"/>
+    <property name="javax-enterprise.version" value="1.1"/>
     <property name="maven.repository.importer.version" value="1.2"/>
     <property name="yuicompressor.version" value="2.4.2"/>
 
@@ -540,7 +540,7 @@
                 <available file="${javax-inject.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${redhat.maven2}/javax/inject/javax.inject/${javax-inject.version}/javax.inject-${javax-inject.version}.jar"
+                <get src="${central.maven2}/javax/inject/javax.inject/${javax-inject.version}/javax.inject-${javax-inject.version}.jar"
                      dest="${javax-inject.jar}"
                      usetimestamp="true"/>
             </then>

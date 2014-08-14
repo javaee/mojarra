@@ -43,13 +43,20 @@ package com.sun.faces.application.resource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.Override;
+import java.lang.String;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.zip.GZIPOutputStream;
 
+import javax.faces.application.*;
+import javax.faces.application.Application;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.application.ResourceHandlerWrapper;
+import javax.faces.application.ResourceWrapper;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -65,7 +72,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.apache.cactus.WebRequest;
@@ -960,6 +966,94 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertTrue(res.getStatusCode() == 404);
     }
 
+
+    //==========================================================================
+    // Validate the fix for issue ????.
+    //
+    public void beginHandleResourceRequest16(WebRequest req) {
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.addHeader("accept-encoding", "gzip;q=0, deflate");
+    }
+
+    static class TestInputStreamContainingZeroes extends InputStream {
+        private boolean open = true;
+
+        @Override
+        public int read() throws IOException {
+            return 0;
+        }
+        @Override
+        public void close() throws IOException {
+            open = false;
+        }
+        public boolean isOpen() {
+            return open;
+        }
+    };
+
+    public void testHandleResourceRequest16() throws Exception {
+
+        final ResourceHandler originalResourceHandler =
+                getFacesContext().getApplication().getResourceHandler();
+
+        final TestInputStreamContainingZeroes resourceInputStream = new TestInputStreamContainingZeroes();
+
+        ResourceHandler resourceHandler = new ResourceHandlerWrapper() {
+            @Override
+            public ResourceHandler getWrapped() {
+                return originalResourceHandler;
+            }
+            @Override
+            public Resource createResource(String resourceName, String libraryName) {
+                final Resource resource = super.createResource(resourceName, libraryName);
+                return new ResourceWrapper() {
+                    @Override
+                    public Resource getWrapped() {
+                        return resource;
+                    }
+                    @Override
+                    public InputStream getInputStream() throws IOException {
+                        return resourceInputStream;
+                    }
+                };
+            }
+        };
+
+        HttpServletResponse wrappedResponse = new HttpServletResponseWrapper(response) {
+            @Override
+            public ServletOutputStream getOutputStream() throws IOException {
+                return new ServletOutputStream() {
+                    @Override
+                    public void write(int b) throws IOException {
+                        throw new IOException("Simulation of broken pipe or connection reset by peer");
+                    }
+                    @Override
+                    public void close() throws IOException {
+                        throw new IOException("Simulation of broken pipe or connection reset by peer");
+                    }
+                };
+            }
+        };
+        getFacesContext().getExternalContext().setResponse(wrappedResponse);
+
+        getFacesContext().getApplication().setResourceHandler(resourceHandler);
+        try {
+            boolean exceptionOccurred = false;
+            try {
+                resourceHandler.handleResourceRequest(getFacesContext());
+            } catch (IOException e) {
+                exceptionOccurred = true;
+            }
+            assertFalse(resourceInputStream.isOpen());
+            assertFalse(exceptionOccurred);
+        } finally {
+            getFacesContext().getApplication().setResourceHandler(originalResourceHandler);
+        }
+    }
+
+    public void endHandleResourceRequest16(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
+    }
 
 
 // ---------------------------------------------------------- Helper Methods

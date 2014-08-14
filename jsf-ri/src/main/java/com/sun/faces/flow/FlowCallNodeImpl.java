@@ -40,6 +40,7 @@
  */
 package com.sun.faces.flow;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.Parameter;
 
-public class FlowCallNodeImpl extends FlowCallNode {
+public class FlowCallNodeImpl extends FlowCallNode implements Serializable {
+    private static final long serialVersionUID = 543332738561754405L;
     
     private final String id;
     private final ValueExpression calledFlowIdVE;

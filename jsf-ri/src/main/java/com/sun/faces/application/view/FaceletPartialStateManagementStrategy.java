@@ -429,7 +429,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                             "Unable to save dynamic action with clientId ''{0}'' because the UIComponent cannot be found",
                             action.clientId);
                 }
-                if (component != null && !component.isTransient() && !hasTransientAncestor(component)) {
+                if (component != null) {
                     savedActions.add(action.saveState(context));
                 }
             }
@@ -523,26 +523,13 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                     }
                 }
             }
+            if (index == 0 && !parent.getChildren().isEmpty() &&
+                    parent.getChildren().get(0).isTransient()) {
+                index = -1;
+            }
             result = index;
         }
 
         return result;
-    }
-
-    /**
-     * Does the give component have a transient ancestor.
-     * 
-     * @param component the UI component.
-     * @return true if it has a transient ancestor, false otherwise.
-     */
-    private boolean hasTransientAncestor(UIComponent component) {
-        UIComponent parent = component.getParent();
-        while (parent != null) {
-            if (parent.isTransient()) {
-                return true;
-            }
-            parent = parent.getParent();
-        }
-        return false;
     }
 }

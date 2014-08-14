@@ -37,17 +37,16 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.ajax;
+package com.sun.faces.test.agnostic.renderKit.basic;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue2613IT {
 
@@ -66,6 +65,7 @@ public class Issue2613IT {
     }
 
     @Test
+    @Ignore
     public void testIssue2613() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2613.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("submit");
@@ -75,4 +75,3 @@ public class Issue2613IT {
         assertTrue(page.asXml().contains("12"));
     }
 }
-

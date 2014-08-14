@@ -41,6 +41,7 @@
 package javax.faces.component;
 
 import java.io.IOException;
+import java.util.Iterator;
 import javax.el.ValueExpression;
 import javax.faces.FactoryFinder;
 import javax.faces.application.FacesMessage;
@@ -50,6 +51,8 @@ import javax.faces.convert.ConverterException;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
+import javax.faces.validator.RequiredValidator;
+import javax.faces.validator.Validator;
 
 /**
  * <p class="changed_added_2_0"><strong class="changed_modified_2_2">UIViewParameter</strong> represents a
@@ -253,7 +256,7 @@ public class UIViewParameter extends UIInput {
         }
 
         // we have to override since UIInput assumes that a null value means don't check
-        if (getSubmittedValue() == null && isRequired()) {
+        if (getSubmittedValue() == null && myIsRequired()) {
             String requiredMessageStr = getRequiredMessage();
             FacesMessage message;
             if (null != requiredMessageStr) {
@@ -275,7 +278,45 @@ public class UIViewParameter extends UIInput {
             super.processValidators(context);
         }
     }
+    
+    private boolean myIsRequired() {
+        return super.isRequired() || isRequiredViaNestedRequiredValidator();
+    }
 
+    
+    /* JAVASERVERFACES-3058.  Handle the nested requiredValidator case
+     * explicitly in the case of <f:viewParam>.  
+     * 
+     */
+    private boolean isRequiredViaNestedRequiredValidator() {
+        boolean result = false;
+        if (null == validators) {
+            return result;
+        }
+        Iterator<Validator> iter = validators.iterator();
+        while (iter.hasNext()) {
+            if (iter.next() instanceof RequiredValidator) {
+                // See JAVASERVERFACES-2526.  Note that we can assume
+                // that at this point the validator is not disabled, 
+                // so the mere existence of the validator implies it is
+                // enabled.
+                result = true;
+                Object submittedValue = getSubmittedValue();
+                if (submittedValue == null) {
+                    // JAVASERVERFACES-3058 asserts that view parameters 
+                    // should be treated differently than form parameters
+                    // if they are not submitted.  I'm not sure if that's 
+                    // correct, but let's put this in and see how 
+                    // the community responds.
+                    this.setSubmittedValue("");
+                }
+                break;
+            }
+        }
+                
+        return result;
+    }
+    
     /**
      * <p class="changed_added_2_0">Call through to superclass {@link
      * UIInput#updateModel} then take the additional action of pushing

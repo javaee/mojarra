@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xml:lang="en" lang="en">
+    <h:head>
+        <title>Legend without id</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <fieldset>
+                <legend>Sample</legend>
+                <h:inputText id="input" value="#{legendWithoutIdBean.value}"></h:inputText>
+                <h:commandButton id="submit" value="Click">
+                    <f:ajax execute="form:input" />
+                </h:commandButton>
+            </fieldset>
+        </h:form>
+    </h:body>
+</html>

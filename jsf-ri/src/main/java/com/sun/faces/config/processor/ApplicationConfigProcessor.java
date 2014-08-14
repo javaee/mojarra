@@ -40,6 +40,7 @@
 
 package com.sun.faces.config.processor;
 
+import javax.naming.InitialContext;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -80,10 +81,13 @@ import com.sun.faces.config.DocumentInfo;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import javax.faces.validator.BeanValidator;
+import javax.validation.Validator;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 
+import javax.naming.Context;
+import javax.naming.NamingException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -388,21 +392,45 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 if(cachedObject instanceof ValidatorFactory) {
                     result = true;
                 } else {
+                    Context initialContext = null;
                     try {
-                        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-                        appMap.put(BeanValidator.VALIDATOR_FACTORY_KEY, validatorFactory);
-                        result = true;
-                        // don't use ValidationException here, as this will try to load this
-                        // class on instantiation of an ApplicationConfigProcessor.
-                    } catch (Throwable e) {
-                        if(LOGGER.isLoggable(Level.FINE)) {
-                            String msg = "Could not build a default Bean Validator factory: " 
-                                + e.getMessage();
-                            LOGGER.fine(msg);
+                        initialContext = new InitialContext();
+                    } catch (NoClassDefFoundError nde) {
+                        // on google app engine InitialContext is forbidden to use and GAE throws NoClassDefFoundError 
+                        if (LOGGER.isLoggable(Level.FINE)) {
+                            LOGGER.log(Level.FINE, nde.toString(), nde);
+                        }
+                    } catch (NamingException ne) {
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING, ne.toString(), ne);
                         }
                     }
-                }        
-            
+                    
+                    try {
+                        Object validatorFactory = initialContext.lookup("java:comp/ValidatorFactory");
+                        if (null != validatorFactory) {
+                            appMap.put(BeanValidator.VALIDATOR_FACTORY_KEY, validatorFactory);
+                            result = true;
+                        }
+                    } catch (NamingException root) {
+                        if (LOGGER.isLoggable(Level.FINE)) {
+                            String msg = "Could not build a default Bean Validator factory: " 
+                                    + root.getMessage();
+                            LOGGER.fine(msg);                       
+                        }
+                    }
+                    
+                    if (!result) {
+                        try {
+                            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+                            Validator validator = factory.getValidator();
+                            appMap.put(BeanValidator.VALIDATOR_FACTORY_KEY, factory);
+                            result = true;
+                        } catch(Throwable throwable) {
+                        }
+                    }
+                }
+
             } catch (Throwable t) { // CNFE or ValidationException or any other
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Unable to load Beans Validation");
@@ -813,8 +841,14 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                     // If there is an eventClass, use it, otherwise use
                     // SystemEvent.class
                     //noinspection unchecked
-                    Class<? extends SystemEvent> eventClazz =
-                          (Class<? extends SystemEvent>) loadClass(sc, eventClass, this, null);
+                    Class<? extends SystemEvent> eventClazz;
+                    
+                    if (eventClass != null) {
+                        eventClazz = (Class<? extends SystemEvent>) loadClass(sc, eventClass, this, null);
+                    } else {
+                        eventClazz = SystemEvent.class;
+                    }
+                    
                     // If there is a sourceClass, use it, otherwise use null
                     Class sourceClazz =
                           (sourceClass != null && sourceClass.length() != 0)

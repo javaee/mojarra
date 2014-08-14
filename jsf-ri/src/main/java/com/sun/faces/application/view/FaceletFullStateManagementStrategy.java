@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -74,7 +74,8 @@ import javax.faces.render.ResponseStateManager;
 import javax.faces.view.StateManagementStrategy;
 import static com.sun.faces.RIConstants.DYNAMIC_ACTIONS;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+import javax.faces.application.ViewHandler;
+import javax.faces.view.ViewDeclarationLanguage;
 
 /**
  * A state management strategy for FSS.
@@ -217,8 +218,8 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                         if (form.isPrependId() && !clientId.startsWith(form.getClientId(visitContext.getFacesContext()))) {
                             result = VisitResult.REJECT;
                         }
-                    } else if (component instanceof NamingContainer && 
-                            !clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
+                    } else if (component instanceof NamingContainer
+                            && !clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
                         /*
                          * If the component is a naming container then assume it
                          * is prepending its id so if our client id we are
@@ -280,10 +281,11 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
      * Methods that takes care of pruning and re-adding an action to the dynamic
      * action list.
      *
-     * <p> If you remove a component, re-add it to the same parent and then
-     * remove it again, you only have to capture the FIRST remove. Similarly if
-     * you add a component, remove it, and then re-add it to the same parent you
-     * only need to capture the LAST add. </p>
+     * <p>
+     * If you remove a component, re-add it to the same parent and then remove
+     * it again, you only have to capture the FIRST remove. Similarly if you add
+     * a component, remove it, and then re-add it to the same parent you only
+     * need to capture the LAST add. </p>
      *
      * @param dynamicActionList the dynamic action list.
      * @param struct the component struct to add.
@@ -323,7 +325,6 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
 
         final StateContext stateContext = StateContext.getStateContext(context);
         final UIViewRoot viewRoot = context.getViewRoot();
-        final ConcurrentHashMap<String, UIComponent> faceletComponentMap = ComponentSupport.getFaceletComponentMap();
 
         try {
             context.getAttributes().put(SKIP_ITERATION_HINT, true);
@@ -352,16 +353,6 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                         }
                     }
 
-                    /*
-                     * We need to make sure we put the restored component into the facelet component map,
-                     * so the reapply will not try to recreate it because it could not find it. In the FSS
-                     * case this is the time we know if the comments was created by the Facelet runtime 
-                     * (previously).
-                     */
-                    if (component.getAttributes().containsKey("com.sun.faces.facelets.MARK_ID")) {
-                        faceletComponentMap.put(component.getAttributes().get("com.sun.faces.facelets.MARK_ID").toString(), component);
-                    }
-                    
                     return result;
                 }
             });
@@ -594,6 +585,13 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
             }
         }
 
+        /*
+         * Make sure the library contracts get setup as well.
+         */
+        ViewHandler viewHandler = context.getApplication().getViewHandler();
+        ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, viewId);
+        context.setResourceLibraryContracts(vdl.calculateResourceLibraryContracts(context, viewId));
+
         return result;
     }
 
@@ -668,7 +666,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                             "Unable to save dynamic action with clientId ''{0}'' because the UIComponent cannot be found",
                             action.clientId);
                 }
-                if (component != null && !component.isTransient() && !hasTransientAncestor(component)) {
+                if (component != null) {
                     savedActions.add(action.saveState(context));
                 }
             }
@@ -715,7 +713,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
         Object[] tree = treeList.toArray();
 
         result = new Object[]{tree, state};
-        StateContext.release(context);        
+        StateContext.release(context);
         return result;
     }
 
@@ -887,26 +885,13 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                     }
                 }
             }
+            if (index == 0 && !parent.getChildren().isEmpty()
+                    && parent.getChildren().get(0).isTransient()) {
+                index = -1;
+            }
             result = index;
         }
 
         return result;
-    }
-
-    /**
-     * Does the give component have a transient ancestor.
-     *
-     * @param component the UI component.
-     * @return true if it has a transient ancestor, false otherwise.
-     */
-    private boolean hasTransientAncestor(UIComponent component) {
-        UIComponent parent = component.getParent();
-        while (parent != null) {
-            if (parent.isTransient()) {
-                return true;
-            }
-            parent = parent.getParent();
-        }
-        return false;
     }
 }

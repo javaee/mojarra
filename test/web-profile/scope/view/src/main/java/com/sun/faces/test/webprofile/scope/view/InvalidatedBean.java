@@ -39,6 +39,7 @@
  */
 package com.sun.faces.test.webprofile.scope.view;
 
+import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.context.FacesContext;
@@ -50,8 +51,9 @@ import javax.inject.Named;
  */
 @Named(value = "invalidatedBean")
 @ViewScoped
-public class InvalidatedBean {
-
+public class InvalidatedBean implements Serializable {
+    private static final long serialVersionUID = -4803754563990391919L;
+    
     /**
      * Stores the text.
      */

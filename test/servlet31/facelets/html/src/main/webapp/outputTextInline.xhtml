@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:j="http://mojarra.java.net/j">
+    <h:head>
+        <title>EL Example Code</title>
+    </h:head>
+    <h:body>
+        #{'{0}'}
+        <br/>
+        #{'&#123;'}
+        <br/>
+        #{'&#125;'}
+        <br/>
+        #{'&#123;0&#125;'}
+        <br/>
+        <h:outputText value="#{j:format('What EE language is the coolest? Answer: {0}', 'Expression Language (EL)')}"/>
+    </h:body>
+</html>
+

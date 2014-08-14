@@ -59,7 +59,7 @@ and the correct uri, declared here.</p> ]]>
   <display-name>JSTL core</display-name>
   <tlib-version>1.2</tlib-version>
   <short-name>c</short-name>
-  <uri>http://java.sun.com/jsp/jstl/core</uri>
+  <uri>http://xmlns.jcp.org/jsp/jstl/core</uri>
 
   <tag>
     <description>

@@ -187,7 +187,7 @@ public class FacesContextImpl extends FacesContext {
         if (partialViewContext == null) {
             PartialViewContextFactory f = (PartialViewContextFactory)
                   FactoryFinder.getFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY);
-            partialViewContext = f.getPartialViewContext(this);
+            partialViewContext = f.getPartialViewContext(FacesContext.getCurrentInstance());
         }
         return partialViewContext;
         
@@ -252,7 +252,7 @@ public class FacesContextImpl extends FacesContext {
         if (elContext == null) {
             Application app = getApplication();
             elContext = new ELContextImpl(app.getELResolver());
-            elContext.putContext(FacesContext.class, this);
+            elContext.putContext(FacesContext.class, FacesContext.getCurrentInstance());
             UIViewRoot root = this.getViewRoot();
             if (null != root) {
                 elContext.setLocale(root.getLocale());
@@ -586,6 +586,9 @@ public class FacesContextImpl extends FacesContext {
         if (null != resourceLibraryContracts) {
             resourceLibraryContracts.clear();
             resourceLibraryContracts = null;
+        }
+        if (partialViewContext != null) {
+            partialViewContext.release();
         }
         partialViewContext = null;
         exceptionHandler = null;

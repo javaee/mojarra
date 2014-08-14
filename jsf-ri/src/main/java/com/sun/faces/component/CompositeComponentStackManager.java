@@ -246,7 +246,12 @@ public class CompositeComponentStackManager {
                 cc = UIComponent.getCompositeComponentParent(cc);
             }
         }
-        return null;
+        
+        // we could not find the composite component because the location was not found,
+        // this will happen if the #{cc} refers to a composite component one level up,
+        // so we are going after the current composite component.
+        //
+        return UIComponent.getCurrentCompositeComponent(ctx);
     }
 
 

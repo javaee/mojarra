@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,12 +40,13 @@
     holder.
 
 -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.sun.faces.test</groupId>
         <artifactId>pom</artifactId>
-        <version>2.2.1-SNAPSHOT</version>
+        <version>2.2.8-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.agnostic</groupId>
     <artifactId>pom</artifactId>
@@ -61,15 +61,12 @@
         </dependency>
     </dependencies>
     <modules>
-        <module>ajax</module>
         <module>application</module>
-        <module>component</module>
-        <module>composite</module>
+        <module>ajax-namespace</module>
         <module>config</module>
         <module>context</module>
         <module>converter</module>
-        <module>dynamic</module>
-        <module>el</module>
+        <module>replace-vr-add-er</module>
         <module>externalContext</module>
         <module>facelets</module>
         <module>flash</module>
@@ -77,7 +74,6 @@
         <module>renderKit</module>
         <module>resource</module>
         <module>scope</module>
-        <module>shared</module>
         <module>stateSaving</module>
         <module>vdl</module>
     </modules>

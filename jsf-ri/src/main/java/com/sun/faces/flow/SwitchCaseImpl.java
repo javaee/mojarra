@@ -40,12 +40,15 @@
  */
 package com.sun.faces.flow;
 
+import java.io.Serializable;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.SwitchCase;
 
-public class SwitchCaseImpl extends SwitchCase {
+public class SwitchCaseImpl extends SwitchCase implements Serializable {
+    
+    private static final long serialVersionUID = -8982500105361921446L;
 
     // This is the id of the <return> or <switch>
     private String enclosingId;

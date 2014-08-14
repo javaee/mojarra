@@ -141,7 +141,7 @@ public class Issue1111IT {
     }
 
     private void assertFormElement(HtmlPage page, String elementName, String id, String... attrs) {
-        HtmlElement input = page.getElementById(id);
+        HtmlElement input = page.getHtmlElementById(id);
         String xml = input.asXml();
 
         assertTrue(xml.contains("<" + elementName));
@@ -268,12 +268,12 @@ public class Issue1111IT {
         String lastAction = page.getElementById("lastAction").getTextContent();
         assertEquals("", lastAction);
 
-        page = page.getElementById("fancyButton1").click();
+        page = page.getHtmlElementById("fancyButton1").click();
 
         lastAction = page.getElementById("lastAction").getTextContent();
         assertEquals("action1", lastAction);
 
-        page = page.getElementById("fancyButton2").click();
+        page = page.getHtmlElementById("fancyButton2").click();
 
         lastAction = page.getElementById("lastAction").getTextContent();
         assertEquals("action2", lastAction);

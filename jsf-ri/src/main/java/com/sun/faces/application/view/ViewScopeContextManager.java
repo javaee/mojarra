@@ -39,14 +39,21 @@
  */
 package com.sun.faces.application.view;
 
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.PassivationCapable;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -58,10 +65,9 @@ import javax.servlet.http.HttpSessionEvent;
  */
 public class ViewScopeContextManager {
 
-    /**
-     * Stores the logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(ViewScopeContextManager.class.getName());
+    private static final Logger LOGGER = FacesLogger.APPLICATION_VIEW.getLogger();
+    private boolean isCdiOneOneOrGreater;
+    private Class viewScopedCDIEventFireHelperImplClass;
     /**
      * Stores the constant to keep track of all the active view scope contexts.
      */
@@ -70,6 +76,20 @@ public class ViewScopeContextManager {
      * Stores the constants to keep track of the active view maps.
      */
     private static final String ACTIVE_VIEW_MAPS = "com.sun.faces.application.view.activeViewMaps";
+    private final BeanManager beanManager;
+
+    public ViewScopeContextManager() {
+        isCdiOneOneOrGreater = Util.isCdiOneOneOrGreater();
+        try {
+            viewScopedCDIEventFireHelperImplClass = Class.forName("com.sun.faces.application.view.ViewScopedCDIEventFireHelperImpl");
+        } catch (ClassNotFoundException ex) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);
+            }
+        }
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+    }
 
     /**
      * Clear the current view map using the Faces context.
@@ -81,15 +101,15 @@ public class ViewScopeContextManager {
             LOGGER.log(Level.FINEST, "Clearing @ViewScoped CDI beans for current view map");
         }
         Map<String, Object> viewMap = facesContext.getViewRoot().getViewMap(false);
-        Map<Contextual, ViewScopeContextObject> contextMap = getContextMap(facesContext, false);
+        Map<String, ViewScopeContextObject> contextMap = getContextMap(facesContext, false);
         if (contextMap != null) {
             destroyBeans(viewMap, contextMap);
         }
     }
-    
+
     /**
      * Clear the given view map.
-     * 
+     *
      * @param facesContext the Faces context.
      * @param viewMap the given view map.
      */
@@ -97,7 +117,7 @@ public class ViewScopeContextManager {
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.log(Level.FINEST, "Clearing @ViewScoped CDI beans for given view map: {0}");
         }
-        Map<Contextual, ViewScopeContextObject> contextMap = getContextMap(facesContext, false);
+        Map<String, ViewScopeContextObject> contextMap = getContextMap(facesContext, viewMap);
         if (contextMap != null) {
             destroyBeans(viewMap, contextMap);
         }
@@ -117,12 +137,19 @@ public class ViewScopeContextManager {
             LOGGER.log(Level.FINEST, "Creating @ViewScoped CDI bean using contextual: {0}", contextual);
         }
 
+        if (!(contextual instanceof PassivationCapable)) {
+            throw new IllegalArgumentException("ViewScoped bean " + contextual.toString() + " must be PassivationCapable, but is not.");
+        }
+            
         T result = contextual.create(creational);
 
         if (result != null) {
             String name = getName(result);
             facesContext.getViewRoot().getViewMap(true).put(name, result);
-            getContextMap(facesContext).put(contextual, new ViewScopeContextObject(contextual, creational, name));
+            String passivationCapableId = ((PassivationCapable)contextual).getId();
+            
+            getContextMap(facesContext).put(passivationCapableId, 
+                    new ViewScopeContextObject(passivationCapableId, name));
         }
 
         return result;
@@ -134,14 +161,19 @@ public class ViewScopeContextManager {
      * @param viewMap the view map.
      * @param contextMap the context map.
      */
-    private void destroyBeans(Map<String, Object> viewMap, Map<Contextual, ViewScopeContextObject> contextMap) {
+    private void destroyBeans(
+            Map<String, Object> viewMap, Map<String, ViewScopeContextObject> contextMap) {
         ArrayList<String> removalNameList = new ArrayList<String>();
 
         if (contextMap != null) {
-            for (Map.Entry<Contextual, ViewScopeContextObject> entry : contextMap.entrySet()) {
-                Contextual contextual = entry.getKey();
+            for (Map.Entry<String, ViewScopeContextObject> entry : contextMap.entrySet()) {
+                String passivationCapableId = entry.getKey();
+                Contextual contextual = beanManager.getPassivationCapableBean(passivationCapableId);
+                
                 ViewScopeContextObject contextObject = entry.getValue();
-                CreationalContext creationalContext = contextObject.getCreationalContext();
+                CreationalContext creationalContext = beanManager.createCreationalContext(contextual);
+                // We can no longer get this from the contextObject. Instead we must call
+                // beanManager.createCreationalContext(contextual)
                 contextual.destroy(viewMap.get(contextObject.getName()), creationalContext);
                 removalNameList.add(contextObject.getName());
             }
@@ -164,16 +196,19 @@ public class ViewScopeContextManager {
      */
     public <T> T getBean(FacesContext facesContext, Contextual<T> contextual) {
         T result = null;
-        Map<Contextual, ViewScopeContextObject> contextMap = getContextMap(facesContext);
+        Map<String, ViewScopeContextObject> contextMap = getContextMap(facesContext);
 
         if (contextMap != null) {
-            ViewScopeContextObject contextObject = contextMap.get(contextual);
-
-            if (LOGGER.isLoggable(Level.FINEST)) {
-                LOGGER.log(Level.FINEST, "Getting value for @ViewScoped bean with name: {0}", contextObject.getName());
+            if (!(contextual instanceof PassivationCapable)) {
+                throw new IllegalArgumentException("ViewScoped bean " + contextual.toString() + " must be PassivationCapable, but is not.");
             }
+            
+            ViewScopeContextObject contextObject = contextMap.get(((PassivationCapable)contextual).getId());
 
             if (contextObject != null) {
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST, "Getting value for @ViewScoped bean with name: {0}", contextObject.getName());
+                }
                 result = (T) facesContext.getViewRoot().getViewMap(true).get(contextObject.getName());
             }
         }
@@ -187,7 +222,7 @@ public class ViewScopeContextManager {
      * @param facesContext the Faces context.
      * @return the context map.
      */
-    private Map<Contextual, ViewScopeContextObject> getContextMap(FacesContext facesContext) {
+    private Map<String, ViewScopeContextObject> getContextMap(FacesContext facesContext) {
         return getContextMap(facesContext, true);
     }
 
@@ -198,19 +233,19 @@ public class ViewScopeContextManager {
      * @param create flag to indicate if we are creating the context map.
      * @return the context map.
      */
-    private Map<Contextual, ViewScopeContextObject> getContextMap(FacesContext facesContext, boolean create) {
-        Map<Contextual, ViewScopeContextObject> result = null;
+    private Map<String, ViewScopeContextObject> getContextMap(FacesContext facesContext, boolean create) {
+        Map<String, ViewScopeContextObject> result = null;
 
         ExternalContext externalContext = facesContext.getExternalContext();
         if (externalContext != null) {
             Map<String, Object> sessionMap = externalContext.getSessionMap();
-            Map<Object, Map<Contextual, ViewScopeContextObject>> activeViewScopeContexts =
-                    (Map<Object, Map<Contextual, ViewScopeContextObject>>) sessionMap.get(ACTIVE_VIEW_CONTEXTS);
+            Map<Object, Map<String, ViewScopeContextObject>> activeViewScopeContexts =
+                    (Map<Object, Map<String, ViewScopeContextObject>>) sessionMap.get(ACTIVE_VIEW_CONTEXTS);
             Map<String, Object> viewMap = facesContext.getViewRoot().getViewMap(false);
 
             if (activeViewScopeContexts == null && create) {
                 synchronized (sessionMap) {
-                    activeViewScopeContexts = new ConcurrentHashMap<Object, Map<Contextual, ViewScopeContextObject>>();
+                    activeViewScopeContexts = new ConcurrentHashMap<Object, Map<String, ViewScopeContextObject>>();
                     sessionMap.put(ACTIVE_VIEW_CONTEXTS, activeViewScopeContexts);
                 }
             }
@@ -219,7 +254,12 @@ public class ViewScopeContextManager {
                 synchronized (activeViewScopeContexts) {
                     if (!activeViewScopeContexts.containsKey(System.identityHashCode(viewMap)) && create) {
                         activeViewScopeContexts.put(System.identityHashCode(viewMap),
-                                new ConcurrentHashMap<Contextual, ViewScopeContextObject>());
+                                new ConcurrentHashMap<String, ViewScopeContextObject>());
+                        // If we are distributable, this will result in a dirtying of the
+                        // session data, forcing replication.  If we are not distributable,
+                        // this is a no-op.
+                        sessionMap.put(ACTIVE_VIEW_CONTEXTS, activeViewScopeContexts);
+                        
                     }
                 }
             }
@@ -232,6 +272,30 @@ public class ViewScopeContextManager {
         return result;
     }
 
+    /**
+     * Get the context map.
+     *
+     * @param facesContext the Faces context.
+     * @param create flag to indicate if we are creating the context map.
+     * @return the context map.
+     */
+    private Map<String, ViewScopeContextObject> getContextMap(FacesContext facesContext, Map<String, Object> viewMap) {
+        Map<String, ViewScopeContextObject> result = null;
+
+        ExternalContext externalContext = facesContext.getExternalContext();
+        if (externalContext != null) {
+            Map<String, Object> sessionMap = externalContext.getSessionMap();
+            Map<Object, Map<String, ViewScopeContextObject>> activeViewScopeContexts =
+                    (Map<Object, Map<String, ViewScopeContextObject>>) sessionMap.get(ACTIVE_VIEW_CONTEXTS);
+
+            if (activeViewScopeContexts != null) {
+                result = activeViewScopeContexts.get(System.identityHashCode(viewMap));
+            }
+        }
+
+        return result;
+    }
+    
     /**
      * Get the name of the bean for the given object.
      *
@@ -261,8 +325,8 @@ public class ViewScopeContextManager {
 
         HttpSession session = hse.getSession();
 
-        Map<Object, Map<Contextual, ViewScopeContextObject>> activeViewScopeContexts =
-                (Map<Object, Map<Contextual, ViewScopeContextObject>>) session.getAttribute(ACTIVE_VIEW_CONTEXTS);
+        Map<Object, Map<String, ViewScopeContextObject>> activeViewScopeContexts =
+                (Map<Object, Map<String, ViewScopeContextObject>>) session.getAttribute(ACTIVE_VIEW_CONTEXTS);
 
         if (activeViewScopeContexts != null) {
             Map<String, Object> activeViewMaps = (Map<String, Object>) session.getAttribute(ACTIVE_VIEW_MAPS);
@@ -270,7 +334,7 @@ public class ViewScopeContextManager {
                 Iterator<Object> activeViewMapsIterator = activeViewMaps.values().iterator();
                 while (activeViewMapsIterator.hasNext()) {
                     Map<String, Object> instanceMap = (Map<String, Object>) activeViewMapsIterator.next();
-                    Map<Contextual, ViewScopeContextObject> contextMap =
+                    Map<String, ViewScopeContextObject> contextMap =
                             activeViewScopeContexts.get(System.identityHashCode(instanceMap));
                     destroyBeans(instanceMap, contextMap);
                 }
@@ -279,5 +343,44 @@ public class ViewScopeContextManager {
             activeViewScopeContexts.clear();
             session.removeAttribute(ACTIVE_VIEW_CONTEXTS);
         }
+    }
+
+    public void fireInitializedEvent(FacesContext facesContext, UIViewRoot root) {
+        if (isCdiOneOneOrGreater && null != viewScopedCDIEventFireHelperImplClass) {
+            BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+            if (null != beanManager) {
+                Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
+                if (null != availableBeans && !availableBeans.isEmpty()) {
+                    Bean<?> bean = beanManager.resolve(availableBeans);
+                    CreationalContext<?> creationalContext =
+                            beanManager.createCreationalContext(null);
+                    ViewScopedCDIEventFireHelper eventHelper =
+                            (ViewScopedCDIEventFireHelper) beanManager.getReference(bean, bean.getBeanClass(),
+                            creationalContext);
+                    eventHelper.fireInitializedEvent(root);
+                }
+            }
+
+        }
+
+    }
+
+    public void fireDestroyedEvent(FacesContext facesContext, UIViewRoot root) {
+        if (isCdiOneOneOrGreater && null != viewScopedCDIEventFireHelperImplClass) {
+            BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+            if (null != beanManager) {
+                Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
+                if (null != availableBeans && !availableBeans.isEmpty()) {
+                    Bean<?> bean = beanManager.resolve(availableBeans);
+                    CreationalContext<?> creationalContext =
+                            beanManager.createCreationalContext(null);
+                    ViewScopedCDIEventFireHelper eventHelper =
+                            (ViewScopedCDIEventFireHelper) beanManager.getReference(bean, bean.getBeanClass(),
+                            creationalContext);
+                    eventHelper.fireDestroyedEvent(root);
+                }
+            }
+        }
+
     }
 }

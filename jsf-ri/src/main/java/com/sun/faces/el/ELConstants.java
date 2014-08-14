@@ -56,31 +56,33 @@ public interface ELConstants {
 
     public static final int FACES_CONTEXT = 5;
 
-    public static final int FACES_FLOW = 6;
+    public static final int FLASH = 6;
 
-    public static final int HEADER = 7;
+    public static final int FACES_FLOW = 7;
 
-    public static final int HEADER_VALUES = 8;
+    public static final int HEADER = 8;
 
-    public static final int INIT_PARAM = 9;
+    public static final int HEADER_VALUES = 9;
 
-    public static final int PARAM = 10;
+    public static final int INIT_PARAM = 10;
 
-    public static final int PARAM_VALUES = 11;
+    public static final int PARAM = 11;
 
-    public static final int REQUEST = 12;
+    public static final int PARAM_VALUES = 12;
 
-    public static final int REQUEST_SCOPE = 13;
+    public static final int REQUEST = 13;
 
-    public static final int RESOURCE = 14;
+    public static final int REQUEST_SCOPE = 14;
 
-    public static final int SESSION = 15;
+    public static final int RESOURCE = 15;
 
-    public static final int SESSION_SCOPE = 16;
+    public static final int SESSION = 16;
 
-    public static final int VIEW = 17;
+    public static final int SESSION_SCOPE = 17;
 
-    public static final int VIEW_SCOPE = 18;
+    public static final int VIEW = 18;
+
+    public static final int VIEW_SCOPE = 19;
     
     
 }

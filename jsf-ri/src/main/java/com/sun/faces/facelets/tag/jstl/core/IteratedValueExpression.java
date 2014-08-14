@@ -58,7 +58,10 @@
 
 package com.sun.faces.facelets.tag.jstl.core;
 
+import java.util.Collection;
+import java.util.Iterator;
 import javax.el.ELContext;
+import javax.el.ELException;
 import javax.el.PropertyNotWritableException;
 import javax.el.ValueExpression;
 
@@ -68,12 +71,13 @@ public final class IteratedValueExpression extends ValueExpression {
 
     private ValueExpression orig;
 
-    private Object value;
+    private int start;
+    private int index;
 
-
-    public IteratedValueExpression(ValueExpression orig, Object value) {
+    public IteratedValueExpression(ValueExpression orig, int start, int index) {
         this.orig = orig;
-        this.value = value;
+        this.start = start;
+        this.index = index;
     }
 
     /*
@@ -82,7 +86,29 @@ public final class IteratedValueExpression extends ValueExpression {
      * @see javax.el.ValueExpression#getValue(javax.el.ELContext)
      */
     public Object getValue(ELContext context) {
-        return value;
+        Collection collection = (Collection) orig.getValue(context);
+        Iterator iterator = collection.iterator();
+        Object result = null;
+        int i = start;
+        if (i != 0) {
+            while(i != 0) {
+                result = iterator.next();
+                if (!iterator.hasNext()) {
+                    throw new ELException("Unable to position start");
+                }
+                i--;
+            }
+        } else {
+            result = iterator.next();
+        }
+        while(i < index) {
+            if (!iterator.hasNext()) {
+                throw new ELException("Unable to get given value");
+            }
+            i++;
+            result = iterator.next();
+        }
+        return result;
     }
 
     /*

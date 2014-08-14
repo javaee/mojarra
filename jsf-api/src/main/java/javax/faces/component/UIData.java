@@ -1762,9 +1762,20 @@ public class UIData extends UIComponentBase
         } 
     }
 
+    private void resetClientIds(UIComponent component) {
+        Iterator<UIComponent> iterator = component.getFacetsAndChildren();
+        while(iterator.hasNext()) {
+            UIComponent child = iterator.next();
+            resetClientIds(child);
+            child.setId(child.getId());
+        }
+    }
+        
     @Override
     public Object saveState(FacesContext context)
     {
+        resetClientIds(this);
+        
         if (initialStateMarked()) {
             Object superState = super.saveState(context);
             
@@ -1953,25 +1964,30 @@ public class UIData extends UIComponentBase
                 }
             }
         }
+        
+        // collect rendered columns once
+        List<UIColumn> renderedColumns = new ArrayList<UIColumn>(getChildCount());
+        if (getChildCount() > 0) {
+        	for (UIComponent child : getChildren()) {
+        		if (child instanceof UIColumn && child.isRendered()) {
+        			renderedColumns.add((UIColumn)child);
+        		}
+        	}
+        }
 
         // Process each facet of our child UIColumn components exactly once
         setRowIndex(-1);
-        if (getChildCount() > 0) {
-            for (UIComponent column : getChildren()) {
-                if (!(column instanceof UIColumn) || !column.isRendered()) {
-                    continue;
-                }
-                if (column.getFacetCount() > 0) {
-                    for (UIComponent columnFacet : column.getFacets().values()) {
-                        if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-                            columnFacet.processDecodes(context);
-                        } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-                            columnFacet.processValidators(context);
-                        } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-                            columnFacet.processUpdates(context);
-                        } else {
-                            throw new IllegalArgumentException();
-                        }
+        for (UIColumn column : renderedColumns) {
+            if (column.getFacetCount() > 0) {
+                for (UIComponent columnFacet : column.getFacets().values()) {
+                    if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+                        columnFacet.processDecodes(context);
+                    } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+                        columnFacet.processValidators(context);
+                    } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+                        columnFacet.processUpdates(context);
+                    } else {
+                        throw new IllegalArgumentException();
                     }
                 }
             }
@@ -1998,25 +2014,20 @@ public class UIData extends UIComponentBase
             // Perform phase-specific processing as required
             // on the *children* of the UIColumn (facets have
             // been done a single time with rowIndex=-1 already)
-            if (getChildCount() > 0) {
-                for (UIComponent kid : getChildren()) {
-                    if (!(kid instanceof UIColumn) || !kid.isRendered()) {
-                        continue;
-                    }
-                    if (kid.getChildCount() > 0) {
-                        for (UIComponent grandkid : kid.getChildren()) {
-                            if (!grandkid.isRendered()) {
-                                continue;
-                            }
-                            if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-                                grandkid.processDecodes(context);
-                            } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-                                grandkid.processValidators(context);
-                            } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-                                grandkid.processUpdates(context);
-                            } else {
-                                throw new IllegalArgumentException();
-                            }
+            for (UIColumn kid : renderedColumns) {
+                if (kid.getChildCount() > 0) {
+                    for (UIComponent grandkid : kid.getChildren()) {
+                        if (!grandkid.isRendered()) {
+                            continue;
+                        }
+                        if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+                            grandkid.processDecodes(context);
+                        } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+                            grandkid.processValidators(context);
+                        } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+                            grandkid.processUpdates(context);
+                        } else {
+                            throw new IllegalArgumentException();
                         }
                     }
                 }
@@ -2256,25 +2267,27 @@ public class UIData extends UIComponentBase
             EditableValueHolder input = (EditableValueHolder) component;
             String clientId = component.getClientId(context);
 
-            SavedState state = saved.get(clientId);
+            SavedState state = (saved == null ? null : saved.get(clientId));
             if (state == null) {
-                state = new SavedState();
+                input.resetValue();
+            } else {
+                input.setValue(state.getValue());
+                input.setValid(state.isValid());
+                input.setSubmittedValue(state.getSubmittedValue());
+                // This *must* be set after the call to setValue(), since
+                // calling setValue() always resets "localValueSet" to true.
+                input.setLocalValueSet(state.isLocalValueSet());
             }
-            input.setValue(state.getValue());
-            input.setValid(state.isValid());
-            input.setSubmittedValue(state.getSubmittedValue());
-            // This *must* be set after the call to setValue(), since
-            // calling setValue() always resets "localValueSet" to true.
-            input.setLocalValueSet(state.isLocalValueSet());
         } else if (component instanceof UIForm) {
             UIForm form = (UIForm) component;
             String clientId = component.getClientId(context);
-            SavedState state = saved.get(clientId);
+            SavedState state = (saved == null ? null : saved.get(clientId));
             if (state == null) {
-                state = new SavedState();
+                // submitted is transient state
+                form.setSubmitted(false);
+            } else {
+                form.setSubmitted(state.getSubmitted());
             }
-            form.setSubmitted(state.getSubmitted());
-            state.setSubmitted(form.isSubmitted());
         }
 
         // Restore state for children of this component
@@ -2331,37 +2344,41 @@ public class UIData extends UIComponentBase
             String clientId = component.getClientId(context);
             if (saved == null) {
                 state = new SavedState();
-                getStateHelper().put(PropertyKeys.saved, clientId, state);
             }
             if (state == null) {
                 state = saved.get(clientId);
                 if (state == null) {
                     state = new SavedState();
-                    //saved.put(clientId, state);
-                    getStateHelper().put(PropertyKeys.saved, clientId, state);
                 }
             }
             state.setValue(input.getLocalValue());
             state.setValid(input.isValid());
             state.setSubmittedValue(input.getSubmittedValue());
             state.setLocalValueSet(input.isLocalValueSet());
+            if (state.hasDeltaState()) {
+            	getStateHelper().put(PropertyKeys.saved, clientId, state);
+            } else if (saved != null) {
+            	getStateHelper().remove(PropertyKeys.saved, clientId);
+            }
         } else if (component instanceof UIForm) {
             UIForm form = (UIForm) component;
             String clientId = component.getClientId(context);
             SavedState state = null;
             if (saved == null) {
                 state = new SavedState();
-                getStateHelper().put(PropertyKeys.saved, clientId, state);
             }
             if (state == null) {
                 state = saved.get(clientId);
                 if (state == null) {
                     state = new SavedState();
-                    //saved.put(clientId, state);
-                    getStateHelper().put(PropertyKeys.saved, clientId, state);
                 }
             }
             state.setSubmitted(form.isSubmitted());
+            if (state.hasDeltaState()) {
+            	getStateHelper().put(PropertyKeys.saved, clientId, state);
+            } else if (saved != null) {
+            	getStateHelper().remove(PropertyKeys.saved, clientId);
+            }
         }
 
         // Save state for children of this component
@@ -2435,6 +2452,11 @@ class SavedState implements Serializable {
         this.submitted = submitted;
     }
 
+	public boolean hasDeltaState() {
+		return submittedValue != null || value != null || localValueSet
+				|| !valid || submitted;
+	}
+    
     public String toString() {
         return ("submittedValue: " + submittedValue +
                 " value: " + value +
@@ -2442,7 +2464,6 @@ class SavedState implements Serializable {
     }
 
 }
-
 
 // Private class to wrap an event with a row index
 class WrapperEvent extends FacesEvent {

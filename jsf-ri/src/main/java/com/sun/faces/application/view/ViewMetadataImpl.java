@@ -43,10 +43,14 @@ package com.sun.faces.application.view;
 import com.sun.faces.RIConstants;
 import javax.faces.view.facelets.Facelet;
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.context.FacesFileNotFoundException;
 
 
 import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import javax.faces.view.ViewMetadata;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -93,7 +97,9 @@ public class ViewMetadataImpl extends ViewMetadata {
     public UIViewRoot createMetadataView(FacesContext context) {
 
         UIViewRoot result = null;
-
+        UIViewRoot currentViewRoot = context.getViewRoot();
+        Map<String, Object> currentViewMapShallowCopy = Collections.emptyMap();
+        
         try {
             context.setProcessingEvents(false);
             if (faceletFactory == null) {
@@ -109,17 +115,48 @@ public class ViewMetadataImpl extends ViewMetadata {
             // StateContext.partialStateSaving() can determine the current
             // view. 
             context.getAttributes().put(RIConstants.VIEWID_KEY_NAME, viewId);
+            // If the currentViewRoot has a viewMap, make sure the entries are
+            // copied to the temporary UIViewRoot before invoking handlers.
+            if (null != currentViewRoot) {
+                Map<String, Object> currentViewMap = currentViewRoot.getViewMap(false);
+
+                if (null != currentViewMap && !currentViewMap.isEmpty()) {
+                    currentViewMapShallowCopy = new HashMap<String, Object>(currentViewMap);
+                    Map<String, Object> resultViewMap = result.getViewMap(true);
+                    resultViewMap.putAll(currentViewMapShallowCopy);
+                }
+            }
+            
+            // Only replace the current context's UIViewRoot if there is 
+            // one to replace.
+            if (null != currentViewRoot) {
+                // This clear's the ViewMap of the current UIViewRoot before
+                // setting the argument as the new UIViewRoot.
+                context.setViewRoot(result);
+            }
 
             Facelet f = faceletFactory.getMetadataFacelet(context, result.getViewId());
 
             f.apply(context, result);
+        } catch (FacesFileNotFoundException ffnfe) {
+            try {
+                context.getExternalContext().responseSendError(404, ffnfe.getMessage());
+            } catch(IOException ioe) {}
+            context.responseComplete();
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         } finally {
             context.getAttributes().remove(RIConstants.VIEWID_KEY_NAME);
             context.setProcessingEvents(true);
+            if (null != currentViewRoot) {
+                context.setViewRoot(currentViewRoot);
+                if (!currentViewMapShallowCopy.isEmpty()) {
+                    currentViewRoot.getViewMap(true).putAll(currentViewMapShallowCopy);
+                    currentViewMapShallowCopy.clear();
+                }
+            }
+            
         }
-
 
         return result;
         

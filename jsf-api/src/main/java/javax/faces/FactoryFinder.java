@@ -42,32 +42,11 @@ package javax.faces;
 
 
 import com.sun.faces.spi.InjectionProvider;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import java.lang.reflect.Constructor;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Collection;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 
 
 /**
@@ -258,78 +237,12 @@ public final class FactoryFinder {
 
     // ------------------------------------------------------- Static Variables
 
-    private static final FactoryManagerCache FACTORIES_CACHE;
-
-
-    /**
-     * <p>The set of JavaServer Faces factory classes for which the factory
-     * discovery mechanism is supported.  The entries in this list must be 
-     * alphabetically ordered according to the entire string of the
-     * *value* of each of the literals, not just
-     * the last part of the literal!</p>
-     */
-    private static final String[] FACTORY_NAMES;
-
-    /**
-     * <p>Map of Class instances for the our factory names.</p>
-     */
-    private static Map<String, Class> factoryClasses;
+    static final CurrentThreadToServletContext FACTORIES_CACHE;
 
     private static final Logger LOGGER;
 
     static {
-        FACTORIES_CACHE = new FactoryManagerCache();
-
-        FACTORY_NAMES = new String [] {
-            APPLICATION_FACTORY,
-            VISIT_CONTEXT_FACTORY,
-            EXCEPTION_HANDLER_FACTORY,
-            EXTERNAL_CONTEXT_FACTORY,
-            FACES_CONTEXT_FACTORY,
-            FLASH_FACTORY,
-            FLOW_HANDLER_FACTORY,
-            PARTIAL_VIEW_CONTEXT_FACTORY,
-            CLIENT_WINDOW_FACTORY,
-            LIFECYCLE_FACTORY,
-            RENDER_KIT_FACTORY,
-            VIEW_DECLARATION_LANGUAGE_FACTORY,
-            FACELET_CACHE_FACTORY,
-            TAG_HANDLER_DELEGATE_FACTORY
-        };
-
-        // Ensure the factory names are sorted.
-        //
-        Arrays.sort(FACTORY_NAMES);
-        
-        factoryClasses = new HashMap<String, Class>(FACTORY_NAMES.length);
-        factoryClasses.put(APPLICATION_FACTORY,
-                 javax.faces.application.ApplicationFactory.class);
-        factoryClasses.put(VISIT_CONTEXT_FACTORY,
-                 javax.faces.component.visit.VisitContextFactory.class);
-        factoryClasses.put(EXCEPTION_HANDLER_FACTORY,
-                 javax.faces.context.ExceptionHandlerFactory.class);
-        factoryClasses.put(EXTERNAL_CONTEXT_FACTORY,
-                 javax.faces.context.ExternalContextFactory.class);
-        factoryClasses.put(FACES_CONTEXT_FACTORY,
-                 javax.faces.context.FacesContextFactory.class);
-        factoryClasses.put(FLASH_FACTORY,
-                 javax.faces.context.FlashFactory.class);
-        factoryClasses.put(PARTIAL_VIEW_CONTEXT_FACTORY,
-                 javax.faces.context.PartialViewContextFactory.class);
-        factoryClasses.put(LIFECYCLE_FACTORY,
-                 javax.faces.lifecycle.LifecycleFactory.class);
-        factoryClasses.put(CLIENT_WINDOW_FACTORY,
-                 javax.faces.lifecycle.ClientWindowFactory.class);
-        factoryClasses.put(RENDER_KIT_FACTORY,
-                 javax.faces.render.RenderKitFactory.class);
-        factoryClasses.put(VIEW_DECLARATION_LANGUAGE_FACTORY,
-                 javax.faces.view.ViewDeclarationLanguageFactory.class);
-        factoryClasses.put(FACELET_CACHE_FACTORY,
-                 javax.faces.view.facelets.FaceletCacheFactory.class);
-        factoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY,
-                 javax.faces.view.facelets.TagHandlerDelegateFactory.class);
-        factoryClasses.put(FLOW_HANDLER_FACTORY,
-                 javax.faces.flow.FlowHandlerFactory.class);
+        FACTORIES_CACHE = new CurrentThreadToServletContext();
 
         LOGGER = Logger.getLogger("javax.faces", "javax.faces.LogStrings");
     }
@@ -369,14 +282,9 @@ public final class FactoryFinder {
     public static Object getFactory(String factoryName)
          throws FacesException {
 
-        validateFactoryName(factoryName);
-
-        // Identify the web application class loader
-        ClassLoader classLoader = getClassLoader();
-
-        FactoryManager manager =
-              FACTORIES_CACHE.getApplicationFactoryManager(classLoader);
-        return manager.getFactory(classLoader, factoryName);
+        FactoryFinderInstance manager =
+              FACTORIES_CACHE.getApplicationFactoryManager();
+        return manager.getFactory(factoryName);
 
     }
 
@@ -401,13 +309,8 @@ public final class FactoryFinder {
     public static void setFactory(String factoryName,
                                   String implName) {
 
-        validateFactoryName(factoryName);
-
-        // Identify the web application class loader
-        ClassLoader classLoader = getClassLoader();
-
-        FactoryManager manager =
-              FACTORIES_CACHE.getApplicationFactoryManager(classLoader);
+        FactoryFinderInstance manager =
+              FACTORIES_CACHE.getApplicationFactoryManager();
         manager.addFactory(factoryName, implName);
 
     }
@@ -424,727 +327,47 @@ public final class FactoryFinder {
      *                        cannot be identified
      */
     public static void releaseFactories() throws FacesException {
+        synchronized(FACTORIES_CACHE) {
 
-        // Identify the web application class loader
-        ClassLoader cl = getClassLoader();
-        
-        if (!FACTORIES_CACHE.applicationMap.isEmpty()) {
-        
-            FactoryManager fm = FACTORIES_CACHE.getApplicationFactoryManager(cl);
-            InjectionProvider provider = fm.getInjectionProvider();
-            if (null != provider) {
-                Collection factories = null;
-                for (Map.Entry<FactoryManagerCacheKey, FactoryManager> entry : 
-                        FACTORIES_CACHE.applicationMap.entrySet()) {
-                    factories = entry.getValue().getFactories();
-                    for (Object curFactory : factories) {
-                        try {
-                            provider.invokePreDestroy(curFactory);
-                        } catch (Exception ex) {
-                            if (LOGGER.isLoggable(Level.SEVERE)) {
-                                String message = MessageFormat.format("Unable to invoke @PreDestroy annotated methods on {0}.", 
-                                        curFactory);
-                                LOGGER.log(Level.SEVERE, message, ex);
+            if (!FACTORIES_CACHE.applicationMap.isEmpty()) {
+
+                FactoryFinderInstance fm = FACTORIES_CACHE.getApplicationFactoryManager();
+                InjectionProvider provider = fm.getInjectionProvider();
+                if (null != provider) {
+                    Collection factories = null;
+                    for (Map.Entry entry : 
+                            FACTORIES_CACHE.applicationMap.entrySet()) {
+                        FactoryFinderInstance cur = (FactoryFinderInstance) entry.getValue();
+                        factories = cur.getFactories();
+                        for (Object curFactory : factories) {
+                            try {
+                                provider.invokePreDestroy(curFactory);
+                            } catch (Exception ex) {
+                                if (LOGGER.isLoggable(Level.SEVERE)) {
+                                    String message = MessageFormat.format("Unable to invoke @PreDestroy annotated methods on {0}.", 
+                                            curFactory);
+                                    LOGGER.log(Level.SEVERE, message, ex);
+                                }
                             }
                         }
                     }
-                }
-            } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "Unable to call @PreDestroy annotated methods because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
+                } else {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, "Unable to call @PreDestroy annotated methods because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
+                    }
                 }
             }
+
+            FACTORIES_CACHE.removeApplicationFactoryManager();
         }
-
-        FACTORIES_CACHE.removeApplicationFactoryManager(cl);
-
     }
 
 
     // -------------------------------------------------------- Private Methods
-    
-    /**
-     * <p>Identify and return the class loader that is associated with the
-     * calling web application.</p>
-     *
-     * @throws FacesException if the web application class loader
-     *                        cannot be identified
-     */
-    private static ClassLoader getClassLoader() throws FacesException {
 
-        // J2EE 1.3 (and later) containers are required to make the
-        // web application class loader visible through the context
-        // class loader of the current thread.
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        if (cl == null) {
-            throw new FacesException("getContextClassLoader");
-        }
-        return (cl);
-
-    }
-
-
-    /**
-     * <p>Load and return an instance of the specified implementation
-     * class using the following algorithm.</p>
-     * <p/>
-     * <ol>
-     * <p/>
-     * <li><p>If the argument <code>implementations</code> list has
-     * more than one element, or exactly one element, interpret the
-     * last element in the list to be the fully qualified class name of
-     * a class implementing <code>factoryName</code>.  Instantiate that
-     * class and save it for return.  If the
-     * <code>implementations</code> list has only one element, skip
-     * this step.</p></li>
-     * <p/>
-     * <li><p>Look for a resource called
-     * <code>/META-INF/services/&lt;factoryName&gt;</code>.  If found,
-     * interpret it as a properties file, and read out the first entry.
-     * Interpret the first entry as a fully qualify class name of a
-     * class that implements <code>factoryName</code>.  If we have an
-     * instantiated factory from the previous step <em>and</em> the
-     * implementing class has a one arg constructor of the type for
-     * <code>factoryName</code>, instantiate it, passing the
-     * instantiated factory from the previous step.  If there is no one
-     * arg constructor, just instantiate the zero arg constructor.  Save
-     * the newly instantiated factory for return, replacing the
-     * instantiated factory from the previous step.</p></li>
-     * <p/>
-     * <li><p>Treat each remaining element in the
-     * <code>implementations</code> list as a fully qualified class name
-     * of a class implementing <code>factoryName</code>.  If the current
-     * element has a one arg constructor of the type for
-     * <code>factoryName</code>, instantiate it, passing the
-     * instantiated factory from the previous or step iteration.  If
-     * there is no one arg constructor, just instantiate the zero arg
-     * constructor, replacing the instantiated factory from the previous
-     * step or iteration.</p></li>
-     * <p/>
-     * <li><p>Return the saved factory</p></li>
-     * <p/>
-     * </ol>
-     *
-     * @param classLoader     Class loader for the web application that will
-     *                        be loading the implementation class
-     * @param implementations A List of implementations for a given
-     *                        factory class.
-     * @throws FacesException if the specified implementation class
-     *                        cannot be loaded
-     * @throws FacesException if an instance of the specified implementation
-     *                        class cannot be instantiated
-     */
-    private static Object getImplementationInstance(ClassLoader classLoader,
-                                                    String factoryName,
-                                                    List implementations)
-    throws FacesException {
-
-        Object result = null;
-        String curImplClass;
-        int len;
-
-        // step 1.
-        if (null != implementations &&
-             (1 < (len = implementations.size()) || 1 == len)) {
-            curImplClass = (String) implementations.remove(len - 1);
-            // since this is the hard coded implementation default,
-            // there is no preceding implementation, so don't bother
-            // with a non-zero-arg ctor.
-            result = getImplGivenPreviousImpl(classLoader, factoryName,
-                 curImplClass, null);
-        }
-
-        // step 2.
-        List<String> fromServices = getImplNameFromServices(classLoader, factoryName);
-        if (fromServices != null) {
-            for (String name : fromServices) {
-                result = getImplGivenPreviousImpl(classLoader,
-                                                  factoryName,
-                                                  name,
-                                                  result);
-            }
-        }        
-
-        // step 3.
-        if (null != implementations) {
-            for (len = (implementations.size() - 1); 0 <= len; len--) {
-                curImplClass = (String) implementations.remove(len);
-                result = getImplGivenPreviousImpl(classLoader, factoryName,
-                     curImplClass, result);
-            }
-        }
-
-        return result;
-
-    }
-
-
-    /**
-     * <p>Perform the logic to get the implementation class for the
-     * second step of {@link FactoryFinder#getImplementationInstance(ClassLoader, String, java.util.List)}.</p>
-     */
-    private static List<String> getImplNameFromServices(ClassLoader classLoader,
-                                                        String factoryName) {
-
-        // Check for a services definition
-        List<String> result = null;
-        String resourceName = "META-INF/services/" + factoryName;
-        InputStream stream;
-        BufferedReader reader = null;
-        try {
-            Enumeration<URL> e = classLoader.getResources(resourceName);
-            while (e.hasMoreElements()) {
-                URL url = e.nextElement();
-                URLConnection conn = url.openConnection();
-                conn.setUseCaches(false);
-                stream = conn.getInputStream();
-                if (stream != null) {
-                    // Deal with systems whose native encoding is possibly
-                    // different from the way that the services entry was created
-                    try {
-                        reader =
-                              new BufferedReader(new InputStreamReader(stream,
-                                                                       "UTF-8"));
-                        if (result == null) {
-                            result = new ArrayList<String>(3);
-                        }
-                        result.add(reader.readLine());
-                    } catch (UnsupportedEncodingException uee) {
-                        // The DM_DEFAULT_ENCODING warning is acceptable here
-                        // because we explicitly *want* to use the Java runtime's
-                        // default encoding.
-                        reader =
-                              new BufferedReader(new InputStreamReader(stream));
-                    } finally {
-                        if (reader != null) {
-                            reader.close();
-                            reader = null;
-                        }
-                        if (stream != null) {
-                            stream.close();
-                            //noinspection UnusedAssignment
-                            stream = null;
-                        }
-                    }
-
-                }
-            }
-        } catch (IOException e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                           e.toString(),
-                           e);
-            }
-        } catch (SecurityException e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                           e.toString(),
-                           e);
-            }
-        }
-        return result;
-
-    }
-
-
-    /**
-     * <p>Implement the decorator pattern for the factory
-     * implementation.</p>
-     * <p/>
-     * <p>If <code>previousImpl</code> is non-<code>null</code> and the
-     * class named by the argument <code>implName</code> has a one arg
-     * contstructor of type <code>factoryName</code>, instantiate it,
-     * passing previousImpl to the constructor.</p>
-     * <p/>
-     * <p>Otherwise, we just instantiate and return
-     * <code>implName</code>.</p>
-     *
-     * @param classLoader  the ClassLoader from which to load the class
-     * @param factoryName  the fully qualified class name of the factory.
-     * @param implName     the fully qualified class name of a class that
-     *                     implements the factory.
-     * @param previousImpl if non-<code>null</code>, the factory
-     *                     instance to be passed to the constructor of the new factory.
-     */
-    private static Object getImplGivenPreviousImpl(ClassLoader classLoader,
-                                                   String factoryName,
-                                                   String implName,
-                                                   Object previousImpl) {
-        Class clazz;
-        Class factoryClass = null;
-        Class[] getCtorArg;
-        Object[] newInstanceArgs = new Object[1];
-        Constructor ctor;
-        Object result = null;
-        InjectionProvider provider = null;
-
-        // if we have a previousImpl and the appropriate one arg ctor.
-        if ((null != previousImpl) &&
-             (null != (factoryClass = getFactoryClass(factoryName)))) {
-            try {
-                clazz = Class.forName(implName, false, classLoader);
-                getCtorArg = new Class[1];
-                getCtorArg[0] = factoryClass;
-                ctor = clazz.getConstructor(getCtorArg);
-                newInstanceArgs[0] = previousImpl;
-                result = ctor.newInstance(newInstanceArgs);
-                
-                FactoryManager fm = FACTORIES_CACHE.getApplicationFactoryManager(classLoader);
-                provider = fm.getInjectionProvider();
-                if (null != provider) {
-                    provider.inject(result);
-                    provider.invokePostConstruct(result);
-                } else {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE, "Unable to inject {0} because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?", result);
-                    }
-                }
-                
-                
-            }
-            catch (NoSuchMethodException nsme) {
-                // fall through to "zero-arg-ctor" case
-                factoryClass = null;
-            }
-            catch (Exception e) {
-                throw new FacesException(implName, e);
-            }
-        }
-        if (null == previousImpl || null == factoryClass) {
-            // we have either no previousImpl or no appropriate one arg
-            // ctor.
-            try {
-                clazz = Class.forName(implName, false, classLoader);
-                // since this is the hard coded implementation default,
-                // there is no preceding implementation, so don't bother
-                // with a non-zero-arg ctor.
-                result = clazz.newInstance();
-            } catch (Exception e) {
-                throw new FacesException(implName, e);
-            }
-        }
-        return result;
-
-    }
-
-
-    /**
-     * @return the <code>java.lang.Class</code> for the argument
-     *         factory.
-     */
-    private static Class getFactoryClass(String factoryClassName) {
-
-        return factoryClasses.get(factoryClassName);
-
-    }
-
-
-    /**
-     * Ensure the provided factory name is valid.
-     */
-    private static void validateFactoryName(String factoryName) {
-
-        if (factoryName == null) {
-            throw new NullPointerException();
-        }
-        if (Arrays.binarySearch(FACTORY_NAMES, factoryName) < 0) {
-            throw new IllegalArgumentException(factoryName);
-        }
-
-    }
-    
+    // Called via reflection from automated tests.
     private static void reInitializeFactoryManager() {
         FACTORIES_CACHE.resetSpecialInitializationCaseFlags();
     }
-
-
-    // ----------------------------------------------------------- Inner Classes
-
-
-    /**
-     * Managed the mappings between a web application and its configured
-     * injectionProvider.
-     */
-    private static final class FactoryManagerCache {
-
-        private ConcurrentMap<FactoryManagerCacheKey,FactoryManager> applicationMap =
-              new ConcurrentHashMap<FactoryManagerCacheKey, FactoryManager>();
-        private AtomicBoolean logNullFacesContext = new AtomicBoolean(false);
-        private AtomicBoolean logNonNullFacesContext = new AtomicBoolean(false);
-
-
-        // ------------------------------------------------------ Public Methods
-        
-        private Object getFallbackFactory(ClassLoader cl, FactoryManager brokenFactoryManager,
-                String factoryName) {
-            Object result = null;
-            for (Map.Entry<FactoryManagerCacheKey,FactoryManager> cur : applicationMap.entrySet()) {
-                if (cur.getKey().getClassLoader().equals(cl) && !cur.getValue().equals(brokenFactoryManager)) {
-                    result = cur.getValue().getFactory(cl, factoryName);
-                    if (null != result) {
-                        break;
-                    }
-                }
-            }
-            return result;
-        }
-        
-        private FactoryManager getApplicationFactoryManager(ClassLoader cl) {
-            FactoryManager result = getApplicationFactoryManager(cl, true);
-            return result;
-        }
-
-        private FactoryManager getApplicationFactoryManager(ClassLoader cl, boolean create) {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            boolean isSpecialInitializationCase = detectSpecialInitializationCase(facesContext);
-
-            FactoryManagerCacheKey key = new FactoryManagerCacheKey(facesContext,
-                    cl, applicationMap);
-
-            FactoryManager result = applicationMap.get(key);
-            FactoryManager toCopy = null;
-            if (result == null && create) {
-                boolean createNewFactoryManagerInstance = false;
-                
-                if (isSpecialInitializationCase) {
-                    // We need to obtain a reference to the correct
-                    // FactoryManager.  Iterate through the data structure 
-                    // containing all FactoryManager instances for this VM.
-                    FactoryManagerCacheKey curKey;
-                    boolean classLoadersMatchButContextsDoNotMatch = false;
-                    boolean foundNoMatchInApplicationMap = true;
-                    for (Map.Entry<FactoryManagerCacheKey, FactoryManager> cur : applicationMap.entrySet()) {
-                        curKey = cur.getKey();
-                        // If the current FactoryManager is for a
-                        // the same ClassLoader as the current ClassLoader...
-                        if (curKey.getClassLoader().equals(cl)) {
-                            foundNoMatchInApplicationMap = false;
-                            // Check the other descriminator for the
-                            // key: the context.  
-
-                            // If the context objects of the keys are
-                            // both non-null and non-equal, then *do*
-                            // create a new FactoryManager instance.
-
-                            if ((null != key.getContext() && null != curKey.getContext()) &&
-                                (!key.getContext().equals(curKey.getContext()))) {
-                                classLoadersMatchButContextsDoNotMatch = true;
-                                toCopy = cur.getValue();
-                            }
-                            else {
-                                // Otherwise, use this FactoryManager
-                                // instance.
-                                result = cur.getValue();
-                            }
-                            break;
-                        }
-                    }
-                    // We must create a new FactoryManager if there was no match
-                    // at all found in the applicationMap, or a match was found
-                    // and the match is safe to use in this web app
-                    createNewFactoryManagerInstance = foundNoMatchInApplicationMap ||
-                            (null == result && classLoadersMatchButContextsDoNotMatch);
-                } else {
-                    createNewFactoryManagerInstance = true;
-                }
-                
-                if (createNewFactoryManagerInstance) {
-                    FactoryManager newResult;
-                    if (null != toCopy) {
-                        newResult = new FactoryManager(toCopy);
-                    } else {
-                        newResult = new FactoryManager();
-                    }
-                    result = applicationMap.putIfAbsent(key, newResult);
-                    result = (null != result) ? result : newResult;
-                }
-                
-            }
-            return result;
-        }
-        
-        /**
-         * This method is used to detect the following special initialization case.
-         * IF no FactoryManager can be found for key, 
-         * AND this call to getApplicationFactoryManager() *does* have a current FacesContext
-         * BUT a previous call to getApplicationFactoryManager *did not* have a current FacesContext
-         * 
-         * @param facesContext the current FacesContext for this request
-         * @return true if the current execution falls into the special initialization case.
-         */
-        private boolean detectSpecialInitializationCase(FacesContext facesContext) {
-            boolean result = false;
-            if (null == facesContext) {
-                logNullFacesContext.compareAndSet(false, true);
-            } else {
-                logNonNullFacesContext.compareAndSet(false, true);
-            }
-            result = logNullFacesContext.get() && logNonNullFacesContext.get();
-            
-            return result;
-        }
-
-
-        public void removeApplicationFactoryManager(ClassLoader cl) {
-            FactoryManager fm = this.getApplicationFactoryManager(cl, false);
-            if (null != fm) {
-                fm.clearInjectionProvider();
-            }
-            
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            boolean isSpecialInitializationCase = detectSpecialInitializationCase(facesContext);
-
-            FactoryManagerCacheKey key = new FactoryManagerCacheKey(facesContext,
-                    cl, applicationMap);
-            
-            applicationMap.remove(key);
-            if (isSpecialInitializationCase) {
-                logNullFacesContext.set(false);
-                logNonNullFacesContext.set(false);
-            }
-
-        }
-        
-        public void resetSpecialInitializationCaseFlags() {
-            logNullFacesContext.set(false);
-            logNonNullFacesContext.set(false);
-        }
-
-    } // END FactoryCache
-
-    private static final class FactoryManagerCacheKey {
-        private ClassLoader cl;
-        private Long marker;
-        private Object context;
-
-        private static final String KEY = FactoryFinder.class.getName() + "." +
-                FactoryManagerCacheKey.class.getSimpleName();
-
-        public FactoryManagerCacheKey(FacesContext facesContext, ClassLoader cl,
-                Map<FactoryManagerCacheKey,FactoryManager> factoryMap) {
-            this.cl = cl;
-            boolean resolveValueFromFactoryMap = false;
-            
-            
-            if (null == facesContext) {
-                resolveValueFromFactoryMap = true;
-            } else {
-                ExternalContext extContext = facesContext.getExternalContext();
-                context = extContext.getContext();
-                if (null == context) {
-                    resolveValueFromFactoryMap = true;
-                } else {
-                    Map<String, Object> appMap = extContext.getApplicationMap();
-                
-                    Long val = (Long) appMap.get(KEY);
-                    if (null == val) {
-                        marker = new Long(System.currentTimeMillis());
-                        appMap.put(KEY, marker);
-                    } else {
-                        marker = val;
-                    }
-                }
-            } 
-            if (resolveValueFromFactoryMap) {
-                // We don't have a FacesContext.
-                // Our only recourse is to inspect the keys of the
-                // factoryMap and see if any of them has a classloader
-                // equal to our argument cl.
-                Set<FactoryManagerCacheKey> keys = factoryMap.keySet();
-                FactoryManagerCacheKey match = null;
-                for (FactoryManagerCacheKey cur : keys) {
-                    if (this.cl.equals(cur.cl)) {
-                        if (null != cur && null != match) {
-                            LOGGER.log(Level.WARNING, "Multiple JSF Applications found on same ClassLoader.  Unable to safely determine which FactoryManager instance to use. Defaulting to first match.");
-                            break;
-                        }
-                        match = cur;
-                    }
-                }
-                if (null != match) {
-                    this.marker = match.marker;
-                }
-            }
-        }
-        
-        public ClassLoader getClassLoader() {
-            return cl;
-        }
-        
-        public Object getContext() {
-            return context;
-        }
-        
-        private FactoryManagerCacheKey() {}
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final FactoryManagerCacheKey other = (FactoryManagerCacheKey) obj;
-            if (this.cl != other.cl && (this.cl == null || !this.cl.equals(other.cl))) {
-                return false;
-            }
-            if (this.marker != other.marker && (this.marker == null || !this.marker.equals(other.marker))) {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 97 * hash + (this.cl != null ? this.cl.hashCode() : 0);
-            hash = 97 * hash + (this.marker != null ? this.marker.hashCode() : 0);
-            return hash;
-        }
-
-
-        
-
-    }
-
-
-    /**
-     * Maintains the injectionProvider for a single web application.
-     */
-    private static final class FactoryManager {
-
-        private final Map<String,Object> factories;
-        private final Map<String, List<String>> savedFactoryNames;
-        private final ReentrantReadWriteLock lock;
-        private static final String INJECTION_PROVIDER_KEY = 
-                FactoryFinder.class.getPackage().getName() + "INJECTION_PROVIDER_KEY";
-                
-
-
-        // -------------------------------------------------------- Consturctors
-
-
-        public FactoryManager() {
-            lock = new ReentrantReadWriteLock(true);
-            factories = new HashMap<String,Object>();
-            savedFactoryNames = new HashMap<String, List<String>>();
-            for (String name : FACTORY_NAMES) {
-                factories.put(name, new ArrayList(4));
-            }
-            copyInjectionProviderFromFacesContext();
-        }
-
-        public FactoryManager(FactoryManager toCopy) {
-            lock = new ReentrantReadWriteLock(true);
-            factories = new HashMap<String,Object>();
-            savedFactoryNames = new HashMap<String, List<String>>();
-            factories.putAll(toCopy.savedFactoryNames);
-            copyInjectionProviderFromFacesContext();
-                
-        }
-        
-        private void copyInjectionProviderFromFacesContext() {
-            InjectionProvider injectionProvider = null;
-            FacesContext context = FacesContext.getCurrentInstance();
-            if (null != context) {
-                injectionProvider = (InjectionProvider) context.getAttributes().get("com.sun.faces.config.ConfigManager_INJECTION_PROVIDER_TASK");
-            } 
-            
-            if (null != injectionProvider) {
-                factories.put(INJECTION_PROVIDER_KEY, injectionProvider);
-            } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "Unable to obtain InjectionProvider from init time FacesContext. Does this container implement the Mojarra Injection SPI?");
-                }
-            }
-        
-        }
-
-
-        
-
-        // ------------------------------------------------------ Public Methods
-        
-        public Collection<Object> getFactories() {
-            return factories.values();
-        }
-
-
-        public void addFactory(String factoryName, String implementation) {
-
-            Object result = factories.get(factoryName);
-            lock.writeLock().lock();
-            try {
-                if (result instanceof List) {
-                    TypedCollections.dynamicallyCastList((List) result, String.class).add(0, implementation);
-                }
-            } finally {
-                lock.writeLock().unlock();
-            }
-        }
-
-        InjectionProvider getInjectionProvider() {
-            InjectionProvider result = (InjectionProvider) factories.get(INJECTION_PROVIDER_KEY);
-            return result;
-        }
-        
-        void clearInjectionProvider() {
-            factories.remove(INJECTION_PROVIDER_KEY);
-        }
-
-        public Object getFactory(ClassLoader cl, String factoryName) {
-
-            Object factoryOrList;
-            lock.readLock().lock();
-            try {
-                factoryOrList = factories.get(factoryName);
-                if (!(factoryOrList instanceof List)) {
-                    return factoryOrList;
-                }
-            } finally {
-                lock.readLock().unlock();
-            }
-
-            // factory hasn't been constructed
-            lock.writeLock().lock();
-            try {
-                // double check the current value.  Another thread
-                // may have completed the initialization by the time
-                // this thread entered this block
-                factoryOrList = factories.get(factoryName);
-                if (!(factoryOrList instanceof List)) {
-                    return factoryOrList;
-                }
-                savedFactoryNames.put(factoryName, new ArrayList((List)factoryOrList));
-                Object factory = getImplementationInstance(cl,
-                                                           factoryName,
-                                                           (List) factoryOrList);
-
-                if (factory == null) {
-                    ResourceBundle rb = LOGGER.getResourceBundle();
-                    String message = rb.getString("severe.no_factory");
-                    message = MessageFormat.format(message, factoryName);
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE, message);
-                    }
-                    factory = FACTORIES_CACHE.getFallbackFactory(cl, this, factoryName);
-                    if (null == factory) {
-                        message = rb.getString("severe.no_factory_backup_failed");
-                        message = MessageFormat.format(message, factoryName);
-                        throw new IllegalStateException(message);
-                    }
-                }
-
-                // Record and return the new instance
-                factories.put(factoryName, factory);
-                return (factory);
-            } finally {
-                lock.writeLock().unlock();
-            }
-        }
-        
-    } // END FactoryManager
-
 
 }

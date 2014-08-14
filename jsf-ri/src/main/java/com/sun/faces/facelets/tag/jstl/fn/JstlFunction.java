@@ -106,7 +106,6 @@ public final class JstlFunction {
             value = "";
         }
         StringBuilder b = new StringBuilder(value.length());
-        final char[] lookahead = { 'a', 'm', 'p', ';' };
         for (int i = 0, len = value.length(); i < len; i++) {
             char c = value.charAt(i);
             if (c == '<') {
@@ -118,16 +117,6 @@ public final class JstlFunction {
             } else if (c == '"') {
                 b.append("&#034;");
             } else if (c == '&') {
-                boolean matched = true;
-                for (int j = 0, jlen = lookahead.length; j < jlen; j++) {
-                    if (lookahead[j] != value.charAt(i + (j + 1))) {
-                        matched = false;
-                        break;
-                    }
-                }
-                if (matched) {
-                    i += 4;
-                } 
                 b.append("&amp;");
             } else {
                 b.append(c);

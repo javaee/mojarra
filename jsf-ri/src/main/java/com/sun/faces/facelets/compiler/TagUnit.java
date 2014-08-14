@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagLibrary;
 
 import javax.faces.view.facelets.FaceletException;
@@ -99,7 +100,7 @@ class TagUnit extends CompilationUnit implements TagConfig {
 
     @Override
     protected void startNotify(CompilationManager manager) {
-        if (this.name.equals("composition") && this.namespace.equals("http://java.sun.com/jsf/facelets")) {
+        if (this.name.equals("composition") && (this.namespace.equals(RIConstants.FACELET_NAMESPACE) || this.namespace.equals(RIConstants.FACELET_NAMESPACE))) {
             CompilerPackageCompilationMessageHolder messageHolder =
                     (CompilerPackageCompilationMessageHolder) manager.getCompilationMessageHolder();
             CompilationManager compositeComponentCompilationManager = messageHolder.

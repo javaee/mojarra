@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.tag.ui;
 
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.FaceletContextImplBase;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
@@ -144,6 +145,10 @@ public final class DecorateHandler extends TagHandlerImpl implements TemplateCli
             path = this.template.getValue(ctx);
             if (path.trim().length() == 0) {
                 throw new TagAttributeException(this.tag, this.template, "Invalid path : " + path);
+            }
+            WebConfiguration webConfig = WebConfiguration.getInstance(); 
+            if (path.startsWith(webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppContractsDirectory))) {
+                throw new TagAttributeException(this.tag, this.template, "Invalid path, contract resources cannot be accessed this way : " + path);
             }
             ctx.includeFacelet(parent, path);
         } catch (IOException e) {

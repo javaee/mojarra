@@ -40,6 +40,9 @@
 
 package com.sun.faces;
 
+import com.sun.faces.facelets.tag.jsf.core.CoreLibrary;
+import com.sun.faces.facelets.tag.jsf.html.HtmlLibrary;
+import com.sun.faces.facelets.tag.ui.UILibrary;
 import javax.faces.render.RenderKitFactory;
 
 /**
@@ -75,10 +78,20 @@ public class RIConstants {
     public static final Object NO_VALUE = "";
       
     public static final String CORE_NAMESPACE = 
-        "http://java.sun.com/jsf/core";
+            CoreLibrary.Namespace;
     public static final String HTML_NAMESPACE = 
-        "http://java.sun.com/jsf/html";
+            HtmlLibrary.Namespace;
     
+    public static final String CORE_NAMESPACE_NEW = 
+            CoreLibrary.XMLNSNamespace;
+    public static final String HTML_NAMESPACE_NEW = 
+            HtmlLibrary.XMLNSNamespace;
+
+    public static final String FACELET_NAMESPACE = 
+        UILibrary.Namespace;
+    public static final String FACELET_NAMESPACE_NEW = 
+        UILibrary.XMLNSNamespace;
+
     public static final Class[] EMPTY_CLASS_ARGS = new Class[0];
     public static final Object[] EMPTY_METH_ARGS = new Object[0];
 
@@ -122,6 +135,13 @@ public class RIConstants {
      */
     public static final String DYNAMIC_COMPONENT =
             FACES_PREFIX + "DynamicComponent";
+    
+    /**
+     * Present in the attrs of UIViewRoot iff the tree has one or more
+     * dynamic modifications
+     */
+    public static final String TREE_HAS_DYNAMIC_COMPONENTS =
+            FACES_PREFIX + "TreeHasDynamicComponents";
     
     public static final String FLOW_DEFINITION_ID_SUFFIX = "-flow.xml";
     

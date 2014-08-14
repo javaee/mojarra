@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -61,6 +61,8 @@ package com.sun.faces.facelets.tag.jsf;
 import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
+import com.sun.faces.util.Util;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
@@ -71,6 +73,7 @@ import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import javax.faces.view.facelets.Tag;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -79,7 +82,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import javax.faces.event.PhaseId;
 
 /**
  * 
@@ -90,6 +93,15 @@ public final class ComponentSupport {
 
     private final static String MARK_DELETED = "com.sun.faces.facelets.MARK_DELETED";
     public final static String MARK_CREATED = "com.sun.faces.facelets.MARK_ID";
+
+    // Expando boolean attribute used to identify parent components that have had
+    // a dynamic child addition or removal.
+    public final static String MARK_CHILDREN_MODIFIED = "com.sun.faces.facelets.MARK_CHILDREN_MODIFIED";
+    
+    // Expando Collection<String> attribute used to identify tagIds of child components that
+    // have been removed from a parent component.
+    public final static String REMOVED_CHILDREN = "com.sun.faces.facelets.REMOVED_CHILDREN";
+
     private final static String IMPLICIT_PANEL = "com.sun.faces.facelets.IMPLICIT_PANEL";
 
     /**
@@ -201,6 +213,36 @@ public final class ComponentSupport {
         return null;
     }
     
+    // Obvious performance optimization.  First, assume this method
+    // is only called from UIInstructionHandler.apply().  With that assumption
+    // in place a few optimizations can be had on the cheap.
+    
+    // If this method is called on an initial page 
+    // render it will always return null, so we can just return 
+    // null in that case without any iteration.  
+    
+    // If this method is called during RestoreView, it will always return null
+    // so we can just return null in that case without any iteration.  
+    
+    // If PartialStateSaving is false, the UIInstruction components will
+    // never be in the tree at this point, so we can return null and skip iterating.
+    
+    public static UIComponent findUIInstructionChildByTagId(FacesContext context, UIComponent parent, String id) {
+        UIComponent result = null;
+        if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+            return null;
+        }
+        Map<Object, Object> attrs = context.getAttributes();
+        if (attrs.containsKey(PartialStateSaving)) {
+            if ((Boolean)attrs.get(PartialStateSaving)) {
+                result = findChildByTagId(context, parent, id);
+            }
+        }
+
+        
+        return result;
+    }
+    
     /**
      * By TagId, find Child
      * 
@@ -208,19 +250,67 @@ public final class ComponentSupport {
      * @param id the id
      * @return the UI component
      */
-    public static UIComponent findChildByTagId(UIComponent parent, String id) {
-        ConcurrentHashMap<String, UIComponent> componentMap = getFaceletComponentMap();
-        return componentMap.get(id);
-    }
-
-    public static ConcurrentHashMap<String, UIComponent> getFaceletComponentMap() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (!facesContext.getAttributes().containsKey("com.sun.faces.facelets.FACELET_COMPONENT_MAP")) {
-            facesContext.getAttributes().put("com.sun.faces.facelets.FACELET_COMPONENT_MAP", 
-                new ConcurrentHashMap<String, UIComponent>());
+    public static UIComponent findChildByTagId(FacesContext context, UIComponent parent, String id) {
+        if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+            return null;
         }
-        return (ConcurrentHashMap<String, UIComponent>) facesContext.getAttributes().get(
-                "com.sun.faces.facelets.FACELET_COMPONENT_MAP");
+        UIComponent c = null;
+        UIViewRoot root = context.getViewRoot();
+        boolean hasDynamicComponents = (null != root && 
+                root.getAttributes().containsKey(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS));
+        String cid = null;
+        List<UIComponent> components;
+        String facetName = getFacetName(parent);
+        if (null != facetName) {
+            c = parent.getFacet(facetName);
+            // We will have a facet name, but no corresponding facet in the
+            // case of facets with composite components.  In this case,
+            // we must do the brute force search.
+            if (null != c) {
+                cid = (String) c.getAttributes().get(MARK_CREATED);
+                if (id.equals(cid)) {
+                    return c;
+                }
+            } 
+        }
+        if (0 < parent.getFacetCount()) {
+            components = new ArrayList<UIComponent>();
+            components.addAll(parent.getFacets().values());
+            components.addAll(parent.getChildren());
+        } else {
+            components = parent.getChildren();
+        }
+
+        int len = components.size();
+        for (int i = 0; i < len; i++) {
+            c = components.get(i);
+            cid = (String) c.getAttributes().get(MARK_CREATED);
+            if (id.equals(cid)) {
+                return c;
+            }
+            if (c instanceof UIPanel && c.getAttributes().containsKey(IMPLICIT_PANEL)) {
+                for (UIComponent c2 : c.getChildren()) {
+                    cid = (String) c2.getAttributes().get(MARK_CREATED);
+                    if (id.equals(cid)) {
+                        return c2;
+                    }
+                }
+            }
+            if (hasDynamicComponents) {
+                /*
+                 * Make sure we look for the child recursively it might have moved
+                 * into a different parent in the parent hierarchy. Note currently
+                 * we are only looking down the tree. Maybe it would be better
+                 * to use the VisitTree API instead.
+                 */
+                UIComponent foundChild = findChildByTagId(context, c, id);
+                if (foundChild != null) {
+                    return foundChild;
+                }
+            }
+        }
+
+        return null;
     }
     
     /**
@@ -243,19 +333,12 @@ public final class ComponentSupport {
         }
         if (obj instanceof String) {
             String s = (String) obj;
-            if (s.length() == 2) {
-                return new Locale(s);
+            try {
+                return Util.getLocaleFromString(s);
             }
-            if (s.length() == 5) {
-                return new Locale(s.substring(0, 2), s.substring(3, 5)
-                        .toUpperCase());
+            catch(IllegalArgumentException iae) {
+                throw new TagAttributeException(attr, "Invalid Locale Specified: " + s);
             }
-            if (s.length() >= 7) {
-                return new Locale(s.substring(0, 2), s.substring(3, 5)
-                        .toUpperCase(), s.substring(6, s.length()));
-            }
-            throw new TagAttributeException(attr, "Invalid Locale Specified: "
-                    + s);
         } else {
             throw new TagAttributeException(attr,
                     "Attribute did not evaluate to a String or Locale: " + obj);
@@ -408,7 +491,7 @@ public final class ComponentSupport {
         } else {
             UIComponent existing = parent.getFacets().get(facetName);
             if (existing != null && existing != child) {
-                if (!(existing instanceof UIPanel)) {
+                if (existing.getAttributes().get(ComponentSupport.IMPLICIT_PANEL) == null) {
                     // move existing component under a panel group
                     UIComponent panelGroup = ctx.getFacesContext().getApplication().createComponent(UIPanel.COMPONENT_TYPE);
                     parent.getFacets().put(facetName, panelGroup);
@@ -416,7 +499,7 @@ public final class ComponentSupport {
                     attrs.put(ComponentSupport.IMPLICIT_PANEL, true);
                     panelGroup.getChildren().add(existing);
                     existing = panelGroup;
-                } 
+                }
                 if (existing.getAttributes().get(ComponentSupport.IMPLICIT_PANEL) != null) {
                     // we have a panel group, so add the new component to it
                     existing.getChildren().add(child);
@@ -427,7 +510,6 @@ public final class ComponentSupport {
                 parent.getFacets().put(facetName, child);
             }
         }
-        
     }
 
     public static String getFacetName(UIComponent parent) {

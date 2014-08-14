@@ -46,6 +46,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -229,16 +230,7 @@ class UrlBuilder {
                     url.append(nextSeparatorChar);
                     url.append(param.getKey());
                     url.append(PARAMETER_NAME_VALUE_SEPARATOR);
-                    if (encoding != null) {
-                        try {
-                            url.append(URLEncoder.encode(value, encoding));
-                        } catch (UnsupportedEncodingException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }
-                    else {
-                        url.append(value);
-                    }
+                    url.append(value);
                     nextSeparatorChar = PARAMETER_PAIR_SEPARATOR;
                 }
             }
@@ -319,7 +311,19 @@ class UrlBuilder {
     protected void addValuesToParameter(String name, List<String> valuesRef, boolean replace) {
         List<String> values = new ArrayList<String>();
         if (valuesRef != null) {
-            values.addAll(valuesRef);
+            for (Iterator<String> it = valuesRef.iterator(); it.hasNext();) {
+                String string = it.next();
+                    if (encoding != null) {
+                        try {
+                            values.add(URLEncoder.encode(string, encoding));
+                        } catch (UnsupportedEncodingException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                    else {
+                        values.add(string);
+                    }
+            }
             values.removeAll(NULL_LIST);
         }
 

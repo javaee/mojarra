@@ -7,15 +7,17 @@
 
 <composite:interface></composite:interface>
 <composite:implementation>
+           
+    <div style="padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #FF9100;">
 
-    <div id="ccTemplate">lib/2_3/template.xhtml</div>
+                <p>within composite component defined within current resource library contract</p>
+            
+            
+
     <div id="ccContent">
-        <ui:insert name="ccContent"/>
+        host1/lib/cc.xhtml
     </div>
-    <ui:decorate template="template.xhtml">
-        <ui:define name="ccContent">
-            host1/lib/2_3/cc.xhtml
-        </ui:define>
-    </ui:decorate>
+                
+    </div>
 </composite:implementation>
 </html>

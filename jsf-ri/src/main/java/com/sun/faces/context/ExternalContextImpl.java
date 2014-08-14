@@ -77,6 +77,7 @@ import java.util.logging.Level;
 
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SendPoweredByHeader;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
@@ -111,6 +112,7 @@ public class ExternalContextImpl extends ExternalContext {
     private Map<String,String> initParameterMap = null;
     private Map<String,String> fallbackContentTypeMap = null;
     private Flash flash;
+    private boolean distributable;
 
     private enum ALLOWABLE_COOKIE_PROPERTIES {
         domain,
@@ -144,6 +146,7 @@ public class ExternalContextImpl extends ExternalContext {
         if (config.isOptionEnabled(SendPoweredByHeader)) {
             ((HttpServletResponse) response).addHeader("X-Powered-By", "JSF/2.2");
         }
+        distributable = config.isOptionEnabled(EnableDistributable);
         fallbackContentTypeMap = new HashMap<String,String>(3, 1.0f);
         fallbackContentTypeMap.put("js", "text/javascript");
         fallbackContentTypeMap.put("css", "text/css");
@@ -286,9 +289,15 @@ public class ExternalContextImpl extends ExternalContext {
      */
     public Map<String,Object> getSessionMap() {
         if (sessionMap == null) {
-            sessionMap = new SessionMap((HttpServletRequest) request,
-                                        FacesContext.getCurrentInstance()
-                                              .getApplication().getProjectStage());
+            if (distributable) {
+                sessionMap = new AlwaysPuttingSessionMap((HttpServletRequest) request,
+                        FacesContext.getCurrentInstance()
+                        .getApplication().getProjectStage());
+            } else {
+                sessionMap = new SessionMap((HttpServletRequest) request,
+                        FacesContext.getCurrentInstance()
+                        .getApplication().getProjectStage());
+            }
         }
         return sessionMap;
     }
@@ -504,6 +513,9 @@ public class ExternalContextImpl extends ExternalContext {
      * @see javax.faces.context.ExternalContext#getInitParameter(String)
      */
     public String getInitParameter(String name) {
+        if (name == null) {
+            throw new NullPointerException("Init parameter name cannot be null");
+        }
         return servletContext.getInitParameter(name);
     }
 
@@ -657,6 +669,7 @@ public class ExternalContextImpl extends ExternalContext {
             setResponseContentType("text/xml");
             setResponseCharacterEncoding("UTF-8");
             addResponseHeader("Cache-Control", "no-cache");
+//            pwriter.writePreamble("<?xml version='1.0' encoding='UTF-8'?>\n");
             pwriter.startDocument();
             pwriter.redirect(requestURI);
             pwriter.endDocument();
@@ -1028,8 +1041,17 @@ public class ExternalContextImpl extends ExternalContext {
     @Override
     public String encodeBookmarkableURL(String baseUrl,
                                         Map<String, List<String>> parameters) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String encodingFromContext =
+              (String) context.getAttributes().get(RIConstants.FACELETS_ENCODING_KEY);
+        if (null == encodingFromContext) {
+            encodingFromContext = (String) context.getViewRoot().getAttributes().
+                    get(RIConstants.FACELETS_ENCODING_KEY);
+        }
+        
+        String currentResponseEncoding = (null != encodingFromContext) ? encodingFromContext : getResponseCharacterEncoding();
 
-        UrlBuilder builder = new UrlBuilder(baseUrl, getResponseCharacterEncoding());
+        UrlBuilder builder = new UrlBuilder(baseUrl, currentResponseEncoding);
         builder.addParameters(parameters);
         return builder.createUrl();
 
@@ -1041,6 +1063,10 @@ public class ExternalContextImpl extends ExternalContext {
         FacesContext context = FacesContext.getCurrentInstance();
         String encodingFromContext =
               (String) context.getAttributes().get(RIConstants.FACELETS_ENCODING_KEY);
+        if (null == encodingFromContext) {
+            encodingFromContext = (String) context.getViewRoot().getAttributes().
+                    get(RIConstants.FACELETS_ENCODING_KEY);
+        }
         
         String currentResponseEncoding = (null != encodingFromContext) ? encodingFromContext : getResponseCharacterEncoding();
 
@@ -1060,7 +1086,17 @@ public class ExternalContextImpl extends ExternalContext {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "url");
             throw new NullPointerException(message);
         }
-        UrlBuilder builder = new UrlBuilder(url, getResponseCharacterEncoding());
+        FacesContext context = FacesContext.getCurrentInstance();
+        String encodingFromContext =
+              (String) context.getAttributes().get(RIConstants.FACELETS_ENCODING_KEY);
+        if (null == encodingFromContext) {
+            encodingFromContext = (String) context.getViewRoot().getAttributes().
+                    get(RIConstants.FACELETS_ENCODING_KEY);
+        }
+        
+        String currentResponseEncoding = (null != encodingFromContext) ? encodingFromContext : getResponseCharacterEncoding();
+        
+        UrlBuilder builder = new UrlBuilder(url, currentResponseEncoding);
         return ((HttpServletResponse) response).encodeURL(builder.createUrl());
     }
 

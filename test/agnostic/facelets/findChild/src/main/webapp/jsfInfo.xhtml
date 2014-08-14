@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<ui:component xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <h:outputText value="JSF Implementation Information:" />
+    <h:panelGrid columns="2">
+        <h:outputText value="Implementation Title:" />
+        <h:outputText value="#{facesContext.getClass().getPackage().getImplementationTitle()}" />
+
+        <h:outputText value="Implementation Version" />
+        <h:outputText value="#{facesContext.getClass().getPackage().getImplementationVersion()}" />
+
+        <h:outputText value="Implementation Vendor" />
+        <h:outputText value="#{facesContext.getClass().getPackage().getImplementationVendor()}" />
+
+        <h:outputText value="Specification Title:" />
+        <h:outputText value="#{facesContext.getClass().getPackage().getSpecificationTitle()}" />
+
+        <h:outputText value="Specification Version:" />
+        <h:outputText value="#{facesContext.getClass().getPackage().getSpecificationVersion()}" />
+
+        <h:outputText value="Specification Vendor:" />
+        <h:outputText value="#{facesContext.getClass().getPackage().getSpecificationVendor()}" />
+
+        <h:outputText value="JSF Package:" />
+        <h:outputText value="#{facesContext.getClass().getPackage().getName()}" />
+    </h:panelGrid>
+
+</ui:component>

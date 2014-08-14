@@ -175,9 +175,8 @@ public class FlashELResolver extends ELResolver {
      * <p>Hook into the EL resolution process to introduce the
      * <code>flash</code> implicit object.  If
      * <code>property</code> is <code>null</code>, take no action
-     * and return <code>null</code>.  If <code>base</code> is
-     * <code>null</code> and value is the literal string "flash", return
-     * the {@link ELFlash} instance, which is a Map.  If
+     * and return <code>null</code>.  if <code>base</code> is null, return null.
+     * If
      * <code>base</code> is an instance of <code>ELFlash</code> and
      * property is the literal string "keep", set a ThreadLocal property
      * that will be inspected by the flash on the next link in the
@@ -203,67 +202,39 @@ public class FlashELResolver extends ELResolver {
 
     Object result = null;
 
-    // Deal with getValue(null, "flash").
     if (null == base)
     {
-      // If the property is the implicit object "flash"...
-      if (property.toString().equals(FLASH_VARIABLE_NAME))
-      {
-        FacesContext facesContext =
-                (FacesContext) elContext.getContext(FacesContext.class);
-        ExternalContext extCtx = facesContext.getExternalContext();
-
-        // try to get the flash from the session.
-        FlashFactory ff = (FlashFactory) 
-                FactoryFinder.getFactory(FactoryFinder.FLASH_FACTORY);
-        Map<String, Object> flash = ff.getFlash(false);
-        
-        elContext.setPropertyResolved(true);
-        
-        if (null == flash)
-        {
-          // create a new one and store it in the session.
-          flash = ff.getFlash(true);
-          extCtx.getSessionMap().put(ELFlash.FLASH_ATTRIBUTE_NAME, flash);
-        }
-        
-        result = flash;
-      }
+      return null;
     }
     // If the base argument is the flash itself...
     else if (base instanceof Flash)
     {
-      FacesContext facesContext =
-              (FacesContext) elContext.getContext(FacesContext.class);
-      ExternalContext extCtx = facesContext.getExternalContext();
-
-      // try to get the flash from the session.
-      FlashFactory ff = (FlashFactory) 
-              FactoryFinder.getFactory(FactoryFinder.FLASH_FACTORY);
-      Map<String, Object> flash = ff.getFlash(false);
-
-      if (base == flash)
-      {
+        FacesContext facesContext =
+                (FacesContext) elContext.getContext(FacesContext.class);
+        ExternalContext extCtx = facesContext.getExternalContext();
+        
         // and the property argument is "keep"...
         if (property.toString().equals(FLASH_KEEP_VARIABLE_NAME))
         {
-          elContext.setPropertyResolved(true);
+            elContext.setPropertyResolved(true);
           
-          // then this is a request to promote the value
-          // "property", which is assumed to have been previously
-          // stored in request scope via the "flash.now"
-          // expression, to flash scope.
-          result = base;
-          // Set a flag so the flash itself can look in the request
-          // and promote the value to the next request
-          ff.getFlash(true);
-          ELFlash.setKeepFlag(facesContext);
+            // then this is a request to promote the value
+            // "property", which is assumed to have been previously
+            // stored in request scope via the "flash.now"
+            // expression, to flash scope.
+            result = base;
+            // Set a flag so the flash itself can look in the request
+            // and promote the value to the next request
+            FlashFactory ff = (FlashFactory) 
+                    FactoryFinder.getFactory(FactoryFinder.FLASH_FACTORY);
+            ff.getFlash(true);
+            ELFlash.setKeepFlag(facesContext);
         }
         // Otherwise, if base is the flash, and property is "now"...
         else if (property.toString().equals(FLASH_NOW_VARIABLE_NAME))
         {
-// PENDING(edburns): use FacesContext.getAttributes() instead of 
-// request scope.
+            // PENDING(edburns): use FacesContext.getAttributes() instead of 
+            // request scope.
             Map<String, Object> requestMap = extCtx.getRequestMap();
             requestMap.put(ELFlash.FLASH_NOW_REQUEST_KEY, property);
             elContext.setPropertyResolved(true);
@@ -271,9 +242,8 @@ public class FlashELResolver extends ELResolver {
         }
         else
         {
-          result = null;
+            result = null;
         }
-      }
     }
 
     return result;
@@ -388,8 +358,7 @@ public class FlashELResolver extends ELResolver {
         ExternalContext extCtx = facesContext.getExternalContext();
 
         //noinspection unchecked
-        if (null != (flash = (Map<String, Object>)
-                extCtx.getSessionMap().get(ELFlash.FLASH_ATTRIBUTE_NAME))) {
+        if (null != (flash = extCtx.getFlash())) {
             Iterator<Map.Entry<String, Object>> iter = flash.entrySet().iterator();
             Map.Entry<String, Object> cur;
             ArrayList<FeatureDescriptor> fds;

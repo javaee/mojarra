@@ -41,7 +41,6 @@
 package com.sun.faces.systest.clientside;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import com.sun.faces.ajax.AjaxTagTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.*;

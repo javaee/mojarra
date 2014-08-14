@@ -1,0 +1,18 @@
+<f:subview id="included" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+	<ol start="21">
+		<li>#{'#{'}cc} evaluates to: <h:outputText value="#{cc}" /></li>
+		<li>#{'#{'}cc['clientId']} evaluates to: <h:outputText
+				value="#{cc['clientId']}" /></li>
+		<li>#{'#{'}cc.clientId} evaluates to: <h:outputText
+				value="#{cc.clientId}" /></li>
+		<li>#{'#{'}cc['attrs'].param} evaluates to: <h:outputText
+				value="#{cc['attrs'].param}" /></li>
+		<li>#{'#{'}cc.attrs.param} evaluates to: <h:outputText
+				value="#{cc.attrs.param}" /></li>
+	</ol>
+</f:subview>

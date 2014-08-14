@@ -108,7 +108,7 @@
     <property name="spec.version" value="2.2"/>
     <property name="spec_version" value="2_2"/>
     <property name="spec.snapshot.version" value="2.2-SNAPSHOT"/>
-    <property name="patch.version" value="1"/>
+    <property name="patch.version" value="8"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}-${TSTAMP}"/>
     <property name="build.type" value="-SNAPSHOT"/>
@@ -161,7 +161,8 @@
 
     <artifact:localRepository id="local.repository" path="${maven.repo.local}"/>
     
-    <artifact:remoteRepository id="j.n.repo" url="https://maven.java.net/content/repositories/snapshots/"/>
+    <artifact:remoteRepository id="j.n.repo" url="https://maven.java.net/content/repositories/releases/"/>
+    <artifact:remoteRepository id="j.n.repo.snapshot" url="https://maven.java.net/content/repositories/snapshots/"/>
     <artifact:remoteRepository id="codehaus.repo" url="http://repository.codehaus.org/"/>
     <artifact:remoteRepository id="ibiblio.repo" url="http://mirrors.ibiblio.org/pub/mirrors/maven2/"/>
 
@@ -173,18 +174,26 @@
         <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.9" scope="provided"/>
         <dependency groupId="javax.validation" artifactId="validation-api" version="1.0.0.GA" scope="provided"/>
         <dependency groupId="javax.inject" artifactId="javax.inject" version="1" scope="provided"/>
-        <dependency groupId="javax.enterprise" artifactId="cdi-api" version="1.0" scope="provided"/>
         <dependency groupId="javax.servlet.jsp.jstl" artifactId="jstl-api" version="1.2" scope="provided" />
         <dependency groupId="javax" artifactId="javaee-web-api" version="6.0" scope="provided"/>
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
+        <remoteRepository refid="codehaus.repo"/>
+        <remoteRepository refid="j.n.repo.snapshot"/>
+    </artifact:dependencies>
+
+    <artifact:dependencies filesetId="cdi.filepath" pathId="cdi.path">
+        <dependency groupId="javax.enterprise" artifactId="cdi-api" version="1.1" scope="provided"/>
+        <localRepository refid="local.repository"/>
+        <remoteRepository refid="ibiblio.repo"/>
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="jsf-spi.filepath" pathId="jsf-spi.path">
         <dependency groupId="com.sun.faces" artifactId="jsf-spi" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
+        <remoteRepository refid="j.n.repo.snapshot"/>
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="commons.filepath" pathId="commons.path">
@@ -194,6 +203,7 @@
         <dependency groupId="commons-logging" artifactId="commons-logging" version="1.0.4"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
+        <remoteRepository refid="j.n.repo.snapshot"/>
     </artifact:dependencies>
 
     <artifact:dependencies filesetId="servlet25test.filepath" pathId="servlet25test.path">
@@ -204,6 +214,7 @@
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
+        <remoteRepository refid="j.n.repo.snapshot"/>
     </artifact:dependencies>
 
 
@@ -251,6 +262,11 @@
     <path id="compile.classpath">
         <path refid="compile.path"/>
     </path>
+
+    <path id="cdi.classpath">
+        <path refid="cdi.path"/>
+    </path>
+
 
     <path id="api-compile.classpath">
         <path refid="jsf-spi.path"/>

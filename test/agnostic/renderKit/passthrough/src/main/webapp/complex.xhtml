@@ -49,23 +49,28 @@
     </head>
     <body jsf:id="body">
         <form jsf:id="form" jsf:prependId="false">
-            <label jsf:for="name">Name</label>
-            <input jsf:id="name" type="text" jsf:value="#{complex.name}">
-                <f:ajax execute="@this" render="progress"/>
-            </input>
+           <p> 
+               <label jsf:for="name">Name</label>
+               <input jsf:id="name" type="text" jsf:value="#{complex.name}">
+                 <f:ajax execute="@this" render="progress"/>
+               </input> 
+           </p>
+           <p>
             <label jsf:for="tel">Tel</label>
             <input jsf:id="tel" type="tel" jsf:value="#{complex.tel}">
                 <f:ajax execute="@this" render="progress"/>
             </input>
-
+                </p>
+                <p>
             <label jsf:for="email">Email</label>
             <input jsf:id="email" type="email" jsf:value="#{complex.email}">
                 <f:ajax execute="@this" render="progress"/>
             </input>
-
+                </p>
+                <p>
             <label for="progress">Progress</label>
             <progress jsf:id="progress" max="3" value="#{complex.progress}" />
-
+            </p>
         </form>
     </body>
 </html>

@@ -169,14 +169,10 @@
                 </configuration>
             </plugin>
         </plugins>
-
     </build>
-
     <issueManagement>
-        <system>issueZilla</system>
-        <url>
-            https://javaserverfaces.dev.java.net/servlets/ProjectIssues
-        </url>
+        <system>JIRA</system>
+        <url>https://java.net/jira/browse/JAVASERVERFACES</url>
     </issueManagement>
     <mailingLists>
         <mailingList>

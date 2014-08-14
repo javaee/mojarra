@@ -144,6 +144,12 @@ public class ConfigureListener implements ServletRequestListener,
         if (timer != null) {
             timer.startTiming();
         }
+
+        ConfigManager configManager = ConfigManager.getInstance();
+        if (configManager.hasBeenInitialized(context)) {
+            return;
+        }
+
         InitFacesContext initContext = new InitFacesContext(context);
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -154,11 +160,6 @@ public class ConfigureListener implements ServletRequestListener,
         }
 
         webConfig = WebConfiguration.getInstance(context);
-        ConfigManager configManager = ConfigManager.getInstance();
-
-        if (configManager.hasBeenInitialized(context)) {
-            return;
-        }
 
         // Check to see if the FacesServlet is present in the
         // web.xml.   If it is, perform faces configuration as normal,
@@ -177,6 +178,7 @@ public class ConfigureListener implements ServletRequestListener,
                                 "No FacesServlet found in deployment descriptor - bypassing configuration");
                     }
                     WebConfiguration.clear(context);
+                    InitFacesContext.cleanupInitMaps(context);
                     return;
                 }
             } else {
@@ -185,6 +187,11 @@ public class ConfigureListener implements ServletRequestListener,
                             "FacesServlet found in deployment descriptor - processing configuration.");
                 }
             }
+        }
+        
+        if (webXmlProcessor.isDistributablePresent()) {
+            webConfig.setOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.EnableDistributable, true);
+            context.setAttribute(WebConfiguration.BooleanWebContextInitParameter.EnableDistributable.getQualifiedName(), Boolean.TRUE);
         }
 
 
@@ -278,6 +285,11 @@ public class ConfigureListener implements ServletRequestListener,
 
     public void contextDestroyed(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
+
+        if (!ConfigManager.getInstance().hasBeenInitialized(context)) {
+            return;
+        }
+
         InitFacesContext initContext = null;
         try {
             initContext = getInitFacesContext(context);
@@ -293,9 +305,6 @@ public class ConfigureListener implements ServletRequestListener,
             }
             if (webResourcePool != null) {
                 webResourcePool.shutdownNow();
-            }
-            if (!ConfigManager.getInstance().hasBeenInitialized(context)) {
-                return;
             }
             GroovyHelper helper = GroovyHelper.getCurrentInstance(context);
             if (helper != null) {
@@ -747,6 +756,7 @@ public class ConfigureListener implements ServletRequestListener,
 
         private boolean facesServletPresent;
         private boolean errorPagePresent;
+        private boolean distributablePresent;
 
 
         /**
@@ -788,6 +798,16 @@ public class ConfigureListener implements ServletRequestListener,
             return errorPagePresent;
 
         }
+
+        /*
+         * return true if <distributable /> is present in the web.xml or a fragment.
+         * 
+         */
+        public boolean isDistributablePresent() {
+            return distributablePresent;
+        }
+        
+        
 
 
         /**
@@ -933,6 +953,9 @@ public class ConfigureListener implements ServletRequestListener,
                     } else {
                         servletClassFound = false;
                     }
+                }
+                if ("distributable".equals(localName)) {
+                    distributablePresent = true;
                 }
 
 

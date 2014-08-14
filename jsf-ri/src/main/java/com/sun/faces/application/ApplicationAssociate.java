@@ -82,10 +82,7 @@ import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
 import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
 import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
-import com.sun.faces.flow.FlowDiscoveryCDIContext;
-import com.sun.faces.flow.FlowDiscoveryCDIHelper;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -101,7 +98,6 @@ import javax.faces.application.ProjectStage;
 import javax.faces.event.PreDestroyCustomScopeEvent;
 import javax.faces.event.ScopeContext;
 import javax.servlet.ServletContext;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -113,9 +109,6 @@ import java.util.LinkedHashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.el.ELContext;
-import javax.el.ValueExpression;
-import javax.enterprise.inject.spi.Producer;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -124,10 +117,8 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.FacesComponent;
 import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.SystemEventListener;
-import javax.faces.flow.Flow;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowHandlerFactory;
-import javax.faces.flow.builder.FlowDefinition;
 import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletsResourceResolver;
 
@@ -224,6 +215,8 @@ public class ApplicationAssociate {
     private FlowHandler flowHandler;
     
     private Map<String, String> definingDocumentIdsToTruncatedJarUrls;
+    
+    private long timeOfInstantiation;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
@@ -273,6 +266,7 @@ public class ApplicationAssociate {
                          Application.class, new PostConstructApplicationListener());
         
         definingDocumentIdsToTruncatedJarUrls = new ConcurrentHashMap<String, String>();
+        timeOfInstantiation = System.currentTimeMillis();
     }
 
     private Map<String, List<String>> resourceLibraryContracts;
@@ -300,7 +294,8 @@ public class ApplicationAssociate {
             FacesContext context = FacesContext.getCurrentInstance();
             if (Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
                 try {
-                    loadFlows(context, ApplicationAssociate.this.flowHandler);
+                    JavaFlowLoaderHelper flowLoader = new JavaFlowLoaderHelper();
+                    flowLoader.loadFlows(context, ApplicationAssociate.this.flowHandler);
                 } catch (IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
@@ -315,50 +310,6 @@ public class ApplicationAssociate {
             viewHandler.getViewDeclarationLanguage(context, 
                     RIConstants.FACES_PREFIX + "xhtml");
 
-        }
-        
-        private synchronized void loadFlows(FacesContext context, FlowHandler flowHandler) throws IOException {
-            javax.enterprise.inject.spi.BeanManager beanManager = (javax.enterprise.inject.spi.BeanManager) 
-                    Util.getCDIBeanManager(context.getExternalContext().getApplicationMap());
-            FlowDiscoveryCDIContext flowDiscoveryContext = (FlowDiscoveryCDIContext) beanManager.getContext(FlowDefinition.class);
-            List<Producer<Flow>> flowProducers = flowDiscoveryContext.getFlowProducers();
-            WebConfiguration config = WebConfiguration.getInstance();
-            if (!flowProducers.isEmpty()) {
-                enableClientWindowModeIfNecessary(context);
-            }
-            
-            for (Producer<Flow> cur : flowProducers) {
-                Flow toAdd = cur.produce(beanManager.<Flow>createCreationalContext(null));
-                if (null == toAdd) {
-                    LOGGER.log(Level.SEVERE, "Flow producer method {0}() returned null.  Ignoring.",
-                            new String [] { cur.toString() });
-                } else {
-                    flowHandler.addFlow(context, toAdd);
-                    config.setHasFlows(true);
-                }
-            }
-            
-        }
-    
-    
-        private void enableClientWindowModeIfNecessary(FacesContext context) {
-
-            WebConfiguration config = WebConfiguration.getInstance(context.getExternalContext());
-            
-            String optionValue = config.getOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode);
-            boolean clientWindowNeedsEnabling = false;
-            if ("none".equals(optionValue)) {
-                clientWindowNeedsEnabling = true;
-                String featureName = 
-                        WebConfiguration.WebContextInitParameter.ClientWindowMode.getQualifiedName();
-                LOGGER.log(Level.WARNING, 
-                        "{0} was set to none, but Faces Flows requires {0} is enabled.  Setting to ''url''.", new Object[]{featureName});
-            } else if (null == optionValue) {
-                clientWindowNeedsEnabling = true;
-            }
-            if (clientWindowNeedsEnabling) {
-                config.setOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode, "url");
-            }
         }
         
     }
@@ -386,6 +337,10 @@ public class ApplicationAssociate {
         Map applicationMap = externalContext.getApplicationMap();
         return ((ApplicationAssociate)
              applicationMap.get(ASSOCIATE_KEY));
+    }
+    
+    public long getTimeOfInstantiation() {
+        return timeOfInstantiation;
     }
 
     public static ApplicationAssociate getInstance(ServletContext context) {
@@ -953,24 +908,24 @@ public class ApplicationAssociate {
                     BooleanWebContextInitParameter.FaceletsSkipComments));
 
         c.addTagLibrary(new CoreLibrary());
-        c.addTagLibrary(new CoreLibrary("http://xmlns.jcp.org/jsf/core"));
+        c.addTagLibrary(new CoreLibrary(CoreLibrary.XMLNSNamespace));
         c.addTagLibrary(new HtmlLibrary());
-        c.addTagLibrary(new HtmlLibrary("http://xmlns.jcp.org/jsf/html"));
+        c.addTagLibrary(new HtmlLibrary(HtmlLibrary.XMLNSNamespace));
         c.addTagLibrary(new UILibrary());
-        c.addTagLibrary(new UILibrary("http://xmlns.jcp.org/jsf/facelets"));
+        c.addTagLibrary(new UILibrary(UILibrary.XMLNSNamespace));
         c.addTagLibrary(new JstlCoreLibrary());
-        c.addTagLibrary(new JstlCoreLibrary("http://java.sun.com/jstl/core"));
-        c.addTagLibrary(new JstlCoreLibrary("http://xmlns.jcp.org/jsp/jstl/core"));
+        c.addTagLibrary(new JstlCoreLibrary(JstlCoreLibrary.IncorrectNamespace));
+        c.addTagLibrary(new JstlCoreLibrary(JstlCoreLibrary.XMLNSNamespace));
         c.addTagLibrary(new PassThroughAttributeLibrary());
         c.addTagLibrary(new PassThroughElementLibrary());
-        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, "http://java.sun.com/jsp/jstl/functions"));
-        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, "http://xmlns.jcp.org/jsp/jstl/functions"));
+        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, FunctionLibrary.Namespace));
+        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, FunctionLibrary.XMLNSNamespace));
         if (isDevModeEnabled()) {
-            c.addTagLibrary(new FunctionLibrary(DevTools.class, "http://java.sun.com/mojarra/private/functions"));
-            c.addTagLibrary(new FunctionLibrary(DevTools.class, "http://xmlns.jcp.org/mojarra/private/functions"));
+            c.addTagLibrary(new FunctionLibrary(DevTools.class, DevTools.Namespace));
+            c.addTagLibrary(new FunctionLibrary(DevTools.class, DevTools.NewNamespace));
         }
         c.addTagLibrary(new CompositeLibrary());
-        c.addTagLibrary(new CompositeLibrary("http://xmlns.jcp.org/jsf/composite"));
+        c.addTagLibrary(new CompositeLibrary(CompositeLibrary.XMLNSNamespace));
 
         return c;
 

@@ -86,6 +86,9 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
             case FACES_CONTEXT:
                 context.setPropertyResolved(true);
                 return facesContext;
+            case FLASH:
+                context.setPropertyResolved(true);
+                return facesContext.getExternalContext().getFlash();
             case VIEW:
                 context.setPropertyResolved(true);
                 return facesContext.getViewRoot();

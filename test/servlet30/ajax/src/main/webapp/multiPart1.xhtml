@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title></title>
+    </h:head>
+    <h:body>
+        <h:form id="form" enctype="multipart/form-data">
+            <h:outputText id="count" value="#{multiPart1Bean.count}"/>
+            <h:commandLink id="submit" value="Submit" actionListener="#{multiPart1Bean.delay()}">
+                <f:ajax execute="@form" render="@form"/>
+            </h:commandLink>
+        </h:form>
+    </h:body>
+</html>

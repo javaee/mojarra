@@ -40,13 +40,15 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.config.WebConfiguration;
 import java.io.IOException;
 import java.util.Map;
-
+import javax.faces.application.FacesMessage;
+import javax.faces.application.ProjectStage;
+import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.application.Resource;
 
 /**
  * <p>This <code>Renderer</code> handles the rendering of external <code>script</code>
@@ -105,9 +107,34 @@ public class ScriptRenderer extends ScriptStyleBaseRenderer {
         ResponseWriter writer = context.getResponseWriter();
         this.startElement(writer, component);
 
-        String resourceSrc;
+        String resourceSrc = "RES_NOT_FOUND";
+        
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        
+        if (library == null && name != null && 
+                name.startsWith(webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppContractsDirectory))) {
+            
+            if (context.isProjectStage(ProjectStage.Development)) {
+            
+            String msg = "Illegal path, direct contract references are not allowed: " + name;
+            context.addMessage(component.getClientId(context),
+                               new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                msg,
+                                                msg));  
+            }
+            resource = null;
+        } 
+        
         if (resource == null) {
-            resourceSrc = "RES_NOT_FOUND";
+            
+            if (context.isProjectStage(ProjectStage.Development)) {
+                String msg = "Unable to find resource " + (library == null ? "" : library + ", ") + name;
+                context.addMessage(component.getClientId(context),
+                               new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                msg,
+                                                msg));
+            }
+            
         } else {
             resourceSrc = resource.getRequestPath();
             if (query != null) {
@@ -117,7 +144,7 @@ public class ScriptRenderer extends ScriptStyleBaseRenderer {
             }
             resourceSrc = context.getExternalContext().encodeResourceURL(resourceSrc);
         }
-
+        
         writer.writeURIAttribute("src", resourceSrc, "src");
         this.endElement(writer);
         super.encodeEnd(context, component);

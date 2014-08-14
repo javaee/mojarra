@@ -65,6 +65,7 @@ import javax.faces.render.ResponseStateManager;
 import javax.faces.render.Renderer;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
@@ -1203,7 +1204,11 @@ public class RenderKitUtils {
             extContext.setResponseContentType("text/html; charset=UTF-8");
             try {
                 Writer w = extContext.getResponseOutputWriter();
-                DevTools.debugHtml(w, ctx, fe.getCause());
+                if (ctx.isProjectStage(ProjectStage.Development)) {
+                    DevTools.debugHtml(w, ctx, fe.getCause());
+                } else {
+                    w.write("Please see your server log for the actual error");
+                }
                 w.flush();
             } catch (IOException ioe) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
@@ -1349,10 +1354,23 @@ public class RenderKitUtils {
         ResourceHandler handler = context.getApplication().getResourceHandler();
         if (resName != null) {
             String libName = (String) component.getAttributes().get("library");
+            WebConfiguration webConfig = WebConfiguration.getInstance();
+
+            if (libName == null && resName.startsWith(webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppContractsDirectory))) {
+                if (context.isProjectStage(ProjectStage.Development)) {
+                    String msg = "Illegal path, direct contract references are not allowed: " + resName;
+                    context.addMessage(component.getClientId(context),
+                                       new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                        msg,
+                                                        msg));
+                }
+                return "RES_NOT_FOUND";
+            }
+
             Resource res = handler.createResource(resName, libName);
             if (res == null) {
                 if (context.isProjectStage(ProjectStage.Development)) {
-                    String msg = "Unable to find resource " + resName;
+                    String msg = "Unable to find resource " + (libName == null ? "" : libName + ", ") + resName;
                     context.addMessage(component.getClientId(context),
                                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                                         msg,
@@ -1369,6 +1387,18 @@ public class RenderKitUtils {
             if (value == null || value.length() == 0) {
                 return "";
             }
+            WebConfiguration webConfig = WebConfiguration.getInstance();
+            if (value.startsWith(webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppContractsDirectory))) {
+                if (context.isProjectStage(ProjectStage.Development)) {
+                    String msg = "Illegal path, direct contract references are not allowed: " + value;
+                    context.addMessage(component.getClientId(context),
+                                       new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                        msg,
+                                                        msg));
+                }
+                return "RES_NOT_FOUND";
+            }
+            
             if (handler.isResourceURL(value)) {
                 return value;
             } else {

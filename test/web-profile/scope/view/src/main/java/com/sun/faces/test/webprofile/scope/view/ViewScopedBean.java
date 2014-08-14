@@ -52,7 +52,18 @@ public class ViewScopedBean implements Serializable {
     
 
     private static final String SESSION_KEY = ViewScopedBean.class.getName() + "_KEY";
+    private static final long serialVersionUID = 8437531843054754394L;
     private int myCount = 0;
+    
+    private String value;
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 
     public int getMyCount() {
         return myCount;

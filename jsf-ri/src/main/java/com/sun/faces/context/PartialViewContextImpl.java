@@ -40,6 +40,7 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.component.visit.PartialVisitContext;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -65,10 +66,15 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import javax.faces.FactoryFinder;
+import static javax.faces.FactoryFinder.VISIT_CONTEXT_FACTORY;
+import javax.faces.component.visit.VisitContextFactory;
+import javax.faces.component.visit.VisitContextWrapper;
 import javax.faces.lifecycle.ClientWindow;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 
  public class PartialViewContextImpl extends PartialViewContext {
 
@@ -107,7 +113,6 @@ import javax.faces.lifecycle.ClientWindow;
     public boolean isAjaxRequest() {
 
         assertNotReleased();
-        updateFacesContext();
         if (ajaxRequest == null) {
             ajaxRequest = "partial/ajax".equals(ctx.
                 getExternalContext().getRequestHeaderMap().get("Faces-Request"));
@@ -158,7 +163,6 @@ import javax.faces.lifecycle.ClientWindow;
     public boolean isRenderAll() {
 
         assertNotReleased();
-        updateFacesContext();
         if (renderAll == null) {
             String render = ctx.
                 getExternalContext().getRequestParameterMap()
@@ -238,7 +242,6 @@ import javax.faces.lifecycle.ClientWindow;
      */
     @Override
     public void processPartial(PhaseId phaseId) {
-        updateFacesContext();
         PartialViewContext pvc = ctx.getPartialViewContext();
         Collection <String> myExecuteIds = pvc.getExecuteIds();
         Collection <String> myRenderIds = pvc.getRenderIds();
@@ -295,11 +298,11 @@ import javax.faces.lifecycle.ClientWindow;
                 exContext.setResponseContentType("text/xml");
                 exContext.addResponseHeader("Cache-Control", "no-cache");
                 
-                String encoding = writer.getCharacterEncoding( );
-                if( encoding == null ) {
-                    encoding = "UTF-8";
-                }
-                writer.writePreamble("<?xml version='1.0' encoding='" + encoding + "'?>\n");
+//                String encoding = writer.getCharacterEncoding( );
+//                if( encoding == null ) {
+//                    encoding = "UTF-8";
+//                }
+//                writer.writePreamble("<?xml version='1.0' encoding='" + encoding + "'?>\n");
                 writer.startDocument();
                 
                 if (isResetValues()) {
@@ -392,24 +395,50 @@ import javax.faces.lifecycle.ClientWindow;
         // is visited.  Note that we use the SKIP_UNRENDERED hint as we
         // only want to visit the rendered subtree.
         EnumSet<VisitHint> hints = EnumSet.of(VisitHint.SKIP_UNRENDERED, VisitHint.EXECUTE_LIFECYCLE);
-        PartialVisitContext visitContext =
-            new PartialVisitContext(context, phaseClientIds, hints);
+        VisitContextFactory visitContextFactory = (VisitContextFactory) 
+                FactoryFinder.getFactory(VISIT_CONTEXT_FACTORY);
+        VisitContext visitContext = visitContextFactory.getVisitContext(context, phaseClientIds, hints);
         PhaseAwareVisitCallback visitCallback =
             new PhaseAwareVisitCallback(ctx, phaseId);
         component.visitTree(visitContext, visitCallback);
-        if (LOGGER.isLoggable(Level.FINER) && !visitContext.getUnvisitedClientIds().isEmpty()) {
-            Collection<String> unvisitedClientIds = visitContext.getUnvisitedClientIds();
-            String message;
-            StringBuilder builder = new StringBuilder();
-            for (String cur : unvisitedClientIds) {
-                builder.append(cur).append(" ");
+
+        PartialVisitContext partialVisitContext = unwrapPartialVisitContext(visitContext);
+        if (partialVisitContext != null) {
+            if (LOGGER.isLoggable(Level.FINER) && !partialVisitContext.getUnvisitedClientIds().isEmpty()) {
+                Collection<String> unvisitedClientIds = partialVisitContext.getUnvisitedClientIds();
+                String message;
+                StringBuilder builder = new StringBuilder();
+                for (String cur : unvisitedClientIds) {
+                    builder.append(cur).append(" ");
+                }
+                LOGGER.log(Level.FINER,
+                        "jsf.context.partial_visit_context_unvisited_children",
+                        new Object[]{builder.toString()});
             }
-            LOGGER.log(Level.FINER,
-                    "jsf.context.partial_visit_context_unvisited_children",
-                    new Object[]{builder.toString()});
-        }
+        }    
     }
 
+    /**
+     * Unwraps {@link PartialVisitContext} from a chain of {@link VisitContextWrapper}s.
+     *
+     * If no {@link PartialVisitContext} is found in the chain, null is returned instead.
+     * 
+     * @param visitContext the visit context.
+     * @return the (unwrapped) partial visit context.
+     */
+    private static PartialVisitContext unwrapPartialVisitContext(VisitContext visitContext) {
+        if (visitContext == null) {
+            return null;
+        }
+        if (visitContext instanceof PartialVisitContext) {
+            return (PartialVisitContext) visitContext;
+        }
+        if (visitContext instanceof VisitContextWrapper) {
+            return unwrapPartialVisitContext(((VisitContextWrapper) visitContext).getWrapped());
+        }
+        return null;
+    }
+    
     private void renderAll(FacesContext context, UIViewRoot viewRoot) throws IOException {
         // If this is a "render all via ajax" request,
         // make sure to wrap the entire page in a <render> elemnt
@@ -482,9 +511,17 @@ import javax.faces.lifecycle.ClientWindow;
         }
 
         if (out != null) {
-            responseWriter =
-                ctx.getRenderKit().createResponseWriter(out,
-                "text/xml", encoding);
+            UIViewRoot viewRoot = ctx.getViewRoot();
+            if (viewRoot != null) {
+                responseWriter =
+                    ctx.getRenderKit().createResponseWriter(out,
+                    "text/xml", encoding);
+            } else {
+                RenderKitFactory factory = (RenderKitFactory)
+                    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+                RenderKit renderKit = factory.getRenderKit(ctx, RenderKitFactory.HTML_BASIC_RENDER_KIT);
+                responseWriter = renderKit.createResponseWriter(out, "text/xml", encoding);
+            }
         }
         if (responseWriter instanceof PartialResponseWriter)  {
             return (PartialResponseWriter) responseWriter;
@@ -509,20 +546,6 @@ import javax.faces.lifecycle.ClientWindow;
             throw new IllegalStateException();
         }
     }
-
-    /**
-     * While setting up PartialViewContextImpl the RI's FacesContextImpl is passed in, but while
-     * processing phases also FacesContextWrapper must be supported. Therefore ctx is updated 
-     * until processing phases has started. Released FacesContext is updated too.
-     */
-    private void updateFacesContext() {
-    	  if (!processingPhases || ctx.isReleased()) {
-            ctx = FacesContext.getCurrentInstance();
-    	  	  processingPhases = ctx.getCurrentPhaseId() != null;
-    	  }
-    }
-
-
 
     // ----------------------------------------------------------- Inner Classes
 

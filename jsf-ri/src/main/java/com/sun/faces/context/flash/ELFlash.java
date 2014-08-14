@@ -42,8 +42,14 @@ package com.sun.faces.context.flash;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
 import com.sun.faces.facelets.tag.ui.UIDebug;
+import com.sun.faces.util.ByteArrayGuardAESCTR;
 import com.sun.faces.util.FacesLogger;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,7 +63,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -135,12 +140,16 @@ public class ELFlash extends Flash {
     private long numberOfFlashesBetweenFlashReapings = Long.
      parseLong(WebContextInitParameter.NumberOfFlashesBetweenFlashReapings.getDefaultValue());
     
-    private Application application;
-
+    private final boolean distributable;
+    
+    private ByteArrayGuardAESCTR guard;
+    
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="class vars">
-
+    
+    private static final String ELEMENT_TYPE_MISMATCH = "element-type-mismatch";
+    
     private static final Logger LOGGER = FacesLogger.FLASH.getLogger();
 
     /**
@@ -154,7 +163,7 @@ public class ELFlash extends Flash {
      * stores the singleton ELFlash instance.</p>
      */
     static final String FLASH_ATTRIBUTE_NAME = PREFIX + "f";
-
+    
     /**
      * <p>This constant is used as the name of the cookie sent to the
      * client.  The cookie is used to allow the flash scope to
@@ -217,6 +226,11 @@ public class ELFlash extends Flash {
          * twice.
          */
         DidWriteCookieAttributeName,
+        
+        /**
+         * Force setMaxAge(0)
+         */
+        ForceSetMaxAgeZero,
 
     }
 
@@ -225,9 +239,9 @@ public class ELFlash extends Flash {
     // <editor-fold defaultstate="collapsed" desc="Constructors and instance accessors">
 
     /** Creates a new instance of ELFlash */
-    private ELFlash() {
+    private ELFlash(ExternalContext extContext) {
         flashInnerMap = new ConcurrentHashMap<String,Map<String, Object>>();
-        WebConfiguration config = WebConfiguration.getInstance();
+        WebConfiguration config = WebConfiguration.getInstance(extContext);
         String value;
         try {
             value = config.getOptionValue(WebContextInitParameter.NumberOfConcurrentFlashUsers);
@@ -249,7 +263,9 @@ public class ELFlash extends Flash {
 
         }
         
-        application = FacesContext.getCurrentInstance().getApplication();
+        distributable = config.isOptionEnabled(EnableDistributable);
+        
+        guard = new ByteArrayGuardAESCTR();
 
     }
 
@@ -286,10 +302,23 @@ public class ELFlash extends Flash {
         if (null == flash && create) {
             synchronized (extContext.getContext()) {
                 if (null == (flash = (ELFlash)
-                    appMap.get(FLASH_ATTRIBUTE_NAME))) {
-                    flash = new ELFlash();
+                        appMap.get(FLASH_ATTRIBUTE_NAME))) {
+                    flash = new ELFlash(extContext);
                     appMap.put(FLASH_ATTRIBUTE_NAME, flash);
                 }
+            }            
+        }
+            
+        // If we are in a clustered environment, store a helper to ensure
+        // our innerMap gets successfully replicated
+        if (null != appMap.get(EnableDistributable.getQualifiedName())) {
+            synchronized (extContext.getContext()) {            
+                SessionHelper sessionHelper = 
+                        SessionHelper.getInstance(extContext);
+                if (null == sessionHelper) {
+                    sessionHelper = new SessionHelper();
+                }
+                sessionHelper.update(extContext, flash);
             }
         }
         return flash;
@@ -346,17 +375,17 @@ public class ELFlash extends Flash {
     // <editor-fold defaultstate="collapsed" desc="Map overrides">
 
     
-    @SuppressWarnings("element-type-mismatch")
+    @SuppressWarnings(ELEMENT_TYPE_MISMATCH)
     public Object get(Object key) {
         Object result = null;
 
+        FacesContext context = FacesContext.getCurrentInstance();
         if (null != key) {
             if (key.equals("keepMessages")) {
                 result = this.isKeepMessages();
             } else if (key.equals("redirect")) {
                 result = this.isRedirect();
             } else {
-                FacesContext context = FacesContext.getCurrentInstance();
                 if (isKeepFlagSet(context)) {
                     result = getPhaseMapForReading().get(key);
                     keep(key.toString());
@@ -370,6 +399,12 @@ public class ELFlash extends Flash {
         
         if (null == result) {
             result = getPhaseMapForReading().get(key);
+        }
+        if (distributable) {
+            SessionHelper sessionHelper = 
+                    SessionHelper.getInstance(context.getExternalContext());
+            assert(null != sessionHelper);
+            sessionHelper.update(context.getExternalContext(), this);
         }
 
         if (LOGGER.isLoggable(Level.FINEST)) {
@@ -395,28 +430,37 @@ public class ELFlash extends Flash {
                 wasSpecialPut = true;
             }
         }
+        FacesContext context = FacesContext.getCurrentInstance();
         if (!wasSpecialPut) {
             result = (null == b) ? getPhaseMapForWriting().put(key, value) : b;
             if (LOGGER.isLoggable(Level.FINEST)) {
                 LOGGER.log(Level.FINEST, "put({0},{1})", new Object [] { key, value});
             }
-            application.publishEvent(FacesContext.getCurrentInstance(), PostPutFlashValueEvent.class, key);
+            context.getApplication().publishEvent(context, PostPutFlashValueEvent.class, key);
         }
+        if (distributable) {
+            SessionHelper sessionHelper = 
+                    SessionHelper.getInstance(context.getExternalContext());
+            assert(null != sessionHelper);
+            sessionHelper.update(context.getExternalContext(), this);
+        }
+        
         return result;
     }
 
-    @SuppressWarnings("element-type-mismatch")
+    @SuppressWarnings(ELEMENT_TYPE_MISMATCH)
     public Object remove(Object key) {
         Object result = null;
 
-        application.publishEvent(FacesContext.getCurrentInstance(), PreRemoveFlashValueEvent.class, key);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getApplication().publishEvent(context, PreRemoveFlashValueEvent.class, key);
         result = getPhaseMapForWriting().remove(key);
 
         return result;
     }
 
     
-    @SuppressWarnings("element-type-mismatch")
+    @SuppressWarnings(ELEMENT_TYPE_MISMATCH)
     public boolean containsKey(Object key) {
         boolean result = false;
 
@@ -535,7 +579,7 @@ public class ELFlash extends Flash {
 
             if (null != toKeep) {
                 getPhaseMapForWriting().put(key, toKeep);
-                application.publishEvent(FacesContext.getCurrentInstance(), PostKeepFlashValueEvent.class, key);
+                context.getApplication().publishEvent(context, PostKeepFlashValueEvent.class, key);
 
             }
         }
@@ -660,8 +704,16 @@ public class ELFlash extends Flash {
     }
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Helpers">
+    
+    void setFlashInnerMap(Map<String,Map<String, Object>> flashInnerMap) {
+        this.flashInnerMap = flashInnerMap;
+    }
+    
+    Map<String, Map<String,Object>> getFlashInnerMap() {
+        return flashInnerMap;
+    }
     
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -722,11 +774,11 @@ public class ELFlash extends Flash {
         if (flashInnerMap.size() < numberOfConcurentFlashUsers) {
             return;
         }
-
+        
         Set<String> keys = flashInnerMap.keySet();
-        long
-                sequenceNumberToTest,
-                currentSequenceNumber = sequenceNumber.get();
+            long
+                    sequenceNumberToTest,
+                    currentSequenceNumber = sequenceNumber.get();
         Map<String, Object> curFlash;
         for (String cur : keys) {
             sequenceNumberToTest = Long.parseLong(cur);
@@ -737,6 +789,15 @@ public class ELFlash extends Flash {
                 flashInnerMap.remove(cur);
             }
         }
+        if (distributable) {
+            ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
+            SessionHelper sessionHelper = SessionHelper.getInstance(extContext);
+            if (null != sessionHelper) {
+                sessionHelper.remove(extContext);
+                sessionHelper = new SessionHelper();
+                sessionHelper.update(extContext, this);
+            }
+        }        
     }
 
     private boolean responseCompleteWasJustSetTrue(FacesContext context,
@@ -913,7 +974,7 @@ public class ELFlash extends Flash {
 
     }
 
-    @SuppressWarnings("element-type-mismatch")
+    @SuppressWarnings(ELEMENT_TYPE_MISMATCH)
     void restoreAllMessages(FacesContext context) {
         Map<String, List<FacesMessage>> allFacesMessages;
         Map<String, Object> phaseMap = getPhaseMapForReading();
@@ -961,6 +1022,10 @@ public class ELFlash extends Flash {
         FlashInfo
                 nextFlash = flashManager.getNextRequestFlashInfo(),
                 prevFlash = flashManager.getPreviousRequestFlashInfo();
+        if (context.getAttributes().containsKey(CONSTANTS.ForceSetMaxAgeZero)) {
+            removeCookie(extContext, toSet);
+            return;
+        }
 
         // Don't try to write the cookie unless there is data in the flash.
         if ((null != nextFlash && !nextFlash.getFlashMap().isEmpty()) ||
@@ -983,21 +1048,55 @@ public class ELFlash extends Flash {
                 if (null != (val = toSet.getMaxAge())) {
                     properties.put("maxAge", val);
                 }
-                if (null != (val = toSet.getSecure())) {
+                if (extContext.isSecure()) {
+                    properties.put("secure", Boolean.TRUE);
+                } else if (null != (val = toSet.getSecure())) {
                     properties.put("secure", val);
                 }
                 if (null != (val = toSet.getPath())) {
                     properties.put("path", val);
                 }
-                if (null != (val = toSet.isHttpOnly())) {
-                    properties.put("httpOnly", val);
-                }
+                properties.put("httpOnly", Boolean.TRUE);
                 extContext.addResponseCookie(toSet.getName(), toSet.getValue(), 
                         !properties.isEmpty() ? properties : null);
                 properties = null;
             }
             contextMap.put(CONSTANTS.DidWriteCookieAttributeName, Boolean.TRUE);
+        } else {
+            removeCookie(extContext, toSet);
         }
+    }
+    
+    private void removeCookie(ExternalContext extContext, Cookie toRemove) {
+        if (extContext.isResponseCommitted()) {
+            return;
+        }
+        Map<String, Object> properties = new HashMap();
+        Object val;
+        toRemove.setMaxAge(0);
+        
+        if (null != (val = toRemove.getComment())) {
+            properties.put("comment", val);
+        }
+        if (null != (val = toRemove.getDomain())) {
+            properties.put("domain", val);
+        }
+        if (null != (val = toRemove.getMaxAge())) {
+            properties.put("maxAge", val);
+        }
+        if (extContext.isSecure()) {
+            properties.put("secure", Boolean.TRUE);
+        } else if (null != (val = toRemove.getSecure())) {
+            properties.put("secure", val);
+        }
+        if (null != (val = toRemove.getPath())) {
+            properties.put("path", val);
+        }
+        properties.put("httpOnly", Boolean.TRUE);
+        extContext.addResponseCookie(toRemove.getName(), toRemove.getValue(), 
+                !properties.isEmpty() ? properties : null);
+        properties = null;           
+        
     }
 
     // </editor-fold>
@@ -1069,7 +1168,7 @@ public class ELFlash extends Flash {
                 contextMap.get(CONSTANTS.RequestFlashManager);
 
         if (null == result && create) {
-            result = new PreviousNextFlashInfoManager(flashInnerMap);
+            result = new PreviousNextFlashInfoManager(guard, flashInnerMap);
             result.initializeBaseCase(this);
             contextMap.put(CONSTANTS.RequestFlashManager, result);
 
@@ -1089,9 +1188,20 @@ public class ELFlash extends Flash {
                 contextMap.get(CONSTANTS.RequestFlashManager);
 
         if (null == result) {
-            result = new PreviousNextFlashInfoManager(flashInnerMap);
-            result.decode(context, this, cookie);
-            contextMap.put(CONSTANTS.RequestFlashManager, result);
+            result = new PreviousNextFlashInfoManager(guard, flashInnerMap);
+            try {
+                result.decode(context, this, cookie);
+                contextMap.put(CONSTANTS.RequestFlashManager, result);
+            } catch (InvalidKeyException ike) {
+                contextMap.put(CONSTANTS.ForceSetMaxAgeZero, Boolean.TRUE);
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    result = getCurrentFlashManager(contextMap, true);
+                    LOGGER.log(Level.SEVERE,
+                            "jsf.externalcontext.flash.bad.cookie",
+                            new Object [] { ike.getMessage() });
+                }
+                
+            }
 
         }
         return result;
@@ -1127,15 +1237,20 @@ public class ELFlash extends Flash {
         private boolean incomingCookieCameFromRedirect = false;
 
         private Map<String,Map<String, Object>> innerMap;
+        
+        private ByteArrayGuardAESCTR guard;
 
-        private PreviousNextFlashInfoManager() {}
+        private PreviousNextFlashInfoManager(ByteArrayGuardAESCTR guard) {
+            this.guard = guard;
+        }
 
-        private PreviousNextFlashInfoManager(Map<String,Map<String, Object>> innerMap) {
+        private PreviousNextFlashInfoManager(ByteArrayGuardAESCTR guard, Map<String,Map<String, Object>> innerMap) {
+            this.guard = guard;
             this.innerMap = innerMap;
         }
 
         protected PreviousNextFlashInfoManager copyWithoutInnerMap() {
-            PreviousNextFlashInfoManager result = new PreviousNextFlashInfoManager();
+            PreviousNextFlashInfoManager result = new PreviousNextFlashInfoManager(guard);
             result.innerMap = Collections.emptyMap();
             if (null != previousRequestFlashInfo) {
                 result.previousRequestFlashInfo = (FlashInfo)
@@ -1235,15 +1350,27 @@ public class ELFlash extends Flash {
 	 * the system.  When any error occurs, the flash is not usable
 	 * for this request, and a nice error message is logged.</p>
 
-	 * <p>This method is where the LifetimeMarker is incremeted,
+	 * <p>This method is where the LifetimeMarker is incremented,
 	 * UNLESS the incoming request is the GET after the REDIRECT
 	 * after POST, in which case we don't increment it because the
 	 * system will expire the entries in the doLastPhaseActions.</p>
 	 *
 	 */
 
-        void decode(FacesContext context, ELFlash flash, Cookie cookie) {
-            String temp, value = cookie.getValue();
+        void decode(FacesContext context, ELFlash flash, Cookie cookie) throws InvalidKeyException {
+            String temp;
+            String value;
+            
+            String urlDecodedValue = null;
+            
+            try {
+                urlDecodedValue = URLDecoder.decode(cookie.getValue(), "UTF-8");
+            } catch (UnsupportedEncodingException uee) {
+                urlDecodedValue = cookie.getValue();
+            }
+            
+            value = guard.decrypt(urlDecodedValue);
+            
             try {
                 int i = value.indexOf("_");
 
@@ -1298,6 +1425,7 @@ public class ELFlash extends Flash {
                     nextRequestFlashInfo.setFlashMap(flashMap);
                 }
             } catch (Throwable t) {
+                context.getAttributes().put(CONSTANTS.ForceSetMaxAgeZero, Boolean.TRUE);
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
                             "jsf.externalcontext.flash.bad.cookie",
@@ -1316,15 +1444,21 @@ public class ELFlash extends Flash {
 
             String value = ((null != previousRequestFlashInfo) ? previousRequestFlashInfo.encode() : "")  + "_" +
                            ((null != nextRequestFlashInfo) ? nextRequestFlashInfo.encode() : "");
-            result = new Cookie(FLASH_COOKIE_NAME, value);
+            String encryptedValue = guard.encrypt(value);
+            try {
+                result = new Cookie(FLASH_COOKIE_NAME, URLEncoder.encode(encryptedValue, "UTF-8"));
+            } catch (UnsupportedEncodingException uee) {
+                result = new Cookie(FLASH_COOKIE_NAME, encryptedValue);
+            }
+                
             if (1 == value.length()) {
                 result.setMaxAge(0);
-                result.setPath(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
-            } 
-            else {
-                result.setPath(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
+            }            
+            String requestContextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            if (requestContextPath.isEmpty()) {
+                requestContextPath = "/";
             }
-
+            result.setPath(requestContextPath);
             return result;
         }
 

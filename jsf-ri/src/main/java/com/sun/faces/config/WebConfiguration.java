@@ -274,6 +274,10 @@ public class WebConfiguration {
     public void setOptionValue(WebContextInitParameter param, String value) {
         contextParameters.put(param, value);
     }
+    
+    public void setOptionEnabled(BooleanWebContextInitParameter param, boolean value) {
+        booleanContextParameters.put(param, value);
+    }
 
     public FaceletsConfiguration getFaceletsConfiguration() {
 
@@ -853,12 +857,25 @@ public class WebConfiguration {
                     LOGGER.fine(root.toString());
                 }
             }
+            // JAVASERVERFACES-2922 Martin Kouba
+            if (!Util.isCDIAvailable(servletContext)) {
+                try {
+                    Object beanManager = initialContext.lookup("java:comp/env/BeanManager");
+                    if (null != beanManager) {
+                        Util.setCDIAvailable(servletContext, beanManager);
+                    }
+                } catch (NamingException root) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine(root.toString());
+                    }
+                }
+            }
         }
 
     }
 
 
-    private boolean canProcessJndiEntries() {
+    public boolean canProcessJndiEntries() {
 
         try {
             Util.getCurrentLoader(this).loadClass("javax.naming.InitialContext");
@@ -1379,12 +1396,22 @@ public class WebConfiguration {
               "com.sun.faces.enableAgressiveSessionDirtying",
               false
         ),
+        EnableDistributable(
+              "com.sun.faces.enableDistributable",
+              false
+        ),
         EnableMissingResourceLibraryDetection(
               "com.sun.faces.enableMissingResourceLibraryDetection",
               false
         ),
         DisableIdUniquenessCheck(
             "com.sun.faces.disableIdUniquenessCheck",
+            false),
+        EnableTransitionTimeNoOpFlash(
+                "com.sun.faces.enableTransitionTimeNoOpFlash",
+                false),
+        NamespaceParameters(
+            "com.sun.faces.namespaceParameters",
             false);
 
         private BooleanWebContextInitParameter alternate;
@@ -1480,7 +1507,6 @@ public class WebConfiguration {
     public enum WebEnvironmentEntry {
 
 
-        ClientStateSavingPassword("com.sun.faces.ClientStateSavingPassword"),
         ProjectStage(javax.faces.application.ProjectStage.PROJECT_STAGE_JNDI_NAME);
 
         private static final String JNDI_PREFIX = "java:comp/env/";

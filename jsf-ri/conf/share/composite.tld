@@ -82,7 +82,7 @@
 
   <p>The default XML namespace URI of the taglib that contains the
   composite component, for use in <em>the using page</em>, is
-  <code>http://java.sun.com/jsf/composite/&lt;composite-library-name&gt;</code>,
+  <code>http://xmlns.jcp.org/jsf/composite/&lt;composite-library-name&gt;</code>,
   where <code>&lt;composite-library-name&gt;</code> is the name of the
   resource library.  For example:</p>
 
@@ -90,10 +90,10 @@
 &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" <br />
             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;<br />
 &lt;html xmlns="http://www.w3.org/1999/xhtml"<br />
-      xmlns:h="http://java.sun.com/jsf/html"<br />
-      xmlns:f="http://java.sun.com/jsf/core"<br />
-      xmlns:ui="http://java.sun.com/jsf/facelets"<br />
-      xmlns:ez="<i>http://java.sun.com/jsf/composite/<b>ezcomp</b></i>"&gt;<br />
+      xmlns:h="http://xmlns.jcp.org/jsf/html"<br />
+      xmlns:f="http://xmlns.jcp.org/jsf/core"<br />
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"<br />
+      xmlns:ez="<i>http://xmlns.jcp.org/jsf/composite/<b>ezcomp</b></i>"&gt;<br />
 ...<br />
 </code></pre>
 
@@ -130,9 +130,9 @@ would make that file accessible like this.</p>
 &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" <br />
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;<br />
 &lt;html xmlns="http://www.w3.org/1999/xhtml"<br />
-      xmlns:h="http://java.sun.com/jsf/html"<br />
-      xmlns:f="http://java.sun.com/jsf/core"<br />
-      xmlns:ui="http://java.sun.com/jsf/facelets"<br />
+      xmlns:h="http://xmlns.jcp.org/jsf/html"<br />
+      xmlns:f="http://xmlns.jcp.org/jsf/core"<br />
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"<br />
       xmlns:ez="<i><b>http://domain.com/path/namespace</b></i>"&gt;<br />
 ...<br />
 </code></pre>
@@ -253,7 +253,7 @@ apply.</p>
     </short-name>
 
     <uri>
-        http://java.sun.com/jsf/composite
+        http://xmlns.jcp.org/jsf/composite
     </uri>
 
 <!-- ===================== HTML 4.0 basic tags ====================== -->

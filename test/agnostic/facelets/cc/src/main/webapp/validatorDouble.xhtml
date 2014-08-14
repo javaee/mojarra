@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:validatorDouble="http://java.sun.com/jsf/composite/validatorDouble">
+    <h:head></h:head>
+    <h:body>
+        <h:form id="form">
+            Adding validators to editableValueHolders inside composite components (FAILS):
+            <validatorDouble:validatorDouble id="myCompositeInput">
+                <f:validator validatorId="com.sun.faces.test.agnostic.facelets.composite.ValidatorDoubleValidator" for="input"/>
+                <f:validateLength minimum="20" for="input"/>
+            </validatorDouble:validatorDouble>
+
+            <br />
+            Simple (WORKS):
+            <h:inputText id="simpleInput">
+                <f:validator validatorId="com.sun.faces.test.agnostic.facelets.composite.ValidatorDoubleValidator"/>
+                <f:validateLength minimum="20"/>
+            </h:inputText>
+
+            <br />
+            <br />
+            <h:commandButton id="submit" value="Enter some short text, click me and watch the errors"/>
+            <h:messages />
+
+        </h:form>
+    </h:body>
+</html>

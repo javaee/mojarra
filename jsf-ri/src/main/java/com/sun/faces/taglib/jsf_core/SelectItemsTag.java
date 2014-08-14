@@ -135,7 +135,7 @@ public class SelectItemsTag extends UIComponentELTag {
             component.getAttributes().put("var", var);
         }
         if (itemValue != null) {
-            component.setValueExpression("itemValue", value);
+            component.setValueExpression("itemValue", itemValue);
         }
         if (itemLabel != null) {
             component.setValueExpression("itemLabel", itemLabel);
