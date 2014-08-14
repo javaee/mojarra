@@ -105,10 +105,10 @@
     <property name="standard.renderkit.xml" value="${api.dir}/doc/standard-html-renderkit.xml"/>
 
     <!-- Version -->
-    <property name="spec.version" value="2.2"/>
-    <property name="spec_version" value="2_2"/>
-    <property name="spec.snapshot.version" value="2.2-SNAPSHOT"/>
-    <property name="patch.version" value="8"/>
+    <property name="spec.version" value="2.3"/>
+    <property name="spec_version" value="2_3"/>
+    <property name="spec.snapshot.version" value="2.3-SNAPSHOT"/>
+    <property name="patch.version" value="0-m01"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}-${TSTAMP}"/>
     <property name="build.type" value="-SNAPSHOT"/>
