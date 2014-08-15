@@ -55,6 +55,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.CharacterCodingException;
+import javax.servlet.WriteListener;
 
 /**
  * This steam converts byte content to character.  This implementation allows us
@@ -144,6 +145,16 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         }
+    }
+
+    @Override
+    public boolean isReady() {
+        throw new UnsupportedOperationException("Not supported"); 
+    }
+
+    @Override
+    public void setWriteListener(WriteListener wl) {
+        throw new UnsupportedOperationException("Not supported");
     }
 
     private static class DirectByteArrayOutputStream extends ByteArrayOutputStream {
@@ -275,9 +286,15 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
         public void println(double v) throws IOException {
             // no-op
         }
+
+        @Override
+        public boolean isReady() {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public void setWriteListener(WriteListener wl) {
+            throw new UnsupportedOperationException("Not supported");
+        }
     }
 }
-
-
-
-

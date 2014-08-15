@@ -97,20 +97,6 @@
                     <target>1.8</target>
                     <showWarnings>true</showWarnings>
                     <useIncrementalCompilation>false</useIncrementalCompilation>
-                    <!-- 
-
-                        Excluding these classes since they bring in 
-                        JavaEE 7 dependencies. We recompile here to
-                        verify that we are not relying on JavaEE 7
-                        APIs anywhere else.
-
-                        -->
-                    <excludes>
-                        <exclude>com/sun/faces/flow/FlowCDIEventFireHelperImpl.java</exclude>
-                        <exclude>com/sun/faces/application/view/ViewScopedCDIEventFireHelperImpl.java</exclude>
-                        <exclude>com/sun/faces/util/cdi11/CDIUtilImpl.java</exclude>
-                        <exclude>com/sun/faces/action/ActionPhase.java</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -150,7 +136,7 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>6.0</version>
+            <version>7.0</version>
             <scope>provided</scope>
         </dependency>
         <!--
