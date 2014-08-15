@@ -159,6 +159,7 @@
     </properties>
     <reporting>
         <plugins>
+            <!--            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
@@ -168,8 +169,7 @@
                     <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
-            
-<!--            <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>3.0.1</version>
@@ -183,7 +183,8 @@
                         <ruleset>${project.build.directory}/../pmd-ruleset.xml</ruleset>
                     </rulesets>
                 </configuration>
-            </plugin>-->
+            </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
@@ -208,7 +209,8 @@
                     </comparisonArtifacts>
                 </configuration>
             </plugin>
-<!--            <plugin>
+            <!--        
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9.1</version>
@@ -217,7 +219,8 @@
                         <link>http://docs.oracle.com/javaee/7/api/</link>
                     </links>
                 </configuration>
-            </plugin>-->
+            </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
