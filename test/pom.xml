@@ -37,6 +37,11 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>1.7</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>2.5</version>
+                </plugin>
                 <!-- 
                 
                     Do not upgrade until https://jira.codehaus.org/browse/MCOMPILER-205
