@@ -74,6 +74,7 @@ import java.util.TimeZone;
 import javax.faces.FactoryFinder;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.WriteListener;
 import org.apache.cactus.WebRequest;
 import org.apache.cactus.WebResponse;
 
@@ -1031,6 +1032,16 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
                     public void close() throws IOException {
                         throw new IOException("Simulation of broken pipe or connection reset by peer");
                     }
+
+                    @Override
+                    public boolean isReady() {
+                        throw new UnsupportedOperationException("Not supported");
+                    }
+
+                    @Override
+                    public void setWriteListener(WriteListener wl) {
+                        throw new UnsupportedOperationException("Not supported");
+                    }
                 };
             }
         };
@@ -1150,6 +1161,16 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
             public byte[] getBytes() {
                 return out.toByteArray();
+            }
+
+            @Override
+            public boolean isReady() {
+                throw new UnsupportedOperationException("Not supported");
+            }
+
+            @Override
+            public void setWriteListener(WriteListener wl) {
+                throw new UnsupportedOperationException("Not supported");
             }
         }
     }
