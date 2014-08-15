@@ -110,12 +110,19 @@
         </plugins>
     </build>
     <dependencies>
+        <!--
+        
+            Until we have particular changes that will change the JSF API we
+            can safely just rely on the javax/javaee-web-api. 
+        
         <dependency>
             <groupId>javax.faces</groupId>
             <artifactId>javax.faces-api</artifactId>
-            <version>2.2</version>
+            <version>2.3</version>
             <scope>provided</scope>
         </dependency>
+        
+            -->
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.faces</artifactId>
@@ -125,7 +132,7 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>6.0</version>
+            <version>7.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
