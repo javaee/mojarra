@@ -402,4 +402,9 @@ public class MockServletContext implements ServletContext {
     public void declareRoles(String... strings) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public String getVirtualServerName() {
+        throw new UnsupportedOperationException("Not supported");
+    }
 }
