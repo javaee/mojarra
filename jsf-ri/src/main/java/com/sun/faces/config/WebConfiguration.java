@@ -1346,6 +1346,10 @@ public class WebConfiguration {
               ViewHandler.DISABLE_FACELET_JSF_VIEWHANDLER_PARAM_NAME,
               false
         ),
+        DisableFaceletJSFViewHandlerDeprecated(
+              "DISABLE_FACELET_JSF_VIEWHANDLER",
+              false
+        ),
         DisableDefaultBeanValidator(
                 BeanValidator.DISABLE_DEFAULT_BEAN_VALIDATOR_PARAM_NAME,
                 false),
