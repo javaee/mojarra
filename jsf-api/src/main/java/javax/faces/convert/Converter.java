@@ -92,8 +92,8 @@ public interface Converter {
     /**
      * <p>Convert the specified string value, which is associated with
      * the specified {@link UIComponent}, into a model data object that
-     * is appropriate for being stored during the <em>Apply Request
-     * Values</em> phase of the request processing lifecycle.</p>
+     * is appropriate for being stored during the <em>Process Validations</em> 
+     * phase of the request processing lifecycle.</p>
      *
      * @param context   {@link FacesContext} for the request being processed
      * @param component {@link UIComponent} with which this model object
