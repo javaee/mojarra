@@ -383,17 +383,30 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
     }
 
+    protected void assignUniqueId(FaceletContext ctx, UIComponent parent,
+            String id, UIComponent c) {
 
-    protected void assignUniqueId(FaceletContext ctx,
+        String uniqueId = createUniqueId(ctx, parent, id);
+        if (uniqueId != null) {
+            c.setId(uniqueId);
+        }
+
+        if (this.rendererType != null) {
+            c.setRendererType(this.rendererType);
+        }
+    }
+
+    protected String createUniqueId(FaceletContext ctx,
                                   UIComponent parent,
-                                  String id,
-                                  UIComponent c) {
+                                  String id) {
 
+        String uniqueId = null;
+        
         // If the id is specified as a literal, and the component is being
         // repeated (by c:forEach, for example), use generated unique ids
         // after the first instance
         if (this.id != null && !(this.id.isLiteral() && ComponentSupport.getNeedUniqueIds(ctx))) {
-            c.setId(this.id.getValue(ctx));
+            uniqueId = this.id.getValue(ctx);
         } else {
             UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
             if (root != null) {
@@ -409,15 +422,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                 } else {
                     uid = root.createUniqueId(ctx.getFacesContext(), mid);
                 }
-                c.setId(uid);
+                uniqueId = uid;
             }
-
         }
-
-        if (this.rendererType != null) {
-            c.setRendererType(this.rendererType);
-        }
-
+        
+        return uniqueId;
     }
 
 
