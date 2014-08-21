@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.1" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+    <factory>
+        <application-factory>com.sun.faces.test.servlet30.custom_viewroot_viewscope.ApplicationFactoryImpl</application-factory>
+    </factory>
+    <managed-bean>
+        <managed-bean-name>userBean</managed-bean-name>
+        <managed-bean-class>
+            com.sun.faces.test.servlet30.custom_viewroot_viewscope.UserBean
+        </managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    
+    
+    
+</faces-config>
