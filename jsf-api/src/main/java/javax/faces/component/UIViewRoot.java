@@ -1554,7 +1554,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         if (create && viewMap == null) {
             viewMap = new ViewMap(getFacesContext().getApplication().getProjectStage());
             getTransientStateHelper().putTransient("com.sun.faces.application.view.viewMap", viewMap);
-            getFacesContext().getApplication().publishEvent(getFacesContext(), PostConstructViewMapEvent.class, this);
+            getFacesContext().getApplication().publishEvent(getFacesContext(), PostConstructViewMapEvent.class, 
+                    UIViewRoot.class, this);
         }
         
         return viewMap;
@@ -1848,6 +1849,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
             FacesContext context = FacesContext.getCurrentInstance();
             context.getApplication().publishEvent(context,
                                                   PreDestroyViewMapEvent.class,
+                                                  UIViewRoot.class,
                                                   context.getViewRoot());
             super.clear();
 
