@@ -70,11 +70,11 @@ import javax.faces.view.ViewMetadata;
 /**
  * <p><strong class="changed_modified_2_0"><span
  * class="changed_modified_2_0_rev_a changed_modified_2_1
- * changed_modified_2_2">UIViewRoot</span></strong> is the UIComponent
- * that represents the root of the UIComponent tree.  This component
- * renders markup as the response to Ajax requests.  It also serves as
- * the root of the component tree, and as a place to hang per-view
- * {@link PhaseListener}s.</p>
+ * changed_modified_2_2 changed_modified_2_3">UIViewRoot</span></strong>
+ * is the UIComponent that represents the root of the UIComponent tree.
+ * This component renders markup as the response to Ajax requests.  It
+ * also serves as the root of the component tree, and as a place to hang
+ * per-view {@link PhaseListener}s.</p>
  *
  * <p>For each of the following lifecycle phase methods:</p>
 
@@ -1504,17 +1504,25 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
     /**
-     * <p class="changed_added_2_0"><span class="changed_modified_2_2">Returns</span>
-     * a <code>Map</code> that acts as the
-     * interface to the data store that is the "view scope", or, if this
-     * instance does not have such a <code>Map</code> and the
-     * <code>create</code> argument is <code>true</code>, creates one and
-     * returns it.  This map must be instantiated lazily and cached for return
-     * from subsequent calls to this method on this <code>UIViewRoot</code>
-     * instance. {@link javax.faces.application.Application#publishEvent} must
-     * be called, passing {@link PostConstructViewMapEvent}<code>.class</code> as the
-     * first argument and this <code>UIViewRoot</code> instance as the second
-     * argument.</p>
+     * <p class="changed_added_2_0"><span class="changed_modified_2_2
+     * changed_modified_2_3">Returns</span> a <code>Map</code> that acts
+     * as the interface to the data store that is the "view scope", or,
+     * if this instance does not have such a <code>Map</code> and the
+     * <code>create</code> argument is <code>true</code>, creates one
+     * and returns it.  This map must be instantiated lazily and cached
+     * for return from subsequent calls to this method on this
+     * <code>UIViewRoot</code> instance. {@link
+     * javax.faces.application.Application#publishEvent} must be called,
+     * passing <span class="changed_added_2_3">the current
+     * <code>FacesContext</code> as the first argument</span>, {@link
+     * PostConstructViewMapEvent}<code>.class</code> as the second
+     * argument, <span
+     * class="changed_added_2_3"><code>UIViewRoot.class</code> as the
+     * third argument</span> and this <code>UIViewRoot</code> instance
+     * as the fourth argument.  <span class="changed_added_2_3">It is
+     * necessary to pass the <code>UIViewRoot.class</code> argument to
+     * account for cases when the <code>UIViewRoot</code> has been
+     * extended with a custom class.</span></p>
      *
      * <p>The returned <code>Map</code> must be implemented such that calling
      * <code>clear()</code> on the <code>Map</code> causes {@link javax.faces.application.Application#publishEvent} to be
