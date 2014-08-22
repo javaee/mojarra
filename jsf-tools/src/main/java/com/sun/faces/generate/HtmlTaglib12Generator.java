@@ -659,6 +659,7 @@ public class HtmlTaglib12Generator extends AbstractGenerator {
             "HtmlHead", 
             "HtmlInputHidden", 
             "HtmlInputSecret", 
+            "HtmlInputFile",
             "HtmlInputText", 
             "HtmlInputTextarea", 
             "HtmlOutcomeTargetButton", 
