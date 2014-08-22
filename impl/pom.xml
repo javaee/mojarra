@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" 
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.glassfish</groupId>
+    <artifactId>javax.faces</artifactId>
+    <version>2.3.0-m01-SNAPSHOT</version>
+    <name>Mojarra ${project.version}</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <delete dir="${basedir}/src/main/java/javax"/>
+                                <delete dir="${basedir}/src/main/java/com/sun"/>
+                                <delete dir="${basedir}/src/main/resources/javax"/>
+                                <delete dir="${basedir}/src/main/resources/com/sun"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-sources-api</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- review what to do with the template-src stuff -->
+                            
+                                <property name="build.generate.dir.api" value="${basedir}/target/generated-sources/template-api"/>
+                                <property name="tools.dir.api" value="${basedir}/../jsf-tools"/>
+                                <property name="api.dir" value="${basedir}/../jsf-api"/>
+                            
+                                <mkdir dir="${build.generate.dir.api}"/>
+                                <filter token="protection" value=""/>
+
+                                <filter token="package" value="javax.faces"/>
+                                <copy file="${tools.dir.api}/template-src/TypedCollections.java"
+                                      todir="${build.generate.dir.api}/javax/faces"
+                                      filtering="true"/>
+
+                                <filter token="package" value="javax.faces.component"/>
+                                <copy file="${tools.dir.api}/template-src/SharedUtils.java"
+                                      todir="${build.generate.dir.api}/javax/faces/component"
+                                      filtering="true"/>
+                                <copy file="${tools.dir.api}/template-src/MessageFactory.java"
+                                      todir="${build.generate.dir.api}/javax/faces/component"
+                                      filtering="true"/>
+                                <copy file="${tools.dir.api}/template-src/TypedCollections.java"
+                                      todir="${build.generate.dir.api}/javax/faces/component"
+                                      filtering="true"/>
+                                <copy file="${tools.dir.api}/template-src/StateHolderSaver.java"
+                                      todir="${build.generate.dir.api}/javax/faces/component"
+                                      filtering="true"/>
+                                <copy todir="${build.generate.dir.api}/javax/faces/component"
+                                      filtering="true">
+                                    <fileset dir="${api.dir}/template-src">
+                                        <include name="*Adapter.java"/>
+                                    </fileset>
+                                </copy>
+
+                                <filter token="package" value="javax.faces.application"/>
+                                <copy file="${tools.dir.api}/template-src/SharedUtils.java"
+                                      todir="${build.generate.dir.api}/javax/faces/application"
+                                      filtering="true"/>
+
+                                <filter token="package" value="javax.faces.convert"/>
+                                <copy file="${tools.dir.api}/template-src/MessageFactory.java"
+                                      todir="${build.generate.dir.api}/javax/faces/convert"
+                                      filtering="true"/>
+
+                                <filter token="package" value="javax.faces.validator"/>
+                                <copy file="${tools.dir.api}/template-src/MessageFactory.java"
+                                      todir="${build.generate.dir.api}/javax/faces/validator"
+                                      filtering="true"/>
+
+                                <filter token="package" value="javax.faces.webapp"/>
+                                <copy file="${tools.dir.api}/template-src/MessageFactory.java"
+                                      todir="${build.generate.dir.api}/javax/faces/webapp"
+                                      filtering="true"/>
+                                <copy file="${tools.dir.api}/template-src/TypedCollections.java"
+                                      todir="${build.generate.dir.api}/javax/faces/webapp"
+                                      filtering="true"/>
+
+                                <replace
+                                    file="${build.generate.dir.api}/javax/faces/component/MethodBindingMethodExpressionAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="7334926223014401689L"/>
+
+                                <replace
+                                    file="${build.generate.dir.api}/javax/faces/component/MethodExpressionMethodBindingAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="-1822420567946048452L"/>
+
+                                <replace
+                                    file="${build.generate.dir.api}/javax/faces/component/ValueExpressionValueBindingAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="2388977392466671243L"/>
+
+                                <replace
+                                    file="${build.generate.dir.api}/javax/faces/component/ValueBindingValueExpressionAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="-8015491904782686906L"/>
+
+                                <replace
+                                    file="${build.generate.dir.api}/javax/faces/component/StateHolderSaver.java"
+                                    token="@serialVersionUID@"
+                                    value="6470180891722042701L"/>
+                                
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-sources-impl</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${basedir}/src/main/java"/>
+                                <copy todir="${basedir}/src/main/java" includeEmptyDirs="false">
+                                    <fileset dir="${basedir}/../jsf-api/src/main/java" includes="**/*.java"/>
+                                </copy>
+                                <copy todir="${basedir}/src/main/java" includeEmptyDirs="false">
+                                    <fileset dir="${basedir}/../jsf-ri/src/main/java" includes="**/*.java"/>
+                                </copy>
+
+                                <!-- review what to do with the template-src stuff -->
+                            
+                                <property name="build.generate.dir" value="${basedir}/target/generated-sources/template"/>
+                                <property name="tools.dir" value="${basedir}/../jsf-tools"/>
+                                <property name="api.dir" value="${basedir}/../jsf-api"/>
+                            
+                                <mkdir dir="${build.generate.dir}/com/sun/faces/util"/>
+                                <filter token="protection" value="public"/>
+
+                                <filter token="package" value="com.sun.faces.util"/>
+                                <copy file="${tools.dir}/template-src/MessageFactory.java"
+                                      todir="${build.generate.dir}/com/sun/faces/util"
+                                      filtering="true"/>
+                                <copy file="${tools.dir}/template-src/TypedCollections.java"
+                                      todir="${build.generate.dir}/com/sun/faces/util"
+                                      filtering="true"/>
+                                <filter token="package" value="com.sun.faces.application.view"/>
+                                <copy file="${tools.dir}/template-src/StateHolderSaver.java"
+                                      todir="${build.generate.dir}/com/sun/faces/application/view"
+                                      filtering="true"/>
+                                <filter token="package" value="com.sun.faces.application"/>
+                                <copy file="${tools.dir}/template-src/SharedUtils.java"
+                                      todir="${build.generate.dir}/com/sun/faces/application"
+                                      filtering="true"/>
+                                <filter token="package" value="com.sun.faces.context"/>
+                                <copy file="${tools.dir}/template-src/StateHolderSaver.java"
+                                      todir="${build.generate.dir}/com/sun/faces/context"
+                                      filtering="true"/>
+                                <copy file="${tools.dir}/template-src/SharedUtils.java"
+                                      todir="${build.generate.dir}/com/sun/faces/application"
+                                      filtering="true"/>
+                                <filter token="package" value="com.sun.faces.mgbean"/>
+                                <copy file="${tools.dir}/template-src/SharedUtils.java"
+                                      todir="${build.generate.dir}/com/sun/faces/mgbean"
+                                      filtering="true"/>
+
+                                <filter token="package" value="com.sun.faces.config.processor"/>
+                                <copy file="${tools.dir}/template-src/SharedUtils.java"
+                                      todir="${build.generate.dir}/com/sun/faces/config/processor"
+                                      filtering="true"/>
+
+                                <filter token="package" value="com.sun.faces.el"/>
+                                <copy file="${tools.dir}/template-src/SharedUtils.java"
+                                      todir="${build.generate.dir}/com/sun/faces/el"
+                                      filtering="true"/>
+
+                                <filter token="protection" value="public"/>
+
+                                <filter token="package" value="com.sun.faces.application"/>
+                                <copy todir="${build.generate.dir}/com/sun/faces/application"
+                                      filtering="true">
+                                    <fileset dir="${api.dir}/template-src">
+                                        <include name="*Adapter.java"/>
+                                    </fileset>
+                                </copy>
+
+                                <replace
+                                    file="${build.generate.dir}/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="6351778415298720238L"/>
+
+                                <replace
+                                    file="${build.generate.dir}/com/sun/faces/application/MethodExpressionMethodBindingAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="5639227653537610567L"/>
+
+                                <replace
+                                    file="${build.generate.dir}/com/sun/faces/application/ValueExpressionValueBindingAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="2990621816592041196L"/>
+
+                                <replace
+                                    file="${build.generate.dir}/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="7410146713650507654L"/>
+                                <replace
+                                    file="${build.generate.dir}/com/sun/faces/application/view/StateHolderSaver.java"
+                                    token="@serialVersionUID@"
+                                    value="4866548262845392093L"/>
+
+                                <replace
+                                    file="${build.generate.dir}/com/sun/faces/context/StateHolderSaver.java"
+                                    token="@serialVersionUID@"
+                                    value="146780782953074472L"/>
+
+                                <!-- the AttributeManagerGenTask needs to be replaced by a Maven plugin -->
+                                <taskdef name="generateAttrManager"
+                                         classname="com.sun.faces.ant.AttributeManagerGenTask">
+                                </taskdef>
+                                <generateAttrManager
+                                    generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+                                    facesConfig="${api.dir}/doc/standard-html-renderkit.xml"
+                                    fork="false">
+                                    <classpath>
+                                        <pathelement location="../jsf-tools/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                    </classpath>
+                                </generateAttrManager>
+                                
+                                <move todir="${basedir}/target/generated-sources/attributemanager">
+                                    <fileset dir="${basedir}/build/generate"/>
+                                </move>
+                                
+                                <delete dir="${basedir}/build"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${basedir}/src/main/resources"/>
+                                <copy todir="${basedir}/src/main/resources" includeEmptyDirs="false">
+                                    <fileset dir="${basedir}/../jsf-api/src/main/java" excludes="**/*.java"/>
+                                </copy>
+                                <copy todir="${basedir}/src/main/resources" includeEmptyDirs="false">
+                                    <fileset dir="${basedir}/../jsf-ri/src/main/java" excludes="**/*.java"/>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.sun.faces.build</groupId>
+                        <artifactId>jsf-tools</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>commons-digester</groupId>
+                        <artifactId>commons-digester</artifactId>
+                        <version>2.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.3.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.1.1</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>1.8</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/template</source>
+                                <source>target/generated-sources/template-api</source>
+                                <source>target/generated-sources/attributemanager</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.ejb</groupId>
+            <artifactId>javax.ejb-api</artifactId>
+            <version>3.2</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0.2</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp.jstl</groupId>
+            <artifactId>javax.servlet.jsp.jstl-api</artifactId>
+            <version>1.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.1.0.Final</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>2.3.6</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+    <prerequisites>
+        <maven>3.1.1</maven>
+    </prerequisites>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+</project>
