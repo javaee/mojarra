@@ -292,7 +292,7 @@
                                 <taskdef name="generateTaglib"
                                          classname="com.sun.faces.ant.TaglibGenTask">
                                     <classpath>
-                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </taskdef>
@@ -301,7 +301,7 @@
                                     facesConfig="${api.dir}/doc/standard-html-renderkit.xml"
                                     fork="false">
                                     <classpath>
-                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateTaglib>
@@ -319,7 +319,7 @@
                                 <taskdef name="generateComponents"
                                          classname="com.sun.faces.ant.ComponentGenTask">
                                     <classpath>
-                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </taskdef>
@@ -328,7 +328,7 @@
                                     facesConfig="${api.dir}/doc/standard-html-renderkit.xml"
                                     fork="false">
                                     <classpath>
-                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateComponents>
