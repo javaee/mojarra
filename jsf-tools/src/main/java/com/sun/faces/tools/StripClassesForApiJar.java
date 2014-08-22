@@ -43,18 +43,18 @@ package com.sun.faces.tools;
 
 
 
-import com.sun.tools.javac.api.JavacTaskImpl;
-import com.sun.tools.javac.code.Kinds;
-import com.sun.tools.javac.code.Scope;
-import com.sun.tools.javac.code.Symbol.*;
-import com.sun.tools.javac.code.Flags;
-import com.sun.tools.javac.code.Type;
-import com.sun.tools.javac.jvm.ClassReader;
-import com.sun.tools.javac.jvm.ClassWriter;
-import com.sun.tools.javac.jvm.Pool;
-import com.sun.tools.javac.processing.JavacProcessingEnvironment;
-import com.sun.tools.javac.util.List;
-import com.sun.tools.javac.util.Name;
+//import com.sun.tools.javac.api.JavacTaskImpl;
+//import com.sun.tools.javac.code.Kinds;
+//import com.sun.tools.javac.code.Scope;
+//import com.sun.tools.javac.code.Symbol.*;
+//import com.sun.tools.javac.code.Flags;
+//import com.sun.tools.javac.code.Type;
+//import com.sun.tools.javac.jvm.ClassReader;
+//import com.sun.tools.javac.jvm.ClassWriter;
+//import com.sun.tools.javac.jvm.Pool;
+//import com.sun.tools.javac.processing.JavacProcessingEnvironment;
+//import com.sun.tools.javac.util.List;
+//import com.sun.tools.javac.util.Name;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -101,192 +101,194 @@ import javax.tools.ToolProvider;
  */
 @SupportedOptions({"com.sun.tools.javac.sym.Jar","com.sun.tools.javac.sym.ExtraApiClassPath","com.sun.tools.javac.sym.Dest"})
 @SupportedAnnotationTypes("*")
-public class StripClassesForApiJar extends AbstractProcessor {
+public class StripClassesForApiJar 
+//extends AbstractProcessor 
+{
 
-    static Set<String> getLegacyPackages() {
-        return Collections.emptySet();
-    }
-
-    @Override
-    public boolean process(Set<? extends TypeElement> tes, RoundEnvironment renv) {
-        if (!renv.processingOver())
-            return true;
-
-        Set<String> legacy = getLegacyPackages();
-        Set<String> legacyProprietary = getLegacyPackages();
-        Set<String> documented = new HashSet<String>();
-        Set<PackageSymbol> packages =
-            ((JavacProcessingEnvironment)processingEnv).getSpecifiedPackages();
-        String jarName = processingEnv.getOptions().get("com.sun.tools.javac.sym.Jar");
-        if (jarName == null)
-            throw new RuntimeException("Must use -Acom.sun.tools.javac.sym.Jar=LOCATION_OF_JAR");
-        String extraApiClassPath = processingEnv.getOptions().get("com.sun.tools.javac.sym.ExtraApiClassPath");
-        if (extraApiClassPath == null)
-            throw new RuntimeException("Must use -Acom.sun.tools.javac.sym.ExtraApiClassPath=extra api class path");
-        String destName = processingEnv.getOptions().get("com.sun.tools.javac.sym.Dest");
-        if (destName == null)
-            throw new RuntimeException("Must use -Acom.sun.tools.javac.sym.Dest=LOCATION_OF_JAR");
-
-        for (PackageSymbol psym : packages) {
-            String name = psym.getQualifiedName().toString();
-            legacyProprietary.remove(name);
-            documented.add(name);
-        }
-
-        JavaCompiler tool = ToolProvider.getSystemJavaCompiler();
-        StandardJavaFileManager fm = tool.getStandardFileManager(null, null, null);
-        Location jarLocation = StandardLocation.locationFor(jarName);
-        File jarFile = new File(jarName);
-        String [] segments = extraApiClassPath.split(File.pathSeparator);
-        java.util.List<File> extraClassPathSegments = new ArrayList<File>(segments.length);
-        for (String cur : segments) {
-            extraClassPathSegments.add(new File(cur));
-        }
-        File ExtraApiClassPathFile = new File(extraApiClassPath);
-        try {
-            fm.setLocation(jarLocation, List.of(jarFile));
-            fm.setLocation(StandardLocation.CLASS_PATH, List.<File>nil());
-            fm.setLocation(StandardLocation.SOURCE_PATH, List.<File>nil());
-            {
-                ArrayList<File> bootClassPath = new ArrayList<File>();
-                bootClassPath.add(jarFile);
-                for (File cur : extraClassPathSegments) {
-                    bootClassPath.add(cur);
-                }
-                // ADD EXTRA DEPENDENCIES HERE:
-                for (File path : fm.getLocation(StandardLocation.PLATFORM_CLASS_PATH)) {
-                    // if (!new File(path.getName()).equals(new File("rt.jar")))
-                    bootClassPath.add(path);
-                }
-                System.err.println("Using boot class path = " + bootClassPath);
-                fm.setLocation(StandardLocation.PLATFORM_CLASS_PATH, bootClassPath);
-            }
-            // System.out.println(fm.getLocation(StandardLocation.PLATFORM_CLASS_PATH));
-            File destDir = new File(destName);
-            if (!destDir.exists())
-                if (!destDir.mkdirs())
-                    throw new RuntimeException("Could not create " + destDir);
-            fm.setLocation(StandardLocation.CLASS_OUTPUT, List.of(destDir));
-        } catch (IOException ioe) {
-            System.err.println("Unable to set location");
-            return false;
-        }
-        Set<String> hiddenPackages = new HashSet<String>();
-        Set<String> crisp = new HashSet<String>();
-        List<String> options = List.of("-XDdev");
-        // options = options.prepend("-doe");
-        // options = options.prepend("-verbose");
-        JavacTaskImpl task = (JavacTaskImpl)
-            tool.getTask(null, fm, null, options, null, null);
-        com.sun.tools.javac.main.JavaCompiler compiler = com.sun.tools.javac.main.JavaCompiler.instance(task.getContext());
-        ClassReader reader = ClassReader.instance(task.getContext());
-        ClassWriter writer = ClassWriter.instance(task.getContext());
-        Type.moreInfo = true;
-        Pool pool = new Pool();
-	ClassSymbol cs = null;
-        try {
-            for (JavaFileObject file : fm.list(jarLocation, "", EnumSet.of(CLASS), true)) {
-                String className = fm.inferBinaryName(jarLocation, file);
-                int index = className.lastIndexOf('.');
-                String pckName = index == -1 ? "" : className.substring(0, index);
-                if (documented.contains(pckName)) {
-                    if (!legacy.contains(pckName))
-                        crisp.add(pckName);
-                    // System.out.println("Documented: " + className);
-                } else if (legacyProprietary.contains(pckName)) {
-                    // System.out.println("Legacy proprietary: " + className);
-                } else {
-                    // System.out.println("Hidden " + className);
-                    hiddenPackages.add(pckName);
-                    continue;
-                }
-                // PackageSymbol psym = reader.enterPackage(names.fromString(pckName));
-                // psym.complete();
-                TypeSymbol sym = (TypeSymbol)compiler.resolveIdent(className);
-                if (sym.kind != Kinds.TYP) {
-                    if (className.indexOf('$') < 0) {
-                         System.err.println("Ignoring (other) " + className + " : " + sym);
-                         System.err.println("   " + sym.getClass().getSimpleName() + " " + sym.type);
-                    }
-                    continue;
-                }
-                sym.complete();
-                if (sym.getEnclosingElement().getKind() != ElementKind.PACKAGE) {
-                    System.err.println("Ignoring (bad) " + sym.getQualifiedName());
-                }
-		if (false) {
-		    /*
-		     * Following eliminates non-public classes from output,
-		     * but is too aggressive because it also eliminates
-		     * non-public superclasses of public classes, which
-		     * makes the output unusable.
-		     */
-		    if (sym.owner.kind == Kinds.PCK &&
-			(sym.flags() & Flags.AccessFlags) == Flags.PUBLIC) {
-			cs = (ClassSymbol) sym;
-			writeClass(pool, cs, writer);
-			cs = null;
-		    }
-		} else {
-		    cs = (ClassSymbol) sym;
-		    writeClass(pool, cs, writer);
-		    cs = null;
-		}
-            }
-        } catch (IOException ex) {
-	    reportError(ex, cs);
-        } catch (CompletionFailure ex) {
-	    reportError(ex, cs);
-        } catch (RuntimeException ex) {
-	    reportError(ex, cs);
-	}
-        if (false) {
-            for (String pckName : crisp)
-                System.out.println("Crisp: " + pckName);
-            for (String pckName : hiddenPackages)
-                System.out.println("Hidden: " + pckName);
-            for (String pckName : legacyProprietary)
-                System.out.println("Legacy proprietary: " + pckName);
-            for (String pckName : documented)
-                System.out.println("Documented: " + pckName);
-        }
-
-        return true;
-    }
-
-    void reportError(Throwable ex, Element element) {
-	if (element != null)
-	    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-						     ex.getLocalizedMessage(),
-						     element);
-	else
-	    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-						     ex.getLocalizedMessage());
-    }
-
-    void writeClass(final Pool pool, final ClassSymbol cs, final ClassWriter writer) {
-        try {
-            pool.reset();
-            cs.pool = pool;
-            writer.writeClass(cs);
-            for (Scope.Entry e = cs.members().elems; e != null; e = e.sibling) {
-                if (e.sym.kind == Kinds.TYP) {
-                    ClassSymbol nestedClass = (ClassSymbol)e.sym;
-                    nestedClass.complete();
-                    writeClass(pool, nestedClass, writer);
-                }
-            }
-        } catch (ClassWriter.StringOverflow ex) {
-            throw new RuntimeException(ex);
-        } catch (ClassWriter.PoolOverflow ex) {
-            throw new RuntimeException(ex);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.latest();
-    }
+//    static Set<String> getLegacyPackages() {
+//        return Collections.emptySet();
+//    }
+//
+//    @Override
+//    public boolean process(Set<? extends TypeElement> tes, RoundEnvironment renv) {
+//        if (!renv.processingOver())
+//            return true;
+//
+//        Set<String> legacy = getLegacyPackages();
+//        Set<String> legacyProprietary = getLegacyPackages();
+//        Set<String> documented = new HashSet<String>();
+//        Set<PackageSymbol> packages =
+//            ((JavacProcessingEnvironment)processingEnv).getSpecifiedPackages();
+//        String jarName = processingEnv.getOptions().get("com.sun.tools.javac.sym.Jar");
+//        if (jarName == null)
+//            throw new RuntimeException("Must use -Acom.sun.tools.javac.sym.Jar=LOCATION_OF_JAR");
+//        String extraApiClassPath = processingEnv.getOptions().get("com.sun.tools.javac.sym.ExtraApiClassPath");
+//        if (extraApiClassPath == null)
+//            throw new RuntimeException("Must use -Acom.sun.tools.javac.sym.ExtraApiClassPath=extra api class path");
+//        String destName = processingEnv.getOptions().get("com.sun.tools.javac.sym.Dest");
+//        if (destName == null)
+//            throw new RuntimeException("Must use -Acom.sun.tools.javac.sym.Dest=LOCATION_OF_JAR");
+//
+//        for (PackageSymbol psym : packages) {
+//            String name = psym.getQualifiedName().toString();
+//            legacyProprietary.remove(name);
+//            documented.add(name);
+//        }
+//
+//        JavaCompiler tool = ToolProvider.getSystemJavaCompiler();
+//        StandardJavaFileManager fm = tool.getStandardFileManager(null, null, null);
+//        Location jarLocation = StandardLocation.locationFor(jarName);
+//        File jarFile = new File(jarName);
+//        String [] segments = extraApiClassPath.split(File.pathSeparator);
+//        java.util.List<File> extraClassPathSegments = new ArrayList<File>(segments.length);
+//        for (String cur : segments) {
+//            extraClassPathSegments.add(new File(cur));
+//        }
+//        File ExtraApiClassPathFile = new File(extraApiClassPath);
+//        try {
+//            fm.setLocation(jarLocation, List.of(jarFile));
+//            fm.setLocation(StandardLocation.CLASS_PATH, List.<File>nil());
+//            fm.setLocation(StandardLocation.SOURCE_PATH, List.<File>nil());
+//            {
+//                ArrayList<File> bootClassPath = new ArrayList<File>();
+//                bootClassPath.add(jarFile);
+//                for (File cur : extraClassPathSegments) {
+//                    bootClassPath.add(cur);
+//                }
+//                // ADD EXTRA DEPENDENCIES HERE:
+//                for (File path : fm.getLocation(StandardLocation.PLATFORM_CLASS_PATH)) {
+//                    // if (!new File(path.getName()).equals(new File("rt.jar")))
+//                    bootClassPath.add(path);
+//                }
+//                System.err.println("Using boot class path = " + bootClassPath);
+//                fm.setLocation(StandardLocation.PLATFORM_CLASS_PATH, bootClassPath);
+//            }
+//            // System.out.println(fm.getLocation(StandardLocation.PLATFORM_CLASS_PATH));
+//            File destDir = new File(destName);
+//            if (!destDir.exists())
+//                if (!destDir.mkdirs())
+//                    throw new RuntimeException("Could not create " + destDir);
+//            fm.setLocation(StandardLocation.CLASS_OUTPUT, List.of(destDir));
+//        } catch (IOException ioe) {
+//            System.err.println("Unable to set location");
+//            return false;
+//        }
+//        Set<String> hiddenPackages = new HashSet<String>();
+//        Set<String> crisp = new HashSet<String>();
+//        List<String> options = List.of("-XDdev");
+//        // options = options.prepend("-doe");
+//        // options = options.prepend("-verbose");
+//        JavacTaskImpl task = (JavacTaskImpl)
+//            tool.getTask(null, fm, null, options, null, null);
+//        com.sun.tools.javac.main.JavaCompiler compiler = com.sun.tools.javac.main.JavaCompiler.instance(task.getContext());
+//        ClassReader reader = ClassReader.instance(task.getContext());
+//        ClassWriter writer = ClassWriter.instance(task.getContext());
+//        Type.moreInfo = true;
+//        Pool pool = new Pool();
+//	ClassSymbol cs = null;
+//        try {
+//            for (JavaFileObject file : fm.list(jarLocation, "", EnumSet.of(CLASS), true)) {
+//                String className = fm.inferBinaryName(jarLocation, file);
+//                int index = className.lastIndexOf('.');
+//                String pckName = index == -1 ? "" : className.substring(0, index);
+//                if (documented.contains(pckName)) {
+//                    if (!legacy.contains(pckName))
+//                        crisp.add(pckName);
+//                    // System.out.println("Documented: " + className);
+//                } else if (legacyProprietary.contains(pckName)) {
+//                    // System.out.println("Legacy proprietary: " + className);
+//                } else {
+//                    // System.out.println("Hidden " + className);
+//                    hiddenPackages.add(pckName);
+//                    continue;
+//                }
+//                // PackageSymbol psym = reader.enterPackage(names.fromString(pckName));
+//                // psym.complete();
+//                TypeSymbol sym = (TypeSymbol)compiler.resolveIdent(className);
+//                if (sym.kind != Kinds.TYP) {
+//                    if (className.indexOf('$') < 0) {
+//                         System.err.println("Ignoring (other) " + className + " : " + sym);
+//                         System.err.println("   " + sym.getClass().getSimpleName() + " " + sym.type);
+//                    }
+//                    continue;
+//                }
+//                sym.complete();
+//                if (sym.getEnclosingElement().getKind() != ElementKind.PACKAGE) {
+//                    System.err.println("Ignoring (bad) " + sym.getQualifiedName());
+//                }
+//		if (false) {
+//		    /*
+//		     * Following eliminates non-public classes from output,
+//		     * but is too aggressive because it also eliminates
+//		     * non-public superclasses of public classes, which
+//		     * makes the output unusable.
+//		     */
+//		    if (sym.owner.kind == Kinds.PCK &&
+//			(sym.flags() & Flags.AccessFlags) == Flags.PUBLIC) {
+//			cs = (ClassSymbol) sym;
+//			writeClass(pool, cs, writer);
+//			cs = null;
+//		    }
+//		} else {
+//		    cs = (ClassSymbol) sym;
+//		    writeClass(pool, cs, writer);
+//		    cs = null;
+//		}
+//            }
+//        } catch (IOException ex) {
+//	    reportError(ex, cs);
+//        } catch (CompletionFailure ex) {
+//	    reportError(ex, cs);
+//        } catch (RuntimeException ex) {
+//	    reportError(ex, cs);
+//	}
+//        if (false) {
+//            for (String pckName : crisp)
+//                System.out.println("Crisp: " + pckName);
+//            for (String pckName : hiddenPackages)
+//                System.out.println("Hidden: " + pckName);
+//            for (String pckName : legacyProprietary)
+//                System.out.println("Legacy proprietary: " + pckName);
+//            for (String pckName : documented)
+//                System.out.println("Documented: " + pckName);
+//        }
+//
+//        return true;
+//    }
+//
+//    void reportError(Throwable ex, Element element) {
+//	if (element != null)
+//	    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+//						     ex.getLocalizedMessage(),
+//						     element);
+//	else
+//	    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+//						     ex.getLocalizedMessage());
+//    }
+//
+//    void writeClass(final Pool pool, final ClassSymbol cs, final ClassWriter writer) {
+//        try {
+//            pool.reset();
+//            cs.pool = pool;
+//            writer.writeClass(cs);
+//            for (Scope.Entry e = cs.members().elems; e != null; e = e.sibling) {
+//                if (e.sym.kind == Kinds.TYP) {
+//                    ClassSymbol nestedClass = (ClassSymbol)e.sym;
+//                    nestedClass.complete();
+//                    writeClass(pool, nestedClass, writer);
+//                }
+//            }
+//        } catch (ClassWriter.StringOverflow ex) {
+//            throw new RuntimeException(ex);
+//        } catch (ClassWriter.PoolOverflow ex) {
+//            throw new RuntimeException(ex);
+//        } catch (IOException ex) {
+//            throw new RuntimeException(ex);
+//        }
+//    }
+//
+//    public SourceVersion getSupportedSourceVersion() {
+//        return SourceVersion.latest();
+//    }
 
 }

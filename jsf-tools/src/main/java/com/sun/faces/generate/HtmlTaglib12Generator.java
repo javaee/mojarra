@@ -653,15 +653,55 @@ public class HtmlTaglib12Generator extends AbstractGenerator {
 
      protected static boolean isValueHolder(String componentClass) {
 
-        try {
-            Class<?> clazz = Class.forName(componentClass);
-            Class<?> valueHolderClass =
-                Class.forName("javax.faces.component.ValueHolder");
-            return valueHolderClass.isAssignableFrom(clazz);
-        } catch (ClassNotFoundException cnfe) {
-            throw new IllegalStateException("Unable to find component class '" +
-                componentClass + "' : " + cnfe.toString());
-        }
+        String[] valueHolderClasses = {
+            "HtmlBody", 
+            "HtmlDoctype", 
+            "HtmlHead", 
+            "HtmlInputHidden", 
+            "HtmlInputSecret", 
+            "HtmlInputText", 
+            "HtmlInputTextarea", 
+            "HtmlOutcomeTargetButton", 
+            "HtmlOutcomeTargetLink", 
+            "HtmlOutputFormat", 
+            "HtmlOutputLabel", 
+            "HtmlOutputLink", 
+            "HtmlOutputText", 
+            "HtmlSelectBooleanCheckbox", 
+            "HtmlSelectManyCheckbox", 
+            "HtmlSelectManyListbox", 
+            "HtmlSelectManyMenu", 
+            "HtmlSelectOneListbox", 
+            "HtmlSelectOneMenu", 
+            "HtmlSelectOneRadio", 
+            "UIInput", 
+            "UIOutcomeTarget", 
+            "UIOutput", 
+            "UISelectBoolean", 
+            "UISelectMany", 
+            "UISelectOne", 
+            "UIViewParameter" };
+         
+        boolean result = false;
+        
+        for(int i = 0; i<valueHolderClasses.length; i++) {
+            if (componentClass.endsWith(valueHolderClasses[i])) {
+                result = true;
+                break;
+            }
+        } 
+        
+        return result;
+//        
+//        try {
+//            Class<?> clazz = Class.forName(componentClass);
+//            Class<?> valueHolderClass =
+//                Class.forName("javax.faces.component.ValueHolder");
+//            return valueHolderClass.isAssignableFrom(clazz);
+//        } catch (ClassNotFoundException cnfe) {
+//            throw new IllegalStateException("Unable to find component class '" +
+//                componentClass + "' : " + cnfe.toString());
+//        }
 
     } // END isValueHolder
 
