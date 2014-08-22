@@ -285,6 +285,60 @@
                                 </move>
                                 
                                 <delete dir="${project.build.directory}/../build"/>
+
+                                <!--                                
+                                
+                                <taskdef name="generateTaglib"
+                                         classname="com.sun.faces.ant.TaglibGenTask">
+                                    <classpath>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                    </classpath>
+                                </taskdef>
+                                <generateTaglib
+                                    generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+                                    facesConfig="${api.dir}/doc/standard-html-renderkit.xml"
+                                    fork="false">
+                                    <classpath>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                    </classpath>
+                                </generateTaglib>
+
+                                <move todir="${project.build.directory}/generated-sources/jsptags">
+                                    <fileset dir="${project.build.directory}/../build/generate"/>
+                                </move>
+                                
+                                <delete dir="${project.build.directory}/../build"/>
+                                
+                                -->
+
+                                <mkdir dir="${project.build.directory}/../build"/>
+                                <copy todir="${project.build.directory}/../build"
+                                    file="${project.build.directory}/../../jsf-tools/conf/TAG-DEF-21.txt"/>
+                                    
+                                <taskdef name="generateComponents"
+                                         classname="com.sun.faces.ant.ComponentGenTask">
+                                    <classpath>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                    </classpath>
+                                </taskdef>
+                                <generateComponents
+                                    generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+                                    facesConfig="${api.dir}/doc/standard-html-renderkit.xml"
+                                    fork="false">
+                                    <classpath>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                    </classpath>
+                                </generateComponents>
+
+                                <move todir="${project.build.directory}/generated-sources/htmlcomponents">
+                                    <fileset dir="${project.build.directory}/../build/generate"/>
+                                </move>
+                                
+                                <delete dir="${project.build.directory}/../build"/>
                             </target>
                         </configuration>
                     </execution>
@@ -367,6 +421,8 @@
                         <configuration>
                             <sources>
                                 <source>target/generated-sources/attributemanager</source>
+                                <source>target/generated-sources/htmlcomponents</source>
+                                <source>target/generated-sources/jsptags</source>
                                 <source>target/generated-sources/template-api</source>
                                 <source>target/generated-sources/template-impl</source>
                             </sources>
