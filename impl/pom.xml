@@ -267,15 +267,21 @@
                                     value="146780782953074472L"/>
 
                                 <mkdir dir="${project.build.directory}/../build/generate"/>
-                                
+
+                                <echo>AttributeManager</echo>
+                                                                
                                 <!-- the AttributeManagerGenTask needs to be replaced by a Maven plugin -->
                                 <taskdef name="generateAttrManager"
                                          classname="com.sun.faces.ant.AttributeManagerGenTask">
+                                    <classpath>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                    </classpath>
                                 </taskdef>
                                 <generateAttrManager
                                     generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
                                     facesConfig="${api.dir}/doc/standard-html-renderkit.xml"
-                                    fork="false">
+                                    fork="true">
                                     <classpath>
                                         <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
                                         <path refid="maven.plugin.classpath"/>
@@ -313,7 +319,9 @@
                                 
                                 <delete dir="${project.build.directory}/../build"/>
                                 
-                                -->                             
+                                -->
+                                                             
+                                <echo>Generating HTML components</echo>
                                 <mkdir dir="${project.build.directory}/../build/generate"/>
                                 
                                 <copy todir="${tools.dir}/build/classes/com/sun/faces"
@@ -333,7 +341,7 @@
                                 <generateComponents
                                     generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
                                     facesConfig="${api.dir}/doc/standard-html-renderkit.xml"
-                                    fork="false">
+                                    fork="true">
                                     <classpath>
                                         <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
                                         <pathelement location="${tools.dir}/build/classes"/>
