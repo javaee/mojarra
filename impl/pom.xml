@@ -65,10 +65,10 @@
                         </goals>
                         <configuration>
                             <target>
-                                <delete dir="${basedir}/src/main/java/javax"/>
-                                <delete dir="${basedir}/src/main/java/com/sun"/>
-                                <delete dir="${basedir}/src/main/resources/javax"/>
-                                <delete dir="${basedir}/src/main/resources/com/sun"/>
+                                <delete dir="${project.buildDirectory}/../src/main/java/javax"/>
+                                <delete dir="${project.buildDirectory}/../src/main/java/com/sun"/>
+                                <delete dir="${project.buildDirectory}/../src/main/resources/javax"/>
+                                <delete dir="${project.buildDirectory}/../src/main/resources/com/sun"/>
                             </target>
                         </configuration>
                     </execution>
@@ -82,9 +82,9 @@
                             <target>
                                 <!-- review what to do with the template-src stuff -->
                             
-                                <property name="build.generate.dir.api" value="${basedir}/target/generated-sources/template-api"/>
-                                <property name="tools.dir.api" value="${basedir}/../jsf-tools"/>
-                                <property name="api.dir" value="${basedir}/../jsf-api"/>
+                                <property name="build.generate.dir.api" value="${project.build.directory}/generated-sources/template-api"/>
+                                <property name="tools.dir.api" value="${project.build.directory}/../../jsf-tools"/>
+                                <property name="api.dir" value="${project.build.directory}/../../jsf-api"/>
                             
                                 <mkdir dir="${build.generate.dir.api}"/>
                                 <filter token="protection" value=""/>
@@ -173,19 +173,19 @@
                         </goals>
                         <configuration>
                             <target>
-                                <mkdir dir="${basedir}/src/main/java"/>
-                                <copy todir="${basedir}/src/main/java" includeEmptyDirs="false">
-                                    <fileset dir="${basedir}/../jsf-api/src/main/java" includes="**/*.java"/>
+                                <mkdir dir="${project.build.directory}/../src/main/java"/>
+                                <copy todir="${project.build.directory}/../src/main/java" includeEmptyDirs="false">
+                                    <fileset dir="${project.build.directory}/../../jsf-api/src/main/java" includes="**/*.java"/>
                                 </copy>
-                                <copy todir="${basedir}/src/main/java" includeEmptyDirs="false">
-                                    <fileset dir="${basedir}/../jsf-ri/src/main/java" includes="**/*.java"/>
+                                <copy todir="${project.build.directory}/../src/main/java" includeEmptyDirs="false">
+                                    <fileset dir="${project.build.directory}/../../jsf-ri/src/main/java" includes="**/*.java"/>
                                 </copy>
 
                                 <!-- review what to do with the template-src stuff -->
                             
-                                <property name="build.generate.dir" value="${basedir}/target/generated-sources/template"/>
-                                <property name="tools.dir" value="${basedir}/../jsf-tools"/>
-                                <property name="api.dir" value="${basedir}/../jsf-api"/>
+                                <property name="build.generate.dir" value="${project.build.directory}/generated-sources/template-impl"/>
+                                <property name="tools.dir" value="${project.build.directory}/../../jsf-tools"/>
+                                <property name="api.dir" value="${project.build.directory}/../../jsf-api"/>
                             
                                 <mkdir dir="${build.generate.dir}/com/sun/faces/util"/>
                                 <filter token="protection" value="public"/>
@@ -275,16 +275,16 @@
                                     facesConfig="${api.dir}/doc/standard-html-renderkit.xml"
                                     fork="false">
                                     <classpath>
-                                        <pathelement location="../jsf-tools/build/classes"/>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateAttrManager>
                                 
-                                <move todir="${basedir}/target/generated-sources/attributemanager">
-                                    <fileset dir="${basedir}/build/generate"/>
+                                <move todir="${project.build.directory}/generated-sources/attributemanager">
+                                    <fileset dir="${project.build.directory}/../build/generate"/>
                                 </move>
                                 
-                                <delete dir="${basedir}/build"/>
+                                <delete dir="${project.build.directory}/../build"/>
                             </target>
                         </configuration>
                     </execution>
@@ -296,12 +296,12 @@
                         </goals>
                         <configuration>
                             <target>
-                                <mkdir dir="${basedir}/src/main/resources"/>
-                                <copy todir="${basedir}/src/main/resources" includeEmptyDirs="false">
-                                    <fileset dir="${basedir}/../jsf-api/src/main/java" excludes="**/*.java"/>
+                                <mkdir dir="${project.build.directory}/../src/main/resources"/>
+                                <copy todir="${project.build.directory}/../src/main/resources" includeEmptyDirs="false">
+                                    <fileset dir="${project.build.directory}/../../jsf-api/src/main/java" excludes="**/*.java"/>
                                 </copy>
-                                <copy todir="${basedir}/src/main/resources" includeEmptyDirs="false">
-                                    <fileset dir="${basedir}/../jsf-ri/src/main/java" excludes="**/*.java"/>
+                                <copy todir="${project.build.directory}/../src/main/resources" includeEmptyDirs="false">
+                                    <fileset dir="${project.build.directory}/../../jsf-ri/src/main/java" excludes="**/*.java"/>
                                 </copy>
                             </target>
                         </configuration>
@@ -366,9 +366,9 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>target/generated-sources/template</source>
-                                <source>target/generated-sources/template-api</source>
                                 <source>target/generated-sources/attributemanager</source>
+                                <source>target/generated-sources/template-api</source>
+                                <source>target/generated-sources/template-impl</source>
                             </sources>
                         </configuration>
                     </execution>
