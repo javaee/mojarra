@@ -47,7 +47,7 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong class="changed_modified_2_0 changed_modified_2_2">Converter</strong> is an
+ * <p><strong class="changed_modified_2_0 changed_modified_2_2 changed_modified_2_3">Converter</strong> is an
  * interface describing a Java class that can perform Object-to-String
  * and String-to-Object conversions between model data objects and a
  * String representation of those objects that is suitable for
@@ -90,9 +90,9 @@ public interface Converter {
 
 
     /**
-     * <p>Convert the specified string value, which is associated with
+     * <p><span class="changed_modified_2_3">Convert</span> the specified string value, which is associated with
      * the specified {@link UIComponent}, into a model data object that
-     * is appropriate for being stored during the <em>Process Validations</em> 
+     * is appropriate for being stored during the <em class="changed_modified_2_3">Process Validations</em> 
      * phase of the request processing lifecycle.</p>
      *
      * @param context   {@link FacesContext} for the request being processed
