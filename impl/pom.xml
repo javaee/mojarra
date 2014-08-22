@@ -266,6 +266,8 @@
                                     token="@serialVersionUID@"
                                     value="146780782953074472L"/>
 
+                                <mkdir dir="${project.build.directory}/../build/generate"/>
+                                
                                 <!-- the AttributeManagerGenTask needs to be replaced by a Maven plugin -->
                                 <taskdef name="generateAttrManager"
                                          classname="com.sun.faces.ant.AttributeManagerGenTask">
@@ -286,9 +288,8 @@
                                 
                                 <delete dir="${project.build.directory}/../build"/>
 
-                                <mkdir dir="${project.build.directory}/../build"/>
-                                <copy todir="${project.build.directory}/../build"
-                                    file="${project.build.directory}/../../jsf-tools/conf/TAG-DEF-21.txt"/>
+<!--
+                                <mkdir dir="${project.build.directory}/../build/generate"/>
                                 <taskdef name="generateTaglib"
                                          classname="com.sun.faces.ant.TaglibGenTask">
                                     <classpath>
@@ -312,14 +313,20 @@
                                 
                                 <delete dir="${project.build.directory}/../build"/>
                                 
-                                <mkdir dir="${project.build.directory}/../build"/>
-                                <copy todir="${project.build.directory}/../build"
-                                    file="${project.build.directory}/../../jsf-tools/conf/TAG-DEF-21.txt"/>
-                                    
+                                -->                             
+                                <mkdir dir="${project.build.directory}/../build/generate"/>
+                                
+                                <copy todir="${tools.dir}/build/classes/com/sun/faces"
+                                      flatten="true">
+                                    <fileset dir="${api.dir}/doc"
+                                             includes="*.dtd,*.xsd"/>
+                                </copy>
+                                
                                 <taskdef name="generateComponents"
                                          classname="com.sun.faces.ant.ComponentGenTask">
                                     <classpath>
                                         <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
+                                        <pathelement location="${tools.dir}/build/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </taskdef>
@@ -329,6 +336,7 @@
                                     fork="false">
                                     <classpath>
                                         <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
+                                        <pathelement location="${tools.dir}/build/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateComponents>
@@ -343,7 +351,7 @@
                     </execution>
                     <execution>
                         <id>generate-resources</id>
-                        <phase>generate-resources</phase>
+                        <phase>initialize</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
