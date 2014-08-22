@@ -286,6 +286,9 @@
                                 
                                 <delete dir="${project.build.directory}/../build"/>
 
+                                <mkdir dir="${project.build.directory}/../build"/>
+                                <copy todir="${project.build.directory}/../build"
+                                    file="${project.build.directory}/../../jsf-tools/conf/TAG-DEF-21.txt"/>
                                 <taskdef name="generateTaglib"
                                          classname="com.sun.faces.ant.TaglibGenTask">
                                     <classpath>
