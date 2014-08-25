@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.ajax_namespace;
+package com.sun.faces.test.servlet30.custom_viewroot_viewscope;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
@@ -102,6 +102,8 @@ public class Issue3375IT {
         
         HtmlElement result = (HtmlElement) page.getElementById("result");
         assertTrue(null != result);
+        String resultText = result.asText();
+        System.out.println("debug: edburns: resultText: " + resultText);
         assertTrue(0 < result.asText().length());
 
         
