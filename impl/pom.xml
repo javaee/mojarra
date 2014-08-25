@@ -57,6 +57,10 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.7</version>
                 <executions>
+                    <!-- 
+                        as we are copying sources and resources we need to remove everything
+                        if we want to do a clean build.
+                      -->
                     <execution>
                         <id>clean</id>
                         <phase>clean</phase>
@@ -72,17 +76,60 @@
                             </target>
                         </configuration>
                     </execution>
+                    <!--
+                        copy the sources from the jsf-api and jsf-ri projects.
+                      -->
                     <execution>
-                        <id>generate-sources-api</id>
+                        <id>copy-sources</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.build.directory}/../src/main/java"/>
+                                <copy todir="${project.build.directory}/../src/main/java" includeEmptyDirs="false">
+                                    <fileset dir="${project.build.directory}/../../jsf-api/src/main/java" includes="**/*.java"/>
+                                </copy>
+                                <copy todir="${project.build.directory}/../src/main/java" includeEmptyDirs="false">
+                                    <fileset dir="${project.build.directory}/../../jsf-ri/src/main/java" includes="**/*.java"/>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <!--
+                        copy the resources from the jsf-api and jsf-ri projects.
+                      -->
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.build.directory}/../src/main/resources"/>
+                                <copy todir="${project.build.directory}/../src/main/resources" includeEmptyDirs="false">
+                                    <fileset dir="${project.build.directory}/../../jsf-api/src/main/java" excludes="**/*.java"/>
+                                </copy>
+                                <copy todir="${project.build.directory}/../src/main/resources" includeEmptyDirs="false">
+                                    <fileset dir="${project.build.directory}/../../jsf-ri/src/main/java" excludes="**/*.java"/>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <!--
+                        generate sources using the template source from the jsf-api project.
+                      -->
+                    <execution>
+                        <id>generate-api-template</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <configuration>
                             <target>
-                                <!-- review what to do with the template-src stuff -->
-                            
-                                <property name="build.generate.dir.api" value="${project.build.directory}/generated-sources/template-api"/>
+                                <property name="build.generate.dir.api" value="${project.build.directory}/generated-sources/api-template"/>
                                 <property name="tools.dir.api" value="${project.build.directory}/../../jsf-tools"/>
                                 <property name="api.dir" value="${project.build.directory}/../../jsf-api"/>
                             
@@ -161,29 +208,59 @@
                                     file="${build.generate.dir.api}/javax/faces/component/StateHolderSaver.java"
                                     token="@serialVersionUID@"
                                     value="6470180891722042701L"/>
-                                
                             </target>
                         </configuration>
                     </execution>
+                    <!--
+                        generate sources using the AttributeManagerGenTask.
+                      -->
                     <execution>
-                        <id>generate-sources-impl</id>
+                        <id>generate-impl-attribute-manager</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <configuration>
                             <target>
-                                <mkdir dir="${project.build.directory}/../src/main/java"/>
-                                <copy todir="${project.build.directory}/../src/main/java" includeEmptyDirs="false">
-                                    <fileset dir="${project.build.directory}/../../jsf-api/src/main/java" includes="**/*.java"/>
-                                </copy>
-                                <copy todir="${project.build.directory}/../src/main/java" includeEmptyDirs="false">
-                                    <fileset dir="${project.build.directory}/../../jsf-ri/src/main/java" includes="**/*.java"/>
-                                </copy>
+                                <property name="tools.dir" value="${project.build.directory}/../../jsf-tools"/>
+                                <property name="api.dir" value="${project.build.directory}/../../jsf-api"/>
 
-                                <!-- review what to do with the template-src stuff -->
-                            
-                                <property name="build.generate.dir" value="${project.build.directory}/generated-sources/template-impl"/>
+                                <mkdir dir="${project.build.directory}/../build/generate"/>
+                                <taskdef name="generateAttrManager"
+                                         classname="com.sun.faces.ant.AttributeManagerGenTask">
+                                    <classpath>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                    </classpath>
+                                </taskdef>
+                                <generateAttrManager
+                                    generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+                                    facesConfig="${api.dir}/doc/standard-html-renderkit.xml"
+                                    fork="true">
+                                    <classpath>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                    </classpath>
+                                </generateAttrManager>
+                                <move todir="${project.build.directory}/generated-sources/impl-attribute-manager">
+                                    <fileset dir="${project.build.directory}/../build/generate"/>
+                                </move>
+                                <delete dir="${project.build.directory}/../build"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <!--
+                        generate sources using the template source in the jsf-ri project.
+                      -->
+                    <execution>
+                        <id>generate-impl-template</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <property name="build.generate.dir" value="${project.build.directory}/generated-sources/impl-template"/>
                                 <property name="tools.dir" value="${project.build.directory}/../../jsf-tools"/>
                                 <property name="api.dir" value="${project.build.directory}/../../jsf-api"/>
                             
@@ -197,14 +274,17 @@
                                 <copy file="${tools.dir}/template-src/TypedCollections.java"
                                       todir="${build.generate.dir}/com/sun/faces/util"
                                       filtering="true"/>
+                                
                                 <filter token="package" value="com.sun.faces.application.view"/>
                                 <copy file="${tools.dir}/template-src/StateHolderSaver.java"
                                       todir="${build.generate.dir}/com/sun/faces/application/view"
                                       filtering="true"/>
+                                
                                 <filter token="package" value="com.sun.faces.application"/>
                                 <copy file="${tools.dir}/template-src/SharedUtils.java"
                                       todir="${build.generate.dir}/com/sun/faces/application"
                                       filtering="true"/>
+                                
                                 <filter token="package" value="com.sun.faces.context"/>
                                 <copy file="${tools.dir}/template-src/StateHolderSaver.java"
                                       todir="${build.generate.dir}/com/sun/faces/context"
@@ -265,36 +345,67 @@
                                     file="${build.generate.dir}/com/sun/faces/context/StateHolderSaver.java"
                                     token="@serialVersionUID@"
                                     value="146780782953074472L"/>
-
-                                <mkdir dir="${project.build.directory}/../build/generate"/>
-
-                                <echo>AttributeManager</echo>
-                                                                
-                                <!-- the AttributeManagerGenTask needs to be replaced by a Maven plugin -->
-                                <taskdef name="generateAttrManager"
-                                         classname="com.sun.faces.ant.AttributeManagerGenTask">
+                            </target>
+                        </configuration>
+                    </execution>
+                    <!--
+                        generate sources using the template source in the jsf-ri project.
+                      -->
+                    <execution>
+                        <id>generate-sources-impl</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <property name="tools.dir" value="${project.build.directory}/../../jsf-tools"/>
+                                <property name="api.dir" value="${project.build.directory}/../../jsf-api"/>
+                                
+                                <taskdef name="generateComponents"
+                                         classname="com.sun.faces.ant.ComponentGenTask">
                                     <classpath>
-                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
+                                        <pathelement location="${tools.dir}/build/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </taskdef>
-                                <generateAttrManager
+                                <generateComponents
                                     generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
                                     facesConfig="${api.dir}/doc/standard-html-renderkit.xml"
                                     fork="true">
                                     <classpath>
-                                        <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
+                                        <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
+                                        <pathelement location="${tools.dir}/build/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
-                                </generateAttrManager>
-                                
-                                <move todir="${project.build.directory}/generated-sources/attributemanager">
+                                </generateComponents>
+                                <move todir="${project.build.directory}/generated-sources/api-html-components">
                                     <fileset dir="${project.build.directory}/../build/generate"/>
                                 </move>
-                                
                                 <delete dir="${project.build.directory}/../build"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.sun.faces.build</groupId>
+                        <artifactId>jsf-tools</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>commons-digester</groupId>
+                        <artifactId>commons-digester</artifactId>
+                        <version>2.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+<!--            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
 
-<!--
                                 <mkdir dir="${project.build.directory}/../build/generate"/>
                                 <taskdef name="generateTaglib"
                                          classname="com.sun.faces.ant.TaglibGenTask">
@@ -318,9 +429,7 @@
                                 </move>
                                 
                                 <delete dir="${project.build.directory}/../build"/>
-                                
-                                -->
-                                                             
+                                                                                                                           
                                 <echo>Generating HTML components</echo>
                                 <mkdir dir="${project.build.directory}/../build/generate"/>
                                 
@@ -330,65 +439,11 @@
                                              includes="*.dtd,*.xsd"/>
                                 </copy>
                                 
-                                <taskdef name="generateComponents"
-                                         classname="com.sun.faces.ant.ComponentGenTask">
-                                    <classpath>
-                                        <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
-                                        <pathelement location="${tools.dir}/build/classes"/>
-                                        <path refid="maven.plugin.classpath"/>
-                                    </classpath>
-                                </taskdef>
-                                <generateComponents
-                                    generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
-                                    facesConfig="${api.dir}/doc/standard-html-renderkit.xml"
-                                    fork="true">
-                                    <classpath>
-                                        <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
-                                        <pathelement location="${tools.dir}/build/classes"/>
-                                        <path refid="maven.plugin.classpath"/>
-                                    </classpath>
-                                </generateComponents>
-
-                                <move todir="${project.build.directory}/generated-sources/htmlcomponents">
-                                    <fileset dir="${project.build.directory}/../build/generate"/>
-                                </move>
-                                
-                                <delete dir="${project.build.directory}/../build"/>
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>generate-resources</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <mkdir dir="${project.build.directory}/../src/main/resources"/>
-                                <copy todir="${project.build.directory}/../src/main/resources" includeEmptyDirs="false">
-                                    <fileset dir="${project.build.directory}/../../jsf-api/src/main/java" excludes="**/*.java"/>
-                                </copy>
-                                <copy todir="${project.build.directory}/../src/main/resources" includeEmptyDirs="false">
-                                    <fileset dir="${project.build.directory}/../../jsf-ri/src/main/java" excludes="**/*.java"/>
-                                </copy>
                             </target>
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.sun.faces.build</groupId>
-                        <artifactId>jsf-tools</artifactId>
-                        <version>${project.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>commons-digester</groupId>
-                        <artifactId>commons-digester</artifactId>
-                        <version>2.0</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -435,11 +490,10 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>target/generated-sources/attributemanager</source>
-                                <source>target/generated-sources/htmlcomponents</source>
-                                <source>target/generated-sources/jsptags</source>
-                                <source>target/generated-sources/template-api</source>
-                                <source>target/generated-sources/template-impl</source>
+                                <source>target/generated-sources/api-html-components</source>
+                                <source>target/generated-sources/api-template</source>
+                                <source>target/generated-sources/impl-attribute-manager</source>
+                                <source>target/generated-sources/impl-template</source>
                             </sources>
                         </configuration>
                     </execution>
