@@ -231,6 +231,12 @@
                                 <property name="tools.dir" value="${project.build.directory}/../../jsf-tools"/>
                                 <property name="api.dir" value="${project.build.directory}/../../jsf-api"/>
 
+                                <copy todir="${project.build.directory}/../src/main/resources/com/sun/faces"
+                                    flatten="true">
+                                    <fileset dir="${api.dir}/doc"
+                                        includes="*.dtd,*.xsd"/>
+                                </copy>
+                                
                                 <mkdir dir="${project.build.directory}/../build/generate"/>
                                 <taskdef name="generateAttrManager"
                                          classname="com.sun.faces.ant.AttributeManagerGenTask">
