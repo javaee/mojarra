@@ -246,6 +246,7 @@
                                     <classpath>
                                         <pathelement location="${project.build.directory}/../../jsf-tools/build/classes"/>
                                         <path refid="maven.plugin.classpath"/>
+                                        <pathelement location="${project.build.directory}/../src/main/resources"/>
                                     </classpath>
                                 </generateAttrManager>
                                 <move todir="${project.build.directory}/generated-sources/impl-attribute-manager">
