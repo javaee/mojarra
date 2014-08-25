@@ -109,8 +109,14 @@
                         <configuration>
                             <target>
                                 <mkdir dir="${project.build.directory}/../src/main/resources"/>
+                                <copy todir="${project.build.directory}/../src/main/java" includeEmptyDirs="false">
+                                    <fileset dir="${project.build.directory}/../../jsf-api/src/main/java" excludes="**/*.java"/>
+                                </copy>
                                 <copy todir="${project.build.directory}/../src/main/resources" includeEmptyDirs="false">
                                     <fileset dir="${project.build.directory}/../../jsf-api/src/main/java" excludes="**/*.java"/>
+                                </copy>
+                                <copy todir="${project.build.directory}/../src/main/java" includeEmptyDirs="false">
+                                    <fileset dir="${project.build.directory}/../../jsf-ri/src/main/java" excludes="**/*.java"/>
                                 </copy>
                                 <copy todir="${project.build.directory}/../src/main/resources" includeEmptyDirs="false">
                                     <fileset dir="${project.build.directory}/../../jsf-ri/src/main/java" excludes="**/*.java"/>
