@@ -393,6 +393,7 @@
                                         <pathelement location="${project.build.directory}/../../jsf-tools/target/classes"/>
                                         <pathelement location="${tools.dir}/build/classes"/>
                                         <path refid="maven.plugin.classpath"/>
+                                        <pathelement location="${project.build.directory}/../src/main/resources"/>
                                     </classpath>
                                 </generateComponents>
                                 <move todir="${project.build.directory}/generated-sources/api-html-components">
