@@ -128,7 +128,6 @@ public class Spec745IT {
     }
 
     @Test
-    @Ignore
     public void testType8() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attribute/attributeType.xhtml?test=typedXunset");
         assertTrue(page.asXml().contains("type of @typedXunset: Dog"));       
@@ -138,7 +137,6 @@ public class Spec745IT {
     }
 
     @Test
-    @Ignore
     public void testType9() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attribute/attributeType.xhtml?test=typedXliteral");
         assertTrue(page.asXml().contains("type of @typedXliteral: Integer"));       
@@ -148,7 +146,6 @@ public class Spec745IT {
     }
 
     @Test
-    @Ignore
     public void testType10() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attribute/attributeType.xhtml?test=typedXwideEL");
         assertTrue(page.asXml().contains("type of @typedXwideEL: Dog"));       
@@ -185,7 +182,6 @@ public class Spec745IT {
     }
 
     @Test
-    @Ignore
     public void testType14() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attribute/attributeType.xhtml?test=typedXsetByApi");
         assertTrue(page.asXml().contains("type of @typedXsetByApi: Dog"));       
