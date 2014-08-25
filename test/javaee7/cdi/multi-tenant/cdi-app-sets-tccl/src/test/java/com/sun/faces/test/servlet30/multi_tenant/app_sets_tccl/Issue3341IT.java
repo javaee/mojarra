@@ -94,8 +94,8 @@ public class Issue3341IT {
         webClient.closeAllWindows();
     }
 
+    // Enable when running against a GlassFish that has 19296686 fixed
     @Test
-    @Ignore // Enable when running against a GlassFish that has 19296686 fixed
     public void testTCCLReplacementResilience() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
