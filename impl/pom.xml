@@ -58,8 +58,8 @@
                 <version>1.7</version>
                 <executions>
                     <!-- 
-                        as we are copying sources and resources we need to remove everything
-                        if we want to do a clean build.
+                        as we are copying test and impl sources and impl resources we 
+                        need to remove everything if we want to do a clean build.
                       -->
                     <execution>
                         <id>clean</id>
@@ -73,6 +73,7 @@
                                 <delete dir="${project.buildDirectory}/../src/main/java/com/sun"/>
                                 <delete dir="${project.buildDirectory}/../src/main/resources/javax"/>
                                 <delete dir="${project.buildDirectory}/../src/main/resources/com/sun"/>
+                                <delete dir="${project.buildDirectory}/../src/test/java"/>
                             </target>
                         </configuration>
                     </execution>
@@ -118,6 +119,27 @@
                             </target>
                         </configuration>
                     </execution>
+                    <!--
+                        copy test sources from the test/unit project.
+                      -->
+                    <!--
+                        this execution cannot be enabled until the Mock object use the latest Servlet API
+                    <execution>
+                        <id>copy-test-sources</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.build.directory}/../src/test/java"/>
+                                <copy todir="${project.build.directory}/../src/test/java" includeEmptyDirs="false">
+                                    <fileset dir="${project.build.directory}/../../test/unit/src/test/java" includes="**/*.java"/>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                      -->
                     <!--
                         generate sources using the template source from the jsf-api project.
                       -->
@@ -361,6 +383,8 @@
                             <target>
                                 <property name="tools.dir" value="${project.build.directory}/../../jsf-tools"/>
                                 <property name="api.dir" value="${project.build.directory}/../../jsf-api"/>
+
+                                <mkdir dir="${project.build.directory}/../build/generate"/>
                                 
                                 <taskdef name="generateComponents"
                                          classname="com.sun.faces.ant.ComponentGenTask">
@@ -429,16 +453,7 @@
                                 </move>
                                 
                                 <delete dir="${project.build.directory}/../build"/>
-                                                                                                                           
-                                <echo>Generating HTML components</echo>
-                                <mkdir dir="${project.build.directory}/../build/generate"/>
-                                
-                                <copy todir="${tools.dir}/build/classes/com/sun/faces"
-                                      flatten="true">
-                                    <fileset dir="${api.dir}/doc"
-                                             includes="*.dtd,*.xsd"/>
-                                </copy>
-                                
+                                                                                                                                                           
                             </target>
                         </configuration>
                     </execution>
@@ -501,6 +516,44 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <configuration>
+                            <excludePackageNames>com.sun.*</excludePackageNames>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.3</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <dependencies>
         <dependency>
             <groupId>javax.enterprise</groupId>
@@ -558,6 +611,42 @@
             <version>2.3.6</version>
             <scope>provided</scope>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymockclassextension</artifactId>
+            <version>3.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+            <version>2.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-easymock</artifactId>
+            <version>1.5.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>1.5.5</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <prerequisites>
