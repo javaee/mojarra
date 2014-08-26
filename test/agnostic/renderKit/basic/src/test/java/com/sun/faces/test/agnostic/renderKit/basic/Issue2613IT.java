@@ -46,7 +46,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class Issue2613IT {
 
@@ -65,7 +64,6 @@ public class Issue2613IT {
     }
 
     @Test
-    @Ignore
     public void testIssue2613() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2613.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("submit");

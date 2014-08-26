@@ -47,7 +47,6 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
 
 public class Issue3341IT {
     /**
@@ -95,7 +94,7 @@ public class Issue3341IT {
     }
 
     @Test
-    @Ignore // Enable when running against a GlassFish that has 19296686 fixed
+    // Enable when running against a GlassFish that has 19296686 fixed
     public void testTCCLReplacementResilience() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
