@@ -70,6 +70,6 @@ public class Issue2613IT {
         page = button.click();
         webClient.waitForBackgroundJavaScript(120000);
         assertTrue(page.asXml().contains("email, form, javax.faces.ViewState, javax.faces.behavior.event, javax.faces.partial.ajax, javax.faces.partial.event, javax.faces.partial.execute, javax.faces.partial.render, javax.faces.source, name, tel"));
-        assertTrue(page.asXml().contains("12"));
+        assertTrue(page.asXml().contains("11"));
     }
 }
