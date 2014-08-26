@@ -243,16 +243,16 @@ public final class ComponentSupport {
                     }
                 }
             }
-//            /*
-//             * Make sure we look for the child recursively it might have moved
-//             * into a different parent in the parent hierarchy. Note currently
-//             * we are only looking down the tree. Maybe it would be better
-//             * to use the VisitTree API instead.
-//             */
-//            UIComponent foundChild = findChildByTagId(c, id);
-//            if (foundChild != null) {
-//                return foundChild;
-//            }
+            /*
+             * Make sure we look for the child recursively it might have moved
+             * into a different parent in the parent hierarchy. Note currently
+             * we are only looking down the tree. Maybe it would be better
+             * to use the VisitTree API instead.
+             */
+            UIComponent foundChild = findChildByTagId(c, id);
+            if (foundChild != null) {
+                return foundChild;
+            }
         }
         return null;
     }
