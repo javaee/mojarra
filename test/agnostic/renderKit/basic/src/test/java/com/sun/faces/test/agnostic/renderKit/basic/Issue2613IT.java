@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -46,7 +46,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class Issue2613IT {
 
@@ -70,7 +69,7 @@ public class Issue2613IT {
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("submit");
         page = button.click();
         webClient.waitForBackgroundJavaScript(120000);
-        assertTrue(page.asXml().contains("button, email, form, javax.faces.ViewState, javax.faces.behavior.event, javax.faces.partial.ajax, javax.faces.partial.event, javax.faces.partial.execute, javax.faces.partial.render, javax.faces.source, name, tel"));
-        assertTrue(page.asXml().contains("12"));
+        assertTrue(page.asXml().contains("email, form, javax.faces.ViewState, javax.faces.behavior.event, javax.faces.partial.ajax, javax.faces.partial.event, javax.faces.partial.execute, javax.faces.partial.render, javax.faces.source, name, tel"));
+        assertTrue(page.asXml().contains("11"));
     }
 }
