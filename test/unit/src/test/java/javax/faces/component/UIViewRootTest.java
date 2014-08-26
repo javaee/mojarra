@@ -74,7 +74,7 @@ public class UIViewRootTest {
         reset(facesContext, externalContext);
         expect(facesContext.getApplication()).andReturn(application).anyTimes();
         expect(application.getProjectStage()).andReturn(ProjectStage.UnitTest);
-        application.publishEvent(facesContext, PostConstructViewMapEvent.class, viewRoot);
+        application.publishEvent(facesContext, PostConstructViewMapEvent.class, UIViewRoot.class, viewRoot);
         replay(facesContext, application, externalContext, httpSession);
         Map<String, Object> viewMap = viewRoot.getViewMap();
         assertNotNull(viewMap);
@@ -101,11 +101,11 @@ public class UIViewRootTest {
         reset(facesContext, externalContext);
         expect(facesContext.getApplication()).andReturn(application).anyTimes();
         expect(application.getProjectStage()).andReturn(ProjectStage.UnitTest);
-        application.publishEvent(facesContext, PostConstructViewMapEvent.class, viewRoot);
+        application.publishEvent(facesContext, PostConstructViewMapEvent.class, UIViewRoot.class, viewRoot);
         expect(facesContext.getViewRoot()).andReturn(viewRoot);
-        application.publishEvent(facesContext, PreDestroyViewMapEvent.class, viewRoot);
+        application.publishEvent(facesContext, PreDestroyViewMapEvent.class, UIViewRoot.class,  viewRoot);
         expect(facesContext.getViewRoot()).andReturn(viewRoot);
-        application.publishEvent(facesContext, PreDestroyViewMapEvent.class, viewRoot);
+        application.publishEvent(facesContext, PreDestroyViewMapEvent.class, UIViewRoot.class,  viewRoot);
 
         replay(facesContext, application, externalContext, httpSession);
         
@@ -149,7 +149,7 @@ public class UIViewRootTest {
         expect(application.getProjectStage()).andReturn(ProjectStage.UnitTest).anyTimes();
         expect(facesContext.getExternalContext()).andReturn(externalContext).anyTimes();
         expect(externalContext.getSessionMap()).andReturn(sessionMap).anyTimes();
-        application.publishEvent(facesContext, PostConstructViewMapEvent.class, viewRoot1);
+        application.publishEvent(facesContext, PostConstructViewMapEvent.class, UIViewRoot.class,  viewRoot1);
         replay(facesContext, application, externalContext, httpSession);
         Map<String, Object> viewMap = viewRoot1.getViewMap();
         viewMap.put("one", "one");
