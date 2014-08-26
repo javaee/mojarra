@@ -847,6 +847,12 @@ public class ApplicationAssociate {
                         (com.sun.faces.facelets.FaceletCache)ReflectionUtil.forName(faceletCacheName)
                                           .newInstance();
                 cache = new PrivateApiFaceletCacheAdapter(privateApiCache);
+            } catch(ClassCastException e) {
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    LOGGER.log(Level.INFO,
+                            "Please remove context-param when using javax.faces.view.facelets.FaceletCache class with name:" 
+                                    + faceletCacheName + "and use the new FaceletCacheFactory API", e);
+                }
             } catch(Exception e) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
