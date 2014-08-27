@@ -42,7 +42,6 @@ package com.sun.faces.test.javaee7.action.basic;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
