@@ -125,8 +125,9 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      * {@link ComponentSupport#finalizeForDeletion(UIComponent) finalize} for deletion.</li>
      * </ol>
      *
-     * @throws TagException
-     *             if the UIComponent parent is null
+     * @param parent the parent UI component.
+     * @throws IOException when I/O error occurs.
+     * @throws TagException if the UIComponent parent is null
      */
     
     @Override
@@ -138,11 +139,9 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             throw new TagException(owner.getTag(), "Parent UIComponent was null");
         }
 
-        // our id
-        String id = ctx.generateUniqueId(owner.getTagId());
-
-        // grab our component
-        UIComponent c = findChild(ctx, parent, id);
+        String id = getMarkId(ctx, parent);
+        UIComponent c  = findChild(ctx, parent, id);
+        
         if (null == c &&
             context.isPostback() &&
             UIComponent.isCompositeComponent(parent) &&
@@ -223,6 +222,19 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         ComponentSupport.copyPassthroughAttributes(ctx, c, owner.getTag());
         adjustIndexOfDynamicChildren(context, c);
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
+    }
+    
+    protected String getMarkId(FaceletContext context, UIComponent component) {
+        String result;
+        
+        if (this.id.getValue(context) != null) {  
+            result = this.id.getValue(context);
+        }
+        else {
+            result = context.generateUniqueId(owner.getTagId());
+        }
+        
+        return result;
     }
 
     // Tests whether the component associated with the specified tagId was
@@ -420,18 +432,27 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
     }
 
+    protected void assignUniqueId(FaceletContext ctx, UIComponent parent,
+            String id, UIComponent c) {
 
-    protected void assignUniqueId(FaceletContext ctx,
+        String uniqueId = createUniqueId(ctx, parent, id);
+        if (uniqueId != null) {
+            c.setId(uniqueId);
+        }
+
+        if (this.rendererType != null) {
+            c.setRendererType(this.rendererType);
+        }
+    }
+
+    protected String createUniqueId(FaceletContext ctx,
                                   UIComponent parent,
-                                  String id,
-                                  UIComponent c) {
+                                  String id) {
 
-        // If the id is specified as a literal, and the component is being
-        // repeated (by c:forEach, for example), use generated unique ids
-        // after the first instance 
+        String uniqueId = null;
         
         if (this.id != null && !(this.id.isLiteral() && IterationIdManager.registerLiteralId(ctx, this.id.getValue()))) {
-            c.setId(this.id.getValue(ctx));
+            uniqueId = this.id.getValue(ctx);
         } else {
             UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
             if (root != null) {
@@ -447,17 +468,12 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                 } else {
                     uid = root.createUniqueId(ctx.getFacesContext(), mid);
                 }
-                c.setId(uid);
+                uniqueId = uid;
             }
-
         }
-
-        if (this.rendererType != null) {
-            c.setRendererType(this.rendererType);
-        }
-
+        
+        return uniqueId;
     }
-
 
     protected void doNewComponentActions(FaceletContext ctx,
                                          String id,
