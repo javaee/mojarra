@@ -51,7 +51,6 @@ import static com.sun.faces.test.junit.JsfServerExclude.GLASSFISH_4_0;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_1;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_2;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_3;
-import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
@@ -104,7 +103,7 @@ public class Issue3341IT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value=JSF_2_2_0, excludes={GLASSFISH_3_1_2_2, GLASSFISH_4_0, WEBLOGIC_12_1_1, WEBLOGIC_12_1_2, WEBLOGIC_12_1_3, WEBLOGIC_12_1_4})
+    @JsfTest(value=JSF_2_2_0, excludes={GLASSFISH_3_1_2_2, GLASSFISH_4_0, WEBLOGIC_12_1_1, WEBLOGIC_12_1_2, WEBLOGIC_12_1_3})
     @Test
     public void testCDIWithTCCL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
