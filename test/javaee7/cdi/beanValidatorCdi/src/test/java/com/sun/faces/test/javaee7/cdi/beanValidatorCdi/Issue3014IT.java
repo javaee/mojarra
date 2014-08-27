@@ -42,7 +42,6 @@ package com.sun.faces.test.javaee7.cdi.beanValidatorCdi;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
@@ -69,7 +68,7 @@ public class Issue3014IT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value = JSF_2_2_0, excludes = {WEBLOGIC_12_1_4})
+    @JsfTest(value = JSF_2_2_0)
     @Test
     public void testValidatorInjection() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
