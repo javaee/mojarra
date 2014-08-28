@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version='1.0' encoding='UTF-8' ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -39,41 +38,20 @@
     and therefore, elected the GPL Version 2 license, then the option applies
     only if the new code is made subject to such option by the copyright
     holder.
-
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.9-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.servlet30</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Servlet 3.0</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>ajax</module>
-        <module>component</module>
-        <module>composite</module>
-        <module>custom-viewroot-viewscope</module>
-        <module>dynamic</module>
-        <module>el</module>
-        <module>facelets</module>
-        <module>factory</module>
-        <module>mapping</module>
-        <module>multi-tenant</module>
-        <module>navigation</module>
-        <module>systest</module>
-        <module>stateSaving</module>
-    </modules>
-</project>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>JAVASERVERFACES-3359-reproducer</title>
+    </h:head>
+    <h:body>
+        <a id="link" onclick="window.history.back();return false;" href="#">Go back to the index page</a>
+        <h:form style="margin-top: 100px;">
+            This form is required for the NPE to occur<br/>
+            <h:inputText/>
+            <h:commandButton/>
+        </h:form>
+    </h:body>
+</html>

@@ -45,35 +45,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test</groupId>
+        <groupId>com.sun.faces.test.servlet30</groupId>
         <artifactId>pom</artifactId>
         <version>2.2.9-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.servlet30</groupId>
+    <groupId>com.sun.faces.test.servlet30.statesaving</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Servlet 3.0</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - State Saving</name>
     <modules>
-        <module>ajax</module>
-        <module>component</module>
-        <module>composite</module>
-        <module>custom-viewroot-viewscope</module>
-        <module>dynamic</module>
-        <module>el</module>
-        <module>facelets</module>
-        <module>factory</module>
-        <module>mapping</module>
-        <module>multi-tenant</module>
-        <module>navigation</module>
-        <module>systest</module>
-        <module>stateSaving</module>
+        <module>viewExpiredException</module>
     </modules>
 </project>
