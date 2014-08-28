@@ -39,7 +39,7 @@
 
  */
 
-package com.sun.faces.test.servlet30.multi_tenant.app_sets_tccl;
+package com.sun.faces.test.javaee7.cdi.multi_tenant.cdi_app_sets_tccl;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -117,7 +117,7 @@ java.lang.IllegalStateException: Singleton not set for java.net.URLClassLoader@5
         // to TCCL replacement.  To continue with the job of exercising 
         // the fix in FactoryFinder, we just exercise it directly here.
         // I confirmed this is fixed in Weld 2.2.2 Final, which is in GlassFish 4.0.1
-        final boolean weldIsTCCLReplacementResilient = true;
+        final boolean weldIsTCCLReplacementResilient = false;
         
         if (weldIsTCCLReplacementResilient) {
             try {
