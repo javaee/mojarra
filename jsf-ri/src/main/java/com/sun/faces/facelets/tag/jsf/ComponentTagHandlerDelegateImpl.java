@@ -227,12 +227,12 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     protected String getMarkId(FaceletContext context, UIComponent component) {
         String result;
         
-        if (this.id != null && this.id.getValue(context) != null) {  
-            result = this.id.getValue(context);
-        }
-        else {
+//        if (this.id != null && this.id.getValue(context) != null) {  
+//            result = this.id.getValue(context);
+//        }
+//        else {
             result = context.generateUniqueId(owner.getTagId());
-        }
+//        }
         
         return result;
     }
