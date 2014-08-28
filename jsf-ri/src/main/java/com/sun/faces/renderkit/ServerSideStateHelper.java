@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -335,13 +335,13 @@ public class ServerSideStateHelper extends StateHelper {
                     RequestStateManager.set(ctx,
                                             RequestStateManager.LOGICAL_VIEW_MAP,
                                             idInLogicalMap);
-                    Object[] state = (Object[]) actualMap.get(idInActualMap);
+                    
                     Object[] restoredState = new Object[2];
-                    
-                    restoredState[0] = state[0];
-                    restoredState[1] = state[1];
-                    
+                    Object[] state = (Object[]) actualMap.get(idInActualMap);
                     if(state != null){
+                        restoredState[0] = state[0];
+                        restoredState[1] = state[1];
+                        
                         RequestStateManager.set(ctx,
                                                 RequestStateManager.ACTUAL_VIEW_MAP,
                                                 idInActualMap);
