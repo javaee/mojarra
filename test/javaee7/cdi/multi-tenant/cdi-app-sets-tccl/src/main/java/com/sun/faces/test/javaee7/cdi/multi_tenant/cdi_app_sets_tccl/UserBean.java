@@ -1,4 +1,4 @@
-package com.sun.faces.test.servlet30.multi_tenant.app_sets_tccl;
+package com.sun.faces.test.javaee7.cdi.multi_tenant.cdi_app_sets_tccl;
 
 import java.io.Serializable;
 import java.util.Date;
