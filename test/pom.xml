@@ -770,6 +770,14 @@
                     </plugin>
                 </plugins>
             </build>
+            <dependencies>
+                <dependency>
+                    <groupId>${jsf.groupId}</groupId>
+                    <artifactId>${jsf.artifactId}</artifactId>
+                    <version>${jsf.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
             <properties>
                 <weblogic.patch.mojarraJarPath>wlserver/modules</weblogic.patch.mojarraJarPath>
                 <weblogic.patch.mojarraJarName>glassfish.jsf_2.0.0.0_2-1-20.jar</weblogic.patch.mojarraJarName>
