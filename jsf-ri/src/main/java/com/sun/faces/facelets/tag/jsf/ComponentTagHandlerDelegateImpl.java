@@ -223,18 +223,16 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         adjustIndexOfDynamicChildren(context, c);
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
     }
-    
+
+    /**
+     * Get the mark id for the given tag.
+     * 
+     * @param context the Facelet context.
+     * @param component the UI component.
+     * @return the mark id.
+     */
     protected String getMarkId(FaceletContext context, UIComponent component) {
-        String result;
-        
-//        if (this.id != null && this.id.getValue(context) != null) {  
-//            result = this.id.getValue(context);
-//        }
-//        else {
-            result = context.generateUniqueId(owner.getTagId());
-//        }
-        
-        return result;
+        return context.generateUniqueId(owner.getTagId());
     }
 
     // Tests whether the component associated with the specified tagId was
