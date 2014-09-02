@@ -204,6 +204,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * </div>
  */
+@MultipartConfig
 public final class FacesServlet implements Servlet {
 
     /*
