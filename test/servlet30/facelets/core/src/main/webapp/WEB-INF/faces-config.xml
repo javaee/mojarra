@@ -54,4 +54,17 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/viewParamRedirect1.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/viewParamRedirect2.xhtml</to-view-id>
+            <redirect>
+                <redirect-param>
+                    <name>info</name>
+                    <value>Welcome</value>
+                </redirect-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

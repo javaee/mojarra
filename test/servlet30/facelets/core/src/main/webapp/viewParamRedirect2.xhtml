@@ -1,0 +1,15 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <f:view>
+        <f:metadata>
+            <f:viewParam name="info" required="true" />
+        </f:metadata>
+        <h:head>
+        </h:head>
+        <h:body>
+            <h:messages/>
+            <h:outputText value="#{param['info']}" />
+        </h:body>
+    </f:view>
+</html>

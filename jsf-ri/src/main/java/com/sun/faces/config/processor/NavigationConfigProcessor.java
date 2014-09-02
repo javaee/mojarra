@@ -131,6 +131,21 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
     private static final String VIEW_PARAM_VALUE = "value";
 
     /**
+     * <p>/faces-confg/navigation-rule/navigation-case/redirect/redirect-param</p>
+     */
+    private static final String REDIRECT_PARAM = "redirect-param";
+
+    /**
+     * <p>/faces-confg/navigation-rule/navigation-case/redirect/redirect-param/name</p>
+     */
+    private static final String REDIRECT_PARAM_NAME = "name";
+
+    /**
+     * <p>/faces-confg/navigation-rule/navigation-case/redirect/redirect-param/value</p>
+     */
+    private static final String REDIRECT_PARAM_VALUE = "value";
+    
+    /**
      * <p>/faces-config/navigation-rule/navigation-case/redirect[@include-page-params]</p>
      */
     private static final String INCLUDE_VIEW_PARAMS_ATTRIBUTE = "include-view-params";
@@ -372,11 +387,37 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                             }
                         }
                     }
+                    if (REDIRECT_PARAM.equals(n.getLocalName())) {
+                        String name = null;
+                        String value = null;
+                        NodeList params = n.getChildNodes();
+                        for (int j = 0, jsize = params.getLength(); j < jsize; j++) {
+                            Node pn = params.item(j);
+                            if (pn.getNodeType() == Node.ELEMENT_NODE) {
+                                if (REDIRECT_PARAM_NAME.equals(pn.getLocalName())) {
+                                    name = getNodeText(pn);
+                                }
+                                if (REDIRECT_PARAM_VALUE.equals(pn.getLocalName())) {
+                                    value = getNodeText(pn);
+                                }
+                            }
+                        }
+                        if (name != null) {
+                            List<String> values = parameters.get(name);
+                            if (values == null && value != null) {
+                                values = new ArrayList<String>(2);
+                                parameters.put(name, values);
+                            }
+                            if (values != null) {
+                                values.add(value);
+                            }
+                        }
+                    }
                 }
             }
         }
+        
         return parameters;
-
     }
 
 
