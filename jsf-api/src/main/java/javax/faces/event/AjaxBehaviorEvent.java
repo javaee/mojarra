@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,9 +42,10 @@ package javax.faces.event;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.context.FacesContext;
 
 /**
- * <p><strong class="changed_added_2_0">AjaxBehaviorEvent</strong>
+ * <p><strong class="changed_added_2_0 changed_modified_2_3">AjaxBehaviorEvent</strong>
  * represents the component behavior  specific to 
  * <code>Ajax</code>).</p>
  *
@@ -52,28 +53,34 @@ import javax.faces.component.behavior.Behavior;
  */
 public class AjaxBehaviorEvent extends BehaviorEvent {
 
-
-    // ------------------------------------------------------------ Constructors
-
-
     /**
-     * <p class="changed_added_2_0">Construct a new event object 
+     * <p class="changed_added_2_0 changed_removed_2_3">Construct a new event object 
      * from the specified source component and Ajax behavior.</p>
      *
      * @param component Source {@link UIComponent} for this event
      * @param behavior {@link Behavior} for this event
-     *
      * @throws IllegalArgumentException if <code>component</code> or
      * <code>ajaxBehavior</code> is <code>null</code>
-     *
      * @since 2.0
      */
     public AjaxBehaviorEvent(UIComponent component, Behavior behavior) {
-
         super(component, behavior);
-
     }
-
+    
+    /**
+     * <p class="changed_added_2_3">Construct a new event object from the 
+     * Faces context, specified source component and Ajax behavior.</p>
+     *
+     * @param facesContext the FacesContext.
+     * @param component Source {@link UIComponent} for this event
+     * @param behavior {@link Behavior} for this event
+     * @throws IllegalArgumentException if <code>component</code> or
+     * <code>ajaxBehavior</code> is <code>null</code>
+     * @since 2.3
+     */
+    public AjaxBehaviorEvent(FacesContext facesContext, UIComponent component, Behavior behavior) {
+        super(facesContext, component, behavior);
+    }
 
     // ------------------------------------------------- Event Broadcast Methods
 

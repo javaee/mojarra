@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -126,7 +126,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
             return;
         }        
 
-        component.queueEvent(createEvent(component, ajaxBehavior));
+        component.queueEvent(createEvent(context, component, ajaxBehavior));
 
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("This command resulted in form submission " +
@@ -139,10 +139,10 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     }
 
     // Creates an AjaxBehaviorEvent for the specified component/behavior
-    private static AjaxBehaviorEvent createEvent(UIComponent component,
-                                                 AjaxBehavior ajaxBehavior) {
+    private static AjaxBehaviorEvent createEvent(
+            FacesContext facesContext, UIComponent component, AjaxBehavior ajaxBehavior) {
 
-        AjaxBehaviorEvent event = new AjaxBehaviorEvent(component, ajaxBehavior);
+        AjaxBehaviorEvent event = new AjaxBehaviorEvent(facesContext, component, ajaxBehavior);
 
         PhaseId phaseId = isImmediate(component, ajaxBehavior) ?
                               PhaseId.APPLY_REQUEST_VALUES :

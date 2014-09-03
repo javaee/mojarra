@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,34 +42,38 @@ package javax.faces.event;
 
 
 import javax.faces.component.UIComponent;
-
+import javax.faces.context.FacesContext;
 
 /**
- * <p>An {@link ActionEvent} represents the activation of a user interface
- * component (such as a <code>UICommand</code>).</p>
+ * <p class="changed_modified_2_3">An {@link ActionEvent} represents the 
+ * activation of a user interface component (such as a <code>UICommand</code>).</p>
  */
-
 public class ActionEvent extends FacesEvent {
 
-
-    // ------------------------------------------------------------ Constructors
-
-
     /**
-     * <p>Construct a new event object from the specified source component
-     * and action command.</p>
+     * <p class="changed_removed_2_3">Construct a new event object from the 
+     * specified source component and action command.</p>
      *
      * @param component Source {@link UIComponent} for this event
-     *
      * @throws IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
     public ActionEvent(UIComponent component) {
-
         super(component);
-
     }
-
+    
+    /**
+     * <p class="changed_added_2_3">Construct a new event object from the 
+     * Faces context, specified source component and action command.</p>
+     *
+     * @param facesContext the Faces context.
+     * @param component Source {@link UIComponent} for this event.
+     * @throws IllegalArgumentException if <code>component</code> is <code>null</code>
+     * @since 2.3
+     */
+    public ActionEvent(FacesContext facesContext, UIComponent component) {
+        super(facesContext, component);
+    }
 
     // ------------------------------------------------- Event Broadcast Methods
 

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -44,35 +44,45 @@ package javax.faces.event;
 import java.util.EventObject;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
-
+import javax.faces.context.FacesContext;
 
 /**
- * <p><strong>FacesEvent</strong> is the base class for user interface and
- * application events that can be fired by {@link UIComponent}s.  Concrete
- * event classes must subclass {@link FacesEvent} in order to be supported
+ * <p class="changed_modified_2_3"><strong>FacesEvent</strong> is the base class 
+ * for user interface and application events that can be fired by {@link UIComponent}s.
+ * Concrete event classes must subclass {@link FacesEvent} in order to be supported
  * by the request processing lifecycle.</p>
  */
-
 public abstract class FacesEvent extends EventObject {
 
-
-    // ------------------------------------------------------------ Constructors
-
-
     /**
-     * <p>Construct a new event object from the specified source component.</p>
+     * <p class="changed_added_2_3">Stores the Faces context.</p>
+     */
+    private transient FacesContext facesContext;
+    
+    /**
+     * <p class="changed_removed_2_3">Construct a new event object from the 
+     * specified source component.</p>
      *
      * @param component Source {@link UIComponent} for this event
-     *
-     * @throws IllegalArgumentException if <code>component</code> is
-     *  <code>null</code>
+     * @throws IllegalArgumentException if <code>component</code> is <code>null</code>
      */
     public FacesEvent(UIComponent component) {
-
         super(component);
-
     }
-
+    
+    /**
+     * <p class="changed_added_2_3">Construct a new event object from the 
+     * Faces context and specified source component.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param component Source {@link UIComponent} for this event.
+     * @throws IllegalArgumentException if <code>component</code> is <code>null</code>
+     * @since 2.3
+     */
+    public FacesEvent(FacesContext facesContext, UIComponent component) {
+        this(component);
+        this.facesContext = facesContext;
+    }
 
     // -------------------------------------------------------------- Properties
 
@@ -84,6 +94,24 @@ public abstract class FacesEvent extends EventObject {
 
         return ((UIComponent) getSource());
 
+    }
+    
+    /**
+     * <p class="changed_added_2_3">Get the Faces context.</p>
+     * 
+     * <p>
+     *  If the constructor was passed a FacesContext we return it, otherwise
+     *  we call FacesContext.getCurrentInstance() and return it.
+     * </p>
+     * 
+     * @return the Faces context.
+     * @since 2.3
+     */
+    public FacesContext getFacesContext() {
+        if (facesContext != null) {
+            return facesContext;
+        }
+        return FacesContext.getCurrentInstance();
     }
 
     private PhaseId phaseId = PhaseId.ANY_PHASE;

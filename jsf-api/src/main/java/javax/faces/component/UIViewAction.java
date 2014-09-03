@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -536,7 +536,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
 
         super.broadcast(event);
 
-        FacesContext context = getFacesContext();
+        FacesContext context = event.getFacesContext();
         if (!(event instanceof ActionEvent)) {
             throw new IllegalArgumentException();
         }
@@ -648,7 +648,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
             return;
         }
 
-        ActionEvent e = new ActionEvent(this);
+        ActionEvent e = new ActionEvent(context, this);
         PhaseId phaseId = getPhaseId();
         if (phaseId != null) {
             e.setPhaseId(phaseId);

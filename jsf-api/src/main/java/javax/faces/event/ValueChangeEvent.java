@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,24 +42,19 @@ package javax.faces.event;
 
 
 import javax.faces.component.UIComponent;
-
+import javax.faces.context.FacesContext;
 
 /**
- * <p>A {@link ValueChangeEvent} is a notification that the local value of
- * the source component has been change as a result of user interface
- * activity.  It is not fired unless validation of the new value was
- * completed successfully.</p>
+ * <p class="changed_modified_2_3">A {@link ValueChangeEvent} is a notification 
+ * that the local value of the source component has been change as a result of 
+ * user interface activity.  It is not fired unless validation of the new value 
+ * was completed successfully.</p>
  */
-
 public class ValueChangeEvent extends FacesEvent {
 
-
-    // ------------------------------------------------------------ Constructors
-
-
     /**
-     * <p>Construct a new event object from the specified source component,
-     * old value, and new value.</p>
+     * <p class="changed_removed_2_3">Construct a new event object from the 
+     * specified source component, old value, and new value.</p>
      *
      * <p>The default {@link PhaseId} for this event is {@link
      * PhaseId#ANY_PHASE}.</p>
@@ -67,19 +62,37 @@ public class ValueChangeEvent extends FacesEvent {
      * @param component Source {@link UIComponent} for this event
      * @param oldValue The previous local value of this {@link UIComponent}
      * @param newValue The new local value of thie {@link UIComponent}
-     *
      * @throws IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
     public ValueChangeEvent(UIComponent component,
                              Object oldValue, Object newValue) {
-
         super(component);
         this.oldValue = oldValue;
         this.newValue = newValue;
     }
 
-
+    /**
+     * <p class="changed_added_2_3">Construct a new event object from the 
+     * Faces context, specified source component, old value and new value.</p>
+     *
+     * <p>The default {@link PhaseId} for this event is {@link
+     * PhaseId#ANY_PHASE}.</p>
+     *
+     * @param facesContext the Faces context.
+     * @param component Source {@link UIComponent} for this event
+     * @param oldValue The previous local value of this {@link UIComponent}
+     * @param newValue The new local value of thie {@link UIComponent}
+     * @throws IllegalArgumentException if <code>component</code> is
+     *  <code>null</code>
+     */
+    public ValueChangeEvent(FacesContext facesContext, UIComponent component,
+                             Object oldValue, Object newValue) {
+        super(facesContext, component);
+        this.oldValue = oldValue;
+        this.newValue = newValue;
+    }
+    
     // -------------------------------------------------------------- Properties
 
 
