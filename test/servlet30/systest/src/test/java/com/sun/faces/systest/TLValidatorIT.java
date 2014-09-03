@@ -42,6 +42,7 @@ package com.sun.faces.systest;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_3;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
@@ -132,7 +133,14 @@ public class TLValidatorIT {
         webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 
-    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3})
+    /*
+     * Because of differences in the JSP engine between Glassfish and Weblogic
+     * and this issue not being raised as a bug by any user we exclude this 
+     * test on the following servers: WLS 12.1.3 and WLS 12.1.4
+     * 
+     * 20140903 - edburns, mriem
+     */
+    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4})
     @Test
     public void testElValidatorActionRefFail() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
@@ -141,7 +149,14 @@ public class TLValidatorIT {
         webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 
-    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3})
+    /*
+     * Because of differences in the JSP engine between Glassfish and Weblogic
+     * and this issue not being raised as a bug by any user we exclude this 
+     * test on the following servers: WLS 12.1.3 and WLS 12.1.4
+     * 
+     * 20140903 - edburns, mriem
+     */
+    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4})
     @Test
     public void testElValidatorComponentFail() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
