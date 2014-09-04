@@ -519,6 +519,8 @@ public abstract class FacesContext {
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      *
+     * @since 2.2 
+     *
      */
     
     public void setResourceLibraryContracts(List<String> contracts) {
