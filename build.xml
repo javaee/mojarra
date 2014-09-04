@@ -598,6 +598,7 @@
             target="mvn.deploy.${mojarra.build.type}${mojarra.build.local.or.blank}"
                dir="jsf-ri" />
 
+<!--      
       <ant inheritAll="true"
             antfile="build-pre-maven-rename.xml"
             target="main"
@@ -617,6 +618,7 @@
             antfile="build-pre-maven-rename.xml"
             target="mvn.pre-maven-rename.deploy.${mojarra.build.type}${mojarra.build.local.or.blank}"
                dir="jsf-ri" />
+        -->
 
 
 
