@@ -255,6 +255,14 @@
                     </plugin>
                 </plugins>
             </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.glassfish</groupId>
+                    <artifactId>javax.faces</artifactId>
+                    <version>${jsf.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
             <properties>
                 <glassfish.patch.home>C:/Glassfish4.0</glassfish.patch.home>
             </properties>
