@@ -43,6 +43,7 @@ package javax.faces.event;
 
 import java.util.EventObject;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewAction;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
@@ -108,7 +109,15 @@ public abstract class FacesEvent extends EventObject {
      * @since 2.3
      */
     public FacesContext getFacesContext() {
-        if (facesContext != null) {
+        /*
+         * Note because UIViewAction is decorating the FacesContext during
+         * the execution of a request we cannot rely on the saved FacesContext 
+         * as it would be the original FacesContext (which is what we should be
+         * able to rely on). 
+         *
+         * TODO - remove UIViewAction dependency on decorating the FacesContext.
+         */
+        if (!(source instanceof UIViewAction) && facesContext != null) {
             return facesContext;
         }
         return FacesContext.getCurrentInstance();
