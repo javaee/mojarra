@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -63,7 +63,7 @@ import javax.faces.event.PhaseId;
 
 /**
  * <p><strong class="changed_modified_2_0 changed_modified_2_1
- * changed_modified_2_2">FacesContext</strong> contains all of the
+ * changed_modified_2_2 changed_modified_2_3">FacesContext</strong> contains all of the
  * per-request state information related to the processing of a single
  * JavaServer Faces request, and the rendering of the corresponding
  * response.  It is passed to, and potentially modified by, each phase
@@ -79,8 +79,11 @@ import javax.faces.event.PhaseId;
  * from any thread other than the one upon which the servlet container
  * executing this web application utilizes for the processing of this request.
  * </p>
+ * 
+ * <p class="changed_added_2_3">A FacesContext can be injected into a request
+ * scoped bean using <code>@Inject FacesContext facesContext;</code>
+ * </p>
  */
-
 public abstract class FacesContext {
 
 
