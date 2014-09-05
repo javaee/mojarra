@@ -59,7 +59,10 @@
 <root>
     <property>
         <description>
-          Converter instance registered with this component.
+          Converter instance registered with this component. As a convenience
+          this attribute is also allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createConverter(String converterId)&lt;/code&gt;
+          to create the converter instance.
         </description>
         <display-name>Converter</display-name>
         <icon></icon>
