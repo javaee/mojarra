@@ -91,15 +91,15 @@ import java.net.MalformedURLException;
 public class ViewHandlerImpl extends ViewHandler {
 
     // Log instance for this class
-    private static final Logger logger = FacesLogger.APPLICATION.getLogger();
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private ApplicationAssociate associate;
     private String[] configuredExtensions;
     private int bufSize = -1;
 
     public ViewHandlerImpl() {
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE,"Created ViewHandler instance ");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE,"Created ViewHandler instance ");
         }
         WebConfiguration config = WebConfiguration.getInstance();
         String defaultSuffixConfig =
@@ -153,8 +153,8 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new FacesException(e);
         }
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Completed building view for : \n" +
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, "Completed building view for : \n" +
                     viewToRender.getViewId());
         }
 
@@ -269,8 +269,8 @@ public class ViewHandlerImpl extends ViewHandler {
             associate.responseRendered();
         }
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "About to render view " + viewToRender.getViewId());
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, "About to render view " + viewToRender.getViewId());
         }
 
         viewToRender.encodeAll(context);
@@ -305,8 +305,8 @@ public class ViewHandlerImpl extends ViewHandler {
             // send them off to the root of the web application
             try {
                 context.responseComplete();
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE, "Response Complete for" + viewId);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE, "Response Complete for" + viewId);
                 }
                 extContext.redirect(extContext.getRequestContextPath());
             } catch (IOException ioe) {
@@ -370,8 +370,8 @@ public class ViewHandlerImpl extends ViewHandler {
             renderKitId = context.getViewRoot().getRenderKitId();
         }
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Created new view for " + viewId);
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, "Created new view for " + viewId);
         }
         // PENDING(): not sure if we should set the RenderKitId here.
         // The UIViewRoot ctor sets the renderKitId to the default
@@ -382,13 +382,13 @@ public class ViewHandlerImpl extends ViewHandler {
             locale =
                 context.getApplication().getViewHandler().calculateLocale(
                     context);
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Locale for this view as determined by calculateLocale "
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Locale for this view as determined by calculateLocale "
                             + locale.toString());
             }
         } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Using locale from previous view "
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Using locale from previous view "
                             + locale.toString());
             }
         }
@@ -397,14 +397,14 @@ public class ViewHandlerImpl extends ViewHandler {
             renderKitId =
                 context.getApplication().getViewHandler().calculateRenderKitId(
                     context);
-           if (logger.isLoggable(Level.FINE)) {
-               logger.fine(
+           if (LOGGER.isLoggable(Level.FINE)) {
+               LOGGER.fine(
                "RenderKitId for this view as determined by calculateRenderKitId "
                + renderKitId);
             }
         } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Using renderKitId from previous view "
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Using renderKitId from previous view "
                             + renderKitId);
             }
         }
@@ -452,8 +452,8 @@ public class ViewHandlerImpl extends ViewHandler {
 
         String requestURI = viewToExecute.getViewId();
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("About to execute view " + requestURI);
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("About to execute view " + requestURI);
         }
 
         // update the JSTL locale attribute in request scope so that JSTL
@@ -465,8 +465,8 @@ public class ViewHandlerImpl extends ViewHandler {
             extContext.getRequest(),
                        Config.FMT_LOCALE, context.getViewRoot().getLocale());
         }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Before dispacthMessage to viewId " + requestURI);
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Before dispacthMessage to viewId " + requestURI);
         }
 
         // save the original response
@@ -479,8 +479,8 @@ public class ViewHandlerImpl extends ViewHandler {
         // build the view by executing the page
         extContext.dispatch(requestURI);
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("After dispacthMessage to viewId " + requestURI);
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("After dispacthMessage to viewId " + requestURI);
         }
 
         // replace the original response
@@ -624,8 +624,8 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(message);
         }
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Begin writing marker for viewId " +
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Begin writing marker for viewId " +
                         context.getViewRoot().getViewId());
         }
 
@@ -634,8 +634,8 @@ public class ViewHandlerImpl extends ViewHandler {
             writer.writingState();
         }
         context.getResponseWriter().write(RIConstants.SAVESTATE_FIELD_MARKER);
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("End writing marker for viewId " +
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("End writing marker for viewId " +
                         context.getViewRoot().getViewId());
         }
 
@@ -660,8 +660,8 @@ public class ViewHandlerImpl extends ViewHandler {
                   MessageUtils.getExceptionMessageString(
                         MessageUtils.ILLEGAL_VIEW_ID_ID,
                         viewId);
-            if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, "jsf.illegal_view_id_error", viewId);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "jsf.illegal_view_id_error", viewId);
             }
         throw new IllegalArgumentException(message);
         }
@@ -730,9 +730,9 @@ public class ViewHandlerImpl extends ViewHandler {
             String mappingMod = builder.toString();
             boolean logged = false;
             while (uri.startsWith(mappingMod)) {
-                if (!logged && logger.isLoggable(Level.WARNING)) {
+                if (!logged && LOGGER.isLoggable(Level.WARNING)) {
                     logged = true;
-                    logger.log(Level.WARNING,
+                    LOGGER.log(Level.WARNING,
                                "jsf.viewhandler.requestpath.recursion",
                                new Object[] {uri, mapping});
                 }
@@ -787,8 +787,8 @@ public class ViewHandlerImpl extends ViewHandler {
                     buffer.append(viewId);
                 }
             } catch (MalformedURLException e) {
-                if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE,
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
                                e.toString(),
                                e);
                 }
