@@ -1632,10 +1632,9 @@ will not pass validation.</p> ]]>
 
     <attribute>
       <description>
-
-          MethodBinding pointing to a method that takes a
-          javax.faces.event.PhaseEvent and returns void.  This method
-          will be called after every phase except for restore view.
+        MethodBinding pointing to a method that takes a javax.faces.event.PhaseEvent 
+        and returns void. This method will be called after every phase except for 
+        restore view on an initial request.
       </description>
       <name>afterPhase</name>
       <required>false</required>
