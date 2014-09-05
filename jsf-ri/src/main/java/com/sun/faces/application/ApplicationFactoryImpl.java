@@ -65,7 +65,7 @@ import javax.faces.application.ApplicationFactory;
 public class ApplicationFactoryImpl extends ApplicationFactory {
 
    // Log instance for this class
-    private static final Logger logger = FacesLogger.APPLICATION.getLogger();
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     //
     // Protected Constants
     //
@@ -91,8 +91,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
     public ApplicationFactoryImpl() {
         super();
         application = null;
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Created ApplicationFactory ");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, "Created ApplicationFactory ");
         }
     }
 
@@ -106,8 +106,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
         if (application == null) {
             application = new ApplicationImpl();
             InjectionApplicationFactory.setApplicationInstance(application);
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine(MessageFormat.format("Created Application instance ''{0}''",
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine(MessageFormat.format("Created Application instance ''{0}''",
                                                  application));
             }
         }
@@ -129,8 +129,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
         }
 
         this.application = application;
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("set Application Instance to ''{0}''", 
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("set Application Instance to ''{0}''", 
                                              application.getClass().getName()));
         }
     }
