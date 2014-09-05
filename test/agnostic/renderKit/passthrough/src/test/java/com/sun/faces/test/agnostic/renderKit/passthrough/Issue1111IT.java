@@ -53,7 +53,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.gargoylesoftware.htmlunit.javascript.host.html.HTMLButtonElement;
+import com.sun.faces.test.htmlunit.IgnoringIncorrectnessListener;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.*;
@@ -77,6 +77,7 @@ public class Issue1111IT {
 
     @Test
     public void testInputMarkup() throws Exception {
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
         HtmlPage page = webClient.getPage(webUrl + "faces/input.xhtml");
         assertInputDefaults(page);
     }
@@ -94,6 +95,7 @@ public class Issue1111IT {
 
     @Test
     public void testInputPostback() throws Exception {
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
         HtmlPage page = webClient.getPage(webUrl + "faces/input.xhtml");
 
         setValue(page, "inputText2", "new text2");
@@ -160,15 +162,17 @@ public class Issue1111IT {
     
     @Test
     public void testCauseError() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/causeError.xhtml");
         String xml = page.getBody().asXml();
         assertTrue(xml.contains("FaceletException"));
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }        
     
     @Test
     public void testSelectMarkup() throws Exception {
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
         HtmlPage page = webClient.getPage(webUrl + "faces/select.xhtml");
         assertSelectAttributes(page);
         assertDefaultSelections(page);
@@ -202,6 +206,7 @@ public class Issue1111IT {
 
     @Test
     public void testSelectPostback() throws Exception {
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
         HtmlPage page = webClient.getPage(webUrl + "faces/select.xhtml");
 
         select(page, "selectOne", "3");
@@ -239,6 +244,7 @@ public class Issue1111IT {
 
     @Test
     public void testTextareaMarkup() throws Exception {
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
         HtmlPage page = webClient.getPage(webUrl + "faces/textarea.xhtml");
         assertFormElement(page, "textarea", "textarea", "autofocus", "autofocus");
         HtmlTextArea textarea = (HtmlTextArea) page.getElementById("textarea");
@@ -247,6 +253,7 @@ public class Issue1111IT {
 
     @Test
     public void testTextareaPostback() throws Exception {
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
         HtmlPage page = webClient.getPage(webUrl + "faces/textarea.xhtml");
         HtmlTextArea textarea = (HtmlTextArea) page.getElementById("textarea");
         textarea.setText("Very long text");
@@ -262,6 +269,7 @@ public class Issue1111IT {
 
     @Test
     public void testButton() throws Exception {
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
         HtmlPage page = webClient.getPage(webUrl + "faces/button.xhtml");
         assertFormElement(page, "button", "fancyButton1");
         assertFormElement(page, "button", "fancyButton2");
@@ -287,6 +295,7 @@ public class Issue1111IT {
     
     @Test
     public void testLinks() throws Exception {
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
         HtmlPage page = webClient.getPage(webUrl + "faces/links.xhtml");
         
         HtmlAnchor link = (HtmlAnchor) page.getElementById("action1");
@@ -311,6 +320,7 @@ public class Issue1111IT {
 
     @Test
     public void testComplex() throws Exception {
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
         HtmlPage page = webClient.getPage(webUrl + "faces/complex.xhtml");
         
         AjaxWaiter waiter = new AjaxWaiter();
