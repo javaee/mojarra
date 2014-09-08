@@ -79,7 +79,7 @@ import java.util.logging.Logger;
  */
 public final class Resource {
 
-    protected final static Logger log = FacesLogger.FACELETS_FACTORY.getLogger();
+    protected final static Logger LOGGER = FacesLogger.FACELETS_FACTORY.getLogger();
 
     /**
      * Get an URL of an internal resource. First,
@@ -104,8 +104,8 @@ public final class Resource {
             throws MalformedURLException {
         final ExternalContext externalContext = ctx.getExternalContext();
         URL url = externalContext.getResource(path);
-        if (log.isLoggable(Level.FINE)) {
-            log.fine("Resource-Url from external context: " + url);
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Resource-Url from external context: " + url);
         }
         // This might happen on Servlet container which doesnot return
         // anything
@@ -137,8 +137,8 @@ public final class Resource {
                 try {
                     stream.close();
                 } catch (IOException e) {
-                    if (log.isLoggable(Level.FINEST)) {
-                        log.log(Level.FINEST, "Closing stream", e);
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "Closing stream", e);
                     }
                 }
                 return true;
@@ -160,8 +160,8 @@ public final class Resource {
                     }
 
                     public InputStream getInputStream() throws IOException {
-                        if (log.isLoggable(Level.FINE)) {
-                            log.fine("Opening internal url to " + file);
+                        if (LOGGER.isLoggable(Level.FINE)) {
+                            LOGGER.fine("Opening internal url to " + file);
                         }
                         Object ctx = externalContext.getContext();
                         // Or maybe fetch the external context afresh ?
