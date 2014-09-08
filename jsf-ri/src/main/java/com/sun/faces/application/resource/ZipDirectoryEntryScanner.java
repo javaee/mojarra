@@ -60,7 +60,7 @@ class ZipDirectoryEntryScanner {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
     private static final String PREFIX = "META-INF/resources";
-    private static final int prefixLen = PREFIX.length();
+    private static final int PREFIX_LENGTH = PREFIX.length();
     Map<String, Boolean> resourceLibraries;
 
 
@@ -77,8 +77,8 @@ class ZipDirectoryEntryScanner {
                 try {
                     while (null != (ze = zis.getNextEntry())) {
                         entryName = ze.getName();
-                        if (entryName.startsWith(PREFIX) && prefixLen < entryName.length()) {
-                            entryName = entryName.substring(prefixLen + 1);
+                        if (entryName.startsWith(PREFIX) && PREFIX_LENGTH < entryName.length()) {
+                            entryName = entryName.substring(PREFIX_LENGTH + 1);
                             if (!entryName.endsWith("/")) {
                                 // Assume this code is only reached if the zip entry
                                 // is NOT a 'directory' entry.
