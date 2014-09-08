@@ -1174,7 +1174,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         // Create a dummy ResponseWriter with a bogus writer,
         // so we can figure out what content type the ReponseWriter
         // is really going to ask for
-        ResponseWriter writer = renderKit.createResponseWriter(NullWriter.Instance,
+        ResponseWriter writer = renderKit.createResponseWriter(NullWriter.INSTANCE,
                                                                contentType,
                                                                encoding);
 
@@ -2025,7 +2025,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      */
     protected static final class NullWriter extends Writer {
 
-        static final NullWriter Instance = new NullWriter();
+        static final NullWriter INSTANCE = new NullWriter();
 
         public void write(char[] buffer) {
         }
@@ -2048,8 +2048,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         public void flush() {
         }
 
-    } // END NullWriter
-
+    } 
     /**
      * Find the given component in the component tree.
      *
