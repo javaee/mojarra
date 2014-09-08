@@ -37,29 +37,21 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.context;
+package com.sun.faces.test.javaee8.cdi;
 
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-/**
- * The FacesContext extension.
- * 
- * <p>
- *  Note because of class loading we need to use an extension to get the 
- *  FacesContext injected and we cannot use the example as given in the Weld
- *  documentation.
- * </p>
- */
-public class FacesContextExtension implements Extension {
-    /**
-     * After bean discovery.
-     * 
-     * @param afterBeanDiscovery the after bean discovery.
-     */
-    public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery) {
-        afterBeanDiscovery.addBean(new FacesContextProducer());
-        afterBeanDiscovery.addBean(new ExternalContextProducer());
+@Named(value="injectExternalContextBean")
+@RequestScoped
+public class InjectExternalContextBean {
+
+    @Inject
+    ExternalContext context;
+
+    public String getValue() {
+        return context.toString();
     }
 }

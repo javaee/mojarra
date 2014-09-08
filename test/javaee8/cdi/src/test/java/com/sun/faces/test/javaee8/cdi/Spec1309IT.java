@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,29 +37,37 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.context;
+package com.sun.faces.test.javaee8.cdi;
 
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.Extension;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTestRunner;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-/**
- * The FacesContext extension.
- * 
- * <p>
- *  Note because of class loading we need to use an extension to get the 
- *  FacesContext injected and we cannot use the example as given in the Weld
- *  documentation.
- * </p>
- */
-public class FacesContextExtension implements Extension {
-    /**
-     * After bean discovery.
-     * 
-     * @param afterBeanDiscovery the after bean discovery.
-     */
-    public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery) {
-        afterBeanDiscovery.addBean(new FacesContextProducer());
-        afterBeanDiscovery.addBean(new ExternalContextProducer());
+@RunWith(JsfTestRunner.class)
+public class Spec1309IT {
+
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testInjectedExternalContext() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/injectExternalContext.xhtml");
+        assertTrue(page.asXml().contains("com.sun.faces.context.ExternalContextImpl"));
     }
 }

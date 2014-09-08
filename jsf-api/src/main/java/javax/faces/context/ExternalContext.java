@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -60,8 +60,8 @@ import javax.faces.lifecycle.ClientWindow;
 
 
 /**
- * <p><span class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2">This</span>
- * class allows the Faces API to be unaware of the nature of its containing
+ * <p><span class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2 changed_modified_2_3">
+ * This</span> class allows the Faces API to be unaware of the nature of its containing
  * application environment.  In particular, this class allows JavaServer Faces based
  * appications to run in either a Servlet or a Portlet environment.</p>
  *
@@ -82,8 +82,10 @@ import javax.faces.lifecycle.ClientWindow;
  * application startup or shutdown" must be supported during application startup or shutdown
  * time.  The result of calling a method during application startup or shutdown time
  * that does not have this designation is undefined.</p>
-
-
+ * 
+ * <p class="changed_added_2_3">An ExternalContext can be injected into a request
+ * scoped bean using <code>@Inject ExternalContext externalContext;</code>
+ * </p>
  */
 
 public abstract class ExternalContext {
