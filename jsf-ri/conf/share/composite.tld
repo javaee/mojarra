@@ -673,6 +673,23 @@ follows.</p>
         </attribute>  
         <attribute>
             <description>
+                <![CDATA[
+                    <div class="changed_added_2_3">
+                        <p>The "hidden" flag is used to identify features that are intended only
+                        for tool use, and which should not be exposed to humans. The value of
+                        this attribute will be set as the value for this property on the
+                        <em>composite component bean descriptor</em>.</p>
+                    </div>
+                ]]>
+            </description>
+            <name>hidden</name>
+            <required>false</required>
+            <deferred-value>
+                <type>boolean</type>
+            </deferred-value>
+        </attribute>
+          <attribute>
+            <description>
 
                 <![CDATA[
 <div class="changed_added_2_0">

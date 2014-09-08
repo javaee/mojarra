@@ -1060,6 +1060,20 @@
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description>
+                &lt;div class="changed_added_2_3"&gt; &lt;p&gt;The
+                "hidden" flag is used to identify features that are
+                intended only for tool use, and which should not be
+                exposed to humans.The value of this attribute will be
+                set as the value for this property on the
+                &lt;em&gt;composite component bean
+                descriptor&lt;/em&gt;.&lt;/p&gt;&lt;/div&gt;
+            </description>
+            <name>hidden</name>
+            <required>false</required>
+            <type>boolean</type>
+        </attribute>
     </tag>
     <tag>
         <description><![CDATA[
