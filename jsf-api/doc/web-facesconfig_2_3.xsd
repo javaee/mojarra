@@ -6,7 +6,7 @@
 
       DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
       
-      Copyright (c) 2011 - 2013 Oracle and/or its affiliates. All rights reserved.
+      Copyright (c) 2011 - 2014 Oracle and/or its affiliates. All rights reserved.
       
       The contents of this file are subject to the terms of either the GNU
       General Public License Version 2 only ("GPL") or the Common Development
@@ -946,6 +946,16 @@
             
           ]]></xsd:documentation>
         </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="client-window-factory"
+                   type="javaee:fully-qualified-classType">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[
+                <p class="changed_added_2_3"> The "client-window-factory" element contains the fully 
+                qualified class name of the concrete ClientWindowFactory implementation class that 
+                will be called when FactoryFinder.getFactory(CLIENT_WINDOW_FACTORY) is called.</p>  
+            ]]></xsd:documentation>
+        </xsd:annotation>    
       </xsd:element>
       <xsd:element name="factory-extension"
                    type="javaee:faces-config-factory-extensionType"
