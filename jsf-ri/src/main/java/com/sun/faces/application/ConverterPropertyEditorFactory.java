@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -338,7 +338,7 @@ public class ConverterPropertyEditorFactory {
                 }
                 name += "Array" + bracketCount + 'd';                
             }
-            Matcher m = UnderscorePattern.matcher(name);
+            Matcher m = UNDERSCORE_PATTERN.matcher(name);
             // Replace existing underscores with one extra underscore.
             name = m.replaceAll("$0_");
             // Replace existing dots with a single underscore.
@@ -512,7 +512,7 @@ public class ConverterPropertyEditorFactory {
         }
     }
 
-    private static final Pattern UnderscorePattern = Pattern.compile("_+");
+    private static final Pattern UNDERSCORE_PATTERN = Pattern.compile("_+");
     private static final Pattern SingleUnderscorePattern = Pattern
         .compile("([^_])_([^_])");
     private static final Pattern MultipleUnderscorePattern = Pattern
