@@ -445,10 +445,9 @@ public final class SAXCompiler extends Compiler {
                                        String alias)
     throws IOException {
 
-        InputStream is = null;
         String encoding = getEncoding();
-        try {
-            is = new BufferedInputStream(src.openStream(), 1024);
+        try (InputStream is = new BufferedInputStream(src.openStream(), 1024);) {
+            
             writeXmlDecl(is, encoding, mngr);
             SAXParser parser = this.createSAXParser(handler);
             parser.parse(is, handler);
@@ -460,10 +459,6 @@ public final class SAXCompiler extends Compiler {
                     + ": " + e.getMessage(), e.getCause());
         } catch (FaceletException e) {
             throw e;
-        } finally {
-            if (is != null) {
-                is.close();
-            }
         }
         FaceletHandler result = new EncodingHandler(mngr.createFaceletHandler(), encoding,
                 mngr.getCompilationMessageHolder());

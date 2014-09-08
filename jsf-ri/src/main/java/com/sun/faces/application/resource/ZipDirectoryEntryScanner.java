@@ -67,14 +67,12 @@ class ZipDirectoryEntryScanner {
     ZipDirectoryEntryScanner() {
         ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
         Set<String> webInfLibJars = extContext.getResourcePaths("/WEB-INF/lib");
-        resourceLibraries = new ConcurrentHashMap<String, Boolean>();
-        ZipInputStream zis = null;
+        resourceLibraries = new ConcurrentHashMap<>();
         ZipEntry ze = null;
         String entryName = null;
         if (null != webInfLibJars) {
             for (String cur : webInfLibJars) {
-                zis = new ZipInputStream(extContext.getResourceAsStream(cur));
-                try {
+                try (ZipInputStream zis = new ZipInputStream(extContext.getResourceAsStream(cur))) {
                     while (null != (ze = zis.getNextEntry())) {
                         entryName = ze.getName();
                         if (entryName.startsWith(PREFIX) && PREFIX_LENGTH < entryName.length()) {
@@ -92,7 +90,6 @@ class ZipDirectoryEntryScanner {
                             }
                         }
                     }
-
                 } catch (IOException ioe) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE, "Unable to inspect resource library " + cur, ioe);
@@ -113,7 +110,7 @@ class ZipDirectoryEntryScanner {
     }
 
     boolean libraryExists(String libraryName, String localePrefix) {
-        boolean result = false;
+        boolean result;
         if (null != localePrefix) {
             result = resourceLibraries.containsKey(localePrefix + "/" + libraryName);
         } else {

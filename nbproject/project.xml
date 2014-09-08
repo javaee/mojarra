@@ -92,14 +92,14 @@
             </view>
             <subprojects/>
         </general-data>
-        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/3">
+        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/4">
             <compilation-unit>
                 <package-root>jsf-api/src/main/java</package-root>
                 <package-root>jsf-ri/src/main/java</package-root>
                 <package-root>jsf-api/build/generate</package-root>
                 <package-root>jsf-ri/build/generate</package-root>
                 <classpath mode="compile">lib/jsf-extensions-test-time.jar:lib/cactus-1.7.1-javaee5.jar:dependencies/jars/cdi-api-1.1.jar:dependencies/jars/javaee-api-7.0.jar:dependencies/jars/groovy-all-1.6.9.jar:dependencies/jars/junit-3.8.1.jar</classpath>
-                <source-level>1.6</source-level>
+                <source-level>1.8</source-level>
             </compilation-unit>
         </java-data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">

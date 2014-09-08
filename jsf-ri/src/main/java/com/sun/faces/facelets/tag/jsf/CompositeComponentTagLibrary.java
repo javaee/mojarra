@@ -120,25 +120,14 @@ public class CompositeComponentTagLibrary extends LazyTagLibrary {
                         
         if (null != (ccResource = 
                 getCompositeComponentResource(ns, localName))) {
-            InputStream componentStream = null;
-            try {
-                componentStream = ccResource.getInputStream();
+            
+            try (InputStream componentStream = ccResource.getInputStream();) {
                 result = (componentStream != null);
             } catch (IOException ex) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
-            } finally {
-                try {
-                    if (result) {
-                        componentStream.close();
-                    }
-                } catch (IOException ex) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE, ex.toString(), ex);
-                    }
-                } 
-            }
+            } 
         }
         return result || super.containsTagHandler(ns, localName);
     }

@@ -284,53 +284,35 @@ final class FactoryFinderInstance {
         // Check for a services definition
         List<String> result = null;
         String resourceName = "META-INF/services/" + factoryName;
-        InputStream stream;
-        BufferedReader reader = null;
         try {
             Enumeration<URL> e = classLoader.getResources(resourceName);
             while (e.hasMoreElements()) {
                 URL url = e.nextElement();
                 URLConnection conn = url.openConnection();
                 conn.setUseCaches(false);
-                stream = conn.getInputStream();
-                if (stream != null) {
-                    // Deal with systems whose native encoding is possibly
-                    // different from the way that the services entry was created
-                    try {
-                        reader =
-                              new BufferedReader(new InputStreamReader(stream,
-                                                                       "UTF-8"));
+                try (InputStream stream = conn.getInputStream()) {
+                    if (stream != null) {
                         if (result == null) {
-                            result = new ArrayList<String>(3);
+                            result = new ArrayList<>(3);
                         }
-                        result.add(reader.readLine());
-                    } catch (UnsupportedEncodingException uee) {
-                        // The DM_DEFAULT_ENCODING warning is acceptable here
-                        // because we explicitly *want* to use the Java runtime's
-                        // default encoding.
-                        reader =
-                              new BufferedReader(new InputStreamReader(stream));
-                    } finally {
-                        if (reader != null) {
-                            reader.close();
-                            reader = null;
-                        }
-                        if (stream != null) {
-                            stream.close();
-                            //noinspection UnusedAssignment
-                            stream = null;
-                        }
+                        // Deal with systems whose native encoding is possibly
+                        // different from the way that the services entry was created
+                        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream,
+                                "UTF-8"))) {
+                            result.add(reader.readLine());
+                        } catch (UnsupportedEncodingException uee) {
+                            // The DM_DEFAULT_ENCODING warning is acceptable here
+                            // because we explicitly *want* to use the Java runtime's
+                            // default encoding.
+                            try (BufferedReader reader =
+                                    new BufferedReader(new InputStreamReader(stream))) {
+                                result.add(reader.readLine());
+                            }
+                        } 
                     }
-
                 }
             }
-        } catch (IOException e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                           e.toString(),
-                           e);
-            }
-        } catch (SecurityException e) {
+        } catch (IOException | SecurityException e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
                            e.toString(),

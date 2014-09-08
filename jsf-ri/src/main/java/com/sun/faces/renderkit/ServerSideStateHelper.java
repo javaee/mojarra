@@ -446,26 +446,14 @@ public class ServerSideStateHelper extends StateHelper {
     protected Object handleRestoreState(Object state) {
 
         if (webConfig.isOptionEnabled(SerializeServerStateDeprecated) || webConfig.isOptionEnabled(SerializeServerState)) {
-            ByteArrayInputStream bais = new ByteArrayInputStream((byte[]) state);
-            ObjectInputStream ois = null;
-            try {
-                ois = serialProvider
+            try (ByteArrayInputStream bais = new ByteArrayInputStream((byte[]) state);
+                 ObjectInputStream ois = serialProvider
                       .createObjectInputStream(((compressViewState)
                                                 ? new GZIPInputStream(bais, 1024)
-                                                : bais));
+                                                : bais));) {
                 return ois.readObject();
             } catch (Exception e) {
                 throw new FacesException(e);
-            } finally {
-                if (ois != null) {
-                    try {
-                        ois.close();
-                    } catch (IOException ioe) { 
-                        if (LOGGER.isLoggable(Level.FINEST)) {
-                            LOGGER.log(Level.FINEST, "Closing stream", ioe);
-                        }
-                    }
-                }
             }
         } else {
             return state;

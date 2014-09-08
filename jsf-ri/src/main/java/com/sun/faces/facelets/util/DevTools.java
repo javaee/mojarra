@@ -301,21 +301,29 @@ public final class DevTools {
     private static String[] splitTemplate(String rsc) throws IOException {
 
         ClassLoader loader = Util.getCurrentLoader(DevTools.class);
-        InputStream is = loader.getResourceAsStream(rsc);
-        if (is == null) {
-            loader = DevTools.class.getClassLoader();
+        String str = "";
+        InputStream is = null;
+        try {
             is = loader.getResourceAsStream(rsc);
             if (is == null) {
-                throw new FileNotFoundException(rsc);
+                loader = DevTools.class.getClassLoader();
+                is = loader.getResourceAsStream(rsc);
+                if (is == null) {
+                    throw new FileNotFoundException(rsc);
+                }
+            }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buff = new byte[512];
+            int read;
+            while ((read = is.read(buff)) != -1) {
+                baos.write(buff, 0, read);
+            }
+            str = baos.toString(RIConstants.CHAR_ENCODING);
+        } finally {
+            if (null != is) {
+                is.close();
             }
         }
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] buff = new byte[512];
-        int read;
-        while ((read = is.read(buff)) != -1) {
-            baos.write(buff, 0, read);
-        }
-        String str = baos.toString(RIConstants.CHAR_ENCODING);
         return str.split("@@");
 
     }

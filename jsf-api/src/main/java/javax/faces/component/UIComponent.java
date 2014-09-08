@@ -1008,23 +1008,11 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                                 findComponentResourceBundleLocaleMatch(context, 
                                 ccResource.getResourceName(), 
                                 ccResource.getLibraryName()))) {
-                            InputStream propertiesInputStream = null;
-                            try {
-                                propertiesInputStream = ccResource.getInputStream();
+                            try (InputStream propertiesInputStream = ccResource.getInputStream()) {
                                 resourceBundle = new PropertyResourceBundle(propertiesInputStream);
                             } catch (IOException ex) {
                                 Logger.getLogger(UIComponent.class.getName()).log(Level.SEVERE, null, ex);
-                            } finally{
-                            	if(null != propertiesInputStream){
-                                    try{
-                                        propertiesInputStream.close();
-                                    } catch(IOException ioe){
-                                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                                            LOGGER.log(Level.SEVERE, null, ioe);
-                                        }
-                                    }
-                            	}
-                            }
+                            } 
                         }
                     }
                 }

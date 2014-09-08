@@ -283,10 +283,9 @@ public class ConverterPropertyEditorFactory {
         private void loadTemplateBytes() throws IOException {
             String resourceName = '/'
                 + templateClass.getName().replace('.', '/') + ".class";
-            InputStream in = ConverterPropertyEditorFactory.class
-                .getResourceAsStream(resourceName);
-            if (in != null) {
-                try {
+            try (InputStream in = ConverterPropertyEditorFactory.class
+                    .getResourceAsStream(resourceName)) {
+                if (in != null) {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     byte[] buff = new byte[1024];
                     int more;
@@ -303,8 +302,6 @@ public class ConverterPropertyEditorFactory {
                     assert templateBytes[3] == (byte) 0xBE;
                     constant_pool_count = ((templateBytes[8] & 0xff) << 8)
                         + (templateBytes[9] & 0xff);
-                } finally {
-                    in.close();
                 }
             }
         }

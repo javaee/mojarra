@@ -217,22 +217,20 @@ public abstract class ResourceHelper {
                     in = null;
                 }
             } else {
-                InputStream temp = null;
-                try {
-                    // using dynamic compression here
-                    temp = new BufferedInputStream(
+                byte[] buf = new byte[512];
+
+                try (InputStream temp = new BufferedInputStream(
                             new ELEvaluatingInputStream(ctx,
                                     resource,
                                     getNonCompressedInputStream(resource,
                             ctx)));
-                    byte[] buf = new byte[512];
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
-                    OutputStream out = new GZIPOutputStream(baos);
+                     ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+                     OutputStream out = new GZIPOutputStream(baos);) {
+                    // using dynamic compression here
+                    
                     for (int read = temp.read(buf); read != -1; read = temp.read(buf)) {
                         out.write(buf, 0, read);
                     }
-                    out.flush();
-                    out.close();
                     in = new BufferedInputStream(
                             new ByteArrayInputStream(baos.toByteArray()));
                     
@@ -241,16 +239,6 @@ public abstract class ResourceHelper {
                         LOGGER.log(Level.SEVERE,
                                 ioe.getMessage(),
                                 ioe);
-                    }
-                } finally {
-                    if (temp != null) {
-                        try {
-                            temp.close();
-                        } catch (IOException ioe) {
-                            if (LOGGER.isLoggable(Level.FINEST)) {
-                                LOGGER.log(Level.FINEST, "Closing stream", ioe);
-                            }
-                        }
                     }
                 }
             }

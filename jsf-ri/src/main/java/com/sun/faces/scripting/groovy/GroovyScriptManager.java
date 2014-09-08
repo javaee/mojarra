@@ -47,6 +47,7 @@ import com.sun.faces.util.FacesLogger;
 import javax.servlet.ServletContext;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
@@ -64,7 +65,7 @@ public class GroovyScriptManager implements ScriptManager {
     public static final Set<String> FACES_ANNOTATIONS;
 
     static {
-        HashSet<String> annotations = new HashSet<String>(15, 1.0f);
+        HashSet<String> annotations = new HashSet<>(15, 1.0f);
         Collections.addAll(annotations,
                 "javax.faces.component.FacesComponent",
                 "javax.faces.component.*",
@@ -117,39 +118,35 @@ public class GroovyScriptManager implements ScriptManager {
 
     private boolean containsAnnotation(ServletContext sc, String pathElement) {
         boolean containsAnnotation = false;
-        BufferedReader in = null;
+        URL url;
         try {
-            URL url = sc.getResource(pathElement);
-            in = new BufferedReader(new InputStreamReader(url.openStream(), RIConstants.CHAR_ENCODING));
+            url = sc.getResource(pathElement);
+        } catch (MalformedURLException ex) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }   
+            return false;
+        }
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), RIConstants.CHAR_ENCODING))) {
             String line = in.readLine();
             while ((line != null) && (!containsAnnotation)) {
                 line = line.trim();
                 if (line.length() != 0) {
                     for (String pattern : FACES_ANNOTATIONS) {
-                        if (line.indexOf(pattern) > -1) {
+                        if (line.contains(pattern)) {
                             containsAnnotation = true;
                             break;
                         }
                     }
                 }
-
+                
                 line = in.readLine();
             }
         } catch (Exception ioe) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, null, ioe);
             }
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (Exception e) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST, "Closing stream", e);
-                    }
-                }
-            }
-        }
+        } 
         return containsAnnotation;
     }
 

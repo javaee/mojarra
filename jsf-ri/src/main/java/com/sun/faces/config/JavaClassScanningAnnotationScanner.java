@@ -46,6 +46,7 @@ import com.sun.faces.util.FacesLogger;
 
 import javax.servlet.ServletContext;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
@@ -239,9 +240,8 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
                 if (!processClass(cname, allowedPackages)) {
                     continue;
                 }
-                ReadableByteChannel channel = null;
-                try {
-                    channel = Channels.newChannel(jarFile.getInputStream(entry));
+                try (InputStream is = jarFile.getInputStream(entry);
+                     ReadableByteChannel channel = Channels.newChannel(is);) {
                     if (classFileScanner.containsAnnotation(channel)) {
                         if (LOGGER.isLoggable(Level.FINE)) {
                             LOGGER.log(Level.FINE,
@@ -259,19 +259,7 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
                                    e.toString(),
                                    e);
                     }
-                } finally {
-                    if (channel != null) {
-                        try {
-                            channel.close();
-                        } catch (IOException ignored) {
-                            if (LOGGER.isLoggable(Level.FINE)) {
-                                LOGGER.log(Level.FINE,
-                                           ignored.toString(),
-                                           ignored);
-                            }
-                        }
-                    }
-                }
+                } 
             }
         }
 

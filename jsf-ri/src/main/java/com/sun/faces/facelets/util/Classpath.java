@@ -201,13 +201,8 @@ public final class Classpath {
         boolean done = false;
         InputStream is = getInputStream(url);
         if (is != null) {
-            ZipInputStream zis;
-            if (is instanceof ZipInputStream) {
-                zis = (ZipInputStream) is;
-            } else {
-                zis = new ZipInputStream(is);
-            }
-            try {
+            try (ZipInputStream zis = (is instanceof ZipInputStream) ? 
+                 (ZipInputStream) is : new ZipInputStream(is))  {
                 ZipEntry entry = zis.getNextEntry();
                 // initial entry should not be null
                 // if we assume this is some inner jar
@@ -220,9 +215,7 @@ public final class Classpath {
                     }
                     entry = zis.getNextEntry();
                 }
-            } finally {
-                zis.close();
-            }
+            } 
         }
         if (!done && prefix.length() > 0) {
             // we add '/' at the end since join adds it as well
