@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -89,7 +89,7 @@ import javax.faces.flow.ViewNode;
 public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
     // Log instance for this class
-    private static final Logger logger = FacesLogger.APPLICATION.getLogger();
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     /**
      * <code>Map</code> containing configured navigation cases.
@@ -116,8 +116,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     public NavigationHandlerImpl() {
 
         super();
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Created NavigationHandler instance ");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, "Created NavigationHandler instance ");
         }
         ApplicationAssociate associate = ApplicationAssociate.getInstance(
               FacesContext.getCurrentInstance().getExternalContext());
@@ -211,8 +211,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                                  SharedUtils.evaluateExpressions(context, caseStruct.navCase.getParameters()),
                                                  caseStruct.navCase.isIncludeViewParams());
                 try {
-                    if (logger.isLoggable(Level.FINE)) {
-                        logger.log(Level.FINE, "Redirecting to path {0} for outcome {1}and viewId {2}", new Object[]{redirectUrl, outcome, caseStruct.viewId});
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE, "Redirecting to path {0} for outcome {1}and viewId {2}", new Object[]{redirectUrl, outcome, caseStruct.viewId});
                     }
                     // encode the redirect to ensure session state
                     // is maintained
@@ -220,15 +220,15 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     flash.setRedirect(true);
                     extContext.redirect(redirectUrl);
                 } catch (java.io.IOException ioe) {
-                    if (logger.isLoggable(Level.FINE)) {
-                        logger.log(Level.FINE,"jsf.redirect_failed_error",
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,"jsf.redirect_failed_error",
                                    redirectUrl);
                     }
                     throw new FacesException(ioe.getMessage(), ioe);
                 }
                 context.responseComplete();
-               if (logger.isLoggable(Level.FINE)) {
-                   logger.log(Level.FINE, "Response complete for {0}", caseStruct.viewId);
+               if (LOGGER.isLoggable(Level.FINE)) {
+                   LOGGER.log(Level.FINE, "Response complete for {0}", caseStruct.viewId);
                }
             } else {
                 UIViewRoot newRoot = viewHandler.createView(context,
@@ -242,8 +242,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                             caseStruct.facesFlowCallNode, caseStruct.viewId);
                     setDidTransition(context, false);
                 }
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE, "Set new view in FacesContext for {0}", caseStruct.viewId);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE, "Set new view in FacesContext for {0}", caseStruct.viewId);
                 }
             }
             clearViewMapIfNecessary(context, caseStruct.viewId);
@@ -387,8 +387,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         String fullyQualifiedFlowId = toInspect.getDefiningDocumentId() + toInspect.getId();
         // Is there an existing NavigationMap for this flowId
         if (navigationMaps.containsKey(fullyQualifiedFlowId)) {
-            if (logger.isLoggable(Level.INFO)) {
-                logger.log(Level.INFO, "PENDING(edburns): merge existing map");
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO, "PENDING(edburns): merge existing map");
             }
             
         } else {
@@ -777,8 +777,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (-1 != questionMark) {
             int viewIdLen = viewIdToTest.length();
             if (viewIdLen <= (questionMark+1)) {
-                if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE, "jsf.navigation_invalid_query_string",
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "jsf.navigation_invalid_query_string",
                             viewIdToTest);
                 }
                 if (development) {
