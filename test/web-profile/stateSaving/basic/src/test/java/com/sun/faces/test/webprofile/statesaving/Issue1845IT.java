@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,6 +43,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.htmlunit.IgnoringIncorrectnessListener;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,7 +58,7 @@ public class Issue1845IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.setJavaScriptEnabled(true);
+        webClient.getOptions().setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(120000);
     }
 
@@ -68,6 +69,7 @@ public class Issue1845IT {
 
     @Test
     public void testIssue1845() throws Exception {
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
         HtmlPage page = webClient.getPage(webUrl + "faces/issue1845.xhtml");
         assertTrue(!page.asText().contains("Click Me"));
         HtmlCheckBoxInput checkbox = (HtmlCheckBoxInput) page.getHtmlElementById("myForm:buttonCheckbox");
