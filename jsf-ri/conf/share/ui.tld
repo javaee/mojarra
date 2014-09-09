@@ -421,7 +421,7 @@ starting with "/".</span>
         <description>
 
             <![CDATA[
-<div class="changed_added_2_0">
+<div class="changed_added_2_0 changed_modified_2_3">
   <p>
 	When the <code>ui:debug</code> tag is placed in an XHTML page, it creates a component and adds it to the
 	component tree. That debug component captures debugging information, namely the current state of the component
@@ -441,6 +441,10 @@ starting with "/".</span>
 	Using an EL expression as the value for the <code>rendered</code> attribute lets you control whether
 	debug output is enabled for multiple views based on a single bean property.
   </p>
+  
+        <p class="changed_added_2_3">
+              Note ui:debug only works when the ProjectStage is set to Development.
+        </p>
 </div>
 ]]>
         </description>
