@@ -75,7 +75,7 @@ public class WebappResourceHelper extends ResourceHelper {
 
     private final String BASE_RESOURCE_PATH;
     
-    private String BASE_CONTRACTS_PATH;
+    private final String BASE_CONTRACTS_PATH;
 
     private boolean cacheTimestamp;
 
