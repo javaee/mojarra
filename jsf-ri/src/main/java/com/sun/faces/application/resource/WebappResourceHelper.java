@@ -73,7 +73,7 @@ public class WebappResourceHelper extends ResourceHelper {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
-    private String BASE_RESOURCE_PATH;
+    private final String BASE_RESOURCE_PATH;
     
     private String BASE_CONTRACTS_PATH;
 
