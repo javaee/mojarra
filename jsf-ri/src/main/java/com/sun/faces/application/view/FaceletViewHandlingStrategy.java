@@ -168,7 +168,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     /**
      * Stores the skip hint.
      */
-    private static String SKIP_ITERATION_HINT = "javax.faces.visit.SKIP_ITERATION";
+    private static final String SKIP_ITERATION_HINT = "javax.faces.visit.SKIP_ITERATION";
 
     // ------------------------------------------------------------ Constructors
 
