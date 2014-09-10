@@ -754,7 +754,6 @@
                                                dest="${weblogic.patch.home}/tmp.mojarra/wls.mojarra" />
                                         <delete dir="${weblogic.patch.home}/tmp.mojarra/wls.mojarra/javax" />
                                         <delete dir="${weblogic.patch.home}/tmp.mojarra/wls.mojarra/com/sun" />
-                                        <delete dir="${weblogic.patch.home}/tmp.mojarra/wls.mojarra/META-INF" />
                                         <unzip src="${weblogic.patch.home}/tmp.mojarra/javax.faces.jar"
                                                dest="${weblogic.patch.home}/tmp.mojarra/wls.mojarra" />
                                         <zip destfile="${weblogic.patch.home}/tmp.mojarra/${weblogic.patch.mojarraJarName}"
