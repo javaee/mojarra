@@ -54,6 +54,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.junit.Test;
 
 @RunWith(JsfTestRunner.class)
 public class Spec802IT {
@@ -73,6 +74,7 @@ public class Spec802IT {
     }
 
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
+    @Test
     public void testFileUpload() throws Exception {
         webClient = new WebClient();
         HtmlPage page = webClient.getPage(webUrl + "faces/inputFile.xhtml");
@@ -117,6 +119,7 @@ public class Spec802IT {
     }
 
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
+    @Test
     public void testFileUploadNoEncType() throws Exception {
         webClient = new WebClient();
         HtmlPage page = webClient.getPage(webUrl + "faces/inputFileNoEncTyoe.xhtml");
