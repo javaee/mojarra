@@ -101,7 +101,7 @@
 
         ]]></description>
         <tag-name>passThroughAttribute</tag-name>
-        <handler-class></handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.PassThroughAttributeHandler</handler-class>
         <attribute>
             <description><![CDATA[<p class="changed_added_2_2">The name
             of the pass through attribute.  An attribute with this name,
@@ -137,7 +137,7 @@
 ]]>
         </description>
         <tag-name>passThroughAttributes</tag-name>
-        <handler-class></handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.PassThroughAttributesHandler</handler-class>
         <attribute>
             <description><![CDATA[<p class="changed_added_2_2">An EL <code>ValueExpression</code> that evaluates to a <code>Map&lt;String, Object&gt;</code>.</p>]]></description>
             <name>value</name>
@@ -163,7 +163,7 @@
 ]]>
         </description>
         <tag-name>attributes</tag-name>
-        <handler-class></handler-class>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.AttributesHandler</handler-class>
         <attribute>
             <description><![CDATA[<p class="changed_added_2_2">An EL <code>ValueExpression</code> that evaluates to a <code>Map&lt;String, Object&gt;</code>.</p>]]></description>
             <name>value</name>
