@@ -11103,6 +11103,10 @@
             </div>]]>
         </description>
         <tag-name>inputFile</tag-name>
+        <component>
+            <component-type>javax.faces.HtmlInputFile</component-type>
+            <renderer-type>javax.faces.File</renderer-type>
+        </component>
         <attribute>
             <description>
                 <![CDATA[Converter instance registered with this component.]]>
@@ -11543,6 +11547,10 @@
             </div>]]>
         </description>
         <tag-name>doctype</tag-name>
+        <component>
+            <component-type>javax.faces.HtmlDoctype</component-type>
+            <renderer-type>javax.faces.Doctype</renderer-type>
+        </component>
         <attribute>
             <description>
                 <![CDATA[Converter instance registered with this component.]]>
