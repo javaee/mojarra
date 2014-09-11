@@ -1347,8 +1347,10 @@ public class WebConfiguration {
               false
         ),
         DisableFaceletJSFViewHandlerDeprecated(
-              "DISABLE_FACELET_JSF_VIEWHANDLER",
-              false
+                "DISABLE_FACELET_JSF_VIEWHANDLER",
+                false,
+                true,
+                DisableFaceletJSFViewHandler
         ),
         DisableDefaultBeanValidator(
                 BeanValidator.DISABLE_DEFAULT_BEAN_VALIDATOR_PARAM_NAME,
@@ -1583,7 +1585,8 @@ public class WebConfiguration {
     private static class FaceletsConfigParamLoggingStrategy implements DeprecationLoggingStrategy {
 
         public boolean shouldBeLogged(WebConfiguration configuration) {
-            return !configuration.isOptionEnabled(BooleanWebContextInitParameter.DisableFaceletJSFViewHandler);
+            return !configuration.isOptionEnabled(BooleanWebContextInitParameter.DisableFaceletJSFViewHandler) &&
+                    !configuration.isOptionEnabled(BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated);
         }
 
     } // END FaceletsConfigParamLoggingStrategy

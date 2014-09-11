@@ -85,6 +85,7 @@ import javax.validation.Validator;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -883,7 +884,8 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         // FaceletViewHandler.  Make the application behave as 1.2
         // unless they use our ViewHandler
         WebConfiguration webConfig = WebConfiguration.getInstance();
-        if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler)) {
+        if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler) &&
+                !webConfig.isOptionEnabled(DisableFaceletJSFViewHandlerDeprecated)) {
             if (viewHandlers.containsKey("com.sun.facelets.FaceletViewHandler")) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING,

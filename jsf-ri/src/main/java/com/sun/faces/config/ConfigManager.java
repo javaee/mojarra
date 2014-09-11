@@ -43,6 +43,7 @@ package com.sun.faces.config;
 import com.sun.faces.RIConstants;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
 import com.sun.faces.spi.ConfigurationResourceProvider;
 import com.sun.faces.spi.ConfigurationResourceProviderFactory;
@@ -362,13 +363,16 @@ public class ConfigManager {
                         InjectionProviderFactory.createInstance(context.getExternalContext());
                 context.getAttributes().put(INJECTION_PROVIDER_KEY, containerConnector);
 
-                boolean isFaceletsDisabled = false;
+                boolean isFaceletsDisabled;
                 
                 // Don't perform the check unless lastFacesConfigInfo is indeed
                 // *the* WEB-INF/faces-config.xml
                 if (lastFacesConfigInfo.isWebInfFacesConfig()) {
                     isFaceletsDisabled = 
                             isFaceletsDisabled(webConfig, lastFacesConfigInfo);
+                } else {
+                    isFaceletsDisabled = webConfig.isOptionEnabled(DisableFaceletJSFViewHandler) ||
+                            webConfig.isOptionEnabled(DisableFaceletJSFViewHandlerDeprecated);
                 }
                 if (!lastFacesConfigInfo.isWebInfFacesConfig() || !lastFacesConfigInfo.isMetadataComplete()) {
                     // execute the Task responsible for finding annotation classes
@@ -641,7 +645,8 @@ public class ConfigManager {
     private boolean isFaceletsDisabled(WebConfiguration webconfig,
                                        FacesConfigInfo facesConfigInfo) {
 
-        boolean isFaceletsDisabled = webconfig.isOptionEnabled(DisableFaceletJSFViewHandler);
+        boolean isFaceletsDisabled = webconfig.isOptionEnabled(DisableFaceletJSFViewHandler) ||
+                webconfig.isOptionEnabled(DisableFaceletJSFViewHandlerDeprecated);
         if (!isFaceletsDisabled) {
             // if not explicitly disabled, make a sanity check against
             // /WEB-INF/faces-config.xml

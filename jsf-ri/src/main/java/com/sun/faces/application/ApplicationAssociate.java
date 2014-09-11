@@ -74,6 +74,7 @@ import com.sun.faces.util.FacesLogger;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.*;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
 import com.sun.faces.el.DemuxCompositeELResolver;
 import com.sun.faces.el.ELUtils;
@@ -321,7 +322,8 @@ public class ApplicationAssociate {
         
         FacesContext ctx = FacesContext.getCurrentInstance();
         
-        if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler)) {
+        if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler) &&
+                !webConfig.isOptionEnabled(DisableFaceletJSFViewHandlerDeprecated)) {
             Map<String, Object> appMap = ctx.getExternalContext().getApplicationMap();
             compiler = createCompiler(appMap, webConfig);
             faceletFactory = createFaceletFactory(ctx, compiler, webConfig);

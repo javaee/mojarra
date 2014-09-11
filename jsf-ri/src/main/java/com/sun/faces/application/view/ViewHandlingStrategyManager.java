@@ -65,7 +65,8 @@ public class ViewHandlingStrategyManager {
 
         WebConfiguration webConfig = WebConfiguration.getInstance();
         boolean pdlDisabled = webConfig
-              .isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler);
+              .isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler) ||
+                webConfig.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated);
         strategies = ((pdlDisabled)
                       ? new ViewHandlingStrategy[] { new JspViewHandlingStrategy() }
                       : new ViewHandlingStrategy[] { new FaceletViewHandlingStrategy(),
