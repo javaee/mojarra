@@ -11103,7 +11103,6 @@
             </div>]]>
         </description>
         <tag-name>inputFile</tag-name>
-        <handler-class></handler-class>
         <attribute>
             <description>
                 <![CDATA[Converter instance registered with this component.]]>
@@ -11544,7 +11543,6 @@
             </div>]]>
         </description>
         <tag-name>doctype</tag-name>
-        <handler-class></handler-class>
         <attribute>
             <description>
                 <![CDATA[Converter instance registered with this component.]]>
