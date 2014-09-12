@@ -49,6 +49,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue2398IT {
 
@@ -79,6 +80,7 @@ public class Issue2398IT {
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testIssue2398() throws Exception {
         HtmlPage page = webClient.getPage(webUrl.substring(0, webUrl.length() - 2) + "2/faces/index.xhtml");
 
