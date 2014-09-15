@@ -92,6 +92,11 @@
                     <artifactId>cargo-maven2-plugin</artifactId>
                     <version>1.4.4</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.wagon</groupId>
+                    <artifactId>wagon-provider-api</artifactId>
+                    <version>2.6</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -121,6 +126,17 @@
                     <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
+            </plugin>
+            <!--
+                
+                Making sure we have a work-around for SSL issues, by forcing
+                a particular version of the Wagon API.
+                
+                -->
+            <plugin>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-provider-api</artifactId>
+                <version>2.6</version>
             </plugin>
         </plugins>
     </build>
@@ -656,13 +672,13 @@
   Uncomment to cause Tomcat to be started with debugging enabled.  Make
   sure to pay attention to the value of the suspend parameter.
 
-                                    <cargo.jvmargs>
-                                      -Xdebug
-                                      -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9009
-                                      -Xnoagent
-                                      -Djava.compiler=NONE
-                                    </cargo.jvmargs>
--->
+                                                                        <cargo.jvmargs>
+                                                                          -Xdebug
+                                                                          -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9009
+                                                                          -Xnoagent
+                                                                          -Djava.compiler=NONE
+                                                                        </cargo.jvmargs>
+                                    -->
                                 </properties>
                             </configuration>
                         </configuration>
@@ -819,15 +835,15 @@
                                 <phase>install</phase>
                                 <configuration>
                                     <script>
-startServer(
-    'AdminServer', 'mydomain', 't3://localhost:7001', '${weblogic.cargo.username}',
-    '${weblogic.cargo.password}', '${weblogic.cargo.wldomain}', jvmArgs='${weblogic.cargo.memargs}')
+                                        startServer(
+                                        'AdminServer', 'mydomain', 't3://localhost:7001', '${weblogic.cargo.username}',
+                                        '${weblogic.cargo.password}', '${weblogic.cargo.wldomain}', jvmArgs='${weblogic.cargo.memargs}')
                                     </script>
                                 </configuration>
                                 <goals>
                                     <goal>wlst</goal>
                                 </goals>
-                             </execution>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
