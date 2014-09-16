@@ -52,9 +52,8 @@
     <groupId>com.sun.faces.test.weblogic.wls1214.facelets</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Weblogic - WLS1214 - Facelets</name>
+    <name>Mojarra ${project.version} - Test - Weblogic - WLS 12.1.4 - Facelets</name>
     <modules>
 	<module>core</module>
     </modules>
 </project>
-
