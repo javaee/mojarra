@@ -49,7 +49,6 @@
         <artifactId>pom</artifactId>
         <version>2.3.0-m01-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.javaee8</groupId>
     <artifactId>disableFaceletsViewHandler</artifactId>
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - JavaEE 8 - Disable Facelets ViewHandler</name>
