@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -48,8 +48,8 @@ import javax.faces.convert.Converter;
 
 /**
  * <p><strong
- * class="changed_modified_2_0_rev_a">DoubleRangeValidator</strong> is a
- * {@link Validator} that checks the value of the corresponding
+ * class="changed_modified_2_0_rev_a changed_modified_2_3">DoubleRangeValidator</strong> 
+ * is a {@link Validator} that checks the value of the corresponding
  * component against specified minimum and maximum values.  The
  * following algorithm is implemented:</p>
 
@@ -310,7 +310,16 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
 
     }
 
-
+    /**
+     * <p class="changed_modified_2_3">
+     *  Overrides the default equals method to take the minimum and maximum 
+     *  into account when comparing DoubleRangeValidator instances.
+     * </p>
+     * 
+     * @param otherObj the object to compare against.
+     * @return true if equal, false otherwise.
+     */
+    @Override
     public boolean equals(Object otherObj) {
 
         if (!(otherObj instanceof DoubleRangeValidator)) {
@@ -324,7 +333,15 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
 
     }
 
-
+    /**
+     * <p class="changed_modified_2_3">
+     *  Overrides the default hash code method to take the minimum and maximum 
+     *  into account when generating the hash code.
+     * </p>
+     * 
+     * @return the hash code.
+     */
+    @Override
     public int hashCode() {
 
         int hashCode = (Double.valueOf(this.getMinimum()).hashCode()
