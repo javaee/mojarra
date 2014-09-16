@@ -1310,7 +1310,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -2768,7 +2771,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -3726,7 +3732,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -4449,7 +4458,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -4813,7 +4825,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -8557,7 +8572,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -9333,7 +9351,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -9691,7 +9712,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -10482,7 +10506,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -11257,7 +11284,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -16878,7 +16908,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -17617,7 +17650,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -18422,7 +18458,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -19189,7 +19228,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -19946,7 +19988,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -20700,7 +20745,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
@@ -21446,7 +21494,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
-          with a return type of void.
+          with a return type of void. As a convenience this attribute is also 
+          allowed to evaluate to a &lt;code&gt;java.lang.String&lt;/code&gt;, 
+          which will be used in a call to &lt;code&gt;Application.createValidator(String validatorId&lt;/code&gt;
+          to create the validator instance.
         </description>
       <display-name>Validator</display-name>
       <icon/>
