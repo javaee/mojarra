@@ -539,11 +539,9 @@ starting with "/".</span>
             <required>
 				true
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <type>
+                java.lang.String
+            </type>
         </attribute>
 
   </tag>
