@@ -51,8 +51,8 @@
     </parent>
     <artifactId>cdi-jsp-only-app-sets-tccl</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Java EE 7 - CDI - Multi-Tenant - CDI+JSP Only App Sets TCCL</name>
+    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI - Multi-Tenant - CDI+JSP Only App Sets TCCL</name>
     <build>
-        <finalName>test-cdi-jsp-only-app-sets-tccl</finalName>
+        <finalName>test-javaee7-cdi-multi-tenant-jsp-only-app-sets-tccl</finalName>
     </build>  
 </project>

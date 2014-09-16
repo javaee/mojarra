@@ -4,7 +4,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -52,7 +52,7 @@
     <groupId>com.sun.faces.test.javaee7.cdi.multi-tenant</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Java EE 7 - CDI - Multi-Tenant</name>
+    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI - Multi-Tenant</name>
     <modules>
         <module>cdi-jsp-only-app-sets-tccl</module>
         <module>cdi-app-sets-tccl</module>

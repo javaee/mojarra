@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -39,22 +39,19 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>pom</artifactId>
-    <groupId>com.sun.faces.test.javaee7.cdi.multi-tenant</groupId>
-    <version>2.3.0-m01-SNAPSHOT</version>
-  </parent>
-  
-  <groupId>com.sun.faces.test.javaee7.cdi.multi-tenant</groupId>
-  <artifactId>cdi-app-sets-tccl</artifactId>
-  <version>2.3.0-m01-SNAPSHOT</version>
-  <packaging>war</packaging>
-  <name>Mojarra ${project.version} - Test - Java EE 7 - CDI - Multi-Tenant - App Sets TCCL</name>
-  
-  <build>
-    <finalName>test-cdi-app-sets-tccl</finalName>
-  </build>
-  
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>pom</artifactId>
+        <groupId>com.sun.faces.test.javaee7.cdi.multi-tenant</groupId>
+        <version>2.3.0-m01-SNAPSHOT</version>
+    </parent>
+    <artifactId>cdi-app-sets-tccl</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI - Multi-Tenant - App Sets TCCL</name>
+    <build>
+        <finalName>test-javaee7-cdi-multi-tenant-app-sets-tccl</finalName>
+    </build>
 </project>
