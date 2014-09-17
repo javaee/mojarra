@@ -52,7 +52,8 @@ import java.io.IOException;
 
 /**
  * <p>
- * <strong class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2">StateManager</strong>
+ * <strong class="changed_modified_2_0 changed_modified_2_1 
+ * changed_modified_2_2 changed_modified_2_3">StateManager</strong>
  * directs the process of saving and
  * restoring the view between requests.  <span class="changed_added_2_0">An
  * implementation
@@ -519,16 +520,21 @@ public abstract class StateManager {
     private Boolean savingStateInClient = null;
 
     /**
+     * <p class="changed_modified_2_3">
+     *  Method to determine if the state is saved on the client. 
+     * </p>
+     * 
+     * @param context the Faces context.
      * @return <code>true</code> if and only if the value of the
      *         <code>ServletContext</code> init parameter named by the value of
-     *         the constant {@link #STATE_SAVING_METHOD_PARAM_NAME} is equal to
+     *         the constant {@link #STATE_SAVING_METHOD_PARAM_NAME} is 
+     *         equal <span class="changed_modified_2_3">(ignoring case)</span> to
      *         the value of the constant {@link #STATE_SAVING_METHOD_CLIENT}.
      *         <code>false</code> otherwise.
      *
      * @throws NullPointerException if <code>context</code> is
      *                              <code>null</code>.
      */
-
     public boolean isSavingStateInClient(FacesContext context) {
         if (null != savingStateInClient) {
             return savingStateInClient.booleanValue();
