@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -131,15 +131,16 @@ public class TagAttributeImpl extends TagAttribute {
     }
 
     /**
-     * If literal, return
-     * {@link Boolean#getBoolean(java.lang.String) Boolean.getBoolean(java.lang.String)}
+     * <p class="changed_modified_2_3">
+     * If literal,return
+     * {@link Boolean#valueOf(java.lang.String)  Boolean.valueOf(java.lang.String)}
      * passing our value, otherwise call
      * {@link #getObject(FaceletContext, Class) getObject(FaceletContext, Class)}.
+     * </p>
      * 
-     * @see Boolean#getBoolean(java.lang.String)
+     * @see Boolean#valueOf(java.lang.String) 
      * @see #getObject(FaceletContext, Class)
-     * @param ctx
-     *            FaceletContext to use
+     * @param ctx FaceletContext to use
      * @return boolean value
      */
     @Override
