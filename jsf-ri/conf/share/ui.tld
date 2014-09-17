@@ -908,6 +908,48 @@ the value of the <code>jsfc</code> attribute, like this:
         </body-content>
 
         <attribute>
+            <description>
+                <![CDATA[
+                <div class="changed_modified_2_3">
+                    <p>
+                        Read-write property setting the begin index of the 
+                        collection to iterate.
+                    </p>
+                </div>
+                ]]>
+            </description>
+            <name>begin</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    int
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+            <![CDATA[
+                <div class="changed_modified_2_3">
+                    <p>
+                        Read-write property setting the end index of the 
+                        collection to iterate.
+                    </p>
+                </div>
+            ]]>
+            </description>
+            <name>end</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    int
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
 
             <description>
 

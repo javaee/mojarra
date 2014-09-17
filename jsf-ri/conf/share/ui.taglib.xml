@@ -895,6 +895,36 @@
         <tag-name>repeat</tag-name>
         <handler-class>com.sun.faces.facelets.tag.ui.RepeatHandler</handler-class>
         <attribute>
+            <description>
+            <![CDATA[
+                <div class="changed_modified_2_3">
+                    <p>
+                        Read-write property setting the begin index of the 
+                        collection to iterate.
+                    </p>
+                </div>
+            ]]>
+            </description>
+            <name>begin</name>
+            <required>false</required>
+            <type>int</type>
+        </attribute>
+        <attribute>
+            <description>
+            <![CDATA[
+                <div class="changed_modified_2_3">
+                    <p>
+                        Read-write property setting the end index of the 
+                        collection to iterate.
+                    </p>
+                </div>
+            ]]>
+            </description>
+            <name>end</name>
+            <required>false</required>
+            <type>int</type>
+        </attribute>
+        <attribute>
             <description><![CDATA[
 
 
