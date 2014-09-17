@@ -1417,13 +1417,14 @@ public abstract class ExternalContext {
      *
      * <p><em>Servlet:</em> This must return the result of calling
      * <code>getMaxInactiveInterval</code> on the underlying
-     * <code>javax.servlet.http.HttpServletRequest</code> instance.</p>
+     * <code class="changed_modified_2_3">javax.servlet.http.HttpSession</code> instance.</p>
      *
      * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
+     * @return the session maximum inactive interval.
      * @since 2.1
      */
     public int getSessionMaxInactiveInterval() {
