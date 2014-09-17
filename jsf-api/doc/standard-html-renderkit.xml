@@ -591,13 +591,18 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </property-extension>
     </property>
     <property>
-      <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
+      <description><![CDATA[
+            <span class="changed_added_2_1 changed_modified_2_3">
+                Boolean flag directing how the per-row component state should 
+                be handled. See UIData.setRowStatePreserved for more information.
+            </span>
+            ]]></description>
       <display-name>Preserve Row Component State</display-name>
       <icon/>
       <property-name>rowStatePreserved</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-        <tag-attribute>false</tag-attribute>
+        <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
     </property>
     <property>
@@ -6761,13 +6766,18 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </property-extension>
     </property>
     <property>
-      <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
+      <description><![CDATA[
+            <span class="changed_added_2_1 changed_modified_2_3">
+                Boolean flag directing how the per-row component state should 
+                be handled. See UIData.setRowStatePreserved for more information.
+            </span>
+            ]]></description>
       <display-name>Preserve Row Component State</display-name>
       <icon/>
       <property-name>rowStatePreserved</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-        <tag-attribute>false</tag-attribute>
+        <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
     </property>
     <property>
