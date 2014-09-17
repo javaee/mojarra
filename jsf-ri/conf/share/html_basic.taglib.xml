@@ -5452,7 +5452,7 @@
     </tag>
     <tag>
         <description>
-            &lt;p&gt;&lt;span class="changed_modified_2_0"&gt;The&lt;/span&gt;
+            &lt;p&gt;&lt;span class="changed_modified_2_0 changed_modified_2_3"&gt;The&lt;/span&gt;
             same as for the
             Message renderer, but output all the messages. &lt;span
             class="changed_added_2_0"&gt;If an "id" attribute has been
@@ -5482,6 +5482,11 @@
             &lt;code&gt;true&lt;/code&gt;. If the layout was "table" close out
             the table
             elements, otherwise, close out the list elements.&lt;/p&gt;
+            &lt;p&gt;
+              If an h:form does not contain a h:messages tag and the ProjectStage
+              is set to Development the runtime will automatically add h:messages
+              for debugging purposes.
+            &lt;/p&gt;
         </description>
         <tag-name>messages</tag-name>
         <component>
