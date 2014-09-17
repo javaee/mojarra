@@ -1181,7 +1181,7 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Override the default {@link UIComponentBase#processValidators}
+     * <p class="changed_modified_2_3">Override the default {@link UIComponentBase#processValidators}
      * processing to perform the following steps.</p> <ul> <li>If the
      * <code>rendered</code> property of this {@link UIComponent} is
      * <code>false</code>, skip further processing.</li> <li>Set the current
@@ -1201,8 +1201,9 @@ public class UIData extends UIComponentBase
      * <code>rowIndex</code> to -1.</li> </ul>
      *
      * @param context {@link FacesContext} for the current request
-     *
      * @throws NullPointerException if <code>context</code> is <code>null</code>
+     * @see javax.faces.event.PreValidateEvent
+     * @see javax.faces.event.PostValidateEvent
      */
     public void processValidators(FacesContext context) {
 

@@ -229,11 +229,13 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
 
 
     /**
-     * <p>Override {@link UIComponent#processValidators} to ensure that
+     * <p class="changed_modified_2_3">Override {@link UIComponent#processValidators} to ensure that
      * the children of this <code>UIForm</code> instance are only
      * processed if {@link #isSubmitted} returns <code>true</code>.</p>
      *
      * @throws NullPointerException {@inheritDoc}
+     * @see javax.faces.event.PreValidateEvent
+     * @see javax.faces.event.PostValidateEvent
      */
     public void processValidators(FacesContext context) {
 

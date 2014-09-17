@@ -2419,7 +2419,7 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * <p><span class="changed_modified_2_0"><span
+     * <p><span class="changed_modified_2_0 changed_modified_2_3"><span
      * class="changed_modified_2_0_rev_a">Perform</span></span> the component
      * tree processing required by the <em>Process Validations</em>
      * phase of the request processing lifecycle for all facets of this
@@ -2442,6 +2442,8 @@ private void doFind(FacesContext context, String clientId) {
      *
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
+     * @see javax.faces.event.PreValidateEvent
+     * @see javax.faces.event.PostValidateEvent
      */
     public abstract void processValidators(FacesContext context);
 
