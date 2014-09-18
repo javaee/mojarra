@@ -55,6 +55,7 @@
     <name>Mojarra ${project.version} - Test - Weblogic - WLS 12.1.4</name>
     <modules>
 	<module>facelets</module>
+	<module>elBackwardCompatible</module>
     </modules>
 </project>
 

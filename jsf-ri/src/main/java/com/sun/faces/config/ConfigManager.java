@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,7 @@
 package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
@@ -73,6 +74,7 @@ import com.sun.faces.config.processor.FacesFlowDefinitionConfigProcessor;
 import com.sun.faces.config.processor.ProtectedViewsConfigProcessor;
 import com.sun.faces.config.processor.ResourceLibraryContractsConfigProcessor;
 import com.sun.faces.el.ELContextImpl;
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.FacesLogger;
@@ -127,6 +129,7 @@ import java.util.ServiceLoader;
 import javax.el.ELContext;
 import javax.el.ELContextEvent;
 import javax.el.ELContextListener;
+import javax.el.ExpressionFactory;
 import javax.faces.application.ApplicationConfigurationPopulator;
 import javax.faces.component.UIViewRoot;
 import javax.xml.validation.Schema;
@@ -675,6 +678,10 @@ public class ConfigManager {
         if (null == ((InitFacesContext)ctx).getELContext()) {
             ELContext elContext = new ELContextImpl(app.getELResolver());
             elContext.putContext(FacesContext.class, ctx);
+            ExpressionFactory exFactory = ELUtils.getDefaultExpressionFactory(ctx);
+            if (null != exFactory) {
+                elContext.putContext(ExpressionFactory.class, exFactory);
+            }
             UIViewRoot root = ctx.getViewRoot();
             if (null != root) {
                 elContext.setLocale(root.getLocale());
