@@ -1,0 +1,11 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+    <composite:interface>
+        <composite:attribute name="action" targets="button"/>
+        <composite:clientBehavior name="click" event="action" default="true" targets="button"/>
+    </composite:interface>
+    <composite:implementation>
+        <h:commandButton id="button" value="click"/>
+    </composite:implementation>
+</html>

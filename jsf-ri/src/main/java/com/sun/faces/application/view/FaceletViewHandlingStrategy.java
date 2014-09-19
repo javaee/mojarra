@@ -543,8 +543,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 
         if (rsm.isStateless(context, viewId))  {
             try {
+                context.setProcessingEvents(true);
                 ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewId);
-                viewRoot = vdl.createView(context, viewId);
+                viewRoot = vdl.createView(context, viewId);                
                 context.setViewRoot(viewRoot);
                 vdl.buildView(context, viewRoot);
                 return viewRoot;
