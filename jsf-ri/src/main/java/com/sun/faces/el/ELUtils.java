@@ -47,10 +47,7 @@ import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.MessageUtils;
 
 import com.sun.faces.util.ReflectionUtils;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.el.ArrayELResolver;
 import javax.el.BeanELResolver;
 import javax.el.CompositeELResolver;
@@ -75,6 +72,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.el.ExpressionFactory;
+import javax.servlet.ServletContext;
+import javax.servlet.jsp.JspApplicationContext;
+import javax.servlet.jsp.JspFactory;
 
 /**
  * <p>Utility class for EL related methods.</p>
@@ -835,6 +835,56 @@ public class ELUtils {
         }
         return false;
     }
-
     
+    /*
+     * First look in the ApplicationAssociate.  If that fails, try
+     * the Jsp engine.  If that fails, return null;
+    
+    */
+    public static ExpressionFactory getDefaultExpressionFactory(FacesContext facesContext) {
+        ExpressionFactory result;
+        if (null == facesContext) {
+            return null;
+        }
+        ExternalContext extContext = facesContext.getExternalContext();
+        if (null == extContext) {
+            return null;
+        }
+        
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
+        result = getDefaultExpressionFactory(associate, facesContext);
+        
+        return result;
+    }
+
+    public static ExpressionFactory getDefaultExpressionFactory(ApplicationAssociate associate, FacesContext facesContext) {
+        ExpressionFactory result = null;
+        
+        if (null != associate) {
+            result = associate.getExpressionFactory();
+        }
+        
+        if (null == result) {
+            if (null == facesContext) {
+                return null;
+            }
+            ExternalContext extContext = facesContext.getExternalContext();
+            if (null == extContext) {
+                return null;
+            }
+            
+            Object servletContext = extContext.getContext();
+            if (null != servletContext) {
+                if (servletContext instanceof ServletContext) {
+                    ServletContext sc = (ServletContext) servletContext;
+                    JspApplicationContext jspAppContext = JspFactory.getDefaultFactory().getJspApplicationContext(sc);
+                    if (null != jspAppContext) {
+                        result = jspAppContext.getExpressionFactory();
+                    }
+                }
+            }
+        }
+        
+        return result;
+    }
 }

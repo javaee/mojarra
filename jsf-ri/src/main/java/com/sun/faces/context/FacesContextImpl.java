@@ -71,9 +71,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.el.ELContextImpl;
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.renderkit.RenderKitUtils;
+import javax.el.ExpressionFactory;
 
 public class FacesContextImpl extends FacesContext {
 
@@ -252,7 +254,12 @@ public class FacesContextImpl extends FacesContext {
         if (elContext == null) {
             Application app = getApplication();
             elContext = new ELContextImpl(app.getELResolver());
-            elContext.putContext(FacesContext.class, FacesContext.getCurrentInstance());
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            elContext.putContext(FacesContext.class, facesContext);
+            ExpressionFactory exFactory = ELUtils.getDefaultExpressionFactory(facesContext);
+            if (null != exFactory) {
+                elContext.putContext(ExpressionFactory.class, exFactory);
+            }
             UIViewRoot root = this.getViewRoot();
             if (null != root) {
                 elContext.setLocale(root.getLocale());

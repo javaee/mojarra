@@ -44,6 +44,7 @@ import javax.faces.context.FacesContext;
 import javax.el.ELContext;
 import javax.el.ELContextListener;
 import javax.el.ELContextEvent;
+import javax.el.ExpressionFactory;
 
 public class ELContextListenerImpl implements ELContextListener {
     
@@ -65,6 +66,10 @@ public class ELContextListenerImpl implements ELContextListener {
         ELContext source = (ELContext)ece.getSource();
         // Register FacesContext with JSP
         source.putContext(FacesContext.class, context);
+        ExpressionFactory exFactory = ELUtils.getDefaultExpressionFactory(context);
+        if (null != exFactory) {
+            source.putContext(ExpressionFactory.class, exFactory);
+        }
         
         // dispatch the event to any JSF applications interested in
         // the event.
