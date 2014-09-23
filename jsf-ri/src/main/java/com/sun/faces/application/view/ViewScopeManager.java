@@ -44,7 +44,6 @@ import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.LRUMap;
-import com.sun.faces.util.Util;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
