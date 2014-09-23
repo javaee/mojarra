@@ -1606,7 +1606,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          * @ignore
          */
         var doEval = function doEval(element) {
-            var evalText = element.firstChild.nodeValue;
+            var evalText = '';
+            var childNodes = element.childNodes;
+            for (var i = 0; i < childNodes.length; i++) {
+                evalText += childNodes[i].nodeValue;
+            }
             globalEval(evalText);
         };
 
