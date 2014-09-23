@@ -54,6 +54,7 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Weblogic - WLS 12.1.4</name>
     <modules>
+	<module>elBackwardCompatible</module>
 	<module>facelets</module>
     </modules>
 </project>

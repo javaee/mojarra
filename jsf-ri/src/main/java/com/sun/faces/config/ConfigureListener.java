@@ -235,11 +235,15 @@ public class ConfigureListener implements ServletRequestListener,
                 LOGGER.severe(sb.toString());
             }
             registerELResolverAndListenerWithJsp(context, false);
-            ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
-            elctx.putContext(FacesContext.class, initContext);
-            initContext.setELContext(elctx);
             ApplicationAssociate associate =
                     ApplicationAssociate.getInstance(context);
+            ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
+            elctx.putContext(FacesContext.class, initContext);
+            ExpressionFactory exFactory = ELUtils.getDefaultExpressionFactory(associate, initContext);
+            if (null != exFactory) {
+                elctx.putContext(ExpressionFactory.class, exFactory);
+            }
+            initContext.setELContext(elctx);
             if (associate != null) {
                 associate.setContextName(getServletContextIdentifier(context));
                 BeanManager manager = associate.getBeanManager();
@@ -318,6 +322,11 @@ public class ConfigureListener implements ServletRequestListener,
             
             ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
             elctx.putContext(FacesContext.class, initContext);
+            ExpressionFactory exFactory = ELUtils.getDefaultExpressionFactory(initContext);
+            if (null != exFactory) {
+                elctx.putContext(ExpressionFactory.class, exFactory);
+            }
+            
             initContext.setELContext(elctx);
             Application app = initContext.getApplication();
             app.publishEvent(initContext,
