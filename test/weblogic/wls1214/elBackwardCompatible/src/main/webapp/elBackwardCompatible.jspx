@@ -1,4 +1,6 @@
-/*
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
@@ -36,65 +38,34 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
- */
-package com.sun.faces.test.junit;
+ -->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" 
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:f="http://java.sun.com/jsf/core"
+          version="2.0">
 
-public enum JsfServerExclude {
+    <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
 
-    GLASSFISH_4_1("Glassfish", "4.1"),
-    GLASSFISH_4_0("Glassfish", "4.0"),
-    GLASSFISH_3_1_2_2("Glassfish", "3.1.2.2"),
-    TOMCAT_7_0_35("Tomcat", "7.0.35"),
-    WEBLOGIC_12_1_4("Weblogic", "12.1.4.0"),
-    WEBLOGIC_12_1_3("Weblogic", "12.1.3.0"),
-    WEBLOGIC_12_1_2("Weblogic", "12.1.2.0"),
-    WEBLOGIC_12_1_1("Weblogic", "12.1.1.0");
+    <f:view>
+        <h:form id="form" prependId="false">
+            <h:dataTable id="table" value="#{userBean.listValues}" var="row">
+                <h:column>
+                    
+                    <p>
+                        
+                      <h:inputText id="input" value="#{userBean.numberFilterBetweenOperatorMaxValue[row]}">
+                          <f:validateDoubleRange minimum="#{userBean.numberFilterBetweenOperatorMinValue[row]}" />
+                      </h:inputText>
+                        
+                    </p>
+                    
+                </h:column>
+            </h:dataTable>
+            
+            
+            <h:commandButton id="submit" value="submit" />
+        </h:form>
+    </f:view>
+            
 
-    /**
-     * Constructor.
-     *
-     * @param version the version.
-     */
-    private JsfServerExclude(String name, String version) {
-        this.name = name;
-        this.version = version;
-    }
-
-    /**
-     * To string representation.
-     *
-     * @return the string representation.
-     */
-    @Override
-    public String toString() {
-        return name + ":" + version;
-    }
-
-    /**
-     * From string.
-     *
-     * @param serverString the server string.
-     * @return the JsfServerExclude
-     */
-    public static JsfServerExclude fromString(String serverString) {
-        if (serverString != null) {
-            JsfServerExclude[] excludes = JsfServerExclude.values();
-            for (JsfServerExclude exclude : excludes) {
-                if (serverString.contains(exclude.name) && serverString.contains(exclude.version)) {
-                    return exclude;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Stores the name.
-     */
-    private final String name;
-
-    /**
-     * Stores the version.
-     */
-    private final String version;
-}
+</jsp:root>
