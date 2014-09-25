@@ -168,12 +168,22 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          */
         var getTransport = function getTransport(context) {
             var returnVal;
+            var isElementInputFile = false;
+            var isIeVal = isIE();
+            if (typeof context !== 'undefined' && context !== null && 
+                ((isIeVal && isIE9Plus()) || (!isIeVal))) {
+                if (context.element.hasAttribute("type")) {
+                    isElementInputFile = context.element.type === "file";
+                }
+            }
+
             // Here we check for encoding type for file upload(s).
             // This is where we would also include a check for the existence of
             // input file control for the current form (see hasInputFileControl
             // function) but IE9 (at least) seems to render controls outside of
             // form.
             if (typeof context !== 'undefined' && context !== null &&
+                isElementInputFile &&
                 context.form.enctype === "multipart/form-data") {
                 returnVal = new FrameTransport(context);
                 return returnVal;
