@@ -51,9 +51,11 @@
     </parent>
     <groupId>com.sun.faces.test.weblogic.wls1214</groupId>
     <artifactId>pom</artifactId>
+    <version>2.3.0-m01-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Weblogic - WLS 12.1.4</name>
     <modules>
+	<module>elBackwardCompatible</module>
 	<module>facelets</module>
     </modules>
 </project>
