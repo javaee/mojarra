@@ -44,12 +44,18 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfServerExclude;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import java.net.URL;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2398IT {
 
     private String webUrl;
@@ -78,6 +84,8 @@ public class Issue2398IT {
      *
      * @throws Exception when a serious error occurs.
      */
+    @JsfTest(value = JsfVersion.JSF_2_2_0, 
+            excludes = {JsfServerExclude.GLASSFISH_4_0, JsfServerExclude.GLASSFISH_4_1})
     @Test
     public void testIssue2398() throws Exception {
         HtmlPage page = webClient.getPage(webUrl.substring(0, webUrl.length() - 2) + "2/faces/index.xhtml");
