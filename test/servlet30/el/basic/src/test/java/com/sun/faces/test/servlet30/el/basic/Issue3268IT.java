@@ -71,7 +71,6 @@ public class Issue3268IT {
         assertTrue(pageXml.indexOf("cc") != -1);
         assertTrue(pageXml.indexOf("component") != -1);
         assertTrue(pageXml.indexOf("cookie") != -1);
-        assertTrue(pageXml.indexOf("facesContext") != -1);
         assertTrue(pageXml.indexOf("flash") != -1);
         assertTrue(pageXml.indexOf("flowScope") != -1);
         assertTrue(pageXml.indexOf("view") != -1);

@@ -110,7 +110,6 @@ public class ResourceBundleELResolverITCase extends HtmlUnitFacesITCase {
             "Name: application displayName: application",
             "Name: applicationScope displayName: applicationScope",
             "Name: cookie displayName: cookie",
-            "Name: facesContext displayName: facesContext",
             "Name: view displayName: view",
             "Name: header displayName: header",
             "Name: headerValues displayName: headerValues",
