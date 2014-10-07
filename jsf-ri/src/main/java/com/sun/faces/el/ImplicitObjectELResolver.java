@@ -140,9 +140,6 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                 case COOKIE:
                     context.setPropertyResolved(true);
                     return extCtx.getRequestCookieMap();
-                case FACES_CONTEXT:
-                    context.setPropertyResolved(true);
-                    return facesContext;
                 case FLASH:
                     context.setPropertyResolved(true);
                     return facesContext.getExternalContext().getFlash();
@@ -272,8 +269,6 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                                            "component",false, false, true, UIComponent.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("cookie", "cookie",
                                            "cookie",false, false, true, Map.class, Boolean.TRUE));
-        list.add(Util.getFeatureDescriptor("facesContext", "facesContext",
-                                           "facesContext",false, false, true, FacesContext.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("flash", "flash",
                                            "flash",false, false, true, Map.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("flowScope", "flowScope",
