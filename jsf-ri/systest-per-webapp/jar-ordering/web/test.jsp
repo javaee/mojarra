@@ -57,7 +57,7 @@
 
   <h:form id="form">
 
-    <h:outputText id="viewHandler" value="#{facesContext.application.viewHandler}" />
+    <h:outputText id="viewHandler" value="#{facesContext.application.viewHandler.wrapped}" />
 
   </h:form>
 
