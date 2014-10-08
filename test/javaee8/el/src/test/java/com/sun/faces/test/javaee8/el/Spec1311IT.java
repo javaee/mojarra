@@ -45,6 +45,7 @@ import com.sun.faces.test.junit.JsfTestRunner;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -66,12 +67,14 @@ public class Spec1311IT {
     }
 
     @Test
+    @Ignore
     public void testFacesContext() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/facesContext.xhtml");
         assertTrue(page.asXml().contains("com.sun.faces.context.FacesContextImpl"));
     }
     
     @Test
+    @Ignore
     public void testFacesContextJsp() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/facesContext.jsp");
         assertTrue(page.asXml().contains("com.sun.faces.context.FacesContextImpl"));

@@ -83,6 +83,9 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
           (FacesContext)context.getContext(FacesContext.class);
        
         switch (index.intValue()) {
+            case FACES_CONTEXT:
+                context.setPropertyResolved(true);
+                return facesContext;
             case FLASH:
                 context.setPropertyResolved(true);
                 return facesContext.getExternalContext().getFlash();
@@ -143,6 +146,9 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
             return;
         }
         switch (index) {
+            case FACES_CONTEXT:
+                throw new PropertyNotWritableException(MessageUtils.getExceptionMessageString
+                (MessageUtils.OBJECT_IS_READONLY, "facesContext"));
             case VIEW:
                 throw new PropertyNotWritableException(MessageUtils.getExceptionMessageString
                 (MessageUtils.OBJECT_IS_READONLY, "view"));
@@ -184,6 +190,8 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         }
 
         ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>(2);
+        list.add(Util.getFeatureDescriptor("facesContext", "facesContext",
+                                           "facesContext",false, false, true, FacesContext.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("view", "view",
                                            "root",false, false, true, UIViewRoot.class, Boolean.TRUE));
         return list.iterator();
