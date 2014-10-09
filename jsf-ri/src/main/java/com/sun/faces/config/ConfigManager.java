@@ -1099,6 +1099,12 @@ public class ConfigManager {
                             } else {
                                 schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_22);
                             }
+                        } else if ("2.3".equals(versionStr)) {
+                            if ("facelet-taglib".equals(documentElement.getLocalName())) {
+                                schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACELET_TAGLIB_22);
+                            } else {
+                                schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_23);
+                            }
                         } else {
                             throw new ConfigurationException("Unknown Schema version: " + versionStr);
                         }

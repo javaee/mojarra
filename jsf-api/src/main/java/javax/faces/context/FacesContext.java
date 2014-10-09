@@ -79,6 +79,10 @@ import javax.faces.event.PhaseId;
  * from any thread other than the one upon which the servlet container
  * executing this web application utilizes for the processing of this request.
  * </p>
+ * 
+ * <p class="changed_added_2_3">A FacesContext can be injected into a request
+ * scoped bean using <code>@Inject FacesContext facesContext;</code>
+ * </p>
  */
 
 public abstract class FacesContext {
