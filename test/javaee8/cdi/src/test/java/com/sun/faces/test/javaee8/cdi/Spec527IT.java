@@ -45,6 +45,7 @@ import com.sun.faces.test.junit.JsfTestRunner;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -66,6 +67,7 @@ public class Spec527IT {
     }
 
     @Test
+    @Ignore
     public void testInjectedFacesContext() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/injectFacesContext.xhtml");
         assertTrue(page.asXml().contains("com.sun.faces.context.FacesContextImpl"));
