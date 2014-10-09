@@ -48,7 +48,7 @@ import javax.inject.Named;
 @RequestScoped
 public class InjectFacesContextBean {
 
-    @Inject
+//    @Inject
     FacesContext context;
 
     public String getValue() {

@@ -48,7 +48,7 @@ import javax.inject.Named;
 @RequestScoped
 public class InjectExternalContextBean {
 
-    @Inject
+//    @Inject
     ExternalContext context;
 
     public String getValue() {
