@@ -157,7 +157,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
             for (int i = 0, len = attachedObjects.length; i < len; i++) {
                 T restored = (T) ((StateHolderSaver) attachedObjects[i]).restore(context);
                 if (restored != null) {
-                    this.attachedObjects.add(restored);
+                    add(restored);
                 }
             }
         } else {
