@@ -95,7 +95,7 @@
                 <plugin>
                     <groupId>org.apache.maven.wagon</groupId>
                     <artifactId>wagon-provider-api</artifactId>
-                    <version>2.4</version>
+                    <version>2.7</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -126,17 +126,6 @@
                     <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
-            </plugin>
-            <!--
-                
-                Making sure we have a work-around for SSL issues, by forcing
-                a particular version of the Wagon API.
-                
-                -->
-            <plugin>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-provider-api</artifactId>
-                <inherited>true</inherited>
             </plugin>
         </plugins>
     </build>
