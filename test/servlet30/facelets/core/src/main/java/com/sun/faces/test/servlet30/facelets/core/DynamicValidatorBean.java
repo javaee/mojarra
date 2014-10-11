@@ -40,6 +40,7 @@
 package com.sun.faces.test.servlet30.facelets.core;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -54,7 +55,7 @@ public class DynamicValidatorBean {
 
 	private transient UIComponent parentContainer;
 
-	private BigDecimal value;
+	private String value;
         
         private UIInput validatedInput;
 
@@ -66,17 +67,20 @@ public class DynamicValidatorBean {
 		this.parentContainer = container;
 	}
 
-	public BigDecimal getValue() {
+	public String getValue() {
 		return value;
 	}
 
-	public void setValue(BigDecimal value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 
 	public void add() {
 		FacesContext context = FacesContext.getCurrentInstance();
 
+                Map<String,Object> appMap = context.getExternalContext().getApplicationMap();
+                appMap.put("javax.faces.private.BEANS_VALIDATION_AVAILABLE", Boolean.TRUE);
+                
 		Validator dynamicValidator = context.getApplication().createValidator(
 				"javax.faces.Required");
 		validatedInput = (UIInput) parentContainer
