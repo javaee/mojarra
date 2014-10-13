@@ -42,6 +42,7 @@ package com.sun.faces;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
+import javax.faces.context.ExternalContextProducer;
 import javax.faces.context.FacesContextProducer;
 
 /**
@@ -62,5 +63,6 @@ public class FacesCDIExtension implements Extension {
      */
     public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery) {
         afterBeanDiscovery.addBean(new FacesContextProducer());
+        afterBeanDiscovery.addBean(new ExternalContextProducer());
     }
 }
