@@ -531,7 +531,7 @@ public class StateContext {
             Map<String, Object> attrs = component.getAttributes();
             String tagId = (String)attrs.get(MARK_CREATED_REMOVED);
             
-            if (childAddedToSameParentAsBefore(component.getParent(), tagId)) {
+            if (childAddedToSameParentAsBefore(component, tagId)) {
                 
                 // Restore MARK_CREATED if the added component was originally
                 // created as a tag-based child of this parent.
