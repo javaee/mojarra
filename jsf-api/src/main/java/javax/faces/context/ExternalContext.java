@@ -82,6 +82,10 @@ import javax.faces.lifecycle.ClientWindow;
  * application startup or shutdown" must be supported during application startup or shutdown
  * time.  The result of calling a method during application startup or shutdown time
  * that does not have this designation is undefined.</p>
+ * 
+ * <p class="changed_added_2_3">An ExternalContext can be injected into a CDI
+ * managed bean using <code>@Inject ExternalContext externalContext;</code>
+ * </p>
  */
 
 public abstract class ExternalContext {
