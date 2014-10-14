@@ -125,6 +125,8 @@ import javax.faces.application.Resource;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.view.ViewDeclarationLanguage;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 
 /**
@@ -498,8 +500,23 @@ public class ApplicationImpl extends Application {
                         MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ELResolver"));
         }
 
-        elResolvers.add(resolver);
-
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
+                Util.getWebXmlVersion(facesContext).equals("4.0")) {
+            try {
+            InitialContext initialContext = new InitialContext();
+            javax.enterprise.inject.spi.BeanManager beanManager = 
+                    (javax.enterprise.inject.spi.BeanManager) 
+                    initialContext.lookup("java:comp/BeanManager");
+                if (!resolver.equals(beanManager.getELResolver())) {
+                    elResolvers.add(resolver);
+                }
+            } catch(NamingException ne) {
+                throw new FacesException(ne);
+            } 
+        } else {
+            elResolvers.add(resolver);
+        }
     }
 
 

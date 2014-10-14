@@ -60,10 +60,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.event.AbortProcessingException;
 import java.beans.FeatureDescriptor;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.JarURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Locale;
@@ -77,10 +79,15 @@ import javax.faces.application.ProjectStage;
 import javax.faces.component.UINamingContainer;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletContext;
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import org.xml.sax.InputSource;
 
 /**
  * <B>Util</B> is a class ...
@@ -1134,4 +1141,82 @@ public class Util {
         return lastModified;
     }
 
-} // end of class Util
+    /**
+     * Get the faces-config.xml version (if any).
+     *
+     * @param facesContext the Faces context.
+     * @return the version found, or "" if none found.
+     */
+    public static String getFacesConfigXmlVersion(FacesContext facesContext) {
+        String result = "";
+        InputStream stream = null;
+        try {
+            URL url = facesContext.getExternalContext().getResource("/WEB-INF/faces-config.xml");
+            if (url != null) {
+                XPathFactory factory = XPathFactory.newInstance();
+                XPath xpath = factory.newXPath();
+                xpath.setNamespaceContext(new JavaeeNamespaceContext());
+                stream = url.openStream();
+                result = xpath.evaluate("string(/javaee:faces-config/@version)", new InputSource(stream));
+            }
+        } catch (MalformedURLException mue) {
+        } catch (XPathExpressionException | IOException xpee) {
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ioe) {
+                }
+            }
+        }
+        return result;
+    }
+    /**
+     * Get the web.xml version (if any).
+     *
+     * @param facesContext the Faces context.
+     * @return the version found, or "" if none found.
+     */
+    public static String getWebXmlVersion(FacesContext facesContext) {
+        String result = "";
+        InputStream stream = null;
+        try {
+            URL url = facesContext.getExternalContext().getResource("/WEB-INF/web.xml");
+            if (url != null) {
+                XPathFactory factory = XPathFactory.newInstance();
+                XPath xpath = factory.newXPath();
+                xpath.setNamespaceContext(new JavaeeNamespaceContext());
+                stream = url.openStream();
+                result = xpath.evaluate("string(/javaee:web-app/@version)", new InputSource(stream));
+            }
+        } catch (MalformedURLException mue) {
+        } catch (XPathExpressionException | IOException xpee) {
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ioe) {
+                }
+            }
+        }
+        return result;
+    }
+
+    public static class JavaeeNamespaceContext implements NamespaceContext {
+
+        @Override
+        public String getNamespaceURI(String prefix) {
+            return "http://xmlns.jcp.org/xml/ns/javaee";
+        }
+
+        @Override
+        public String getPrefix(String namespaceURI) {
+            return "javaee";
+        }
+
+        @Override
+        public Iterator getPrefixes(String namespaceURI) {
+            return null;
+        }
+    }    
+}

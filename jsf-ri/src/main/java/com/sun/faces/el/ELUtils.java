@@ -47,6 +47,7 @@ import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.MessageUtils;
 
 import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Util;
 import java.lang.reflect.Method;
 import javax.el.ArrayELResolver;
 import javax.el.BeanELResolver;
@@ -72,6 +73,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.el.ExpressionFactory;
+import javax.faces.FacesException;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
@@ -241,26 +245,56 @@ public class ELUtils {
                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "composite");
             throw new NullPointerException(message);
         }
-
-        composite.addRootELResolver(IMPLICIT_RESOLVER);
-        composite.add(FLASH_RESOLVER);
-        composite.addPropertyELResolver(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
-        addELResolvers(composite, associate.getELResolversFromFacesConfig());
-        addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.Faces,
-                associate);
-        addPropertyResolvers(composite, associate);
-        composite.add(associate.getApplicationELResolvers());
-        composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
-        composite.addPropertyELResolver(RESOURCE_RESOLVER);
-        composite.addPropertyELResolver(BUNDLE_RESOLVER);
-        composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
-        addEL3_0_Resolvers(composite, associate);
-        composite.addPropertyELResolver(MAP_RESOLVER);
-        composite.addPropertyELResolver(LIST_RESOLVER);
-        composite.addPropertyELResolver(ARRAY_RESOLVER);
-        composite.addPropertyELResolver(BEAN_RESOLVER);
-        composite.addRootELResolver(SCOPED_RESOLVER);
-
+        
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
+                Util.getWebXmlVersion(facesContext).equals("4.0")) {
+            try {
+            InitialContext initialContext = new InitialContext();
+            javax.enterprise.inject.spi.BeanManager beanManager = 
+                    (javax.enterprise.inject.spi.BeanManager) 
+                    initialContext.lookup("java:comp/BeanManager");
+                composite.add(beanManager.getELResolver());
+            } catch(NamingException ne) {
+                throw new FacesException(ne);
+            }
+            composite.add(FLASH_RESOLVER);
+            composite.addPropertyELResolver(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
+            addELResolvers(composite, associate.getELResolversFromFacesConfig());
+            addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.Faces,
+                    associate);
+            addPropertyResolvers(composite, associate);
+            composite.add(associate.getApplicationELResolvers());
+            composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
+            composite.addPropertyELResolver(RESOURCE_RESOLVER);
+            composite.addPropertyELResolver(BUNDLE_RESOLVER);
+            composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
+            addEL3_0_Resolvers(composite, associate);
+            composite.addPropertyELResolver(MAP_RESOLVER);
+            composite.addPropertyELResolver(LIST_RESOLVER);
+            composite.addPropertyELResolver(ARRAY_RESOLVER);
+            composite.addPropertyELResolver(BEAN_RESOLVER);
+            composite.addRootELResolver(SCOPED_RESOLVER);
+        } else {        
+            composite.addRootELResolver(IMPLICIT_RESOLVER);
+            composite.add(FLASH_RESOLVER);
+            composite.addPropertyELResolver(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
+            addELResolvers(composite, associate.getELResolversFromFacesConfig());
+            addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.Faces,
+                    associate);
+            addPropertyResolvers(composite, associate);
+            composite.add(associate.getApplicationELResolvers());
+            composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
+            composite.addPropertyELResolver(RESOURCE_RESOLVER);
+            composite.addPropertyELResolver(BUNDLE_RESOLVER);
+            composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
+            addEL3_0_Resolvers(composite, associate);
+            composite.addPropertyELResolver(MAP_RESOLVER);
+            composite.addPropertyELResolver(LIST_RESOLVER);
+            composite.addPropertyELResolver(ARRAY_RESOLVER);
+            composite.addPropertyELResolver(BEAN_RESOLVER);
+            composite.addRootELResolver(SCOPED_RESOLVER);
+        }
     }
     
     private static void addEL3_0_Resolvers(FacesCompositeELResolver composite, 
@@ -305,17 +339,39 @@ public class ELUtils {
             throw new NullPointerException(message);
         }
 
-        composite.addRootELResolver(IMPLICIT_JSP_RESOLVER);
-        composite.add(FLASH_RESOLVER);
-        composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
-        composite.addPropertyELResolver(RESOURCE_RESOLVER);
-        composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
-        addELResolvers(composite, associate.getELResolversFromFacesConfig());
-        addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.JSP,
-	                associate);
-        addPropertyResolvers(composite, associate);
-        composite.add(associate.getApplicationELResolvers());
-
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
+                Util.getWebXmlVersion(facesContext).equals("4.0")) {
+            try {
+            InitialContext initialContext = new InitialContext();
+            javax.enterprise.inject.spi.BeanManager beanManager = 
+                    (javax.enterprise.inject.spi.BeanManager) 
+                    initialContext.lookup("java:comp/BeanManager");
+                composite.add(beanManager.getELResolver());
+            } catch(NamingException ne) {
+                throw new FacesException(ne);
+            }
+            composite.add(FLASH_RESOLVER);
+            composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
+            composite.addPropertyELResolver(RESOURCE_RESOLVER);
+            composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
+            addELResolvers(composite, associate.getELResolversFromFacesConfig());
+            addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.JSP,
+                            associate);
+            addPropertyResolvers(composite, associate);
+            composite.add(associate.getApplicationELResolvers());
+        } else {
+            composite.addRootELResolver(IMPLICIT_JSP_RESOLVER);
+            composite.add(FLASH_RESOLVER);
+            composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
+            composite.addPropertyELResolver(RESOURCE_RESOLVER);
+            composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
+            addELResolvers(composite, associate.getELResolversFromFacesConfig());
+            addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.JSP,
+                            associate);
+            addPropertyResolvers(composite, associate);
+            composite.add(associate.getApplicationELResolvers());
+        }
     }
 
 
