@@ -68,9 +68,6 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
 
     private static final String COMP_KEY =
           ScriptStyleBaseRenderer.class.getName() + "_COMPOSITE_COMPONENT";
-    
-    private static final String COMP_KEY_REQUEST_ATTR =
-            COMP_KEY + ".requestAttr";
 
     // Log instance for this class
     protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
@@ -102,7 +99,6 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
             UIComponent cc = UIComponent.getCurrentCompositeComponent(context);
             if (cc != null) {
                 component.getAttributes().put(COMP_KEY, cc.getClientId(context));
-                context.getAttributes().put(COMP_KEY_REQUEST_ATTR, cc);
             }
             context.getViewRoot().addComponentResource(context, component, target);
 
@@ -129,9 +125,8 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
           throws IOException {
 
         // Remove the key to prevent issues with state saving...
-        UIComponent cc = getCC(context, component);
-        
-        if (null != cc) {
+        String ccID = (String) component.getAttributes().get(COMP_KEY);
+        if (ccID != null) {
             // the first pop maps to the component we're rendering.
             // the second pop maps to the composite component that was pushed
             // in this renderer's encodeBegin implementation.
@@ -151,9 +146,9 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        UIComponent cc = getCC(context, component);
-        
-        if (null != cc) {
+        String ccID = (String) component.getAttributes().get(COMP_KEY);
+        if (null != ccID) {
+            UIComponent cc = context.getViewRoot().findComponent(':' + ccID);
             UIComponent curCC = UIComponent.getCurrentCompositeComponent(context);
             if (cc != curCC) {
                 // the first pop maps to the component we're rendering.
@@ -166,20 +161,6 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
             }
         }
 
-    }
-    
-    private UIComponent getCC(FacesContext context, UIComponent component) {
-        UIComponent cc;
-        
-        cc = (UIComponent) context.getAttributes().get(COMP_KEY_REQUEST_ATTR);
-        if (null == cc) {
-            String ccID = (String) component.getAttributes().get(COMP_KEY);
-            if (null != ccID) {
-                cc = context.getViewRoot().findComponent(':' + ccID);
-            }
-        }
-        
-        return cc;
     }
         
     @Override
