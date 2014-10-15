@@ -37,34 +37,23 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces;
+package com.sun.faces.test.javaee8.cdi;
 
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.Extension;
-import javax.faces.application.ApplicationMapProducer;
-import javax.faces.context.ExternalContextProducer;
-import javax.faces.context.FacesContextProducer;
+import java.util.Map;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.application.ApplicationMap;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-/**
- * The FacesContext extension.
- *
- * <p>
- * Note because of class loading we need to use an extension to get the
- * FacesContext injected and we cannot use the example as given in the Weld
- * documentation.
- * </p>
- */
-public class FacesCDIExtension implements Extension {
+@Named(value = "injectApplicationMapBean")
+@RequestScoped
+public class InjectApplicationMapBean {
 
-    /**
-     * After bean discovery.
-     *
-     * @param afterBeanDiscovery the after bean discovery.
-     */
-    public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery) {
-        afterBeanDiscovery.addBean(new ApplicationMapProducer());
-        afterBeanDiscovery.addBean(new ExternalContextProducer());
-        afterBeanDiscovery.addBean(new FacesContextProducer());
+    @ApplicationMap
+    @Inject
+    Map applicationMap;
+
+    public String getValue() {
+        return applicationMap.containsKey("com.sun.faces.config.WebConfiguration") ? "TRUE" : "FALSE";
     }
 }
