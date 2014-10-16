@@ -43,9 +43,13 @@ package com.sun.faces.test.agnostic.facelets.composite;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import java.io.Serializable;
+
 @ManagedBean
 @SessionScoped
-public class TestBean {
+public class TestBean implements Serializable {
+    private static final long serialVersionUID = 8797989409085180214L;
+    
     public String getMyname() {
         return myname;
     }
