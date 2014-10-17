@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head/>
+    <body>
+        State Saving Mode: <h:outputText value="#{removeReaddMoveBean.stateSavingMode}"/>
+        
+        <h:panelGroup id="a">
+            
+            <h:inputText id="inputText" value="inputText" />
+            
+        </h:panelGroup>
+        
+        <h:panelGroup id="b">
+            
+            
+        </h:panelGroup>
+        
+        <f:event type="preRenderView"
+                 listener="#{removeReaddMoveBean.update}"/>
+        
+        <p>panelGroup b has ComponentSupport.MARK_CHILDREN_MODIFIED:</p>
+        <p id="hasMarkChildrenModified">#{removeReaddMoveBean.hasMarkChildrenModified}</p>
+        
+    </body>
+</html>
