@@ -745,11 +745,15 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         super.processUpdates(context);
 
+        pushComponentToEL(context, this);
+        
         try {
             updateModel(context);
         } catch (RuntimeException e) {
             context.renderResponse();
             throw e;
+        } finally {
+            popComponentFromEL(context);
         }
 
         if (!isValid()) {

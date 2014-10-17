@@ -276,13 +276,18 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
             return;
         }
 
-        // Process all facets and children of this component
-        Iterator kids = getFacetsAndChildren();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            kid.processUpdates(context);
-        }
+        pushComponentToEL(context, this);
 
+        try {
+            // Process all facets and children of this component
+            Iterator kids = getFacetsAndChildren();
+            while (kids.hasNext()) {
+                UIComponent kid = (UIComponent) kids.next();
+                kid.processUpdates(context);
+            } 
+        } finally {
+            popComponentFromEL(context);
+        }
     }
 
     /**<p class="changed_modified_2_2">Generate an identifier for a component. The identifier
