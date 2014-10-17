@@ -73,7 +73,7 @@ public class Issue19667737IT {
     
     @Test
     public void testHasAlertValuePrependIdTrue() throws Exception {
-        webClient.getOptions().setJavaScriptEnabled(false);
+        webClient.setJavaScriptEnabled(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/ccAttrsValuePrependIdTrue.xhtml");
         String text = page.asXml();
         assertTrue(text.matches("(?s).*<head.*alert\\(\\'ok\\'\\);.*</head.*"));
