@@ -64,7 +64,7 @@ public class Issue19667737IT {
 
     @Test
     public void testHasAlertValue() throws Exception {
-        webClient.getOptions().setJavaScriptEnabled(false);
+        webClient.setJavaScriptEnabled(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/ccAttrsValue.xhtml");
         String text = page.asXml();
         System.out.println("pageXml: " + text);
