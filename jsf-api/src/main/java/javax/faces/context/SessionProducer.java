@@ -72,7 +72,8 @@ public class SessionProducer extends CdiProducer implements Bean<Object>, Passiv
      */
     @Override
     public String getId() {
-        if (FacesContext.getCurrentInstance() != null) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (facesContext != null && facesContext.getExternalContext().getSession(false) != null) {
             return SessionProducer.class.getName() + "-" + FacesContext.getCurrentInstance().getExternalContext().getSessionId(false);
         }
         return SessionProducer.class.getName();
