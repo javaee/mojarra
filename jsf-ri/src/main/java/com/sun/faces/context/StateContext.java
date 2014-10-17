@@ -448,7 +448,9 @@ public class StateContext {
             UIComponent originalComponent = c;
             if (null != c) {
                 Collection<UIComponent> dynamics = getDynamicComponentCollection(contextMap);
-                if (!dynamics.contains(c)) {
+                if (dynamics.contains(c)) {
+                    result = true;
+                } else {
                     c = c.getParent();
                     while (null != c && !dynamics.contains(c)) {
                         c = c.getParent();
