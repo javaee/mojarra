@@ -174,7 +174,7 @@ import javax.servlet.http.HttpServletResponse;
  * complete list of security concerns, and is no substitute for a
  * thorough application level security review.</p>
  *
- * <ul>
+ * <blockquote>
 
  * <p><strong>Prefix mappings and the <code>FacesServlet</code></strong></p>
 
@@ -200,7 +200,7 @@ import javax.servlet.http.HttpServletResponse;
  * information the use of these elements.</p>
 
 
- * </ul>
+ * </blockquote>
  *
  * </div>
  */
@@ -531,7 +531,6 @@ public final class FacesServlet implements Servlet {
      * passing the code <code>HttpServletResponse.SC_NOT_FOUND</code> as
      * the argument. </p>
      *
-     * <ul>
      *
 <pre><code>
 /WEB-INF/
@@ -540,7 +539,6 @@ public final class FacesServlet implements Servlet {
 /META-INF
 </code></pre>
      *
-     * </ul>
      *
      
      * <p>If none of the cases described above in the specification for
