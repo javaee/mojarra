@@ -47,15 +47,15 @@ package javax.faces.event;
  * scope.  The runtime must listen for this event and invoke any
  * <code>PostConstruct</code> annotated methods on any of the beans in
  * this scope as appropriate.  The following code can be used as a
- * template for publishing such an event.</p> <code><pre>
+ * template for publishing such an event.</p> 
+ * 
+ * <pre><code>
 
 Map&lt;String, Object&gt; myScope = getMyScope(); 
 ScopeContext scopeContext = new ScopeContext("myScope", myScope);
 applicationPublishEvent(PostConstructCustomScopeEvent.class, scopeContext);
-</pre></code>
-
- * <p></p>
- *
+</code></pre>
+ * 
  * @since 2.0
  */
 public class PostConstructCustomScopeEvent extends SystemEvent {
