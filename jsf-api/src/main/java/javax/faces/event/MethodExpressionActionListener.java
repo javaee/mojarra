@@ -86,7 +86,7 @@ public class MethodExpressionActionListener implements ActionListener,
      * <code>MethodExpression</code> whose expected param types match
      * those of a zero argument method.  The usage requirements for both
      * of these <code>MethodExpression</code> instances are described in
-     * {@link #processAction}.</span></p>
+     * {@link #processAction}.</span></span></p>
      *
      * @param methodExpressionOneArg a <code>MethodExpression</code>
      * that points to a method that returns <code>void</code> and takes
@@ -126,9 +126,9 @@ public class MethodExpressionActionListener implements ActionListener,
      * argument.  If a {@link MethodNotFoundException} is thrown, call
      * to the zero argument <code>MethodExpression</code> derived from
      * the <code>MethodExpression</code> passed to the constructor of
-     * this instance.  <span class="changed_deleted_2_2"><del>If that
+     * this instance.  <span class="changed_deleted_2_2">If that
      * fails for any reason, throw an {@link AbortProcessingException},
-     * including the cause of the failure.</del></span></span></p>
+     * including the cause of the failure.</span></span></p>
      * 
      * @throws NullPointerException {@inheritDoc}     
      * @throws AbortProcessingException {@inheritDoc}     
