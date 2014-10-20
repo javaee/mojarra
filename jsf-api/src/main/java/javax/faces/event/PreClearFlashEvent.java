@@ -65,7 +65,7 @@ public class PreClearFlashEvent extends SystemEvent {
      * @param source Map containing the values about to be cleared  This need not
      * be the actual {@link javax.faces.context.Flash} instance.
      *
-     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
     public PreClearFlashEvent(Map<String, Object> source) {
         super(source);
