@@ -302,15 +302,15 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <p><span class="changed_modified_2_2">Convenience</span> method to reset 
      * this component's value to the
      * un-initialized state.  This method does the following:</p>
-     * <p/>
+     * 
      * <p class="changed_modified_2_2">Call {@link UIOutput#setValue}.</p>
-     * <p/>
+     * 
      * <p>Call {@link #setSubmittedValue} passing <code>null</code>.</p>
-     * <p/>
+     * 
      * <p>Clear state for property <code>localValueSet</code>.</p>
-     * <p/>
+     * 
      * <p>Clear state for property <code>valid</code>.</p>
-     * <p/>
+     * 
      * <p>Upon return from this call if the instance had a
      * <code>ValueBinding</code> associated with it for the "value"
      * property, this binding is evaluated when {@link
@@ -520,7 +520,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * method that will be called during <em>Process Validations</em>
      * phase of the request processing lifecycle, to validate the current
      * value of this component.</p>
-     * <p/>
+     * 
      * <p>Any method referenced by such an expression must be public, with
      * a return type of <code>void</code>, and accept parameters of type
      * {@link FacesContext}, {@link UIComponent}, and <code>Object</code>.</p>
@@ -809,11 +809,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * </li>
      * <li>Set the <code>valid</code> property of this {@link UIInput}
      * to <code>false</code>.</li>
-     * </ul></li>
+     * </ul>
      * The exception must not be re-thrown.  This enables tree traversal
      * to continue for this lifecycle phase, as in all the other lifecycle
      * phases. 
-     * </ul>
+     * </li></ul>
      *
      * @param context {@link FacesContext} for the request we are processing
      * @throws NullPointerException if <code>context</code>
@@ -898,8 +898,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * processing.  (This indicates that no value was submitted for this
      * component.)</li>
 
-     * <p/>
-
      * <li><span class="changed_modified_2_0">If the
      * <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code>
      * context parameter value is <code>true</code> (ignoring case), and
@@ -907,25 +905,22 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <code>String</code> call <code>{@link #setSubmittedValue}</code>,
      * passing <code>null</code> as the argument and continue processing
      * using <code>null</code> as the current submitted
-     * value.</code></span></li>
-
-     * <p/>
+     * value.</span></li>
 
      * <li> Convert the submitted value into a "local value" of the
      * appropriate data type by calling {@link #getConvertedValue}.</li>
-     * <li><span class="changed_added_2_0_rev_a">If conversion fails:
+     * <li><span class="changed_added_2_0_rev_a">If conversion fails</span>:
      * <ul>
      * <li>Enqueue an appropriate error message by calling the
      * <code>addMessage()</code> method on the
      * <code>FacesContext</code>.</li>
      * <li>Set the <code>valid</code> property
      * on this component to <code>false</code> </li>
-     * </ul></span>
+     * </ul>
      * </li>
 
-     * <p/>
      * <li>Validate the property by calling {@link #validateValue}.</li>
-     * <p/>
+     * 
      * <li>If the <code>valid</code> property of this component is still
      * <code>true</code>, retrieve the previous value of the component
      * (with <code>getValue()</code>), store the new local value using
@@ -939,7 +934,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * listeners.</li>
 
      * </ul>
-     * <p/>
      * <p>Application components implementing {@link UIInput} that wish to
      * perform validation with logic embedded in the component should perform
      * their own correctness checks, and then call the
@@ -1031,10 +1025,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * on this method, and thus must be handled by the caller.</span></li>
      * <li>Otherwise, use the submitted value without any conversion</li>
      * </ul>
-     * </li>
-     * <p/>
-     * </p>
-     * <p/>
      * <p>This method can be overridden by subclasses for more specific
      * behavior.</p>
      */
@@ -1086,10 +1076,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * #getRequiredMessage} returns non-<code>null</code>, use the value
      * as the <code>summary</code> and <code>detail</code> in the {@link
      * FacesMessage} that is enqueued on the <code>FacesContext</code>,
-     * otherwise use the message for the {@link #REQUIRED_MESSAGE_ID}.
-     * </li> <li>Set the <code>valid</code> property on this component
-     * to <code>false</code>.</p></li> 
-
+     * otherwise use the message for the {@link #REQUIRED_MESSAGE_ID}.</li>
+     * 
+     * <li>Set the <code>valid</code> property on this component
+     * to <code>false</code>.</li> 
+     * 
      * <li><p class="changed_modified_2_0">If calling {@link
      * ValidatorException#getFacesMessages} returns
      * non-<code>null</code>, each message should be added to the
@@ -1098,11 +1089,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * added.</p></li>
      *
      * </ul>
-
+     *
      * </li>
      *
-     *
-     * <li class="changed_added_2_0"><p>Otherwise, if the
+     * <li class="changed_added_2_0">
+     * 
+     * <p>Otherwise, if the
      * <code>valid</code> property on this component is still
      * <code>true</code>, take the following action to determine if
      * validation of this component should proceed.</p>
@@ -1127,7 +1119,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * (ignoring case) to &#8220;<code>true</code>&#8221; (without the
      * quotes) validation should proceed.  Otherwise, validation should
      * not proceed.</p></li>
-
+     * 
+     * </ul>
+     * 
      * <p>If the above determination indicates that validation should
      * proceed, call the <code>validate()</code> method of each {@link
      * Validator} registered for this {@link UIInput}, followed by the
