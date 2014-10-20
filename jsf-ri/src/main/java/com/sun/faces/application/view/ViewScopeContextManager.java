@@ -183,6 +183,8 @@ public class ViewScopeContextManager {
                 String name = removalNames.next();
                 viewMap.remove(name);
             }
+            
+            contextMap.clear();
         }
     }
 
