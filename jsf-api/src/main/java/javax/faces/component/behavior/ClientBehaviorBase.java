@@ -116,7 +116,7 @@ public class ClientBehaviorBase extends BehaviorBase implements ClientBehavior {
      * @param component {@link UIComponent} the component associated with this {@link ClientBehavior} 
      *
      * @throws NullPointerException if <code>context</code> or 
-     * <code>component<code> is <code>null</code>.
+     * <code>component</code> is <code>null</code>.
      *
      * @since 2.0
      */
