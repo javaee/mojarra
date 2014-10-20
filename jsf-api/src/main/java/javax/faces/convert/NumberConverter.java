@@ -87,7 +87,7 @@ import java.util.Locale;
  * for the <code>setParseIntegerOnly()</code> method of the
  * <code>java.text.NumberFormat</code> class for more information.</li>
  * </ul>
- * <p/>
+ * 
  * <p>The <code>getAsString()</code> method expects a value of type
  * <code>java.lang.Number</code> (or a subclass), and creates a formatted
  * String according to the following algorithm:</p>
@@ -151,7 +151,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String CURRENCY_ID =
          "javax.faces.converter.NumberConverter.CURRENCY";
@@ -162,11 +162,11 @@ public class NumberConverter implements Converter, PartialStateHolder {
      * string for this message may optionally include the following
      * placeholders:
      * <ul>
-     * <li><code>{0}</code> replaced by the unconverted value.</li>                              HA
+     * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String NUMBER_ID =
          "javax.faces.converter.NumberConverter.NUMBER";
@@ -181,7 +181,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String PATTERN_ID =
          "javax.faces.converter.NumberConverter.PATTERN";
@@ -196,7 +196,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String PERCENT_ID =
          "javax.faces.converter.NumberConverter.PERCENT";
@@ -210,7 +210,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      * <li><code>{0}</code> relaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String STRING_ID =
          "javax.faces.converter.STRING";
