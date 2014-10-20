@@ -74,7 +74,7 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
      * <p><span class="changed_modified_2_0">Construct</span> a {@link
      * ValueChangeListener} that contains a {@link
      * MethodExpression}.<span
-     * class="changed_added_2_0">To accomodate method expression targets
+     * class="changed_added_2_0">To accommodate method expression targets
      * that take no arguments instead of taking a {@link
      * ValueChangeEvent} argument</span>, the implementation of this
      * class must take the argument <code>methodExpressionOneArg</code>,
@@ -82,7 +82,7 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
      * <code>MethodExpression</code> whose expected param types match
      * those of a zero argument method.  The usage requirements for both
      * of these <code>MethodExpression</code> instances are described in
-     * {@link #processValueChange}.</span></p>
+     * {@link #processValueChange}.</p>
      *
      * @param methodExpressionOneArg a <code>MethodExpression</code>
      * that points to a method that returns <code>void</code> and takes
@@ -125,9 +125,9 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
      * MethodNotFoundException} is thrown, call to the zero argument
      * <code>MethodExpression</code> derived from the
      * <code>MethodExpression</code> passed to the constructor of this
-     * instance.  <span class="changed_deleted_2_2"><del>If that fails
+     * instance.  <span class="changed_deleted_2_2">If that fails
      * for any reason, throw an {@link AbortProcessingException},
-     * including the cause of the failure.</del></span></span></p>
+     * including the cause of the failure.</span></span></p>
      * 
      * @throws NullPointerException if the argument valueChangeEvent is null.
      * @throws AbortProcessingException {@inheritDoc}     
