@@ -61,7 +61,7 @@ public class RequiredValidator implements Validator {
 
     /**
 
-     * </p>Verify that the converted object value is not null.</p>
+     * <p>Verify that the converted object value is not null.</p>
 
      * @param context {@inheritDoc}
      * @param component {@inheritDoc}
