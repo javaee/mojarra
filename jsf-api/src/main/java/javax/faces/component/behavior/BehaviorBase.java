@@ -55,7 +55,6 @@ import javax.faces.event.BehaviorListener;
  * convenience base class that provides a default implementation of the 
  * {@link Behavior} contract.  It also provides behavior listener registration 
  * and state saving support.</p>
- * </p>
  *
  * @since 2.0
  */
