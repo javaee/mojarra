@@ -982,7 +982,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
     /**
      * <p>The default behavior of this method is to
      * call {@link ExternalContext#getFlash()} on the wrapped {@link ExternalContext}
-     * object.</p?
+     * object.</p>
      *
      * @see javax.faces.context.ExternalContext#getFlash()
      */
