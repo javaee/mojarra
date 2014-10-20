@@ -183,8 +183,9 @@ public abstract class Resource extends ViewResource {
      * returns <code>true</code>), return an <code>InputStream</code>
      * containing the bytes of the resource.  Otherwise, throw an
      * <code>IOException</code>.</p>
+     * 
      * @return an <code>InputStream</code> containing the bytes of the
-     * resource.</p>
+     * resource.
      *
      * <p class="changed_modified_2_1">Any EL expressions present in the
      * resource must be evaluated before serving the bytes of the
@@ -241,16 +242,20 @@ public abstract class Resource extends ViewResource {
      *
      * <p>If prefix mapped, <em>result</em> must be</p>
      *
-     * <ul><p><code>result = <em>contextRoot</em> + '/' +
+     * <blockquote>
+     * <p><code>result = <em>contextRoot</em> + '/' +
      * <em>facesServletMapping</em> + {@link
      * ResourceHandler#RESOURCE_IDENTIFIER} + '/' + {@link
-     * #getResourceName}</code></p></ul>
+     * #getResourceName}</code></p>
+     * </blockquote>
      *
      * <p>If extension mapped, <em>result</em> must be</p>
      *
-     * <ul><p><code>result = <em>contextRoot</em> + {@link
+     * <blockquote>
+     * <p><code>result = <em>contextRoot</em> + {@link
      * ResourceHandler#RESOURCE_IDENTIFIER} + {@link #getResourceName} +
-     * <em>facesServletMapping</em></code></p></ul>
+     * <em>facesServletMapping</em></code></p>
+     * </blockquote>
      *
      * </li>
      *
@@ -259,7 +264,7 @@ public abstract class Resource extends ViewResource {
      * name=value pairs suitable for inclusion in a URL query
      * string.</p>
      *
-     * <ul>
+     * <blockquote>
      *
      * <p>If {@link #getLibraryName} returns non-<code>null</code>,
      * <code>resourceMetaData</code> must include "ln=" + the return
@@ -275,7 +280,7 @@ public abstract class Resource extends ViewResource {
      * resource library contract, <code>resourceMetaData</code> must
      * include "con=" + the name of the resource library contract.</p>
      *
-     * </ul>
+     * </blockquote>
      *
      * <p>Append "?" + <em>resourceMetaData</em> to <em>result</em>.</p>
      *
