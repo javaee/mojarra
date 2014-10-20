@@ -137,10 +137,10 @@ public class PhaseId implements Comparable {
      * @param phase the String for which the corresponding
      * <code>PhaseId</code> should be returned.
      *
-     * @throws <code>NullPointerException</code> if argument <code>phase</code> is
+     * @throws NullPointerException if argument <code>phase</code> is
      * <code>null</code>.
      *
-     * @throws <code>FacesException</code> if the <code>PhaseId</code>
+     * @throws FacesException if the <code>PhaseId</code>
      * corresponding to the argument <code>phase</code> cannot be found.
      *
      * @since 2.2
