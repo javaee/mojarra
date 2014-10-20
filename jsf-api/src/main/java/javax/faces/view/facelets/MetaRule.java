@@ -74,10 +74,10 @@ package javax.faces.view.facelets;
 
  * <p>For example, consider this markup:</p>
 
-<code><pre>&lt;h:inputText value="#{user.userid}" 
-                valueChangeListener="#{user.newUserId}" /&gt;</pre></code>
+<pre><code>&lt;h:inputText value="#{user.userid}" 
+                valueChangeListener="#{user.newUserId}" /&gt;</code></pre>
 
- * Two <code>MetaRule</code> instances are involved in this example.</p>
+ * <p>Two <code>MetaRule</code> instances are involved in this example.</p>
 
  * <ol>
  *
