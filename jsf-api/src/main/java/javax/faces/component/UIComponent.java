@@ -680,7 +680,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     /**
      * <p class="changed_added_2_0">Return <code>true</code> if this
      * component is within the view hierarchy otherwise
-     * <code>false</code></code>
+     * <code>false</code>
      *
      * @since 2.0
      */
@@ -843,8 +843,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * <p class="changed_modified_2_0"><span
      * class="changed_modified_2_0_rev_a">Set</span> the parent
      * <code>UIComponent</code> of this <code>UIComponent</code>.  <span
-     * class="changed_added_2_0"><span
-     * class="changed_modified_2_0_rev_a">If
+     * class="changed_added_2_0 changed_modified_2_0_rev_a">If
      * <code>parent.isInView()</code> returns <code>true</code>, calling
      * this method will first cause a {@link
      * javax.faces.event.PreRemoveFromViewEvent} to be published, for
@@ -879,7 +878,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * be called by developers; a {@link UIComponent}'s internal
      * implementation will call it as components are added to or removed
      * from a parent's child <code>List</code> or facet
-     * <code>Map</code></strong></span>.</p>
+     * <code>Map</code></strong>.</p>
      *
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree
@@ -1400,7 +1399,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * ContextCallback#invokeContextCallback} method on the argument
      * callback, passing through the <code>FacesContext</code> argument
      * and passing this as the component argument.  <span
-     * class="changed_added_2_1">Then call {@link #popComponentFromEL}.
+     * class="changed_added_2_1">Then call {@link #popComponentFromEL}</span>.
      * If an <code>Exception</code> is thrown by the callback, wrap it
      * in a {@link FacesException} and re-throw it.  Otherwise, return
      * <code>true</code>.</p>
@@ -1716,7 +1715,7 @@ private void doFind(FacesContext context, String clientId) {
 
      * <p>If this method returns false, the tree visited is
      * short-circuited such that neither the component nor any of its
-     * descendents will be visited></p> 
+     * descendents will be visited</p> 
 
      * <p>Custom {@code visitTree()} implementations may call this
      * method to determine whether the component is visitable before
@@ -1753,7 +1752,7 @@ private void doFind(FacesContext context, String clientId) {
      * Call {@link javax.faces.application.Application#publishEvent}, passing
      * {@link javax.faces.event.PreRenderComponentEvent}<code>.class</code> as the
      * first argument and the component instance to be rendered as the
-     * second argument.</p></li>
+     * second argument.</p>
 
      * <p>If a {@link Renderer} is associated with this {@link
      * UIComponent}, the actual encoding will be delegated to
@@ -1824,7 +1823,7 @@ private void doFind(FacesContext context, String clientId) {
      *
      * <p>Render this component and all its children that return
      * <code>true</code> from <code>isRendered()</code>, regardless of
-     * the value of the {@link #getRendersChildren} flag.</p></li>
+     * the value of the {@link #getRendersChildren} flag.</p>
 
      * @since 1.2
      *
@@ -1907,7 +1906,7 @@ private void doFind(FacesContext context, String clientId) {
      * <code>UIComponent</code> associated with {@link #CURRENT_COMPONENT} for a
      * subsequent call to {@link #popComponentFromEL}.</p>
      *
-     * <pclass="changed_added_2_0">This method and <code>popComponentFromEL()</code> form the basis for
+     * <p class="changed_added_2_0">This method and <code>popComponentFromEL()</code> form the basis for
      * the contract that enables the EL Expression "<code>#{component}</code>" to
      * resolve to the "current" component that is being processed in the
      * lifecycle.  The requirements for when <code>pushComponentToEL()</code> and
