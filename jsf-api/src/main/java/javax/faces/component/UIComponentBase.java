@@ -84,7 +84,7 @@ import java.util.logging.Logger;
  * <p><strong class="changed_modified_2_0 changed_modified_2_0_rev_a changed_added_2_1">UIComponentBase</strong> is a
  * convenience base class that implements the default concrete behavior
  * of all methods defined by {@link UIComponent}.</p>
- * <p/>
+ * 
  * <p>By default, this class defines <code>getRendersChildren()</code>
  * to find the renderer for this component and call its
  * <code>getRendersChildren()</code> method.  The default implementation
