@@ -95,7 +95,7 @@ public class ScalarDataModel<E> extends DataModel<E> {
      * available, and the current value of <code>rowIndex</code> is zero.
      * Otherwise, return <code>false</code>.</p>
      *
-     * @throws FacesException if an error occurs getting the row availability
+     * @throws javax.faces.FacesException if an error occurs getting the row availability
      */
     public boolean isRowAvailable() {
 
@@ -114,7 +114,7 @@ public class ScalarDataModel<E> extends DataModel<E> {
      * <p>If there is <code>wrappedData</code> available, return 1.
      * If no <code>wrappedData</code> is available, return -1.</p>
      *
-     * @throws FacesException if an error occurs getting the row count
+     * @throws javax.faces.FacesException if an error occurs getting the row count
      */
     public int getRowCount() {
 
@@ -130,7 +130,7 @@ public class ScalarDataModel<E> extends DataModel<E> {
      * <p>If wrapped data is available, return the wrapped data instance.
      * Otherwise, return <code>null</code>.</p>
      *
-     * @throws FacesException if an error occurs getting the row data
+     * @throws javax.faces.FacesException if an error occurs getting the row data
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
@@ -149,7 +149,7 @@ public class ScalarDataModel<E> extends DataModel<E> {
 
 
     /**
-     * @throws FacesException {@inheritDoc}     
+     * @throws javax.faces.FacesException {@inheritDoc}     
      */ 
     public int getRowIndex() {
 
@@ -159,7 +159,7 @@ public class ScalarDataModel<E> extends DataModel<E> {
 
 
     /**
-     * @throws FacesException {@inheritDoc}
+     * @throws javax.faces.FacesException {@inheritDoc}
      * @throws IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
