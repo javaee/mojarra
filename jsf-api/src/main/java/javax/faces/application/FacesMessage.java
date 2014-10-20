@@ -63,7 +63,7 @@ import java.util.HashMap;
  * <p>The implementation must take the following steps when creating
  * <code>FacesMessage</code> instances given a <code>messageId</code>:</p>
  *
- * <ul>
+ * <blockquote>
  *
  * <p>Call {@link Application#getMessageBundle}.  If
  * non-<code>null</code>, locate the named <code>ResourceBundle</code>,
@@ -88,7 +88,7 @@ import java.util.HashMap;
  * <code>summary</code> and <code>detail</code> of the
  * <code>FacesMessage</code>.</p>
  *
- * </ul>
+ * </blockquote>
  *
  */
 
