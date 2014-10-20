@@ -141,6 +141,7 @@ public abstract class ExternalContext {
      * below.</p>
      *
      * <table border="1">
+     *  <caption>Cookie handling table</caption>
      *
      * <tr>
      *
@@ -280,7 +281,7 @@ public abstract class ExternalContext {
      * 
      * <p class="changed_added_2_2">Encoding the {@link javax.faces.lifecycle.ClientWindow}</p>
      *
-     * <ul>
+     * <blockquote>
      * 
      * <p class="changed_added_2_2">Call {@link javax.faces.lifecycle.ClientWindow#isClientWindowRenderModeEnabled(javax.faces.context.FacesContext) }.
      * If the result is <code>false</code> take no further action and return
@@ -297,7 +298,7 @@ public abstract class ExternalContext {
      * of the query string parameter is given by the value of the constant
      * {@link javax.faces.render.ResponseStateManager#CLIENT_WINDOW_URL_PARAM}.</p>
      * 
-     * </ul>
+     * </blockquote>
      *
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.http.HttpServletResponse</code> method
@@ -568,7 +569,7 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p><span class="changed_modified_2_0">Return</span></span> an
+     * <p><span class="changed_modified_2_0">Return</span> an
      * immutable <code>Map</code> whose keys are the set of application
      * initialization parameter names configured for this application,
      * and whose values are the corresponding parameter values.  The
@@ -1618,6 +1619,7 @@ public abstract class ExternalContext {
      * the <code>javax.servlet.http.HttpServletResponse</code> method
      * <code>sendRedirect()</code>.</span> <div class="changed_added_2_0">
      * For Ajax requests, the implementation must:
+     * </div>
      * <ul>
      * <li>Get a {@link PartialResponseWriter} instance from the 
      * {@link FacesContext}.</li>
@@ -1630,8 +1632,6 @@ public abstract class ExternalContext {
      * argument.</li>
      * <li>Call {@link PartialResponseWriter#endDocument}</li>
      * </ul>
-     * </div>
-     * </p>
      *
      * @param url Absolute URL to which the client should be redirected
      *
