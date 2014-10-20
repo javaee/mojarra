@@ -119,7 +119,7 @@ public class PostAddToViewEvent extends ComponentSystemEvent {
      * @param component the <code>UIComponent</code> that has just been
      * added to the view.
      *
-     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
     public PostAddToViewEvent(UIComponent component) {
 
