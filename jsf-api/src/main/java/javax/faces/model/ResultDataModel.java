@@ -108,7 +108,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
      * by calling <code>getRows()</code> on the underlying <code>Result</code>.
      * Otherwise, return <code>false</code>.</p>
      *
-     * @throws FacesException if an error occurs getting the row availability
+     * @throws javax.faces.FacesException if an error occurs getting the row availability
      */ 
     public boolean isRowAvailable() {
 
@@ -129,7 +129,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
      * on the underlying <code>Result</code>.  If no <code>wrappedData</code>
      * is available, return -1.</p>
      *
-     * @throws FacesException if an error occurs getting the row count
+     * @throws javax.faces.FacesException if an error occurs getting the row count
      */
     public int getRowCount() {
 
@@ -153,7 +153,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
      * current row, keyed by column name.  Column name comparisons must be
      * performed in a case-insensitive manner.</p>
      *
-     * @throws FacesException if an error occurs getting the row data
+     * @throws javax.faces.FacesException if an error occurs getting the row data
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
@@ -172,7 +172,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
 
 
     /**
-     * @throws FacesException {@inheritDoc}     
+     * @throws javax.faces.FacesException {@inheritDoc}     
      */ 
     public int getRowIndex() {
 
@@ -182,7 +182,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
 
 
     /**
-     * @throws FacesException {@inheritDoc}
+     * @throws javax.faces.FacesException {@inheritDoc}
      * @throws IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
