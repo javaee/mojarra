@@ -45,7 +45,7 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><span class="changed_modified_2_0 changed_modified_2_2">A</a> 
+ * <p><span class="changed_modified_2_0 changed_modified_2_2">A</span> 
  * <strong>NavigationHandler</strong> is passed the outcome string
  * returned by an application action invoked for this application, and will
  * use this (along with related state information) to choose the view to
