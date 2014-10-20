@@ -111,7 +111,7 @@ import java.util.logging.Level;
  *
  * </ul>
  *
- * <code><pre>
+ * <pre><code>
 
  &lt;h:panelGrid style="color:red" border="4" columns="2"&gt;
  CASE 1
@@ -122,14 +122,14 @@ import java.util.logging.Level;
  &lt;c:out value="${pageScope.CASE4}" /&gt;
  &lt;/h:panelGrid&gt;
 
- * </pre></code>
+ * </code></pre>
  *
  * <p>The preceding arrangement of faces component tags, must yield
  * markup that will render identically to the following (assuming that
  * <code>${pageScope.CASE4}</code> evaluates to "<code>CASE 4</code>"
  * without the quotes).</p>
  *
- * <code><pre>
+ * <pre><code>
 
  &lt;table border="4" style="color:red"&gt;
 
@@ -145,7 +145,7 @@ import java.util.logging.Level;
 
  &lt;/table&gt;
 
- * </pre></code>
+ * </code></pre>
 
  *
  */
@@ -1731,7 +1731,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     /**
      * Returns the <code>List</code> of {@link UIComponent} ids created or
      * located by nested {@link UIComponentTag}s while processing the current
-     * request.</p>
+     * request.
      */
     protected List<String> getCreatedComponents() {
         return createdComponents;
