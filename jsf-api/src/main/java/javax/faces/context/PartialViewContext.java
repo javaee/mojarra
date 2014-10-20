@@ -197,7 +197,7 @@ public abstract class PartialViewContext {
      * Return <code>true</code> if {@link #isAjaxRequest}
      * returns <code>true</code> and {@link #PARTIAL_EXECUTE_PARAM_NAME}
      * is present in the current request with the value
-     * {@link #ALL_PARTIAL_PHASE_CLIENT_IDS}.</p>
+     * {@link #ALL_PARTIAL_PHASE_CLIENT_IDS}.
      * Otherwise, return <code>false</code>.</p>
      *
      * @throws IllegalStateException if this method is called after
@@ -212,7 +212,7 @@ public abstract class PartialViewContext {
      * Return <code>true</code> if {@link #isAjaxRequest}
      * returns <code>true</code> and {@link #PARTIAL_RENDER_PARAM_NAME}
      * is present in the current request with the value
-     * {@link #ALL_PARTIAL_PHASE_CLIENT_IDS}.</p>
+     * {@link #ALL_PARTIAL_PHASE_CLIENT_IDS}.
      * Otherwise, return <code>false</code>.</p>
      *
      * @throws IllegalStateException if this method is called after
