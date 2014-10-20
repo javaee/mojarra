@@ -100,7 +100,7 @@ package javax.faces.view.facelets;
  * value of the "target tag" column for that entry.</p>
 
  * <table border="1">
-
+ *  <caption>localName and selector attribute to tag mapping</caption>
  * <tr>
 
  * <th>localName</th>
