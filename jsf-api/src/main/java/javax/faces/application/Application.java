@@ -126,7 +126,6 @@ public abstract class Application {
     /**
      * <p>Set the default {@link ActionListener} to be registered for all
      * {@link javax.faces.component.ActionSource} components.</p>
-     * </p>
      *
      * @param listener The new default {@link ActionListener}
      *
@@ -369,7 +368,9 @@ public abstract class Application {
 
      * <div class="changed_added_2_0"> <p>The implementation of this
      * method must perform the following algorithm or an equivalent with
-     * the same end result to determine the value to return.</p> <ul>
+     * the same end result to determine the value to return.</p> 
+     * 
+     * <blockquote>
      *
      * <p>If the value has already been determined by a previous call to
      * this method, simply return that value.</p>
@@ -395,7 +396,7 @@ public abstract class Application {
      * assign the value as <code>ProjectStage.Production</code> and
      * return it.</p>
      *
-     * </ul>
+     * </blockquote>
 
      * <p class="changed_added_2_0">A default implementation is provided
      * that throws <code>UnsupportedOperationException</code> so that
@@ -595,7 +596,7 @@ public abstract class Application {
 
      * @since 2.2
      * 
-     * @throws NullPounterException if {code newHandler} is {@code null}
+     * @throws NullPointerException if newHandler is <code>null</code>
      * 
      * @throws IllegalStateException if this method is called after at least one 
      * request has been processed by the {@code Lifecycle} instance for this application. 
@@ -1101,8 +1102,7 @@ public abstract class Application {
      * @throws FacesException if a {@link UIComponent} from the {@link
      * Resource} cannot be created
 
-     * @throws <code>NullPointerException</code> if any parameter is
-     * <code>null</code>
+     * @throws NullPointerException if any parameter is <code>null</code>
      * 
      * @throws NullPointerException if unable, for any reason, to obtain a 
      * <code>ViewDeclarationLanguage</code> instance as described above.
@@ -1779,7 +1779,7 @@ public abstract class Application {
      * javax.faces.event.SystemEventListener#processEvent} method must be called when
      * events of type <code>systemEventClass</code> are fired.
      *
-     * @throws <code>NullPointerException</code> if any combination of
+     * @throws NullPointerException if any combination of
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
      *
@@ -1816,7 +1816,7 @@ public abstract class Application {
      * function</p>.
 
      * @param systemEventClass the <code>Class</code> of event for which
-     * <code>listener</code> must be fired.</p>
+     * <code>listener</code> must be fired.
 
      * @param listener the implementation of {@link
      * javax.faces.event.SystemEventListener} whose {@link
@@ -1833,7 +1833,7 @@ public abstract class Application {
 
      * </div>
 
-     * @throws <code>NullPointerException</code> if any combination of
+     * @throws NullPointerException if any combination of
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
      *
@@ -1883,7 +1883,7 @@ public abstract class Application {
      * javax.faces.event.SystemEventListener} to remove from the internal data
      * structure.
      *
-     * @throws <code>NullPointerException</code> if any combination of
+     * @throws NullPointerException if any combination of
      * <code>context</code>,
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
@@ -1929,7 +1929,7 @@ public abstract class Application {
      * javax.faces.event.SystemEventListener} to remove from the internal data
      * structure.
      *
-     * @throws <code>NullPointerException</code> if any combination of
+     * @throws NullPointerException if any combination of
      * <code>context</code>, <code>systemEventClass</code>, or
      * <code>listener</code> are
      * <code>null</code>.                
