@@ -69,7 +69,7 @@ import java.lang.annotation.Inherited;
  * <ul>
 
           <li><p> If this annotation is not present on the class in
-          question, no action must be taken.  </p></li>
+          question, no action must be taken.  </p>
 
           <p>Determine the "target" on which to call
           <code>subscribeToEvent</code>.</p>
