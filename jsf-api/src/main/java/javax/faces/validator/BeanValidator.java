@@ -86,7 +86,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * <li><code>{0}</code> replaced by the interpolated message from Bean Validation.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      * <p>The message format string provided by the default implementation should be a the placeholder {0},
      * thus fully delegating the message handling to Bean Validation. A developer can override this message
      * format string to make it conform to other JSF validator messages (i.e., by including the component label)</p>
