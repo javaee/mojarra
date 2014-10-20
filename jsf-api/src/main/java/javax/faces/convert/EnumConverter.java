@@ -84,7 +84,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
      * string if none can be found.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String ENUM_ID =
          "javax.faces.converter.EnumConverter.ENUM";
@@ -99,7 +99,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
      * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String ENUM_NO_CLASS_ID =
          "javax.faces.converter.EnumConverter.ENUM_NO_CLASS";
