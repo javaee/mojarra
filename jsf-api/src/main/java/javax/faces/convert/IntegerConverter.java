@@ -70,7 +70,7 @@ public class IntegerConverter implements Converter {
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String INTEGER_ID =
          "javax.faces.converter.IntegerConverter.INTEGER";
@@ -84,7 +84,7 @@ public class IntegerConverter implements Converter {
      * <li><code>{0}</code> relaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String STRING_ID =
          "javax.faces.converter.STRING";
