@@ -67,7 +67,7 @@ import javax.faces.context.FacesContext;
 
  * <p><strong>Managing Flows</strong></p>
 
- * <ul>
+ * <blockquote>
 
  * <p>The singleton instance of this class must be thread safe, and
  * therefore must not store any per-user state.  Flows are, however,
@@ -133,7 +133,7 @@ import javax.faces.context.FacesContext;
 
  * <p><strong>Flows and Model Objects</strong></p>
 
- * <ul>
+ * <blockquote>
 
  * <p>Managed beans annotated with the CDI annotation
  * {@link FlowScoped} must be instantiated upon a user agent's entry
@@ -144,8 +144,9 @@ import javax.faces.context.FacesContext;
  * available to store values in the "current" slope.  Values stored in
  * this scope must be made available for garbage collection when the
  * user agent leaves the flow.</p>
-
- * </ul>
+ * </blockquote>
+ * 
+ * </blockquote>
 
  * </div>
 
@@ -344,7 +345,7 @@ public abstract class FlowHandler {
 
      * <div class="changed_added_2_2">
 
-     * <ul>
+     * <blockquote>
 
      * <p>If the {@code outboundParameters} property of {@code
      * outboundCallNode} is non-{@code null} and not empty, and the
@@ -356,7 +357,7 @@ public abstract class FlowHandler {
      * name.  Otherwise, consider <strong>evaluatedParams</strong> to be
      * empty.</p>
 
-     * </ul>
+     * </blockquote>
 
      * <p>If the {@code destination Flow} is a sub-flow of the {@code
      * origin Flow} push the {@code destination Flow} onto the flow data
