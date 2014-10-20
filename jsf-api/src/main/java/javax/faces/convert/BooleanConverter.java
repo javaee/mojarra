@@ -69,7 +69,7 @@ public class BooleanConverter implements Converter {
      * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String BOOLEAN_ID =
          "javax.faces.converter.BooleanConverter.BOOLEAN";
@@ -83,7 +83,7 @@ public class BooleanConverter implements Converter {
      * <li><code>{0}</code> relaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String STRING_ID =
          "javax.faces.converter.STRING";
