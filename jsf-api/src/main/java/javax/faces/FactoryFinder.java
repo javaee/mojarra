@@ -293,11 +293,11 @@ public final class FactoryFinder {
      * <code>factoryName/implName</code> mapping in such a way that
      * {@link #getFactory} will find this mapping when searching for a
      * match.</p>
-     * <p/>
+     * 
      * <p>This method has no effect if <code>getFactory()</code> has
      * already been called looking for a factory for this
      * <code>factoryName</code>.</p>
-     * <p/>
+     * 
      * <p>This method can be used by implementations to store a factory
      * mapping while parsing the Faces configuration file</p>
      *
