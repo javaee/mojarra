@@ -69,7 +69,7 @@ import javax.faces.render.Renderer;
  *      {@link Application} - and therefore, any attached "action"
  *      {@link MethodExpression}.
  * </ol>
- * </p>
+ * 
  * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>javax.faces.Button</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
