@@ -108,7 +108,7 @@ public abstract class NavigationCaseBuilder {
      * 
      * <p class="changed_added_2_2">Set the if of the current navigation case.</p>
      * 
-     * @param condition the <if>
+     * @param condition the &lt;if&gt;
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
      */
@@ -119,7 +119,7 @@ public abstract class NavigationCaseBuilder {
      * 
      * <p class="changed_added_2_2">Set the if of the current navigation case.</p>
      * 
-     * @param condition the <if>
+     * @param condition the &lt;if&gt;
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
      */
@@ -149,7 +149,7 @@ public abstract class NavigationCaseBuilder {
          * <p class="changed_added_2_2">Add a parameter to the redirect.</p>
          * 
          * @param name the name of the redirect parameter
-         * @value the value of the redirect parameter.  May not be a {@code ValueExpression}.
+         * @param value the value of the redirect parameter.  May not be a {@code ValueExpression}.
          * @throws NullPointerException if any of the parameters are {@code null}
          * @since 2.2
          */
