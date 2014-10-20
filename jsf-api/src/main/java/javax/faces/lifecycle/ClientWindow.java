@@ -55,7 +55,7 @@ import javax.faces.render.ResponseStateManager;
 
  * <p>Modes of Operation</p>
 
- * <ul>
+ * <blockquote>
 
  * <p>none mode</p>
 
@@ -101,7 +101,7 @@ import javax.faces.render.ResponseStateManager;
  * javax.faces.context.ExternalContext#encodeActionURL(java.lang.String)
  * } for details.</p>
 
- * </ul>
+ * </blockquote>
  
  * </div>
  * 
