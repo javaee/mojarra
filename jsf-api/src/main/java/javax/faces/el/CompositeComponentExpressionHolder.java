@@ -55,7 +55,7 @@ public interface CompositeComponentExpressionHolder {
     /**
      * @param name that attribute name which may be assocated with a
      * <code>ValueExpression</code>
-     * @return the <code>ValueExpression</code> associated with </code>name</code>
+     * @return the <code>ValueExpression</code> associated with <code>name</code>
      *  otherwise return <code>null</code>
      */
     ValueExpression getExpression(String name);
