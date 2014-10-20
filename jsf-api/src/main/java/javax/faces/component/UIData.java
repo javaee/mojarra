@@ -91,8 +91,8 @@ import javax.servlet.jsp.jstl.sql.Result;
  * ValueExpression}). During iterative processing over the rows of data
  * in the data model, the object for the current row is exposed as a
  * request attribute under the key specified by the <code>var</code>
- * property.</p> <p/> <p>Only children of type {@link UIColumn} should
- * be processed by renderers associated with this component.</p> <p/>
+ * property.</p> <p>Only children of type {@link UIColumn} should
+ * be processed by renderers associated with this component.</p>
  * <p>By default, the <code>rendererType</code> property is set to
  * <code>javax.faces.Table</code>.  This value can be changed by calling
  * the <code>setRendererType()</code> method.</p>
@@ -1805,7 +1805,7 @@ public class UIData extends UIComponentBase
     /**
      * <p>Return the internal {@link DataModel} object representing the data
      * objects that we will iterate over in this component's rendering.</p>
-     * <p/>
+     * 
      * <p>If the model has been cached by a previous call to {@link
      * #setDataModel}, return it.  Otherwise call {@link #getValue}.  If the
      * result is null, create an empty {@link ListDataModel} and return it.  If
@@ -1850,7 +1850,7 @@ public class UIData extends UIComponentBase
      * <code>DataModel</code> must be reset in a manner so that the next call to
      * {@link #getDataModel} causes lazy instantion of a newly refreshed
      * <code>DataModel</code>.</p>
-     * <p/>
+     * 
      * <p>Subclasses might call this method if they either want to restore the
      * internal <code>DataModel</code> during the <em>Restore View</em> phase or
      * if they want to explicitly refresh the current <code>DataModel</code> for
