@@ -52,13 +52,12 @@ import javax.faces.context.FacesContext;
  * and String-to-Object conversions between model data objects and a
  * String representation of those objects that is suitable for
  * rendering.</p>
-
- * <p/>
+ * 
  * <p>{@link Converter} implementations must have a zero-arguments public
  * constructor.  In addition, if the {@link Converter} class wishes to have
  * configuration property values saved and restored with the component tree,
  * the implementation must also implement {@link StateHolder}.</p>
- * <p/>
+ * 
  * <p>Starting with version 1.2 of the specification, an exception to the above
  * zero-arguments constructor requirement has been introduced.  If a converter has
  * a single argument constructor that takes a <code>Class</code> instance and
@@ -67,7 +66,7 @@ import javax.faces.context.FacesContext;
  * must be used to instantiate the converter instead of the zero-argument
  * version.  This enables the per-class conversion
  * of Java enumerated types.</p>
- * <p/>
+ * 
  * <p>If any <code>Converter</code> implementation requires a
  * <code>java.util.Locale</code> to perform its job, it must obtain that
  * <code>Locale</code> from the {@link javax.faces.component.UIViewRoot}
