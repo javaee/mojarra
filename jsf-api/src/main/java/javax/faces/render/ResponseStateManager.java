@@ -88,8 +88,7 @@ public abstract class ResponseStateManager {
      * constant field value, the separator char, and a number that is 
      * guaranteed to be unique with respect to all the other instances of
      * this kind of client parameter in the view.</span>
-     * 
-     * </span></p>
+     * </p>
 
      * <p class="changed_added_2_0">It is strongly recommend that
      * implementations guard against cross site scripting attacks by at
@@ -149,7 +148,7 @@ public abstract class ResponseStateManager {
             "javax.faces.Token";
     
     /**       
-     * <p><span class="changed_modified_2_2"">Take</span> the argument 
+     * <p><span class="changed_modified_2_2">Take</span> the argument 
      * <code>state</code> and write it into the
      * output using the current {@link ResponseWriter}, which must be
      * correctly positioned already.</p>
