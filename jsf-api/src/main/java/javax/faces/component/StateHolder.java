@@ -76,9 +76,9 @@ public interface StateHolder {
      * <p>This method must not alter the state of the implementing
      * object.  In other words, after executing this code:</p>
      *
-     * <code><pre>
+     * <pre><code>
      * Object state = component.saveState(facesContext);
-     * </pre></code>
+     * </code></pre>
      *
      * <p><code>component</code> should be the same as before executing
      * it.</p>
@@ -92,7 +92,7 @@ public interface StateHolder {
 
     /**
      *
-     * <p><span class="changed_modified_2_0_rev_a">Perform</state> any
+     * <p><span class="changed_modified_2_0_rev_a">Perform</span> any
      * processing required to restore the state from the entries in the
      * state Object.</p>
      *
