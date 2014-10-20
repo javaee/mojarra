@@ -55,13 +55,9 @@ import java.lang.annotation.Inherited;
  * have a resource dependency added so that the named resource will be
  * present in user agent's view of the <code>UIViewRoot</code> in which
  * this component or renderer is used.</p>
-
- * <p/>
-
+ * 
  * <div class="changed_added_2_0">
-
- * <p/>
-
+ * 
  * <p>The default implementation must support attaching this annotation
  * to {@link javax.faces.component.UIComponent} or {@link
  * javax.faces.render.Renderer} classes.  In both cases, the event that
