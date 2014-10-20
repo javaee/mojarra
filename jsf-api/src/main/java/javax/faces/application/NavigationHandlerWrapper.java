@@ -52,7 +52,7 @@ import javax.faces.context.FacesContext;
  * default implementation of all methods is to call through to the
  * wrapped {@link NavigationHandler} instance.</p>
  *
- * <p class="changed_added_2_2>Usage: extend this class and override 
+ * <p class="changed_added_2_2">Usage: extend this class and override 
  * {@link #getWrapped} to
  * return the instance being wrapping.</p>
  *
