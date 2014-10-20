@@ -76,7 +76,7 @@ import javax.faces.event.PostPutFlashValueEvent;
  * traversal map of the previous traversal.  Here is an example for
  * illustration purposes only.</p>
  *
- * <ul>
+ * <blockquote>
  *
  * <p>Consider an initial request to the faces lifecycle</p>
  *
@@ -86,9 +86,9 @@ import javax.faces.event.PostPutFlashValueEvent;
  *
  * <p>Traversal N+1, execute phase: flash access goes to flash[N].</p>
  *
- * <p>Traversan N+1, render phase: flash access goes to flash[N+1].</p>
+ * <p>Traversal N+1, render phase: flash access goes to flash[N+1].</p>
  *
- * </ul>
+ * </blockquote>
  *
  * <p>The implementation must ensure the proper behaviour of the flash
  * is preserved even in the case of a
@@ -110,30 +110,30 @@ import javax.faces.event.PostPutFlashValueEvent;
  *
  * <p>EL Usage Example</p>
 
- * <ul>
+ * <blockquote>
  *
  * <p>First page</p>
  *
-<code><pre>
+<pre><code>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"&gt;
 &lt;!-- extra code removed --&gt;
   &lt;c:set target="#{flash}" property="foo" value="fooValue" /&gt;
 
-</pre></code>
+</code></pre>
 
  * <p>Next page</p>
  *
-<code><pre>
+<pre><code>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"&gt;
 &lt;!-- extra code removed --&gt;
   &lt;h:outputText value="#{flash.foo}" /&gt; will be "fooValue"
   without the quotes.
 
-</pre></code>
+</code></pre>
 
- * </ul>
+ * </blockquote>
  *
  * <p>The same usage syntax must be available in JSP.</p>
 
@@ -143,19 +143,19 @@ import javax.faces.event.PostPutFlashValueEvent;
  * <code>h:link</code>.  The following example illustrates one way to
  * use the flash in such circumstances.</p>
 
- * <ul>
+ * <blockquote>
 
  * <p>First page</p>
 
-<code><pre>
+<pre><code>
 &lt;h:button id="nextButton" value="Next (button)" outcome="next.xhtml"&gt;
   &lt;f:param name="foo" value="bar"/&gt;
 &lt;/h:button&gt;
-</pre></code>
+</code></pre>
 
  * <p>Next page</p>
 
-<code><pre>
+<pre><code>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"&gt;
@@ -166,9 +166,9 @@ import javax.faces.event.PostPutFlashValueEvent;
 foo = #{flash.foo}
 &lt;/body&gt;
 &lt;/html&gt;
-</pre></code>
+</code></pre>
 
- * </ul>
+ * </blockquote>
 
  * <p>Note that this example uses <code>#{flash.now}</code> on the
  * second page.  This is because the value doesn't actuall enter the
@@ -207,30 +207,30 @@ public abstract class Flash implements Map<String, Object> {
      *
      * <p>EL Usage Example</p>
 
-     * <ul>
+     * <blockquote>
      *
      * <p>First page</p>
      *
-<code><pre>
+<pre><code>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"&gt;
 &lt;!-- extra code removed --&gt;
   &lt;c:set target="#{flash}" property="keepMessages" value="true" /&gt;
 
-</pre></code>
+</code></pre>
 
      * <p>Next page</p>
      *
-<code><pre>
+<pre><code>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"&gt;
 &lt;!-- extra code removed --&gt;
   &lt;h:messages /&gt; Any messages present on the first page must be displayed on 
   this page.
 
-</pre></code>
+</code></pre>
 
-     * </ul>
+     * </blockquote>
      *
      * </div>
      *
@@ -267,7 +267,7 @@ public abstract class Flash implements Map<String, Object> {
      * &#8220;execute&#8221; phase and the previous traversal had {@link
      * #setRedirect} called with <code>true</code> as the
      * argument.</p></li>
-     *
+     * </ul>
      * </div>
 
      */
@@ -287,17 +287,17 @@ public abstract class Flash implements Map<String, Object> {
 
      * <p>EL Usage Example</p>
 
-     * <ul>
+     * <blockquote>
      *
-<code><pre>
+<pre><code>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"&gt;
 &lt;!-- extra code removed --&gt;
   &lt;c:set target="#{flash}" property="redirect" value="true" /&gt;
 
-</pre></code>
+</code></pre>
 
-     * </ul>
+     * </blockquote>
      *
      * </div>
 
@@ -320,9 +320,9 @@ public abstract class Flash implements Map<String, Object> {
 
      * <p>EL Usage Example</p>
 
-     * <ul>
+     * <blockquote>
      *
-<code><pre>
+<pre><code>
 &lt;html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"&gt;
 &lt;!-- extra code removed --&gt;
@@ -332,9 +332,9 @@ public abstract class Flash implements Map<String, Object> {
 
   &lt;h:outputText value="#{flash.now.bar}" /&gt;
 
-</pre></code>
+</code></pre>
 
-     * </ul>
+     * </blockquote>
      *
      * </div>
      *
