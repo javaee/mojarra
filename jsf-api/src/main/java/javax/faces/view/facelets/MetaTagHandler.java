@@ -70,8 +70,8 @@ package javax.faces.view.facelets;
  *
  * <div class="changed_added_2_0">
 
-<code><pre>&lt;h:inputText value="#{user.userid}" 
-                valueChangeListener="#{user.newUserId}" /&gt;</pre></code>
+<pre><code>&lt;h:inputText value="#{user.userid}" 
+                valueChangeListener="#{user.newUserId}" /&gt;</code></pre>
 
  * <p>This markup element corresponds to an instance of {@link
  * javax.faces.component.html.HtmlInputText} in the view.
