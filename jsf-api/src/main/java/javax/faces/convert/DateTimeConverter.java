@@ -83,7 +83,7 @@ import java.util.TimeZone;
  * <li>In all cases, parsing must be non-lenient; the given string must
  * strictly adhere to the parsing format.</li>
  * </ul>
- * <p/>
+ * 
  * <p>The <code>getAsString()</code> method expects a value of type
  * <code>java.util.Date</code> (or a subclass), and creates a formatted
  * String according to the following algorithm:</p>
@@ -129,7 +129,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String DATE_ID =
          "javax.faces.converter.DateTimeConverter.DATE";
@@ -144,7 +144,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String TIME_ID =
          "javax.faces.converter.DateTimeConverter.TIME";
@@ -159,7 +159,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String DATETIME_ID =
          "javax.faces.converter.DateTimeConverter.DATETIME";
@@ -173,7 +173,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      * <li><code>{0}</code> relaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String STRING_ID =
          "javax.faces.converter.STRING";
