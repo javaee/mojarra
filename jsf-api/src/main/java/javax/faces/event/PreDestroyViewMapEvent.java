@@ -67,7 +67,7 @@ public class PreDestroyViewMapEvent extends ComponentSystemEvent {
      * @param root the <code>UIViewRoot</code> for which the view map has
      * just been destroyed.
      *
-     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
     public PreDestroyViewMapEvent(UIViewRoot root) {
         super(root);
