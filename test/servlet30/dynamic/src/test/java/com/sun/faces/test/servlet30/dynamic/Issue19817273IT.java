@@ -61,7 +61,12 @@ public class Issue19817273IT {
     @Test
     public void testRemoveReaddMove() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/removeReaddMove.xhtml");
-        HtmlElement result = page.getHtmlElementById("hasMarkChildrenModified");
-        assertTrue(result.asText().equals("true"));
+        
+        String pageText = page.asText();
+        // Only exercise this test in Full State Saving
+        if (pageText.contains("FSS")) {
+            HtmlElement result = page.getHtmlElementById("hasMarkChildrenModified");
+            assertTrue(result.asText().equals("true"));
+        }
     }
 }
