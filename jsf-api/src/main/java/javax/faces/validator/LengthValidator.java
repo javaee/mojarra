@@ -67,7 +67,7 @@ import javax.faces.convert.Converter;
  * specified minimum, throw a {@link ValidatorException} containing a
  * a MINIMUM_MESSAGE_ID message.</li>
  * </ul>
- * <p/>
+ * 
  * <p>For all of the above cases that cause a {@link ValidatorException}
  * to be thrown, if there are parameters to the message that match up
  * with validator parameters, the values of these parameters must be
@@ -96,7 +96,7 @@ public class LengthValidator implements Validator, PartialStateHolder {
      * <li><code>{0}</code> replaced by the configured maximum length.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String MAXIMUM_MESSAGE_ID =
          "javax.faces.validator.LengthValidator.MAXIMUM";
@@ -110,7 +110,7 @@ public class LengthValidator implements Validator, PartialStateHolder {
      * <li><code>{0}</code> replaced by the configured minimum length.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
-     * </ul></p>
+     * </ul>
      */
     public static final String MINIMUM_MESSAGE_ID =
          "javax.faces.validator.LengthValidator.MINIMUM";
