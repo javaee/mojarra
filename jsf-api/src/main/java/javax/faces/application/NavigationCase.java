@@ -356,14 +356,14 @@ public class NavigationCase {
      * the expression is evaluated, its value must be coerced into a
      * <code>boolean</code> per the normal EL coercion rules.</p>
      *
+     * Note throws any exceptions encountered during the process of
+     * evaluating the expression or obtaining its value.
+     *
      * @param context the {@link FacesContext} for the current request
      *
      * @return <code>null</code> if there is no <code>&lt;if&gt;</code> element
      *  associated with this <code>&lt;navigation-case&gt;</code>, otherwise
      *  return the evaluation result of the condition
-     *
-     * @throws any exceptions encountered during the process of
-     * evaluating the expression or obtaining its value.
      */
     public Boolean getCondition(FacesContext context) {
 
