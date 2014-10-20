@@ -947,11 +947,11 @@ public abstract class UIComponentBase extends UIComponent {
      *   }
      *   ...
      * }
-     * <p/>
+     * 
      * public interface FooListener extends FacesListener {
      *   public void processFoo(FooEvent event);
      * }
-     * <p/>
+     * 
      * public class FooComponent extends UIComponentBase {
      *   ...
      *   public void addFooListener(FooListener listener) {
@@ -1079,7 +1079,7 @@ public abstract class UIComponentBase extends UIComponent {
      * javax.faces.event.ComponentSystemEventListener#processEvent} method must be called
      * when events of type <code>facesEventClass</code> are fired.
      *
-     * @throws <code>NullPointerException</code> if any of the
+     * @throws NullPointerException if any of the
      * arguments are <code>null</code>.
      *
      * @since 2.1
@@ -1135,7 +1135,7 @@ public abstract class UIComponentBase extends UIComponent {
      * ComponentSystemEventListener#processEvent} method must no longer be called
      * when events of type <code>eventClass</code> are fired.
      *
-     * @throws <code>NullPointerException</code> if any of the
+     * @throws NullPointerException if any of the
      * arguments are <code>null</code>.
      *
      * @since 2.1
@@ -1668,7 +1668,7 @@ public abstract class UIComponentBase extends UIComponent {
      * StateHolder} interface.  Using this method implies the use of
      * {@link #restoreAttachedState} to restore the attached
      * objects.</p>
-     * <p/>
+     * 
      * <p>This method supports saving attached objects of the following
      * type: <code>Object</code>s, <code>null</code> values, and <code
      * class="changed_modified_2_0">Collection</code>s of these objects.
@@ -1758,7 +1758,7 @@ public abstract class UIComponentBase extends UIComponent {
      * need to restore the objects they saved using {@link
      * #saveAttachedState}.  This method is tightly coupled with {@link
      * #saveAttachedState}.</p>
-     * <p/>
+     * 
      * <p>This method supports restoring all attached objects types
      * supported by {@link #saveAttachedState}.</p>
      *

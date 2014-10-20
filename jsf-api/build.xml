@@ -782,7 +782,7 @@ javax.faces.level=ALL
                  protected="${javadoc.protected}"
                  windowtitle="${DocName} (${spec.version})"
                  stylesheetfile="${resources.dir}/jsf-api.css"
-                 source="1.5"
+                 source="1.8"
                  useexternalfile="yes"
                  doctitle="${DocName} (${spec.version} SNAPSHOT ${build.number})"
                  >
