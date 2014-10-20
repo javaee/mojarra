@@ -60,7 +60,7 @@ import javax.faces.context.FacesContext;
  *
  * <p class="javadocSection">Packaging Resources</p>
  *
- * <ul>
+ * <blockquote>
  *
  *  <p>ResourceHandler defines a path based packaging convention for
  *  resources.  The default implementation of
@@ -110,11 +110,11 @@ import javax.faces.context.FacesContext;
 
  * <p>Note that <em>resourceName</em> is the only required segment.</p>
  *
- * </ul>
+ * </blockquote>
  *
  * <p class="javadocSection">Encoding Resources</p>
  *
- * <ul>
+ * <blockquote>
  *
  *  <p>During the handling of view requests, the JSF run-time may be
  *  called upon to encode a resource in such a way as to instruct the
@@ -129,11 +129,11 @@ import javax.faces.context.FacesContext;
  * <p class="changed_added_2_2">This usage of resources does not apply
  * for resources that correspond to VDL resources.</p>
  *
- * </ul>
+ * </blockquote>
  *
  * <p class="javadocSection">Decoding Resources</p>
  *
- * <ul>
+ * <blockquote>
  *
  *  <p>During the handling of resource requests, the JSF run-time will
  *  be called upon to decode a resource in such a way as to serve up
@@ -145,7 +145,7 @@ import javax.faces.context.FacesContext;
  * <p class="changed_added_2_2">This usage of resources does not apply
  * for resources that correspond to VDL resources.</p>
 
- * </ul>
+ * </blockquote>
  *
  * </div>
  *
@@ -419,7 +419,7 @@ public abstract class ResourceHandler {
      * class="changed_modified_2_0_rev_a">May not include relative
      * paths, such as "../".</span></span>
      *
-     * @throws <code>NullPointerException</code> if
+     * @throws NullPointerException if
      * <code>resourceName</code> is <code>null</code>
      *
      * @return a newly created <code>Resource</code> instance, suitable
@@ -462,9 +462,9 @@ public abstract class ResourceHandler {
      * Resource#getContentType}.  If the value is <code>null</code>, The
      * content-type of the resource is derived by passing the
      * <em>resourceName</em> to {@link
-     * javax.faces.context.ExternalContext#getMimeType}</p>
+     * javax.faces.context.ExternalContext#getMimeType}
      *
-     * @throws <code>NullPointerException</code> if
+     * @throws NullPointerException if
      * <code>resourceName</code> is <code>null</code>.
      *
      * @return a newly created <code>Resource</code> instance, suitable
@@ -633,6 +633,7 @@ public abstract class ResourceHandler {
      * <code>null</code> must be returned.</p> 
      * 
      * <table border="1">
+     *  <caption>resource name to renderer-type mapping</caption>
      * 
      * <tr>
      * 
