@@ -53,18 +53,17 @@ import java.util.EventListener;
  * javax.faces.component.EditableValueHolder} in the view, and are
  * called during the <em>Process Validations</em> phase of the request
  * processing lifecycle.</p>
-
- * <p/>
+ * 
  * <p>Individual {@link Validator}s should examine the value and
  * component that they are passed, and throw a {@link ValidatorException}
  * containing a {@link javax.faces.application.FacesMessage}, documenting
  * any failures to conform to the required rules.
- * <p/>
+ * 
  * <p>For maximum generality, {@link Validator} instances may be
  * configurable based on properties of the {@link Validator} implementation
  * class.  For example, a range check {@link Validator} might support
  * configuration of the minimum and maximum values to be used.</p>
- * <p/>
+ * 
  * <p>{@link Validator} implementations must have a zero-arguments
  * public constructor.  In addition, if the {@link Validator} class
  * wishes to have configuration property values saved and restored with
@@ -81,7 +80,6 @@ import java.util.EventListener;
  * action described in <code>ResourceDependencies</code> must be taken
  * when {@link javax.faces.component.EditableValueHolder#addValidator} 
  * is called.</p>
-
  */
 
 public interface Validator extends EventListener {
