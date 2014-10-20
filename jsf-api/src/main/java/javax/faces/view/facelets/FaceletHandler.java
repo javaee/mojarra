@@ -101,9 +101,9 @@ public interface FaceletHandler {
 
      * @throws FaceletException if unable to parse the markup loaded from <code>relativePath</code>
 
-     * @throws FacesException if unable to create child <code>UIComponent</code> instances
+     * @throws javax.faces.FacesException if unable to create child <code>UIComponent</code> instances
 
-     * @throws ELException if any of the expressions in the markup
+     * @throws javax.el.ELException if any of the expressions in the markup
      * loaded from <code>relativePath</code> fail
 
      * @since 2.0
