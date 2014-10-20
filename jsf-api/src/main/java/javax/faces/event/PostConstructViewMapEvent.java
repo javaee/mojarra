@@ -49,7 +49,7 @@ import javax.faces.component.UIViewRoot;
  * map is first created.  This must happen on the first time a call is
  * made to {@link UIViewRoot#getViewMap} on a <code>UIViewRoot</code>
  * instance.  The source for this event is the
- * <code>UIViewRoot<code>.</p>
+ * <code>UIViewRoot</code>.</p>
  *
  * @since 2.0
  */
@@ -69,7 +69,7 @@ public class PostConstructViewMapEvent extends ComponentSystemEvent {
      * @param root the <code>UIViewRoot</code> for which a view map has
      * just been created.
      *
-     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
     public PostConstructViewMapEvent(UIViewRoot root) {
         super(root);
