@@ -73,7 +73,7 @@ public class PostValidateEvent extends ComponentSystemEvent {
      * @param component the <code>UIComponent</code> that is about to be
      * validated.
 
-     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
     public PostValidateEvent(UIComponent component) {
         super(component);
