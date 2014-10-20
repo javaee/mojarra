@@ -52,7 +52,7 @@ import java.io.Writer;
  * behavior to an existing {@link ResponseWriter} instance.  The default
  * implementation of all methods is to call through to the wrapped
  * {@link ResponseWriter}.</p>
- * <p/>
+ * 
  * <p>Usage: extend this class and override {@link #getWrapped} to
  * return the instance we are wrapping.</p>
  *
