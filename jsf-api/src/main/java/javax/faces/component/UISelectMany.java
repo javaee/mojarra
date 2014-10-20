@@ -71,13 +71,13 @@ import javax.faces.convert.Converter;
  *
  * <p>The {@link javax.faces.render.Renderer} for this component must
  * perform the following logic on <a
- * name="#getConvertedValue"><code>getConvertedValue()</code></a>:</p>
+ * name="getConvertedValue"><code>getConvertedValue()</code></a>:</p>
  *
- * <ul>
+ * <blockquote>
  *
  * <p>Obtain the {@link javax.faces.convert.Converter} using the following algorithm:</p>
  *
- * <ul> 
+ * <blockquote> 
  *
  * <p>If the component has an attached {@link javax.faces.convert.Converter}, use it.</p>
  *
@@ -96,13 +96,13 @@ import javax.faces.convert.Converter;
 
  * <li class="changed_added_2_0"><p>A <code>java.util.Collection</code>.
  * Do not convert the values.</p></li>
-
  * </ul>
+ * </blockquote>
  *
  * <p>If for any reason a <code>Converter</code> cannot be found, assume
  * the type to be a String array.</p>
 
- * </ul>
+ * </blockquote>
 
  * <p>Use the selected {@link javax.faces.convert.Converter} (if any) to
  * convert each element in the values array from the request to the
@@ -166,6 +166,7 @@ import javax.faces.convert.Converter;
  * request.</p>
 
  * <table border="1">
+ *  <caption>modelType to targetForConvertedValues mapping</caption>
 
  * <tr>
 
@@ -225,7 +226,6 @@ import javax.faces.convert.Converter;
  * <p>Return <em>targetForConvertedValues</em> after populating it with
  * the converted values.</p>
 
- * </ul>
  *
  */
 
