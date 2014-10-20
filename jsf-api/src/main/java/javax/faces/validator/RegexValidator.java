@@ -117,7 +117,7 @@ public class RegexValidator implements Validator, PartialStateHolder {
 
     /**
 
-     * </p>Validate a String against a regular expression pattern.  The
+     * <p>Validate a String against a regular expression pattern.  The
      * full regex pattern must be matched in order to pass the
      * validation.</p>
 
