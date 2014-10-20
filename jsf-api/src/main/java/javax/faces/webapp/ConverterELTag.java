@@ -91,7 +91,7 @@ public abstract class ConverterELTag extends TagSupport {
      * with our most immediately surrounding {@link UIComponentClassicTagBase} instance, if
      * the {@link UIComponent} instance was created by this execution of the
      * containing JSP page.  If the localValue of the
-     * {@link UIComponent} is a String, attempt to convert it.</p></p>
+     * {@link UIComponent} is a String, attempt to convert it.</p>
      *
      * @throws JspException if a JSP error occurs
      */
