@@ -631,7 +631,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * <p>Queue the event with a call to {@link #queueEvent}. Keep track
      * of the number of events that are queued in this way on this run
      * through the lifecycle.  This information is necessary during
-     * processing in {@link #broadcast}</code>.</p>
+     * processing in {@link #broadcast}.</p>
 
      * </div>
      * 
