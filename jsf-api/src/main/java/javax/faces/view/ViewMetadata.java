@@ -51,7 +51,7 @@ import javax.faces.component.UIViewAction;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0"/> <code>ViewMetadata</code> is
+ * <p class="changed_added_2_0"> <code>ViewMetadata</code> is
  * reponsible for extracting and providing view parameter metadata from
  * VDL views.  Because {@link ViewDeclarationLanguage#getViewMetadata}
  * is required to return <code>null</code> for JSP views and
@@ -64,7 +64,8 @@ public abstract class ViewMetadata {
 
 
     /**
-     * <p class="changed_added_2_0"/>
+     * <p class="changed_added_2_0">Get the view id</p>
+     * 
      * @return the view ID for which this <code>ViewMetadata</code> instance
      *  was created
      */
