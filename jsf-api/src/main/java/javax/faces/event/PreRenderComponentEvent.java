@@ -71,7 +71,7 @@ public class PreRenderComponentEvent extends ComponentSystemEvent {
      * @param component the <code>UIComponent</code> that is about to be
      * rendered.
 
-     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
     public PreRenderComponentEvent(UIComponent component) {
         super(component);
