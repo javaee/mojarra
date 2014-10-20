@@ -111,7 +111,7 @@ public abstract class ResponseWriter extends Writer {
      * call the <code>writeAttribute()</code> or
      * <code>writeURIAttribute()</code> methods to add attributes and
      * corresponding values.  The starting element will be closed
-     * (that is, the trailing '>' character added)
+     * (that is, the trailing '&gt;' character added)
      * on any subsequent call to <code>startElement()</code>,
      * <code>writeComment()</code>,
      * <code>writeText()</code>, <code>endElement()</code>,
@@ -338,7 +338,7 @@ public abstract class ResponseWriter extends Writer {
      * <code>component</code> property to allow custom
      * <code>ResponseWriter</code> implementations to associate a
      * component with an arbitrary portion of text.</p>
-     * <p/>
+     * 
      * <p>The default implementation simply ignores the
      * <code>component</code> argument and calls through to {@link
      * #writeText(java.lang.Object,java.lang.String)}</p>
