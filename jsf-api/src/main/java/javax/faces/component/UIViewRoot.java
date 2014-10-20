@@ -96,7 +96,7 @@ import javax.faces.view.ViewMetadata;
  * <p>Take the following action regarding
  * <code>PhaseListener</code>s.</p>
 
- * <ul>
+ * <blockquote>
 
  * <p>Initialize a state flag to <code>false</code>.</p>
 
@@ -127,15 +127,14 @@ import javax.faces.view.ViewMetadata;
  * <p>If {@link #getAfterPhaseListener} returns non-<code>null</code>,
  * invoke the listener, passing in the correct corresponding {@link
  * PhaseId} for this phase.</p>
- * <p/>
+ * 
  * <p>If or one or more listeners have been added by a call to {@link
  * #addPhaseListener}, invoke the <code>afterPhase</code> method on each
  * one whose {@link PhaseListener#getPhaseId} matches the current
  * phaseId, passing in the same <code>PhaseId</code> as in the previous
  * step.</p>
- * <p/>
- * <p/>
- * </ul>
+ * 
+ * </blockquote>
  */
 
 public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
@@ -385,7 +384,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * phases <span class="changed_modified_2_0">including {@link
      * PhaseId#RESTORE_VIEW}</span>.  Unlike a true {@link
      * PhaseListener}, this approach doesn't allow for only receiving
-     * {@link PhaseEvent}s for a given phase.</p> <p/> <p>The method
+     * {@link PhaseEvent}s for a given phase.</p> <p>The method
      * must conform to the signature of {@link
      * PhaseListener#afterPhase}.</p>
      *
@@ -461,6 +460,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @param context {@link FacesContext} for the current request
      * @param componentResource The {@link UIComponent} representing a 
      * {@link javax.faces.application.Resource} instance
+     * 
+     * </p>
+     * </div>
      *
      * @since 2.0
      */
@@ -555,7 +557,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * must refer to a component that extends {@link UIPanel} and
      * overrides the <code>encodeAll()</code> method to take no action.
      * This is necessary to prevent component resources from being
-     * inadvertently rendered.</span></li>
+     * inadvertently rendered.</span>
 
      * <ul>
 
@@ -610,6 +612,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @param componentResource The {@link UIComponent} representing a 
      * {@link javax.faces.application.Resource} instance
      *
+     * </p>
+     * </div>
+     * 
      * @since 2.0
      */
     public void removeComponentResource(FacesContext context, UIComponent componentResource) {
@@ -634,7 +639,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * given target.</li>
      * <li>Remove the <code>component</code> resource from the child list.</li>
      * </ul>
-     * </p>
      * </div>
      *  
      * @param context {@link FacesContext} for the current request
@@ -858,8 +862,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * UIComponentBase#processRestoreState} from within a
      * <code>try</code> block.  The <code>try</code> block must have a
      * <code>finally</code> block that ensures that no {@link
-     * FacesEvent}s remain in the event queue. <a
-     * class="changed_deleted_2_0_rev_a" title="text removed in 2.0 Rev a: and that the this.visitTree is called, passing a ContextCallback that takes the following action: call the processEvent method of the current component. The argument event must be an instance of PostRestoreStateEvent whose component property is the current component in the traversal.">&nbsp;&nbsp;&nbsp;</a> </p>
+     * FacesEvent}s remain in the event queue. <a class="changed_deleted_2_0_rev_a"> 
+     *  <!-- text removed in 2.0 Rev a: and that the this.visitTree is called, passing a ContextCallback that takes the following action: call the processEvent method of the current component. The argument event must be an instance of PostRestoreStateEvent whose component property is the current component in the traversal. --></a> </p>
      * @param context the <code>FacesContext</code> for this requets
      * @param state the opaque state object obtained from the {@link
      * javax.faces.application.StateManager}
@@ -901,7 +905,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * <li>{@link javax.faces.context.PartialViewContext#isPartialRequest}
      * returns <code>false</code></li>
      * </ul>
-     * </p>
      * </div>
      * <p class="changed_modified_2_0">Override the default 
      * {@link UIComponentBase#processDecodes} behavior to broadcast any queued 
@@ -1167,7 +1170,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * <li>{@link javax.faces.context.PartialViewContext#isPartialRequest}
      * returns <code>false</code></li>
      * </ul>
-     * </p>
      * </div>
      * <p class="changed_modified_2_0">Override the default 
      * {@link UIComponentBase#processValidators} behavior to broadcast any 
@@ -1226,7 +1228,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * <li>{@link javax.faces.context.PartialViewContext#isPartialRequest}
      * returns <code>false</code></li>
      * </ul>
-     * </p>
      *</div>
      * <p class="changed_modified_2_0">Override the default {@link UIComponentBase}
      * behavior to broadcast any queued events after the default processing or 
@@ -1339,9 +1340,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     /**
      * <p>Return the <code>Locale</code> to be used in localizing the
      * response being created for this view.</p>
-     * <p/>
      * <p>Algorithm:</p>
-     * <p/>
      * <p>If we have a <code>locale</code> ivar, return it.  If we have
      * a value expression for "locale", get its value.  If the value is
      * <code>null</code>, return the result of calling {@link
@@ -1493,7 +1492,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * <p class="changed_added_2_0">This implementation simply calls through to {@link
      * #getViewMap(boolean)}, passing <code>true</code> as the argument, and
      * returns the result.</p>
-     * <div class="changed_added_2_0">
+     * <div class="changed_added_2_0"></div>
      *
      * @since 2.0
      */
@@ -1546,8 +1545,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * 
      * <p>See {@link FacesContext#setViewRoot} for the specification of when the
      * <code>clear()</code> method must be called.</p>
-     * <p/>
-     * </div>
      *
      * @param create <code>true</code> to create a new <code>Map</code> for this
      *               instance if necessary; <code>false</code> to return
@@ -1590,7 +1587,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      *  be called when events of type <code>systemEventClass</code> are
      *  fired.
      *
-     * @throws <code>NullPointerException</code> if <code>systemEventClass</code>
+     * @throws NullPointerException if <code>systemEventClass</code>
      *  or <code>listener</code> are <code>null</code>.
      *
      * @since 2.0
@@ -1632,7 +1629,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      *  be called when events of type <code>systemEventClass</code> are
      *  fired.
      *
-     * @throws <code>NullPointerException</code> if
+     * @throws NullPointerException if
      * <code>systemEventClass</code> or <code>listener</code> are
      * <code>null</code>.
      *
