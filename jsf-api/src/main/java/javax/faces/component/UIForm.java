@@ -161,7 +161,9 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      * <strong>not</strong> experiencing a submit, this method must be
      * called, with <code>false</code> as the argument, during the
      * {@link UIComponent#decode} for this <code>UIForm</code>
-     * instance.</p> <p/> <p>The value of a <code>UIForm</code>'s
+     * instance.</p> 
+     * 
+     * <p>The value of a <code>UIForm</code>'s
      * submitted property must not be saved as part of its state.</p>
 
      * <p class="changed_modified_2_1">This property must be kept as a
