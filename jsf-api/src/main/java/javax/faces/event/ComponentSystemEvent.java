@@ -67,7 +67,7 @@ public abstract class ComponentSystemEvent extends SystemEvent {
      * @param component the <code>UIComponent</code> reference to be
      * passed to the superclass constructor.
      *
-     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      * 
      * @since 2.0
      */
