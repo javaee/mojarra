@@ -238,7 +238,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * <em>delay</em> milliseconds elapses between calls to
      * <em>request()</em> only the most recent one is sent and all other
      * requests are discarded. The default value of this option is
-     * 300.</code> If the value of <em>delay</em> is the literal string
+     * 300. If the value of <em>delay</em> is the literal string
      * <code>'none'</code> without the quotes, no delay is used.</p>
      *
      * @param delay the ajax delay value
@@ -412,7 +412,6 @@ public class AjaxBehavior extends ClientBehaviorBase {
     /**
      * <p class="changed_added_2_0">Sets the {@link ValueExpression} 
      * used to calculate the value for the specified property name.</p>
-     * </p>
      *
      * @param name Name of the property for which to set a
      *  {@link ValueExpression}
