@@ -142,7 +142,7 @@ import javax.faces.component.UIComponent;
  * <code>UIComponent</code> instance has been populated with children as
  * a result of execution of child tag handlers, subclasses may override
  * {@link #onComponentPopulated}.</p></li>
-
+ * </ul>
  * </div>
 
  * </div>
