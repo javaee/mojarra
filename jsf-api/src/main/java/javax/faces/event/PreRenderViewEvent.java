@@ -82,7 +82,7 @@ public class PreRenderViewEvent extends ComponentSystemEvent {
      * @param root the <code>UIViewRoot</code> that is about to be
      * rendered.
 
-     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
     public PreRenderViewEvent(UIViewRoot root) {
         super(root);
