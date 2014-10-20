@@ -67,7 +67,7 @@ public class PostRestoreStateEvent extends ComponentSystemEvent {
 
      * @param component the <code>UIComponent</code> whose state was just restored.
 
-     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
     public PostRestoreStateEvent(UIComponent component) {
         super(component);
