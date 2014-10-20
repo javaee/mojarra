@@ -64,7 +64,7 @@ public abstract class SystemEvent extends EventObject {
      * @param source the <code>source</code> reference to be
      * passed to the superclass constructor.
      *
-     * @throws <code>IllegalArgumentException</code> if the argument is
+     * @throws IllegalArgumentException if the argument is
      * <code>null</code>.
      */
     public SystemEvent(Object source) {
