@@ -209,7 +209,7 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
 
             if (event != null) {
                 if (unhandledExceptions == null) {
-                    unhandledExceptions = new LinkedList<ExceptionQueuedEvent>();
+                    unhandledExceptions = new LinkedList<>();
                 }
                 unhandledExceptions.add((ExceptionQueuedEvent) event);
             }

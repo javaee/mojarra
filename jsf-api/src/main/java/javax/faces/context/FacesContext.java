@@ -173,7 +173,7 @@ public abstract class FacesContext {
         }
         if (!isCreatedFromValidFactory) {
             if (attributesForInvalidFactoryConstruction == null) {
-                attributesForInvalidFactoryConstruction = new HashMap<Object, Object>();
+                attributesForInvalidFactoryConstruction = new HashMap<>();
             }
             return attributesForInvalidFactoryConstruction;
         }

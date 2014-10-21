@@ -90,7 +90,7 @@ final class FactoryFinderInstance {
     static {
         
         Map<String, Class> buildUpFactoryClasses; 
-        buildUpFactoryClasses = new HashMap<String, Class>();
+        buildUpFactoryClasses = new HashMap<>();
         buildUpFactoryClasses.put(FactoryFinder.APPLICATION_FACTORY,
                  javax.faces.application.ApplicationFactory.class);
         buildUpFactoryClasses.put(FactoryFinder.VISIT_CONTEXT_FACTORY,
@@ -148,8 +148,8 @@ final class FactoryFinderInstance {
     // -------------------------------------------------------- Consturctors
     public FactoryFinderInstance() {
         lock = new ReentrantReadWriteLock(true);
-        factories = new HashMap<String, Object>();
-        savedFactoryNames = new HashMap<String, List<String>>();
+        factories = new HashMap<>();
+        savedFactoryNames = new HashMap<>();
         for (String name : FACTORY_NAMES) {
             factories.put(name, new ArrayList(4));
         }
@@ -158,8 +158,8 @@ final class FactoryFinderInstance {
 
     public FactoryFinderInstance(FactoryFinderInstance toCopy) {
         lock = new ReentrantReadWriteLock(true);
-        factories = new HashMap<String, Object>();
-        savedFactoryNames = new HashMap<String, List<String>>();
+        factories = new HashMap<>();
+        savedFactoryNames = new HashMap<>();
         factories.putAll(toCopy.savedFactoryNames);
         copyInjectionProviderFromFacesContext();
     }

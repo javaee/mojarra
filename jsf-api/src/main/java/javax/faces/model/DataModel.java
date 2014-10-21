@@ -211,7 +211,7 @@ public abstract class DataModel<E> implements Iterable<E> {
         }
         if (listeners == null) {
             //noinspection CollectionWithoutInitialCapacity
-            listeners = new ArrayList<DataModelListener>();
+            listeners = new ArrayList<>();
         }
         listeners.add(listener);
 
@@ -266,7 +266,7 @@ public abstract class DataModel<E> implements Iterable<E> {
      */
     public Iterator<E> iterator() {
 
-        return new DataModelIterator<E>(this);
+        return new DataModelIterator<>(this);
         
     }
     

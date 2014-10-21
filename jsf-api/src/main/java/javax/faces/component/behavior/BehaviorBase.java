@@ -231,7 +231,7 @@ public class BehaviorBase implements Behavior, PartialStateHolder {
         }
         if (listeners == null) {
             //noinspection CollectionWithoutInitialCapacity
-            listeners = new ArrayList<BehaviorListener>();
+            listeners = new ArrayList<>();
         }
         listeners.add(listener);
 

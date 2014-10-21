@@ -802,7 +802,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     protected void addChild(UIComponent child) {
 
         if (createdComponents == null) {
-            createdComponents = new ArrayList<String>(6);
+            createdComponents = new ArrayList<>(6);
         }
         createdComponents.add(child.getId());
     }
@@ -826,7 +826,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
         if (createdFacets == null) {
             //noinspection CollectionWithoutInitialCapacity
-            createdFacets = new ArrayList<String>(3);
+            createdFacets = new ArrayList<>(3);
         }
         createdFacets.add(name);
 
@@ -864,7 +864,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                 context.getAttributes().get(COMPONENT_TAG_STACK_ATTR), UIComponentClassicTagBase.class);
         if (list == null) {
             //noinspection CollectionWithoutInitialCapacity
-            list = new ArrayList<UIComponentClassicTagBase>();
+            list = new ArrayList<>();
             context.getAttributes().put(COMPONENT_TAG_STACK_ATTR, list);
         }
         list.add(this);
@@ -1318,7 +1318,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         String clientId = null;
 
         if (component instanceof NamingContainer || (parentTag == null)) {
-            namingContainerChildIds = new HashMap<String, Map<String, UIComponentTagBase>>();
+            namingContainerChildIds = new HashMap<>();
         }
 
         if (this.id != null) {
@@ -1900,7 +1900,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
         if (null == previousJspIdSet)
         {
-            previousJspIdSet = new HashSet<String>();
+            previousJspIdSet = new HashSet<>();
 
             //noinspection CollectionWithoutInitialCapacity
             pageContext.setAttribute(PREVIOUS_JSP_ID_SET, previousJspIdSet, PageContext.PAGE_SCOPE);

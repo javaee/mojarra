@@ -440,7 +440,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
                     // an AjaxBehavior would have more than 1 or 2 bound 
                     // properties - and even if more are present, it's okay
                     // if we have some collisions - will still be fast.
-                    bindings = new HashMap<String, ValueExpression>(6,1.0f);
+                    bindings = new HashMap<>(6,1.0f);
                 }
 
                 bindings.put(name, binding);
@@ -593,7 +593,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
         Object values[] = (Object[]) state;
         String names[] = (String[]) values[0];
         Object states[] = (Object[]) values[1];
-        Map<String, ValueExpression> bindings = new HashMap<String, ValueExpression>(names.length);
+        Map<String, ValueExpression> bindings = new HashMap<>(names.length);
         for (int i = 0; i < names.length; i++) {
             bindings.put(names[i],
                     (ValueExpression) UIComponentBase.restoreAttachedState(context, states[i]));

@@ -405,7 +405,7 @@ public final class FacesServlet implements Servlet {
             methods = allowedHttpMethodsString.split("\\s+");
             assert (null != methods); // assuming split always returns a non-null array result
             allowedUnknownHttpMethods = new HashSet(methods.length);
-            List<String> allowedKnownHttpMethodsStringList = new ArrayList<String>();
+            List<String> allowedKnownHttpMethodsStringList = new ArrayList<>();
             // validate input against allHttpMethods data structure
             for (String cur : methods) {
                 if (cur.equals("*")) {
@@ -480,7 +480,7 @@ public final class FacesServlet implements Servlet {
                 
             } else {
                 List<HttpMethod> restList = 
-                        new ArrayList<HttpMethod>(allowedKnownHttpMethodsStringList.size() - 1);
+                        new ArrayList<>(allowedKnownHttpMethodsStringList.size() - 1);
                 for (int i = 1; i < allowedKnownHttpMethodsStringList.size() - 1; i++) {
                     restList.add(HttpMethod.valueOf(
                             allowedKnownHttpMethodsStringList.get(i)

@@ -235,8 +235,8 @@ public class UIData extends UIComponentBase
      */
     private Boolean isNested = null;
 
-    private Map<String, Object> _rowDeltaStates = new HashMap<String, Object>();
-    private Map<String, Object> _rowTransientStates = new HashMap<String, Object>();
+    private Map<String, Object> _rowDeltaStates = new HashMap<>();
+    private Map<String, Object> _rowTransientStates = new HashMap<>();
     
     private Object _initialDescendantFullComponentState = null;
 
@@ -1549,7 +1549,7 @@ public class UIData extends UIComponentBase
         {
             if (childStates == null)
             {
-                childStates = new ArrayList<Object[]>();
+                childStates = new ArrayList<>();
             }
 
             UIComponent child = childIterator.next();
@@ -1602,7 +1602,7 @@ public class UIData extends UIComponentBase
                 {
                     if (stateMap == null)
                     {
-                        stateMap = new HashMap<String,Object>();
+                        stateMap = new HashMap<>();
                     }
                     stateMap.put(child.getClientId(facesContext), state);
                 }
@@ -1730,7 +1730,7 @@ public class UIData extends UIComponentBase
                 {
                     if (childStates == null)
                     {
-                        childStates = new HashMap<String, Object>();
+                        childStates = new HashMap<>();
                     }
                     childStates.put(child.getClientId(facesContext), state);
                 }
@@ -1967,7 +1967,7 @@ public class UIData extends UIComponentBase
         }
         
         // collect rendered columns once
-        List<UIColumn> renderedColumns = new ArrayList<UIColumn>(getChildCount());
+        List<UIColumn> renderedColumns = new ArrayList<>(getChildCount());
         if (getChildCount() > 0) {
         	for (UIComponent child : getChildren()) {
         		if (child instanceof UIColumn && child.isRendered()) {

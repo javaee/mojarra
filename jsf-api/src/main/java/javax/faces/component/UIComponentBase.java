@@ -148,7 +148,7 @@ public abstract class UIComponentBase extends UIComponent {
             
             if (!applicationMap.containsKey("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP")) {
                 applicationMap.put("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP", 
-                        new ConcurrentHashMap<Class<?>, Map<String, PropertyDescriptor>>());
+                        new ConcurrentHashMap<>());
             }
             
             descriptors = (Map<Class<?>, Map<String, PropertyDescriptor>>) applicationMap.get("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP");
@@ -162,7 +162,7 @@ public abstract class UIComponentBase extends UIComponent {
              */
             PropertyDescriptor pd[] = getPropertyDescriptors();
             if (pd != null) {
-                pdMap = new HashMap<String, PropertyDescriptor>(pd.length, 1.0f);
+                pdMap = new HashMap<>(pd.length, 1.0f);
                 for (PropertyDescriptor aPd : pd) {
                     pdMap.put(aPd.getName(), aPd);
                 }
@@ -220,7 +220,7 @@ public abstract class UIComponentBase extends UIComponent {
                 this.getStateHelper().get(PropertyKeys.passThroughAttributes);
         if (null == result) {
             if (create) {
-                result = new PassThroughAttributesMap<String, Object>();
+                result = new PassThroughAttributesMap<>();
                 this.getStateHelper().put(PropertyKeys.passThroughAttributes, 
                         result);
             }
@@ -975,7 +975,7 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         if (listeners == null) {
-            listeners = new AttachedObjectListHolder<FacesListener>();
+            listeners = new AttachedObjectListHolder<>();
         }
 
         listeners.add(listener);
@@ -1004,7 +1004,7 @@ public abstract class UIComponentBase extends UIComponent {
             return (FacesListener[]) Array.newInstance(clazz, 0);
         }
 
-        List<FacesListener> results = new ArrayList<FacesListener>(listeners.length);
+        List<FacesListener> results = new ArrayList<>(listeners.length);
         for (FacesListener listener : listeners) {
             if (((Class<?>) clazz).isAssignableFrom(listener.getClass())) {
                 results.add(listener);
@@ -1098,15 +1098,14 @@ public abstract class UIComponentBase extends UIComponent {
             initialState = false;
         }
         if (null == listenersByEventClass) {
-            listenersByEventClass = new HashMap<Class<? extends SystemEvent>,
-                                                List<SystemEventListener>>(3, 1.0f);
+            listenersByEventClass = new HashMap<>(3, 1.0f);
         }
         SystemEventListener facesLifecycleListener =
               new ComponentSystemEventListenerAdapter(componentListener, this);
         List<SystemEventListener> listenersForEventClass =
               listenersByEventClass.get(eventClass);
         if (listenersForEventClass == null) {
-            listenersForEventClass = new ArrayList<SystemEventListener>(3);
+            listenersForEventClass = new ArrayList<>(3);
             listenersByEventClass.put(eventClass, listenersForEventClass);
         }
         if (!listenersForEventClass.contains(facesLifecycleListener)) {
@@ -1323,7 +1322,7 @@ public abstract class UIComponentBase extends UIComponent {
             if (count > 0) {
 
                 // this arraylist will store state
-                List<Object> stateList = new ArrayList<Object>(count);
+                List<Object> stateList = new ArrayList<>(count);
 
                 // if we have children, add them to the stateList
                 if (this.getChildCount() > 0) {
@@ -1606,7 +1605,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         if (values[0] != null) {
             if (listeners == null) {
-                listeners = new AttachedObjectListHolder<FacesListener>();
+                listeners = new AttachedObjectListHolder<>();
             }
             listeners.restoreState(context, values[0]);
         }
@@ -1718,7 +1717,7 @@ public abstract class UIComponentBase extends UIComponent {
                         continue;
                     }
                     if (resultList == null) {
-                        resultList = new ArrayList<StateHolderSaver>(attachedCollection.size() + 1);
+                        resultList = new ArrayList<>(attachedCollection.size() + 1);
                         resultList.add(new StateHolderSaver(context, mapOrCollectionClass));
                     }
                     resultList.add(new StateHolderSaver(context, item));
@@ -1739,7 +1738,7 @@ public abstract class UIComponentBase extends UIComponent {
                     continue;
                 }
                 if (resultList == null) {
-                    resultList = new ArrayList<StateHolderSaver>(attachedMap.size()*2 + 1);
+                    resultList = new ArrayList<>(attachedMap.size()*2 + 1);
                     resultList.add(new StateHolderSaver(context, mapOrCollectionClass));
                 }
                 resultList.add(new StateHolderSaver(context, key));
@@ -1848,7 +1847,7 @@ public abstract class UIComponentBase extends UIComponent {
         Object values[] = (Object[]) state;
         String names[] = (String[]) values[0];
         Object states[] = (Object[]) values[1];
-        Map<String, ValueExpression> bindings = new HashMap<String, ValueExpression>(names.length);
+        Map<String, ValueExpression> bindings = new HashMap<>(names.length);
         for (int i = 0; i < names.length; i++) {
             bindings.put(names[i],
                     (ValueExpression) restoreAttachedState(context, states[i]));
@@ -1912,7 +1911,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         Object[][] listeners = (Object[][]) state;
         Map<Class<? extends SystemEvent>, List<SystemEventListener>> m =
-                new HashMap<Class<? extends SystemEvent>, List<SystemEventListener>>(listeners.length, 1.0f);
+                new HashMap<>(listeners.length, 1.0f);
         for (int i = 0, len = listeners.length; i < len; i++) {
             Object[] source = listeners[i];
             m.put((Class<? extends SystemEvent>) source[0],
@@ -2014,7 +2013,7 @@ public abstract class UIComponentBase extends UIComponent {
                 // any component - in most cases only 1.  Using a very small
                 // initial capacity so that we keep the footprint to a minimum.
                 Map<String, List<ClientBehavior>> modifiableMap =
-                    new HashMap<String, List<ClientBehavior>>(5,1.0f);
+                    new HashMap<>(5,1.0f);
                 behaviors = new BehaviorsMap(modifiableMap);
             }
 
@@ -2023,7 +2022,7 @@ public abstract class UIComponentBase extends UIComponent {
             if (null == eventBehaviours) {
                 // Again using small initial capacity - we typically
                 // only have 1 Behavior per event type.
-                eventBehaviours = new ArrayList<ClientBehavior>(3);
+                eventBehaviours = new ArrayList<>(3);
                 behaviors.getModifiableMap().put(eventName, eventBehaviours);
             }
 
@@ -2176,13 +2175,13 @@ public abstract class UIComponentBase extends UIComponent {
             // restoreAttachedState(), otherwise, call restoreState() on the
             // behaviors directly.
             if (!initialStateMarked()) {
-                Map<String, List<ClientBehavior>> modifiableMap = new HashMap<String, List<ClientBehavior>>(
+                Map<String, List<ClientBehavior>> modifiableMap = new HashMap<>(
                       names.length,
                       1.0f);
                 for (int i = 0; i < attachedBehaviors.length; i++) {
                     Object[] attachedEventBehaviors = (Object[]) attachedBehaviors[i];
                     ArrayList<ClientBehavior> eventBehaviors =
-                          new ArrayList<ClientBehavior>(attachedBehaviors.length);
+                          new ArrayList<>(attachedBehaviors.length);
                     for (int j = 0; j < attachedEventBehaviors.length; j++) {
                         eventBehaviors.add((ClientBehavior) restoreAttachedState(context,
                                                                                  attachedEventBehaviors[j]));
@@ -2253,7 +2252,7 @@ public abstract class UIComponentBase extends UIComponent {
             application.publishEvent(context, PostAddToViewEvent.class, component);
             if (component.getChildCount() > 0) {
                 Collection<UIComponent> clist =
-                      new ArrayList<UIComponent>(component.getChildren());
+                      new ArrayList<>(component.getChildren());
                 for (UIComponent c : clist) {
                     publishAfterViewEvents(context, application, c);
                 }
@@ -2261,7 +2260,7 @@ public abstract class UIComponentBase extends UIComponent {
 
             if (component.getFacetCount() > 0) {
                 Collection<UIComponent> clist =
-                      new ArrayList<UIComponent>(component.getFacets().values());
+                      new ArrayList<>(component.getFacets().values());
                 for (UIComponent c : clist) {
                     publishAfterViewEvents(context, application, c);
                 }
@@ -2691,7 +2690,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         public boolean addAll(Collection<? extends UIComponent> collection) {
             Iterator<UIComponent> elements =
-                    (new ArrayList<UIComponent>(collection)).iterator();
+                    (new ArrayList<>(collection)).iterator();
             boolean changed = false;
             while (elements.hasNext()) {
                 UIComponent element = elements.next();
@@ -2707,7 +2706,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         public boolean addAll(int index, Collection<? extends UIComponent> collection) {
             Iterator<UIComponent> elements =
-                    (new ArrayList<UIComponent>(collection)).iterator();
+                    (new ArrayList<>(collection)).iterator();
             boolean changed = false;
             while (elements.hasNext()) {
                 UIComponent element = elements.next();
@@ -3018,7 +3017,7 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         Iterator<String> keySetIterator() {
-            return ((new ArrayList<String>(super.keySet())).iterator());
+            return ((new ArrayList<>(super.keySet())).iterator());
         }
 
     }

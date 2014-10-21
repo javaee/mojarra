@@ -109,7 +109,7 @@ public abstract class ViewMetadata {
         if (metadataFacet == null) {
             params = Collections.emptyList();
         } else {
-            params = new ArrayList<UIViewParameter>();
+            params = new ArrayList<>();
             List<UIComponent> children = metadataFacet.getChildren();
             int len = children.size();
             for (int i = 0; i < len; i++) {
@@ -142,7 +142,7 @@ public abstract class ViewMetadata {
         if (metadataFacet == null) {
             actions = Collections.emptyList();
         } else {
-            actions = new ArrayList<UIViewAction>();
+            actions = new ArrayList<>();
             List<UIComponent> children = metadataFacet.getChildren();
             int len = children.size();
             for (int i = 0; i < len; i++) {

@@ -335,7 +335,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
                           violation.getMessage(),
                           MessageFactory.getLabel(context, component)));
                 } else {
-                    Set<FacesMessage> messages = new LinkedHashSet<FacesMessage>(
+                    Set<FacesMessage> messages = new LinkedHashSet<>(
                           violations.size());
                     for (ConstraintViolation violation : violations) {
                         messages.add(MessageFactory.getMessage(context,
@@ -400,7 +400,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
             return cachedValidationGroups;
         }
 
-        List<Class> validationGroupsList = new ArrayList<Class>();
+        List<Class> validationGroupsList = new ArrayList<>();
         String[] classNames = validationGroupsStr.split(VALIDATION_GROUPS_DELIMITER);
         for (String className : classNames) {
             className = className.trim();

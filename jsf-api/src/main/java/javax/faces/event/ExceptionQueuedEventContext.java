@@ -242,7 +242,7 @@ public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
     public Map<Object, Object> getAttributes() {
 
         if (null == attributes) {
-            attributes = new HashMap<Object,Object>();
+            attributes = new HashMap<>();
         }
         return attributes;
 
@@ -258,7 +258,7 @@ public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass) {
 
         if (null == listener) {
-            List<SystemEventListener> list = new ArrayList<SystemEventListener>(1);
+            List<SystemEventListener> list = new ArrayList<>(1);
             list.add(context.getExceptionHandler());
             listener = Collections.unmodifiableList(list);
         }

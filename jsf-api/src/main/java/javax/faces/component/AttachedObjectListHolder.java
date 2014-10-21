@@ -56,7 +56,7 @@ import java.util.Iterator;
 class AttachedObjectListHolder<T> implements PartialStateHolder {
 
     private boolean initialState;
-    private List<T> attachedObjects = new ArrayList<T>(2);
+    private List<T> attachedObjects = new ArrayList<>(2);
 
 
     // ------------------------------------- Methods from PartialStateHolder
@@ -206,7 +206,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
 
     T[] asArray(Class<T> type) {
 
-        return new ArrayList<T>(attachedObjects).toArray((T[])Array.newInstance(type, attachedObjects.size()));
+        return new ArrayList<>(attachedObjects).toArray((T[])Array.newInstance(type, attachedObjects.size()));
         
     }
     

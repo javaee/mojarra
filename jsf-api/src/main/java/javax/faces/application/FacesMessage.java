@@ -166,7 +166,7 @@ public class FacesMessage implements Serializable {
 	Collections.unmodifiableList(Arrays.asList(values));
 
     private static Map<String,Severity> _MODIFIABLE_MAP =
-         new HashMap<String,Severity>(4, 1.0f);
+         new HashMap<>(4, 1.0f);
     
     static {
 	for (int i = 0, len = values.length; i < len; i++) {

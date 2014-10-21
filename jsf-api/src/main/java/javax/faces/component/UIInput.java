@@ -1302,7 +1302,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
 
         if (validators == null) {
-            validators = new AttachedObjectListHolder<Validator>();
+            validators = new AttachedObjectListHolder<>();
         }
         validators.add(validator);
 
@@ -1418,7 +1418,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         super.restoreState(context, values[0]);
         if (values[1] != null) {
             if (validators == null) {
-                validators = new AttachedObjectListHolder<Validator>();
+                validators = new AttachedObjectListHolder<>();
             }
             validators.restoreState(context, values[1]);
         }

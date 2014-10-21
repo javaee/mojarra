@@ -1116,7 +1116,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
 
 
                             public Set keySet() {
-                                Set<String> keySet = new HashSet<String>();
+                                Set<String> keySet = new HashSet<>();
                                 Enumeration<String> keys = bundle.getKeys();
                                 while (keys.hasMoreElements()) {
                                     keySet.add(keys.nextElement());
@@ -1155,7 +1155,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
 
 
                             public java.util.Collection values() {
-                                ArrayList<Object> result = new ArrayList<Object>();
+                                ArrayList<Object> result = new ArrayList<>();
                                 Enumeration<String> keys = bundle.getKeys();
                                 while (keys.hasMoreElements()) {
                                     result.add(
@@ -1861,7 +1861,7 @@ private void doFind(FacesContext context, String clientId) {
       
       if (elStack == null)
       {
-        elStack = new ArrayDeque<UIComponent>();
+        elStack = new ArrayDeque<>();
         contextAttributes.put(keyName, elStack);
       }
       

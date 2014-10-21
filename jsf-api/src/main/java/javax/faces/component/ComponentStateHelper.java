@@ -70,8 +70,8 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     public ComponentStateHelper(UIComponent component) {
 
         this.component = component;
-        this.deltaMap = new HashMap<Serializable,Object>();
-        this.defaultMap = new HashMap<Serializable,Object>();
+        this.deltaMap = new HashMap<>();
+        this.defaultMap = new HashMap<>();
         this.transientState = null;
     }
 
@@ -140,7 +140,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
         if (component.initialStateMarked()) {
             Map<String,Object> dMap = (Map<String,Object>) deltaMap.get(key);
             if (dMap == null) {
-                dMap = new HashMap<String,Object>(5);
+                dMap = new HashMap<>(5);
                 deltaMap.put(key, dMap);
             }
             ret = dMap.put(mapKey, value);
@@ -148,7 +148,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
         }
         Map<String,Object> map = (Map<String,Object>) get(key);
         if (map == null) {
-            map = new HashMap<String,Object>(8);
+            map = new HashMap<>(8);
             defaultMap.put(key, map);
         }
         if (ret == null) {
@@ -208,14 +208,14 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
         if (component.initialStateMarked()) {
             List<Object> deltaList = (List<Object>) deltaMap.get(key);
             if (deltaList == null) {
-                deltaList = new ArrayList<Object>(4);
+                deltaList = new ArrayList<>(4);
                 deltaMap.put(key, deltaList);
             }
             deltaList.add(value);
         }
         List<Object> items = (List<Object>) get(key);
         if (items == null) {
-            items = new ArrayList<Object>(4);
+            items = new ArrayList<>(4);
             defaultMap.put(key, items);
         }
         items.add(value);
@@ -463,7 +463,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     {
         if (transientState == null)
         {
-            transientState = new HashMap<Object, Object>();
+            transientState = new HashMap<>();
         }
         return transientState.put(key, value);
     }

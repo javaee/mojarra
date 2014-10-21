@@ -53,7 +53,7 @@ import javax.faces.context.FacesContext;
 
 // ----------------------------------------------------------- Inner Classes
 final class CurrentThreadToServletContext {
-    ConcurrentMap<FactoryManagerCacheKey, FactoryFinderInstance> applicationMap = new ConcurrentHashMap<FactoryManagerCacheKey, FactoryFinderInstance>();
+    ConcurrentMap<FactoryManagerCacheKey, FactoryFinderInstance> applicationMap = new ConcurrentHashMap<>();
     private AtomicBoolean logNullFacesContext = new AtomicBoolean(false);
     private AtomicBoolean logNonNullFacesContext = new AtomicBoolean(false);
     
