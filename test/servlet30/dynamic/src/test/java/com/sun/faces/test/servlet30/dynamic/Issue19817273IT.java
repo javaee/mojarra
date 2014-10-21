@@ -66,6 +66,7 @@ public class Issue19817273IT {
         // Only exercise this test in Full State Saving
         if (pageText.contains("FSS")) {
             HtmlElement result = page.getHtmlElementById("hasMarkChildrenModified");
+            System.out.println("result: " + result.asText());
             assertTrue(result.asText().equals("true"));
         }
     }
