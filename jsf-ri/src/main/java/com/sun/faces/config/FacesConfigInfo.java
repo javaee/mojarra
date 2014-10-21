@@ -228,7 +228,7 @@ public class FacesConfigInfo {
             }
             Node absoluteOrderingNode = absoluteOrderingElements.item(0);
             NodeList children = absoluteOrderingNode.getChildNodes();
-            absoluteOrdering = new ArrayList<String>(children.getLength());
+            absoluteOrdering = new ArrayList<>(children.getLength());
             for (int i = 0, len = children.getLength(); i < len; i++) {
                 Node n = children.item(i);
                 if (NAME.equals(n.getLocalName())) {

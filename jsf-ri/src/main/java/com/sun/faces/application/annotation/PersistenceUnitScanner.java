@@ -73,8 +73,8 @@ class PersistenceUnitScanner implements Scanner {
         Util.notNull("clazz", clazz);
         PersistenceUnitHandler handler = null;
 
-        ArrayList<PersistenceUnit> fieldAnnotations = new ArrayList<PersistenceUnit>();
-        ArrayList<Field> fields = new ArrayList<Field>();
+        ArrayList<PersistenceUnit> fieldAnnotations = new ArrayList<>();
+        ArrayList<Field> fields = new ArrayList<>();
 
         for (Field field : clazz.getDeclaredFields()) {
             PersistenceUnit fieldAnnotation = field.getAnnotation(PersistenceUnit.class);
@@ -84,8 +84,8 @@ class PersistenceUnitScanner implements Scanner {
             }
         }
         
-        ArrayList<PersistenceUnit> methodAnnotations = new ArrayList<PersistenceUnit>();
-        ArrayList<Method> methods = new ArrayList<Method>();
+        ArrayList<PersistenceUnit> methodAnnotations = new ArrayList<>();
+        ArrayList<Method> methods = new ArrayList<>();
         for (Method method : clazz.getDeclaredMethods()) {
             PersistenceUnit methodAnnotation = method.getAnnotation(PersistenceUnit.class);
             if (methodAnnotation != null) {

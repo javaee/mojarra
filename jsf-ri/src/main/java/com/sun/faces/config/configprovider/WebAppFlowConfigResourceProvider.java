@@ -116,7 +116,7 @@ public class WebAppFlowConfigResourceProvider implements
         for (String cur : allPaths) {
             if (cur.endsWith(RIConstants.FLOW_DEFINITION_ID_SUFFIX)) {
                 if (null == list) {
-                    list = new ArrayList<URI>();
+                    list = new ArrayList<>();
                 }
                 try {
                     curUrl = context.getResource(cur);

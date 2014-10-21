@@ -83,7 +83,7 @@ public class NamedEventConfigHandler implements ConfigAnnotationHandler {
 
     public void collect(Class<?> target, Annotation annotation) {
         if (namedEvents == null) {
-            namedEvents = new HashMap<Class<?>, Annotation>();
+            namedEvents = new HashMap<>();
         }
         namedEvents.put(target, annotation);
     }

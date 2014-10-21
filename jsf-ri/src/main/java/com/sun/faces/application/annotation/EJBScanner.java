@@ -73,8 +73,8 @@ class EJBScanner implements Scanner {
         Util.notNull("clazz", clazz);
         EJBHandler handler = null;
 
-        ArrayList<EJB> fieldAnnotations = new ArrayList<EJB>();
-        ArrayList<Field> fields = new ArrayList<Field>();
+        ArrayList<EJB> fieldAnnotations = new ArrayList<>();
+        ArrayList<Field> fields = new ArrayList<>();
 
         for (Field field : clazz.getDeclaredFields()) {
             EJB fieldAnnotation = field.getAnnotation(EJB.class);
@@ -84,8 +84,8 @@ class EJBScanner implements Scanner {
             }
         }
         
-        ArrayList<EJB> methodAnnotations = new ArrayList<EJB>();
-        ArrayList<Method> methods = new ArrayList<Method>();
+        ArrayList<EJB> methodAnnotations = new ArrayList<>();
+        ArrayList<Method> methods = new ArrayList<>();
 
         for (Method method : clazz.getDeclaredMethods()) {
             EJB methodAnnotation = method.getAnnotation(EJB.class);

@@ -120,7 +120,7 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
     @Override
     public Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(Set<URI> uris) {
 
-        Set<String> classList = new HashSet<String>();
+        Set<String> classList = new HashSet<>();
 
         processWebInfClasses(sc, classList);
         processClasspath(uris, classList);

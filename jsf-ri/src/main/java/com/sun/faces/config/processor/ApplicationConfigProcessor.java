@@ -261,7 +261,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         ApplicationAssociate associate =
               ApplicationAssociate.getInstance(
                     FacesContext.getCurrentInstance().getExternalContext());
-        LinkedHashMap<String,Node> viewHandlers = new LinkedHashMap<String,Node>();
+        LinkedHashMap<String,Node> viewHandlers = new LinkedHashMap<>();
         LinkedHashSet<String> defaultValidatorIds = null;
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -320,7 +320,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                 addSystemEventListener(sc, app, n);
                             } else if (DEFAULT_VALIDATORS.equals(n.getLocalName())) {
                                 if (defaultValidatorIds == null) {
-                                    defaultValidatorIds = new LinkedHashSet<String>();
+                                    defaultValidatorIds = new LinkedHashSet<>();
                                 } else {
                                     defaultValidatorIds.clear();
                                 }
@@ -356,7 +356,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
      */
     private void registerDefaultValidatorIds(Application application, LinkedHashSet<String> defaultValidatorIds) {
         if (defaultValidatorIds == null) {
-            defaultValidatorIds = new LinkedHashSet<String>();
+            defaultValidatorIds = new LinkedHashSet<>();
             if (isBeanValidatorAvailable()) {
                 WebConfiguration webConfig = WebConfiguration.getInstance();
                 if (!webConfig.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableDefaultBeanValidator)) {
@@ -597,7 +597,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                      .getELResolversFromFacesConfig();
                 if (resolvers == null) {
                     //noinspection CollectionWithoutInitialCapacity
-                    resolvers = new ArrayList<ELResolver>();
+                    resolvers = new ArrayList<>();
                     associate.setELResolversFromFacesConfig(resolvers);
                 }
                 String elResolverClass = getNodeText(elResolver);
@@ -753,12 +753,12 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                             var = getNodeText(n);
                         } else if (RES_DESCRIPTIONS.equals(n.getLocalName())) {
                             if (descriptions == null) {
-                                descriptions = new ArrayList<Node>(2);
+                                descriptions = new ArrayList<>(2);
                             }
                             descriptions.add(n);
                         } else if (RES_DISPLAY_NAMES.equals(n.getLocalName())) {
                             if (displayNames == null) {
-                                displayNames = new ArrayList<Node>(2);
+                                displayNames = new ArrayList<>(2);
                             }
                             displayNames.add(n);
                         }
@@ -779,7 +779,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     private Set<Locale> getCurrentLocales(Application application) {
 
         //noinspection CollectionWithoutInitialCapacity
-        Set<Locale> supportedLocales = new HashSet<Locale>();
+        Set<Locale> supportedLocales = new HashSet<>();
         for (Iterator<Locale> i = application.getSupportedLocales();
              i.hasNext();) {
             supportedLocales.add(i.next());

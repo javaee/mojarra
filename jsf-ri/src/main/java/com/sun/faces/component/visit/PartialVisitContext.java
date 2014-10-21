@@ -249,18 +249,18 @@ public class PartialVisitContext extends VisitContext {
         // perhaps we could pick more intelligent defaults.
 
         // Initialize unvisitedClientIds collection
-        this.unvisitedClientIds = new HashSet<String>();
+        this.unvisitedClientIds = new HashSet<>();
 
         // Initialize ids collection
-        this.ids = new HashSet<String>();
+        this.ids = new HashSet<>();
 
         // Intialize subtreeClientIds collection
-        this.subtreeClientIds = new HashMap<String,Collection<String>>();
+        this.subtreeClientIds = new HashMap<>();
 
         // Initialize the clientIds collection.  Note that we proxy 
         // this collection so that we can trap adds/removes and sync 
         // up all of the other collections.
-        this.clientIds = new CollectionProxy<String>(new HashSet<String>());
+        this.clientIds = new CollectionProxy<>(new HashSet<>());
 
         // Finally, populate the clientIds collection.  This has the
         // side effect of populating all of the other collections.       
@@ -338,7 +338,7 @@ public class PartialVisitContext extends VisitContext {
                 Collection<String> c = subtreeClientIds.get(namingContainerClientId);
 
                 if (c == null) {
-                    c = new ArrayList<String>();
+                    c = new ArrayList<>();
                     subtreeClientIds.put(namingContainerClientId, c);
                 }
 

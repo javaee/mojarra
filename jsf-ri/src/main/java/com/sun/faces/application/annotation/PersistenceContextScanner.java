@@ -73,8 +73,8 @@ class PersistenceContextScanner implements Scanner {
         Util.notNull("clazz", clazz);
         PersistenceContextHandler handler = null;
 
-        ArrayList<PersistenceContext> fieldAnnotations = new ArrayList<PersistenceContext>();
-        ArrayList<Field> fields = new ArrayList<Field>();
+        ArrayList<PersistenceContext> fieldAnnotations = new ArrayList<>();
+        ArrayList<Field> fields = new ArrayList<>();
 
         for (Field field : clazz.getDeclaredFields()) {
             PersistenceContext fieldAnnotation = field.getAnnotation(PersistenceContext.class);
@@ -84,8 +84,8 @@ class PersistenceContextScanner implements Scanner {
             }
         }
         
-        ArrayList<PersistenceContext> methodAnnotations = new ArrayList<PersistenceContext>();
-        ArrayList<Method> methods = new ArrayList<Method>();
+        ArrayList<PersistenceContext> methodAnnotations = new ArrayList<>();
+        ArrayList<Method> methods = new ArrayList<>();
         for (Method method : clazz.getDeclaredMethods()) {
             PersistenceContext methodAnnotation = method.getAnnotation(PersistenceContext.class);
             if (methodAnnotation != null) {

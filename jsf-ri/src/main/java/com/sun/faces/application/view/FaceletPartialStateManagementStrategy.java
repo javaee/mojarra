@@ -113,7 +113,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
             LOGGER.log(Level.FINEST, "FaceletPartialStateManagementStrategy.locateComponentByClientId", clientId);
         }
 
-        final List<UIComponent> found = new ArrayList<UIComponent>();
+        final List<UIComponent> found = new ArrayList<>();
         UIComponent result = null;
 
         try {
@@ -420,7 +420,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
         HashMap<String, UIComponent> componentMap = stateContext.getDynamicComponents();
         
         if (actions != null) {
-            List<Object> savedActions = new ArrayList<Object>(actions.size());
+            List<Object> savedActions = new ArrayList<>(actions.size());
             for (ComponentStruct action : actions) {
                 UIComponent component = componentMap.get(action.clientId);
                 if (component == null && context.isProjectStage(ProjectStage.Development)) {
@@ -458,9 +458,9 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
             return null;
         }
 
-        Util.checkIdUniqueness(context, viewRoot, new HashSet<String>(viewRoot.getChildCount() << 1));
+        Util.checkIdUniqueness(context, viewRoot, new HashSet<>(viewRoot.getChildCount() << 1));
 
-        final Map<String, Object> stateMap = new HashMap<String, Object>();
+        final Map<String, Object> stateMap = new HashMap<>();
         final StateContext stateContext = StateContext.getStateContext(context);
 
         context.getAttributes().put(SKIP_ITERATION_HINT, true);

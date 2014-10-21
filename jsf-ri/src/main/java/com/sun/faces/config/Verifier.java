@@ -62,7 +62,7 @@ public class Verifier {
      * Thread local to share the <code>Verifier</code>.
      */
     private static final ThreadLocal<Verifier> VERIFIER =
-            new ThreadLocal<Verifier>();
+            new ThreadLocal<>();
 
     /**
      * Represent the current Faces object types we validate.
@@ -89,7 +89,7 @@ public class Verifier {
      */
     Verifier() {
 
-        messages = new ArrayList<String>(4);
+        messages = new ArrayList<>(4);
         
     }
 

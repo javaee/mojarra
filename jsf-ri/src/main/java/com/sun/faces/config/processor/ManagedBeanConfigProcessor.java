@@ -305,12 +305,12 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
                     mapEntry = buildMapEntry(n);
                 } else if (MG_PROPERTY.equals(n.getLocalName())) {
                     if (managedProperties == null) {
-                        managedProperties = new ArrayList<Node>(size);
+                        managedProperties = new ArrayList<>(size);
                     }
                     managedProperties.add(n);
                 } else if (DESCRIPTION.equals(n.getLocalName())) {
                     if (descriptions == null) {
-                        descriptions = new ArrayList<Node>(4);
+                        descriptions = new ArrayList<>(4);
                     }
                     descriptions.add(n);
                 }
@@ -326,7 +326,7 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
 
         List<ManagedBeanInfo.ManagedProperty> properties = null;
         if (managedProperties != null && !managedProperties.isEmpty()) {
-             properties = new ArrayList<ManagedBeanInfo.ManagedProperty>(
+             properties = new ArrayList<>(
                  managedProperties.size());
             for (Node managedProperty : managedProperties) {
                 properties.add(buildManagedProperty(managedProperty));
@@ -366,12 +366,12 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
                         valueClass = getNodeText(child);
                     } else if (VALUE.equals(child.getLocalName())) {
                         if (values == null) {
-                            values = new ArrayList<String>(size);
+                            values = new ArrayList<>(size);
                         }
                         values.add(getNodeText(child));
                     } else if (NULL_VALUE.equals(child.getLocalName())) {
                         if (values == null) {
-                            values = new ArrayList<String>(size);
+                            values = new ArrayList<>(size);
                         }
                         values.add(ManagedBeanInfo.NULL_VALUE);
                     }
@@ -414,7 +414,7 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
                         keyClass = getNodeText(child);
                     } else if (MAP_ENTRY.equals(child.getLocalName())) {
                         if (entries == null) {
-                            entries = new LinkedHashMap<String,String>(8, 1.0f);
+                            entries = new LinkedHashMap<>(8, 1.0f);
                         }
                         NodeList c = child.getChildNodes();
                         String key = null;

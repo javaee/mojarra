@@ -154,7 +154,7 @@ public class WebappLifecycleListener {
         // PENDING this should only create a new list if in dev mode
          if (associate != null && associate.isDevModeEnabled()) {
             if (activeSessions == null) {
-                activeSessions = new ArrayList<HttpSession>();
+                activeSessions = new ArrayList<>();
             }
             activeSessions.add(event.getSession());
         }
@@ -358,7 +358,7 @@ public class WebappLifecycleListener {
 
 
     public List<HttpSession> getActiveSessions() {
-        return new ArrayList<HttpSession>(activeSessions);
+        return new ArrayList<>(activeSessions);
     }
 
 

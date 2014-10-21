@@ -144,9 +144,9 @@ public class ApplicationImpl extends Application {
     private static final ELContextListener[] EMPTY_EL_CTX_LIST_ARRAY = { };
 
     private static final Map<String,Class<?>[]> STANDARD_CONV_ID_TO_TYPE_MAP =
-         new HashMap<String,Class<?>[]>(8, 1.0f);
+         new HashMap<>(8, 1.0f);
     private static final Map<Class<?>,String> STANDARD_TYPE_TO_CONV_ID_MAP =
-         new HashMap<Class<?>,String>(16, 1.0f);
+         new HashMap<>(16, 1.0f);
 
     static {
         STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Byte", new Class[] { Byte.TYPE, Byte.class});
@@ -214,13 +214,13 @@ public class ApplicationImpl extends Application {
     public ApplicationImpl() {
         super();
         associate = new ApplicationAssociate(this);
-        componentMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
-        converterIdMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
-        converterTypeMap = new ConcurrentHashMap<Class<?>, Object>();
-        validatorMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
-        defaultValidatorIds = new LinkedHashSet<String>();
-        behaviorMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
-        elContextListeners = new CopyOnWriteArrayList<ELContextListener>();
+        componentMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<>());
+        converterIdMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<>());
+        converterTypeMap = new ConcurrentHashMap<>();
+        validatorMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<>());
+        defaultValidatorIds = new LinkedHashSet<>();
+        behaviorMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<>());
+        elContextListeners = new CopyOnWriteArrayList<>();
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
         elResolvers = new CompositeELResolver();
@@ -1090,7 +1090,7 @@ public class ApplicationImpl extends Application {
                         attributesWithDeclaredDefaultValues = (Collection<String>)
                                 desc.getValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES);
                         if (null == attributesWithDeclaredDefaultValues) {
-                            attributesWithDeclaredDefaultValues = new HashSet<String>();
+                            attributesWithDeclaredDefaultValues = new HashSet<>();
                             desc.setValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES,
                                     attributesWithDeclaredDefaultValues);
                         }
@@ -1650,7 +1650,7 @@ public class ApplicationImpl extends Application {
         if (defaultValidatorInfo == null) {
             synchronized (this) {
                 if (defaultValidatorInfo == null) {
-                    defaultValidatorInfo = new LinkedHashMap<String, String>();
+                    defaultValidatorInfo = new LinkedHashMap<>();
                     if (!defaultValidatorIds.isEmpty()) {
                         for (String id : defaultValidatorIds) {
                             String validatorClass;
@@ -2123,7 +2123,7 @@ public class ApplicationImpl extends Application {
 
             if (null == (result = (Map<Class<? extends SystemEvent>, Boolean>)
                          ctxMap.get(IS_PROCESSING_LISTENERS_KEY))) {
-                result = new HashMap<Class<? extends SystemEvent>, Boolean>(12);
+                result = new HashMap<>(12);
                 ctxMap.put(IS_PROCESSING_LISTENERS_KEY, result);
             }
 
@@ -2195,7 +2195,7 @@ public class ApplicationImpl extends Application {
 
           if (listeners != null && !listeners.isEmpty()) {
             ArrayList<SystemEventListener> list = 
-                    new ArrayList<SystemEventListener>(listeners);
+                    new ArrayList<>(listeners);
             
             for (SystemEventListener curListener : list) {
                 if (curListener != null && curListener.isListenerForSource(source)) {
@@ -2235,7 +2235,7 @@ public class ApplicationImpl extends Application {
               }
 
               Map<SystemEventListener, Boolean> processedListeners =
-                      new HashMap<SystemEventListener, Boolean>(listeners.size());
+                      new HashMap<>(listeners.size());
               boolean processedSomeEvents = false,
                       originalDiffersFromCopy = false;
 
@@ -2328,7 +2328,7 @@ public class ApplicationImpl extends Application {
         public SystemEventHelper() {
 
             systemEventInfoCache =
-                  new Cache<Class<? extends SystemEvent>, SystemEventInfo>(
+                  new Cache<>(
                         new Factory<Class<? extends SystemEvent>, SystemEventInfo>() {
                             public SystemEventInfo newInstance(final Class<? extends SystemEvent> arg)
                                   throws InterruptedException {
@@ -2403,10 +2403,10 @@ public class ApplicationImpl extends Application {
                                         return new EventInfo(systemEventClass, sourceClass);
                                     }
                                 };
-                          return new Cache<Class<? extends SystemEvent>, EventInfo>(eventInfoFactory);
+                          return new Cache<>(eventInfoFactory);
                       }
                   };
-            sourceCache = new Cache<Class<?>,Cache<Class<? extends SystemEvent>,EventInfo>>(eventCacheFactory);
+            sourceCache = new Cache<>(eventCacheFactory);
 
         }
 
@@ -2432,7 +2432,7 @@ public class ApplicationImpl extends Application {
      */
     private static class SystemEventInfo {
 
-        private Cache<Class<?>,EventInfo> cache = new Cache<Class<?>,EventInfo>(
+        private Cache<Class<?>,EventInfo> cache = new Cache<>(
               new Factory<Class<?>, EventInfo>() {
                   public EventInfo newInstance(Class<?> arg)
                         throws InterruptedException {
@@ -2486,8 +2486,8 @@ public class ApplicationImpl extends Application {
 
             this.systemEvent = systemEvent;
             this.sourceClass = sourceClass;
-            this.listeners = new CopyOnWriteArraySet<SystemEventListener>();
-            this.constructorMap = new HashMap<Class<?>,Constructor>();
+            this.listeners = new CopyOnWriteArraySet<>();
+            this.constructorMap = new HashMap<>();
             if (!sourceClass.equals(Void.class)) {
                 eventConstructor = getEventConstructor(sourceClass);
             }

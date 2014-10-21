@@ -85,7 +85,7 @@ public class ApplicationResourceBundle {
         this.baseName = baseName;
         this.displayNames = displayNames;
         this.descriptions = descriptions;
-        this.resources = new HashMap<Locale, ResourceBundle>(4, 1.0f);
+        this.resources = new HashMap<>(4, 1.0f);
 
     }
 

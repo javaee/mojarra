@@ -115,7 +115,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
      */
     public FaceletFullStateManagementStrategy(FacesContext context) {
         isDevelopmentMode = context.isProjectStage(ProjectStage.Development);
-        classMap = new ConcurrentHashMap<String, Class<?>>(32);
+        classMap = new ConcurrentHashMap<>(32);
     }
 
     /**
@@ -189,7 +189,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
             LOGGER.log(Level.FINEST, "FaceletFullStateManagementStrategy.locateComponentByClientId", clientId);
         }
 
-        final List<UIComponent> found = new ArrayList<UIComponent>();
+        final List<UIComponent> found = new ArrayList<>();
         UIComponent result = null;
 
         try {
@@ -603,7 +603,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
      */
     private Object saveComponentState(FacesContext context) {
 
-        final HashMap<String, Object> stateMap = new HashMap<String, Object>();
+        final HashMap<String, Object> stateMap = new HashMap<>();
         final StateContext stateContext = StateContext.getStateContext(context);
         final UIViewRoot viewRoot = context.getViewRoot();
         final FacesContext finalContext = context;
@@ -657,7 +657,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
         HashMap<String, UIComponent> componentMap = stateContext.getDynamicComponents();
 
         if (actions != null) {
-            List<Object> savedActions = new ArrayList<Object>(actions.size());
+            List<Object> savedActions = new ArrayList<>(actions.size());
             for (ComponentStruct action : actions) {
                 UIComponent component = componentMap.get(action.clientId);
                 if (component == null && context.isProjectStage(ProjectStage.Development)) {
@@ -692,7 +692,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
         /*
          * Check uniqueness.
          */
-        Util.checkIdUniqueness(context, viewRoot, new HashSet<String>(viewRoot.getChildCount() << 1));
+        Util.checkIdUniqueness(context, viewRoot, new HashSet<>(viewRoot.getChildCount() << 1));
 
         /**
          * Save the dynamic actions.
@@ -708,7 +708,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
         /*
          * Save the tree structure.
          */
-        List<TreeNode> treeList = new ArrayList<TreeNode>(32);
+        List<TreeNode> treeList = new ArrayList<>(32);
         captureChild(treeList, 0, viewRoot);
         Object[] tree = treeList.toArray();
 

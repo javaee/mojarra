@@ -97,7 +97,7 @@ public class MultiViewHandler extends ViewHandler {
         extensionsSet = config.isSet(WebConfiguration.WebContextInitParameter.DefaultSuffix);
         vdlFactory = (ViewDeclarationLanguageFactory)
                 FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
-        protectedViews = new CopyOnWriteArraySet<String>();
+        protectedViews = new CopyOnWriteArraySet<>();
 
     }
 
@@ -439,11 +439,11 @@ public class MultiViewHandler extends ViewHandler {
         String responseEncoding = (null != encodingFromContext) ? encodingFromContext : context.getExternalContext().getResponseCharacterEncoding();
 
         if (parameters != null) {
-            Map<String, List<String>> decodedParameters = new HashMap<String, List<String>>();
+            Map<String, List<String>> decodedParameters = new HashMap<>();
             for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
                 String string = entry.getKey();
                 List<String> list = entry.getValue();
-                List<String> values = new ArrayList<String>();
+                List<String> values = new ArrayList<>();
                 for (Iterator<String> it = list.iterator(); it.hasNext();) {
                     String value = it.next();
                     try {
@@ -610,9 +610,9 @@ public class MultiViewHandler extends ViewHandler {
 
         Map<String,List<String>> copy;
         if (existingParameters == null || existingParameters.isEmpty()) {
-            copy = new LinkedHashMap<String,List<String>>(4);
+            copy = new LinkedHashMap<>(4);
         } else {
-          copy = new LinkedHashMap<String,List<String>>(existingParameters);
+          copy = new LinkedHashMap<>(existingParameters);
         }
         addViewParameters(ctx, viewId, copy);
         return copy;
@@ -677,7 +677,7 @@ public class MultiViewHandler extends ViewHandler {
             if (value != null) {
                 List<String> existing = existingParameters.get(viewParam.getName());
                 if (existing == null) {
-                    existing = new ArrayList<String>(4);
+                    existing = new ArrayList<>(4);
                     existingParameters.put(viewParam.getName(), existing);
                 }
                 existing.add(value);

@@ -148,7 +148,7 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
                 }
                 if (!found) {
                     if (ret == null) {
-                        ret = new ArrayList<URI>();
+                        ret = new ArrayList<>();
                     }
                     try {
                         String urlString = url.toExternalForm();

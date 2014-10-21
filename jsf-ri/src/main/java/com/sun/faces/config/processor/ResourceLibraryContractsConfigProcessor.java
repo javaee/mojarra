@@ -84,7 +84,7 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
     @Override
     public void process(ServletContext servletContext, DocumentInfo[] documentInfos) throws Exception {
 
-        HashMap<String, List<String>> map = new HashMap<String, List<String>>();
+        HashMap<String, List<String>> map = new HashMap<>();
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE, MessageFormat.format(
@@ -137,7 +137,7 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
                                     /*
                                      * If there is no urlPattern then add it to the list,
                                      */
-                                    ArrayList<String> list = new ArrayList<String>();
+                                    ArrayList<String> list = new ArrayList<>();
                                     NodeList contracts = (NodeList) xpath.evaluate(".//ns1:contracts/text()", contractMapping, XPathConstants.NODESET);
                                     if (contracts != null && contracts.getLength() > 0) {
                                         for (int j = 0; j < contracts.getLength(); j++) {

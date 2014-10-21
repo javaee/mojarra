@@ -121,7 +121,7 @@ public class ViewMetadataImpl extends ViewMetadata {
                 Map<String, Object> currentViewMap = currentViewRoot.getViewMap(false);
 
                 if (null != currentViewMap && !currentViewMap.isEmpty()) {
-                    currentViewMapShallowCopy = new HashMap<String, Object>(currentViewMap);
+                    currentViewMapShallowCopy = new HashMap<>(currentViewMap);
                     Map<String, Object> resultViewMap = result.getViewMap(true);
                     resultViewMap.putAll(currentViewMapShallowCopy);
                 }

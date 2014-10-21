@@ -1057,7 +1057,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         groovyAvailable = GroovyHelper.isGroovyAvailable(FacesContext.getCurrentInstance());
 
-        metadataCache = new Cache<Resource, BeanInfo>(new Factory<Resource, BeanInfo>() {
+        metadataCache = new Cache<>(new Factory<Resource, BeanInfo>() {
 
             public BeanInfo newInstance(Resource ccResource) throws InterruptedException {
                 FacesContext context = FacesContext.getCurrentInstance();
@@ -1087,9 +1087,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 (Map<String, List<String>>) 
                 appMap.remove(RESOURCE_LIBRARY_CONTRACT_DATA_STRUCTURE_KEY);
         if (null != contractDataStructure && !contractDataStructure.isEmpty()) {
-            contractMappings = new ConcurrentHashMap<String, List<String>>();
+            contractMappings = new ConcurrentHashMap<>();
             for (Map.Entry<String, List<String>> cur : contractDataStructure.entrySet()) {
-                contractMappings.put(cur.getKey(), new CopyOnWriteArrayList<String>(cur.getValue()));
+                contractMappings.put(cur.getKey(), new CopyOnWriteArrayList<>(cur.getValue()));
                 cur.getValue().clear();
             }
             contractDataStructure.clear();
@@ -1628,7 +1628,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     private static final class MethodRetargetHandlerManager {
 
         private Map<String,MethodRetargetHandler> handlerMap =
-              new HashMap<String,MethodRetargetHandler>(4, 1.0f);
+              new HashMap<>(4, 1.0f);
         private MethodRetargetHandler arbitraryHandler = new ArbitraryMethodRegargetHandler();
 
         // -------------------------------------------------------- Constructors
@@ -2057,7 +2057,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @param clientId the client id of the component to find.
      */
     private UIComponent locateComponentByClientId(final FacesContext context, final UIComponent parent, final String clientId) {
-        final List<UIComponent> found = new ArrayList<UIComponent>();
+        final List<UIComponent> found = new ArrayList<>();
         UIComponent result = null;
 
         parent.invokeOnComponent(context, clientId, new ContextCallback() {

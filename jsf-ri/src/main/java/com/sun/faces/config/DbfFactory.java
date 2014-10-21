@@ -342,7 +342,7 @@ public class DbfFactory {
          * physical resource.</p>
          */
         private HashMap<String,String> entities =
-             new HashMap<String, String>(12, 1.0f);
+             new HashMap<>(12, 1.0f);
 
         // -------------------------------------------------------- Constructors
 

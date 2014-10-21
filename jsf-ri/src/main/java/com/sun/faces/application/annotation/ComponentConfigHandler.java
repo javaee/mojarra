@@ -63,7 +63,7 @@ public class ComponentConfigHandler implements ConfigAnnotationHandler {
     private static final Collection<Class<? extends Annotation>> HANDLES;
     static {
         Collection<Class<? extends Annotation>> handles =
-              new ArrayList<Class<? extends Annotation>>(1);
+              new ArrayList<>(1);
         handles.add(FacesComponent.class);
         HANDLES = Collections.unmodifiableCollection(handles);
     }
@@ -91,7 +91,7 @@ public class ComponentConfigHandler implements ConfigAnnotationHandler {
     public void collect(Class<?> target, Annotation annotation) {
 
         if (components == null) {
-            components = new HashMap<String,FacesComponentUsage>();
+            components = new HashMap<>();
         }
         String value = ((FacesComponent) annotation).value();
         if (null == value || 0 == value.length()) {

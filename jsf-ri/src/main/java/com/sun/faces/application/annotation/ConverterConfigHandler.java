@@ -68,7 +68,7 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
     
     static {
         Collection<Class<? extends Annotation>> handles =
-              new ArrayList<Class<? extends Annotation>>(1);
+              new ArrayList<>(1);
         handles.add(FacesConverter.class);
         HANDLES = Collections.unmodifiableCollection(handles);
     }
@@ -96,7 +96,7 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
     public void collect(Class<?> target, Annotation annotation) {
 
         if (converters == null) {
-            converters = new HashMap<Object,String>();
+            converters = new HashMap<>();
         }
         Object key;
         FacesConverter converterAnnotation = (FacesConverter) annotation;

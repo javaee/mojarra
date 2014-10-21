@@ -68,7 +68,7 @@ public class AjaxBehaviors implements Serializable {
     private ArrayDeque<BehaviorInfo> behaviorStack = null;
 
     public AjaxBehaviors() {
-        behaviorStack = new ArrayDeque<BehaviorInfo>();
+        behaviorStack = new ArrayDeque<>();
     }
 
     // Returns the AjaxBehaviors instance, creating it if necessary.

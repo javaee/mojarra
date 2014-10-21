@@ -218,7 +218,7 @@ public class ConfigManager {
      */
     @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     private List<ServletContext> initializedContexts =
-         new CopyOnWriteArrayList<ServletContext>();
+         new CopyOnWriteArrayList<>();
 
     /**
      * <p>
@@ -262,7 +262,7 @@ public class ConfigManager {
 
         // initialize the resource providers for faces-config documents
         List<ConfigurationResourceProvider> facesConfigProviders =
-          new ArrayList<ConfigurationResourceProvider>(3);
+          new ArrayList<>(3);
         facesConfigProviders.add(new MojarraFacesConfigResourceProvider());
         facesConfigProviders.add(new MetaInfFacesConfigResourceProvider());
         facesConfigProviders.add(new WebAppFlowConfigResourceProvider());
@@ -271,7 +271,7 @@ public class ConfigManager {
 
         // initialize the resource providers for facelet-taglib documents
         List<ConfigurationResourceProvider> faceletTaglibProviders =
-              new ArrayList<ConfigurationResourceProvider>(3);
+              new ArrayList<>(3);
         faceletTaglibProviders.add(new MetaInfFaceletTaglibraryConfigProvider());
         faceletTaglibProviders.add(new WebFaceletTaglibResourceProvider());
         FACELET_TAGLIBRARY_RESOURCE_PROVIDERS = Collections.unmodifiableList(faceletTaglibProviders);
@@ -386,7 +386,7 @@ public class ConfigManager {
                         pushTaskToContext(sc, annotationScan);
                     } else {
                         annotationScan =
-                              new FutureTask<Map<Class<? extends Annotation>,Set<Class<?>>>>(new AnnotationScanTask(sc, context, taskMetadata));
+                              new FutureTask<>(new AnnotationScanTask(sc, context, taskMetadata));
                         ((FutureTask) annotationScan).run();
                     }
                     pushTaskToContext(sc, annotationScan);
@@ -404,7 +404,7 @@ public class ConfigManager {
                 dbf.setNamespaceAware(true);
                 DocumentBuilder builder = dbf.newDocumentBuilder();
                 DOMImplementation domImpl = builder.getDOMImplementation();
-                List<DocumentInfo> programmaticDocuments = new ArrayList<DocumentInfo>();
+                List<DocumentInfo> programmaticDocuments = new ArrayList<>();
                 DocumentInfo newDocInfo;
                 for (ApplicationConfigurationPopulator pop : populators) {
                     newDoc = domImpl.createDocument(RIConstants.JAVAEE_XMLNS, "faces-config", null);
@@ -553,7 +553,7 @@ public class ConfigManager {
         if (custom.length == 0) {
             return defaultProviders;
         } else {
-            List<ConfigurationResourceProvider> list = new ArrayList<ConfigurationResourceProvider>();
+            List<ConfigurationResourceProvider> list = new ArrayList<>();
             list.addAll(defaultProviders);
             // insert the custom providers after the META-INF providers and
             // before those that scan /WEB-INF
@@ -590,7 +590,7 @@ public class ConfigManager {
 
         if (len > 1) {
             List<DocumentOrderingWrapper> list =
-                  new ArrayList<DocumentOrderingWrapper>();
+                  new ArrayList<>();
             for (int i = 1; i < len; i++) {
                 list.add(new DocumentOrderingWrapper(facesDocuments[i]));
             }
@@ -731,10 +731,10 @@ public class ConfigManager {
                                                  boolean validating) {
 
         List<FutureTask<Collection<URI>>> urlTasks =
-             new ArrayList<FutureTask<Collection<URI>>>(providers.size());
+             new ArrayList<>(providers.size());
         for (ConfigurationResourceProvider p : providers) {
             FutureTask<Collection<URI>> t =
-                 new FutureTask<Collection<URI>>(new URITask(p, sc));
+                 new FutureTask<>(new URITask(p, sc));
             urlTasks.add(t);
             if (executor != null) {
                 executor.execute(t);
@@ -744,14 +744,14 @@ public class ConfigManager {
         }
 
         List<FutureTask<DocumentInfo>> docTasks =
-             new ArrayList<FutureTask<DocumentInfo>>(providers.size() << 1);
+             new ArrayList<>(providers.size() << 1);
 
         for (FutureTask<Collection<URI>> t : urlTasks) {
             try {
                 Collection<URI> l = t.get();
                 for (URI u : l) {
                     FutureTask<DocumentInfo> d =
-                         new FutureTask<DocumentInfo>(new ParseTask(sc, validating, u));
+                         new FutureTask<>(new ParseTask(sc, validating, u));
                     docTasks.add(d);
                     if (executor != null) {
                         executor.execute(d);
@@ -765,7 +765,7 @@ public class ConfigManager {
             }
         }
 
-        List<DocumentInfo> docs = new ArrayList<DocumentInfo>(docTasks.size());
+        List<DocumentInfo> docs = new ArrayList<>(docTasks.size());
         for (FutureTask<DocumentInfo> t : docTasks) {
             try {
                 docs.add(t.get());
@@ -848,8 +848,8 @@ public class ConfigManager {
                 assert(null != uris && null != jarNames);
                 return;
             }
-            uris = new HashSet<URI>(documentInfos.length);
-            jarNames = new HashSet<String>(documentInfos.length);
+            uris = new HashSet<>(documentInfos.length);
+            jarNames = new HashSet<>(documentInfos.length);
             for (DocumentInfo docInfo : documentInfos) {
                 URI sourceURI = docInfo.getSourceURI();
                 Matcher m = JAR_PATTERN.matcher(sourceURI.toString());
@@ -1330,7 +1330,7 @@ public class ConfigManager {
                 Object cur = untypedCollectionIterator.next();
                 // account for older versions of the provider that return Collection<URL>.
                 if (cur instanceof URL) {
-                    result = new ArrayList<URI>(untypedCollection.size());
+                    result = new ArrayList<>(untypedCollection.size());
                     result.add(new URI(((URL)cur).toExternalForm()));
                     while (untypedCollectionIterator.hasNext()) {
                         cur = untypedCollectionIterator.next();

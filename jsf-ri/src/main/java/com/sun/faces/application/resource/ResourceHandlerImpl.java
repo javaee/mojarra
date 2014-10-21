@@ -611,7 +611,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
         String excludesParam = webconfig
               .getOptionValue(ResourceExcludes);
         String[] patterns = Util.split(appMap, excludesParam, " ");
-        excludePatterns = new ArrayList<Pattern>(patterns.length);
+        excludePatterns = new ArrayList<>(patterns.length);
         for (String pattern : patterns) {
             excludePatterns.add(Pattern.compile(".*\\" + pattern));
         }

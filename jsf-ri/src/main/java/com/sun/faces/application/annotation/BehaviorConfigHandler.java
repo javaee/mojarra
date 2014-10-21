@@ -62,7 +62,7 @@ public class BehaviorConfigHandler implements ConfigAnnotationHandler {
     private static final Collection<Class<? extends Annotation>> HANDLES;
     static {
         Collection<Class<? extends Annotation>> handles =
-              new ArrayList<Class<? extends Annotation>>(1);
+              new ArrayList<>(1);
         handles.add(FacesBehavior.class);
         HANDLES = Collections.unmodifiableCollection(handles);
     }
@@ -89,7 +89,7 @@ public class BehaviorConfigHandler implements ConfigAnnotationHandler {
     public void collect(Class<?> target, Annotation annotation) {
 
         if (behaviors == null) {
-            behaviors = new HashMap<String,String>();
+            behaviors = new HashMap<>();
         }
         behaviors.put(((FacesBehavior) annotation).value(), target.getName());
 

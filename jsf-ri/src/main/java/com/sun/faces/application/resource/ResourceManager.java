@@ -122,7 +122,7 @@ public class ResourceManager {
     public ResourceManager(ResourceCache cache) {
 
         this.cache = cache;
-        Map<String, Object> throwAwayMap = new HashMap<String, Object>();
+        Map<String, Object> throwAwayMap = new HashMap<>();
         initCompressableTypes(throwAwayMap);
 
     }
@@ -681,7 +681,7 @@ public class ResourceManager {
                         pattern += "/[a-z0-9.-]*";
                     }
                     if (compressableTypes == null) {
-                        compressableTypes = new ArrayList<Pattern>(values.length);
+                        compressableTypes = new ArrayList<>(values.length);
                     }
                     try {
                         compressableTypes.add(Pattern.compile(pattern));

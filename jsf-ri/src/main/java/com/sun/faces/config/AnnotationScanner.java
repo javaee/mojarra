@@ -107,7 +107,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
     // </editor-fold>
 
     static {
-        HashSet<String> annotations = new HashSet<String>(8, 1.0f);
+        HashSet<String> annotations = new HashSet<>(8, 1.0f);
         // JAVASERVERFACES-1835 this collection has the same information twice.
         // Once in javap -s format, and once as fully qualified Java class names.
         Collections.addAll(annotations,
@@ -131,7 +131,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
                            "javax.faces.view.facelets.FaceletsResourceResolver");
         FACES_ANNOTATIONS = Collections.unmodifiableSet(annotations);
         HashSet<Class<? extends Annotation>> annotationInstances =
-              new HashSet<Class<? extends Annotation>>(8, 1.0f);
+              new HashSet<>(8, 1.0f);
         Collections.addAll(annotationInstances,
                            FacesComponent.class,
                            FacesConverter.class,
@@ -145,7 +145,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
         FACES_ANNOTATION_TYPE = Collections.unmodifiableSet(annotationInstances);
     }
 
-    private List<ScriptManager> scriptManagers = new ArrayList<ScriptManager>();
+    private List<ScriptManager> scriptManagers = new ArrayList<>();
     private boolean isAnnotationScanPackagesSet = false;
     private String[] webInfClassesPackages;
     private Map<String,String[]> classpathPackages;
@@ -182,10 +182,10 @@ public abstract class AnnotationScanner extends AnnotationProvider {
             return;
         }
         isAnnotationScanPackagesSet = true;
-        classpathPackages = new HashMap<String,String[]>(4);
+        classpathPackages = new HashMap<>(4);
         webInfClassesPackages = new String[0];
         String[] options = webConfig.getOptionValue(AnnotationScanPackages, "\\s+");
-        List<String> packages = new ArrayList<String>(4);
+        List<String> packages = new ArrayList<>(4);
         for (String option : options) {
             if (option.length() == 0) {
                 continue;
@@ -233,7 +233,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
         if (packages.length == 0) {
             return packages;
         }
-        List<String> normalizedPackages = new ArrayList<String>(packages.length);
+        List<String> normalizedPackages = new ArrayList<>(packages.length);
         for (String pkg : packages) {
             if (WILDCARD.equals(pkg)) {
                 normalizedPackages.clear();
@@ -303,7 +303,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
 
         Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses = null;
         if (classList.size() > 0) {
-            annotatedClasses = new HashMap<Class<? extends Annotation>,Set<Class<?>>>(6, 1.0f);
+            annotatedClasses = new HashMap<>(6, 1.0f);
             for (String className : classList) {
                 try {
                     Class<?> clazz = Util.loadClass(className, this);
@@ -314,7 +314,7 @@ public abstract class AnnotationScanner extends AnnotationProvider {
                         if (FACES_ANNOTATION_TYPE.contains(annoType)) {
                             Set<Class<?>> classes = annotatedClasses.get(annoType);
                             if (classes == null) {
-                                classes = new HashSet<Class<?>>();
+                                classes = new HashSet<>();
                                 annotatedClasses.put(annoType, classes);
                             }
                             classes.add(clazz);

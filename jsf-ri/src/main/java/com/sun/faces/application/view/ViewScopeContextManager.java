@@ -163,7 +163,7 @@ public class ViewScopeContextManager {
      */
     private void destroyBeans(
             Map<String, Object> viewMap, Map<String, ViewScopeContextObject> contextMap) {
-        ArrayList<String> removalNameList = new ArrayList<String>();
+        ArrayList<String> removalNameList = new ArrayList<>();
 
         if (contextMap != null) {
             for (Map.Entry<String, ViewScopeContextObject> entry : contextMap.entrySet()) {
@@ -247,7 +247,7 @@ public class ViewScopeContextManager {
 
             if (activeViewScopeContexts == null && create) {
                 synchronized (sessionMap) {
-                    activeViewScopeContexts = new ConcurrentHashMap<Object, Map<String, ViewScopeContextObject>>();
+                    activeViewScopeContexts = new ConcurrentHashMap<>();
                     sessionMap.put(ACTIVE_VIEW_CONTEXTS, activeViewScopeContexts);
                 }
             }
@@ -256,7 +256,7 @@ public class ViewScopeContextManager {
                 synchronized (activeViewScopeContexts) {
                     if (!activeViewScopeContexts.containsKey(System.identityHashCode(viewMap)) && create) {
                         activeViewScopeContexts.put(System.identityHashCode(viewMap),
-                                new ConcurrentHashMap<String, ViewScopeContextObject>());
+                                new ConcurrentHashMap<>());
                         // If we are distributable, this will result in a dirtying of the
                         // session data, forcing replication.  If we are not distributable,
                         // this is a no-op.

@@ -95,7 +95,7 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
      */
     public JspStateManagementStrategy(FacesContext context) {
         isDevelopmentMode = context.isProjectStage(ProjectStage.Development);
-        classMap = new ConcurrentHashMap<String, Class<?>>(32);
+        classMap = new ConcurrentHashMap<>(32);
     }
 
     /**
@@ -295,7 +295,7 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
         /*
          * Check uniqueness.
          */
-        Util.checkIdUniqueness(context, viewRoot, new HashSet<String>(viewRoot.getChildCount() << 1));
+        Util.checkIdUniqueness(context, viewRoot, new HashSet<>(viewRoot.getChildCount() << 1));
 
         /*
          * Save the component state.
@@ -305,7 +305,7 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
         /*
          * Save the tree structure.
          */
-        List<TreeNode> treeList = new ArrayList<TreeNode>(32);
+        List<TreeNode> treeList = new ArrayList<>(32);
         captureChild(treeList, 0, viewRoot);
         Object[] tree = treeList.toArray();
 

@@ -223,7 +223,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                                 }
                             } else if (NAVIGATION_CASE.equals(n.getLocalName())) {
                                 if (navigationCases == null) {
-                                    navigationCases = new ArrayList<Node>(csize);
+                                    navigationCases = new ArrayList<>(csize);
                                 }
                                 navigationCases.add(n);
                             }
@@ -337,7 +337,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                     ConfigurableNavigationHandler cnav = (ConfigurableNavigationHandler) navHandler;
                     Set<NavigationCase> cases = cnav.getNavigationCases().get(fromViewId);
                     if (cases == null) {
-                        cases = new LinkedHashSet<NavigationCase>();
+                        cases = new LinkedHashSet<>();
                         cnav.getNavigationCases().put(fromViewId, cases);
                     }
                     cases.add(cnc);
@@ -357,7 +357,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
         Map<String,List<String>> parameters = null;
 
         if (children.getLength() > 0) {
-            parameters = new LinkedHashMap<String,List<String>>(4, 1.0f);
+            parameters = new LinkedHashMap<>(4, 1.0f);
             for (int i = 0, size = children.getLength(); i < size; i++) {
                 Node n = children.item(i);
                 if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -379,7 +379,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                         if (name != null) {
                             List<String> values = parameters.get(name);
                             if (values == null && value != null) {
-                                values = new ArrayList<String>(2);
+                                values = new ArrayList<>(2);
                                 parameters.put(name, values);
                             }
                             if (values != null) {
@@ -405,7 +405,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                         if (name != null) {
                             List<String> values = parameters.get(name);
                             if (values == null && value != null) {
-                                values = new ArrayList<String>(2);
+                                values = new ArrayList<>(2);
                                 parameters.put(name, values);
                             }
                             if (values != null) {

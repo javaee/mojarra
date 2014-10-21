@@ -297,10 +297,10 @@ public class DocumentOrderingWrapper {
     public static DocumentOrderingWrapper[] sort(DocumentOrderingWrapper[] documents,
                                                  List<String> absoluteOrder) {
 
-        List<DocumentOrderingWrapper> sourceList = new CopyOnWriteArrayList<DocumentOrderingWrapper>();
+        List<DocumentOrderingWrapper> sourceList = new CopyOnWriteArrayList<>();
         sourceList.addAll(Arrays.asList(documents));
 
-        List<DocumentOrderingWrapper> targetList = new ArrayList<DocumentOrderingWrapper>();
+        List<DocumentOrderingWrapper> targetList = new ArrayList<>();
         for (String name : absoluteOrder) {
             if ("others".equals(name)) {
                 continue;
@@ -473,7 +473,7 @@ public class DocumentOrderingWrapper {
                     if (id.equals(other.id)) {
                         String[] afterIds = other.getAfterIds();
                         if (Arrays.binarySearch(afterIds, w.id) < 0) {
-                            Set<String> newAfterIds = new HashSet<String>(afterIds.length + 1);
+                            Set<String> newAfterIds = new HashSet<>(afterIds.length + 1);
                             newAfterIds.addAll(Arrays.asList(afterIds));
                             newAfterIds.add(w.id);
                             other.afterIds = newAfterIds
@@ -485,7 +485,7 @@ public class DocumentOrderingWrapper {
                         if (otherBeforeIds.length > 0) {
 
                             String[] currentBeforeIds = w.getBeforeIds();
-                            Set<String> newBeforeIds = new HashSet<String>();
+                            Set<String> newBeforeIds = new HashSet<>();
                             newBeforeIds.addAll(Arrays.asList(currentBeforeIds));
                             for (String bid : otherBeforeIds) {
                                 if (OTHERS_KEY.equals(bid)) {
@@ -516,7 +516,7 @@ public class DocumentOrderingWrapper {
                         String[] beforeIds = other.getBeforeIds();
                         if (Arrays.binarySearch(beforeIds, w.id) < 0) {
                             Set<String> newBeforeIds =
-                                  new HashSet<String>(beforeIds.length + 1);
+                                  new HashSet<>(beforeIds.length + 1);
                             newBeforeIds.addAll(Arrays.asList(beforeIds));
                             newBeforeIds.add(w.id);
                             other.beforeIds = newBeforeIds
@@ -526,7 +526,7 @@ public class DocumentOrderingWrapper {
                         String[] otherAfterIds = other.getAfterIds();
                         if (otherAfterIds.length > 0) {
                             String[] currentAfterIds = w.getAfterIds();
-                            Set<String> newAfterIds = new HashSet<String>();
+                            Set<String> newAfterIds = new HashSet<>();
                             newAfterIds.addAll(Arrays.asList(currentAfterIds));
                             for (String bid : otherAfterIds) {
                                 if (OTHERS_KEY.equals(bid)) {
@@ -654,7 +654,7 @@ public class DocumentOrderingWrapper {
 
         Set<String> idsList = null;
         if (nodeName.equals(n.getLocalName())) {
-            idsList = new HashSet<String>();
+            idsList = new HashSet<>();
             NodeList ids = n.getChildNodes();
             for (int k = 0, klen = ids.getLength(); k < klen; k++) {
                 Node idNode = ids.item(k);

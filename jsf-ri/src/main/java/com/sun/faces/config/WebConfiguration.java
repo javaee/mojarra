@@ -113,20 +113,20 @@ public class WebConfiguration {
     private Level loggingLevel = Level.FINE;
 
     private Map<BooleanWebContextInitParameter, Boolean> booleanContextParameters =
-          new EnumMap<BooleanWebContextInitParameter, Boolean>(BooleanWebContextInitParameter.class);
+          new EnumMap<>(BooleanWebContextInitParameter.class);
 
     private Map<WebContextInitParameter, String> contextParameters =
-          new EnumMap<WebContextInitParameter, String>(WebContextInitParameter.class);
+          new EnumMap<>(WebContextInitParameter.class);
 
     private Map<WebContextInitParameter, Map<String, String>> facesConfigParameters =
-            new EnumMap<WebContextInitParameter, Map<String, String>>(WebContextInitParameter.class);
+            new EnumMap<>(WebContextInitParameter.class);
 
     private Map<WebEnvironmentEntry, String> envEntries =
-          new EnumMap<WebEnvironmentEntry, String>(WebEnvironmentEntry.class);
+          new EnumMap<>(WebEnvironmentEntry.class);
 
     private Map<WebContextInitParameter, String []> cachedListParams;
 
-    private Set<String> setParams = new HashSet<String>();
+    private Set<String> setParams = new HashSet<>();
 
     private ServletContext servletContext;
 
@@ -154,7 +154,7 @@ public class WebConfiguration {
         }
         
         // build the cache of list type params
-        cachedListParams = new HashMap<WebContextInitParameter, String []>(3);
+        cachedListParams = new HashMap<>(3);
         getOptionValue(WebContextInitParameter.ResourceExcludes, " ");
         getOptionValue(WebContextInitParameter.DefaultSuffix, " ");
         getOptionValue(WebContextInitParameter.FaceletsViewMappings, ";");
@@ -296,7 +296,7 @@ public class WebConfiguration {
         result = facesConfigParameters.get(param);
         if (null == result) {
             if (create) {
-                result = new ConcurrentHashMap<String, String>(3);
+                result = new ConcurrentHashMap<>(3);
                 facesConfigParameters.put(param, result);
             } else {
                 result = Collections.emptyMap();
@@ -455,7 +455,7 @@ public class WebConfiguration {
     private void discoverResourceLibraryContracts() {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContex = context.getExternalContext();
-        Set<String> foundContracts = new HashSet<String>();
+        Set<String> foundContracts = new HashSet<>();
         Set<String> candidates;
         
         // Scan for "contractMappings" in the web app root
@@ -501,7 +501,7 @@ public class WebConfiguration {
             return;
         }
         
-        Map<String, List<String>> contractMappings = new HashMap<String, List<String>>();
+        Map<String, List<String>> contractMappings = new HashMap<>();
         
         ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
         Map<String, List<String>> contractsFromConfig = associate.getResourceLibraryContracts();
@@ -535,7 +535,7 @@ public class WebConfiguration {
                 }
             }
         } else {
-            contractsToExpose = new ArrayList<String>();
+            contractsToExpose = new ArrayList<>();
             contractsToExpose.addAll(foundContracts);
             contractMappings.put("*", contractsToExpose);
         }
@@ -894,7 +894,7 @@ public class WebConfiguration {
     private void queueLoggingAction(DeferredLoggingAction loggingAction) {
 
         if (deferredLoggingActions == null) {
-            deferredLoggingActions = new ArrayList<DeferredLoggingAction>();
+            deferredLoggingActions = new ArrayList<>();
         }
         deferredLoggingActions.add(loggingAction);
 

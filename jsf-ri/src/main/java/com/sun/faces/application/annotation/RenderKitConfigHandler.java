@@ -66,7 +66,7 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
 
     static {
         Collection<Class<? extends Annotation>> handles =
-              new ArrayList<Class<? extends Annotation>>(2);
+              new ArrayList<>(2);
         handles.add(FacesRenderer.class);
         handles.add(FacesBehaviorRenderer.class);
         HANDLES = Collections.unmodifiableCollection(handles);
@@ -93,7 +93,7 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
     public void collect(Class<?> target, Annotation annotation) {
 
         if (annotatedRenderers == null) {
-            annotatedRenderers = new HashMap<Class<?>, Annotation>();
+            annotatedRenderers = new HashMap<>();
         }
         annotatedRenderers.put(target,  annotation);
 

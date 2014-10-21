@@ -318,13 +318,13 @@ public class WebappResourceHelper extends ResourceHelper {
         List<String> contracts = null;
 
         if (library != null) {
-        	  contracts = new ArrayList<String>(1);
+        	  contracts = new ArrayList<>(1);
         	  contracts.add(library.getContract());
         } else if (root == null) {
             String contractName = ctx.getExternalContext().getRequestParameterMap()
                   .get("con");
             if (null != contractName && 0 < contractName.length()) {
-                contracts = new ArrayList<String>();
+                contracts = new ArrayList<>();
                 contracts.add(contractName);
             } else {
                 return null;

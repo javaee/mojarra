@@ -69,7 +69,7 @@ public class ApplicationInstanceFactoryMetadataMap<K, V> extends MetadataWrapper
         if (value instanceof Class) {
             Map<Object, Object> metadataForKey = getMetadata().get(key);
             if (null == metadataForKey) {
-                metadataForKey = new HashMap<Object, Object>();
+                metadataForKey = new HashMap<>();
                 getMetadata().put(key, metadataForKey);
             }
             metadataForKey.put(METADATA.hasAnnotations, (Boolean)

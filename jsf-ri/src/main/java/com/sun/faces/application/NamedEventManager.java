@@ -60,9 +60,9 @@ import javax.faces.event.SystemEvent;
 public class NamedEventManager {
 
     private Map<String, Class<? extends SystemEvent>> namedEvents =
-            new ConcurrentHashMap<String, Class<? extends SystemEvent>>();
+            new ConcurrentHashMap<>();
     private Map<String, Set<Class<? extends SystemEvent>>> duplicateNames =
-             new ConcurrentHashMap<String, Set<Class<? extends SystemEvent>>>();
+             new ConcurrentHashMap<>();
 
     public NamedEventManager() {
         namedEvents.put("javax.faces.event.PreRenderComponent", PreRenderComponentEvent.class);
@@ -101,7 +101,7 @@ public class NamedEventManager {
         Class<? extends SystemEvent> registeredEvent = namedEvents.remove(name);
         Set<Class<? extends SystemEvent>> events = duplicateNames.get(name);
         if (events == null) {
-            events = new HashSet<Class<? extends SystemEvent>>();
+            events = new HashSet<>();
             duplicateNames.put(name, events);
         }
         events.add(event);

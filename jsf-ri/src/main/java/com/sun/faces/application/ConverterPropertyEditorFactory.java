@@ -381,7 +381,7 @@ public class ConverterPropertyEditorFactory {
         private byte[] replaceInTemplate(Utf8InfoReplacement... replacements) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             // Sort the replacements, and weed out any that have no source match
-            TreeSet<Utf8InfoReplacement> sorted = new TreeSet<Utf8InfoReplacement>();
+            TreeSet<Utf8InfoReplacement> sorted = new TreeSet<>();
             for (Utf8InfoReplacement r : replacements) {
                 if (r.ref != null && r.replacement != null) {
                     sorted.add(r);
@@ -521,7 +521,7 @@ public class ConverterPropertyEditorFactory {
     private Map<ClassLoader, WeakReference<DisposableClassLoader>> classLoaderCache;
     
     private static final Map<Character,String> PRIM_MAP =
-          new HashMap<Character,String>(8, 1.0f);
+          new HashMap<>(8, 1.0f);
     static {
         PRIM_MAP.put('B', "byte");
         PRIM_MAP.put('C', "char");
@@ -588,7 +588,7 @@ public class ConverterPropertyEditorFactory {
                 // Use a WeakHashMap so as not to prevent the class loaders from
                 // being garbage collected.
                 //noinspection CollectionWithoutInitialCapacity
-                classLoaderCache = new WeakHashMap<ClassLoader, WeakReference<DisposableClassLoader>>();
+                classLoaderCache = new WeakHashMap<>();
             }
             DisposableClassLoader loader;
             WeakReference<DisposableClassLoader> loaderRef = classLoaderCache

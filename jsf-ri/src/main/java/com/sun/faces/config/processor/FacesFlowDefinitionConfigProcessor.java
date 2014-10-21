@@ -232,7 +232,7 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
         Map<String, Object> appMap = context.getExternalContext().getApplicationMap();
         List<FlowDefinitionDocument> def = (List<FlowDefinitionDocument>) appMap.get(flowDefinitionListKey);
         if (null == def) {
-            def = new ArrayList<FlowDefinitionDocument>();
+            def = new ArrayList<>();
             appMap.put(flowDefinitionListKey, def);
         }
         def.add(new FlowDefinitionDocument(definingDocumentURI, flowDefinitions));
@@ -690,8 +690,8 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             if (null != params) {
                 List<Class> paramTypes = Collections.emptyList();
                 if (0 < params.getLength()) {
-                    paramTypes = new ArrayList<Class>();
-                    List<Parameter> paramList = new ArrayList<Parameter>();
+                    paramTypes = new ArrayList<>();
+                    List<Parameter> paramList = new ArrayList<>();
                     Parameter toAdd = null;
                     ExpressionFactory ef = context.getApplication().getExpressionFactory();
                     ELContext elContext = context.getELContext();

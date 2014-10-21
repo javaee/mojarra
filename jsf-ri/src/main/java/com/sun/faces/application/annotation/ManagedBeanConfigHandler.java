@@ -75,7 +75,7 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
     private static final Collection<Class<? extends Annotation>> HANDLES;
     static {
         Collection<Class<? extends Annotation>> handles =
-              new ArrayList<Class<? extends Annotation>>(2);
+              new ArrayList<>(2);
         handles.add(ManagedBean.class);
         HANDLES = Collections.unmodifiableCollection(handles);
     }
@@ -102,7 +102,7 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
     public void collect(Class<?> target, Annotation annotation) {
 
         if (managedBeans == null) {
-            managedBeans = new HashMap<Class<?>,Annotation>();
+            managedBeans = new HashMap<>();
         }
         managedBeans.put(target, annotation);
 
@@ -146,7 +146,7 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
         String scope = getScope(annotatedClass);
         boolean eager = metadata.eager();
         
-        Map<String,Field> annotatedFields = new LinkedHashMap<String,Field>();
+        Map<String,Field> annotatedFields = new LinkedHashMap<>();
         //Map<String, Method> annotatedMethods = new LinkedHashMap<String,Method>();
         collectAnnotatedFields(annotatedClass, annotatedFields);
         //collectAnnotatedMethods(annotatedClass,
@@ -156,7 +156,7 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
         List<ManagedBeanInfo.ManagedProperty> properties = null;
 
         if (!annotatedFields.isEmpty()) {
-            properties = new ArrayList<ManagedBeanInfo.ManagedProperty>(annotatedFields.size());
+            properties = new ArrayList<>(annotatedFields.size());
             for (Map.Entry<String,Field> entry : annotatedFields.entrySet()) {
                 Field f = entry.getValue();
                 ManagedProperty property = f.getAnnotation(ManagedProperty.class);

@@ -831,7 +831,7 @@ public class ViewHandlerImpl extends ViewHandler {
               RIConstants.SAVESTATE_FIELD_MARKER.length();
 
         private static final ThreadLocal<WriteBehindStateWriter> CUR_WRITER =
-             new ThreadLocal<WriteBehindStateWriter>();
+             new ThreadLocal<>();
         private Writer out;
         private Writer orig;
         private FastStringWriter fWriter;

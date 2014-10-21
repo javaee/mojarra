@@ -198,7 +198,7 @@ public class AnnotationManager {
      */
     public AnnotationManager() {
 
-        cache = new ConcurrentHashMap<Class<?>,Future<Map<Class<? extends Annotation>, RuntimeAnnotationHandler>>>(40, .75f, 32);
+        cache = new ConcurrentHashMap<>(40, .75f, 32);
 
     }
 
@@ -345,7 +345,7 @@ public class AnnotationManager {
               new NamedEventConfigHandler()
         };
         Map<Class<? extends Annotation>,ConfigAnnotationHandler> handlerMap =
-              new HashMap<Class<? extends Annotation>,ConfigAnnotationHandler>();
+              new HashMap<>();
         for (ConfigAnnotationHandler handler : handlers) {
             Collection<Class<? extends Annotation>> handledClasses = handler.getHandledAnnotations();
             for (Class<? extends Annotation> handled : handledClasses) {
@@ -398,7 +398,7 @@ public class AnnotationManager {
                 ProcessAnnotationsTask t =
                       new ProcessAnnotationsTask(targetClass, processingTarget.scanners);
                 FutureTask<Map<Class<? extends Annotation>, RuntimeAnnotationHandler>> ft =
-                      new FutureTask<Map<Class<? extends Annotation>, RuntimeAnnotationHandler>>(t);
+                      new FutureTask<>(t);
                 f = cache.putIfAbsent(targetClass, ft);
                 if (f == null) {
                     f = ft;
@@ -469,7 +469,7 @@ public class AnnotationManager {
                     RuntimeAnnotationHandler handler = scanner.scan(clazz);
                     if (handler != null) {
                         if (map == null) {
-                            map = new HashMap<Class<? extends Annotation>, RuntimeAnnotationHandler>(2, 1.0f);
+                            map = new HashMap<>(2, 1.0f);
                         }
                         map.put(scanner.getAnnotation(), handler);
                     }

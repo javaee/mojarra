@@ -70,7 +70,7 @@ class ResourceDependencyHandler implements RuntimeAnnotationHandler {
 
         this.dependencies = dependencies;
         Map<Object, Object> attrs = FacesContext.getCurrentInstance().getAttributes();
-        expressionsMap = new HashMap<ResourceDependency,Expressions>(dependencies.length, 1.0f);
+        expressionsMap = new HashMap<>(dependencies.length, 1.0f);
         for (ResourceDependency dep : dependencies) {
             Expressions exprs = new Expressions();
             exprs.name = dep.name();
@@ -186,7 +186,7 @@ class ResourceDependencyHandler implements RuntimeAnnotationHandler {
         Set<ResourceDependency> dependencies = (Set<ResourceDependency>)
               RequestStateManager.get(ctx, RequestStateManager.PROCESSED_RESOURCE_DEPENDENCIES);
         if (dependencies == null) {
-            dependencies = new HashSet<ResourceDependency>(6);
+            dependencies = new HashSet<>(6);
             RequestStateManager.set(ctx, RequestStateManager.PROCESSED_RESOURCE_DEPENDENCIES, dependencies);
         }
         dependencies.add(dep);

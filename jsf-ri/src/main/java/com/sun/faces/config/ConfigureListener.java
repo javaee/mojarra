@@ -1010,7 +1010,7 @@ public class ConfigureListener implements ServletRequestListener,
             this.sc = sc;
             for (URI uri : uris) {
                 if (monitors == null) {
-                    monitors = new ArrayList<Monitor>(uris.size());
+                    monitors = new ArrayList<>(uris.size());
                 }
                 try {
                     Monitor m = new Monitor(uri);

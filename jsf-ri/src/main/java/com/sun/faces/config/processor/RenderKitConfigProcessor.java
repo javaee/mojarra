@@ -137,9 +137,9 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
     throws Exception {
 
         Map<String,Map<Document,List<Node>>> renderers =
-              new LinkedHashMap<String,Map<Document,List<Node>>>();
+              new LinkedHashMap<>();
         Map<String,Map<Document,List<Node>>> behaviorRenderers =
-              new LinkedHashMap<String,Map<Document,List<Node>>>();
+              new LinkedHashMap<>();
         RenderKitFactory rkf = (RenderKitFactory)
              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         for (int i = 0; i < documentInfos.length; i++) {
@@ -216,9 +216,9 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             String rkId = null;
             String rkClass = null;
             List<Node> renderersList =
-                 new ArrayList<Node>(children.getLength());
+                 new ArrayList<>(children.getLength());
             List<Node> behaviorRenderersList =
-                 new ArrayList<Node>(children.getLength());
+                 new ArrayList<>(children.getLength());
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 if (RENDERKIT_ID.equals(n.getLocalName())) {
@@ -261,7 +261,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                     existingRenderers.put(owningDocument, renderersList);
                 }
             } else {
-                existingRenderers = new LinkedHashMap<Document,List<Node>>();
+                existingRenderers = new LinkedHashMap<>();
                 existingRenderers.put(owningDocument, renderersList);
             }
             renderers.put(rkId, existingRenderers);
@@ -275,7 +275,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                     existingBehaviorRenderers.put(owningDocument, behaviorRenderersList);
                 }
             } else {
-                existingBehaviorRenderers = new LinkedHashMap<Document,List<Node>>();
+                existingBehaviorRenderers = new LinkedHashMap<>();
                 existingBehaviorRenderers.put(owningDocument, behaviorRenderersList);
             }
             behaviorRenderers.put(rkId, existingBehaviorRenderers);

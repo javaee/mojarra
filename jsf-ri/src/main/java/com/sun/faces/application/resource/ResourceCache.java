@@ -99,7 +99,7 @@ public class ResourceCache {
         ServletContext sc = config.getServletContext();
         long period = getCheckPeriod(config);
         checkPeriod = ((period != -1) ? period * 1000L * 60L : -1);
-        resourceCache = new MultiKeyConcurrentHashMap<Object,ResourceInfoCheckPeriodProxy>(30);
+        resourceCache = new MultiKeyConcurrentHashMap<>(30);
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,
                        "ResourceCache constructed for {0}.  Check period is {1} minutes.",

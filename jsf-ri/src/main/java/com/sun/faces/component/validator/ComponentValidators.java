@@ -85,7 +85,7 @@ public class ComponentValidators {
     
     public ComponentValidators() {
 
-        validatorStack = new LinkedList<ValidatorInfo>();
+        validatorStack = new LinkedList<>();
 
     }
 
@@ -136,7 +136,7 @@ public class ComponentValidators {
 
         if (!ctx.isPostback() || ctx.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
             Set<String> keySet = ctx.getApplication().getDefaultValidatorInfo().keySet();
-            List<String> validatorIds = new ArrayList<String>(keySet.size());
+            List<String> validatorIds = new ArrayList<>(keySet.size());
             Set<String> disabledValidatorIds = (Set<String>)
                   RequestStateManager.remove(ctx, RequestStateManager.DISABLED_VALIDATORS);
             for (String key : keySet) {
@@ -175,7 +175,7 @@ public class ComponentValidators {
               application.getDefaultValidatorInfo();
         Set<String> keySet = defaultValidatorInfo.keySet();
 
-        List<String> validatorIds = new ArrayList<String>(keySet.size());
+        List<String> validatorIds = new ArrayList<>(keySet.size());
         for (String key : keySet) {
             validatorIds.add(key);
         }

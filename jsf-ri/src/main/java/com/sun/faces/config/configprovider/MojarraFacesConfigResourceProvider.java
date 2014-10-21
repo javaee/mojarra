@@ -70,7 +70,7 @@ public class MojarraFacesConfigResourceProvider implements
      */
     public Collection<URI> getResources(ServletContext context) {
 
-        List<URI> list = new ArrayList<URI>(1);
+        List<URI> list = new ArrayList<>(1);
         // Don't use Util.getCurrentLoader().  This config resource should
         // be available from the same classloader that loaded this instance.
         // Doing so allows us to be more OSGi friendly.

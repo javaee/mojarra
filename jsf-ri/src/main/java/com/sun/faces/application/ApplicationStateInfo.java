@@ -71,7 +71,7 @@ public class ApplicationStateInfo {
 
         if (partialStateSaving) {
             String[] viewIds = config.getOptionValue(FullStateSavingViewIds, ",");
-            fullStateViewIds = new HashSet<String>(viewIds.length, 1.0f);
+            fullStateViewIds = new HashSet<>(viewIds.length, 1.0f);
             fullStateViewIds.addAll(Arrays.asList(viewIds));
         }
         

@@ -305,7 +305,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     
     private void createNavigationMaps() {
         if (null == navigationMaps) {
-            Map<String, NavigationInfo> maps = new ConcurrentHashMap<String, NavigationInfo>();
+            Map<String, NavigationInfo> maps = new ConcurrentHashMap<>();
             NavigationMap result = new NavigationMap();
             NavigationInfo info = new NavigationInfo();
             info.ruleSet = result;
@@ -398,7 +398,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             if (!navRules.isEmpty() || !switches.isEmpty()) {
                 NavigationInfo info = new NavigationInfo();
                 if (!switches.isEmpty()) {
-                    info.switches = new ConcurrentHashMap<String, SwitchNode>();
+                    info.switches = new ConcurrentHashMap<>();
                     for (Map.Entry<String, SwitchNode> cur : switches.entrySet()) {
                         info.switches.put(cur.getKey(), cur.getValue());
                     }
@@ -816,14 +816,14 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     String[] elements = Util.split(appMap, queryElements[i], "=");
                     if (elements.length == 2) {
                         if (parameters == null) {
-                            parameters = new LinkedHashMap<String,List<String>>(len / 2, 1.0f);
-                            List<String> values = new ArrayList<String>(2);
+                            parameters = new LinkedHashMap<>(len / 2, 1.0f);
+                            List<String> values = new ArrayList<>(2);
                             values.add(elements[1]);
                             parameters.put(elements[0], values);
                         } else {
                             List<String> values = parameters.get(elements[0]);
                             if (values == null) {
-                                values = new ArrayList<String>(2);
+                                values = new ArrayList<>(2);
                                 parameters.put(elements[0], values);
                             }
                             values.add(elements[1]);
@@ -1371,9 +1371,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private static final class NavigationMap extends AbstractMap<String,Set<NavigationCase>> {
 
         private HashMap<String,Set<NavigationCase>> navigationMap =
-              new HashMap<String,Set<NavigationCase>>();
+              new HashMap<>();
         private TreeSet<String> wildcardMatchList =
-              new TreeSet<String>(new Comparator<String>() {
+              new TreeSet<>(new Comparator<String>() {
                   public int compare(String fromViewId1, String fromViewId2) {
                       return -(fromViewId1.compareTo(fromViewId2));
                   }

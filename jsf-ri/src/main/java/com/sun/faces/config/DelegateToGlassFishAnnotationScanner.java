@@ -77,7 +77,7 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
     @Override
     public Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClasses(Set<URI> uris) {
 
-        Set<String> classList = new HashSet<String>();
+        Set<String> classList = new HashSet<>();
 
         processAnnotations(classList);
         processScripts(classList);

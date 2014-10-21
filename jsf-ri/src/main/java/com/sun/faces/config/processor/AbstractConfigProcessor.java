@@ -109,7 +109,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         ApplicationInstanceFactoryMetadataMap<String,Object> classMetadataMap = 
                 (ApplicationInstanceFactoryMetadataMap<String,Object>) sc.getAttribute(getClassMetadataMapKey());
         if (null == classMetadataMap) {
-            classMetadataMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
+            classMetadataMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<>());
             sc.setAttribute(getClassMetadataMapKey(), classMetadataMap);
         }
         
@@ -205,7 +205,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         if (list != null && !list.isEmpty()) {
             int len = list.size();
             HashMap<String, String> names =
-                    new HashMap<String, String>(len, 1.0f);
+                    new HashMap<>(len, 1.0f);
             for (int i = 0; i < len; i++) {
                 Node node = list.get(i);
                 String textValue = getNodeText(node);

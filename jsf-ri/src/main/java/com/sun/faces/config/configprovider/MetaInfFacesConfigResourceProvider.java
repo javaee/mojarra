@@ -100,9 +100,9 @@ public class MetaInfFacesConfigResourceProvider implements
         if (duplicateJarPattern != null) {
             duplicatePattern = Pattern.compile(duplicateJarPattern);
         }
-        SortedMap<String, Set<URI>> sortedJarMap = new TreeMap<String, Set<URI>>();
+        SortedMap<String, Set<URI>> sortedJarMap = new TreeMap<>();
         //noinspection CollectionWithoutInitialCapacity
-        List<URI> unsortedResourceList = new ArrayList<URI>();
+        List<URI> unsortedResourceList = new ArrayList<>();
 
         try {
             for (URI uri : loadURLs(context)) {
@@ -136,7 +136,7 @@ public class MetaInfFacesConfigResourceProvider implements
         }
         // Load the sorted resources first:
         List<URI> result =
-              new ArrayList<URI>(sortedJarMap.size() + unsortedResourceList
+              new ArrayList<>(sortedJarMap.size() + unsortedResourceList
                     .size());
         for (Map.Entry<String, Set<URI>> entry : sortedJarMap.entrySet()) {
             result.addAll(entry.getValue());
@@ -154,7 +154,7 @@ public class MetaInfFacesConfigResourceProvider implements
 
     private Collection<URI> loadURLs(ServletContext context) throws IOException {
 
-        Set<URI> urls = new HashSet<URI>();
+        Set<URI> urls = new HashSet<>();
         try {
             for (Enumeration<URL> e = Util.getCurrentLoader(this).getResources(META_INF_RESOURCES); e.hasMoreElements();) {
                 String urlString = e.nextElement().toExternalForm();

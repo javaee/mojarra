@@ -133,7 +133,7 @@ public class InitFacesContext extends FacesContext {
     @Override
     public Map<Object, Object> getAttributes() {
         if (attributes == null) {
-            attributes = new HashMap<Object,Object>();
+            attributes = new HashMap<>();
         }
         return attributes;
     }

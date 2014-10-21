@@ -307,7 +307,7 @@ public class CompositeComponentStackManager {
         public Stack<UIComponent> getStack(boolean create) {
 
             if (stack == null && create) {
-                stack = new Stack<UIComponent>();
+                stack = new Stack<>();
             }
             return stack;
 

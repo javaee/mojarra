@@ -375,7 +375,7 @@ public abstract class ResourceHelper {
      */
     protected VersionInfo getVersion(Collection<String> resourcePaths, boolean isResource) {
 
-        List<VersionInfo> versionedPaths = new ArrayList<VersionInfo>(resourcePaths.size());
+        List<VersionInfo> versionedPaths = new ArrayList<>(resourcePaths.size());
         for (String p : resourcePaths) {
             VersionInfo vp = getVersion(p, isResource);
             if (vp != null) {
@@ -654,7 +654,7 @@ public abstract class ResourceHelper {
     private static final class ELEvaluatingInputStream extends InputStream {
 
         // Premature optimization is the root of all evil.  Blah blah.
-        private List<Integer> buf = new ArrayList<Integer>(1024);
+        private List<Integer> buf = new ArrayList<>(1024);
         private boolean failedExpressionTest = false;
         private boolean writingExpression = false;
         private InputStream inner;

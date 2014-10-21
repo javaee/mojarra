@@ -238,7 +238,7 @@ public class ApplicationAssociate {
         Map<String, Object> appMap = externalContext.getApplicationMap();
         appMap.put(ASSOCIATE_KEY, this);
         //noinspection CollectionWithoutInitialCapacity
-        navigationMap = new ConcurrentHashMap<String, Set<NavigationCase>>();
+        navigationMap = new ConcurrentHashMap<>();
         injectionProvider = (InjectionProvider) ctx.getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
         webConfig = WebConfiguration.getInstance(externalContext);
         beanManager = new BeanManager(injectionProvider,
@@ -266,7 +266,7 @@ public class ApplicationAssociate {
         appImpl.subscribeToEvent(PostConstructApplicationEvent.class,
                          Application.class, new PostConstructApplicationListener());
         
-        definingDocumentIdsToTruncatedJarUrls = new ConcurrentHashMap<String, String>();
+        definingDocumentIdsToTruncatedJarUrls = new ConcurrentHashMap<>();
         timeOfInstantiation = System.currentTimeMillis();
     }
 
@@ -648,14 +648,14 @@ public class ApplicationAssociate {
         FacesComponent facesComponent = facesComponentUsage.getAnnotation();
         assert(facesComponent.createTag());
         if (null == facesComponentsByNamespace) {
-            facesComponentsByNamespace = new HashMap<String, List<FacesComponentUsage>>();
+            facesComponentsByNamespace = new HashMap<>();
         }
 
         List<FacesComponentUsage> componentsInNamespace = null;
         final String namespace = facesComponent.namespace();
         
         if (!facesComponentsByNamespace.containsKey(facesComponent.namespace())) {
-            componentsInNamespace = new ArrayList<FacesComponentUsage>();
+            componentsInNamespace = new ArrayList<>();
             facesComponentsByNamespace.put(namespace, componentsInNamespace);
         } else {
             componentsInNamespace = facesComponentsByNamespace.get(namespace);
@@ -689,7 +689,7 @@ public class ApplicationAssociate {
         Set<NavigationCase> caseSet = navigationMap.get(fromViewId);
         if (caseSet == null) {
             //noinspection CollectionWithoutInitialCapacity
-            caseSet = new LinkedHashSet<NavigationCase>();
+            caseSet = new LinkedHashSet<>();
             caseSet.add(navigationCase);
             navigationMap.put(fromViewId, caseSet);
         } else {
@@ -758,7 +758,7 @@ public class ApplicationAssociate {
 
     @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     Map<String, ApplicationResourceBundle> resourceBundles =
-         new HashMap<String, ApplicationResourceBundle>();
+         new HashMap<>();
 
     public void addResourceBundle(String var, ApplicationResourceBundle bundle) {
         resourceBundles.put(var, bundle);

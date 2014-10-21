@@ -74,8 +74,8 @@ class ResourceScanner implements Scanner {
         Util.notNull("clazz", clazz);
         ResourceHandler handler = null;
 
-        ArrayList<Resource> fieldAnnotations = new ArrayList<Resource>();
-        ArrayList<Field> fields = new ArrayList<Field>();
+        ArrayList<Resource> fieldAnnotations = new ArrayList<>();
+        ArrayList<Field> fields = new ArrayList<>();
 
         for (Field field : clazz.getDeclaredFields()) {
             Resource fieldAnnotation = field.getAnnotation(Resource.class);
@@ -85,8 +85,8 @@ class ResourceScanner implements Scanner {
             }
         }
 
-        ArrayList<Resource> methodAnnotations = new ArrayList<Resource>();
-        ArrayList<Method> methods = new ArrayList<Method>();
+        ArrayList<Resource> methodAnnotations = new ArrayList<>();
+        ArrayList<Method> methods = new ArrayList<>();
 
         for (Method method : clazz.getDeclaredMethods()) {
             Resource methodAnnotation = method.getAnnotation(Resource.class);
