@@ -7,18 +7,12 @@
     <h:head/>
     <body>
         State Saving Mode: <h:outputText value="#{moveComponent2Bean.stateSavingMode}"/>
-        
-        <h:panelGroup id="a">
-            
-            <h:inputText id="inputText" value="inputText" />
-            
-        </h:panelGroup>
-        
-        <h:panelGroup id="b">
-            
-            
-        </h:panelGroup>
-        
+        <h:panelGroup id="target"/>
+        <test:movecomponent2 for="target">
+            <h:panelGroup id="source">
+                <b><h:outputText value="#{moveComponent2Bean.text}"/></b>
+            </h:panelGroup>
+        </test:movecomponent2>
         <h:form id="updateForm">
             <h:commandButton id="submit" value="Update" action="#{moveComponent2Bean.update}" />
         </h:form>
