@@ -95,7 +95,7 @@ public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanIn
     public List<PropertyDescriptor> getPropertyDescriptorsList() {
 
         if (null == propertyDescriptors) {
-            propertyDescriptors = new ArrayList<PropertyDescriptor>();
+            propertyDescriptors = new ArrayList<>();
         }
         return propertyDescriptors;
     }

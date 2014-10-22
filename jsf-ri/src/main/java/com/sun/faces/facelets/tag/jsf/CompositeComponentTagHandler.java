@@ -335,7 +335,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
         if (result == null) {
             if (create) {
-                result = new ArrayList<AttachedObjectHandler>();
+                result = new ArrayList<>();
                 attrs.put(ATTACHED_OBJECT_HANDLERS_KEY, result);
             } else {
                 result = Collections.EMPTY_LIST;

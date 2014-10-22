@@ -63,7 +63,7 @@ public class SwitchNodeImpl extends SwitchNode implements Serializable {
         this.id = id;
         
         this.defaultOutcome = null;
-        _cases = new CopyOnWriteArrayList<SwitchCase>();
+        _cases = new CopyOnWriteArrayList<>();
         cases = Collections.unmodifiableList(_cases);
     }
 

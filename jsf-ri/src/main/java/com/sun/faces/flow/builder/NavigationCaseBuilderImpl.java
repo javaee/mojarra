@@ -88,7 +88,7 @@ public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
         Map<String,Set<NavigationCase>> rules = root._getFlow()._getNavigationCases();
         Set<NavigationCase> cases = rules.get(fromViewId);
         if (null == cases) {
-            cases = new CopyOnWriteArraySet<NavigationCase>();
+            cases = new CopyOnWriteArraySet<>();
             rules.put(fromViewId, cases);
         }
         cases.add(navCase);
@@ -134,7 +134,7 @@ public class NavigationCaseBuilderImpl extends NavigationCaseBuilder {
             Map<String, List<String>> redirectParams = NavigationCaseBuilderImpl.this.navCase.getParameters();
             List<String> values = redirectParams.get(name);
             if (null == values) {
-                values = new CopyOnWriteArrayList<String>();
+                values = new CopyOnWriteArrayList<>();
                 redirectParams.put(name, values);
             }
             values.add(value);

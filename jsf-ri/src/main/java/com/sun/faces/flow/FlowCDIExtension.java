@@ -70,7 +70,7 @@ public class FlowCDIExtension implements Extension {
    private static final Logger LOGGER = FacesLogger.FLOW.getLogger();
 
    public FlowCDIExtension() {
-       flowScopedBeanFlowIds = new ConcurrentHashMap<Contextual<?>, FlowCDIContext.FlowBeanInfo>();
+       flowScopedBeanFlowIds = new ConcurrentHashMap<>();
        isCdiOneOneOrGreater = Util.isCdiOneOneOrGreater();
    }
    

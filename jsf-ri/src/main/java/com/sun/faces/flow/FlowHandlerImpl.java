@@ -68,8 +68,8 @@ public class FlowHandlerImpl extends FlowHandler {
 
     public FlowHandlerImpl() {
         flowFeatureIsEnabled = false;
-        flows = new ConcurrentHashMap<String, Map<String, Flow>>();
-        flowsByFlowId = new ConcurrentHashMap<String, List<Flow>>();
+        flows = new ConcurrentHashMap<>();
+        flowsByFlowId = new ConcurrentHashMap<>();
     }
     
     private boolean flowFeatureIsEnabled;
@@ -115,7 +115,7 @@ public class FlowHandlerImpl extends FlowHandler {
         }
         Map<String, Flow> mapsForDefiningDocument = flows.get(definingDocumentId);
         if (null == mapsForDefiningDocument) {
-            mapsForDefiningDocument = new ConcurrentHashMap<String, Flow>();
+            mapsForDefiningDocument = new ConcurrentHashMap<>();
             flows.put(toAdd.getDefiningDocumentId(), mapsForDefiningDocument);
         }
         
@@ -130,7 +130,7 @@ public class FlowHandlerImpl extends FlowHandler {
         // to flow instances.
         List<Flow> flowsWithId = flowsByFlowId.get(id);
         if (null == flowsWithId) {
-            flowsWithId = new CopyOnWriteArrayList<Flow>();
+            flowsWithId = new CopyOnWriteArrayList<>();
             flowsByFlowId.put(id, flowsWithId);
         }
         flowsWithId.add(toAdd);
@@ -263,7 +263,7 @@ public class FlowHandlerImpl extends FlowHandler {
                         curName = curOutbound.getKey();
                         if (inboundParameters.containsKey(curName)) {
                             if (null == evaluatedParams) {
-                                evaluatedParams = new HashMap<String, Object>();
+                                evaluatedParams = new HashMap<>();
                             }
                             // Evaluate it and put it in the temporary map.
                             // It is necessary to do this before the flow

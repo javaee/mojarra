@@ -225,7 +225,7 @@ public final class JstlFunction {
             return new String[] { value };
         }
 
-        List<String> tokens = new ArrayList<String>();
+        List<String> tokens = new ArrayList<>();
         for (StringTokenizer st = new StringTokenizer(value, d); st.hasMoreTokens(); ) {
             tokens.add(st.nextToken());
         }

@@ -74,7 +74,7 @@ import java.beans.FeatureDescriptor;
 class PropertyHandlerManager {
     
     private static final Map<String,PropertyHandler> ALL_HANDLERS =
-          new HashMap<String,PropertyHandler>(12, 1.0f);
+          new HashMap<>(12, 1.0f);
     static {
         ALL_HANDLERS.put("targets", new StringValueExpressionPropertyHandler());
         ALL_HANDLERS.put("targetAttributeName", new StringValueExpressionPropertyHandler());
@@ -124,7 +124,7 @@ class PropertyHandlerManager {
 
         
         Map<String,PropertyHandler> handlers =
-              new HashMap<String,PropertyHandler>(attributes.length, 1.0f);
+              new HashMap<>(attributes.length, 1.0f);
         for (String attribute : attributes) {
             handlers.put(attribute, ALL_HANDLERS.get(attribute));
         }

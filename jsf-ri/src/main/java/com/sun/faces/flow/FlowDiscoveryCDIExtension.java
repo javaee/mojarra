@@ -90,7 +90,7 @@ public class FlowDiscoveryCDIExtension implements Extension {
     private List<Producer<Flow>> flowProducers;
     
     public FlowDiscoveryCDIExtension() {
-        flowProducers = new CopyOnWriteArrayList<Producer<Flow>>();
+        flowProducers = new CopyOnWriteArrayList<>();
         
     }
     

@@ -339,7 +339,7 @@ public final class DevTools {
         writer.write("</caption><thead stype=\"padding: 2px; color: #030; background-color: #F9F9F9;\"><tr style=\"padding: 2px; color: #030; background-color: #F9F9F9;\"><th style=\"padding: 2px; color: #030; background-color: #F9F9F9;width: 10%; \">Name</th><th style=\"padding: 2px; color: #030; background-color: #F9F9F9;width: 90%; \">Value</th></tr></thead><tbody style=\"padding: 10px 6px;\">");
         boolean written = false;
         if (!vars.isEmpty()) {
-            SortedMap<String,Object> map = new TreeMap<String,Object>(vars);
+            SortedMap<String,Object> map = new TreeMap<>(vars);
             for (Map.Entry<String,Object> entry : map.entrySet()) {
                 String key = entry.getKey();
                 if (key.indexOf('.') == -1) {

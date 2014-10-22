@@ -77,7 +77,7 @@ public class MetaRulesetImpl extends MetaRuleset {
 
     private final static Logger LOGGER = FacesLogger.FACELETS_META.getLogger();
     private final static WeakHashMap<Class, WeakReference<MetadataTarget>> metadata =
-          new WeakHashMap<Class, WeakReference<MetadataTarget>>();
+          new WeakHashMap<>();
 
     private final Tag tag;
     private final Class type;
@@ -93,9 +93,9 @@ public class MetaRulesetImpl extends MetaRuleset {
 
         this.tag = tag;
         this.type = type;
-        this.attributes = new HashMap<String,TagAttribute>();
-        this.mappers = new ArrayList<Metadata>();
-        this.rules = new ArrayList<MetaRule>();
+        this.attributes = new HashMap<>();
+        this.mappers = new ArrayList<>();
+        this.rules = new ArrayList<>();
 
         // setup attributes
         TagAttribute[] attrs = this.tag.getAttributes().getAll();
@@ -217,7 +217,7 @@ public class MetaRulesetImpl extends MetaRuleset {
                 throw new TagException(this.tag,
                         "Error Creating TargetMetadata", e);
             }
-            metadata.put(type, new WeakReference<MetadataTarget>(meta));
+            metadata.put(type, new WeakReference<>(meta));
         }
         return meta;
 

@@ -114,7 +114,7 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
             Set<String> disabledIds = (Set<String>)
                   RequestStateManager.get(context, RequestStateManager.DISABLED_VALIDATORS);
             if (disabledIds == null) {
-                disabledIds = new HashSet<String>(3);
+                disabledIds = new HashSet<>(3);
                 RequestStateManager.set(context,
                                         RequestStateManager.DISABLED_VALIDATORS,
                                         disabledIds);

@@ -177,7 +177,7 @@ class DefaultTagDecorator implements TagDecorator {
         private Namespace namespace;
         private String arbiterAttributeName;
         private String arbiterAttributeNamespace = "";
-        private Map<String, String> additionalMappings = new HashMap<String, String>();
+        private Map<String, String> additionalMappings = new HashMap<>();
         private String otherHtmlIdAttribute;
 
         private ElementConverter() {
@@ -258,7 +258,7 @@ class DefaultTagDecorator implements TagDecorator {
         }
 
         protected TagAttributes convertAttributes(TagAttributes original) {
-            Map<String, TagAttribute> attributes = new HashMap<String, TagAttribute>();
+            Map<String, TagAttribute> attributes = new HashMap<>();
             TagAttribute elementName = createElementName(original.getTag());
             attributes.put(elementName.getQName(), elementName);
 

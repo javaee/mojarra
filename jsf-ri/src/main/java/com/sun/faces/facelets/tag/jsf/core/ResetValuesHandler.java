@@ -94,7 +94,7 @@ public final class ResetValuesHandler extends ActionListenerHandlerBase
         private static final long serialVersionUID = -5676209243297546166L;
 
         public LazyActionListener(Collection<String> render) {
-            this.render = new ArrayList<String>(render);
+            this.render = new ArrayList<>(render);
         }
 
         public void processAction(ActionEvent event)

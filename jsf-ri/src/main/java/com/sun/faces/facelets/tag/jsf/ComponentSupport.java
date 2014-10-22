@@ -169,7 +169,7 @@ public final class ComponentSupport {
         componentToTagMap = (Map<Integer, Tag>)
                 contextMap.get(COMPONENT_TO_TAG_MAP_NAME);
         if (null == componentToTagMap) {
-            componentToTagMap = new HashMap<Integer, Tag>();
+            componentToTagMap = new HashMap<>();
             contextMap.put(COMPONENT_TO_TAG_MAP_NAME, componentToTagMap);
         }
         return componentToTagMap.put((Integer) System.identityHashCode(c), t);
@@ -274,7 +274,7 @@ public final class ComponentSupport {
             } 
         }
         if (0 < parent.getFacetCount()) {
-            components = new ArrayList<UIComponent>();
+            components = new ArrayList<>();
             components.addAll(parent.getFacets().values());
             components.addAll(parent.getChildren());
         } else {

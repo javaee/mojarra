@@ -255,7 +255,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         for (UIComponent cur : children) {
             if (stateContext.componentAddedDynamically(cur)) {
                 if (dynamicChildren.isEmpty()) {
-                    dynamicChildren = new ArrayList<UIComponent>(children.size());
+                    dynamicChildren = new ArrayList<>(children.size());
                 }
                 dynamicChildren.add(cur);
             }

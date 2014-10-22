@@ -419,7 +419,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
         builder.append(".  Please specify one of these supported event names: ");
 
         // Might as well sort the event names for a cleaner error message.
-        Collection<String> sortedEventNames = new TreeSet<String>(eventNames);
+        Collection<String> sortedEventNames = new TreeSet<>(eventNames);
         Iterator<String> iter = sortedEventNames.iterator();
 
         boolean hasNext = iter.hasNext();

@@ -122,7 +122,7 @@ public class FlowCDIContext implements Context, Serializable {
     // This should be vended from a factory for decoration purposes.
     
     FlowCDIContext(Map<Contextual<?>, FlowBeanInfo> flowIds) {
-        this.flowIds = new ConcurrentHashMap<Contextual<?>, FlowBeanInfo>(flowIds);
+        this.flowIds = new ConcurrentHashMap<>(flowIds);
     }
     
     private static final String PER_SESSION_BEAN_MAP_LIST = FlowCDIContext.class.getPackage().getName() + ".PER_SESSION_BEAN_MAP_LIST";
@@ -185,7 +185,7 @@ public class FlowCDIContext implements Context, Serializable {
             Map<String, Object> result;
             result = (Map<String, Object>) sessionMap.get(flowBeansForClientWindowKey);
             if (null == result) {
-                result = new ConcurrentHashMap<String, Object>();
+                result = new ConcurrentHashMap<>();
                 sessionMap.put(flowBeansForClientWindowKey, result);
                 ensureBeanMapCleanupOnSessionDestroyed(sessionMap, flowBeansForClientWindowKey);
             }
@@ -199,7 +199,7 @@ public class FlowCDIContext implements Context, Serializable {
             Map<String, CreationalContext<?>> result;
             result = (Map<String, CreationalContext<?>>) sessionMap.get(creationalForClientWindowKey);
             if (null == result) {
-                result = new ConcurrentHashMap<String, CreationalContext<?>>();
+                result = new ConcurrentHashMap<>();
                 sessionMap.put(creationalForClientWindowKey, result);
                 ensureCreationalCleanupOnSessionDestroyed(sessionMap, creationalForClientWindowKey);
             }
@@ -227,7 +227,7 @@ public class FlowCDIContext implements Context, Serializable {
     private static void ensureBeanMapCleanupOnSessionDestroyed(Map<String, Object> sessionMap, String flowBeansForClientWindow) {
         List<String> beanMapList = (List<String>) sessionMap.get(PER_SESSION_BEAN_MAP_LIST);
         if (null == beanMapList) {
-            beanMapList = new ArrayList<String>();
+            beanMapList = new ArrayList<>();
             sessionMap.put(PER_SESSION_BEAN_MAP_LIST, beanMapList);
         }
         beanMapList.add(flowBeansForClientWindow);
@@ -236,7 +236,7 @@ public class FlowCDIContext implements Context, Serializable {
     private static void ensureCreationalCleanupOnSessionDestroyed(Map<String, Object> sessionMap, String creationalForClientWindow) {
         List<String> beanMapList = (List<String>) sessionMap.get(PER_SESSION_CREATIONAL_LIST);
         if (null == beanMapList) {
-            beanMapList = new ArrayList<String>();
+            beanMapList = new ArrayList<>();
             sessionMap.put(PER_SESSION_CREATIONAL_LIST, beanMapList);
         }
         beanMapList.add(creationalForClientWindow);
@@ -325,7 +325,7 @@ public class FlowCDIContext implements Context, Serializable {
         if (mapHelper.isFlowExists()) {
             result = (Map<Object, Object>) flowScopedBeanMap.get(FLOW_SCOPE_MAP_KEY);
             if (null == result) {
-                result = new ConcurrentHashMap<Object, Object>();
+                result = new ConcurrentHashMap<>();
                 flowScopedBeanMap.put(FLOW_SCOPE_MAP_KEY, result);
             }
         }
@@ -340,7 +340,7 @@ public class FlowCDIContext implements Context, Serializable {
         Map<String, CreationalContext<?>> creationalMap = mapHelper.getFlowScopedCreationalMapForCurrentFlow();
         assert(!flowScopedBeanMap.isEmpty());
         assert(!creationalMap.isEmpty());
-        List<String> flowScopedBeansToRemove = new ArrayList<String>();
+        List<String> flowScopedBeansToRemove = new ArrayList<>();
         BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
         
         for (Entry<String, Object> entry : flowScopedBeanMap.entrySet()) {

@@ -67,7 +67,7 @@ public class MethodCallNodeImpl extends MethodCallNode implements Serializable {
     
     public MethodCallNodeImpl(String id) {
         this.id = id;
-        _parameters = new CopyOnWriteArrayList<Parameter>();            
+        _parameters = new CopyOnWriteArrayList<>();            
     }
     
     public MethodCallNodeImpl(FacesContext context, String id, 

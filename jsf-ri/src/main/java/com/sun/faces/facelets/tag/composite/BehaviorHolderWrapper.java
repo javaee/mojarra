@@ -433,7 +433,7 @@ public class BehaviorHolderWrapper extends UIComponent implements
     public Map<String, List<ClientBehavior>> getClientBehaviors() {
         if (parent instanceof ClientBehaviorHolder) {
             ClientBehaviorHolder parentHolder = (ClientBehaviorHolder) parent;
-            Map<String, List<ClientBehavior>> behaviors = new HashMap<String, List<ClientBehavior>>(
+            Map<String, List<ClientBehavior>> behaviors = new HashMap<>(
                   1);
             behaviors.put(virtualEvent, parentHolder.getClientBehaviors().get(event));
             return Collections.unmodifiableMap(behaviors);

@@ -271,7 +271,7 @@ public class InterfaceHandler extends TagHandlerImpl {
             List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)
               componentDescriptor.getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
             if (null == targetList) {
-                targetList = new ArrayList<AttachedObjectTarget>();
+                targetList = new ArrayList<>();
                 componentDescriptor.setValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY,
                         targetList);
             }

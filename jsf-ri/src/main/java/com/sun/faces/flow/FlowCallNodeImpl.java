@@ -80,7 +80,7 @@ public class FlowCallNodeImpl extends FlowCallNode implements Serializable {
             this.calledFlowIdVE = null;
         }
         
-        _outboundParameters = new ConcurrentHashMap<String, Parameter>();            
+        _outboundParameters = new ConcurrentHashMap<>();            
         if (null != outboundParametersFromConfig) {
             for (Parameter cur : outboundParametersFromConfig) {
                 _outboundParameters.put(cur.getName(), cur);

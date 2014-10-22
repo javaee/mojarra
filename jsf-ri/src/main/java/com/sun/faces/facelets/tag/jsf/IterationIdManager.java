@@ -37,7 +37,7 @@ public class IterationIdManager {
         Set<String> current = stack.peek();
         
         if (current == null) {
-           current = new HashSet<String>();
+           current = new HashSet<>();
         }
         
         stack.push(current);
@@ -60,7 +60,7 @@ public class IterationIdManager {
     private static Deque<Set<String>> _getStackOfTrackedIds(FaceletContext ctx) {
         Deque<Set<String>> stack = (Deque<Set<String>>)ctx.getAttribute(_STACK_OF_TRACKED_IDS);
         if (stack == null) {
-            stack = new LinkedList<Set<String>>();
+            stack = new LinkedList<>();
             ctx.setAttribute(_STACK_OF_TRACKED_IDS, stack);
         }
         return stack;

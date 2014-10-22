@@ -120,7 +120,7 @@ public class DeclareFacetHandler extends TagHandlerImpl {
                    componentBeanDescriptor.getValue(UIComponent.FACETS_KEY);
         
         if (facetDescriptors == null) {
-            facetDescriptors = new HashMap<String, PropertyDescriptor>();
+            facetDescriptors = new HashMap<>();
             componentBeanDescriptor.setValue(UIComponent.FACETS_KEY, 
                     facetDescriptors);
         }

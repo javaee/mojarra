@@ -57,7 +57,7 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class AttachedBehaviors implements Serializable {
 	
-	private Map<String, TagHandler> behaviors = new HashMap<String, TagHandler>();
+	private Map<String, TagHandler> behaviors = new HashMap<>();
 	public static final String COMPOSITE_BEHAVIORS_KEY = "javax.faces.view.ClientBehaviors";
 	
 	public void add(String eventName, TagHandler owner){

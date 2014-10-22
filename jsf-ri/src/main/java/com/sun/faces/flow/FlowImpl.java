@@ -99,20 +99,20 @@ public class FlowImpl extends Flow implements Serializable {
     // <editor-fold defaultstate="collapsed" desc="Constructors">       
 
     public FlowImpl() {
-        _inboundParameters = new ConcurrentHashMap<String, Parameter>();
+        _inboundParameters = new ConcurrentHashMap<>();
         inboundParameters = Collections.unmodifiableMap(_inboundParameters);
-        _returns = new ConcurrentHashMap<String, ReturnNode>();
+        _returns = new ConcurrentHashMap<>();
         returns = Collections.unmodifiableMap(_returns);
-        _switches = new ConcurrentHashMap<String, SwitchNode>();
+        _switches = new ConcurrentHashMap<>();
         switches = Collections.unmodifiableMap(_switches);
-        _facesFlowCalls = new ConcurrentHashMap<String, FlowCallNode>();
+        _facesFlowCalls = new ConcurrentHashMap<>();
         facesFlowCalls = Collections.unmodifiableMap(_facesFlowCalls);
-        _facesFlowCallsByTargetFlowId = new ConcurrentHashMap<String, FlowCallNode>();
-        _views = new CopyOnWriteArrayList<ViewNode>();
+        _facesFlowCallsByTargetFlowId = new ConcurrentHashMap<>();
+        _views = new CopyOnWriteArrayList<>();
         views = Collections.unmodifiableList(_views);
-        _navigationCases = new ConcurrentHashMap<String, Set<NavigationCase>>();
+        _navigationCases = new ConcurrentHashMap<>();
         navigationCases = Collections.unmodifiableMap(_navigationCases);
-        _methodCalls = new CopyOnWriteArrayList<MethodCallNode>();
+        _methodCalls = new CopyOnWriteArrayList<>();
         methodCalls = Collections.unmodifiableList(_methodCalls);
     }
     
