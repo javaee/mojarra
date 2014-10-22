@@ -503,17 +503,13 @@ public class ApplicationImpl extends Application {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
                 Util.getWebXmlVersion(facesContext).equals("4.0")) {
-            try {
-            InitialContext initialContext = new InitialContext();
+            
             javax.enterprise.inject.spi.BeanManager beanManager = 
-                    (javax.enterprise.inject.spi.BeanManager) 
-                    initialContext.lookup("java:comp/BeanManager");
-                if (!resolver.equals(beanManager.getELResolver())) {
-                    elResolvers.add(resolver);
-                }
-            } catch(NamingException ne) {
-                throw new FacesException(ne);
-            } 
+                Util.getCdiBeanManager(facesContext);
+            
+            if (beanManager != null && !resolver.equals(beanManager.getELResolver())) {
+                elResolvers.add(resolver);
+            }
         } else {
             elResolvers.add(resolver);
         }

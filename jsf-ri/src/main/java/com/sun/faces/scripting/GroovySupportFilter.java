@@ -59,7 +59,7 @@ public class GroovySupportFilter implements Filter {
 
     public void init(FilterConfig filterConfig) throws ServletException {
         sc = filterConfig.getServletContext();
-        if (Util.isCDIAvailable(sc)) {
+        if (Util.isCdiAvailable(sc)) {
             delegate = new WeldAwareGroovySupportFilter();
         } else {
             delegate = new NonWeldAwareGroovySupportFilter();

@@ -79,7 +79,8 @@ public class ViewScopeContextManager {
     private final BeanManager beanManager;
 
     public ViewScopeContextManager() {
-        isCdiOneOneOrGreater = Util.isCdiOneOneOrGreater();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        isCdiOneOneOrGreater = Util.isCdiOneOneOrLater(facesContext);
         try {
             viewScopedCDIEventFireHelperImplClass = Class.forName("com.sun.faces.application.view.ViewScopedCDIEventFireHelperImpl");
         } catch (ClassNotFoundException ex) {
@@ -87,8 +88,7 @@ public class ViewScopeContextManager {
                 LOGGER.log(Level.SEVERE, "CDI 1.1 events not enabled", ex);
             }
         }
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+        beanManager = (BeanManager) Util.getCdiBeanManager(facesContext);
     }
 
     /**
@@ -349,7 +349,7 @@ public class ViewScopeContextManager {
 
     public void fireInitializedEvent(FacesContext facesContext, UIViewRoot root) {
         if (isCdiOneOneOrGreater && null != viewScopedCDIEventFireHelperImplClass) {
-            BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+            BeanManager beanManager = (BeanManager) Util.getCdiBeanManager(facesContext);
             if (null != beanManager) {
                 Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
                 if (null != availableBeans && !availableBeans.isEmpty()) {
@@ -369,7 +369,7 @@ public class ViewScopeContextManager {
 
     public void fireDestroyedEvent(FacesContext facesContext, UIViewRoot root) {
         if (isCdiOneOneOrGreater && null != viewScopedCDIEventFireHelperImplClass) {
-            BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+            BeanManager beanManager = (BeanManager) Util.getCdiBeanManager(facesContext);
             if (null != beanManager) {
                 Set<Bean<?>> availableBeans = beanManager.getBeans(viewScopedCDIEventFireHelperImplClass);
                 if (null != availableBeans && !availableBeans.isEmpty()) {

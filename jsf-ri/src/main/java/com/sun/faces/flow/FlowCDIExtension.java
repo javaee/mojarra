@@ -71,7 +71,7 @@ public class FlowCDIExtension implements Extension {
 
    public FlowCDIExtension() {
        flowScopedBeanFlowIds = new ConcurrentHashMap<>();
-       isCdiOneOneOrGreater = Util.isCdiOneOneOrGreater();
+       isCdiOneOneOrGreater = Util.isCdiOneOneOrLater(null);
    }
    
    public void processBean(@Observes ProcessBean<?> event) {

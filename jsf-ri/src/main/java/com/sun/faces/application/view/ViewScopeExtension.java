@@ -74,7 +74,7 @@ public class ViewScopeExtension implements Extension {
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.finest("Constructor @ViewScoped CDI Extension called");
         }
-        isCdiOneOneOrGreater = Util.isCdiOneOneOrGreater();
+        isCdiOneOneOrGreater = Util.isCdiOneOneOrLater(null);
     }
 
     /**

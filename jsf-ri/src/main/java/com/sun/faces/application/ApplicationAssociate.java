@@ -293,7 +293,7 @@ public class ApplicationAssociate {
             }
 
             FacesContext context = FacesContext.getCurrentInstance();
-            if (Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
+            if (Util.isCdiAvailable(context)) {
                 try {
                     JavaFlowLoaderHelper flowLoader = new JavaFlowLoaderHelper();
                     flowLoader.loadFlows(context, ApplicationAssociate.this.flowHandler);

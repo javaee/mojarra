@@ -106,7 +106,7 @@ public class ViewScopeManager implements HttpSessionListener, ViewMapListener {
     public ViewScopeManager() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            if (Util.isCDIAvailable(context.getExternalContext().getApplicationMap())) {
+            if (Util.isCdiAvailable(context)) {
                 contextManager = new ViewScopeContextManager();
             } else {
                 contextManager = null;

@@ -75,9 +75,12 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UINamingContainer;
 import javax.faces.render.ResponseStateManager;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -141,43 +144,6 @@ public class Util {
             sc.setAttribute(patternCacheKey, result);
         }
 
-        return result;
-    }
-    
-    private static final String CDI_AVAILABLE_PER_APP_KEY = Util.class.getName() + "_CDI_AVAILABLE";
-    
-    public static boolean isCDIAvailable(Map<String, Object> appMap) {
-        boolean result = appMap.containsKey(CDI_AVAILABLE_PER_APP_KEY);
-        return result;
-    }
-
-    public static boolean isCDIAvailable(ServletContext sc) {
-        boolean result = null != sc.getAttribute(CDI_AVAILABLE_PER_APP_KEY);
-        return result;
-    }
-    
-    public static Object getCDIBeanManager(Map<String, Object> appMap) {
-        Object beanManager = appMap.get(CDI_AVAILABLE_PER_APP_KEY);
-        return beanManager;
-    }
-    
-    public static void setCDIAvailable(ServletContext sc, Object beanManager) {
-        sc.setAttribute(CDI_AVAILABLE_PER_APP_KEY, beanManager);
-        }
-    
-    public static boolean isCdiOneOneOrGreater() {
-
-        // The following try/catch is a hack to discover
-        // if CDI 1.1 or greater is available
-        boolean result = false;
-        try {
-            Class.forName("javax.enterprise.context.Initialized");
-            result = true;
-        } catch (ClassNotFoundException ignored) {
-            if (LOGGER.isLoggable(Level.FINEST)) {
-                LOGGER.log(Level.FINEST, "Dected CDI 1.0", ignored);
-            }
-        }
         return result;
     }
 
@@ -1219,4 +1185,125 @@ public class Util {
             return null;
         }
     }    
+
+    /**
+     * Get the CDI bean manager.
+     * 
+     * @param facesContext the Faces context to consult
+     * @return the CDI bean manager.
+     */
+    public static BeanManager getCdiBeanManager(FacesContext facesContext) {
+        BeanManager result = null;
+        
+        if (facesContext != null && facesContext.getAttributes().containsKey(RIConstants.CDI_BEAN_MANAGER)) {
+            result = (BeanManager) facesContext.getAttributes().get(RIConstants.CDI_BEAN_MANAGER);
+        } else if (facesContext != null && facesContext.getExternalContext().getApplicationMap().containsKey(RIConstants.CDI_BEAN_MANAGER)) {
+            result = (BeanManager) facesContext.getExternalContext().getApplicationMap().get(RIConstants.CDI_BEAN_MANAGER);
+        } else {
+            try {
+                InitialContext initialContext = new InitialContext();
+                result = (BeanManager) initialContext.lookup("java:comp/BeanManager");
+            }
+            catch (NamingException ne) {
+                try {
+                    InitialContext initialContext = new InitialContext();
+                    result = (BeanManager) initialContext.lookup("java:comp/env/BeanManager");
+                }
+                catch (NamingException ne2) {
+                }
+            }
+            
+            if (result == null && facesContext != null) {
+                Map<String, Object> applicationMap = facesContext.getExternalContext().getApplicationMap();
+                result = (BeanManager) applicationMap.get("org.jboss.weld.environment.servlet.javax.enterprise.inject.spi.BeanManager");
+            }
+            
+            if (result != null && facesContext != null) {
+                facesContext.getAttributes().put(RIConstants.CDI_BEAN_MANAGER, result);
+                facesContext.getExternalContext().getApplicationMap().put(RIConstants.CDI_BEAN_MANAGER, result);
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Is CDI available.
+     * 
+     * @param facesContext the Faces context to consult.
+     * @return true if available, false otherwise.
+     */
+    public static boolean isCdiAvailable(FacesContext facesContext) {
+        boolean result;
+        
+        if (facesContext != null && facesContext.getAttributes().containsKey(RIConstants.CDI_AVAILABLE)) {
+            result = (Boolean) facesContext.getAttributes().get(RIConstants.CDI_AVAILABLE);
+        } else if (facesContext != null && facesContext.getExternalContext().getApplicationMap().containsKey(RIConstants.CDI_AVAILABLE)) {
+            result = (Boolean) facesContext.getExternalContext().getApplicationMap().get(RIConstants.CDI_AVAILABLE);
+        } else {
+            result = getCdiBeanManager(facesContext) != null;
+            
+            if (result && facesContext != null) {
+                facesContext.getAttributes().put(RIConstants.CDI_AVAILABLE, result);
+                facesContext.getExternalContext().getApplicationMap().put(RIConstants.CDI_AVAILABLE, result);
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Is CDI available (ServletContext variant)
+     * 
+     * @param servletContext the servlet context.
+     * @return true if available, false otherwise.
+     */
+    public static boolean isCdiAvailable(ServletContext servletContext) {
+        boolean result;
+        
+        Object value = servletContext.getAttribute(RIConstants.CDI_AVAILABLE);
+        if (value != null) {
+            result = (Boolean) value;
+        } else {
+            result = getCdiBeanManager(null) != null;
+            
+            if (result) {
+                servletContext.setAttribute(RIConstants.CDI_AVAILABLE, result);
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Is CDI 1.1 or later
+     * 
+     * @param facesContext the Faces context.
+     * @return true if CDI 1.1 or later, false otherwise.
+     */
+    public static boolean isCdiOneOneOrLater(FacesContext facesContext) {
+        boolean result = false;
+        
+        if (facesContext != null && facesContext.getAttributes().containsKey(RIConstants.CDI_1_1_OR_LATER)) {
+            result = (Boolean) facesContext.getAttributes().get(RIConstants.CDI_1_1_OR_LATER);
+        } else if (facesContext != null && facesContext.getExternalContext().getApplicationMap().containsKey(RIConstants.CDI_1_1_OR_LATER)) {
+            result = facesContext.getExternalContext().getApplicationMap().containsKey(RIConstants.CDI_1_1_OR_LATER);
+        } else {
+            try {
+                Class.forName("javax.enterprise.context.Initialized");
+                result = true;
+            } catch (ClassNotFoundException ignored) {
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST, "Detected CDI 1.0", ignored);
+                }
+            }
+            
+            if (facesContext != null) {
+                facesContext.getAttributes().put(RIConstants.CDI_1_1_OR_LATER, result);
+                facesContext.getExternalContext().getApplicationMap().put(RIConstants.CDI_1_1_OR_LATER, result);
+            }
+        }
+        
+        return result;
+    }
 }

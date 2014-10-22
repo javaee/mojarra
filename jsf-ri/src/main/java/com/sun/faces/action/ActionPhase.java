@@ -40,6 +40,7 @@
 package com.sun.faces.action;
 
 import com.sun.faces.lifecycle.Phase;
+import com.sun.faces.util.Util;
 import java.util.Iterator;
 import java.util.Set;
 import javax.enterprise.inject.Any;
@@ -61,27 +62,10 @@ public class ActionPhase extends Phase {
 
     private BeanManager beanManager;
 
-    public BeanManager getBeanManager() {
+    public BeanManager getBeanManager(FacesContext facesContext) {
 
         if (beanManager == null) {
-            Object result = null;
-
-            try {
-                InitialContext initialContext = new InitialContext();
-                result = initialContext.lookup("java:comp/BeanManager");
-            } catch (NamingException exception) {
-                try {
-                    InitialContext initialContext = new InitialContext();
-                    result = initialContext.lookup("java:comp/env/BeanManager");
-                } catch (NamingException exception2) {
-                }
-            }
-
-            if (result != null) {
-                beanManager = (BeanManager) result;
-            } else {
-                beanManager = null;
-            }
+            beanManager = Util.getCdiBeanManager(facesContext);
         }
 
         return beanManager;
@@ -92,7 +76,7 @@ public class ActionPhase extends Phase {
         /*
          * 1. Find the bean + method that matches the correct @RequestMapping. 
          */
-        Set<Bean<?>> beans = getBeanManager().getBeans(Object.class, new AnnotationLiteral<Any>() {
+        Set<Bean<?>> beans = getBeanManager(context).getBeans(Object.class, new AnnotationLiteral<Any>() {
         });
         Iterator<Bean<?>> beanIterator = beans.iterator();
         RequestMappingInfo current = null;

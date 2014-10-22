@@ -249,15 +249,16 @@ public class ELUtils {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
                 Util.getWebXmlVersion(facesContext).equals("4.0")) {
-            try {
-            InitialContext initialContext = new InitialContext();
+            
             javax.enterprise.inject.spi.BeanManager beanManager = 
-                    (javax.enterprise.inject.spi.BeanManager) 
-                    initialContext.lookup("java:comp/BeanManager");
+                 Util.getCdiBeanManager(facesContext);
+            
+            if (beanManager != null) {
                 composite.add(beanManager.getELResolver());
-            } catch(NamingException ne) {
-                throw new FacesException(ne);
+            } else {
+                throw new FacesException("Unable to find CDI BeanManager");
             }
+            
             composite.add(FLASH_RESOLVER);
             composite.addPropertyELResolver(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
             addELResolvers(composite, associate.getELResolversFromFacesConfig());
@@ -342,15 +343,16 @@ public class ELUtils {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
                 Util.getWebXmlVersion(facesContext).equals("4.0")) {
-            try {
-            InitialContext initialContext = new InitialContext();
+            
             javax.enterprise.inject.spi.BeanManager beanManager = 
-                    (javax.enterprise.inject.spi.BeanManager) 
-                    initialContext.lookup("java:comp/BeanManager");
+                 Util.getCdiBeanManager(facesContext);
+            
+            if (beanManager != null) {
                 composite.add(beanManager.getELResolver());
-            } catch(NamingException ne) {
-                throw new FacesException(ne);
+            } else {
+                throw new FacesException("Unable to find CDI BeanManager");
             }
+            
             composite.add(FLASH_RESOLVER);
             composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
             composite.addPropertyELResolver(RESOURCE_RESOLVER);
