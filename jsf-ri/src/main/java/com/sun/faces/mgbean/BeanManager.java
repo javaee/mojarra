@@ -73,11 +73,11 @@ public class BeanManager implements SystemEventListener {
 
     @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     private Map<String,BeanBuilder> managedBeans =
-         new HashMap<String,BeanBuilder>();
+         new HashMap<>();
     private InjectionProvider injectionProvider;
     private boolean configPreprocessed;
     private boolean lazyBeanValidation;
-    private List<String> eagerBeans = new ArrayList<String>(4);
+    private List<String> eagerBeans = new ArrayList<>(4);
 
     // ------------------------------------------------------------ Constructors
 
@@ -364,10 +364,10 @@ public class BeanManager implements SystemEventListener {
                 }
 
                 //noinspection CollectionWithoutInitialCapacity
-                List<String> refs = new ArrayList<String>();
+                List<String> refs = new ArrayList<>();
                 refs.add(beanName);
                 //noinspection CollectionWithoutInitialCapacity
-                ArrayList<String> messages = new ArrayList<String>();
+                ArrayList<String> messages = new ArrayList<>();
                 validateReferences(builder, refs, messages);
                 if (!messages.isEmpty()) {
                     builder.queueMessages(messages);
@@ -438,7 +438,7 @@ public class BeanManager implements SystemEventListener {
     private static class ScopeManager {
 
         private static final ConcurrentMap<String,ScopeHandler> handlerMap =
-             new ConcurrentHashMap<String,ScopeHandler>(5);
+             new ConcurrentHashMap<>(5);
         
         static {
             handlerMap.put(ELUtils.Scope.REQUEST.toString(), new RequestScopeHandler());

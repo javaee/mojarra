@@ -72,7 +72,7 @@ public class MostlySingletonSet<E> implements Set<E>, Serializable {
         } else {
             // If we need to transition from one to more-than-one
             if (1 == inner.size()) {
-                HashSet<E> newSet = new HashSet<E>();
+                HashSet<E> newSet = new HashSet<>();
                 newSet.add(inner.iterator().next());
                 inner = newSet;
             }
@@ -91,7 +91,7 @@ public class MostlySingletonSet<E> implements Set<E>, Serializable {
         } else {
             // If we need to transition from one to more-than-one
             if (1 == inner.size()) {
-                HashSet<E> newSet = new HashSet<E>();
+                HashSet<E> newSet = new HashSet<>();
                 newSet.add(inner.iterator().next());
                 inner = newSet;
             }

@@ -220,7 +220,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                         if (value.trim().startsWith("#{") || value.trim().startsWith("${")) {
                             FacesContext fc = FacesContext.getCurrentInstance();
                             value = fc.getApplication().evaluateExpressionGet(fc, value, String.class);
-                            List<String> values = new ArrayList<String>();
+                            List<String> values = new ArrayList<>();
                             values.add(value);
                             existingParams.put(navParamName, values);
                         } else {
@@ -236,7 +236,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
         String toFlowDocumentId = navCase.getToFlowDocumentId();
         if (null != toFlowDocumentId) {
             if (FlowHandler.NULL_FLOW.equals(toFlowDocumentId)) {
-                List<String> flowDocumentIdValues = new ArrayList<String>();
+                List<String> flowDocumentIdValues = new ArrayList<>();
                 flowDocumentIdValues.add(FlowHandler.NULL_FLOW);
                 existingParams.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, flowDocumentIdValues);
                 
@@ -244,18 +244,18 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                 FlowHandler fh = context.getApplication().getFlowHandler();
                 if (fh instanceof FlowHandlerImpl) {
                     FlowHandlerImpl fhi = (FlowHandlerImpl) fh;
-                    List<String> flowReturnDepthValues = new ArrayList<String>();
+                    List<String> flowReturnDepthValues = new ArrayList<>();
                     flowReturnDepthValues.add("" + fhi.getAndClearReturnModeDepth(context));
                     existingParams.put(FlowHandlerImpl.FLOW_RETURN_DEPTH_PARAM_NAME, flowReturnDepthValues);
                 }
                 
             } else {
                 String flowId = navCase.getFromOutcome();
-                List<String> flowDocumentIdValues = new ArrayList<String>();
+                List<String> flowDocumentIdValues = new ArrayList<>();
                 flowDocumentIdValues.add(toFlowDocumentId);
                 existingParams.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, flowDocumentIdValues);
                 
-                List<String> flowIdValues = new ArrayList<String>();
+                List<String> flowIdValues = new ArrayList<>();
                 flowIdValues.add(flowId);
                 existingParams.put(FlowHandler.FLOW_ID_REQUEST_PARAM_NAME, flowIdValues);
             }
@@ -264,7 +264,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
     }
 
     protected Map<String, List<String>> getParamOverrides(UIComponent component) {
-        Map<String, List<String>> params = new LinkedHashMap<String, List<String>>();
+        Map<String, List<String>> params = new LinkedHashMap<>();
         Param[] declaredParams = getParamList(component);
         for (Param candidate : declaredParams) {
             // QUESTION shouldn't the trimming of name should be done elsewhere?
@@ -273,7 +273,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                 candidate.name = candidate.name.trim();
                 List<String> values = params.get(candidate.name);
                 if (values == null) {
-                    values = new ArrayList<String>();
+                    values = new ArrayList<>();
                     params.put(candidate.name, values);
                 }
                 values.add(candidate.value);

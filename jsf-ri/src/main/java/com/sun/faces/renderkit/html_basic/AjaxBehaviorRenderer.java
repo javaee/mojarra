@@ -208,7 +208,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
             }
         }
         if (foundparam != null && !execute.contains(sourceId)) {
-                execute = new LinkedList<String>(execute);
+                execute = new LinkedList<>(execute);
                 execute.add(component.getClientId());
         }
         if (foundparam != null) {

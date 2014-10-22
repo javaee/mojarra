@@ -134,7 +134,7 @@ public class WebContainerInjectionProvider implements InjectionProvider {
     }
     
     private static ConcurrentHashMap<Class, ConcurrentHashMap<Class<? extends Annotation>, MethodHolder>> methodsPerClazz =
-            new ConcurrentHashMap<Class, ConcurrentHashMap<Class<? extends Annotation>, MethodHolder>>();
+            new ConcurrentHashMap<>();
 
 
     private static Method getAnnotatedMethod(Object managedBean,
@@ -148,7 +148,7 @@ public class WebContainerInjectionProvider implements InjectionProvider {
             if(methodsMap==null) {
                 
                 ConcurrentHashMap<Class<? extends Annotation>, MethodHolder> newMethodsMap = 
-                        new ConcurrentHashMap<Class<? extends Annotation>, MethodHolder>();
+                        new ConcurrentHashMap<>();
                 
                 methodsMap = methodsPerClazz.putIfAbsent(clazz, newMethodsMap);
                 

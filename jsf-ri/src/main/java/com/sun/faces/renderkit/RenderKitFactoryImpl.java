@@ -75,7 +75,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
      */
     public RenderKitFactoryImpl() {
         super();
-        renderKits = new ConcurrentHashMap<String, RenderKit>();
+        renderKits = new ConcurrentHashMap<>();
         addRenderKit(HTML_BASIC_RENDER_KIT, new RenderKitImpl());
     }
 

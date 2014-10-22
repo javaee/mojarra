@@ -1152,7 +1152,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (null != passthroughAttributes) {
             throw new IllegalStateException("Error, this method should only be called once per instance.");
         }
-        passthroughAttributes = new ConcurrentHashMap<String, Object>(toCopy);
+        passthroughAttributes = new ConcurrentHashMap<>(toCopy);
     }
     
     private boolean containsPassThroughAttribute(String attrName) {
@@ -1238,7 +1238,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 
         if(!original.equals(name) || elementNames != null) {
             if(elementNames == null) {
-                elementNames = new LinkedList<String>();
+                elementNames = new LinkedList<>();
             }
             elementNames.push(name);
         }

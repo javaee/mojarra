@@ -90,7 +90,7 @@ public class GroovyScriptManager implements ScriptManager {
     }
 
     public Set<String> getScripts() {
-        Set<String> scripts = new HashSet<String>();
+        Set<String> scripts = new HashSet<>();
         processWebInfGroovy(servletContext, servletContext.getResourcePaths(SCRIPT_PATH), scripts);
 
         return scripts;

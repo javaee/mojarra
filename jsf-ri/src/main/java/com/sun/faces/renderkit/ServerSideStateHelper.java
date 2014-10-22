@@ -227,7 +227,7 @@ public class ServerSideStateHelper extends StateHelper {
                           TypedCollections.dynamicallyCastMap(
                                 logicalMap.get(idInLogicalMap), String.class, Object[].class);
                     if (actualMap == null) {
-                        actualMap = new LRUMap<String, Object[]>(numberOfViews);
+                        actualMap = new LRUMap<>(numberOfViews);
                         logicalMap.put(idInLogicalMap, actualMap);
                     }
 

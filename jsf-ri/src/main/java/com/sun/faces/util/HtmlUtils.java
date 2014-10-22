@@ -60,7 +60,7 @@ import java.util.Arrays;
  */
 public class HtmlUtils {
 
-    private final static Set<String> UTF_CHARSET = new HashSet<String>(Arrays.asList("UTF-8", "UTF-16",
+    private final static Set<String> UTF_CHARSET = new HashSet<>(Arrays.asList("UTF-8", "UTF-16",
             "UTF-16BE", "UTF-16LE", "UTF-32", "UTF-32BE", "UTF-32LE", "x-UTF-16LE-BOM", "X-UTF-32BE-BOM",
             "X-UTF-32LE-BOM", ""));
 

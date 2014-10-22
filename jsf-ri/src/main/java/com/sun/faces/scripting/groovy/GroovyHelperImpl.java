@@ -101,7 +101,7 @@ public class GroovyHelperImpl extends GroovyHelper {
         URL[] combinedRoots;
         Enumeration<URL> classpathResourceEnumeration =
                 curLoader.getResources("META-INF/resources/");
-        List<URL> classpathResourceList = new ArrayList<URL>();
+        List<URL> classpathResourceList = new ArrayList<>();
         while (classpathResourceEnumeration.hasMoreElements()) {
             classpathResourceList.add(classpathResourceEnumeration.nextElement());
         }

@@ -115,7 +115,7 @@ public class RenderKitImpl extends RenderKit {
      */
 
     private ConcurrentHashMap<String, ClientBehaviorRenderer> behaviorRenderers = 
-        new ConcurrentHashMap<String, ClientBehaviorRenderer>();
+        new ConcurrentHashMap<>();
 
 
     private ResponseStateManager responseStateManager =
@@ -140,7 +140,7 @@ public class RenderKitImpl extends RenderKit {
 
         HashMap<String,Renderer> renderers = rendererFamilies.get(family);
         if (renderers == null) {
-            renderers = new HashMap<String,Renderer>();
+            renderers = new HashMap<>();
             rendererFamilies.put(family, renderers);
         }
 

@@ -99,7 +99,7 @@ public final class ExpiringConcurrentCache<K, V> extends ConcurrentCache<K, V> {
                         return getFactory().newInstance(key);
                     }
                 };
-                FutureTask<V> ft = new FutureTask<V>(callable);
+                FutureTask<V> ft = new FutureTask<>(callable);
                 // here is the real beauty of the concurrent utilities.
                 // 1.  putIfAbsent() is atomic
                 // 2.  putIfAbsent() will return the value already associated
@@ -187,7 +187,7 @@ public final class ExpiringConcurrentCache<K, V> extends ConcurrentCache<K, V> {
     }
     
     private final ExpiryChecker<K, V> _checker;
-    private final ConcurrentMap<K, Future<V>> _cache = new ConcurrentHashMap<K, Future<V>>();
+    private final ConcurrentMap<K, Future<V>> _cache = new ConcurrentHashMap<>();
     
     private static final Logger _LOGGER = FacesLogger.UTIL.getLogger();
 }

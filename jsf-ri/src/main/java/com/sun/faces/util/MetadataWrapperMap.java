@@ -45,7 +45,7 @@ public abstract class MetadataWrapperMap<K, V> implements Map<K, V> {
 
     public MetadataWrapperMap(Map<K, V> toWrap) {
         this.wrapped = toWrap;
-        metadata = new ConcurrentHashMap<K, Map<Object, Object>>();
+        metadata = new ConcurrentHashMap<>();
     }
 
     protected Map<K, Map<Object, Object>> getMetadata() {

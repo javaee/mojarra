@@ -382,7 +382,7 @@ public class RenderKitUtils {
         if (!incExec) {
             params = Collections.emptyList();
         } else {
-            params = new LinkedList<ClientBehaviorContext.Parameter>();
+            params = new LinkedList<>();
             params.add(new ClientBehaviorContext.Parameter("incExec",true));
         }
         renderHandler(context,
@@ -414,7 +414,7 @@ public class RenderKitUtils {
         if (!incExec) {
             params = Collections.emptyList();
         } else {
-            params = new LinkedList<ClientBehaviorContext.Parameter>();
+            params = new LinkedList<>();
             params.add(new ClientBehaviorContext.Parameter("incExec",true));
         }
         renderHandler(context,
@@ -956,7 +956,7 @@ public class RenderKitUtils {
                                         String[][] serverSupportedContentTypes,
                                         String[][] preferredContentType) {
 
-        List<String[]> resultList = new ArrayList<String[]>(serverSupportedContentTypes.length);
+        List<String[]> resultList = new ArrayList<>(serverSupportedContentTypes.length);
 
         // the highest quality
         double highestQFactor = 0;

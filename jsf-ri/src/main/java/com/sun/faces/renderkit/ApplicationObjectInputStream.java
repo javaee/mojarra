@@ -58,7 +58,7 @@ public class ApplicationObjectInputStream extends ObjectInputStream {
 
     // Taken from ObjectInputStream to resolve primitive types
     private static final Map<String,Class<?>> PRIMITIVE_CLASSES =
-          new HashMap<String,Class<?>>(9, 1.0F);
+          new HashMap<>(9, 1.0F);
 
     static {
         PRIMITIVE_CLASSES.put("boolean", boolean.class);

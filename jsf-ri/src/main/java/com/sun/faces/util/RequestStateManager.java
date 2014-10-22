@@ -183,7 +183,7 @@ public class RequestStateManager {
 
 
     private static final Map<PhaseId,String[]> PHASE_ATTRIBUTES =
-        new HashMap<PhaseId,String[]>(2, 1.0f);
+        new HashMap<>(2, 1.0f);
 
     static {
         PHASE_ATTRIBUTES.put(PhaseId.RENDER_RESPONSE, RENDER_RESPONSE);
@@ -301,7 +301,7 @@ public class RequestStateManager {
         //noinspection unchecked
         Map<String,Object> reqState = (Map<String,Object>) contextMap.get(KEY);
         if (reqState == null) {
-            reqState = new HashMap<String,Object>();
+            reqState = new HashMap<>();
             contextMap.put(KEY, reqState);
         }
         return reqState;

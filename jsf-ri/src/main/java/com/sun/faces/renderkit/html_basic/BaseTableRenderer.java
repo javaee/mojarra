@@ -442,7 +442,7 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
                 int childCount = table.getChildCount();
                 if (childCount > 0) {
                     List<UIColumn> results =
-                          new ArrayList<UIColumn>(childCount);
+                          new ArrayList<>(childCount);
                     for (UIComponent kid : table.getChildren()) {
                         if ((kid instanceof UIColumn) && kid.isRendered()) {
                             results.add((UIColumn) kid);
@@ -463,7 +463,7 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
                 if (count < 1) {
                     count = 1;
                 }
-                List<UIColumn> result = new ArrayList<UIColumn>(count);
+                List<UIColumn> result = new ArrayList<>(count);
                 for (int i = 0; i < count; i++) {
                     result.add(new UIColumn());
                 }

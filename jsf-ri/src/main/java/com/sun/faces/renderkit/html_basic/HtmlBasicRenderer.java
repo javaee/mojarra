@@ -583,7 +583,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
     protected Param[] getParamList(UIComponent command) {
 
         if (command.getChildCount() > 0) {
-            ArrayList<Param> parameterList = new ArrayList<Param>();
+            ArrayList<Param> parameterList = new ArrayList<>();
 
             for (UIComponent kid : command.getChildren()) {
                 if (kid instanceof UIParameter) {
@@ -631,7 +631,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
                     if ((name != null) && (name.length() > 0)) {
 
                         if (params == null) {
-                            params = new ArrayList<ClientBehaviorContext.Parameter>(childCount);
+                            params = new ArrayList<>(childCount);
                         }
 
                         params.add(new ClientBehaviorContext.Parameter(name, value));

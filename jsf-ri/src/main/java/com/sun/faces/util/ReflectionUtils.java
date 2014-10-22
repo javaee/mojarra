@@ -67,7 +67,7 @@ public final class ReflectionUtils {
      * <p>Cache</p>
      */
     private static final Map<ClassLoader, ConcurrentMap<String, MetaData>> REFLECTION_CACHE =
-          new WeakHashMap<ClassLoader,ConcurrentMap<String, MetaData>>();
+          new WeakHashMap<>();
 
 
     // ------------------------------------------------------------ Constructors
@@ -97,7 +97,7 @@ public final class ReflectionUtils {
 
         if (REFLECTION_CACHE.get(loader) == null) {
             REFLECTION_CACHE.put(loader,
-                                 new ConcurrentHashMap<String,MetaData>());
+                                 new ConcurrentHashMap<>());
         }
 
     }
@@ -318,30 +318,30 @@ public final class ReflectionUtils {
             String name;
             this.clazz = clazz;
             Constructor[] ctors = clazz.getConstructors();
-            constructors = new HashMap<Integer,Constructor>(ctors.length, 1.0f);
+            constructors = new HashMap<>(ctors.length, 1.0f);
             for (int i = 0, len = ctors.length; i < len; i++) {
                 constructors.put(getKey(ctors[i].getParameterTypes()),
                                  ctors[i]);
             }
             Method[] meths = clazz.getMethods();
-            methods = new HashMap<String,HashMap<Integer,Method>>(meths.length, 1.0f);
+            methods = new HashMap<>(meths.length, 1.0f);
             for (int i = 0, len = meths.length; i < len; i++) {
                 name = meths[i].getName();
                 HashMap<Integer,Method> methodsMap = methods.get(name);
                 if (methodsMap == null) {
-                    methodsMap = new HashMap<Integer,Method>(4, 1.0f);
+                    methodsMap = new HashMap<>(4, 1.0f);
                     methods.put(name, methodsMap);
                 }
                 methodsMap.put(getKey(meths[i].getParameterTypes()), meths[i]);
             }
             
             meths = clazz.getDeclaredMethods();
-            declaredMethods = new HashMap<String,HashMap<Integer,Method>>(meths.length, 1.0f);
+            declaredMethods = new HashMap<>(meths.length, 1.0f);
             for (int i = 0, len = meths.length; i < len; i++) {
                 name = meths[i].getName();
                 HashMap<Integer,Method> declaredMethodsMap = declaredMethods.get(name);
                 if (declaredMethodsMap == null) {
-                    declaredMethodsMap = new HashMap<Integer,Method>(4, 1.0f);
+                    declaredMethodsMap = new HashMap<>(4, 1.0f);
                     declaredMethods.put(name, declaredMethodsMap);
                 }
                 declaredMethodsMap.put(getKey(meths[i].getParameterTypes()), meths[i]);
@@ -352,7 +352,7 @@ public final class ReflectionUtils {
                 PropertyDescriptor[] pds = info.getPropertyDescriptors();
                 if (pds != null) {
                     if (propertyDescriptors == null) {
-                        propertyDescriptors = new HashMap<String,PropertyDescriptor>(pds.length, 1.0f);
+                        propertyDescriptors = new HashMap<>(pds.length, 1.0f);
                     }
                     for (PropertyDescriptor pd : pds) {
                         propertyDescriptors.put(pd.getName(), pd);

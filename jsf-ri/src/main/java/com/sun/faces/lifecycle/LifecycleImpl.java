@@ -99,7 +99,7 @@ public class LifecycleImpl extends Lifecycle {
 
     // List for registered PhaseListeners
     private List<PhaseListener> listeners =
-          new CopyOnWriteArrayList<PhaseListener>();
+          new CopyOnWriteArrayList<>();
     private boolean isClientWindowEnabled = false;
     private WebConfiguration config;
     
@@ -232,7 +232,7 @@ public class LifecycleImpl extends Lifecycle {
         }
 
         if (listeners == null) {
-            listeners = new CopyOnWriteArrayList<PhaseListener>();
+            listeners = new CopyOnWriteArrayList<>();
         }
 
         if (listeners.contains(listener)) {

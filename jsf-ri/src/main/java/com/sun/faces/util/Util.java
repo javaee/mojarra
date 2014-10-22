@@ -126,7 +126,7 @@ public class Util {
         Map<String,Pattern> result = 
                 (Map<String,Pattern>) appMap.get(patternCacheKey);
         if (null == result) {
-            result = new LRUMap<String,Pattern>(15);
+            result = new LRUMap<>(15);
             appMap.put(patternCacheKey, result);
         }
         
@@ -137,7 +137,7 @@ public class Util {
         Map<String,Pattern> result =
                 (Map<String,Pattern>) sc.getAttribute(patternCacheKey);
         if (null == result) {
-            result = new LRUMap<String,Pattern>(15);
+            result = new LRUMap<>(15);
             sc.setAttribute(patternCacheKey, result);
         }
 

@@ -91,7 +91,7 @@ public class OutputMessageRenderer extends HtmlBasicInputRenderer {
         List<Object> parameterList;
 
         if (childCount > 0) {
-            parameterList = new ArrayList<Object>(childCount);
+            parameterList = new ArrayList<>(childCount);
             // get UIParameter children...
 
             for (UIComponent kid : component.getChildren()) {

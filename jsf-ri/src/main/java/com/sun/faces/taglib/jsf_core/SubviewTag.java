@@ -218,7 +218,7 @@ public class SubviewTag extends UIComponentELTag {
         Stack<UIComponentClassicTagBase> result = (Stack<UIComponentClassicTagBase>)
               stateMap.get(RequestStateManager.VIEWTAG_STACK_ATTR_NAME);
         if (result == null) {
-            result = new Stack<UIComponentClassicTagBase>();
+            result = new Stack<>();
             stateMap.put(RequestStateManager.VIEWTAG_STACK_ATTR_NAME, result);
         }
         

@@ -86,7 +86,7 @@ public class ConfigurationResourceProviderFactory {
     public static ConfigurationResourceProvider[] createProviders(ProviderType providerType) {
 
         String[] serviceEntries = ServiceFactoryUtils.getServiceEntries(providerType.servicesKey);
-        List<ConfigurationResourceProvider> providers = new ArrayList<ConfigurationResourceProvider>();
+        List<ConfigurationResourceProvider> providers = new ArrayList<>();
         if (serviceEntries.length > 0) {
             for (String serviceEntry : serviceEntries) {
                 try {

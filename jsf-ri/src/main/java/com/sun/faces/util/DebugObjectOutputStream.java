@@ -103,7 +103,7 @@ public class DebugObjectOutputStream
   }
 
   final List<Object> stack
-      = new ArrayList<Object>();
+      = new ArrayList<>();
 
   /**
    * Indicates whether or not OOS has tried to

@@ -114,7 +114,7 @@ public class CDIUtilImpl implements Serializable, CDIUtil {
        
        @Override
        public Set<Annotation> getQualifiers() {
-           Set<Annotation> qualifiers = new HashSet<Annotation>();
+           Set<Annotation> qualifiers = new HashSet<>();
            qualifiers.add( new DefaultAnnotationLiteral());
            qualifiers.add( new AnyAnnotationLiteral());
            return qualifiers;
@@ -141,7 +141,7 @@ public class CDIUtilImpl implements Serializable, CDIUtil {
        
        @Override
        public Set<Type> getTypes() {
-           Set<Type> types = new HashSet<Type>();
+           Set<Type> types = new HashSet<>();
            types.add( beanClass );
            types.add( Object.class );
            return types;

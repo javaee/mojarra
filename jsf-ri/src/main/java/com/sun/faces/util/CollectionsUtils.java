@@ -64,7 +64,7 @@ public class CollectionsUtils {
 	}
 
 	public static <T,V> ConstMap<T,V> map() {
-		return new ConstMap<T, V>();
+		return new ConstMap<>();
 	}
 	
 	@SuppressWarnings("serial")

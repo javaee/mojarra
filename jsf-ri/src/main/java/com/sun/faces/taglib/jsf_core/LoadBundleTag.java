@@ -217,7 +217,7 @@ public class LoadBundleTag extends TagSupport {
 
 
                 public Set<Map.Entry<String,Object>> entrySet() {
-                    HashMap<String,Object> mappings = new HashMap<String, Object>();
+                    HashMap<String,Object> mappings = new HashMap<>();
                     Enumeration<String> keys = bundle.getKeys();
                     while (keys.hasMoreElements()) {
                         String key = keys.nextElement();
@@ -259,7 +259,7 @@ public class LoadBundleTag extends TagSupport {
 
 
                 public Set keySet() {
-                    Set<String> keySet = new HashSet<String>();
+                    Set<String> keySet = new HashSet<>();
                     Enumeration<String> keys = bundle.getKeys();
                     while (keys.hasMoreElements()) {
                         keySet.add(keys.nextElement());
@@ -298,7 +298,7 @@ public class LoadBundleTag extends TagSupport {
 
 
                 public java.util.Collection values() {
-                    ArrayList<Object> result = new ArrayList<Object>();
+                    ArrayList<Object> result = new ArrayList<>();
                     Enumeration<String> keys = bundle.getKeys();
                     while (keys.hasMoreElements()) {
                         result.add(
@@ -381,7 +381,7 @@ public class LoadBundleTag extends TagSupport {
         List<UIComponent> result = (List<UIComponent>)
               stateMap.get(PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME);
         if (result == null) {
-            result = new ArrayList<UIComponent>();
+            result = new ArrayList<>();
             stateMap.put(PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME, result);
         }
         

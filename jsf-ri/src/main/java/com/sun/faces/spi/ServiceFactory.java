@@ -121,7 +121,7 @@ final class ServiceFactoryUtils {
             while (urls.hasMoreElements()) {
                 try {
                     if (results == null) {
-                        results = new ArrayList<String>();
+                        results = new ArrayList<>();
                     }
                     URL url = urls.nextElement();
                     URLConnection conn = url.openConnection();

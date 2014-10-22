@@ -213,7 +213,7 @@ public class TableRenderer extends BaseTableRenderer {
         if (bodyRows != null) {
             String [] rows = Util.split(appMap, bodyRows, ",");
             if (rows != null) {
-                result = new ArrayList<Integer>(rows.length);
+                result = new ArrayList<>(rows.length);
                 for (String curRow : rows) {
                     result.add(Integer.valueOf(curRow));
                 }
@@ -438,7 +438,7 @@ public class TableRenderer extends BaseTableRenderer {
         int childCount = table.getChildCount();
         if (childCount > 0) {
             List<UIColumn> results =
-                  new ArrayList<UIColumn>(childCount);
+                  new ArrayList<>(childCount);
             for (UIComponent kid : table.getChildren()) {
                 if ((kid instanceof UIColumn) && kid.isRendered()) {
                     results.add((UIColumn) kid);

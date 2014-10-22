@@ -74,7 +74,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
 
     public LifecycleFactoryImpl() {
         super();
-        lifecycleMap = new ConcurrentHashMap<String,Lifecycle>();
+        lifecycleMap = new ConcurrentHashMap<>();
 
         // We must have an implementation under this key.
         lifecycleMap.put(LifecycleFactory.DEFAULT_LIFECYCLE,

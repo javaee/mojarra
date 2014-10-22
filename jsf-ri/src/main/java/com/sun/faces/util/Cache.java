@@ -64,7 +64,7 @@ public class Cache<K, V> {
 
 
         private final ConcurrentMap<K,V> cache =
-              new ConcurrentHashMap<K,V>();
+              new ConcurrentHashMap<>();
         private final Factory<K,V> factory;
 
 

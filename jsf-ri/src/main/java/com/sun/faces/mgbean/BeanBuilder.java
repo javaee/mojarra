@@ -280,12 +280,12 @@ public abstract class BeanBuilder {
                                                      Map<String,String> mapEntries) {
 
         if (mapEntries == null || mapEntries.isEmpty()) {
-            return new LinkedHashMap<Expression,Expression>(4, 1.0f);
+            return new LinkedHashMap<>(4, 1.0f);
         }
         Class<?> keyClazz = loadClass(keyClass);
         Class<?> valueClazz = loadClass(valueClass);
         Map<Expression,Expression> target = new
-             LinkedHashMap<Expression,Expression>(mapEntries.size(), 1.0f);
+             LinkedHashMap<>(mapEntries.size(), 1.0f);
         for (Map.Entry<String,String> m : mapEntries.entrySet()) {
             String sk = m.getKey();
             String sv = m.getValue();
@@ -307,7 +307,7 @@ public abstract class BeanBuilder {
         Class<?> valueClazz = loadClass(valueClass);
 
         //noinspection StringBufferWithoutInitialCapacity
-        List<Expression> target = new ArrayList<Expression>(entries.size());
+        List<Expression> target = new ArrayList<>(entries.size());
         for (String item : entries) {
             target.add((!ManagedBeanInfo.NULL_VALUE.equals(item))
                        ? new Expression(item, valueClazz)
@@ -355,7 +355,7 @@ public abstract class BeanBuilder {
 
     void queueMessage(String message) {
         if (messages == null) {
-            messages = new ArrayList<String>(4);
+            messages = new ArrayList<>(4);
         }
         messages.add(message);
     }
@@ -505,7 +505,7 @@ public abstract class BeanBuilder {
                         ELUtils.getScope(expression, segment);
                         if (segment[0] != null) {
                             if (references == null) {
-                                references = new ArrayList<String>(4);
+                                references = new ArrayList<>(4);
                             }
                             if (!references.contains(segment[0])) {
                                 references.add(segment[0]);

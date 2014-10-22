@@ -90,7 +90,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
             super.bake();
             if (beanInfo.hasManagedProperties()) {
                 properties =
-                     new ArrayList<BakedProperty>(beanInfo.getManagedProperties().size());
+                     new ArrayList<>(beanInfo.getManagedProperties().size());
                 String propertyName = null;
                 try {
                     for (ManagedBeanInfo.ManagedProperty property
