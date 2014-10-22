@@ -84,7 +84,7 @@ public class FacesContextImpl extends FacesContext {
 
     // Queried by InjectionFacesContextFactory
     private static final ThreadLocal<FacesContext> DEFAULT_FACES_CONTEXT =
-          new ThreadLocal<FacesContext>();
+          new ThreadLocal<>();
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
@@ -238,7 +238,7 @@ public class FacesContextImpl extends FacesContext {
 
         assertNotReleased();
         if (attributes == null) {
-            attributes = new HashMap<Object, Object>();
+            attributes = new HashMap<>();
         }
         return attributes;
 
@@ -326,7 +326,7 @@ public class FacesContextImpl extends FacesContext {
             return Collections
                   .unmodifiableList(Collections.<FacesMessage>emptyList());
         } else {
-            List<FacesMessage> messages = new ArrayList<FacesMessage>();
+            List<FacesMessage> messages = new ArrayList<>();
             for (List<FacesMessage> list : componentMessageLists.values()) {
                 messages.addAll(list);
             }
@@ -523,13 +523,13 @@ public class FacesContextImpl extends FacesContext {
 
         if (componentMessageLists == null) {
             componentMessageLists =
-                  new LinkedHashMap<String, List<FacesMessage>>();
+                  new LinkedHashMap<>();
         }
 
         // Add this message to our internal queue
         List<FacesMessage> list = componentMessageLists.get(clientId);
         if (list == null) {
-            list = new ArrayList<FacesMessage>();
+            list = new ArrayList<>();
             componentMessageLists.put(clientId, list);
         }
         list.add(message);
@@ -669,7 +669,7 @@ public class FacesContextImpl extends FacesContext {
                 resourceLibraryContracts = null;
             }
         } else {
-            resourceLibraryContracts = new ArrayList<String>(contracts);
+            resourceLibraryContracts = new ArrayList<>(contracts);
         }
         
     }

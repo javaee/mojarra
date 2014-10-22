@@ -189,7 +189,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
             return null;
         }
 
-        ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>(2);
+        ArrayList<FeatureDescriptor> list = new ArrayList<>(2);
         list.add(Util.getFeatureDescriptor("facesContext", "facesContext",
                                            "facesContext",false, false, true, FacesContext.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("view", "view",

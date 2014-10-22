@@ -457,7 +457,7 @@ public class ELUtils {
             return Collections.emptyList();
         }
         //noinspection CollectionWithoutInitialCapacity
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         int i, j, len = expressionString.length(), cur = 0;
         while (cur < len &&
              -1 != (i = expressionString.indexOf("#{", cur))) {

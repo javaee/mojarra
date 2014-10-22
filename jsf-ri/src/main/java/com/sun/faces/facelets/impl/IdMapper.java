@@ -72,7 +72,7 @@ public class IdMapper {
 
     private static final String KEY = IdMapper.class.getName();
 
-    private Cache<String,String> idCache = new Cache<String,String>(new IdGen());
+    private Cache<String,String> idCache = new Cache<>(new IdGen());
 
 
     // ------------------------------------------------------------ Constructors

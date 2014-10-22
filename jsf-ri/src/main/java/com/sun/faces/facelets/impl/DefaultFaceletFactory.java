@@ -165,10 +165,10 @@ public class DefaultFaceletFactory {
         Util.notNull("compiler", compiler);
         Util.notNull("resolver", resolver);
         this.compiler = compiler;
-        this.cachePerContract = new ConcurrentHashMap<String, FaceletCache<DefaultFacelet>>();
+        this.cachePerContract = new ConcurrentHashMap<>();
         this.resolver = resolver;
         this.baseUrl = resolver.resolveUrl("/");
-        this.idMappers = new Cache<String,IdMapper>(new IdMapperFactory());
+        this.idMappers = new Cache<>(new IdMapperFactory());
         // this.location = url;
         refreshPeriod = (refreshPeriod >= 0) ? refreshPeriod * 1000 : -1;
         this.refreshPeriod = refreshPeriod;

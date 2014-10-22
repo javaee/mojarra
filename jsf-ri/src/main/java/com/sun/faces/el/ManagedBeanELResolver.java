@@ -185,7 +185,7 @@ public class ManagedBeanELResolver extends ELResolver {
 
         Map<String,BeanBuilder> beans = beanManager.getRegisteredBeans();
         List<FeatureDescriptor> list =
-             new ArrayList<FeatureDescriptor>(beans.size());
+             new ArrayList<>(beans.size());
         // iterate over the list of managed beans
         for (Map.Entry<String,BeanBuilder> bean : beans.entrySet()) {
             String beanName = bean.getKey();

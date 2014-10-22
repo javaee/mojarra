@@ -364,7 +364,7 @@ public class FlashELResolver extends ELResolver {
             ArrayList<FeatureDescriptor> fds;
             FeatureDescriptor fd;
             if (iter.hasNext()) {
-                fds = new ArrayList<FeatureDescriptor>(flash.size());
+                fds = new ArrayList<>(flash.size());
                 while (iter.hasNext()) {
                     cur = iter.next();
                     fd = new FeatureDescriptor();

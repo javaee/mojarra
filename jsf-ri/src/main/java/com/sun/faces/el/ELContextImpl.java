@@ -115,7 +115,7 @@ public class ELContextImpl extends ELContext {
         public VariableMapperImpl() {
 
             //noinspection CollectionWithoutInitialCapacity
-            variables = new HashMap<String,ValueExpression>();
+            variables = new HashMap<>();
 
         }
 

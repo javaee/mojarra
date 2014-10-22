@@ -106,7 +106,7 @@ public class UIRepeat extends UINamingContainer {
     public static final String COMPONENT_FAMILY = "facelets";
 
     private final static DataModel EMPTY_MODEL =
-          new ListDataModel<Object>(Collections.emptyList());
+          new ListDataModel<>(Collections.emptyList());
 
     // our data
     private Object value;
@@ -345,7 +345,7 @@ public class UIRepeat extends UINamingContainer {
 
     private Map<String,SavedState> getChildState() {
         if (this.childState == null) {
-            this.childState = new HashMap<String,SavedState>();
+            this.childState = new HashMap<>();
         }
         return this.childState;
     }
@@ -488,7 +488,7 @@ public class UIRepeat extends UINamingContainer {
      */
     private void saveInitialChildState(FacesContext facesContext) {
         index = -1;
-        initialChildState = new ConcurrentHashMap<String, SavedState>();
+        initialChildState = new ConcurrentHashMap<>();
         initialClientId = getClientId(facesContext);
         if (getChildCount() > 0) {
             for (UIComponent child : getChildren()) {

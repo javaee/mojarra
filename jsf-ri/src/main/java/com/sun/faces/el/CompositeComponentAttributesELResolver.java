@@ -300,7 +300,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
               (Map<UIComponent,Map<String,Object>>) ctxAttributes.get(EVAL_MAP_KEY);
         Map<String,Object> evalMap = null;
         if (topMap == null) {
-            topMap = new HashMap<UIComponent,Map<String,Object>>();
+            topMap = new HashMap<>();
             ctxAttributes.put(EVAL_MAP_KEY, topMap);
             evalMap = new ExpressionEvalMap(ctx, c);
             topMap.put(c, evalMap);
@@ -348,7 +348,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
             BeanInfo metadata = (BeanInfo) this.attributesMap.get(UIComponent.BEANINFO_KEY);
             if (null != metadata) {
                 this.declaredAttributes = metadata.getPropertyDescriptors();
-                this.declaredDefaultValues = new HashMap<Object, Object>(5);
+                this.declaredDefaultValues = new HashMap<>(5);
             }
             this.ctx = ctx;
 

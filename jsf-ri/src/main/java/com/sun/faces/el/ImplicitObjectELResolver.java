@@ -76,7 +76,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         "view", "viewScope" };
         int nameCount = implictNames.length;
 
-        Map<String, Integer> implicitObjects = new HashMap<String, Integer>((int) (nameCount * 1.5f));
+        Map<String, Integer> implicitObjects = new HashMap<>((int) (nameCount * 1.5f));
 
         for (int nameIndex = 0; nameIndex < nameCount; nameIndex++) {
             implicitObjects.put(implictNames[nameIndex], nameIndex);
@@ -261,7 +261,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         if (base != null) {
             return null;
         }
-        ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>(14);
+        ArrayList<FeatureDescriptor> list = new ArrayList<>(14);
         list.add(Util.getFeatureDescriptor("application", "application",
                                            "application",false, false, true, Object.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("applicationScope", "applicationScope",

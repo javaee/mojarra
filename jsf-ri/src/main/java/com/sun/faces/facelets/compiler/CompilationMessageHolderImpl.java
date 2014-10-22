@@ -56,7 +56,7 @@ public class CompilationMessageHolderImpl implements CompilerPackageCompilationM
 
     private Map<String, List<FacesMessage>> getMessageListMap() {
         if (null == messageListMap) {
-            messageListMap = new HashMap<String, List<FacesMessage>>();
+            messageListMap = new HashMap<>();
         }
         return messageListMap;
     }
@@ -66,7 +66,7 @@ public class CompilationMessageHolderImpl implements CompilerPackageCompilationM
         List<FacesMessage> result = null;
         Map<String, List<FacesMessage>> map = getMessageListMap();
         if (null == (result = map.get(prefix))) {
-            result = new ArrayList<FacesMessage>();
+            result = new ArrayList<>();
             map.put(prefix, result);
         }
         

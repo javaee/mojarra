@@ -107,7 +107,7 @@ public class VariableResolverChainWrapper extends ELResolver {
             }
             // Make sure subsequent calls don't take action.
             if (varNames == null) {
-                varNames = new ArrayList<String>();
+                varNames = new ArrayList<>();
                 stateMap.put(RequestStateManager.REENTRANT_GUARD, varNames);
             }
             varNames.add(propString);

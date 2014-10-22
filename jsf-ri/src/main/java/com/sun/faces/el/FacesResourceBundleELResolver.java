@@ -176,7 +176,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
             return null;
         }
 
-        ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>();
+        ArrayList<FeatureDescriptor> list = new ArrayList<>();
 
         FacesContext facesContext =
             (FacesContext) context.getContext(FacesContext.class);

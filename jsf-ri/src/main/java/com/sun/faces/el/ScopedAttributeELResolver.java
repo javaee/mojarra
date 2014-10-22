@@ -193,7 +193,7 @@ public class ScopedAttributeELResolver extends ELResolver {
 
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
 
-       ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>();
+       ArrayList<FeatureDescriptor> list = new ArrayList<>();
 
        FacesContext facesContext = (FacesContext)
            context.getContext(FacesContext.class);

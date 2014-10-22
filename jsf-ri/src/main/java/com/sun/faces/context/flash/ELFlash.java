@@ -240,7 +240,7 @@ public class ELFlash extends Flash {
 
     /** Creates a new instance of ELFlash */
     private ELFlash(ExternalContext extContext) {
-        flashInnerMap = new ConcurrentHashMap<String,Map<String, Object>>();
+        flashInnerMap = new ConcurrentHashMap<>();
         WebConfiguration config = WebConfiguration.getInstance(extContext);
         String value;
         try {
@@ -528,7 +528,7 @@ public class ELFlash extends Flash {
                 writingMapEntrySet = getPhaseMapForWriting().entrySet(),
                 result = null;
 
-        result = new HashSet<Map.Entry<String, Object>>();
+        result = new HashSet<>();
         result.addAll(readingMapEntrySet);
         result.addAll(writingMapEntrySet);
 
@@ -554,7 +554,7 @@ public class ELFlash extends Flash {
                 writingMapKeySet = getPhaseMapForWriting().keySet(),
                 result = null;
 
-        result = new HashSet<String>();
+        result = new HashSet<>();
         result.addAll(readingMapKeySet);
         result.addAll(writingMapKeySet);
 
@@ -946,13 +946,13 @@ public class ELFlash extends Flash {
             curMessageId = messageClientIds.next();
             // Get the messages for this clientId
             messageIter = context.getMessages(curMessageId);
-            facesMessages = new ArrayList<FacesMessage>();
+            facesMessages = new ArrayList<>();
             while (messageIter.hasNext()) {
                 facesMessages.add(messageIter.next());
             }
             // Add the list to the map
             if (null == allFacesMessages) {
-                allFacesMessages = new HashMap<String, List<FacesMessage>>();
+                allFacesMessages = new HashMap<>();
             }
             allFacesMessages.put(curMessageId, facesMessages);
         }
@@ -962,14 +962,14 @@ public class ELFlash extends Flash {
         // id associated with them.
         messageIter = context.getMessages(null);
         // Make sure to overwrite the previous facesMessages list
-        facesMessages = new ArrayList<FacesMessage>();
+        facesMessages = new ArrayList<>();
         while (messageIter.hasNext()) {
             facesMessages.add(messageIter.next());
         }
         if (null != facesMessages) {
             // Add the list to the map
             if (null == allFacesMessages) {
-                allFacesMessages = new HashMap<String, List<FacesMessage>>();
+                allFacesMessages = new HashMap<>();
             }
             allFacesMessages.put(null, facesMessages);
         }
@@ -1289,13 +1289,13 @@ public class ELFlash extends Flash {
             previousRequestFlashInfo = new FlashInfo(flash.getNewSequenceNumber(),
                     LifetimeMarker.FirstTimeThru, false);
             innerMap.put(previousRequestFlashInfo.getSequenceNumber() + "",
-                    flashMap = new HashMap<String, Object>());
+                    flashMap = new HashMap<>());
             previousRequestFlashInfo.setFlashMap(flashMap);
 
             nextRequestFlashInfo = new FlashInfo(flash.getNewSequenceNumber(),
                     LifetimeMarker.FirstTimeThru, false);
             innerMap.put(nextRequestFlashInfo.getSequenceNumber() + "",
-                    flashMap = new HashMap<String, Object>());
+                    flashMap = new HashMap<>());
             nextRequestFlashInfo.setFlashMap(flashMap);
         }
 
@@ -1412,7 +1412,7 @@ public class ELFlash extends Flash {
                     previousRequestFlashInfo.setIsRedirect(false);
                     // put it in the flash
                     innerMap.put(previousRequestFlashInfo.getSequenceNumber() + "",
-                            flashMap = new HashMap<String, Object>());
+                            flashMap = new HashMap<>());
                 }
                 previousRequestFlashInfo.setFlashMap(flashMap);
                 if (null != nextRequestFlashInfo) {
@@ -1424,7 +1424,7 @@ public class ELFlash extends Flash {
                         nextRequestFlashInfo.setIsRedirect(false);
                         // put it in the flash
                         innerMap.put(nextRequestFlashInfo.getSequenceNumber() + "",
-                                flashMap = new HashMap<String, Object>());
+                                flashMap = new HashMap<>());
                     }
                     nextRequestFlashInfo.setFlashMap(flashMap);
                 }
@@ -1487,7 +1487,7 @@ public class ELFlash extends Flash {
                 // put it in the flash
                 Map<String, Object> flashMap = null;
                 innerMap.put(nextRequestFlashInfo.getSequenceNumber() + "",
-                        flashMap = new HashMap<String, Object>());
+                        flashMap = new HashMap<>());
                 nextRequestFlashInfo.setFlashMap(flashMap);
             }
             return nextRequestFlashInfo;

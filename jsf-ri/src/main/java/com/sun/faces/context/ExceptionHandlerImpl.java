@@ -158,7 +158,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
             } finally {
                 if (handledExceptions == null) {
-                    handledExceptions = new LinkedList<ExceptionQueuedEvent>();
+                    handledExceptions = new LinkedList<>();
                 }
                 handledExceptions.add(event);
                 i.remove();               
@@ -185,7 +185,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
         if (event != null) {
             if (unhandledExceptions == null) {
-                unhandledExceptions = new LinkedList<ExceptionQueuedEvent>();
+                unhandledExceptions = new LinkedList<>();
             }
             unhandledExceptions.add((ExceptionQueuedEvent) event);
         }

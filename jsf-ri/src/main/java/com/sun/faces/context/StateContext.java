@@ -89,7 +89,7 @@ public class StateContext {
     private boolean trackMods = true;
     private AddRemoveListener modListener;
     private ApplicationStateInfo stateInfo;
-    private WeakReference<UIViewRoot> viewRootRef = new WeakReference<UIViewRoot>(null);
+    private WeakReference<UIViewRoot> viewRootRef = new WeakReference<>(null);
 
     private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
 
@@ -149,7 +149,7 @@ public class StateContext {
         UIViewRoot refRoot = viewRootRef.get();
         if (root != refRoot) {
           // set weak reference to current viewRoot
-          this.viewRootRef = new WeakReference<UIViewRoot>(root);
+          this.viewRootRef = new WeakReference<>(root);
 
           // On first call in restore phase, viewRoot is null, so we treat the first 
           // change to not null not as a changing viewRoot.
@@ -471,7 +471,7 @@ public class StateContext {
         private Collection<UIComponent> getDynamicComponentCollection(Map<Object, Object> contextMap) {
             Collection<UIComponent> result = (Collection<UIComponent>) contextMap.get(DYNAMIC_COMPONENT_ADD_COLLECTION);
             if (null == result) {
-                result = new HashSet<UIComponent>();
+                result = new HashSet<>();
                 contextMap.put(DYNAMIC_COMPONENT_ADD_COLLECTION, result);
             }
             return result;
@@ -513,7 +513,7 @@ public class StateContext {
                     attrs.get(ComponentSupport.REMOVED_CHILDREN);
             
             if (removedChildrenIds == null) {
-                removedChildrenIds = new MostlySingletonSet<String>();
+                removedChildrenIds = new MostlySingletonSet<>();
                 attrs.put(ComponentSupport.REMOVED_CHILDREN, removedChildrenIds);
             }
 
@@ -596,7 +596,7 @@ public class StateContext {
         public List<ComponentStruct> getDynamicActions() {
             synchronized(this) {
                 if (dynamicActions == null) {
-                    dynamicActions = new ArrayList<ComponentStruct>();
+                    dynamicActions = new ArrayList<>();
                 }
             }
             return dynamicActions;
@@ -611,7 +611,7 @@ public class StateContext {
         public HashMap<String, UIComponent> getDynamicComponents() {
             synchronized(this) {
                 if (dynamicComponents == null) {
-                    dynamicComponents = new HashMap<String, UIComponent>();
+                    dynamicComponents = new HashMap<>();
                 }
             }
             return dynamicComponents;

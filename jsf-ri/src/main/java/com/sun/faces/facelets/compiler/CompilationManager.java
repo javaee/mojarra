@@ -130,7 +130,7 @@ final class CompilationManager {
         this.finished = false;
 
         // our compilationunit stack
-        this.units = new Stack<CompilationUnit>();
+        this.units = new Stack<>();
         this.units.push(new CompilationUnit());
 
         config = WebConfiguration.getInstance();

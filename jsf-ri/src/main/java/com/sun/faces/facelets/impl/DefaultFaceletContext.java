@@ -124,7 +124,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
         this.ids = ctx.ids;
         this.prefixes = ctx.prefixes;
         this.varMapper = ctx.varMapper;
-        this.faceletHierarchy = new ArrayList<Facelet>(ctx.faceletHierarchy.size()+1);
+        this.faceletHierarchy = new ArrayList<>(ctx.faceletHierarchy.size()+1);
         this.faceletHierarchy.addAll(ctx.faceletHierarchy);
         this.faceletHierarchy.add(facelet);
         this.facelet=facelet;
@@ -134,11 +134,11 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
 
     public DefaultFaceletContext(FacesContext faces, DefaultFacelet facelet) {
         this.ctx = faces.getELContext();
-        this.ids = new HashMap<String,Integer>();
-        this.prefixes = new HashMap<Integer,Integer>();
-        this.clients = new ArrayList<TemplateManager>(5);
+        this.ids = new HashMap<>();
+        this.prefixes = new HashMap<>();
+        this.clients = new ArrayList<>(5);
         this.faces = faces;
-        this.faceletHierarchy = new ArrayList<Facelet>(1);
+        this.faceletHierarchy = new ArrayList<>(1);
         this.faceletHierarchy.add(facelet);
         this.facelet = facelet;
         this.varMapper = this.ctx.getVariableMapper();
@@ -376,7 +376,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
         
         private final boolean root;
 
-        private final Set<String> names = new HashSet<String>();
+        private final Set<String> names = new HashSet<>();
 
         public TemplateManager(DefaultFacelet owner, TemplateClient target, boolean root) {
             this.owner = owner;

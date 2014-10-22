@@ -147,7 +147,7 @@ public class ExternalContextImpl extends ExternalContext {
             ((HttpServletResponse) response).addHeader("X-Powered-By", "JSF/2.2");
         }
         distributable = config.isOptionEnabled(EnableDistributable);
-        fallbackContentTypeMap = new HashMap<String,String>(3, 1.0f);
+        fallbackContentTypeMap = new HashMap<>(3, 1.0f);
         fallbackContentTypeMap.put("js", "text/javascript");
         fallbackContentTypeMap.put("css", "text/css");
         fallbackContentTypeMap.put("groovy", "application/x-groovy");
