@@ -44,7 +44,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 
-import javax.faces.component.html.HtmlInputFile; // FILE_UPLOAD
+import com.sun.faces.component.html.HtmlInputFile; // FILE_UPLOAD
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
