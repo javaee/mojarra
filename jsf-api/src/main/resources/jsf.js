@@ -3047,7 +3047,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var formElements = form.elements;
                 for (var i = 0, length = formElements.length; i < length; i++) {
                     var formElement = formElements[i];
-                    console.log('!@#$ formElement.name=' + formElement.name);
                     if (formElement.name.indexOf('javax.faces.ClientWindow') >= 0) {
                         return formElement;
                     }
