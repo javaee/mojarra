@@ -1073,7 +1073,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
 
 
                             public Set<Map.Entry<String, Object>> entrySet() {
-                                HashMap<String, Object> mappings = new HashMap<String, Object>();
+                                HashMap<String, Object> mappings = new HashMap<>();
                                 Enumeration<String> keys = bundle.getKeys();
                                 while (keys.hasMoreElements()) {
                                     String key = keys.nextElement();
