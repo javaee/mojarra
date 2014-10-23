@@ -697,9 +697,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         // We are a UIViewRoot, so no need to check for the ISE
         if (events == null) {
             int len = PhaseId.VALUES.size();
-            List<List<FacesEvent>> events = new ArrayList<List<FacesEvent>>(len);
+            List<List<FacesEvent>> events = new ArrayList<>(len);
             for (int i = 0; i < len; i++) {
-                events.add(new ArrayList<FacesEvent>(5));
+                events.add(new ArrayList<>(5));
             }
             this.events = events;
         }
@@ -1603,11 +1603,11 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         }
         
         if (viewListeners == null) {
-            viewListeners = new HashMap<Class<? extends SystemEvent>, List<SystemEventListener>>(4, 1.0f);
+            viewListeners = new HashMap<>(4, 1.0f);
         }
         List<SystemEventListener> listeners = viewListeners.get(systemEvent);
         if (listeners == null) {
-            listeners = new CopyOnWriteArrayList<SystemEventListener>();
+            listeners = new CopyOnWriteArrayList<>();
             viewListeners.put(systemEvent, listeners);
         }
         listeners.add(listener);
