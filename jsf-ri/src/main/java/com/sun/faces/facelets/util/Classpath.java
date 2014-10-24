@@ -71,6 +71,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -318,7 +319,11 @@ public final class Classpath {
                 }
             }
             if (!foundExclusion) {
-                result = new JarFile(jarFileUrl);
+                try {
+                    result = new JarFile(jarFileUrl);
+                } catch(ZipException ze) {
+                    result = null;
+                }
             }
 
             return result;
