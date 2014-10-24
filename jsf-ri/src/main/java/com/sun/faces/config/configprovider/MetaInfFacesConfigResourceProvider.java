@@ -123,7 +123,7 @@ public class MetaInfFacesConfigResourceProvider implements
 
                     Set<URI> uris = sortedJarMap.get(jarName);
                     if (uris == null) {
-                        uris = new HashSet<URI>();
+                        uris = new HashSet<>();
                         sortedJarMap.put(jarName, uris);
                     }
                     uris.add(uri);
