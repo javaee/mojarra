@@ -72,7 +72,7 @@ public class NamedEventConfigHandler implements ConfigAnnotationHandler {
 
     static {
         Collection<Class<? extends Annotation>> handles =
-                new ArrayList<Class<? extends Annotation>>(2);
+                new ArrayList<>(2);
         handles.add(NamedEvent.class);
         HANDLES = Collections.unmodifiableCollection(handles);
     }
