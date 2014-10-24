@@ -310,6 +310,8 @@ public class ApplicationAssociate {
             // ctor called at this time.
             viewHandler.getViewDeclarationLanguage(context, 
                     RIConstants.FACES_PREFIX + "xhtml");
+            
+            Util.initImmutableValuesMap(context);
 
         }
         
