@@ -188,7 +188,7 @@ class UrlBuilder {
 
     protected void parseQueryString() {
         if (parameters == null) {
-            parameters = new LinkedHashMap<String, List<String>>();
+            parameters = new LinkedHashMap<>();
         }
 
         // if query string is null, then it has been parsed into parameters
@@ -300,7 +300,7 @@ class UrlBuilder {
 
 
     protected void addValueToParameter(String name, String value, boolean replace) {
-        List<String> values = new ArrayList<String>(value == null ? 0 : 1);
+        List<String> values = new ArrayList<>(value == null ? 0 : 1);
         if (value != null) {
             values.add(value);
         }
@@ -309,7 +309,7 @@ class UrlBuilder {
 
 
     protected void addValuesToParameter(String name, List<String> valuesRef, boolean replace) {
-        List<String> values = new ArrayList<String>();
+        List<String> values = new ArrayList<>();
         if (valuesRef != null) {
             for (Iterator<String> it = valuesRef.iterator(); it.hasNext();) {
                 String string = it.next();
@@ -333,7 +333,7 @@ class UrlBuilder {
         else {
             List<String> currentValues = parameters.get(name);
             if (currentValues == null) {
-                currentValues = new ArrayList<String>(1);
+                currentValues = new ArrayList<>(1);
                 parameters.put(name, currentValues);
             }
             currentValues.addAll(values);
