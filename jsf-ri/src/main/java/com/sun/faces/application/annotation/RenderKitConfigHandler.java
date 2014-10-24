@@ -126,7 +126,7 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
 						}
 						rk.addRenderer(ra.componentFamily(), ra.rendererType(),
 								(Renderer) rClass.newInstance());
-					} catch (Exception e) {
+					} catch (IllegalStateException | InstantiationException | IllegalAccessException e) {
 						throw new FacesException(e);
 					}
 				} else if (entry.getValue() instanceof FacesBehaviorRenderer) {
@@ -144,7 +144,7 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
 						}
 						rk.addClientBehaviorRenderer(bra.rendererType(),
 								(ClientBehaviorRenderer) rClass.newInstance());
-					} catch (Exception e) {
+					} catch (IllegalStateException | InstantiationException | IllegalAccessException e) {
 						throw new FacesException(e);
 					}
 				}

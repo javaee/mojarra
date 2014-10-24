@@ -150,7 +150,7 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE, "Unable to find private field named 'defaultApplication' in javax.faces.application.Application.");
                 }
-            } catch (Exception e) {
+            } catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE, e.toString(), e);
                 }

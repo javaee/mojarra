@@ -407,18 +407,11 @@ public class AnnotationManager {
             }
             try {
                 return f.get();
-            } catch (CancellationException ce) {
+            } catch (CancellationException | InterruptedException ce) {
                 if (LOGGER.isLoggable(Level.FINEST)) {
                     LOGGER.log(Level.FINEST,
                                ce.toString(),
                                ce);
-                }
-                cache.remove(targetClass);
-            } catch (InterruptedException ie) {
-                if (LOGGER.isLoggable(Level.FINEST)) {
-                    LOGGER.log(Level.FINEST,
-                               ie.toString(),
-                               ie);
                 }
                 cache.remove(targetClass);
             } catch (ExecutionException ee) {

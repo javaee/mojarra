@@ -107,14 +107,7 @@ public abstract class JndiHandler implements RuntimeAnnotationHandler {
                 if (!fieldAccessible) {
                     field.setAccessible(false);
                 }
-            } catch (IllegalArgumentException iae) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING, "Unable to set field: " + field.getName(), iae);
-                }
-                if (facesContext.isProjectStage(ProjectStage.Development)) {
-                    facesContext.addMessage(null, new FacesMessage("Unable to set field: " + field.getName(), "Unable to set field: " + field.getName()));
-                }
-            } catch (IllegalAccessException iae) {
+            } catch (IllegalArgumentException | IllegalAccessException iae) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING, "Unable to set field: " + field.getName(), iae);
                 }
@@ -140,23 +133,9 @@ public abstract class JndiHandler implements RuntimeAnnotationHandler {
                 method.setAccessible(false);
                 method.invoke(instance, value);
                 method.setAccessible(accessible);
-            } catch (InvocationTargetException ite) {
+            } catch (InvocationTargetException | IllegalArgumentException | IllegalAccessException ite) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING, "Unable to call method: " + method.getName(), ite);
-                }
-                if (facesContext.isProjectStage(ProjectStage.Development)) {
-                    facesContext.addMessage(null, new FacesMessage("Unable to call method: " + method.getName(), "Unable to call method: " + method.getName()));
-                }
-            } catch (IllegalArgumentException iae) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING, "Unable to call method: " + method.getName(), iae);
-                }
-                if (facesContext.isProjectStage(ProjectStage.Development)) {
-                    facesContext.addMessage(null, new FacesMessage("Unable to call method: " + method.getName(), "Unable to call method: " + method.getName()));
-                }
-            } catch (IllegalAccessException iae) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING, "Unable to call method: " + method.getName(), iae);
                 }
                 if (facesContext.isProjectStage(ProjectStage.Development)) {
                     facesContext.addMessage(null, new FacesMessage("Unable to call method: " + method.getName(), "Unable to call method: " + method.getName()));

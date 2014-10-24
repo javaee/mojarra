@@ -41,6 +41,7 @@ package com.sun.faces.action;
 
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.util.Util;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Set;
 import javax.enterprise.inject.Any;
@@ -110,7 +111,7 @@ public class ActionPhase extends Phase {
                  * needs to be expanded.
                  */
                 viewId = (String) current.getMethod().invoke(instance.get(), new Object[0]);
-            } catch (Throwable throwable) {
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException throwable) {
                 throw new FacesException(throwable);
             }
             if (context.getViewRoot() == null) {

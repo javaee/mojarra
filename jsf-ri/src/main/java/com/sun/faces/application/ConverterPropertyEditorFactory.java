@@ -189,7 +189,7 @@ public class ConverterPropertyEditorFactory {
                 classNameRefConstant = findConstant(
                      new StringBuilder(64).append('L').append(getVMClassName(templateClass)).append(';').toString());
                 targetClassConstant = findConstant(getVMClassName(templateTargetClass));
-            } catch (Exception e) {
+            } catch (InstantiationException | IllegalAccessException | IOException e) {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
                                "Unexected exception ClassTemplateInfo",

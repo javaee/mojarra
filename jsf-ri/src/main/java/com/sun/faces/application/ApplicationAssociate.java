@@ -855,7 +855,7 @@ public class ApplicationAssociate {
                             "Please remove context-param when using javax.faces.view.facelets.FaceletCache class with name:" 
                                     + faceletCacheName + "and use the new FaceletCacheFactory API", e);
                 }
-            } catch(Exception e) {
+            } catch(ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
                                "Error Loading Facelet cache: " + faceletCacheName,
@@ -900,7 +900,7 @@ public class ApplicationAssociate {
                                    "Successfully Loaded Decorator: {0}",
                                    decorator);
                     }
-                } catch (Exception e) {
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE,
                                    "Error Loading Decorator: " + decorator,

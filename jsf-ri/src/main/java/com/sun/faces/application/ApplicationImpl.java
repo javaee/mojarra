@@ -105,6 +105,7 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 
 import java.util.LinkedHashSet;
@@ -1013,18 +1014,8 @@ public class ApplicationImpl extends Application {
                 if (!associate.isDevModeEnabled()) {
                     componentMap.put(className, ComponentResourceClassNotFound.class);
                 }
-            } catch (InstantiationException ie) {
+            } catch (InstantiationException | IllegalAccessException | ClassCastException ie) {
                 throw new FacesException(ie);
-            } catch (IllegalAccessException iae) {
-                throw new FacesException(iae);
-            } catch (ClassCastException cce) {
-                throw new FacesException(cce);
-            } catch (Exception otherwise) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                               otherwise.toString(),
-                               otherwise);
-                }
             }
         }
 
@@ -1515,7 +1506,7 @@ public class ApplicationImpl extends Application {
 
         Util.notNull("newLocales", newLocales);
 
-        supportedLocales = new ArrayList<Locale>(newLocales);
+        supportedLocales = new ArrayList<>(newLocales);
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, MessageFormat.format("set Supported Locales ''{0}''",
@@ -1834,13 +1825,13 @@ public class ApplicationImpl extends Application {
         if (ctor != null) {
             try {
                 result = ctor.newInstance(targetClass);
-            } catch (Exception e) {
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 cause = e;
             }
         } else {
             try {
                 result = clazz.newInstance();
-            } catch (Exception e) {
+            } catch (InstantiationException | IllegalAccessException e) {
                 cause = e;
             }
         }       
@@ -1880,15 +1871,7 @@ public class ApplicationImpl extends Application {
                 componentMap.put(className, componentClass);
             }
             result = (UIComponent) componentClass.newInstance();
-        } catch (IllegalAccessException ex) {
-        	if (LOGGER.isLoggable(Level.SEVERE)) {
-        		LOGGER.log(Level.SEVERE, null, ex);
-        	}
-        } catch (InstantiationException ex) {
-        	if (LOGGER.isLoggable(Level.SEVERE)) {
-        		LOGGER.log(Level.SEVERE, null, ex);
-        	}
-        } catch (ClassNotFoundException ex) {
+        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException ex) {
         	if (LOGGER.isLoggable(Level.SEVERE)) {
         		LOGGER.log(Level.SEVERE, null, ex);
         	}
@@ -2506,7 +2489,7 @@ public class ApplicationImpl extends Application {
             if (toInvoke != null) {
                 try {
                     return (SystemEvent) toInvoke.newInstance(source);
-                } catch (Exception e) {
+                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                     throw new FacesException(e);
                 }
             }

@@ -59,7 +59,7 @@ public class ActionLifecycle extends Lifecycle {
         try {
             Class phaseClass = Class.forName("com.sun.faces.action.ActionPhase");
             actionPhase = (Phase) phaseClass.newInstance();
-        } catch(Throwable throwable) {  
+        } catch(ClassNotFoundException | InstantiationException | IllegalAccessException throwable) {  
             actionPhase = null;
         }
     }

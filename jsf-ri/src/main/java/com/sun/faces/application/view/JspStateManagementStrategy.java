@@ -188,7 +188,7 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
             c.setId(n.id);
 
             return c;
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | NullPointerException | InstantiationException | IllegalAccessException e) {
             throw new FacesException(e);
         }
 
