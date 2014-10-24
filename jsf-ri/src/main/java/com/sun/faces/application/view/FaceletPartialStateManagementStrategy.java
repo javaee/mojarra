@@ -498,38 +498,4 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
         StateContext.release(context);
         return new Object[]{null, stateMap};
     }
-
-    /**
-     * Helper method that determines what the index of the given child component
-     * will be taking transient siblings into account.
-     *
-     * @param component the UI component.
-     * @return the calculated index.
-     */
-    private int getProperChildIndex(UIComponent component) {
-        int result = -1;
-
-        if (component.getParent().getChildren().indexOf(component) != -1) {
-            UIComponent parent = component.getParent();
-            int index = 0;
-            Iterator<UIComponent> iterator = parent.getChildren().iterator();
-            while (iterator.hasNext()) {
-                UIComponent child = iterator.next();
-                if (child == component) {
-                    break;
-                } else {
-                    if (!child.isTransient()) {
-                        index++;
-                    }
-                }
-            }
-            if (index == 0 && !parent.getChildren().isEmpty() &&
-                    parent.getChildren().get(0).isTransient()) {
-                index = -1;
-            }
-            result = index;
-        }
-
-        return result;
-    }
 }
