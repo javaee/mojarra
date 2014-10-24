@@ -387,7 +387,7 @@ public class PartialVisitContext extends VisitContext {
 
         @Override
         public Iterator<E> iterator() {
-            return new IteratorProxy<E>(wrapped.iterator());
+            return new IteratorProxy<>(wrapped.iterator());
         }
 
         @Override
