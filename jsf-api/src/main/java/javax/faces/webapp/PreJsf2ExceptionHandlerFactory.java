@@ -181,7 +181,7 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
                 } finally {
                     if (handledExceptions == null) {
                         handledExceptions =
-                              new LinkedList<ExceptionQueuedEvent>();
+                              new LinkedList<>();
                     }
                     handledExceptions.add(event);
                     i.remove();
