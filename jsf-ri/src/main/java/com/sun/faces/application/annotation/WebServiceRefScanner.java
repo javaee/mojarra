@@ -73,13 +73,13 @@ class WebServiceRefScanner implements Scanner {
         Util.notNull("clazz", clazz);
         WebServiceRefHandler handler = null;
 
-        ArrayList<WebServiceRef> classAnnotations = new ArrayList<WebServiceRef>();
+        ArrayList<WebServiceRef> classAnnotations = new ArrayList<>();
         WebServiceRef classAnnotation = clazz.getAnnotation(WebServiceRef.class);
         if (classAnnotation != null) {
             classAnnotations.add(classAnnotation);
         }
-        ArrayList<WebServiceRef> fieldAnnotations = new ArrayList<WebServiceRef>();
-        ArrayList<Field> fields = new ArrayList<Field>();
+        ArrayList<WebServiceRef> fieldAnnotations = new ArrayList<>();
+        ArrayList<Field> fields = new ArrayList<>();
 
         for (Field field : clazz.getDeclaredFields()) {
             WebServiceRef fieldAnnotation = field.getAnnotation(WebServiceRef.class);
@@ -89,8 +89,8 @@ class WebServiceRefScanner implements Scanner {
             }
         }
         
-        ArrayList<WebServiceRef> methodAnnotations = new ArrayList<WebServiceRef>();
-        ArrayList<Method> methods = new ArrayList<Method>();
+        ArrayList<WebServiceRef> methodAnnotations = new ArrayList<>();
+        ArrayList<Method> methods = new ArrayList<>();
         for (Method method : clazz.getDeclaredMethods()) {
             WebServiceRef methodAnnotation = method.getAnnotation(WebServiceRef.class);
             if (methodAnnotation != null) {
