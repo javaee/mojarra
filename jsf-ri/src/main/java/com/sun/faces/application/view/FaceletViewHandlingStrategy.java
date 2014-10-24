@@ -1114,8 +1114,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
             String[] mappingsArray = Util.split(appMap, viewMappings, ";");
 
-            List<String> extensionsList = new ArrayList<String>(mappingsArray.length);
-            List<String> prefixesList = new ArrayList<String>(mappingsArray.length);
+            List<String> extensionsList = new ArrayList<>(mappingsArray.length);
+            List<String> prefixesList = new ArrayList<>(mappingsArray.length);
 
             for (String aMappingsArray : mappingsArray) {
                 String mapping = aMappingsArray.trim();
