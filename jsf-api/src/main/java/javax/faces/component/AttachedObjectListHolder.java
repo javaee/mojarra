@@ -152,7 +152,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
             if (this.attachedObjects != null) {
                 this.attachedObjects.clear();
             } else {
-                this.attachedObjects = new ArrayList<T>(2);
+                this.attachedObjects = new ArrayList<>(2);
             }
             for (int i = 0, len = attachedObjects.length; i < len; i++) {
                 T restored = (T) ((StateHolderSaver) attachedObjects[i]).restore(context);
