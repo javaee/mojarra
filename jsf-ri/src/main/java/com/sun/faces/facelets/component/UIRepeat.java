@@ -260,9 +260,9 @@ public class UIRepeat extends UINamingContainer {
                 this.model = (DataModel<Object>) val;
             } else if (val instanceof List) {
                 //noinspection unchecked
-                this.model = new ListDataModel<Object>((List<Object>) val);
+                this.model = new ListDataModel<>((List<Object>) val);
             } else if (Object[].class.isAssignableFrom(val.getClass())) {
-                this.model = new ArrayDataModel<Object>((Object[]) val);
+                this.model = new ArrayDataModel<>((Object[]) val);
             } else if (val instanceof ResultSet) {
                 this.model = new ResultSetDataModel((ResultSet) val);
             } else {
