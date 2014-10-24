@@ -62,7 +62,7 @@ public class ValidatorConfigHandler implements ConfigAnnotationHandler {
     private static final Collection<Class<? extends Annotation>> HANDLES;
     static {
         Collection<Class<? extends Annotation>> handles =
-              new ArrayList<Class<? extends Annotation>>(1);
+              new ArrayList<>(1);
         handles.add(FacesValidator.class);
         HANDLES = Collections.unmodifiableCollection(handles);
     }
@@ -89,7 +89,7 @@ public class ValidatorConfigHandler implements ConfigAnnotationHandler {
     public void collect(Class<?> target, Annotation annotation) {
 
         if (validators == null) {
-            validators = new HashMap<ValidatorInfo,String>();
+            validators = new HashMap<>();
         }
         FacesValidator validatorAnnotation = (FacesValidator) annotation;
         String value = ((FacesValidator) annotation).value();
