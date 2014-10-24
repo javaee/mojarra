@@ -476,7 +476,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                     Object stateObj;
                     if (!target.isTransient()) {
                         if (stateContext.componentAddedDynamically(target)) {
-                            target.getAttributes().put(DYNAMIC_COMPONENT, new Integer(getProperChildIndex(target)));
+                            target.getAttributes().put(DYNAMIC_COMPONENT, target.getParent().getChildren().indexOf(target));
                             stateObj = new StateHolderSaver(finalContext, target);
                         } else {
                             stateObj = target.saveState(context.getFacesContext());
