@@ -518,7 +518,7 @@ public class WebConfiguration {
                         LOGGER.log(Level.CONFIG, "resource library contract mapping for pattern {0} has no contracts.", cur.getKey());
                     }
                 } else {
-                    contractsToExpose = new ArrayList<String>();
+                    contractsToExpose = new ArrayList<>();
                     for (String curContractFromMapping : contractsFromMapping) {
                         if (foundContracts.contains(curContractFromMapping)) {
                             contractsToExpose.add(curContractFromMapping);
