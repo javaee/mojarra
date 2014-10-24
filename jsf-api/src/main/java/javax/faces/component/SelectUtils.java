@@ -217,9 +217,7 @@ class SelectUtils {
         try {
             ExpressionFactory ef = ctx.getApplication().getExpressionFactory();
             newValue = ef.coerceToType(value, toType);
-        } catch (ELException ele) {
-            newValue = value;
-        } catch (IllegalArgumentException iae) {
+        } catch (ELException | IllegalArgumentException ele) {
             // If coerceToType fails, per the docs it should throw
             // an ELException, however, GF 9.0 and 9.0u1 will throw
             // an IllegalArgumentException instead (see GF issue 1527).

@@ -1034,7 +1034,7 @@ public class UIData extends UIComponentBase
         catch (FacesException fe) {
             throw fe;
         }
-        catch (Exception e) {
+        catch (NumberFormatException e) {
             throw new FacesException(e);
         }
         finally {

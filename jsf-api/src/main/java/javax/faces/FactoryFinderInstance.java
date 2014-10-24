@@ -42,12 +42,14 @@
 package javax.faces;
 
 import com.sun.faces.spi.InjectionProvider;
+import com.sun.faces.spi.InjectionProviderException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
@@ -382,7 +384,7 @@ final class FactoryFinderInstance {
                 // fall through to "zero-arg-ctor" case
                 factoryClass = null;
             }
-            catch (Exception e) {
+            catch (ClassNotFoundException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InjectionProviderException e) {
                 throw new FacesException(implName, e);
             }
         }
@@ -395,7 +397,7 @@ final class FactoryFinderInstance {
                 // there is no preceding implementation, so don't bother
                 // with a non-zero-arg ctor.
                 result = clazz.newInstance();
-            } catch (Exception e) {
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 throw new FacesException(implName, e);
             }
         }

@@ -167,11 +167,8 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
 			result = 
 			    (MethodBinding) toRestoreClass.newInstance();
 		    }
-		    catch (InstantiationException e) {
+		    catch (InstantiationException | IllegalAccessException e) {
 			throw new IllegalStateException(e);
-		    }
-		    catch (IllegalAccessException a) {
-			throw new IllegalStateException(a);
 		    }
 		}
 		

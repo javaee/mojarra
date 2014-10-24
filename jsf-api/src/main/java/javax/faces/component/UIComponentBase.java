@@ -1788,7 +1788,7 @@ public abstract class UIComponentBase extends UIComponent {
                 Collection<Object> retCollection = null;
                 try {
                     retCollection = (Collection<Object>) mapOrCollection.newInstance();
-                } catch (Exception e) {
+                } catch (InstantiationException | IllegalAccessException e) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE, e.toString(), e);
                     }
@@ -1810,7 +1810,7 @@ public abstract class UIComponentBase extends UIComponent {
                 Map<Object, Object> retMap = null;
                 try {
                     retMap = (Map<Object,Object>) mapOrCollection.newInstance();
-                } catch (Exception e) {
+                } catch (InstantiationException | IllegalAccessException e) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE, e.toString(), e);
                     }
@@ -2581,9 +2581,7 @@ public abstract class UIComponentBase extends UIComponent {
                         }
                     }
                 }
-            } catch (ClassCastException unused) {
-                return false;
-            } catch (NullPointerException unused) {
+            } catch (ClassCastException | NullPointerException unused) {
                 return false;
             }
 
@@ -2645,7 +2643,7 @@ public abstract class UIComponentBase extends UIComponent {
             Class clazz = (Class) in.readObject();
             try {
                 component = (UIComponent) clazz.newInstance();
-            } catch (Exception e) {
+            } catch (InstantiationException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
             component.restoreState(FacesContext.getCurrentInstance(), in.readObject());
