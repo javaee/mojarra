@@ -77,6 +77,7 @@ import javax.servlet.ServletContext;
 
 import java.lang.reflect.Constructor;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -349,7 +350,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                                                         rootType),
                                    source),
                                    cce);
-            } catch (Exception e) {
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | FacesException e) {
                 throw new ConfigurationException(
                       buildMessage(MessageFormat.format("Unable to create a new instance of ''{0}'': {1}",
                                                         className,

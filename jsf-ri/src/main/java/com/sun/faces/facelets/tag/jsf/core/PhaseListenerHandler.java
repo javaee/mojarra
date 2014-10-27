@@ -105,7 +105,7 @@ public class PhaseListenerHandler extends TagHandlerImpl {
                 try {
                     instance = (PhaseListener) ReflectionUtil.forName(
                           this.type).newInstance();
-                } catch (Exception e) {
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                     throw new AbortProcessingException(
                           "Couldn't Lazily instantiate PhaseListener", e);
                 }

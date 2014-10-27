@@ -88,7 +88,7 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE, "Unable to find private field named 'defaultFacesContext' in javax.faces.context.FacesContext.");
             }
-        } catch (Exception e) {
+        } catch (SecurityException e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, e.toString(), e);
             }
@@ -101,7 +101,7 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE, "Unable to find private field named 'defaultExternalContext' in javax.faces.context.ExternalContext.");
             }
-        } catch (Exception e) {
+        } catch (SecurityException e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, e.toString(), e);
             }

@@ -67,6 +67,7 @@ import com.sun.faces.util.Util;
 import javax.faces.view.facelets.ResourceResolver;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.Arrays;
 
@@ -236,7 +237,7 @@ public class ReflectionUtil {
                 returnObject = clazz.newInstance();
             }
         }
-        catch (Exception e) {
+        catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new ConfigurationException(
                     buildMessage(MessageFormat.format("Unable to create a new instance of ''{0}'': {1}",
                     clazz.getName(),

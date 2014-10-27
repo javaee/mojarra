@@ -106,7 +106,7 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
                 } catch(InvocationTargetException ite) { 
                     Throwable targetException = ite.getTargetException();
                     System.out.println(targetException);
-                } catch (Exception e) {
+                } catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException e) {
                     if (LOGGER.isLoggable(Level.FINEST)) {
                         LOGGER.log(Level.FINEST, "Problem getting deployment context information", e);
                     }
@@ -135,7 +135,7 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
 
                 }
 
-            } catch (Exception e) {
+            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 if (LOGGER.isLoggable(Level.FINEST)) {
                     LOGGER.log(Level.FINEST, "Problem in getCurrentWebModulePrefix", e);
                 }
@@ -152,7 +152,7 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
                     }
                 }
 
-            } catch (Exception e) {
+            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 if (LOGGER.isLoggable(Level.FINEST)) {
                     LOGGER.log(Level.FINEST, "Problem in getCurrentWebModulePrefix", e);
                 }

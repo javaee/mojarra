@@ -115,7 +115,7 @@ public final class ValueChangeListenerHandler extends TagHandlerImpl implements 
                 try {
                     instance = (ValueChangeListener) ReflectionUtil
                           .forName(this.type).newInstance();
-                } catch (Exception e) {
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                     throw new AbortProcessingException(
                           "Couldn't Lazily instantiate ValueChangeListener",
                           e);

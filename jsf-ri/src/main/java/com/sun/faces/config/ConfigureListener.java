@@ -112,6 +112,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * <p>Parse all relevant JavaServer Faces configuration resources, and
@@ -635,7 +636,7 @@ public class ConfigureListener implements ServletRequestListener,
         try {
             JspFactory.class.getMethod("getJspApplicationContext",
                     ServletContext.class);
-        } catch (Exception e) {
+        } catch (NoSuchMethodException | SecurityException e) {
             return false;
         }
         try {
@@ -725,7 +726,7 @@ public class ConfigureListener implements ServletRequestListener,
                 associate.setExpressionFactory(factory);
             }
             return true;
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.severe(MessageFormat.format("Unable to instantiate ExpressionFactory ''{0}''",
                         elFactoryType));
@@ -838,7 +839,7 @@ public class ConfigureListener implements ServletRequestListener,
                 try {
                     SAXParser parser = factory.newSAXParser();
                     parser.parse(in, new WebXmlHandler());
-                } catch (Exception e) {
+                } catch (ParserConfigurationException | SAXException | IOException e) {
                     warnProcessingError(e, context);
                     facesServletPresent = true;
                     return;
@@ -872,7 +873,7 @@ public class ConfigureListener implements ServletRequestListener,
                             fragmentStream = conn.getInputStream();
                             SAXParser parser = factory.newSAXParser();
                             parser.parse(fragmentStream, new WebXmlHandler());
-                        } catch (Exception e) {
+                        } catch (IOException | ParserConfigurationException | SAXException e) {
                             warnProcessingError(e, context);
                             facesServletPresent = true;
                             return;

@@ -511,7 +511,7 @@ public class ConfigManager {
             return ((scanTask != null)
                     ? scanTask.get()
                     : Collections.<Class<? extends Annotation>,Set<Class<?>>>emptyMap());
-        } catch (Exception e) {
+        } catch (InterruptedException | ExecutionException e) {
             throw new FacesException(e);
         }
 

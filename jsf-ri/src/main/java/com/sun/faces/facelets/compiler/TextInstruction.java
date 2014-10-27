@@ -86,7 +86,7 @@ final class TextInstruction implements Instruction {
             //out.writeText(txt.toString(elContext), null);
         } catch (ELException e) {
             throw new ELException(this.alias + ": " + e.getMessage(), e.getCause());
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new ELException(this.alias + ": " + e.getMessage(), e);
         }
     }

@@ -678,7 +678,7 @@ public class InitFacesContext extends FacesContext {
             Field threadMap = FacesContext.class.getDeclaredField("threadInitContext");
             threadMap.setAccessible(true);
             threadInitContext = (ConcurrentHashMap)threadMap.get(null);
-        } catch (Exception e) {
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
             if (LOGGER.isLoggable(Level.FINEST)) {
                 LOGGER.log(Level.FINEST, "Unable to get (thread, init context) map", e);
             }
@@ -692,7 +692,7 @@ public class InitFacesContext extends FacesContext {
             Field initContextMap = FacesContext.class.getDeclaredField("initContextServletContext");
             initContextMap.setAccessible(true);
             initContextServletContext = (ConcurrentHashMap)initContextMap.get(null);
-        } catch (Exception e) {
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
             if (LOGGER.isLoggable(Level.FINEST)) {
                 LOGGER.log(Level.FINEST, "Unable to get (init context, servlet context) map", e);
             }

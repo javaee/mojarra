@@ -48,6 +48,7 @@ import com.sun.faces.util.MessageUtils;
 
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.el.ArrayELResolver;
 import javax.el.BeanELResolver;
@@ -313,7 +314,7 @@ public class ELUtils {
                 composite.addRootELResolver((ELResolver)
                         ReflectionUtils.newInstance("javax.el.StaticFieldELResolver"));
                 
-            } catch (Throwable t) {
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException t) {
                 // This is normal on containers that do not have these ELResolvers
             }
         }

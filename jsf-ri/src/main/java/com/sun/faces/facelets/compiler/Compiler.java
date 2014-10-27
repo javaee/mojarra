@@ -182,7 +182,7 @@ public abstract class Compiler {
         if (type != null) {
             try {
                 return ReflectionUtil.forName(type).newInstance();
-            } catch (Throwable t) {
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException t) {
                 throw new FaceletException("Could not instantiate feature["
                         + name + "]: " + type);
             }

@@ -123,10 +123,8 @@ public abstract class BaseWebConfigResourceProvider implements
                 urlString = urlString.replaceAll(" ", "%20");
                 result = new URI(urlString);            
             }
-        } catch (MalformedURLException mue) {
+        } catch (MalformedURLException | URISyntaxException mue) {
             throw new FacesException(mue);
-        } catch (URISyntaxException use) {
-            throw new FacesException(use);
         }
         return result;
 

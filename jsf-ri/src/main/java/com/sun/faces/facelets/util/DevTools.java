@@ -69,9 +69,11 @@ import javax.faces.context.Flash;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
 import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.util.*;
@@ -411,7 +413,7 @@ public final class DevTools {
                             writer.write(str.replaceAll("<", TS));
                             writer.write("\"");
                         }
-                    } catch (Exception e) {
+                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
                         if (LOGGER.isLoggable(Level.FINEST)) {
                             LOGGER.log(Level.FINEST, "Error writing out attribute", e);
                         }
@@ -425,7 +427,7 @@ public final class DevTools {
                 writer.write(binding.getExpressionString().replaceAll("<", TS));
                 writer.write("\"");
             }
-        } catch (Exception e) {
+        } catch (IntrospectionException | IOException e) {
             if (LOGGER.isLoggable(Level.FINEST)) {
                 LOGGER.log(Level.FINEST, "Error writing out attributes", e);
             }

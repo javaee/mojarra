@@ -164,7 +164,7 @@ public final class MethodRule extends MetaRule {
                 _method.invoke(instance, expr );
             } catch (InvocationTargetException e) {
                 throw new TagAttributeException(_attribute, e.getCause());
-            } catch (Exception e) {
+            } catch (IllegalAccessException | IllegalArgumentException e) {
                 throw new TagAttributeException(_attribute, e);
             }
         }

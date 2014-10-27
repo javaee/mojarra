@@ -109,9 +109,7 @@ public final class LegacyValueBinding extends ValueBinding implements Externaliz
         ELContext ctx = context.getELContext();
         try {
             this.delegate.setValue(ctx, value);
-        } catch (PropertyNotWritableException e) {
-            throw new PropertyNotFoundException(e.getMessage(), e.getCause());
-        } catch (javax.el.PropertyNotFoundException e) {
+        } catch (PropertyNotWritableException | javax.el.PropertyNotFoundException e) {
             throw new PropertyNotFoundException(e.getMessage(), e.getCause());
         } catch (ELException e) {
             throw new EvaluationException(e.getMessage(), e.getCause());

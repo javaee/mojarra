@@ -326,7 +326,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             this.type = type;
             try {
                 this.constructor = this.type.getConstructor(CONS_SIG);
-            } catch (Exception e) {
+            } catch (NoSuchMethodException | SecurityException e) {
                 throw new FaceletException(
                         "Must have a Constructor that takes in a ComponentConfig",
                         e);
@@ -342,7 +342,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
                         .newInstance(new Object[] { ccfg });
             } catch (InvocationTargetException e) {
                 throw new FaceletException(e.getCause().getMessage(), e.getCause().getCause());
-            } catch (Exception e) {
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
                 throw new FaceletException("Error Instantiating ComponentHandler: "+this.type.getName(), e);
             }
         }
@@ -407,7 +407,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             this.type = type;
             try {
                 this.constructor = this.type.getConstructor(CONS_SIG);
-            } catch (Exception e) {
+            } catch (NoSuchMethodException | SecurityException e) {
                 throw new FaceletException(
                         "Must have a Constructor that takes in a ConverterConfig",
                         e);
@@ -423,7 +423,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
                         .newInstance(new Object[] { ccfg });
             } catch (InvocationTargetException e) {
                 throw new FaceletException(e.getCause().getMessage(), e.getCause().getCause());
-            } catch (Exception e) {
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
                 throw new FaceletException("Error Instantiating ConverterHandler: "+this.type.getName(), e);
             }
         }
@@ -444,7 +444,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 			this.type = type;
 			try {
 				this.constructor = this.type.getConstructor(CONS_SIG);
-			} catch (Exception e) {
+			} catch (NoSuchMethodException | SecurityException e) {
 				throw new FaceletException(
 						"Must have a Constructor that takes in a ValidatorConfig",
 						e);
@@ -461,7 +461,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 			} catch (InvocationTargetException e) {
 				throw new FaceletException(e.getCause().getMessage(), e
 						.getCause().getCause());
-			} catch (Exception e) {
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
 				throw new FaceletException(
 						"Error Instantiating ValidatorHandler: "
 								+ this.type.getName(), e);
@@ -484,7 +484,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 			this.type = type;
 			try {
 				this.constructor = this.type.getConstructor(CONS_SIG);
-			} catch (Exception e) {
+			} catch (NoSuchMethodException | SecurityException e) {
 				throw new FaceletException(
 						"Must have a Constructor that takes in a BehaviorConfig",
 						e);
@@ -501,7 +501,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 			} catch (InvocationTargetException e) {
 				throw new FaceletException(e.getCause().getMessage(), e
 						.getCause().getCause());
-			} catch (Exception e) {
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
 				throw new FaceletException(
 						"Error Instantiating BehaviorHandler: "
 								+ this.type.getName(), e);

@@ -264,10 +264,8 @@ public class PropertyResolverImpl extends PropertyResolver {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             context.getApplication().getELResolver().setValue(context.getELContext(), base,property, value);
-        } catch (javax.el.PropertyNotFoundException pnfe) {
+        } catch (javax.el.PropertyNotFoundException | javax.el.PropertyNotWritableException pnfe) {
             throw new PropertyNotFoundException(pnfe);
-        } catch (javax.el.PropertyNotWritableException pnwe) {
-            throw new PropertyNotFoundException(pnwe);
         }
         catch (ELException elex) {
             throw new EvaluationException(elex);

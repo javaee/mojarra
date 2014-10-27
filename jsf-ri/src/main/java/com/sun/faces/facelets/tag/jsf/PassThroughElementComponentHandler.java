@@ -80,12 +80,8 @@ public class PassThroughElementComponentHandler extends ComponentHandler {
         try {
             Class clazz = Util.loadClass("com.sun.faces.component.PassthroughElement", this);
             result = (UIComponent)clazz.newInstance();
-        } catch (ClassNotFoundException cnfe) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException cnfe) {
             throw new FacesException(cnfe);
-        } catch (IllegalAccessException iae) {
-            throw new FacesException(iae);
-        } catch (InstantiationException ie) {
-            throw new FacesException(ie);
         }
         
         return result;

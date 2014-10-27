@@ -80,6 +80,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 
@@ -210,7 +211,7 @@ public class DefaultFaceletFactory {
             Method m = FaceletCache.class.getDeclaredMethod("setMemberFactories", FaceletCache.MemberFactory.class, FaceletCache.MemberFactory.class);
             m.setAccessible(true);
             m.invoke(cache, faceletFactory, metadataFaceletFactory);
-        } catch (Exception ex) {
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             if (log.isLoggable(Level.SEVERE)) {
                 log.log(Level.SEVERE, null, ex);
             }

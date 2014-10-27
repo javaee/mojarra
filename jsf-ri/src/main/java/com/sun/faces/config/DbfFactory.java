@@ -65,6 +65,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.servlet.ServletContext;
 import com.sun.faces.util.FacesLogger;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
@@ -427,7 +428,7 @@ public class DbfFactory {
                 try {
                     result = super.resolveEntity(publicId, null);
                 }
-                catch (Exception e) {
+                catch (IOException | SAXException e) {
                     throw new SAXException(e);
                 }
                 return result;
@@ -449,7 +450,7 @@ public class DbfFactory {
                 try {
                     source = super.resolveEntity(publicId, systemId);
                 }
-                catch (Exception e) {
+                catch (IOException | SAXException e) {
                     throw new SAXException(e);
                 }
 
@@ -767,7 +768,7 @@ public class DbfFactory {
                     throw new ConfigurationException("Unrecognized Faces Version: " + schemaId.toString());
             }
         }
-        catch (Exception e) {
+        catch (IllegalStateException | IOException | SAXException | ConfigurationException e) {
             throw new ConfigurationException(e);
         }        
     }
