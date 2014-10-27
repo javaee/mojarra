@@ -422,7 +422,7 @@ public class FlowHandlerImpl extends FlowHandler {
         Map<String, Object> sessionMap = extContext.getSessionMap();
         result = (FlowDeque<Flow>) sessionMap.get(sessionKey);
         if (null == result) {
-            result = new FlowDeque<Flow>(sessionKey);
+            result = new FlowDeque<>(sessionKey);
             sessionMap.put(sessionKey, result);
         }
         
@@ -453,8 +453,8 @@ public class FlowHandlerImpl extends FlowHandler {
         private final String sessionKey;
 
         public FlowDeque(final String sessionKey) {
-            data = new ArrayDeque<E>();
-            rideAlong = new ArrayDeque<RideAlong>();
+            data = new ArrayDeque<>();
+            rideAlong = new ArrayDeque<>();
             this.sessionKey = sessionKey;
         }
         
