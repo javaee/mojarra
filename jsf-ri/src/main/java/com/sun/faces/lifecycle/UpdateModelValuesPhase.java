@@ -76,10 +76,8 @@ public class UpdateModelValuesPhase extends Phase {
 
         try {
             component.processUpdates(facesContext);
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | FacesException e) {
             exceptionMessage = e.getMessage();
-        } catch (FacesException fe) {
-            exceptionMessage = fe.getMessage();
         }
 
         // Just log the exception.  Any exception occurring from

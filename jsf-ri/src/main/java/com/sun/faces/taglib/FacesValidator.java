@@ -283,9 +283,7 @@ public abstract class FacesValidator extends TagLibraryValidator {
 
         } catch (SAXException ex) {
             result = vmFromString(ex.toString());
-        } catch (ParserConfigurationException ex) {
-            result = vmFromString(ex.toString());
-        } catch (IOException ex) {
+        } catch (ParserConfigurationException | IOException ex) {
             result = vmFromString(ex.toString());
         }
         // Make sure all resources are released

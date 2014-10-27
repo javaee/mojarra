@@ -350,17 +350,10 @@ public class LoadBundleTag extends TagSupport {
                 addChildToComponentAndTag.invoke(parentTag,
                         child);
             }
-            catch (IllegalAccessException accessException) {
+            catch (IllegalAccessException | IllegalArgumentException accessException) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING, 
                             "Unable to add " + child + " to tree:", accessException);
-                }
-                
-            }
-            catch (IllegalArgumentException argumentException) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING, 
-                            "Unable to add " + child + " to tree:", argumentException);
                 }
                 
             }

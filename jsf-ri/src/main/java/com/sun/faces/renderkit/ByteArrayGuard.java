@@ -51,6 +51,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.util.FacesLogger;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -129,7 +135,7 @@ public final class ByteArrayGuard {
             byte[] macBytes = encryptMac.doFinal(encdata);
             byte[] tmp = concatBytes(macBytes, iv);
             securedata = concatBytes(tmp, encdata);
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalStateException | IllegalBlockSizeException | BadPaddingException e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
                            "Unexpected exception initializing encryption."
@@ -181,7 +187,7 @@ public final class ByteArrayGuard {
                 System.err.println("ERROR: MAC did not verify!");
                 return null;
             }
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalStateException | IllegalBlockSizeException | BadPaddingException e) {
             System.err.println("ERROR: Decrypting:"+e.getCause());
             return null; // Signal to JSF runtime
         }

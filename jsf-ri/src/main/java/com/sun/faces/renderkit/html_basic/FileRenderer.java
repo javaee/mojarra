@@ -98,10 +98,8 @@ public class FileRenderer extends TextRenderer {
                     setSubmittedValue(component, cur);
                 }
             }
-        } catch (IOException ioe) {
+        } catch (IOException | ServletException ioe) {
             throw new FacesException(ioe);
-        } catch (ServletException se) {
-            throw new FacesException(se);
         }
             
     }

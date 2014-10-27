@@ -43,6 +43,8 @@ package com.sun.faces.scripting.groovy;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import groovy.util.GroovyScriptEngine;
+import groovy.util.ResourceException;
+import groovy.util.ScriptException;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -214,7 +216,7 @@ public class GroovyHelperImpl extends GroovyHelper {
             Class<?> c;
             try {
                 c = gse.loadScriptByName(name);
-            } catch (Exception e) {
+            } catch (ResourceException | ScriptException e) {
                 try {
                     c = gse.getGroovyClassLoader().loadClass(name);
                 } catch (ClassNotFoundException cnfe) {

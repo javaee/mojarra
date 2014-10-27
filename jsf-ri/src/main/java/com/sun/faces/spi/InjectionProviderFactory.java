@@ -175,19 +175,12 @@ public class InjectionProviderFactory {
                               "jsf.spi.injection.provider_not_found",
                               new Object[]{ className });
                 }
-            } catch (InstantiationException ie) {
+            } catch (InstantiationException | IllegalAccessException ie) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
                                "jsf.spi.injection.provider_cannot_instantiate",
                                new Object[]{className});
                     LOGGER.log(Level.SEVERE, "", ie);
-                }
-            } catch (IllegalAccessException iae) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                               "jsf.spi.injection.provider_cannot_instantiate",
-                               new Object[]{className});
-                    LOGGER.log(Level.SEVERE, "", iae);
                 }
             }
         }

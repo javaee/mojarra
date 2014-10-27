@@ -90,6 +90,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.ReflectionUtils;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of
@@ -878,9 +879,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         try {
             ExpressionFactory ef = ctx.getApplication().getExpressionFactory();
             newValue = ef.coerceToType(value, itemValueType);
-        } catch (ELException ele) {
-            newValue = value;
-        } catch (IllegalArgumentException iae) {
+        } catch (ELException | IllegalArgumentException ele) {
             // If coerceToType fails, per the docs it should throw
             // an ELException, however, GF 9.0 and 9.0u1 will throw
             // an IllegalArgumentException instead (see GF issue 1527).
@@ -908,7 +907,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
              && !Modifier.isAbstract(lookupClass.getModifiers())) {
             try {
                 return lookupClass.newInstance();
-            } catch (Exception e) {
+            } catch (InstantiationException | IllegalAccessException e) {
                 if (logger.isLoggable(Level.SEVERE)) {
                     logger.log(Level.SEVERE,
                                "Unable to create new Collection instance for type "
@@ -949,7 +948,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                     Collection c = (Collection) clone.invoke(value);
                     c.clear();
                     return c;
-                } catch (Exception e) {
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                     if (logger.isLoggable(Level.SEVERE)) {
                         logger.log(Level.SEVERE,
                                    "Unable to clone collection type: {0}",

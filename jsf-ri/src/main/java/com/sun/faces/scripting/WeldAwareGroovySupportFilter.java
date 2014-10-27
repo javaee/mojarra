@@ -131,7 +131,7 @@ class WeldAwareGroovySupportFilter implements Filter {
             currentThread.setContextClassLoader(mojarraGroovyClassLoader);
             try {
                 installMojarraGroovyClassLoaderToContainer(c);
-            } catch (Exception ex) {
+            } catch (NoSuchFieldException | NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException ex) {
                 Logger.getLogger(WeldAwareGroovySupportFilter.class.getName()).log(Level.SEVERE, null, ex);
             }
             

@@ -57,6 +57,7 @@ import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <p>
@@ -85,7 +86,7 @@ final class ServiceFactoryUtils {
                 throw new FacesException("Unable to find constructor accepting arguments: " + Arrays.toString(arguments));
             }
             return c.newInstance(arguments);
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | FacesException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE, e.toString(), e);
             }

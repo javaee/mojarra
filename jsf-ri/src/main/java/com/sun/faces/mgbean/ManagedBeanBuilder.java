@@ -51,6 +51,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -436,7 +437,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
                     target = (Map) readMethod.invoke(bean,
                                                      RIConstants.EMPTY_METH_ARGS);
                     mapReturned = (target != null);
-                } catch (Exception ignored) {
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ignored) {
                     // ignored
                 }
             }
@@ -450,7 +451,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
                 Method writeMethod = pd.getWriteMethod();
                 try {
                     writeMethod.invoke(bean, target);
-                } catch (Exception e) {
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                     String message = MessageUtils.getExceptionMessageString(
                          MessageUtils.MANAGED_BEAN_UNABLE_TO_SET_PROPERTY_ERROR_ID,
                          pd.getName(),
@@ -487,7 +488,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
             if (readMethod != null) {
                 try {
                     temp = readMethod.invoke(bean, RIConstants.EMPTY_METH_ARGS);
-                } catch (Exception ignored) {
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ignored) {
                     // ignored
                 }
             }
@@ -533,7 +534,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
                 }
                 try {
                     pd.getWriteMethod().invoke(bean, result);
-                } catch (Exception e) {
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                     String message = MessageUtils.getExceptionMessageString(
                          MessageUtils.MANAGED_BEAN_UNABLE_TO_SET_PROPERTY_ERROR_ID,
                          pd.getName(),
@@ -556,7 +557,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
                     }
                     try {
                         writeMethod.invoke(bean, result);
-                    } catch (Exception e) {
+                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                         String message = MessageUtils.getExceptionMessageString(
                              MessageUtils.MANAGED_BEAN_UNABLE_TO_SET_PROPERTY_ERROR_ID,
                              pd.getName(),
@@ -566,7 +567,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
                 } else {
                     try {
                         writeMethod.invoke(bean, target);
-                    } catch (Exception e) {
+                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                         String message = MessageUtils.getExceptionMessageString(
                              MessageUtils.MANAGED_BEAN_UNABLE_TO_SET_PROPERTY_ERROR_ID,
                              pd.getName(),
@@ -607,7 +608,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
                                        ((value != null)
                                         ? value.evaluate(context.getELContext())
                                         : null));
-                } catch (Exception e) {
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                     String message = MessageUtils.getExceptionMessageString(
                          MessageUtils.MANAGED_BEAN_UNABLE_TO_SET_PROPERTY_ERROR_ID,
                          pd.getName(),

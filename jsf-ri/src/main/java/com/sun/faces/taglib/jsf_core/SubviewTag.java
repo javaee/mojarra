@@ -58,6 +58,7 @@ import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.RIConstants;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class SubviewTag extends UIComponentELTag {
@@ -177,7 +178,7 @@ public class SubviewTag extends UIComponentELTag {
                 }
                 resetBuffers.invoke(response);
 
-            } catch (Exception e) {
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 throw new FacesException("Response interweaving failed!", e);
             }
         }

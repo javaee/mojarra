@@ -46,6 +46,7 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -96,7 +97,7 @@ public abstract class GroovyHelper {
             } else {
                 return delegate.newInstance();
             }
-        } catch (Exception e) {
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new FacesException(e);
         }
     }
@@ -116,7 +117,7 @@ public abstract class GroovyHelper {
         if (root != null) {
             try {
                 return groovyClass.getConstructor(ctorArgument);
-            } catch (Exception e) {
+            } catch (NoSuchMethodException | SecurityException e) {
                 if (LOGGER.isLoggable(Level.FINEST)) {
                     LOGGER.log(Level.FINE, "Unable to get constructor", e);
                 }

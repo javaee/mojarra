@@ -184,7 +184,7 @@ public abstract class BeanBuilder {
 
         try {
             return loadBeanClass().newInstance();
-        } catch (Exception e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             String message = MessageUtils.getExceptionMessageString(
                  MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
                  beanInfo.getClassName());

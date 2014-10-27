@@ -129,7 +129,7 @@ public final class ByteArrayGuardAESCTR {
             byte[] encdata = encryptCipher.doFinal(bytes);
             // Base64 encode the encrypted bytes
             securedata = DatatypeConverter.printBase64Binary(encdata);
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
                            "Unexpected exception initializing encryption."
@@ -157,16 +157,8 @@ public final class ByteArrayGuardAESCTR {
                 }
             }
             return new String(plaindata, utf8);
-        } catch (NoSuchAlgorithmException nsae) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException nsae) {
             throw new InvalidKeyException(nsae);
-        } catch (NoSuchPaddingException nspe) {
-            throw new InvalidKeyException(nspe);
-        } catch (InvalidAlgorithmParameterException iape) {
-            throw new InvalidKeyException(iape);
-        } catch (IllegalBlockSizeException ibse) {
-            throw new InvalidKeyException(ibse);
-        } catch (BadPaddingException bpe) {
-            throw new InvalidKeyException(bpe);
         }
     }
     
@@ -191,7 +183,7 @@ public final class ByteArrayGuardAESCTR {
             if (LOGGER.isLoggable(Level.FINEST)) { 
                 LOGGER.log(Level.FINEST, "Unable to find the encoded key.", exception);
             }
-        } catch (Exception e) {
+        } catch (FacesException e) {
             throw new FacesException(e);
         }
         

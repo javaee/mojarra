@@ -122,9 +122,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         try {
             newValue = context.getApplication().getExpressionFactory().
                     coerceToType(itemValue, type);
-        } catch (ELException ele) {
-            newValue = itemValue;
-        } catch (IllegalArgumentException iae) {
+        } catch (ELException | IllegalArgumentException ele) {
             // If coerceToType fails, per the docs it should throw
             // an ELException, however, GF 9.0 and 9.0u1 will throw
             // an IllegalArgumentException instead (see GF issue 1527).

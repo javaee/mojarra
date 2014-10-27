@@ -67,7 +67,7 @@ public class GroovyHelperFactory {
                         LOGGER.fine("Groovy runtime available, but WEB-INF/groovy directory not present."
                                     + "  Groovy support will not be enabled.");
                     }
-                } catch (Exception e) {
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE,
                                    "Groovy support not available",

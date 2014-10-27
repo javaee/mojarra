@@ -49,6 +49,7 @@ import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -111,7 +112,7 @@ public class WebContainerInjectionProvider implements InjectionProvider {
             method.setAccessible(true);
             try {
                 method.invoke(managedBean);
-            } catch (Exception e) {
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 throw new InjectionProviderException(e.getMessage(), e);
             } finally {
                 method.setAccessible(accessible);

@@ -62,6 +62,7 @@ import java.beans.FeatureDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
@@ -191,7 +192,7 @@ public class Util {
         if (instance == null && type != null) {
             try {
                 instance = ReflectionUtils.newInstance(((String) type.getValue(faces.getELContext())));
-            } catch (Exception e) {
+            } catch (InstantiationException | IllegalAccessException e) {
                 throw new AbortProcessingException(e.getMessage(), e);
             }
 
@@ -551,7 +552,7 @@ public class Util {
             if (method != null) {
                 result = (Locale) method.invoke(null, localeStr);
             }
-        } catch(Throwable throwable) {
+        } catch(NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException throwable) {
             // if we are NOT running JavaSE 7 we end up here and we will 
             // default to the previous way of determining the Locale below.
         }
@@ -697,7 +698,7 @@ public class Util {
                         result = obj.toString();
                     }
                 }
-            } catch (Exception e) {
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 throw new FacesException(e);
             }
         }

@@ -162,17 +162,14 @@ public final class ExpiringConcurrentCache<K, V> extends ConcurrentCache<K, V> {
                     
                     return true;
                 }
-            } catch (TimeoutException ce) {
-                    // do nothing. This just indicates that the object is not yet ready
-                } catch (CancellationException ce) {
+            } catch (TimeoutException | ExecutionException ce) {
+            } catch (CancellationException ce) {
                 if (_LOGGER.isLoggable(Level.SEVERE)) {
                     _LOGGER.log(Level.SEVERE, ce.toString(), ce);
                 }
             } catch (InterruptedException ie) {
                 throw new FacesException(ie);
 
-            } catch (ExecutionException ee) {
-                // Do nothing - the FutureTask will be removed by the thread that called get() on this class
             }
         }
         

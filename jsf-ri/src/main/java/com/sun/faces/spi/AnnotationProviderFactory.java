@@ -45,6 +45,7 @@ import com.sun.faces.config.DelegatingAnnotationProvider;
 import javax.servlet.ServletContext;
 import javax.faces.FacesException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * 
@@ -95,7 +96,7 @@ public class AnnotationProviderFactory {
         try {
             c = DEFAULT_ANNOTATION_PROVIDER.getDeclaredConstructor(new Class<?>[] { ServletContext.class });
             result = (AnnotationProvider) c.newInstance(sc);
-        } catch (Exception e2) {
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e2) {
             throw new FacesException(e2);
         }
         return result;

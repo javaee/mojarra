@@ -71,6 +71,8 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.RIConstants;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * All JSF component tags must be nested within a f:view tag.  This tag
@@ -180,7 +182,7 @@ public class ViewTag extends UIComponentELTag {
             try {
                 pageContext.getOut().flush();
                 customFlush.invoke(response, RIConstants.EMPTY_METH_ARGS);
-            } catch (Exception e) {
+            } catch (IOException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 throw new JspException("Exception attemtping to write content above the <f:view> tag.", e);
             }
         } else {
