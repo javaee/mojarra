@@ -483,7 +483,7 @@ public class MultiKeyConcurrentHashMap<K, V> {
                     oldValue = null;
                     ++modCount;
                     tab[index] =
-                          new HashEntry<K, V>(key1, key2, key3, key4, hash, first, value);
+                          new HashEntry<>(key1, key2, key3, key4, hash, first, value);
                     count = c; // write-volatile
                 }
                 return oldValue;
@@ -549,7 +549,7 @@ public class MultiKeyConcurrentHashMap<K, V> {
                             int k = p.hash & sizeMask;
                             //noinspection unchecked
                             HashEntry<K, V> n = (HashEntry<K, V>) newTable[k];
-                            newTable[k] = new HashEntry<K, V>(p.key1,
+                            newTable[k] = new HashEntry<>(p.key1,
                                                               p.key2,
                                                               p.key3,
                                                               p.key4,
@@ -599,7 +599,7 @@ public class MultiKeyConcurrentHashMap<K, V> {
                         ++modCount;
                         HashEntry<K, V> newFirst = e.next;
                         for (HashEntry<K, V> p = first; p != e; p = p.next) {
-                            newFirst = new HashEntry<K, V>(p.key1,
+                            newFirst = new HashEntry<>(p.key1,
                                                            p.key2,
                                                            p.key3,
                                                            p.key4,
@@ -690,7 +690,7 @@ public class MultiKeyConcurrentHashMap<K, V> {
         }
 
         for (int i = 0; i < this.segments.length; ++i) {
-            this.segments[i] = new Segment<K, V>(cap, loadFactor);
+            this.segments[i] = new Segment<>(cap, loadFactor);
         }
     }
 
