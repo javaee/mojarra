@@ -45,6 +45,7 @@ package com.sun.faces.util;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.io.FastStringWriter;
+import com.sun.faces.scripting.groovy.GroovyHelper;
 
 import javax.el.ELResolver;
 import javax.el.ValueExpression;
@@ -72,8 +73,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -168,7 +167,7 @@ public class Util {
      *  instances that may be referenced by <code>type</code>
      *  or <code>binding</code>.</p>
      * <p>If <code>binding</code> is not <code>null</code>
- and the evaluation cachedValue is not <code>null</code> return
+     * and the evaluation result is not <code>null</code> return
      * that instance.  Otherwise try to instantiate an instances
      * based on <code>type</code>.</p>
      * 
@@ -397,7 +396,7 @@ public class Util {
      * 
      * If the viewId has multiple segments assume the next to last is the flowId.
      * 
-     * Otherwise, remove the extension and assume the cachedValue is the flowId.
+     * Otherwise, remove the extension and assume the result is the flowId.
      * 
      * 
      */
@@ -626,7 +625,7 @@ public class Util {
      * @param set the substring
      * @param fromIndex starting index
      * @return starting at <code>fromIndex</code>, the index of the
-     *         first occurrence of any substring from <code>cachedValue</code> in
+     *         first occurrence of any substring from <code>set</code> in
      *         <code>toSearch</code>, or -1 if no such match is found
      */
     public static int indexOfSet(String str, char[] set, int fromIndex) {
@@ -731,7 +730,7 @@ public class Util {
      * @param appMap the Application Map
      * @param toSplit the string to split
      * @param regex the regex used for splitting
-     * @return the cachedValue of <code>Pattern.spit(String, int)</code>
+     * @return the result of <code>Pattern.spit(String, int)</code>
      */
     public synchronized static String[] split(Map<String, Object> appMap, String toSplit, String regex) {
         Map<String, Pattern> patternCache = getPatternCache(appMap);
@@ -775,32 +774,7 @@ public class Util {
      * @throws NullPointerException if <code>context</code> is null
      */
     public static String getFacesMapping(FacesContext context) {
-        ConcurrentMap<String, Object> immutableValues = getImmutableValuesMap(context);
-        final String FACES_MAPPING_KEY = RIConstants.FACES_PREFIX + ".facesMapping";
-        String cachedValue = (String) immutableValues.get(FACES_MAPPING_KEY);
-        if (null == cachedValue) {
-            final String value = lookupFacesMapping(context);
-            cachedValue = (String) immutableValues.putIfAbsent(FACES_MAPPING_KEY, value);
-            if (null == cachedValue) {
-                cachedValue = value;
-            }
-        }
-        return cachedValue;
 
-    }
-    
-    private static final String IMMUTABLE_VALUES_MAP = RIConstants.FACES_PREFIX + ".immutableValues";
-    
-    public static void initImmutableValuesMap(FacesContext context) {
-        ConcurrentHashMap<String, Object> constantsMap = new ConcurrentHashMap<>();
-        context.getExternalContext().getApplicationMap().put(IMMUTABLE_VALUES_MAP, constantsMap);
-    }
-    
-    public static ConcurrentMap<String, Object> getImmutableValuesMap(FacesContext context) {
-        return (ConcurrentHashMap<String, Object>) context.getExternalContext().getApplicationMap().get(IMMUTABLE_VALUES_MAP);
-    }
-    
-    private static String lookupFacesMapping(FacesContext context) {
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
                   (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
@@ -848,7 +822,7 @@ public class Util {
                        "URL pattern of the FacesServlet executing the current request "
                        + mapping);
         }
-        return mapping;        
+        return mapping;
     }
 
     /**
