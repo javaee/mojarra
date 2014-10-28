@@ -266,7 +266,7 @@ public class UIRepeat extends UINamingContainer {
             } else if (val instanceof ResultSet) {
                 this.model = new ResultSetDataModel((ResultSet) val);
             } else {
-                this.model = new ScalarDataModel<Object>(val);
+                this.model = new ScalarDataModel<>(val);
             }
         }
         return this.model;
