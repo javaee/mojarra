@@ -116,14 +116,19 @@ public class CoreTagParserImpl implements TagParser {
         String ln = validatorInfo.getLocalName();
 
         if (ns.equals(RIConstants.CORE_NAMESPACE)) {
-            if(ln.equals("valueChangeListener")) {
-                handleListener();
-            } else if (ln.equals("actionListener")) {
-                handleListener();
-            } else if (ln.equals("converter")) {
-                handleConverter();
-            } else if (ln.equals("validator")) {
-                handleValidator();
+            switch (ln) {
+                case "valueChangeListener":
+                    handleListener();
+                    break;
+                case "actionListener":
+                    handleListener();
+                    break;
+                case "converter":
+                    handleConverter();
+                    break;
+                case "validator":
+                    handleValidator();
+                    break;
             }
         }
     }

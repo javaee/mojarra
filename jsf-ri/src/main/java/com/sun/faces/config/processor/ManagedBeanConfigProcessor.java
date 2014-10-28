@@ -290,29 +290,34 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
         for (int i = 0, size = children.getLength(); i < size; i++) {
             Node n = children.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
-                if (MGBEAN_NAME.equals(n.getLocalName())) {
-                    beanName = getNodeText(n);
-                } else if (MGBEAN_CLASS.equals(n.getLocalName())) {
-                    beanClass = getNodeText(n);
-                } else if (MGBEAN_SCOPE.equals(n.getLocalName())) {
-                    beanScope = getNodeText(n);
-                    if (beanScope == null) {
-                        beanScope = DEFAULT_SCOPE;
-                    }
-                } else if (LIST_ENTRIES.equals(n.getLocalName())) {
-                    listEntry = buildListEntry(n);
-                } else if (MAP_ENTRIES.equals(n.getLocalName())) {
-                    mapEntry = buildMapEntry(n);
-                } else if (MG_PROPERTY.equals(n.getLocalName())) {
-                    if (managedProperties == null) {
-                        managedProperties = new ArrayList<>(size);
-                    }
-                    managedProperties.add(n);
-                } else if (DESCRIPTION.equals(n.getLocalName())) {
-                    if (descriptions == null) {
-                        descriptions = new ArrayList<>(4);
-                    }
-                    descriptions.add(n);
+                switch (n.getLocalName()) {
+                    case MGBEAN_NAME:
+                        beanName = getNodeText(n);
+                        break;
+                    case MGBEAN_CLASS:
+                        beanClass = getNodeText(n);
+                        break;
+                    case MGBEAN_SCOPE:
+                        beanScope = getNodeText(n);
+                        if (beanScope == null) {
+                            beanScope = DEFAULT_SCOPE;
+                        }   break;
+                    case LIST_ENTRIES:
+                        listEntry = buildListEntry(n);
+                        break;
+                    case MAP_ENTRIES:
+                        mapEntry = buildMapEntry(n);
+                        break;
+                    case MG_PROPERTY:
+                        if (managedProperties == null) {
+                            managedProperties = new ArrayList<>(size);
+                        }   managedProperties.add(n);
+                        break;
+                    case DESCRIPTION:
+                        if (descriptions == null) {
+                            descriptions = new ArrayList<>(4);
+                        }   descriptions.add(n);
+                        break;
                 }
             }
         }
@@ -362,18 +367,20 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
             for (int i = 0, size = children.getLength(); i < size; i++) {
                 Node child = children.item(i);
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
-                    if (VALUE_CLASS.equals(child.getLocalName())) {
-                        valueClass = getNodeText(child);
-                    } else if (VALUE.equals(child.getLocalName())) {
-                        if (values == null) {
-                            values = new ArrayList<>(size);
-                        }
-                        values.add(getNodeText(child));
-                    } else if (NULL_VALUE.equals(child.getLocalName())) {
-                        if (values == null) {
-                            values = new ArrayList<>(size);
-                        }
-                        values.add(ManagedBeanInfo.NULL_VALUE);
+                    switch (child.getLocalName()) {
+                        case VALUE_CLASS:
+                            valueClass = getNodeText(child);
+                            break;
+                        case VALUE:
+                            if (values == null) {
+                                values = new ArrayList<>(size);
+                            }   values.add(getNodeText(child));
+                            break;
+                        case NULL_VALUE:
+                            if (values == null) {
+                                values = new ArrayList<>(size);
+                            }   values.add(ManagedBeanInfo.NULL_VALUE);
+                            break;
                     }
                 }
             }
@@ -408,31 +415,36 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
             for (int i = 0, size = children.getLength(); i < size; i++) {
                 Node child = children.item(i);
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
-                    if (VALUE_CLASS.equals(child.getLocalName())) {
-                        valueClass = getNodeText(child);
-                    } else if (MAP_KEY_CLASS.equals(child.getLocalName())) {
-                        keyClass = getNodeText(child);
-                    } else if (MAP_ENTRY.equals(child.getLocalName())) {
-                        if (entries == null) {
-                            entries = new LinkedHashMap<>(8, 1.0f);
-                        }
-                        NodeList c = child.getChildNodes();
-                        String key = null;
-                        String value = null;
-                        for (int j = 0, jsize = c.getLength(); j < jsize; j++) {
-                            Node node = c.item(j);
-                            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                                if (KEY.equals(node.getLocalName())) {
-                                    key = getNodeText(node);
-                                } else if (VALUE.equals(node.getLocalName())) {
-                                    value = getNodeText(node);
-                                } else
-                                if (NULL_VALUE.equals(node.getLocalName())) {
-                                    value = ManagedBeanInfo.NULL_VALUE;
+                    switch (child.getLocalName()) {
+                        case VALUE_CLASS:
+                            valueClass = getNodeText(child);
+                            break;
+                        case MAP_KEY_CLASS:
+                            keyClass = getNodeText(child);
+                            break;
+                        case MAP_ENTRY:
+                            if (entries == null) {
+                                entries = new LinkedHashMap<>(8, 1.0f);
+                            }   NodeList c = child.getChildNodes();
+                            String key = null;
+                            String value = null;
+                            for (int j = 0, jsize = c.getLength(); j < jsize; j++) {
+                                Node node = c.item(j);
+                                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                                    switch (node.getLocalName()) {
+                                        case KEY:
+                                            key = getNodeText(node);
+                                            break;
+                                        case VALUE:
+                                            value = getNodeText(node);
+                                            break;
+                                        case NULL_VALUE:
+                                            value = ManagedBeanInfo.NULL_VALUE;
+                                            break;
+                                    }
                                 }
-                            }
-                        }
-                        entries.put(key, value);
+                            }   entries.put(key, value);
+                            break;
                     }
                 }
             }
@@ -468,18 +480,25 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
             for (int i = 0, size = children.getLength(); i < size; i++) {
                 Node child = children.item(i);
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
-                    if (MG_PROPERTY_NAME.equals(child.getLocalName())) {
-                        propertyName = getNodeText(child);
-                    } else if (MG_PROPERTY_TYPE.equals(child.getLocalName())) {
-                        propertyClass = getNodeText(child);
-                    } else if (VALUE.equals(child.getLocalName())) {
-                        value = getNodeText(child);
-                    } else if (NULL_VALUE.equals(child.getLocalName())) {
-                        value = ManagedBeanInfo.NULL_VALUE;
-                    } else if (LIST_ENTRIES.equals(child.getLocalName())) {
-                        listEntry = buildListEntry(child);
-                    } else if (MAP_ENTRIES.equals(child.getLocalName())) {
-                        mapEntry = buildMapEntry(child);
+                    switch (child.getLocalName()) {
+                        case MG_PROPERTY_NAME:
+                            propertyName = getNodeText(child);
+                            break;
+                        case MG_PROPERTY_TYPE:
+                            propertyClass = getNodeText(child);
+                            break;
+                        case VALUE:
+                            value = getNodeText(child);
+                            break;
+                        case NULL_VALUE:
+                            value = ManagedBeanInfo.NULL_VALUE;
+                            break;
+                        case LIST_ENTRIES:
+                            listEntry = buildListEntry(child);
+                            break;
+                        case MAP_ENTRIES:
+                            mapEntry = buildMapEntry(child);
+                            break;
                     }
                 }
             }

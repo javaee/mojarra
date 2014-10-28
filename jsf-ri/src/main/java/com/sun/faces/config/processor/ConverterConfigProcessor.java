@@ -143,12 +143,16 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
             String converterForClass = null;
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
-                if (CONVERTER_ID.equals(n.getLocalName())) {
-                    converterId = getNodeText(n);
-                } else if (CONVERTER_CLASS.equals(n.getLocalName())) {
-                    converterClass = getNodeText(n);
-                } else if (CONVERTER_FOR_CLASS.equals(n.getLocalName())) {
-                    converterForClass = getNodeText(n);
+                switch (n.getLocalName()) {
+                    case CONVERTER_ID:
+                        converterId = getNodeText(n);
+                        break;
+                    case CONVERTER_CLASS:
+                        converterClass = getNodeText(n);
+                        break;
+                    case CONVERTER_FOR_CLASS:
+                        converterForClass = getNodeText(n);
+                        break;
                 }
             }
 

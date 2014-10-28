@@ -208,24 +208,25 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                             c++) {
                         Node n = children.item(c);
                         if (n.getNodeType() == Node.ELEMENT_NODE) {
-                            if (FROM_VIEW_ID.equals(n.getLocalName())) {
-                                String t = getNodeText(n);
-                                fromViewId = ((t == null)
-                                        ? FROM_VIEW_ID_DEFAULT
-                                        : t);
-                                if (!fromViewId.equals(FROM_VIEW_ID_DEFAULT) && fromViewId.charAt(0) != '/') {
-                                    if (LOGGER.isLoggable(Level.WARNING)) {
-                                        LOGGER.log(Level.WARNING,
-                                                "jsf.config.navigation.from_view_id_leading_slash",
-                                                new String[] { fromViewId });
-                                    }
-                                    fromViewId = '/' + fromViewId;
-                                }
-                            } else if (NAVIGATION_CASE.equals(n.getLocalName())) {
-                                if (navigationCases == null) {
-                                    navigationCases = new ArrayList<>(csize);
-                                }
-                                navigationCases.add(n);
+                            switch (n.getLocalName()) {
+                                case FROM_VIEW_ID:
+                                    String t = getNodeText(n);
+                                    fromViewId = ((t == null)
+                                            ? FROM_VIEW_ID_DEFAULT
+                                            : t);
+                                    if (!fromViewId.equals(FROM_VIEW_ID_DEFAULT) && fromViewId.charAt(0) != '/') {
+                                        if (LOGGER.isLoggable(Level.WARNING)) {
+                                            LOGGER.log(Level.WARNING,
+                                                    "jsf.config.navigation.from_view_id_leading_slash",
+                                                    new String[] { fromViewId });
+                                        }
+                                        fromViewId = '/' + fromViewId;
+                                    }   break;
+                                case NAVIGATION_CASE:
+                                    if (navigationCases == null) {
+                                        navigationCases = new ArrayList<>(csize);
+                                }   navigationCases.add(n);
+                                    break;
                             }
                         }
                     }
@@ -270,41 +271,46 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                 for (int i = 0, size = children.getLength(); i < size; i++) {
                     Node n = children.item(i);
                     if (n.getNodeType() == Node.ELEMENT_NODE) {
-                        if (FROM_OUTCOME.equals(n.getLocalName())) {
-                            outcome = getNodeText(n);
-                        } else if (FROM_ACTION.equals(n.getLocalName())) {
-                            action = getNodeText(n);
-                        } else if (IF.equals(n.getLocalName())) {
-                            String expression = getNodeText(n);
-                            if (SharedUtils.isExpression(expression) && !SharedUtils.isMixedExpression(expression)) {
-                                condition = expression;
-                            }
-                            else {
-                                if (LOGGER.isLoggable(Level.WARNING)) {
-                                    LOGGER.log(Level.WARNING,
-                                               "jsf.config.navigation.if_invalid_expression",
-                                               new String[] { expression, fromViewId });
+                        switch (n.getLocalName()) {
+                            case FROM_OUTCOME:
+                                outcome = getNodeText(n);
+                                break;
+                            case FROM_ACTION:
+                                action = getNodeText(n);
+                                break;
+                            case IF:
+                                String expression = getNodeText(n);
+                                if (SharedUtils.isExpression(expression) && !SharedUtils.isMixedExpression(expression)) {
+                                    condition = expression;
                                 }
-                            }
-                        } else if (TO_VIEW_ID.equals(n.getLocalName())) {
-                            String toViewIdString = getNodeText(n);
-                            if (toViewIdString.charAt(0) != '/' && toViewIdString.charAt(0) != '#') {
-                                if (LOGGER.isLoggable(Level.WARNING)) {
-                                    LOGGER.log(Level.WARNING,
-                                               "jsf.config.navigation.to_view_id_leading_slash",
-                                               new String[] { toViewIdString,
-                                                              fromViewId });
-                                }
-                                toViewId = '/' + toViewIdString;
-                            } else {
-                                toViewId = toViewIdString;
-                            }
-                        } else if (TO_FLOW_DOCUMENT_ID.equals(n.getLocalName())) {
-                            toFlowDocumentId = getNodeText(n);
-                        } else if (REDIRECT.equals(n.getLocalName())) {
-                            parameters = processParameters(n.getChildNodes());
-                            includeViewParams = isIncludeViewParams(n);
-                            redirect = true;
+                                else {
+                                    if (LOGGER.isLoggable(Level.WARNING)) {
+                                        LOGGER.log(Level.WARNING,
+                                                "jsf.config.navigation.if_invalid_expression",
+                                                new String[] { expression, fromViewId });
+                                    }
+                                }   break;
+                            case TO_VIEW_ID:
+                                String toViewIdString = getNodeText(n);
+                                if (toViewIdString.charAt(0) != '/' && toViewIdString.charAt(0) != '#') {
+                                    if (LOGGER.isLoggable(Level.WARNING)) {
+                                        LOGGER.log(Level.WARNING,
+                                                "jsf.config.navigation.to_view_id_leading_slash",
+                                                new String[] { toViewIdString,
+                                                    fromViewId });
+                                    }
+                                    toViewId = '/' + toViewIdString;
+                                } else {
+                                    toViewId = toViewIdString;
+                            }   break;
+                            case TO_FLOW_DOCUMENT_ID:
+                                toFlowDocumentId = getNodeText(n);
+                                break;
+                            case REDIRECT:
+                                parameters = processParameters(n.getChildNodes());
+                                includeViewParams = isIncludeViewParams(n);
+                                redirect = true;
+                                break;
                         }
                     }
                 }

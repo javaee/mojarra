@@ -769,10 +769,15 @@ public class UIData extends UIComponentBase
      */
     public void setValueBinding(String name, ValueBinding binding) {
 
-        if ("value".equals(name)) {
-            setDataModel(null);
-        } else if ("var".equals(name) || "rowIndex".equals(name)) {
-            throw new IllegalArgumentException();
+        if (null != name) {
+            switch (name) {
+                case "value":
+                    setDataModel(null);
+                    break;
+                case "var":
+                case "rowIndex":
+                    throw new IllegalArgumentException();
+            }
         }
         super.setValueBinding(name, binding);
 
@@ -798,10 +803,15 @@ public class UIData extends UIComponentBase
      */
     public void setValueExpression(String name, ValueExpression binding) {
 
-        if ("value".equals(name)) {
-            this.model = null;
-        } else if ("var".equals(name) || "rowIndex".equals(name)) {
-            throw new IllegalArgumentException();
+        if (null != name) {
+            switch (name) {
+                case "value":
+                    this.model = null;
+                    break;
+                case "var":
+                case "rowIndex":
+                    throw new IllegalArgumentException();
+            }
         }
         super.setValueExpression(name, binding);
 

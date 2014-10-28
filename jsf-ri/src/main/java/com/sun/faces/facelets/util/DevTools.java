@@ -126,18 +126,27 @@ public final class DevTools {
          init();
          Date now = new Date();
          for (String ERROR_PART : ERROR_PARTS) {
-             if ("message".equals(ERROR_PART)) {
-                 writeMessage(writer, e);
-             } else if ("trace".equals(ERROR_PART)) {
-                 writeException(writer, e);
-             } else if ("now".equals(ERROR_PART)) {
-                 writer.write(DateFormat.getDateTimeInstance().format(now));
-             } else if ("tree".equals(ERROR_PART)) {
-                 writeComponent(writer, faces.getViewRoot());
-             } else if ("vars".equals(ERROR_PART)) {
-                 writeVariables(writer, faces);
-             } else {
-                 writer.write(ERROR_PART);
+             if (null != ERROR_PART) {
+                 switch (ERROR_PART) {
+                     case "message":
+                         writeMessage(writer, e);
+                         break;
+                     case "trace":
+                         writeException(writer, e);
+                         break;
+                     case "now":
+                         writer.write(DateFormat.getDateTimeInstance().format(now));
+                         break;
+                     case "tree":
+                         writeComponent(writer, faces.getViewRoot());
+                         break;
+                     case "vars":
+                         writeVariables(writer, faces);
+                         break;
+                     default:
+                         writer.write(ERROR_PART);
+                         break;
+                 }
              }
          }
 
@@ -181,16 +190,24 @@ public final class DevTools {
         init();
         Date now = new Date();
         for (String DEBUG_PART : DEBUG_PARTS) {
-            if ("message".equals(DEBUG_PART)) {
-                writer.write(faces.getViewRoot().getViewId());
-            } else if ("now".equals(DEBUG_PART)) {
-                writer.write(DateFormat.getDateTimeInstance().format(now));
-            } else if ("tree".equals(DEBUG_PART)) {
-                writeComponent(writer, faces.getViewRoot());
-            } else if ("vars".equals(DEBUG_PART)) {
-                writeVariables(writer, faces);
-            } else {
-                writer.write(DEBUG_PART);
+            if (null != DEBUG_PART) {
+                switch (DEBUG_PART) {
+                    case "message":
+                        writer.write(faces.getViewRoot().getViewId());
+                        break;
+                    case "now":
+                        writer.write(DateFormat.getDateTimeInstance().format(now));
+                        break;
+                    case "tree":
+                        writeComponent(writer, faces.getViewRoot());
+                        break;
+                    case "vars":
+                        writeVariables(writer, faces);
+                        break;
+                    default:
+                        writer.write(DEBUG_PART);
+                        break;
+                }
             }
         }
 

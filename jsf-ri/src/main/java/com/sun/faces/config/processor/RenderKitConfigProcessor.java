@@ -221,14 +221,19 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                  new ArrayList<>(children.getLength());
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
-                if (RENDERKIT_ID.equals(n.getLocalName())) {
-                    rkId = getNodeText(n);
-                } else if (RENDERKIT_CLASS.equals(n.getLocalName())) {
-                    rkClass = getNodeText(n);
-                } else if (RENDERER.equals(n.getLocalName())) {
-                    renderersList.add(n);
-                } else if (CLIENT_BEHAVIOR_RENDERER.equals(n.getLocalName())) {
-                    behaviorRenderersList.add(n);
+                switch (n.getLocalName()) {
+                    case RENDERKIT_ID:
+                        rkId = getNodeText(n);
+                        break;
+                    case RENDERKIT_CLASS:
+                        rkClass = getNodeText(n);
+                        break;
+                    case RENDERER:
+                        renderersList.add(n);
+                        break;
+                    case CLIENT_BEHAVIOR_RENDERER:
+                        behaviorRenderersList.add(n);
+                        break;
                 }
             }
 
@@ -298,12 +303,16 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             String rendererClass = null;
             for (int i = 0, size = children.getLength(); i < size; i++) {
                 Node n = children.item(i);
-                if (RENDERER_FAMILY.equals(n.getLocalName())) {
-                    rendererFamily = getNodeText(n);
-                } else if (RENDERER_TYPE.equals(n.getLocalName())) {
-                    rendererType = getNodeText(n);
-                } else if (RENDERER_CLASS.equals(n.getLocalName())) {
-                    rendererClass = getNodeText(n);
+                switch (n.getLocalName()) {
+                    case RENDERER_FAMILY:
+                        rendererFamily = getNodeText(n);
+                        break;
+                    case RENDERER_TYPE:
+                        rendererType = getNodeText(n);
+                        break;
+                    case RENDERER_CLASS:
+                        rendererClass = getNodeText(n);
+                        break;
                 }
             }
 
@@ -344,10 +353,13 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             String behaviorRendererClass = null;
             for (int i = 0, size = children.getLength(); i < size; i++) {
                 Node n = children.item(i);
-                if (CLIENT_BEHAVIOR_RENDERER_TYPE.equals(n.getLocalName())) {
-                    behaviorRendererType = getNodeText(n);
-                } else if (CLIENT_BEHAVIOR_RENDERER_CLASS.equals(n.getLocalName())) {
-                    behaviorRendererClass = getNodeText(n);
+                switch (n.getLocalName()) {
+                    case CLIENT_BEHAVIOR_RENDERER_TYPE:
+                        behaviorRendererType = getNodeText(n);
+                        break;
+                    case CLIENT_BEHAVIOR_RENDERER_CLASS:
+                        behaviorRendererClass = getNodeText(n);
+                        break;
                 }
             }
 

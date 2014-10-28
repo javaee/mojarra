@@ -41,7 +41,6 @@
 package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationAssociate;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
@@ -1087,92 +1086,103 @@ public class ConfigManager {
                  * we need to transform it to reference a special 1.1 schema before validating.
                  */
                 Node documentElement = ((Document) domSource.getNode()).getDocumentElement();
-                if (JAVAEE_SCHEMA_DEFAULT_NS.equals(documentNS)) {
-                    Attr version = (Attr)
-                            documentElement.getAttributes().getNamedItem("version");
-                    Schema schema;
-                    if (version != null) {
-                        String versionStr = version.getValue();
-                        if ("2.2".equals(versionStr)) {
-                            if ("facelet-taglib".equals(documentElement.getLocalName())) {
-                                schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACELET_TAGLIB_22);
+                switch (documentNS) {
+                    case JAVAEE_SCHEMA_DEFAULT_NS:
+                        {
+                            Attr version = (Attr)
+                                    documentElement.getAttributes().getNamedItem("version");
+                            Schema schema;
+                            if (version != null) {
+                                String versionStr = version.getValue();
+                                switch (versionStr) {
+                                    case "2.2":
+                                        if ("facelet-taglib".equals(documentElement.getLocalName())) {
+                                            schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACELET_TAGLIB_22);
+                                        } else {
+                                            schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_22);
+                                        }   break;
+                                    case "2.3":
+                                        if ("facelet-taglib".equals(documentElement.getLocalName())) {
+                                            schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACELET_TAGLIB_22);
+                                        } else {
+                                            schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_23);
+                                        }   break;
+                                    default:
+                                        throw new ConfigurationException("Unknown Schema version: " + versionStr);
+                                }
+                                DocumentBuilder builder = getBuilderForSchema(schema);
+                                if (builder.isValidating()) {
+                                    builder.getSchema().newValidator().validate(domSource);
+                                    returnDoc = ((Document) domSource.getNode());
+                                } else {
+                                    returnDoc = ((Document) domSource.getNode());
+                                }
                             } else {
-                                schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_22);
+                                // this shouldn't happen, but...
+                                throw new ConfigurationException("No document version available.");
+                            }       break;
+                        }
+                    case JAVAEE_SCHEMA_LEGACY_DEFAULT_NS:
+                    {
+                        Attr version = (Attr)
+                                documentElement.getAttributes().getNamedItem("version");
+                        Schema schema;
+                        if (version != null) {
+                            String versionStr = version.getValue();
+                            switch (versionStr) {
+                                case "2.0":
+                                    if ("facelet-taglib".equals(documentElement.getLocalName())) {
+                                        schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACELET_TAGLIB_20);
+                                    } else {
+                                        schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_20);
+                                    }   break;
+                                case "2.1":
+                                    if ("facelet-taglib".equals(documentElement.getLocalName())) {
+                                        schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACELET_TAGLIB_20);
+                                    } else {
+                                        schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_21);
+                                    }   break;
+                                case "1.2":
+                                    schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_12);
+                                    break;
+                                default:
+                                    throw new ConfigurationException("Unknown Schema version: " + versionStr);
                             }
-                        } else if ("2.3".equals(versionStr)) {
-                            if ("facelet-taglib".equals(documentElement.getLocalName())) {
-                                schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACELET_TAGLIB_22);
+                            DocumentBuilder builder = getBuilderForSchema(schema);
+                            if (builder.isValidating()) {
+                                builder.getSchema().newValidator().validate(domSource);
+                                returnDoc = ((Document) domSource.getNode());
                             } else {
-                                schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_23);
+                                returnDoc = ((Document) domSource.getNode());
                             }
                         } else {
-                            throw new ConfigurationException("Unknown Schema version: " + versionStr);
+                            // this shouldn't happen, but...
+                            throw new ConfigurationException("No document version available.");
+                        }       break;
+                    }
+                    default:
+                        DOMResult domResult = new DOMResult();
+                        Transformer transformer = getTransformer(documentNS);
+                        transformer.transform(domSource, domResult);
+                        // copy the source document URI to the transformed result
+                        // so that processes that need to build URLs relative to the
+                        // document will work as expected.
+                        ((Document) domResult.getNode())
+                                .setDocumentURI(((Document) domSource
+                                        .getNode()).getDocumentURI());
+                        Schema schemaToApply;
+                        switch (documentNS) {
+                            case FACES_CONFIG_1_X_DEFAULT_NS:
+                                schemaToApply = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_11);
+                                break;
+                            case FACELETS_1_0_DEFAULT_NS:
+                                schemaToApply = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACELET_TAGLIB_20);
+                                break;
+                            default:
+                                throw new IllegalStateException();
                         }
-                        DocumentBuilder builder = getBuilderForSchema(schema);
+                        DocumentBuilder builder = getBuilderForSchema(schemaToApply);
                         if (builder.isValidating()) {
-                            builder.getSchema().newValidator().validate(domSource);
-                            returnDoc = ((Document) domSource.getNode());
-                        } else {
-                            returnDoc = ((Document) domSource.getNode());
-                        }
-                    } else {
-                        // this shouldn't happen, but...
-                        throw new ConfigurationException("No document version available.");
-                    }
-                } else if (JAVAEE_SCHEMA_LEGACY_DEFAULT_NS.equals(documentNS)) {
-                    Attr version = (Attr)
-                            documentElement.getAttributes().getNamedItem("version");
-                    Schema schema;
-                    if (version != null) {
-                        String versionStr = version.getValue();
-                        if ("2.0".equals(versionStr)) {
-                            if ("facelet-taglib".equals(documentElement.getLocalName())) {
-                                schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACELET_TAGLIB_20);
-                            } else {
-                                schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_20);
-                            }
-                        } else if ("2.1".equals(versionStr)) {
-                            if ("facelet-taglib".equals(documentElement.getLocalName())) {
-                                schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACELET_TAGLIB_20);
-                            } else {
-                                schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_21);
-                            }
-                        } else if ("1.2".equals(versionStr)) {
-                            schema = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_12);
-                        } else {
-                            throw new ConfigurationException("Unknown Schema version: " + versionStr);
-                        }
-                        DocumentBuilder builder = getBuilderForSchema(schema);
-                        if (builder.isValidating()) {
-                            builder.getSchema().newValidator().validate(domSource);
-                            returnDoc = ((Document) domSource.getNode());
-                        } else {
-                            returnDoc = ((Document) domSource.getNode());
-                        }
-                    } else {
-                        // this shouldn't happen, but...
-                        throw new ConfigurationException("No document version available.");
-                    }
-                } else {
-                    DOMResult domResult = new DOMResult();
-                    Transformer transformer = getTransformer(documentNS);
-                    transformer.transform(domSource, domResult);
-                    // copy the source document URI to the transformed result
-                    // so that processes that need to build URLs relative to the
-                    // document will work as expected.
-                    ((Document) domResult.getNode())
-                          .setDocumentURI(((Document) domSource
-                                .getNode()).getDocumentURI());
-                    Schema schemaToApply;
-                    if (FACES_CONFIG_1_X_DEFAULT_NS.equals(documentNS)) {
-                        schemaToApply = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_11);
-                    } else if (FACELETS_1_0_DEFAULT_NS.equals(documentNS)) {
-                        schemaToApply = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACELET_TAGLIB_20);
-                    } else {
-                        throw new IllegalStateException();
-                    }
-                    DocumentBuilder builder = getBuilderForSchema(schemaToApply);
-                    if (builder.isValidating()) {
                         builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
                         returnDoc = (Document) domResult.getNode();
                     } else {
@@ -1226,12 +1236,15 @@ public class ConfigManager {
             TransformerFactory factory = Util.createTransformerFactory();
 
             String xslToApply;
-            if (FACES_CONFIG_1_X_DEFAULT_NS.equals(documentNS)) {
-                xslToApply = FACES_TO_1_1_PRIVATE_XSL;
-            } else if (FACELETS_1_0_DEFAULT_NS.equals(documentNS)) {
-                xslToApply = FACELETS_TO_2_0_XSL;
-            } else {
-                throw new IllegalStateException();
+            switch (documentNS) {
+                case FACES_CONFIG_1_X_DEFAULT_NS:
+                    xslToApply = FACES_TO_1_1_PRIVATE_XSL;
+                    break;
+                case FACELETS_1_0_DEFAULT_NS:
+                    xslToApply = FACELETS_TO_2_0_XSL;
+                    break;
+                default:
+                    throw new IllegalStateException();
             }
             return factory
                  .newTransformer(new StreamSource(getInputStream(ConfigManager

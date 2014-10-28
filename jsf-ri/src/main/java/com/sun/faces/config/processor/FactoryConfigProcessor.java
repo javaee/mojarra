@@ -254,50 +254,65 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                  .getElementsByTagNameNS(namespace, "*");
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
-                if (APPLICATION_FACTORY.equals(n.getLocalName())) {
-                    appCount.incrementAndGet();
-                    setFactory(FactoryFinder.APPLICATION_FACTORY,
-                               getNodeText(n));
-                } else if (EXCEPTION_HANDLER_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY,
-                               getNodeText(n));
-                } else if (VISIT_CONTEXT_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.VISIT_CONTEXT_FACTORY,
-                               getNodeText(n));
-                } else if (LIFECYCLE_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.LIFECYCLE_FACTORY,
-                               getNodeText(n));
-                } else if (FLASH_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.FLASH_FACTORY,
-                               getNodeText(n));
-                } else if (CLIENT_WINDOW_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.CLIENT_WINDOW_FACTORY,
-                               getNodeText(n));
-                } else if (FACES_CONTEXT_FACTORY.equals(n.getLocalName())) {
-                    fcCount.incrementAndGet();
-                    setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
-                               getNodeText(n));
-                } else if (RENDER_KIT_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-                               getNodeText(n));
-                } else if (VIEW_DECLARATION_LANGUAGE_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY,
-                               getNodeText(n));
-                } else if (TAG_HANDLER_DELEGATE_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY,
-                               getNodeText(n));
-                } else if (FACELET_CACHE_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.FACELET_CACHE_FACTORY,
-                               getNodeText(n));
-                } else if (EXTERNAL_CONTEXT_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
-                               getNodeText(n));
-                } else if (PARTIAL_VIEW_CONTEXT_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
-                               getNodeText(n));
-                } else if (FLOW_HANDLER_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.FLOW_HANDLER_FACTORY,
-                               getNodeText(n));
+                switch (n.getLocalName()) {
+                    case APPLICATION_FACTORY:
+                        appCount.incrementAndGet();
+                        setFactory(FactoryFinder.APPLICATION_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case EXCEPTION_HANDLER_FACTORY:
+                        setFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case VISIT_CONTEXT_FACTORY:
+                        setFactory(FactoryFinder.VISIT_CONTEXT_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case LIFECYCLE_FACTORY:
+                        setFactory(FactoryFinder.LIFECYCLE_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case FLASH_FACTORY:
+                        setFactory(FactoryFinder.FLASH_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case CLIENT_WINDOW_FACTORY:
+                        setFactory(FactoryFinder.CLIENT_WINDOW_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case FACES_CONTEXT_FACTORY:
+                        fcCount.incrementAndGet();
+                        setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case RENDER_KIT_FACTORY:
+                        setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case VIEW_DECLARATION_LANGUAGE_FACTORY:
+                        setFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case TAG_HANDLER_DELEGATE_FACTORY:
+                        setFactory(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case FACELET_CACHE_FACTORY:
+                        setFactory(FactoryFinder.FACELET_CACHE_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case EXTERNAL_CONTEXT_FACTORY:
+                        setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case PARTIAL_VIEW_CONTEXT_FACTORY:
+                        setFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case FLOW_HANDLER_FACTORY:
+                        setFactory(FactoryFinder.FLOW_HANDLER_FACTORY,
+                                getNodeText(n));
+                        break;
                 }
             }
         }

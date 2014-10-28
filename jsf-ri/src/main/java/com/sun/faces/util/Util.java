@@ -45,8 +45,6 @@ package com.sun.faces.util;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.io.FastStringWriter;
-import com.sun.faces.scripting.groovy.GroovyHelper;
-
 import javax.el.ELResolver;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -477,29 +475,39 @@ public class Util {
     
     public static Class getTypeFromString(String type) throws ClassNotFoundException {
         Class result;
-        if (type.equals("byte")) {
-            result = Byte.TYPE;
-        } else if (type.equals("short")) {
-            result = Short.TYPE;
-        } else if (type.equals("int")) {
-            result = Integer.TYPE;
-        } else if (type.equals("long")) {
-            result = Long.TYPE;
-        } else if (type.equals("float")) {
-            result = Float.TYPE;
-        } else if (type.equals("double")) {
-            result = Double.TYPE;
-        } else if (type.equals("boolean")) {
-            result = Boolean.TYPE;
-        } else if (type.equals("char")) {
-            result = Character.TYPE;
-        } else if (type.equals("void")) {
-            result = Void.TYPE;
-        } else {
-            if (type.indexOf('.') == -1) {
-                type = "java.lang." + type;
-            }
-            result = Util.loadClass(type, Void.TYPE);
+        switch (type) {
+            case "byte":
+                result = Byte.TYPE;
+                break;
+            case "short":
+                result = Short.TYPE;
+                break;
+            case "int":
+                result = Integer.TYPE;
+                break;
+            case "long":
+                result = Long.TYPE;
+                break;
+            case "float":
+                result = Float.TYPE;
+                break;
+            case "double":
+                result = Double.TYPE;
+                break;
+            case "boolean":
+                result = Boolean.TYPE;
+                break;
+            case "char":
+                result = Character.TYPE;
+                break;
+            case "void":
+                result = Void.TYPE;
+                break;
+            default:
+                if (type.indexOf('.') == -1) {
+                    type = "java.lang." + type;
+                }   result = Util.loadClass(type, Void.TYPE);
+                break;
         }
 
         return result;

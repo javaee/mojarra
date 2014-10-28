@@ -134,10 +134,13 @@ public class BehaviorConfigProcessor extends AbstractConfigProcessor {
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 if (n.getNodeType() == Node.ELEMENT_NODE) {
-                    if (BEHAVIOR_ID.equals(n.getLocalName())) {
-                        behaviorId = getNodeText(n);
-                    } else if (BEHAVIOR_CLASS.equals(n.getLocalName())) {
-                        behaviorClass = getNodeText(n);
+                    switch (n.getLocalName()) {
+                        case BEHAVIOR_ID:
+                            behaviorId = getNodeText(n);
+                            break;
+                        case BEHAVIOR_CLASS:
+                            behaviorClass = getNodeText(n);
+                            break;
                     }
                 }
             }

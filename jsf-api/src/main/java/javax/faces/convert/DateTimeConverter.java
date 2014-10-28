@@ -403,21 +403,24 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
             // Perform the requested parsing
             returnValue = parser.parse(value);
         } catch (ParseException e) {
-            if ("date".equals(type)) {
-                throw new ConverterException(MessageFactory.getMessage(
-                     context, DATE_ID, value,
-                     parser.format(new Date(System.currentTimeMillis())),
-                     MessageFactory.getLabel(context, component)), e);
-            } else if ("time".equals(type)) {
-                throw new ConverterException(MessageFactory.getMessage(
-                     context, TIME_ID, value,
-                     parser.format(new Date(System.currentTimeMillis())),
-                     MessageFactory.getLabel(context, component)), e);
-            } else if ("both".equals(type)) {
-                throw new ConverterException(MessageFactory.getMessage(
-                     context, DATETIME_ID, value,
-                     parser.format(new Date(System.currentTimeMillis())),
-                     MessageFactory.getLabel(context, component)), e);
+            if (null != type) {
+                switch (type) {
+                    case "date":
+                        throw new ConverterException(MessageFactory.getMessage(
+                                context, DATE_ID, value,
+                                parser.format(new Date(System.currentTimeMillis())),
+                                MessageFactory.getLabel(context, component)), e);
+                    case "time":
+                        throw new ConverterException(MessageFactory.getMessage(
+                                context, TIME_ID, value,
+                                parser.format(new Date(System.currentTimeMillis())),
+                                MessageFactory.getLabel(context, component)), e);
+                    case "both":
+                        throw new ConverterException(MessageFactory.getMessage(
+                                context, DATETIME_ID, value,
+                                parser.format(new Date(System.currentTimeMillis())),
+                                MessageFactory.getLabel(context, component)), e);
+                }
             }
         } catch (Exception e) {
             throw new ConverterException(e);
@@ -538,21 +541,22 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      */
     private static int getStyle(String name) {
 
-        if ("default".equals(name)) {
-            return (DateFormat.DEFAULT);
-        } else if ("short".equals(name)) {
-            return (DateFormat.SHORT);
-        } else if ("medium".equals(name)) {
-            return (DateFormat.MEDIUM);
-        } else if ("long".equals(name)) {
-            return (DateFormat.LONG);
-        } else if ("full".equals(name)) {
-            return (DateFormat.FULL);
-        } else {
-            // PENDING(craigmcc) - i18n
-            throw new ConverterException("Invalid style '" + name + '\'');
+        if (null != name) { 
+            switch (name) {
+                case "default":
+                    return (DateFormat.DEFAULT);
+                case "short":
+                    return (DateFormat.SHORT);
+                case "medium":
+                    return (DateFormat.MEDIUM);
+                case "long":
+                    return (DateFormat.LONG);
+                case "full":
+                    return (DateFormat.FULL);
+            }
         }
-
+        // PENDING(craigmcc) - i18n
+        throw new ConverterException("Invalid style '" + name + '\'');
     }
 
     // ----------------------------------------------------- StateHolder Methods

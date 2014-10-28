@@ -699,22 +699,33 @@ public class AjaxBehavior extends ClientBehaviorBase {
             throw new FacesException(ele);
         }
 
-        if (ONEVENT.equals(propertyName)) {
-            onevent = (String)value;
-        } else if (DELAY.equals(propertyName)) {
-            delay = (String)value;
-        } else if (ONERROR.equals(propertyName)) {
-            onerror = (String)value;
-        } else if (IMMEDIATE.equals(propertyName)) {
-            immediate = (Boolean)value;
-        } else if (RESET_VALUES.equals(propertyName)) {
-            resetValues = (Boolean)value;
-        } else if (DISABLED.equals(propertyName)) {
-            disabled = (Boolean)value;
-        } else if (EXECUTE.equals(propertyName)) {
-            execute = toList(propertyName, expression, value);
-        } else if (RENDER.equals(propertyName)) {
-            render = toList(propertyName, expression, value);
+        if (null != propertyName) {
+            switch (propertyName) {
+                case ONEVENT:
+                    onevent = (String)value;
+                    break;
+                case DELAY:
+                    delay = (String)value;
+                    break;
+                case ONERROR:
+                    onerror = (String)value;
+                    break;
+                case IMMEDIATE:
+                    immediate = (Boolean)value;
+                    break;
+                case RESET_VALUES:
+                    resetValues = (Boolean)value;
+                    break;
+                case DISABLED:
+                    disabled = (Boolean)value;
+                    break;
+                case EXECUTE:
+                    execute = toList(propertyName, expression, value);
+                    break;
+                case RENDER:
+                    render = toList(propertyName, expression, value);
+                    break;
+            }
         }
     }
 

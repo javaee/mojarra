@@ -231,13 +231,18 @@ public class FacesConfigInfo {
             absoluteOrdering = new ArrayList<>(children.getLength());
             for (int i = 0, len = children.getLength(); i < len; i++) {
                 Node n = children.item(i);
-                if (NAME.equals(n.getLocalName())) {
-                    absoluteOrdering.add(getNodeText(n));
-                } else if (OTHERS.equals(n.getLocalName())) {
-                    if (absoluteOrdering.contains("others")) {
-                        throw new IllegalStateException("'absolute-ordering' element defined with multiple 'others' child elements found within WEB-INF/faces-config.xml");
+                if (null != n.getLocalName()) { 
+                    switch (n.getLocalName()) {
+                        case NAME:
+                            absoluteOrdering.add(getNodeText(n));
+                            break;
+                        case OTHERS:
+                            if (absoluteOrdering.contains("others")) {
+                                throw new IllegalStateException("'absolute-ordering' element defined with multiple 'others' child elements found within WEB-INF/faces-config.xml");
+                            }   
+                            absoluteOrdering.add("others");
+                            break;
                     }
-                    absoluteOrdering.add("others");
                 }
             }
         }

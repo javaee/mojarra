@@ -300,10 +300,13 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             String compositeLibraryName = null;
             for (int i = 0, ilen = children.getLength(); i < ilen; i++) {
                 Node n = children.item(i);
-                if (TAGLIB_NAMESPACE.equals(n.getLocalName())) {
-                    taglibNamespace = getNodeText(n);
-                } else if (COMPOSITE_LIBRARY_NAME.equals(n.getLocalName())) {
-                    compositeLibraryName = getNodeText(n);
+                switch (n.getLocalName()) {
+                    case TAGLIB_NAMESPACE:
+                        taglibNamespace = getNodeText(n);
+                        break;
+                    case COMPOSITE_LIBRARY_NAME:
+                        compositeLibraryName = getNodeText(n);
+                        break;
                 }
             }
 
@@ -348,20 +351,28 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                     Node n = children.item(j);
 
                     // process the nodes to see what children we have
-                    if (TAG_NAME.equals(n.getLocalName())) {
-                        tagName = getNodeText(n);
-                    } else if (COMPONENT.equals(n.getLocalName())) {
-                        component = n.getChildNodes();
-                    } else if (CONVERTER.equals(n.getLocalName())) {
-                        converter = n.getChildNodes();
-                    } else if (VALIDATOR.equals(n.getLocalName())) {
-                        validator = n.getChildNodes();
-                    } else if (BEHAVIOR.equals(n.getLocalName())) {
-                        behavior = n.getChildNodes();
-                    } else if (SOURCE.equals(n.getLocalName())) {
-                        source = n;
-                    } else if (HANDLER_CLASS.equals(n.getLocalName())) {
-                        handlerClass = n;
+                    switch (n.getLocalName()) {
+                        case TAG_NAME:
+                            tagName = getNodeText(n);
+                            break;
+                        case COMPONENT:
+                            component = n.getChildNodes();
+                            break;
+                        case CONVERTER:
+                            converter = n.getChildNodes();
+                            break;
+                        case VALIDATOR:
+                            validator = n.getChildNodes();
+                            break;
+                        case BEHAVIOR:
+                            behavior = n.getChildNodes();
+                            break;
+                        case SOURCE:
+                            source = n;
+                            break;
+                        case HANDLER_CLASS:
+                            handlerClass = n;
+                            break;
                     }
                 }
                 if (component != null) {
@@ -390,10 +401,13 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             String handlerClass = null;
             for (int i = 0, ilen = behavior.getLength(); i < ilen; i++) {
                 Node n = behavior.item(i);
-                if (BEHAVIOR_ID.equals(n.getLocalName())) {
-                    behaviorId = getNodeText(n);
-                } else if (HANDLER_CLASS.equals(n.getLocalName())) {
-                    handlerClass = getNodeText(n);
+                switch (n.getLocalName()) {
+                    case BEHAVIOR_ID:
+                        behaviorId = getNodeText(n);
+                        break;
+                    case HANDLER_CLASS:
+                        handlerClass = getNodeText(n);
+                        break;
                 }
 
             }
@@ -481,10 +495,13 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             String handlerClass = null;
             for (int i = 0, ilen = validator.getLength(); i < ilen; i++) {
                 Node n = validator.item(i);
-                if (VALIDATOR_ID.equals(n.getLocalName())) {
-                    validatorId = getNodeText(n);
-                } else if (HANDLER_CLASS.equals(n.getLocalName())) {
-                    handlerClass = getNodeText(n);
+                switch (n.getLocalName()) {
+                    case VALIDATOR_ID:
+                        validatorId = getNodeText(n);
+                        break;
+                    case HANDLER_CLASS:
+                        handlerClass = getNodeText(n);
+                        break;
                 }
 
             }
@@ -526,10 +543,13 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             for (int i = 0, ilen = converter.getLength(); i < ilen; i++) {
                 Node n = converter.item(i);
 
-                if (CONVERTER_ID.equals(n.getLocalName())) {
-                    converterId = getNodeText(n);
-                } else if (HANDLER_CLASS.equals(n.getLocalName())) {
-                    handlerClass = getNodeText(n);
+                switch (n.getLocalName()) {
+                    case CONVERTER_ID:
+                        converterId = getNodeText(n);
+                        break;
+                    case HANDLER_CLASS:
+                        handlerClass = getNodeText(n);
+                        break;
                 }
 
             }
@@ -572,14 +592,19 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             Node resourceId = null;
             for (int i = 0, ilen = component.getLength(); i < ilen; i++) {
                 Node n = component.item(i);
-                if (COMPONENT_TYPE.equals(n.getLocalName())) {
-                    componentType = getNodeText(n);
-                } else if (RENDERER_TYPE.equals(n.getLocalName())) {
-                    rendererType = getNodeText(n);
-                } else if (HANDLER_CLASS.equals(n.getLocalName())) {
-                    handlerClass = getNodeText(n);
-                }  else if (RESOURCE_ID.equals(n.getLocalName())) {
-                    resourceId = n;
+                switch (n.getLocalName()) {
+                    case COMPONENT_TYPE:
+                        componentType = getNodeText(n);
+                        break;
+                    case RENDERER_TYPE:
+                        rendererType = getNodeText(n);
+                        break;
+                    case HANDLER_CLASS:
+                        handlerClass = getNodeText(n);
+                        break;
+                    case RESOURCE_ID:
+                        resourceId = n;
+                        break;
                 }
             }
             if (handlerClass != null) {
@@ -626,12 +651,16 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 for (int j = 0, jlen = children.getLength(); j < jlen; j++) {
                     Node n = children.item(j);
 
-                    if (FUNCTION_NAME.equals(n.getLocalName())) {
-                        functionName = getNodeText(n);
-                    } else if (FUNCTION_CLASS.equals(n.getLocalName())) {
-                        functionClass = getNodeText(n);
-                    } else if (FUNCTION_SIGNATURE.equals(n.getLocalName())) {
-                        functionSignature = getNodeText(n);
+                    switch (n.getLocalName()) {
+                        case FUNCTION_NAME:
+                            functionName = getNodeText(n);
+                            break;
+                        case FUNCTION_CLASS:
+                            functionClass = getNodeText(n);
+                            break;
+                        case FUNCTION_SIGNATURE:
+                            functionSignature = getNodeText(n);
+                            break;
                     }
                 }
                 try {

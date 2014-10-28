@@ -287,45 +287,60 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                              c < csize;
                              c++) {
                             Node n = children.item(c);
-                            if (MESSAGE_BUNDLE.equals(n.getLocalName())) {
-                                setMessageBundle(app, n);
-                            } else if (DEFAULT_RENDERKIT_ID.equals(n.getLocalName())) {
-                                setDefaultRenderKitId(app, n);
-                            } else if (ACTION_LISTENER.equals(n.getLocalName())) {
-                                addActionListener(sc, app, n);
-                            } else if (NAVIGATION_HANDLER.equals(n.getLocalName())) {
-                                setNavigationHandler(sc, app, n);
-                            } else if (VIEW_HANDLER.equals(n.getLocalName())) {
-                                String viewHandler = getNodeText(n);
-                                if (viewHandler != null) {
-                                    viewHandlers.put(viewHandler, n);
-                                }
-                            } else if (STATE_MANAGER.equals(n.getLocalName())) {
-                                setStateManager(sc, app, n);
-                            } else if (EL_RESOLVER.equals(n.getLocalName())) {
-                                addELResolver(sc, associate, n);
-                            } else if (PROPERTY_RESOLVER.equals(n.getLocalName())) {
-                                addPropertyResolver(sc, associate, n);
-                            } else if (VARIABLE_RESOLVER.equals(n.getLocalName())) {
-                                addVariableResolver(sc, associate, n);
-                            } else if (DEFAULT_LOCALE.equals(n.getLocalName())) {
-                                setDefaultLocale(app, n);
-                            } else if (SUPPORTED_LOCALE.equals(n.getLocalName())) {
-                                addSupportedLocale(app, n);
-                            } else if (RESOURCE_BUNDLE.equals(n.getLocalName())) {
-                                addResouceBundle(associate, n);
-                            } else if (RESOURCE_HANDLER.equals(n.getLocalName())) {
-                                setResourceHandler(sc, app, n);
-                            } else if (SYSTEM_EVENT_LISTENER.equals(n.getLocalName())) {
-                                addSystemEventListener(sc, app, n);
-                            } else if (DEFAULT_VALIDATORS.equals(n.getLocalName())) {
-                                if (defaultValidatorIds == null) {
-                                    defaultValidatorIds = new LinkedHashSet<>();
-                                } else {
-                                    defaultValidatorIds.clear();
-                                }
-                            } else if (VALIDATOR_ID.equals(n.getLocalName())) {
-                                defaultValidatorIds.add(getNodeText(n));
+                            switch (n.getLocalName()) {
+                                case MESSAGE_BUNDLE:
+                                    setMessageBundle(app, n);
+                                    break;
+                                case DEFAULT_RENDERKIT_ID:
+                                    setDefaultRenderKitId(app, n);
+                                    break;
+                                case ACTION_LISTENER:
+                                    addActionListener(sc, app, n);
+                                    break;
+                                case NAVIGATION_HANDLER:
+                                    setNavigationHandler(sc, app, n);
+                                    break;
+                                case VIEW_HANDLER:
+                                    String viewHandler = getNodeText(n);
+                                    if (viewHandler != null) {
+                                        viewHandlers.put(viewHandler, n);
+                                    }   break;
+                                case STATE_MANAGER:
+                                    setStateManager(sc, app, n);
+                                    break;
+                                case EL_RESOLVER:
+                                    addELResolver(sc, associate, n);
+                                    break;
+                                case PROPERTY_RESOLVER:
+                                    addPropertyResolver(sc, associate, n);
+                                    break;
+                                case VARIABLE_RESOLVER:
+                                    addVariableResolver(sc, associate, n);
+                                    break;
+                                case DEFAULT_LOCALE:
+                                    setDefaultLocale(app, n);
+                                    break;
+                                case SUPPORTED_LOCALE:
+                                    addSupportedLocale(app, n);
+                                    break;
+                                case RESOURCE_BUNDLE:
+                                    addResouceBundle(associate, n);
+                                    break;
+                                case RESOURCE_HANDLER:
+                                    setResourceHandler(sc, app, n);
+                                    break;
+                                case SYSTEM_EVENT_LISTENER:
+                                    addSystemEventListener(sc, app, n);
+                                    break;
+                                case DEFAULT_VALIDATORS:
+                                    if (defaultValidatorIds == null) {
+                                        defaultValidatorIds = new LinkedHashSet<>();
+                                    } else {
+                                        defaultValidatorIds.clear();
+                                    }   break;
+                                case VALIDATOR_ID:
+                                    defaultValidatorIds.add(getNodeText(n));
+                                    break;
                             }
                         }
                     }
@@ -747,20 +762,23 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 for (int i = 0, size = children.getLength(); i < size; i++) {
                     Node n = children.item(i);
                     if (n.getNodeType() == Node.ELEMENT_NODE) {
-                        if (BASE_NAME.equals(n.getLocalName())) {
-                            baseName = getNodeText(n);
-                        } else if (VAR.equals(n.getLocalName())) {
-                            var = getNodeText(n);
-                        } else if (RES_DESCRIPTIONS.equals(n.getLocalName())) {
-                            if (descriptions == null) {
-                                descriptions = new ArrayList<>(2);
-                            }
-                            descriptions.add(n);
-                        } else if (RES_DISPLAY_NAMES.equals(n.getLocalName())) {
-                            if (displayNames == null) {
-                                displayNames = new ArrayList<>(2);
-                            }
-                            displayNames.add(n);
+                        switch (n.getLocalName()) {
+                            case BASE_NAME:
+                                baseName = getNodeText(n);
+                                break;
+                            case VAR:
+                                var = getNodeText(n);
+                                break;
+                            case RES_DESCRIPTIONS:
+                                if (descriptions == null) {
+                                    descriptions = new ArrayList<>(2);
+                                }   descriptions.add(n);
+                                break;
+                            case RES_DISPLAY_NAMES:
+                                if (displayNames == null) {
+                                    displayNames = new ArrayList<>(2);
+                                }   displayNames.add(n);
+                                break;
                         }
                     }
                 }
@@ -822,12 +840,16 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         for (int j = 0, len = children.getLength(); j < len; j++) {
             Node n = children.item(j);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
-                if (SYSTEM_EVENT_LISTENER_CLASS.equals(n.getLocalName())) {
-                    listenerClass = getNodeText(n);
-                } else if (SYSTEM_EVENT_CLASS.equals(n.getLocalName())) {
-                    eventClass = getNodeText(n);
-                } else if (SOURCE_CLASS.equals(n.getLocalName())) {
-                    sourceClass = getNodeText(n);
+                switch (n.getLocalName()) {
+                    case SYSTEM_EVENT_LISTENER_CLASS:
+                        listenerClass = getNodeText(n);
+                        break;
+                    case SYSTEM_EVENT_CLASS:
+                        eventClass = getNodeText(n);
+                        break;
+                    case SOURCE_CLASS:
+                        sourceClass = getNodeText(n);
+                        break;
                 }
             }
         }

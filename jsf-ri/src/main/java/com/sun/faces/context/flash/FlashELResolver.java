@@ -214,35 +214,33 @@ public class FlashELResolver extends ELResolver {
         ExternalContext extCtx = facesContext.getExternalContext();
         
         // and the property argument is "keep"...
-        if (property.toString().equals(FLASH_KEEP_VARIABLE_NAME))
-        {
-            elContext.setPropertyResolved(true);
-          
-            // then this is a request to promote the value
-            // "property", which is assumed to have been previously
-            // stored in request scope via the "flash.now"
-            // expression, to flash scope.
-            result = base;
-            // Set a flag so the flash itself can look in the request
-            // and promote the value to the next request
-            FlashFactory ff = (FlashFactory) 
-                    FactoryFinder.getFactory(FactoryFinder.FLASH_FACTORY);
-            ff.getFlash(true);
-            ELFlash.setKeepFlag(facesContext);
-        }
+        switch (property.toString()) {
         // Otherwise, if base is the flash, and property is "now"...
-        else if (property.toString().equals(FLASH_NOW_VARIABLE_NAME))
-        {
-            // PENDING(edburns): use FacesContext.getAttributes() instead of 
-            // request scope.
-            Map<String, Object> requestMap = extCtx.getRequestMap();
-            requestMap.put(ELFlash.FLASH_NOW_REQUEST_KEY, property);
-            elContext.setPropertyResolved(true);
-            result = requestMap;
-        }
-        else
-        {
-            result = null;
+            case FLASH_KEEP_VARIABLE_NAME:
+                elContext.setPropertyResolved(true);
+                // then this is a request to promote the value
+                // "property", which is assumed to have been previously
+                // stored in request scope via the "flash.now"
+                // expression, to flash scope.
+                result = base;
+                // Set a flag so the flash itself can look in the request
+                // and promote the value to the next request
+                FlashFactory ff = (FlashFactory)
+                        FactoryFinder.getFactory(FactoryFinder.FLASH_FACTORY);
+                ff.getFlash(true);
+                ELFlash.setKeepFlag(facesContext);
+                break;
+            case FLASH_NOW_VARIABLE_NAME:
+                // PENDING(edburns): use FacesContext.getAttributes() instead of
+                // request scope.
+                Map<String, Object> requestMap = extCtx.getRequestMap();
+                requestMap.put(ELFlash.FLASH_NOW_REQUEST_KEY, property);
+                elContext.setPropertyResolved(true);
+                result = requestMap;
+                break;
+            default:
+                result = null;
+                break;
         }
     }
 

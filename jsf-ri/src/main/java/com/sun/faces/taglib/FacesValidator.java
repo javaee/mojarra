@@ -345,19 +345,23 @@ public abstract class FacesValidator extends TagLibraryValidator {
                 null != (qName = attrs.getQName(i))) {
                 if (qName.startsWith("xmlns:") && 7 <= qName.length()) {
                     prefix = qName.substring(6);
-                    if (value.equals(JSF_CORE_URI)) {
-                        JSF_CORE_PRE = prefix;
-                        JSF_SUBVIEW_QN = JSF_CORE_PRE + JSF_SUBVIEW_QN;
-                    } else if (value.equals(JSF_HTML_URI)) {
-                        JSF_HTML_PRE = prefix;
-                        JSF_FORM_QN = JSF_HTML_PRE + JSF_FORM_QN;
-                    } else if (value.equals(JSTL_OLD_CORE_URI) ||
-                        value.equals(JSTL_NEW_CORE_URI)) {
-                        JSTL_CORE_PRE = prefix;
-                        JSTL_IF_QN = JSTL_CORE_PRE + JSTL_IF_QN;
-                        JSTL_CHOOSE_QN = JSTL_CORE_PRE + JSTL_CHOOSE_QN;
-                        JSTL_FOREACH_QN = JSTL_CORE_PRE + JSTL_FOREACH_QN;
-                        JSTL_FORTOKENS_QN = JSTL_CORE_PRE + JSTL_FORTOKENS_QN;
+                    switch (value) {
+                        case JSF_CORE_URI:
+                            JSF_CORE_PRE = prefix;
+                            JSF_SUBVIEW_QN = JSF_CORE_PRE + JSF_SUBVIEW_QN;
+                            break;
+                        case JSF_HTML_URI:
+                            JSF_HTML_PRE = prefix;
+                            JSF_FORM_QN = JSF_HTML_PRE + JSF_FORM_QN;
+                            break;
+                        case JSTL_OLD_CORE_URI:
+                        case JSTL_NEW_CORE_URI:
+                            JSTL_CORE_PRE = prefix;
+                            JSTL_IF_QN = JSTL_CORE_PRE + JSTL_IF_QN;
+                            JSTL_CHOOSE_QN = JSTL_CORE_PRE + JSTL_CHOOSE_QN;
+                            JSTL_FOREACH_QN = JSTL_CORE_PRE + JSTL_FOREACH_QN;
+                            JSTL_FORTOKENS_QN = JSTL_CORE_PRE + JSTL_FORTOKENS_QN;
+                            break;
                     }
                 }
             }

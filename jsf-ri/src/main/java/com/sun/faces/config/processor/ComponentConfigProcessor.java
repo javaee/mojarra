@@ -136,10 +136,13 @@ public class ComponentConfigProcessor extends AbstractConfigProcessor {
             String componentClass = null;
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
-                if (COMPONENT_TYPE.equals(n.getLocalName())) {
-                    componentType = getNodeText(n);
-                } else if (COMPONENT_CLASS.equals(n.getLocalName())) {
-                    componentClass = getNodeText(n);
+                switch (n.getLocalName()) {
+                    case COMPONENT_TYPE:
+                        componentType = getNodeText(n);
+                        break;
+                    case COMPONENT_CLASS:
+                        componentClass = getNodeText(n);
+                        break;
                 }
             }
 
