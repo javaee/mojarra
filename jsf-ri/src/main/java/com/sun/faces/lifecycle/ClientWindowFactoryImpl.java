@@ -41,7 +41,6 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.config.WebConfiguration;
-import java.util.Map;
 import javax.faces.application.Application;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
