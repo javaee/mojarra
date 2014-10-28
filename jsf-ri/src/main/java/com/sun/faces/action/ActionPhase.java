@@ -56,8 +56,6 @@ import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 public class ActionPhase extends Phase {
 
