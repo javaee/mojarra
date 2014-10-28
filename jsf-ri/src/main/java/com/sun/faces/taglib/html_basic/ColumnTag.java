@@ -49,7 +49,6 @@ import javax.el.ValueExpression;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 
 public class ColumnTag extends UIComponentELTag {
