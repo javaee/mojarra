@@ -320,7 +320,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @since 2.2
      */
 
-    public final Map<String, Object> getPassThroughAttributes(){
+    public Map<String, Object> getPassThroughAttributes(){
         
         return getPassThroughAttributes(true);
     }
@@ -614,7 +614,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @since 2.1
      */
     
-    public final TransientStateHelper getTransientStateHelper()
+    public TransientStateHelper getTransientStateHelper()
     {
         return getTransientStateHelper(true);
     }
@@ -1932,7 +1932,7 @@ private void doFind(FacesContext context, String clientId) {
      *
      * @since 2.0
      */
-    public final void pushComponentToEL(FacesContext context, UIComponent component) {
+    public void pushComponentToEL(FacesContext context, UIComponent component) {
 
         if (context == null) {
             throw new NullPointerException();
@@ -1996,7 +1996,7 @@ private void doFind(FacesContext context, String clientId) {
      *
      * @since 2.0
      */
-    public final void popComponentFromEL(FacesContext context)
+    public void popComponentFromEL(FacesContext context)
     {
       if (context == null)
       {
