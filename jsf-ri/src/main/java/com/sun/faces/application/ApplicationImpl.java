@@ -126,8 +126,6 @@ import javax.faces.application.Resource;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.view.ViewDeclarationLanguage;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 
 /**
