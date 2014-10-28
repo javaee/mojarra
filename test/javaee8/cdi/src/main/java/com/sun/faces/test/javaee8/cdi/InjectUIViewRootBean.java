@@ -37,17 +37,21 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.javaee8.cdi;
 
-package javax.faces.application;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.component.UIViewRoot;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import javax.inject.Qualifier;
+@Named(value = "injectUIViewRootBean")
+@RequestScoped
+public class InjectUIViewRootBean {
 
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
-@Qualifier
-@Retention(value = RetentionPolicy.RUNTIME)
-public @interface ApplicationMap {
+    @Inject
+    UIViewRoot viewRoot;
+
+    public String getValue() {
+        return viewRoot.toString();
+    }
 }

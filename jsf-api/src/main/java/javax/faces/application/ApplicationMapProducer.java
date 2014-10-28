@@ -82,10 +82,15 @@ public class ApplicationMapProducer implements Bean<Map<String, Object>> {
     private Boolean active;
 
     /**
-     * Inner class defining an annotation literal for @Default.
+     * Inner class defining an annotation literal for @ApplicationMap.
      */
-    public class DefaultAnnotationLiteral
+    public class ApplicationMapAnnotationLiteral
             extends AnnotationLiteral<ApplicationMap> {
+
+        @Override
+        public Class<? extends Annotation> annotationType() {
+            return ApplicationMap.class;
+        }
 
         private static final long serialVersionUID = 1L;
     }
@@ -169,7 +174,7 @@ public class ApplicationMapProducer implements Bean<Map<String, Object>> {
      */
     @Override
     public Set<Annotation> getQualifiers() {
-        return singleton((Annotation) new DefaultAnnotationLiteral());
+        return singleton((Annotation) new ApplicationMapAnnotationLiteral());
     }
 
     /**
