@@ -201,7 +201,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
                     throw new FacesException("Error Instantiating: "
                             + this.handlerType.getName(), t);
                 }
-            } catch (Exception e) {
+            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException e) {
                 throw new FacesException("Error Instantiating: "
                         + this.handlerType.getName(), e);
             }
