@@ -596,19 +596,21 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             Node resourceId = null;
             for (int i = 0, ilen = component.getLength(); i < ilen; i++) {
                 Node n = component.item(i);
-                switch (n.getLocalName()) {
-                    case COMPONENT_TYPE:
-                        componentType = getNodeText(n);
-                        break;
-                    case RENDERER_TYPE:
-                        rendererType = getNodeText(n);
-                        break;
-                    case HANDLER_CLASS:
-                        handlerClass = getNodeText(n);
-                        break;
-                    case RESOURCE_ID:
-                        resourceId = n;
-                        break;
+                if (n.getLocalName() != null) {
+                    switch (n.getLocalName()) {
+                        case COMPONENT_TYPE:
+                            componentType = getNodeText(n);
+                            break;
+                        case RENDERER_TYPE:
+                            rendererType = getNodeText(n);
+                            break;
+                        case HANDLER_CLASS:
+                            handlerClass = getNodeText(n);
+                            break;
+                        case RESOURCE_ID:
+                            resourceId = n;
+                            break;
+                    }
                 }
             }
             if (handlerClass != null) {
