@@ -77,7 +77,6 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.ProjectStage;
-import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.TagAttributeException;
 
 /**
