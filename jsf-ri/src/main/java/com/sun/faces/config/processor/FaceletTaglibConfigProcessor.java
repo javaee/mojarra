@@ -300,13 +300,15 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             String compositeLibraryName = null;
             for (int i = 0, ilen = children.getLength(); i < ilen; i++) {
                 Node n = children.item(i);
-                switch (n.getLocalName()) {
-                    case TAGLIB_NAMESPACE:
-                        taglibNamespace = getNodeText(n);
-                        break;
-                    case COMPOSITE_LIBRARY_NAME:
-                        compositeLibraryName = getNodeText(n);
-                        break;
+                if (n.getLocalName() != null) {
+                    switch (n.getLocalName()) {
+                        case TAGLIB_NAMESPACE:
+                            taglibNamespace = getNodeText(n);
+                            break;
+                        case COMPOSITE_LIBRARY_NAME:
+                            compositeLibraryName = getNodeText(n);
+                            break;
+                    }
                 }
             }
 
