@@ -351,30 +351,31 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 Node handlerClass = null;
                 for (int j = 0, jlen = children.getLength(); j < jlen; j++) {
                     Node n = children.item(j);
-
                     // process the nodes to see what children we have
-                    switch (n.getLocalName()) {
-                        case TAG_NAME:
-                            tagName = getNodeText(n);
-                            break;
-                        case COMPONENT:
-                            component = n.getChildNodes();
-                            break;
-                        case CONVERTER:
-                            converter = n.getChildNodes();
-                            break;
-                        case VALIDATOR:
-                            validator = n.getChildNodes();
-                            break;
-                        case BEHAVIOR:
-                            behavior = n.getChildNodes();
-                            break;
-                        case SOURCE:
-                            source = n;
-                            break;
-                        case HANDLER_CLASS:
-                            handlerClass = n;
-                            break;
+                    if (n.getLocalName() != null) {
+                        switch (n.getLocalName()) {
+                            case TAG_NAME:
+                                tagName = getNodeText(n);
+                                break;
+                            case COMPONENT:
+                                component = n.getChildNodes();
+                                break;
+                            case CONVERTER:
+                                converter = n.getChildNodes();
+                                break;
+                            case VALIDATOR:
+                                validator = n.getChildNodes();
+                                break;
+                            case BEHAVIOR:
+                                behavior = n.getChildNodes();
+                                break;
+                            case SOURCE:
+                                source = n;
+                                break;
+                            case HANDLER_CLASS:
+                                handlerClass = n;
+                                break;
+                        }
                     }
                 }
                 if (component != null) {
