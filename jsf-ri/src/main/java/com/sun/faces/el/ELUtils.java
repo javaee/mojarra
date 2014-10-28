@@ -75,8 +75,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
