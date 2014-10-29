@@ -547,16 +547,16 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             String handlerClass = null;
             for (int i = 0, ilen = converter.getLength(); i < ilen; i++) {
                 Node n = converter.item(i);
-
-                switch (n.getLocalName()) {
-                    case CONVERTER_ID:
-                        converterId = getNodeText(n);
-                        break;
-                    case HANDLER_CLASS:
-                        handlerClass = getNodeText(n);
-                        break;
+                if (n.getLocalName() != null) {
+                    switch (n.getLocalName()) {
+                        case CONVERTER_ID:
+                            converterId = getNodeText(n);
+                            break;
+                        case HANDLER_CLASS:
+                            handlerClass = getNodeText(n);
+                            break;
+                    }
                 }
-
             }
             if (handlerClass != null) {
                 try {
@@ -657,17 +657,18 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 String functionSignature = null;
                 for (int j = 0, jlen = children.getLength(); j < jlen; j++) {
                     Node n = children.item(j);
-
-                    switch (n.getLocalName()) {
-                        case FUNCTION_NAME:
-                            functionName = getNodeText(n);
-                            break;
-                        case FUNCTION_CLASS:
-                            functionClass = getNodeText(n);
-                            break;
-                        case FUNCTION_SIGNATURE:
-                            functionSignature = getNodeText(n);
-                            break;
+                    if (n.getLocalName() != null) {
+                        switch (n.getLocalName()) {
+                            case FUNCTION_NAME:
+                                functionName = getNodeText(n);
+                                break;
+                            case FUNCTION_CLASS:
+                                functionClass = getNodeText(n);
+                                break;
+                            case FUNCTION_SIGNATURE:
+                                functionSignature = getNodeText(n);
+                                break;
+                        }
                     }
                 }
                 try {
