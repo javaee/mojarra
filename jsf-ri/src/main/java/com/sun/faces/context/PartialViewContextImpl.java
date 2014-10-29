@@ -628,7 +628,7 @@ import javax.faces.render.RenderKitFactory;
             ExternalContext extCtx = ctx.ctx.getExternalContext();
             extCtx.setResponseContentType("text/xml");
             extCtx.setResponseCharacterEncoding(extCtx.getRequestCharacterEncoding());
-
+            extCtx.setResponseBufferSize(ctx.ctx.getExternalContext().getResponseBufferSize());
         }
 
 
