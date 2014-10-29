@@ -447,10 +447,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                     writer.writePreamble(xmlDecl);
                 }
 
-                String DOCTYPE = Util.getDOCTYPEFromFacesContextAttributes(ctx);
-                if (null != DOCTYPE) {
+                String docType = Util.getDOCTYPEFromFacesContextAttributes(ctx);
+                if (null != docType) {
                     // Do not escape.
-                    writer.writeDoctype(DOCTYPE);
+                    writer.writeDoctype(docType);
                 }
                 writer.startDocument();
                 viewToRender.encodeAll(ctx);
