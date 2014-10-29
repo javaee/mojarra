@@ -136,6 +136,10 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             // If we come across a group of options, render them as a nested
             // table.
             if (curItem instanceof SelectItemGroup) {
+                if (idx > 0) {
+                    idx--;
+                }
+                
                 // write out the label for the group.
                 if (curItem.getLabel() != null) {
                     if (alignVertical) {
@@ -167,7 +171,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                  currentSelections,
                                  submittedValues,
                                  alignVertical,
-                                 i,
+                                 idx++,
                                  optionInfo);
                 }
                 renderEndText(component, alignVertical, context);
