@@ -404,15 +404,16 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             String handlerClass = null;
             for (int i = 0, ilen = behavior.getLength(); i < ilen; i++) {
                 Node n = behavior.item(i);
-                switch (n.getLocalName()) {
-                    case BEHAVIOR_ID:
-                        behaviorId = getNodeText(n);
-                        break;
-                    case HANDLER_CLASS:
-                        handlerClass = getNodeText(n);
-                        break;
+                if (n.getLocalName() != null) {
+                    switch (n.getLocalName()) {
+                        case BEHAVIOR_ID:
+                            behaviorId = getNodeText(n);
+                            break;
+                        case HANDLER_CLASS:
+                            handlerClass = getNodeText(n);
+                            break;
+                    }
                 }
-
             }
             if (handlerClass != null) {
                 try {
