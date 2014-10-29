@@ -441,10 +441,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 }
                 
                 // render the view to the response
-                String XMLDECL = Util.getXMLDECLFromFacesContextAttributes(ctx);
-                if (null != XMLDECL) {
+                String xmlDecl = Util.getXMLDECLFromFacesContextAttributes(ctx);
+                if (null != xmlDecl) {
                     // Do not escape.
-                    writer.writePreamble(XMLDECL);
+                    writer.writePreamble(xmlDecl);
                 }
 
                 String DOCTYPE = Util.getDOCTYPEFromFacesContextAttributes(ctx);
