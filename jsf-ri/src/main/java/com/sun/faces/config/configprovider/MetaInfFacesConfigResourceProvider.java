@@ -84,7 +84,9 @@ public class MetaInfFacesConfigResourceProvider implements
 
     private static final String WEB_INF_CLASSES =
           "/WEB-INF/classes/META-INF";
-
+    
+    private static final String FACES_CONFIG_EXTENSION = 
+            ".faces-config.xml";
 
     // ------------------------------ Methods From ConfigurationResourceProvider
 
@@ -161,7 +163,7 @@ public class MetaInfFacesConfigResourceProvider implements
                 urlString = urlString.replaceAll(" ", "%20");                
                 urls.add(new URI(urlString));
             }
-            URL [] urlArray = Classpath.search("META-INF/", ".faces-config.xml");
+            URL [] urlArray = Classpath.search("META-INF/", FACES_CONFIG_EXTENSION);
             for (URL cur : urlArray) {
                 String urlString = cur.toExternalForm();
                 urlString = urlString.replaceAll(" ", "%20");
@@ -172,7 +174,7 @@ public class MetaInfFacesConfigResourceProvider implements
             if (paths != null) {
                 for (Object path : paths) {
                     String p = path.toString();
-                    if (p.endsWith(".taglib.xml")) {
+                    if (p.endsWith(FACES_CONFIG_EXTENSION)) {
                         String urlString = context.getResource(p).toExternalForm();
                         urlString = urlString.replaceAll(" ", "%20");
                         urls.add(new URI(urlString));
