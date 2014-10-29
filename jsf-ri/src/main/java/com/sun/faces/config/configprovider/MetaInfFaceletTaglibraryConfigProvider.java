@@ -114,10 +114,8 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
                 for (Object path : paths) {
                     String p = path.toString();
                     if (p.endsWith(".taglib.xml")) {
-                        String urlString = context.getResource(p).toExternalForm();
-                        urlString = urlString.replaceAll(" ", "%20");
                         try {
-                            urlsList.add(new URI(urlString));
+                            urlsList.add(new URI(context.getResource(p).toExternalForm()));
                         } catch (URISyntaxException ex) {
                             throw new FacesException(ex);
                         }
