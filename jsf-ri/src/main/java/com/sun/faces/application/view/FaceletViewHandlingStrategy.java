@@ -992,9 +992,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             
             if (f instanceof XMLFrontMatterSaver) {
                 XMLFrontMatterSaver frontMatterSaver = (XMLFrontMatterSaver) f;
-                String DOCTYPE = frontMatterSaver.getSavedDoctype();
-                if (null != DOCTYPE) {
-                    Util.saveDOCTYPEToFacesContextAttributes(DOCTYPE);
+                String docType = frontMatterSaver.getSavedDoctype();
+                if (null != docType) {
+                    Util.saveDOCTYPEToFacesContextAttributes(docType);
                 }
                 String XMLDECL = frontMatterSaver.getSavedXMLDecl();
                 if (null != XMLDECL) {
