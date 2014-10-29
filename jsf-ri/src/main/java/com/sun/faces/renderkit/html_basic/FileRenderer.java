@@ -91,10 +91,7 @@ public class FileRenderer extends TextRenderer {
             Collection<Part> parts = request.getParts();
             for (Part cur : parts) {
                 if (clientId.equals(cur.getName())) {
-                    // The cause of 3404 is here: the component should not be 
-                    // transient, rather, the value should not saved as part of
-                    // the state
-                    // component.setTransient(true);
+                    component.setTransient(true);
                     setSubmittedValue(component, cur);
                 }
             }

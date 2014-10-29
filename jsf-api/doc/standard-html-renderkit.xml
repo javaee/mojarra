@@ -8311,7 +8311,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       of type <code>file</code>.</p>]]></description>
     <display-name>Input File</display-name>
     <component-type>javax.faces.HtmlInputFile</component-type>
-    <component-class>com.sun.faces.component.html.HtmlInputFile</component-class>
+    <component-class>javax.faces.component.html.HtmlInputFile</component-class>
 
     <property>
       <description><![CDATA[

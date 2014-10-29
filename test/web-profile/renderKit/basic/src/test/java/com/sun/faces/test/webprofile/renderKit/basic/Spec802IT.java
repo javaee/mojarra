@@ -53,7 +53,6 @@ import org.junit.After;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.Test;
 
@@ -117,17 +116,6 @@ public class Spec802IT {
 
         pageText = page.getElementById("textOutput").getTextContent();
         assertTrue(!pageText.contains(textValue));
-    }
-    
-    @Test
-    public void testUploadMultipleTimes() throws Exception {
-        // This is a manual test.  Manfred agreed to look at JAVASERVERFACES-3129
-        // and fix these to be automated.  The agreed policy is to put the manual
-        // test in the comments.
-        
-        // This test is the same as testFileUpload but it uploads inputFileSuccess.txt
-        // three times in succession, asserting it correctly uploads
-        // all three times.
     }
 
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
