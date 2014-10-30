@@ -68,8 +68,8 @@ public class Issue3472IT {
         assertNotNull(page.getHtmlElementById("form:selectManyCheckbox:0"));
         assertNotNull(page.getHtmlElementById("form:selectManyCheckbox:1"));
         assertNotNull(page.getHtmlElementById("form:selectManyCheckbox:2"));
-        assertNotNull(page.getHtmlElementById("form:selectManyCheckbox:3"));
         assertNotNull(page.getHtmlElementById("form:selectManyCheckbox:4"));
         assertNotNull(page.getHtmlElementById("form:selectManyCheckbox:5"));
+        assertNotNull(page.getHtmlElementById("form:selectManyCheckbox:6"));
     }
 }
