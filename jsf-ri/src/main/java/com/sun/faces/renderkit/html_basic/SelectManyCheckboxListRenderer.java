@@ -135,11 +135,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             idx++;
             // If we come across a group of options, render them as a nested
             // table.
-            if (curItem instanceof SelectItemGroup) {
-                if (idx > 0) {
-                    idx--;
-                }
-                
+            if (curItem instanceof SelectItemGroup) {                
                 // write out the label for the group.
                 if (curItem.getLabel() != null) {
                     if (alignVertical) {
