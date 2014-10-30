@@ -167,7 +167,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                  currentSelections,
                                  submittedValues,
                                  alignVertical,
-                                 i,
+                                 idx++,
                                  optionInfo);
                 }
                 renderEndText(component, alignVertical, context);
