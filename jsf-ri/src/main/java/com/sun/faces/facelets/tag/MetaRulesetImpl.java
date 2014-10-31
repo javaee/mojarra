@@ -76,8 +76,8 @@ import java.lang.ref.WeakReference;
 public class MetaRulesetImpl extends MetaRuleset {
 
     private final static Logger LOGGER = FacesLogger.FACELETS_META.getLogger();
-    private final static WeakHashMap<Class, WeakReference<MetadataTarget>> metadata =
-          new WeakHashMap<Class, WeakReference<MetadataTarget>>();
+    private final static Map<Class, WeakReference<MetadataTarget>> metadata =
+         Collections.synchronizedMap(new WeakHashMap<Class, WeakReference<MetadataTarget>>());
 
     private final Tag tag;
     private final Class type;
