@@ -37,42 +37,16 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces;
+package javax.faces.view;
 
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.Extension;
-import javax.faces.application.ApplicationProducer;
-import javax.faces.application.ApplicationMapProducer;
-import javax.faces.context.ExternalContextProducer;
-import javax.faces.context.FacesContextProducer;
-import javax.faces.context.SessionProducer;
-import javax.faces.view.ViewMapProducer;
-import javax.faces.view.ViewProducer;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
 
-/**
- * The FacesContext extension.
- *
- * <p>
- * Note because of class loading we need to use an extension to get the
- * FacesContext injected and we cannot use the example as given in the Weld
- * documentation.
- * </p>
- */
-public class FacesCDIExtension implements Extension {
-
-    /**
-     * After bean discovery.
-     *
-     * @param afterBeanDiscovery the after bean discovery.
-     */
-    public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery) {
-        afterBeanDiscovery.addBean(new ApplicationProducer());
-        afterBeanDiscovery.addBean(new ApplicationMapProducer());
-        afterBeanDiscovery.addBean(new ExternalContextProducer());
-        afterBeanDiscovery.addBean(new FacesContextProducer());
-        afterBeanDiscovery.addBean(new SessionProducer());
-        afterBeanDiscovery.addBean(new ViewMapProducer());
-        afterBeanDiscovery.addBean(new ViewProducer());
-    }
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
+@Qualifier
+@Retention(value = RetentionPolicy.RUNTIME)
+public @interface ViewMap {
 }
