@@ -225,7 +225,10 @@ public class ResourceHandlerImpl extends ResourceHandler {
         }
         FacesContext context = FacesContext.getCurrentInstance();
         // PENDING(fcaputo) do we need to iterate over the contracts here? I don't think so.
-        LibraryInfo info = manager.findLibrary(libraryName, null, null, context);
+        LibraryInfo info = manager.findLibrary(libraryName, null, null, true, context);
+        if(info == null) {
+            info = manager.findLibrary(libraryName, null, null, false, context);
+        }
         if (null == info) {
             info = manager.findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, null, null, context, true);
 
@@ -509,8 +512,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
      * provided will be logged as well.
      *
      * @param ctx the {@link FacesContext} for the current request
-     * @param resourceName the resource name
-     * @param libraryName the resource library
+     * @param resourceId the resourceId
      * @param t the exception caught when attempting to find the resource
      */
     private void logMissingResource(FacesContext ctx,
