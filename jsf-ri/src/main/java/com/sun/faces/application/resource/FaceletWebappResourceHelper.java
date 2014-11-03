@@ -100,7 +100,7 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
             // By definition, FaceletWebappResourceHelper only deals with files
             // in the web app root, not in the resource directories
             if (null != url && -1 == url.getPath().indexOf("/META-INF/")) {
-                result = new FaceletLibraryInfo(libraryName, null, contract, this, url);
+                result = new FaceletLibraryInfo(libraryName, null, localePrefix, contract, this, url);
             }
         } catch (MalformedURLException ex) {
             throw new FacesException(ex);

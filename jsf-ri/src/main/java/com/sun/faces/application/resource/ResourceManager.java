@@ -260,7 +260,7 @@ public class ResourceManager {
      * @param resourceName the name of the resource
      * @param localePrefix the locale prefix for this resource (if any)
      * @param compressable if this resource can be compressed
-     * @param isViewResource if this resource is requested via ResourceHandler#createViewResource
+     * @param isViewResource 
      * @param contracts the contracts to consider
      * @param ctx the {@link javax.faces.context.FacesContext} for the current
 *  request
@@ -289,11 +289,11 @@ public class ResourceManager {
 
     private ResourceInfo getResourceInfo(String libraryName, String resourceName, String localePrefix, String contract, boolean compressable, boolean isViewResource, FacesContext ctx, LibraryInfo library) {
         if (libraryName != null && !nameContainsForbiddenSequence(libraryName)) {
-            library = findLibrary(libraryName, localePrefix, contract, isViewResource, ctx);
+            library = findLibrary(libraryName, localePrefix, contract, ctx);
             if (library == null && localePrefix != null) {
                 // no localized library found.  Try to find
                 // a library that isn't localized.
-                library = findLibrary(libraryName, null, contract, isViewResource, ctx);
+                library = findLibrary(libraryName, null, contract, ctx);
             }
             if (library == null) {
                 // If we don't have one by now, perhaps it's time to
@@ -451,25 +451,24 @@ public class ResourceManager {
      * LibraryInfo} instance that contains the name, version, and {@link
      * ResourceHelper}.</p>
      *
-     *  @param libraryName the library to find
+     *
+     * @param libraryName the library to find
      * @param localePrefix the prefix for the desired locale
      * @param contract the contract to use
-     * @param isViewResource if this resource is requested via ResourceHandler#createViewResource
-     * @param ctx         the {@link javax.faces.context.FacesContext} for the current request
-     * @return the Library instance for the specified library
+     *@param ctx         the {@link javax.faces.context.FacesContext} for the current request
+     *  @return the Library instance for the specified library
      */
      LibraryInfo findLibrary(String libraryName,
                              String localePrefix,
-                             String contract, boolean isViewResource, FacesContext ctx) {
+                             String contract, FacesContext ctx) {
 
         LibraryInfo library = webappHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         
         if (library == null) {
             library = classpathHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         }
-
-        // FCAPUTO: faceletResourceHelper must not handle non view resources
-        if (library == null && isViewResource) {
+        
+        if (library == null) {
             library = faceletResourceHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         }
 
@@ -533,8 +532,7 @@ public class ResourceManager {
                                                         compressable, 
                                                         ctx);
             }
-            // FCAPUTO: faceletResourceHelper must not handle non view resources
-            if (resource == null && skipToFaceletResourceHelper) {
+            if (resource == null) {
                 resource = faceletResourceHelper.findResource(library, 
                     resourceName, 
                     localePrefix, 
@@ -560,8 +558,7 @@ public class ResourceManager {
             }
         }
         FacesContext context = FacesContext.getCurrentInstance();
-        // FCAPUTO: we assume that this method is only called for composite components. thus it's a view resource
-        LibraryInfo info = this.findLibrary(libraryName, null, null, true, context);
+        LibraryInfo info = this.findLibrary(libraryName, null, null, context);
         ResourceInfo resourceInfo = this.findResource(info, resourceName, libraryName, true, false, context);
         
         return resourceInfo;
