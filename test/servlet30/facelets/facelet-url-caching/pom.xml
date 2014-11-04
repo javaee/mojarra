@@ -42,20 +42,15 @@
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.servlet30</groupId>
+        <groupId>com.sun.faces.test.servlet30.facelets</groupId>
         <artifactId>pom</artifactId>
         <version>2.3.0-m01-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.servlet30.facelets</groupId>
+    <groupId>com.sun.faces.test.servlet30.facelets.facelet_url_caching</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Facelets</name>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Facelets - Facelet URL Caching</name>
     <modules>
-        <module>c</module>
-	<module>core</module>
-	<module>coreEmptyAsNull</module>
-    	<module>html</module>
-        <module>ui</module>
-        <module>facelet-url-caching</module>
+        <module>disable-facelet-factory-resolve-url-caching</module>
   </modules>
 </project>

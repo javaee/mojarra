@@ -85,6 +85,10 @@ public class FacesConfigExtensionProcessor extends AbstractConfigProcessor {
      * <code>/faces-config/faces-config-extension/facelets-processing/process-as</code>
      */
     private static final String PROCESS_AS = "process-as";
+    
+    private static final String MOJARRA = "mojarra";
+    
+    private static final String DISABLE_FACELET_FACTORY_RESOLVE_URL_CACHING = WebConfiguration.WebContextInitParameter.MojarraDisableFaceletFactoryResolveUrlCaching.getQualifiedName();
 
     // ------------------------------------------------------------ Constructors
 
@@ -143,19 +147,18 @@ public class FacesConfigExtensionProcessor extends AbstractConfigProcessor {
                            .getElementsByTagNameNS(namespace, "*");
                     String fileExtension = null, processAs = null;
                     for (int fp = 0, fpsize = faceletsProcessingChildren.getLength(); fp < fpsize; fp++) {
-                        Node childOfInterset = faceletsProcessingChildren.item(fp);
+                        Node childOfInterest = faceletsProcessingChildren.item(fp);
                         if (null == fileExtension &&
-                            FILE_EXTENSION.equals(childOfInterset.getLocalName())) {
-                            fileExtension = getNodeText(childOfInterset);
+                            FILE_EXTENSION.equals(childOfInterest.getLocalName())) {
+                            fileExtension = getNodeText(childOfInterest);
                         } else if (null == processAs &&
-                                   PROCESS_AS.equals(childOfInterset.getLocalName())) {
-                            processAs = getNodeText(childOfInterset);
+                                   PROCESS_AS.equals(childOfInterest.getLocalName())) {
+                            processAs = getNodeText(childOfInterest);
                         } else {
                             if (LOGGER.isLoggable(Level.WARNING)) {
                                 LOGGER.log(Level.WARNING,
-                                        MessageFormat.format(
-                                        "Processing faces-config-extension elements for document: ''{0}'', encountered unexpected configuration ''{1}'', ignoring and continuing",
-                                        info.getSourceURI(), getNodeText(childOfInterset)));
+                                        MessageFormat.format("Processing faces-config-extension elements for document: ''{0}'', encountered unexpected configuration ''{1}'', ignoring and continuing",
+                                        info.getSourceURI(), getNodeText(childOfInterest)));
                             }
                         }
 
@@ -173,10 +176,49 @@ public class FacesConfigExtensionProcessor extends AbstractConfigProcessor {
                         if (LOGGER.isLoggable(Level.WARNING)) {
                             LOGGER.log(Level.WARNING,
                                     MessageFormat.format(
-                                    "Processing faces-config-extension elements for document: ''{0}'', encountered <facelets-processing> elemnet without expected children",
+                                    "Processing faces-config-extension elements for document: ''{0}'', encountered <facelets-processing> element without expected children",
                                     info.getSourceURI()));
                         }
                     }
+                } else if (MOJARRA.equals(n.getLocalName())) {
+                    Node mojarra = n;
+                    NodeList mojarraChildren = ((Element) mojarra)
+                           .getElementsByTagNameNS(namespace, "*");
+                    String disableFaceletFactoryResolveUrlCaching = null;
+                    for (int disableIndex = 0, disableSize = mojarraChildren.getLength(); 
+                            disableIndex < disableSize; disableIndex++) {
+                        Node childOfInterest = mojarraChildren.item(disableIndex);
+                        if (null == disableFaceletFactoryResolveUrlCaching &&
+                                DISABLE_FACELET_FACTORY_RESOLVE_URL_CACHING.equals(childOfInterest.getLocalName())) {
+                            disableFaceletFactoryResolveUrlCaching = getNodeText(childOfInterest);
+                        } else {
+                            if (LOGGER.isLoggable(Level.WARNING)) {
+                                LOGGER.log(Level.WARNING,
+                                        MessageFormat.format(
+                                        "Processing faces-config-extension elements for document: ''{0}'', encountered unexpected configuration ''{1}'', ignoring and continuing",
+                                        info.getSourceURI(), getNodeText(childOfInterest)));
+                            }
+                            
+                        }
+                    }
+                    
+                    if (null != disableFaceletFactoryResolveUrlCaching) {
+                        if (null == config) {
+                            config = WebConfiguration.getInstance();
+                        }
+                        Map<String, String> disableFaceletFactoryMappings =
+                                config.getFacesConfigOptionValue(WebConfiguration.WebContextInitParameter.MojarraDisableFaceletFactoryResolveUrlCaching, true);
+                        disableFaceletFactoryMappings.put(DISABLE_FACELET_FACTORY_RESOLVE_URL_CACHING, Boolean.valueOf(disableFaceletFactoryResolveUrlCaching).toString());
+
+                    } else {
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING,
+                                    MessageFormat.format(
+                                    "Processing faces-config-extension elements for document: ''{0}'', encountered <facelets-processing> element without expected children",
+                                    info.getSourceURI()));
+                        }
+                    }
+                    
                 }
             }
         }
