@@ -52,5 +52,6 @@
     <name>Mojarra ${project.version} - Test - Servlet 3.0 - Facelets - Facelet URL Caching</name>
     <modules>
         <module>disable-facelet-factory-resolve-url-caching</module>
+        <module>pathological-facelet-factory-resolve-url-caching</module>
   </modules>
 </project>
