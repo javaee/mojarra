@@ -257,7 +257,7 @@ public class ApplicationAssociate {
         if (!devModeEnabled) {
             resourceCache = new ResourceCache();
         }
-
+        
         resourceManager = new ResourceManager(appMap, resourceCache);
         namedEventManager = new NamedEventManager();
         applicationStateInfo = new ApplicationStateInfo();
@@ -309,9 +309,22 @@ public class ApplicationAssociate {
             // ctor called at this time.
             viewHandler.getViewDeclarationLanguage(context, 
                     RIConstants.FACES_PREFIX + "xhtml");
-
+            
+            boolean disableUrlCachingValue = false;
+            final String DISABLE_URL_CACHING_KEY = WebConfiguration.WebContextInitParameter.MojarraDisableFaceletFactoryResolveUrlCaching.getQualifiedName();
+            
+            Map<String, String> disableUrlCachingMap = webConfig.getFacesConfigOptionValue(WebConfiguration.WebContextInitParameter.MojarraDisableFaceletFactoryResolveUrlCaching, false);
+            if (disableUrlCachingMap.containsKey(DISABLE_URL_CACHING_KEY)) {
+                disableUrlCachingValue = Boolean.valueOf(disableUrlCachingMap.get(DISABLE_URL_CACHING_KEY));
+            }
+            
+            // If the URL caching should be disabled...
+            if (disableUrlCachingValue) {
+                // ...replace the resourceManager with one that does not cache.
+                resourceManager.disableCache();
+            }
+                
         }
-        
     }
     
     public void initializeFacelets() {
