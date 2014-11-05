@@ -1086,10 +1086,6 @@ public class WebConfiguration {
                 "",
                 ""
         ),
-        MojarraDisableFaceletFactoryResolveUrlCaching(
-                "disable-facelet-factory-resolve-url-caching",
-                "false"
-        ),
         ClientWindowMode(
               ClientWindow.CLIENT_WINDOW_MODE_PARAM_NAME,
               "none"
