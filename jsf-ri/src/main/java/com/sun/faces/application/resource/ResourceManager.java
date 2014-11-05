@@ -143,8 +143,10 @@ public class ResourceManager {
     // ------------------------------------------------------ Public Methods
 
     public void disableCache() {
-        this.cache.clear();
-        this.cache = null;
+        if (null != cache) {
+            this.cache.clear();
+            this.cache = null;
+        }
     }
     
     public boolean isCacheEnabled() {
