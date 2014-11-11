@@ -55,6 +55,7 @@ import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import javax.faces.context.ExternalContext;
 
 /**
  * ELResolver to resolve expressions like the following:
@@ -136,7 +137,9 @@ public class ResourceELResolver extends ELResolver {
                 res = handler.createResource(parts[1], parts[0]);
             }
             if (res != null) {
-                ret = res.getRequestPath();
+                FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
+                ExternalContext extContext = facesContext.getExternalContext();
+                ret = extContext.encodeResourceURL(res.getRequestPath());
             }
             context.setPropertyResolved(true);
         }
