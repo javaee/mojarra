@@ -468,7 +468,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         addComponentResource(context, componentResource, null);
     }
 
-    private static final String ADD_COMPONENT_RESOURCE_REENTRANT_GUARD = UIViewRoot.class.getName() + ".ACRRG";
     /**
      * <p class="changed_added_2_0">Add argument <code>component</code>,
      * which is assumed to represent a resource instance, as a resource
@@ -512,34 +511,26 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      */
     public void addComponentResource(FacesContext context, UIComponent componentResource, String target) {
         final Map<String,Object> attributes = componentResource.getAttributes();
-        if (attributes.containsKey(ADD_COMPONENT_RESOURCE_REENTRANT_GUARD)) {
-            return;
+        // look for a target in the component attribute set if arg is not set.
+        if (target == null) {
+            target = (String) attributes.get("target");
         }
-        try {
-            attributes.put(ADD_COMPONENT_RESOURCE_REENTRANT_GUARD, Boolean.TRUE);
-            // look for a target in the component attribute set if arg is not set.
-            if (target == null) {
-                target = (String) attributes.get("target");
-            }
-            if (target == null) {
-                target = "head";
-            }
-            List<UIComponent> facetChildren = getComponentResources(context,
-                    target,
-                    true);
-            String id = componentResource.getId();
-            if (id != null) {
-                for (UIComponent c : facetChildren) {
-                    if (id.equals(c.getId())) {
-                        facetChildren.remove(c);
-                    }
+        if (target == null) {
+            target = "head";
+        }
+        List<UIComponent> facetChildren = getComponentResources(context,
+                                                                target,
+                                                                true);
+        String id = componentResource.getId();
+        if (id != null) {
+            for (UIComponent c : facetChildren) {
+                if (id.equals(c.getId())) {
+                    facetChildren.remove(c);
                 }
             }
-            // add the resource to the facet
-            facetChildren.add(componentResource);
-        } finally {
-            attributes.remove(ADD_COMPONENT_RESOURCE_REENTRANT_GUARD);
         }
+        // add the resource to the facet
+        facetChildren.add(componentResource);
     }
 
     /**
