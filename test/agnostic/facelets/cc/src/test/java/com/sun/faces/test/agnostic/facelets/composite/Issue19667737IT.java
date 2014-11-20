@@ -64,7 +64,7 @@ public class Issue19667737IT {
 
     @Test
     public void testHasAlertValue() throws Exception {
-        webClient.getOptions().setJavaScriptEnabled(false);
+        webClient.setJavaScriptEnabled(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/ccAttrsValue.xhtml");
         String text = page.asXml();
         assertTrue(text.matches("(?s).*<head.*alert\\(\\'ok\\'\\);.*</head.*"));
@@ -72,7 +72,7 @@ public class Issue19667737IT {
     
     @Test
     public void testHasAlertValuePrependIdTrue() throws Exception {
-        webClient.getOptions().setJavaScriptEnabled(false);
+        webClient.setJavaScriptEnabled(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/ccAttrsValuePrependIdTrue.xhtml");
         String text = page.asXml();
         assertTrue(text.matches("(?s).*<head.*alert\\(\\'ok\\'\\);.*</head.*"));
@@ -80,7 +80,7 @@ public class Issue19667737IT {
     
     @Test
     public void testAlertHasCmp2() throws Exception {
-        webClient.getOptions().setJavaScriptEnabled(false);
+        webClient.setJavaScriptEnabled(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/ccClientId.xhtml");
         String text = page.asXml();
         assertTrue(text.matches("(?s).*<script.*alert\\(\\'cmp2\\'\\);.*</script.*"));
