@@ -41,7 +41,11 @@ package com.sun.faces.test.javaee8.cdi;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
+import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -66,7 +70,9 @@ public class Spec527IT {
     }
 
     @Test
-    public void testInjectedFacesContext() throws Exception {
+    @JsfTest(value = JsfVersion.JSF_2_3_0_M01,
+            excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
+    public void testInjectFacesContext() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/injectFacesContext.xhtml");
         assertTrue(page.asXml().contains("com.sun.faces.context.FacesContextImpl"));
     }
