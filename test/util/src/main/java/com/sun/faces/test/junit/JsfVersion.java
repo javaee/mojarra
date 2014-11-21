@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,7 +41,7 @@ package com.sun.faces.test.junit;
 
 public enum JsfVersion {
 
-    JSF_2_3_0_M01("2.3.0-m01"),
+    JSF_2_3_0("2.3.0"),
     JSF_2_2_0_M01("2.2.0-m01"),
     JSF_2_2_0_M02("2.2.0-m02"),
     JSF_2_2_0_M03("2.2.0-m03"),
