@@ -66,13 +66,13 @@ public class Spec1332IT {
     }
 
     @Test
-    public void testApplicationFacelets() throws Exception {
+    public void testViewFacelets() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/view.xhtml");
         assertTrue(page.asXml().contains("UIViewRoot"));
     }
     
     @Test
-    public void testApplicationJsp() throws Exception {
+    public void testViewJsp() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/view.jsp");
         assertTrue(page.asXml().contains("UIViewRoot"));
     }

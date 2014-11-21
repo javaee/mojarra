@@ -66,13 +66,13 @@ public class Spec1322IT {
     }
 
     @Test
-    public void testFacesContext() throws Exception {
+    public void testExternalContextFacelets() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/externalContext.xhtml");
         assertTrue(page.asXml().contains("com.sun.faces.context.ExternalContextImpl"));
     }
     
     @Test
-    public void testFacesContextJsp() throws Exception {
+    public void testExternalContextJsp() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/externalContext.jsp");
         assertTrue(page.asXml().contains("com.sun.faces.context.ExternalContextImpl"));
     }
