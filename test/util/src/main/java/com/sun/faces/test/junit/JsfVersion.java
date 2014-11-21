@@ -41,6 +41,7 @@ package com.sun.faces.test.junit;
 
 public enum JsfVersion {
 
+    JSF_2_3_0_M01("2.3.0-m01"),
     JSF_2_3_0("2.3.0"),
     JSF_2_2_0_M01("2.2.0-m01"),
     JSF_2_2_0_M02("2.2.0-m02"),
