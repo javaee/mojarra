@@ -74,6 +74,6 @@ public class Issue3014IT {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
         page = button.click();
-        assertTrue(!page.getBody().asText().contains("my message"));
+        assertTrue(!page.asXml().contains("my message"));
     }
 }
