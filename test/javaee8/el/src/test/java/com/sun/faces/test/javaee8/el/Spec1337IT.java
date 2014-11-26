@@ -45,6 +45,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Spec1337IT {
 
@@ -63,12 +64,14 @@ public class Spec1337IT {
     }
 
     @Test
+    @Ignore
     public void testResourceEL1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/resourceEL1.xhtml");
         assertTrue(page.asXml().contains("/javax.faces.resource/resourceEL1.gif"));
     }
 
     @Test
+    @Ignore
     public void testResourceEL2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/resourceEL2.xhtml");
         assertTrue(page.asXml().contains("/javax.faces.resource/resourceEL2.gif"));
@@ -76,6 +79,7 @@ public class Spec1337IT {
     }
 
     @Test
+    @Ignore
     public void testResourceEL3() throws Exception {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         webClient.getOptions().setPrintContentOnFailingStatusCode(false);
