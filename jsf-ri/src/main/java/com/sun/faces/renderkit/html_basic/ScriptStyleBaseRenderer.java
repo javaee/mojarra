@@ -43,6 +43,7 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.FacesLogger;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
 
 import java.util.logging.Level;
@@ -50,6 +51,7 @@ import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
@@ -148,7 +150,16 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
 
         String ccID = (String) component.getAttributes().get(COMP_KEY);
         if (null != ccID) {
-            UIComponent cc = context.getViewRoot().findComponent(':' + ccID);
+            char sep = UINamingContainer.getSeparatorChar(context);
+            UIComponent cc;
+            // If the composite component id includes the separator char...
+            if (-1 != ccID.indexOf(sep)) {
+                // use the UIViewRoot's findComponent.
+                cc = context.getViewRoot().findComponent(':' + ccID);
+            } else {
+                // ... otherwise use our special findComponent.
+                cc = findComponentIgnoringNamingContainers(context.getViewRoot(), ccID, true);
+            }
             UIComponent curCC = UIComponent.getCurrentCompositeComponent(context);
             if (cc != curCC) {
                 // the first pop maps to the component we're rendering.
@@ -162,6 +173,35 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
         }
 
     }
+    
+    private static UIComponent findComponentIgnoringNamingContainers(UIComponent base,
+                                             String id,
+                                             boolean checkId) {
+        if (checkId && id.equals(base.getId())) {
+            return base;
+        }
+        // Search through our facets and children
+        UIComponent result = null;
+        for (Iterator i = base.getFacetsAndChildren(); i.hasNext();) {
+            UIComponent kid = (UIComponent) i.next();
+            if (checkId && id.equals(kid.getId())) {
+                result = kid;
+                break;
+            }
+            result = findComponentIgnoringNamingContainers(kid, id, true);
+            if (result != null) {
+                break;
+            } else if (id.equals(kid.getId())) {
+                result = kid;
+                break;
+            }
+        }
+        return (result);
+
+    }
+    
+    
+    
         
     @Override
     public final void encodeChildren(FacesContext context, UIComponent component)
