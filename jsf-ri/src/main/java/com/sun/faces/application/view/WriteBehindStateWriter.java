@@ -40,16 +40,15 @@
 
 package com.sun.faces.application.view;
 
-import java.io.Writer;
-import java.io.IOException;
+import com.sun.faces.RIConstants;
+import com.sun.faces.io.FastStringWriter;
+import com.sun.faces.util.Util;
 
+import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.application.StateManager;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
-import com.sun.faces.io.FastStringWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 /**
  * Custom {@link Writer} to efficiently handle the state manager replacement
@@ -70,6 +69,7 @@ final class WriteBehindStateWriter extends Writer {
     private int bufSize;
     private char[] buf;
     private FacesContext context;
+    private Object state;
 
 
     // -------------------------------------------------------- Constructors
@@ -307,9 +307,9 @@ final class WriteBehindStateWriter extends Writer {
      * Get the state.
      * 
      * <p>
-     *  In JSF 2.2 it is required by the specification that the view state in
-     *  each h:form has a unique view state id. So we have to call this method
-     *  multiple times as each h:form needs to generate the view state string
+     *  In JSF 2.2 it is required by the specification that the view state hidden
+     *  input in each h:form has a unique id. So we have to call this method
+     *  multiple times as each h:form needs to generate the element id
      *  for itself.
      * </p>
      * 
@@ -319,13 +319,16 @@ final class WriteBehindStateWriter extends Writer {
      * @throws IOException when an I/O error occurs. 
      */
     private StringBuilder getState(StateManager stateManager, ResponseWriter origWriter) throws IOException {
-        FastStringWriter state =
+        FastStringWriter stateWriter =
                 new FastStringWriter((stateManager.isSavingStateInClient(
                         context)) ? bufSize : 128);
-        context.setResponseWriter(origWriter.cloneWithWriter(state));
-        stateManager.writeState(context, stateManager.saveView(context));
+        context.setResponseWriter(origWriter.cloneWithWriter(stateWriter));
+        if(state == null) {
+            state = stateManager.saveView(context);
+        }
+        stateManager.writeState(context, state);
         context.setResponseWriter(origWriter);
-        StringBuilder stateBuilder = state.getBuffer();
+        StringBuilder stateBuilder = stateWriter.getBuffer();
         return stateBuilder;
     }
 
