@@ -42,11 +42,11 @@ package com.sun.faces.test.servlet30.ajax;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class Issue3351IT {
 
@@ -67,6 +67,7 @@ public class Issue3351IT {
     }
 
     @Test
+    @Ignore
     public void testButtonOnlySubmitsOne() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/buttonOnlySubmitsOne.xhtml");
         assertTrue(page.asXml().contains("value1,value2,"));
