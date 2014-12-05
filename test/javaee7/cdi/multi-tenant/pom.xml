@@ -52,9 +52,9 @@
     <groupId>com.sun.faces.test.javaee7.cdi.multi-tenant</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Java EE 7 - CDI - Multi-Tenant</name>
+    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI - Multi-Tenant</name>
     <modules>
-        <module>cdi-jsp-only-app-sets-tccl</module>
         <module>cdi-app-sets-tccl</module>
+        <module>cdi-jsp-only-app-sets-tccl</module>
     </modules>
 </project>
