@@ -97,9 +97,6 @@ public class AnnotationTestBean {
         Converter cv = app.createConverter("AnnotatedConverter");
         assertNotNull(cv);
         assertTrue(cv instanceof AnnotatedConverter);
-        injectedString = ((AnnotatedConverter)cv).getWelcomeMessage();
-        assertTrue(injectedString.equals("Hello World from env-entry!"));
-        
 
         cv = app.createConverter(java.lang.CharSequence.class);
         assertNotNull(cv);
@@ -110,8 +107,6 @@ public class AnnotationTestBean {
         assertTrue(v instanceof AnnotatedValidator);
         Set<String> defaultValidatorIds = app.getDefaultValidatorInfo().keySet();
         assertFalse(defaultValidatorIds.contains("AnnotatedValidator"));
-        injectedString = ((AnnotatedValidator)v).getWelcomeMessage();
-        assertTrue(injectedString.equals("Hello World from env-entry!"));
 
         /*****  JAVASERVERFACES-3266
         v = app.createValidator("annotatedValidatorNoValue");
@@ -142,8 +137,6 @@ public class AnnotationTestBean {
         Behavior b = app.createBehavior("AnnotatedBehavior");
         assertNotNull(b);
         assertTrue(b instanceof AnnotatedBehavior);
-        injectedString = ((AnnotatedBehavior)b).getWelcomeMessage();
-        assertTrue(injectedString.equals("Hello World from env-entry!"));
 
         RenderKitFactory rkf = (RenderKitFactory) FactoryFinder
               .getFactory(FactoryFinder.RENDER_KIT_FACTORY);

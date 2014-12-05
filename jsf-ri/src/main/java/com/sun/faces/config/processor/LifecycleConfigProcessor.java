@@ -57,6 +57,9 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
  * <p>
  *  This <code>ConfigProcessor</code> handles all elements defined under
@@ -76,7 +79,25 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
      * <p>/faces-config/lifecycle/phase-listener</p>
      */
     private static final String PHASE_LISTENER = "phase-listener";
+    private List<PhaseListener> appPhaseListeners;
 
+    public LifecycleConfigProcessor() {
+        appPhaseListeners = new CopyOnWriteArrayList<PhaseListener>();
+    }
+    
+    @Override
+    public void destroy(ServletContext sc) {
+        destroyInstances(sc, appPhaseListeners);
+        
+        destroyNext(sc);
+    }
+    
+    private void destroyInstances(ServletContext sc, List instances) {
+        for (Object cur : instances) {
+            destroyInstance(sc, cur.getClass().getName(), cur);
+        }
+        instances.clear();
+    }
 
     // -------------------------------------------- Methods from ConfigProcessor
 
@@ -117,7 +138,7 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
+    
     // --------------------------------------------------------- Private Methods
 
 
@@ -129,11 +150,15 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                 Node plNode = phaseListeners.item(i);
                 String pl = getNodeText(plNode);
                 if (pl != null) {
-                    Object plInstance = createInstance(sc, pl,
+                    boolean [] didPerformInjection = { false };
+                    PhaseListener plInstance = (PhaseListener) createInstance(sc, pl,
                                                        PhaseListener.class,
                                                        null,
-                                                       plNode);
+                                                       plNode, true, didPerformInjection);
                     if (plInstance != null) {
+                        if (didPerformInjection[0]) {
+                            appPhaseListeners.add(plInstance);
+                        }
                         for (Iterator t = factory.getLifecycleIds(); t.hasNext();)
                         {
                             String lfId = (String) t.next();
@@ -145,7 +170,7 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                                                 pl,
                                                 lfId));
                             }
-                            lifecycle.addPhaseListener((PhaseListener) plInstance);
+                            lifecycle.addPhaseListener(plInstance);
                         }
                     }
                 } 

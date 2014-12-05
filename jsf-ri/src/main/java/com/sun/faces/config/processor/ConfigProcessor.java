@@ -46,7 +46,7 @@ import javax.servlet.ServletContext;
 
 /**
  * <p>
- *  This interface provides a CoR structure for procesing JSF configuration
+ *  This interface provides a CoR structure for processing JSF configuration
  *  resources.
  * </p>
  */
@@ -86,7 +86,8 @@ public interface ConfigProcessor {
     public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception;
 
-
+    public void destroy(ServletContext sc);
+    
     /**
      * <p>
      *  Invoke the <code>ConfigProcess</code> specified by
@@ -97,5 +98,7 @@ public interface ConfigProcessor {
      */
     public void invokeNext(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception;
+    
+    public void destroyNext(ServletContext sc);
 
 }

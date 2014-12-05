@@ -40,7 +40,6 @@
 
 package com.sun.faces.annotation;
 
-import javax.annotation.Resource;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.context.FacesContext;
@@ -60,13 +59,6 @@ public class AnnotatedConverter implements Converter {
                               UIComponent component,
                               Object value) {
         return value.toString();
-    }
-    
-    @Resource(name="welcomeMessage")
-    private String welcomeMessage;
-
-    public String getWelcomeMessage() {
-        return welcomeMessage;
     }
     
 }

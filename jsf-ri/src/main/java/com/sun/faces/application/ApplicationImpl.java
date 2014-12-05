@@ -188,10 +188,10 @@ public class ApplicationImpl extends Application {
     // These four maps store store "identifier" | "class name"
     // mappings.
     //
-    private ApplicationInstanceFactoryMetadataMap<String,Object> behaviorMap = null;
-    private ApplicationInstanceFactoryMetadataMap<String,Object> componentMap = null;
-    private ApplicationInstanceFactoryMetadataMap<String,Object> converterIdMap = null;
-    private ApplicationInstanceFactoryMetadataMap<String,Object> validatorMap = null;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> behaviorMap = null;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> componentMap = null;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> converterIdMap = null;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> validatorMap = null;
 
     private Map<Class<?>,Object> converterTypeMap = null;
     private Set<String> defaultValidatorIds = null;
@@ -213,12 +213,12 @@ public class ApplicationImpl extends Application {
     public ApplicationImpl() {
         super();
         associate = new ApplicationAssociate(this);
-        componentMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<>());
-        converterIdMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<>());
+        componentMap = new ViewMemberInstanceFactoryMetadataMap<>(new ConcurrentHashMap<>());
+        converterIdMap = new ViewMemberInstanceFactoryMetadataMap<>(new ConcurrentHashMap<>());
         converterTypeMap = new ConcurrentHashMap<>();
-        validatorMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<>());
+        validatorMap = new ViewMemberInstanceFactoryMetadataMap<>(new ConcurrentHashMap<>());
         defaultValidatorIds = new LinkedHashSet<>();
-        behaviorMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<>());
+        behaviorMap = new ViewMemberInstanceFactoryMetadataMap<>(new ConcurrentHashMap<>());
         elContextListeners = new CopyOnWriteArrayList<>();
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
@@ -1702,7 +1702,7 @@ public class ApplicationImpl extends Application {
      * @param map The <code>Map</code> that will be searched.
      * @return The new object instance.
      */
-    protected Object newThing(String key, ApplicationInstanceFactoryMetadataMap<String, Object> map) {
+    private Object newThing(String key, ViewMemberInstanceFactoryMetadataMap<String, Object> map) {
         assert (key != null && map != null);
 
         Object result;
@@ -1720,9 +1720,7 @@ public class ApplicationImpl extends Application {
                clazz = Util.loadClass(cValue, value);
                 if (!associate.isDevModeEnabled()) {
                     map.put(key, clazz);
-                } else {
-                  map.scanForAnnotations(key, clazz);
-                }
+                } 
                 assert (clazz != null);
              } catch (Exception e) {
                  throw new FacesException(e.getMessage(), e);
@@ -1746,23 +1744,6 @@ public class ApplicationImpl extends Application {
             throw new FacesException((MessageUtils.getExceptionMessageString(
                   MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
                   clazz.getName())), t);
-        }
-
-        if (map.hasAnnotations(key)) {
-            InjectionProvider injectionProvider = associate.getInjectionProvider();
-            try {
-                injectionProvider.invokePostConstruct(result);
-            } catch (InjectionProviderException ex) {
-               LOGGER.log(Level.SEVERE, "Unable to invoke @PostConstruct annotated method on instance " + key, ex);
-               throw new FacesException(ex);
-            }
-
-            try {
-                injectionProvider.inject(result);
-            } catch (InjectionProviderException ex) {
-               LOGGER.log(Level.SEVERE, "Unable to inject instance" + key, ex);
-               throw new FacesException(ex);
-            }
         }
 
         return result;
