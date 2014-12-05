@@ -47,6 +47,13 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
               version="2.1">
     <application>
+        <message-bundle>com.sun.faces.test.servlet30.el.basic.MessageBundle</message-bundle>
+        <locale-config>
+            <default-locale>en</default-locale>
+            <supported-locale>en</supported-locale>
+            <supported-locale>de</supported-locale>
+            <supported-locale>fr</supported-locale>
+        </locale-config>
         <system-event-listener>
             <system-event-listener-class>com.sun.faces.test.servlet30.el.basic.ViewInitFacesListener</system-event-listener-class>
             <system-event-class>javax.faces.event.PreRenderComponentEvent</system-event-class>
