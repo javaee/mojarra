@@ -42,7 +42,6 @@
 package javax.faces;
 
 import com.sun.faces.spi.InjectionProvider;
-import com.sun.faces.spi.InjectionProviderException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -355,7 +354,6 @@ final class FactoryFinderInstance {
         Object[] newInstanceArgs = new Object[1];
         Constructor ctor;
         Object result = null;
-        InjectionProvider provider = null;
 
         // if we have a previousImpl and the appropriate one arg ctor.
         if ((null != previousImpl) &&
@@ -391,7 +389,7 @@ final class FactoryFinderInstance {
         }
         
         if (null != result) {
-            provider = getInjectionProvider();
+            InjectionProvider provider = getInjectionProvider();
             if (null != provider) {
                 try {
                     provider.inject(result);

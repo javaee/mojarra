@@ -234,12 +234,8 @@ public final class FactoryFinder {
 
     static final CurrentThreadToServletContext FACTORIES_CACHE;
 
-    private static final Logger LOGGER;
-
     static {
         FACTORIES_CACHE = new CurrentThreadToServletContext();
-
-        LOGGER = Logger.getLogger("javax.faces", "javax.faces.LogStrings");
     }
 
     // --------------------------------------------------------- Public Methods

@@ -40,7 +40,6 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.spi.InjectionProviderException;
 
 import java.beans.*;
 import java.lang.reflect.Constructor;
@@ -98,7 +97,6 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
-import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.util.Cache;
 import com.sun.faces.util.Cache.Factory;
 import com.sun.faces.util.FacesLogger;
