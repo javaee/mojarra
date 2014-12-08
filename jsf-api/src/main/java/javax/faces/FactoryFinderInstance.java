@@ -371,7 +371,6 @@ final class FactoryFinderInstance {
         Object[] newInstanceArgs = new Object[1];
         Constructor ctor;
         Object result = null;
-        InjectionProvider provider = null;
 
         // if we have a previousImpl and the appropriate one arg ctor.
         if ((null != previousImpl) &&
@@ -383,18 +382,6 @@ final class FactoryFinderInstance {
                 ctor = clazz.getConstructor(getCtorArg);
                 newInstanceArgs[0] = previousImpl;
                 result = ctor.newInstance(newInstanceArgs);
-                
-                provider = getInjectionProvider();
-                if (null != provider) {
-                    provider.inject(result);
-                    provider.invokePostConstruct(result);
-                } else {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE, "Unable to inject {0} because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?", result);
-                    }
-                }
-                
-                
             }
             catch (NoSuchMethodException nsme) {
                 // fall through to "zero-arg-ctor" case
@@ -417,6 +404,24 @@ final class FactoryFinderInstance {
                 throw new FacesException(implName, e);
             }
         }
+        
+        if (null != result) {
+            InjectionProvider provider = getInjectionProvider();
+            if (null != provider) {
+                try {
+                    provider.inject(result);
+                    provider.invokePostConstruct(result);
+                }
+                catch (Exception e) {
+                    throw new FacesException(implName, e);
+                }
+            } else {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "Unable to inject {0} because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?", result);
+                }
+            }
+        }            
+
         return result;
 
     }
@@ -447,6 +452,42 @@ final class FactoryFinderInstance {
             }
         } finally {
             lock.writeLock().unlock();
+        }
+    }
+    
+    public void releaseFactories() {
+        InjectionProvider provider = getInjectionProvider();
+        if (null != provider) {
+            lock.writeLock().lock();
+            try {
+                for (Map.Entry entry : factories.entrySet()) {
+                    Object curFactory = entry.getValue();
+                    // If the current entry is not the injectionProvider itself
+                    // and the current entry has a non-null value
+                    // and the value is not a string...
+                    if (!INJECTION_PROVIDER_KEY.equals(entry.getKey()) &&
+                            null != curFactory &&
+                            !(curFactory instanceof String)) {
+                        try {
+                            provider.invokePreDestroy(curFactory);
+                        } catch (Exception ex) {
+                            if (LOGGER.isLoggable(Level.SEVERE)) {
+                                String message = MessageFormat.format("Unable to invoke @PreDestroy annotated methods on {0}.", 
+                                        entry.getValue());
+                                LOGGER.log(Level.SEVERE, message, ex);
+                            }
+                        }
+                    }
+                }
+            } finally {
+                factories.clear();
+                lock.writeLock().unlock();
+            }
+            
+        } else {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Unable to call @PreDestroy annotated methods because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
+            }
         }
     }
 

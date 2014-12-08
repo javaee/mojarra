@@ -155,7 +155,7 @@ public class ConfigManager {
      * providers to satisfy the requirements of the specification.
      * </p>
      */
-    private static final List<ConfigurationResourceProvider> FACES_CONFIG_RESOURCE_PROVIDERS;
+    private final List<ConfigurationResourceProvider> FACES_CONFIG_RESOURCE_PROVIDERS;
 
     /**
      * <p>
@@ -164,7 +164,7 @@ public class ConfigManager {
      * providers to satisfy the requirements of the specification.
      * </p>
      */
-    private static final List<ConfigurationResourceProvider> FACELET_TAGLIBRARY_RESOURCE_PROVIDERS;
+    private final List<ConfigurationResourceProvider> FACELET_TAGLIBRARY_RESOURCE_PROVIDERS;
 
     /**
      * <p>
@@ -176,13 +176,7 @@ public class ConfigManager {
      */
     private static final int NUMBER_OF_TASK_THREADS = 5;
 
-    /**
-     * <p>
-     *  There is only once instance of <code>ConfigManager</code>.
-     * <p>
-     */
-    private static final ConfigManager CONFIG_MANAGER = new ConfigManager();
-
+    private static final String CONFIG_MANAGER_INSTANCE_KEY = RIConstants.FACES_PREFIX + "CONFIG_MANAGER_KEY";
 
     /**
      * The application-scoped key under which the Future responsible for annotation
@@ -225,7 +219,7 @@ public class ConfigManager {
      *  faces-config documents.
      * </p>
      */
-    private static final ConfigProcessor FACES_CONFIG_PROCESSOR_CHAIN;
+    private final ConfigProcessor FACES_CONFIG_PROCESSOR_CHAIN;
 
 
     /**
@@ -234,7 +228,7 @@ public class ConfigManager {
      *  facelet-taglib documents.
      * </p>
      */
-    private static final ConfigProcessor FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN;
+    private final ConfigProcessor FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN;
 
     /**
      * Stylesheet to convert 1.0 and 1.1 based faces-config documents
@@ -257,7 +251,7 @@ public class ConfigManager {
           "http://java.sun.com/JSF/Facelet";
 
 
-    static {
+    public ConfigManager() {
 
         // initialize the resource providers for faces-config documents
         List<ConfigurationResourceProvider> facesConfigProviders =
@@ -305,17 +299,24 @@ public class ConfigManager {
 
     }
 
-
     // ---------------------------------------------------------- Public Methods
 
 
     /**
      * @return a <code>ConfigManager</code> instance
      */
-    public static ConfigManager getInstance() {
-
-        return CONFIG_MANAGER;
-
+    public static ConfigManager getInstance(ServletContext sc) {
+        return (ConfigManager) sc.getAttribute(CONFIG_MANAGER_INSTANCE_KEY);
+    }
+    
+    public static ConfigManager createInstance(ServletContext sc) {
+        ConfigManager result = new ConfigManager();
+        sc.setAttribute(CONFIG_MANAGER_INSTANCE_KEY, result);
+        return result;
+    }
+    
+    public static void removeInstance(ServletContext sc) {
+        sc.removeAttribute(CONFIG_MANAGER_INSTANCE_KEY);
     }
     
     private void initializeConfigProcessers(ServletContext sc) {
@@ -475,7 +476,11 @@ public class ConfigManager {
      */
     public void destroy(ServletContext sc) {
 
-        releaseFactories();
+        // Do not call releaseFactories() here because that is done by the 
+        // caller.
+        
+        FACES_CONFIG_PROCESSOR_CHAIN.destroy(sc);
+        
         initializedContexts.remove(sc);
 
     }
