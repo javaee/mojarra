@@ -395,11 +395,13 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
             if (classMetadataMap.hasAnnotations(className)) {
                 InjectionProvider injectionProvider = (InjectionProvider) FacesContext.getCurrentInstance().getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
                 
-                try {
-                    injectionProvider.invokePreDestroy(instance);
-                } catch (InjectionProviderException ex) {
-                    LOGGER.log(Level.SEVERE, "Unable to invoke @PreDestroy annotated method on instance " + className, ex);
-                    throw new FacesException(ex);
+                if (null != injectionProvider) {
+                    try {
+                        injectionProvider.invokePreDestroy(instance);
+                    } catch (InjectionProviderException ex) {
+                        LOGGER.log(Level.SEVERE, "Unable to invoke @PreDestroy annotated method on instance " + className, ex);
+                        throw new FacesException(ex);
+                    }
                 }
             }
         }
