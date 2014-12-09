@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:clientBehavior="http://java.sun.com/jsf/composite/clientBehavior" 
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:view transient="true">
+        <h:head>
+            <title>Simple JSF Facelets page</title>
+        </h:head>
+        <h:body>
+            Place your content here
+            <br/>
+            <h:form id="exampleForm">
+                <h:outputText value="#{clientBehavior1Bean.text}"/>
+                <clientBehavior:clientBehavior1 action="#{clientBehavior1Bean.action}" id="customButton">
+                    <f:ajax execute="@this" render="@form"/>
+                </clientBehavior:clientBehavior1>
+            </h:form>
+        </h:body>
+    </f:view>
+</html>
