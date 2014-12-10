@@ -145,7 +145,7 @@ public class ConfigureListener implements ServletRequestListener,
             timer.startTiming();
         }
 
-        ConfigManager configManager = ConfigManager.getInstance();
+        ConfigManager configManager = ConfigManager.createInstance(context);
         if (configManager.hasBeenInitialized(context)) {
             return;
         }
@@ -290,7 +290,7 @@ public class ConfigureListener implements ServletRequestListener,
     public void contextDestroyed(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
 
-        if (!ConfigManager.getInstance().hasBeenInitialized(context)) {
+        if (!ConfigManager.getInstance(context).hasBeenInitialized(context)) {
             return;
         }
 
@@ -344,7 +344,7 @@ public class ConfigureListener implements ServletRequestListener,
             ApplicationAssociate.clearInstance(context);
             ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
-            ConfigManager.getInstance().destroy(context);
+            ConfigManager.getInstance(context).destroy(context);
             FactoryFinder.releaseFactories();
             ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
             WebConfiguration.clear(context);
@@ -559,7 +559,8 @@ public class ConfigureListener implements ServletRequestListener,
                     .clearInstance(initContext.getExternalContext());
             ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
-            ConfigManager.getInstance().destroy(sc);
+            ConfigManager.getInstance(sc).destroy(sc);
+            ConfigManager.removeInstance(sc);
             initContext.release();
             ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
             WebConfiguration.clear(sc);
@@ -578,7 +579,7 @@ public class ConfigureListener implements ServletRequestListener,
                 .initCache(Thread.currentThread().getContextClassLoader());
 
         try {
-            ConfigManager configManager = ConfigManager.getInstance();
+            ConfigManager configManager = ConfigManager.getInstance(sc);
             configManager.initialize(sc);
 
 

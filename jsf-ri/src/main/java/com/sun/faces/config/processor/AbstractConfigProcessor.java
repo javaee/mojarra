@@ -154,6 +154,19 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         
     }
 
+    @Override
+    public void destroyNext(ServletContext sc) {
+        if (nextProcessor != null) {
+            nextProcessor.destroy(sc);
+        }
+    }
+    
+    
+
+    @Override
+    public void destroy(ServletContext sc) {
+        destroyNext(sc);
+    }
 
     // ------------------------------------------------------- Protected Methods
 
@@ -271,6 +284,16 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                                     Class rootType,
                                     Object root,
                                     Node source) {
+        boolean [] didPerformInjection = { false };
+        Object result = createInstance(sc, className, rootType, root, source, true, didPerformInjection);
+        return result;
+    }
+
+    protected Object createInstance(ServletContext sc, String className,
+                                    Class rootType,
+                                    Object root,
+                                    Node source,
+                                    boolean performInjection, boolean [] didPerformInjection) {
         Class clazz;
         Object returnObject = null;
         if (className != null) {
@@ -309,8 +332,15 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                     ApplicationInstanceFactoryMetadataMap<String,Object>
                             classMetadataMap = getClassMetadataMap(sc);
 
-                    if (classMetadataMap.hasAnnotations(className)) {
+                    if (classMetadataMap.hasAnnotations(className) && performInjection) {
                         InjectionProvider injectionProvider = (InjectionProvider) FacesContext.getCurrentInstance().getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
+
+                        try {
+                            injectionProvider.inject(returnObject);
+                        } catch (InjectionProviderException ex) {
+                            LOGGER.log(Level.SEVERE, "Unable to inject instance" + className, ex);
+                            throw new FacesException(ex);
+                        }
 
                         try {
                             injectionProvider.invokePostConstruct(returnObject);
@@ -319,12 +349,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                             throw new FacesException(ex);
                         }
 
-                        try {
-                            injectionProvider.inject(returnObject);
-                        } catch (InjectionProviderException ex) {
-                            LOGGER.log(Level.SEVERE, "Unable to inject instance" + className, ex);
-                            throw new FacesException(ex);
-                        }
+                        didPerformInjection[0] = true;
                     }
                     
                 }
@@ -362,6 +387,25 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         
     }
 
+    protected void destroyInstance(ServletContext sc, String className, Object instance) {
+        if (null != instance) {
+            ApplicationInstanceFactoryMetadataMap<String,Object>
+                    classMetadataMap = getClassMetadataMap(sc);
+            
+            if (classMetadataMap.hasAnnotations(className)) {
+                InjectionProvider injectionProvider = (InjectionProvider) FacesContext.getCurrentInstance().getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
+                
+                if (null != injectionProvider) {
+                    try {
+                        injectionProvider.invokePreDestroy(instance);
+                    } catch (InjectionProviderException ex) {
+                        LOGGER.log(Level.SEVERE, "Unable to invoke @PreDestroy annotated method on instance " + className, ex);
+                        throw new FacesException(ex);
+                    }
+                }
+            }
+        }
+    }
 
     protected Class<?> loadClass(ServletContext sc, String className,
                                  Object fallback,

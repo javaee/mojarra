@@ -41,12 +41,7 @@
 package javax.faces;
 
 
-import com.sun.faces.spi.InjectionProvider;
-import java.text.MessageFormat;
-import java.util.Map;
 import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.util.Collection;
 
 
 /**
@@ -239,12 +234,8 @@ public final class FactoryFinder {
 
     static final CurrentThreadToServletContext FACTORIES_CACHE;
 
-    private static final Logger LOGGER;
-
     static {
         FACTORIES_CACHE = new CurrentThreadToServletContext();
-
-        LOGGER = Logger.getLogger("javax.faces", "javax.faces.LogStrings");
     }
 
     // --------------------------------------------------------- Public Methods
@@ -332,30 +323,7 @@ public final class FactoryFinder {
             if (!FACTORIES_CACHE.applicationMap.isEmpty()) {
 
                 FactoryFinderInstance fm = FACTORIES_CACHE.getApplicationFactoryManager();
-                InjectionProvider provider = fm.getInjectionProvider();
-                if (null != provider) {
-                    Collection factories = null;
-                    for (Map.Entry entry : 
-                            FACTORIES_CACHE.applicationMap.entrySet()) {
-                        FactoryFinderInstance cur = (FactoryFinderInstance) entry.getValue();
-                        factories = cur.getFactories();
-                        for (Object curFactory : factories) {
-                            try {
-                                provider.invokePreDestroy(curFactory);
-                            } catch (Exception ex) {
-                                if (LOGGER.isLoggable(Level.SEVERE)) {
-                                    String message = MessageFormat.format("Unable to invoke @PreDestroy annotated methods on {0}.", 
-                                            curFactory);
-                                    LOGGER.log(Level.SEVERE, message, ex);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE, "Unable to call @PreDestroy annotated methods because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
-                    }
-                }
+                fm.releaseFactories();
             }
 
             FACTORIES_CACHE.removeApplicationFactoryManager();

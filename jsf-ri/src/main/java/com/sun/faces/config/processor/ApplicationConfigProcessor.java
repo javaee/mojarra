@@ -80,6 +80,7 @@ import com.sun.faces.config.DocumentInfo;
 
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.faces.validator.BeanValidator;
 import javax.validation.Validator;
 import javax.validation.Validation;
@@ -114,6 +115,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String ACTION_LISTENER
          = "action-listener";
+    private List<ActionListener> actionListeners;
 
     /**
      * <code>/faces-config/application/default-render-kit-id
@@ -144,30 +146,35 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String NAVIGATION_HANDLER
          = "navigation-handler";
+    private List<NavigationHandler> navigationHandlers;
 
     /**
      * <code>/faces-config/application/view-handler</code>
      */
     private static final String VIEW_HANDLER
          = "view-handler";
+    private List<ViewHandler> viewHandlers;
 
     /**
      * <code>/faces-config/application/state-manager</code>
      */
     private static final String STATE_MANAGER
          = "state-manager";
+    private List<StateManager> stateManagers;
 
     /**
      * <code>/faces-config/application/resource-handler</code>
      */
     private static final String RESOURCE_HANDLER
          = "resource-handler";
+    private List<ResourceHandler> resourceHandlers;
 
     /**
      * <code>/faces-config/application/el-resolver</code>
      */
     private static final String EL_RESOLVER
          = "el-resolver";
+    private List<ELResolver> elResolvers;
 
     /**
      * <code>/faces-config/application/property-resolver</code>
@@ -228,6 +235,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String SYSTEM_EVENT_LISTENER
          = "system-event-listener";
+    private List<SystemEventListener> systemEventListeners;
 
     /**
      * <code>/faces-config/application/system-event-listener/system-event-listener-class</code>
@@ -247,6 +255,16 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     private static final String SOURCE_CLASS
          = "source-class";
 
+    public ApplicationConfigProcessor() {
+        actionListeners = new CopyOnWriteArrayList<ActionListener>();
+        navigationHandlers = new CopyOnWriteArrayList<NavigationHandler>();
+        viewHandlers = new CopyOnWriteArrayList<ViewHandler>();
+        stateManagers = new CopyOnWriteArrayList<StateManager>();
+        resourceHandlers = new CopyOnWriteArrayList<ResourceHandler>();
+        elResolvers = new CopyOnWriteArrayList<ELResolver>();
+        systemEventListeners = new CopyOnWriteArrayList<SystemEventListener>();
+    }
+    
     // -------------------------------------------- Methods from ConfigProcessor
 
 
@@ -345,6 +363,25 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     }
 
+    @Override
+    public void destroy(ServletContext sc) {
+        destroyInstances(sc, actionListeners);
+        destroyInstances(sc, navigationHandlers);
+        destroyInstances(sc, stateManagers);
+        destroyInstances(sc, viewHandlers);
+        destroyInstances(sc, elResolvers);
+        destroyInstances(sc, resourceHandlers);
+        destroyInstances(sc, systemEventListeners);
+        
+        destroyNext(sc);
+    }
+    
+    private void destroyInstances(ServletContext sc, List instances) {
+        for (Object cur : instances) {
+            destroyInstance(sc, cur.getClass().getName(), cur);
+        }
+        instances.clear();
+    }
 
     // --------------------------------------------------------- Private Methods
 
@@ -486,11 +523,15 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
             String listener = getNodeText(actionListener);
             if (listener != null) {
-                Object instance = createInstance(sc, listener,
+                boolean [] didPerformInjection = { false };
+                ActionListener instance = (ActionListener) createInstance(sc, listener,
                                                  ActionListener.class,
                                                  application.getActionListener(),
-                                                 actionListener);
+                                                 actionListener, true, didPerformInjection);
                 if (instance != null) {
+                    if (didPerformInjection[0]) {
+                        actionListeners.add(instance);
+                    }
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(
@@ -498,7 +539,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                         listener));
                     }
                     application
-                         .setActionListener((ActionListener) instance);
+                         .setActionListener(instance);
                 }
             }
         }
@@ -518,11 +559,15 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                                        ConfigurableNavigationHandler.class,
                                                        NavigationHandler.class
                                                      });
-                Object instance = createInstance(sc, handler,
+                boolean [] didPerformInjection = { false };
+                NavigationHandler instance = (NavigationHandler) createInstance(sc, handler,
                                                  ((rootType != null) ? rootType : NavigationHandler.class),
                                                  application.getNavigationHandler(),
-                                                 navigationHandler);
+                                                 navigationHandler, true, didPerformInjection);
                 if (instance != null) {
+                    if (didPerformInjection[0]) {
+                        navigationHandlers.add(instance);
+                    }
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(
@@ -530,7 +575,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                         handler));
                     }
                     application
-                         .setNavigationHandler((NavigationHandler) instance);
+                         .setNavigationHandler(instance);
                 }
             }
         }
@@ -544,18 +589,22 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         if (stateManager != null) {
             String manager = getNodeText(stateManager);
             if (manager != null) {
-                Object instance = createInstance(sc, manager,
+                boolean [] didPerformInjection = { false };
+                StateManager instance = (StateManager) createInstance(sc, manager,
                                                  StateManager.class,
                                                  application.getStateManager(),
-                                                 stateManager);
+                                                 stateManager, true, didPerformInjection);
                 if (instance != null) {
+                    if (didPerformInjection[0]) {
+                        stateManagers.add(instance);
+                    }
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(
                                         "Calling Application.setStateManagers({0})",
                                         manager));
                     }
-                    application.setStateManager((StateManager) instance);
+                    application.setStateManager(instance);
                 }
             }
         }
@@ -568,18 +617,22 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         if (viewHandler != null) {
             String handler = getNodeText(viewHandler);
             if (handler != null) {
-                Object instance = createInstance(sc, handler,
+                boolean [] didPerformInjection = { false };
+                ViewHandler instance = (ViewHandler) createInstance(sc, handler,
                                                  ViewHandler.class,
                                                  application.getViewHandler(),
-                                                 viewHandler);
+                                                 viewHandler, true, didPerformInjection);
                 if (instance != null) {
+                    if (didPerformInjection[0]) {
+                        viewHandlers.add(instance);
+                    }
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(
                                         "Calling Application.setViewHandler({0})",
                                         handler));
                     }
-                    application.setViewHandler((ViewHandler) instance);
+                    application.setViewHandler(instance);
                 }
             }
         }
@@ -601,18 +654,22 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 }
                 String elResolverClass = getNodeText(elResolver);
                 if (elResolverClass != null) {
-                    Object elRes = createInstance(sc, elResolverClass,
+                    boolean [] didPerformInjection = { false };
+                    ELResolver elRes = (ELResolver) createInstance(sc, elResolverClass,
                                                   ELResolver.class,
                                                   null,
-                                                  elResolver);
+                                                  elResolver, true, didPerformInjection);
                     if (elRes != null) {
+                        if (didPerformInjection[0]) {
+                            elResolvers.add(elRes);
+                        }
                         if (LOGGER.isLoggable(Level.FINE)) {
                             LOGGER.log(Level.FINE,
                                        MessageFormat.format(
                                             "Adding ''{0}'' to ELResolver chain",
                                             elResolverClass));
                         }
-                        resolvers.add((ELResolver) elRes);
+                        resolvers.add(elRes);
                     }
                 }
             }
@@ -634,10 +691,11 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
                 String resolver = getNodeText(propertyResolver);
                 if (resolver != null) {
+                    boolean [] didPerformInjection = { false };
                     resolverImpl = createInstance(sc, resolver,
                                                   PropertyResolver.class,
                                                   resolverImpl,
-                                                  propertyResolver);
+                                                  propertyResolver, false, didPerformInjection);
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(
@@ -667,10 +725,11 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 }
                 String resolver = getNodeText(variableResolver);
                 if (resolver != null) {
+                    boolean [] didPerformInjection = { false };
                     resolverImpl = createInstance(sc, resolver,
                                                   VariableResolver.class,
                                                   resolverImpl,
-                                                  variableResolver);
+                                                  variableResolver, false, didPerformInjection);
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(
@@ -793,18 +852,22 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         if (resourceHandler != null) {
             String handler = getNodeText(resourceHandler);
             if (handler != null) {
-                Object instance = createInstance(sc, handler,
+                boolean [] didPerformInjection = { false };
+                ResourceHandler instance = (ResourceHandler) createInstance(sc, handler,
                                                  ResourceHandler.class,
                                                  application.getResourceHandler(),
-                                                 resourceHandler);
+                                                 resourceHandler, true, didPerformInjection);
                 if (instance != null) {
+                    if (didPerformInjection[0]) {
+                        resourceHandlers.add(instance);
+                    }
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(
                                         "Calling Application.setResourceHandler({0})",
                                         handler));
                     }
-                    application.setResourceHandler((ResourceHandler) instance);
+                    application.setResourceHandler(instance);
                 }
             }
         }
@@ -837,6 +900,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                  null,
                                  systemEventListener);
             if (selInstance != null) {
+                systemEventListeners.add(selInstance);
                 try {
                     // If there is an eventClass, use it, otherwise use
                     // SystemEvent.class

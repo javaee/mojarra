@@ -562,25 +562,8 @@ find jsf-ri/testresults jsf-ri/testresults/systest jsf-test/build/testresults js
 
     <target name="passthru" depends="define.scenario.aware.port">
 
-       <antcall target="undeploy"/>
-       <antcall target="deploy"/>
+       <antcall target="execute.cactus.tests"/>
 
-        <jsf.junit classpath-refid="test.runtime.classpath"
-                   test-results-dir="${impl.test.results.dir}"
-                   explodedWarDir="${basedir}/build/target/test"
-                   custom.port="${scenario.aware.port}">
-            <custom-sysproperties>
-                <sysproperty key="cactus.contextURL"
-                             value="http://${container.host}:${scenario.aware.port}/test"/>
-            </custom-sysproperties>
-            <suite>
-                <test todir="${impl.test.results.dir}"
-                    name="com.sun.faces.application.resource.TestResourceManager"/>
-            </suite>
-
-        </jsf.junit>       
-       
-       
     </target>
 
 </project>

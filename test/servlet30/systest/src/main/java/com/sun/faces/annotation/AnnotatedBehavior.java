@@ -40,7 +40,6 @@
 
 package com.sun.faces.annotation;
 
-import javax.annotation.Resource;
 import javax.faces.component.behavior.ClientBehaviorBase;
 import javax.faces.component.behavior.FacesBehavior;
 
@@ -56,12 +55,5 @@ public class AnnotatedBehavior extends ClientBehaviorBase {
 	public String getRendererType() {
 		return "AnnotatedBehaviorRenderer";
 	}
-
-    @Resource(name="welcomeMessage")
-    private String welcomeMessage;
-
-    public String getWelcomeMessage() {
-        return welcomeMessage;
-    }
 
 }

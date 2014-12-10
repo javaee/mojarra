@@ -40,7 +40,6 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.spi.InjectionProviderException;
 
 import java.beans.*;
 import java.lang.reflect.Constructor;
@@ -98,7 +97,6 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
-import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.util.Cache;
 import com.sun.faces.util.Cache.Factory;
 import com.sun.faces.util.FacesLogger;
@@ -187,10 +185,10 @@ public class ApplicationImpl extends Application {
     // These four maps store store "identifier" | "class name"
     // mappings.
     //
-    private ApplicationInstanceFactoryMetadataMap<String,Object> behaviorMap = null;
-    private ApplicationInstanceFactoryMetadataMap<String,Object> componentMap = null;
-    private ApplicationInstanceFactoryMetadataMap<String,Object> converterIdMap = null;
-    private ApplicationInstanceFactoryMetadataMap<String,Object> validatorMap = null;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> behaviorMap = null;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> componentMap = null;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> converterIdMap = null;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> validatorMap = null;
 
     private Map<Class<?>,Object> converterTypeMap = null;
     private Set<String> defaultValidatorIds = null;
@@ -212,12 +210,12 @@ public class ApplicationImpl extends Application {
     public ApplicationImpl() {
         super();
         associate = new ApplicationAssociate(this);
-        componentMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
-        converterIdMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
+        componentMap = new ViewMemberInstanceFactoryMetadataMap<String, Object>(new ConcurrentHashMap<String, Object>());
+        converterIdMap = new ViewMemberInstanceFactoryMetadataMap<String, Object>(new ConcurrentHashMap<String, Object>());
         converterTypeMap = new ConcurrentHashMap<Class<?>, Object>();
-        validatorMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
+        validatorMap = new ViewMemberInstanceFactoryMetadataMap<String, Object>(new ConcurrentHashMap<String, Object>());
         defaultValidatorIds = new LinkedHashSet<String>();
-        behaviorMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<String, Object>());
+        behaviorMap = new ViewMemberInstanceFactoryMetadataMap<String, Object>(new ConcurrentHashMap<String, Object>());
         elContextListeners = new CopyOnWriteArrayList<ELContextListener>();
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
@@ -1700,7 +1698,7 @@ public class ApplicationImpl extends Application {
      * @param map The <code>Map</code> that will be searched.
      * @return The new object instance.
      */
-    protected Object newThing(String key, ApplicationInstanceFactoryMetadataMap<String, Object> map) {
+    private Object newThing(String key, ViewMemberInstanceFactoryMetadataMap<String, Object> map) {
         assert (key != null && map != null);
 
         Object result;
@@ -1718,9 +1716,7 @@ public class ApplicationImpl extends Application {
                clazz = Util.loadClass(cValue, value);
                 if (!associate.isDevModeEnabled()) {
                     map.put(key, clazz);
-                } else {
-                  map.scanForAnnotations(key, clazz);
-                }
+                } 
                 assert (clazz != null);
              } catch (Exception e) {
                  throw new FacesException(e.getMessage(), e);
@@ -1744,23 +1740,6 @@ public class ApplicationImpl extends Application {
             throw new FacesException((MessageUtils.getExceptionMessageString(
                   MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
                   clazz.getName())), t);
-        }
-
-        if (map.hasAnnotations(key)) {
-            InjectionProvider injectionProvider = associate.getInjectionProvider();
-            try {
-                injectionProvider.invokePostConstruct(result);
-            } catch (InjectionProviderException ex) {
-               LOGGER.log(Level.SEVERE, "Unable to invoke @PostConstruct annotated method on instance " + key, ex);
-               throw new FacesException(ex);
-            }
-
-            try {
-                injectionProvider.inject(result);
-            } catch (InjectionProviderException ex) {
-               LOGGER.log(Level.SEVERE, "Unable to inject instance" + key, ex);
-               throw new FacesException(ex);
-            }
         }
 
         return result;
