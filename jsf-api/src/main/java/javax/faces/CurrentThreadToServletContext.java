@@ -162,7 +162,7 @@ final class CurrentThreadToServletContext {
         return result;
     }
 
-    public void removeApplicationFactoryManager() {
+    void removeApplicationFactoryManager() {
         ClassLoader cl = getClassLoader();
         FactoryFinderInstance fm = this.getApplicationFactoryManager(cl, false);
         if (null != fm) {
@@ -178,7 +178,7 @@ final class CurrentThreadToServletContext {
         }
     }
 
-    public void resetSpecialInitializationCaseFlags() {
+    void resetSpecialInitializationCaseFlags() {
         logNullFacesContext.set(false);
         logNonNullFacesContext.set(false);
     }
@@ -220,7 +220,7 @@ final class CurrentThreadToServletContext {
         private static final String INIT_TIME_CL_KEY = MARKER_KEY + ".InitTimeCLKey";
 
         // <editor-fold defaultstate="collapsed" desc="Constructors and helpers">
-        public FactoryManagerCacheKey(FacesContext facesContext, ClassLoader cl,
+        FactoryManagerCacheKey(FacesContext facesContext, ClassLoader cl,
                 Map<FactoryManagerCacheKey,FactoryFinderInstance> factoryMap) {
             ExternalContext extContext = (null != facesContext) ? facesContext.getExternalContext()
                     : null;
@@ -342,11 +342,11 @@ final class CurrentThreadToServletContext {
         
         // </editor-fold>
         
-        public ClassLoader getClassLoader() {
+        ClassLoader getClassLoader() {
             return cl;
         }
         
-        public Object getContext() {
+        Object getContext() {
             return context;
         }
         

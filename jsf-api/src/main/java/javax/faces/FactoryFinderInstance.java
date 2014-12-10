@@ -146,7 +146,7 @@ final class FactoryFinderInstance {
     
     
     // -------------------------------------------------------- Consturctors
-    public FactoryFinderInstance() {
+    FactoryFinderInstance() {
         lock = new ReentrantReadWriteLock(true);
         factories = new HashMap<String, Object>();
         savedFactoryNames = new HashMap<String, List<String>>();
@@ -156,7 +156,7 @@ final class FactoryFinderInstance {
         copyInjectionProviderFromFacesContext();
     }
 
-    public FactoryFinderInstance(FactoryFinderInstance toCopy) {
+    FactoryFinderInstance(FactoryFinderInstance toCopy) {
         lock = new ReentrantReadWriteLock(true);
         factories = new HashMap<String, Object>();
         savedFactoryNames = new HashMap<String, List<String>>();
@@ -436,12 +436,12 @@ final class FactoryFinderInstance {
 
     }
 
-    // ------------------------------------------------------ Public Methods
-    public Collection<Object> getFactories() {
+    // ------------------------------------------------------ Package Private Methods
+    Collection<Object> getFactories() {
         return factories.values();
     }
 
-    public void addFactory(String factoryName, String implementation) {
+    void addFactory(String factoryName, String implementation) {
         validateFactoryName(factoryName);
         
         Object result = factories.get(factoryName);
@@ -455,7 +455,7 @@ final class FactoryFinderInstance {
         }
     }
     
-    public void releaseFactories() {
+    void releaseFactories() {
         InjectionProvider provider = getInjectionProvider();
         if (null != provider) {
             lock.writeLock().lock();
@@ -500,7 +500,7 @@ final class FactoryFinderInstance {
         factories.remove(INJECTION_PROVIDER_KEY);
     }
 
-    public Object getFactory(String factoryName) {
+    Object getFactory(String factoryName) {
         validateFactoryName(factoryName);
         
         Object factoryOrList;
