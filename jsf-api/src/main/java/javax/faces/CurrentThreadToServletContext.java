@@ -247,7 +247,6 @@ final class CurrentThreadToServletContext {
                 this.marker = new Long(System.currentTimeMillis());
             } else {
             
-                boolean found = false;
                 // For each entry in the factoryMap's keySet...
                 for (FactoryManagerCacheKey currentKey : keys) {
                     assert(null != currentKey.cl);
