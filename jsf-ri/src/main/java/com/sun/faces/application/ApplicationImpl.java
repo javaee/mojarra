@@ -185,10 +185,10 @@ public class ApplicationImpl extends Application {
     // These four maps store store "identifier" | "class name"
     // mappings.
     //
-    private ViewMemberInstanceFactoryMetadataMap<String,Object> behaviorMap = null;
-    private ViewMemberInstanceFactoryMetadataMap<String,Object> componentMap = null;
-    private ViewMemberInstanceFactoryMetadataMap<String,Object> converterIdMap = null;
-    private ViewMemberInstanceFactoryMetadataMap<String,Object> validatorMap = null;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> behaviorMap;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> componentMap;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> converterIdMap;
+    private ViewMemberInstanceFactoryMetadataMap<String,Object> validatorMap;
 
     private Map<Class<?>,Object> converterTypeMap = null;
     private Set<String> defaultValidatorIds = null;
