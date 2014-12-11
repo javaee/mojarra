@@ -41,9 +41,6 @@
 package javax.faces;
 
 
-import java.util.logging.Logger;
-
-
 /**
  * <p><strong class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2">FactoryFinder</strong>
  * implements the standard discovery algorithm for all factory objects
