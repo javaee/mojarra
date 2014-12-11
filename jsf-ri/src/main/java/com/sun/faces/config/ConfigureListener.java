@@ -145,7 +145,10 @@ public class ConfigureListener implements ServletRequestListener,
             timer.startTiming();
         }
 
-        ConfigManager configManager = ConfigManager.createInstance(context);
+        ConfigManager configManager = ConfigManager.getInstance(context);
+        if (null == configManager) {
+            configManager = ConfigManager.createInstance(context);
+        }
         if (configManager.hasBeenInitialized(context)) {
             return;
         }
