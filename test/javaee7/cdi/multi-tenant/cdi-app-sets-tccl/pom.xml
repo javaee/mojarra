@@ -54,7 +54,7 @@
   <name>Mojarra ${project.version} - Test - Java EE 7 - CDI - Multi-Tenant - App Sets TCCL</name>
   
   <build>
-    <finalName>test-cdi-app-sets-tccl</finalName>
+        <finalName>test-javaee7-cdi-multi-tenant-app-sets-tccl</finalName>
   </build>
   
 </project>
