@@ -2153,7 +2153,10 @@ public class ApplicationImpl extends Application {
                                          EventInfo eventInfo) {
 
           if (listeners != null && !listeners.isEmpty()) {
-            for (SystemEventListener curListener : listeners) {
+            ArrayList<SystemEventListener> list = 
+                    new ArrayList<SystemEventListener>(listeners);
+            
+            for (SystemEventListener curListener : list) {
                 if (curListener != null && curListener.isListenerForSource(source)) {
                     if (event == null) {
                         event = eventInfo.createSystemEvent(source);
