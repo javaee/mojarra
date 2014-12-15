@@ -27,6 +27,7 @@
         <module>selenium</module>
         <module>servlet30</module>
         <module>servlet31</module>
+        <module>servlet40</module>
         <module>unit</module>
         <module>util</module>
         <module>web-profile</module>
