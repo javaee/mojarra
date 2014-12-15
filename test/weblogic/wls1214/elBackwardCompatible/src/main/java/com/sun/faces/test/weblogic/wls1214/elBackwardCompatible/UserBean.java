@@ -39,7 +39,7 @@
  */
 package com.sun.faces.test.weblogic.wls1214.elBackwardCompatible;
 
-import com.sun.el.ExpressionFactoryImpl;
+//import com.sun.el.ExpressionFactoryImpl;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
-import org.jboss.weld.el.WeldExpressionFactory;
+//import org.jboss.weld.el.WeldExpressionFactory;
 
 @Named
 @RequestScoped
@@ -125,26 +125,26 @@ public class UserBean implements Serializable {
                 .getJspApplicationContext(sc);
         ExpressionFactory ef = jspAppContext.getExpressionFactory();
         
-        Field delegateField = WeldExpressionFactory.class.getDeclaredField("delegate");
-        delegateField.setAccessible(true);
-        Object delegateInstance = delegateField.get(ef);
+//        Field delegateField = WeldExpressionFactory.class.getDeclaredField("delegate");
+//        delegateField.setAccessible(true);
+//        Object delegateInstance = delegateField.get(ef);
         
-        if (!(delegateInstance instanceof ExpressionFactoryImpl)) {
+//        if (!(delegateInstance instanceof ExpressionFactoryImpl)) {
         
             // dereference twice to get the true ExpressionFactoryImpl instance
-            delegateInstance = delegateField.get(delegateInstance);
-        }
+//            delegateInstance = delegateField.get(delegateInstance);
+//        }
                 
-        Field isBackwardCompatible22Field = ExpressionFactoryImpl.class.getDeclaredField(flagName);
-        isBackwardCompatible22Field.setAccessible(true);
+//        Field isBackwardCompatible22Field = ExpressionFactoryImpl.class.getDeclaredField(flagName);
+//        isBackwardCompatible22Field.setAccessible(true);
         
         boolean flagValue = true;
-        Map<String, String> params = extContext.getRequestParameterMap();
-        if (params.containsKey(flagName)) {
-            flagValue = Boolean.valueOf(params.get(flagName));
-        }
+//        Map<String, String> params = extContext.getRequestParameterMap();
+//        if (params.containsKey(flagName)) {
+//            flagValue = Boolean.valueOf(params.get(flagName));
+//        }
         
-        isBackwardCompatible22Field.setBoolean(delegateInstance, flagValue);
+//        isBackwardCompatible22Field.setBoolean(delegateInstance, flagValue);
         
     }
     
