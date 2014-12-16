@@ -42,7 +42,7 @@
 
 -->
 <glassfish-web-app error-url="">
-  <context-root>/test-webprofile-facelets-core</context-root>
+  <context-root>/test-javaee6web-facelets</context-root>
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">

@@ -1,4 +1,4 @@
-package com.sun.faces.test.webprofile.facelets.core;
+package com.sun.faces.test.javaee6web.facelets;
 
 import java.io.Serializable;
 import javax.faces.view.ViewScoped;

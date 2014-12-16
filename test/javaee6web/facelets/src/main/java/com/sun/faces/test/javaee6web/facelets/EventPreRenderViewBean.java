@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.facelets.core;
+package com.sun.faces.test.javaee6web.facelets;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;

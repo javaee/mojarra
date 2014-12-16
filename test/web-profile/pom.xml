@@ -61,8 +61,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <modules>	
-        <module>facelets</module>
+    <modules>
         <module>flow</module>
         <module>multi_templating</module>
         <module>renderKit</module>
