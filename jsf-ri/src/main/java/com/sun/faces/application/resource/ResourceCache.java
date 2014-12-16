@@ -40,17 +40,17 @@
 
 package com.sun.faces.application.resource;
 
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.servlet.ServletContext;
-
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MultiKeyConcurrentHashMap;
+import com.sun.faces.util.Util;
+
+import javax.servlet.ServletContext;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>
@@ -93,21 +93,25 @@ public class ResourceCache {
      * Constructs a new ResourceCache.
      */
     public ResourceCache() {
+        this(WebConfiguration.getInstance());
+    }
 
-        WebConfiguration config = WebConfiguration.getInstance();
-        assert (config != null);
-        ServletContext sc = config.getServletContext();
-        long period = getCheckPeriod(config);
-        checkPeriod = ((period != -1) ? period * 1000L * 60L : -1);
-        resourceCache = new MultiKeyConcurrentHashMap<Object,ResourceInfoCheckPeriodProxy>(30);
+    private ResourceCache(WebConfiguration config) {
+        this(getCheckPeriod(config));
+
         if (LOGGER.isLoggable(Level.FINE)) {
+            ServletContext sc = config.getServletContext();
             LOGGER.log(Level.FINE,
                        "ResourceCache constructed for {0}.  Check period is {1} minutes.",
                        new Object[] { getServletContextIdentifier(sc), checkPeriod });
         }
-
     }
 
+    // this one is for unit tests
+    ResourceCache(long period) {
+        checkPeriod = ((period != -1) ? period * 1000L * 60L : -1);
+        resourceCache = new MultiKeyConcurrentHashMap<Object, ResourceInfoCheckPeriodProxy>(30);
+    }
 
     // ---------------------------------------------------------- Public Methods
 
@@ -134,7 +138,7 @@ public class ResourceCache {
               resourceCache.putIfAbsent(info.name,
                                         info.libraryName,
                                         info.localePrefix,
-                                        contracts,
+                                        new ArrayList(contracts),
                                         new ResourceInfoCheckPeriodProxy(info, checkPeriod));
         return ((proxy != null) ? proxy.getResourceInfo() : null);
 
@@ -181,7 +185,7 @@ public class ResourceCache {
     // --------------------------------------------------------- Private Methods
 
 
-    private Long getCheckPeriod(WebConfiguration webConfig) {
+    private static Long getCheckPeriod(WebConfiguration webConfig) {
 
         String val = webConfig.getOptionValue(WebContextInitParameter.ResourceUpdateCheckPeriod);
         try {
