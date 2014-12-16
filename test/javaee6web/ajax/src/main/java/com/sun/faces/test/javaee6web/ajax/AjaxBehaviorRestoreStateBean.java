@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.statesaving.basic;
+package com.sun.faces.test.javaee6web.ajax;
 
 import java.io.Serializable;
 import javax.enterprise.context.Conversation;
@@ -47,7 +47,7 @@ import javax.inject.Inject;
 
 @Model
 @ConversationScoped
-public class Issue1845Bean implements Serializable {
+public class AjaxBehaviorRestoreStateBean implements Serializable {
 
     private static final long serialVersionUID = 2736489267082630032L;
     private boolean showButton;

@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.statesaving;
+package com.sun.faces.test.javaee6web.ajax;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
@@ -70,7 +70,7 @@ public class Issue1845IT {
     @Test
     public void testIssue1845() throws Exception {
         webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
-        HtmlPage page = webClient.getPage(webUrl + "faces/issue1845.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/ajaxBehaviorRestoreState.xhtml");
         assertTrue(!page.asText().contains("Click Me"));
         HtmlCheckBoxInput checkbox = (HtmlCheckBoxInput) page.getHtmlElementById("myForm:buttonCheckbox");
         page = checkbox.click();
