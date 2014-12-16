@@ -38,12 +38,48 @@
  * holder.
 
  */
-package com.sun.faces.test;
+package com.sun.faces.test.weblogic.request_char_encoding;
 
-import javax.faces.convert.FacesConverter;
+import java.io.Serializable;
 
+public class Foo implements Serializable {
+    
+    private String name = "";
 
-@FacesConverter(value = "fooConverter")
-public class FooConverterById extends FooConverterBase {
+    public Foo(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Foo other = (Foo) obj;
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 41 * hash + (this.name != null ? this.name.hashCode() : 0);
+        return hash;
+    }
+    
+    
     
 }

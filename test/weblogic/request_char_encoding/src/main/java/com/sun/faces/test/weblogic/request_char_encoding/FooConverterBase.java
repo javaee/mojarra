@@ -38,55 +38,38 @@
  * holder.
 
  */
-package com.sun.faces.test;
+package com.sun.faces.test.weblogic.request_char_encoding;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
+import java.util.logging.Logger;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 
-@ManagedBean
-@ViewScoped
-public class Bean implements Serializable {
+public class FooConverterBase implements Converter {
     
-    String valueFromQueryParamAtCtorTime;
-    
-    public Bean() {
-        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
-        valueFromQueryParamAtCtorTime = extContext.getRequestParameterMap().get("pageWithViewScopedBean");
-        foos = new ArrayList<Foo>();
-        foos.add(new Foo("Shirley"));
-        foos.add(new Foo("Stan"));
-        foos.add(new Foo("Cole"));
+    public static final Logger LOGGER = Logger.getAnonymousLogger();
 
+    public FooConverterBase() {
+        LOGGER.info("FooConverter ctor");        
     }
     
-    
-    public String getBob() { return "Bob created with param " + valueFromQueryParamAtCtorTime; }
-    
-    
-    List<Foo> foos;
-
-    public List<Foo> getFoos() {
-        return foos;
-    }
-
-    public void setFoos(List<Foo> foos) {
-        this.foos = foos;
-    }
+    @Override
+    public Object getAsObject(FacesContext context, UIComponent component, String value) {
+        Foo result = new Foo(value);
         
-    private Foo selectedFoo;
-
-    public Foo getSelectedFoo() {
-        return selectedFoo;
+        return result;
     }
 
-    public void setSelectedFoo(Foo selectedFoo) {
-        this.selectedFoo = selectedFoo;
+    @Override
+    public String getAsString(FacesContext context, UIComponent component, Object value) {
+        String result = "";
+        
+        if (null != value) {
+            result =  ((Foo)value).getName();
+        }
+        return result;
     }
+    
     
     
 }

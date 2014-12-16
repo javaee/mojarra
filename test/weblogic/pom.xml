@@ -62,6 +62,7 @@
         </dependency>
     </dependencies>    
     <modules>
+        <module>request_char_encoding</module>
 	<module>wls1214</module>
     </modules>
 </project>

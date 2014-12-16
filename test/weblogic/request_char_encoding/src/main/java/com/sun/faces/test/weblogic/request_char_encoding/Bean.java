@@ -38,48 +38,55 @@
  * holder.
 
  */
-package com.sun.faces.test;
+package com.sun.faces.test.weblogic.request_char_encoding;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
-public class Foo implements Serializable {
+@ManagedBean
+@ViewScoped
+public class Bean implements Serializable {
     
-    private String name = "";
+    String valueFromQueryParamAtCtorTime;
+    
+    public Bean() {
+        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
+        valueFromQueryParamAtCtorTime = extContext.getRequestParameterMap().get("pageWithViewScopedBean");
+        foos = new ArrayList<Foo>();
+        foos.add(new Foo("Shirley"));
+        foos.add(new Foo("Stan"));
+        foos.add(new Foo("Cole"));
 
-    public Foo(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Foo other = (Foo) obj;
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 41 * hash + (this.name != null ? this.name.hashCode() : 0);
-        return hash;
     }
     
+    
+    public String getBob() { return "Bob created with param " + valueFromQueryParamAtCtorTime; }
+    
+    
+    List<Foo> foos;
+
+    public List<Foo> getFoos() {
+        return foos;
+    }
+
+    public void setFoos(List<Foo> foos) {
+        this.foos = foos;
+    }
+        
+    private Foo selectedFoo;
+
+    public Foo getSelectedFoo() {
+        return selectedFoo;
+    }
+
+    public void setSelectedFoo(Foo selectedFoo) {
+        this.selectedFoo = selectedFoo;
+    }
     
     
 }

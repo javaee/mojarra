@@ -194,6 +194,5 @@ Function of sub-directories in top-level test directory
  * util - Utililty JAR project for use by test projects.
  * web-profile - JavaEE 6 Web-Profile specific tests (do not put any new projects in here).
  * weblogic - Weblogic specific tests.
- * weblogic12c - Weblogic 12c specific tests (do not put any new projects in here).
 
 --END
