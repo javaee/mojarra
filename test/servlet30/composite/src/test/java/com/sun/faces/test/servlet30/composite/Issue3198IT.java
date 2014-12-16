@@ -66,6 +66,8 @@ public class Issue3198IT {
     @Test
     public void testValidatorComponent() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/validator/validatorComponent.xhtml");
+        HtmlElement input = (HtmlElement) page.getElementById("form:composite:inputText");
+        input.type("input");
         HtmlElement button = (HtmlElement) page.getElementById("form:submit");
         page = button.click();
         assertTrue(page.asXml().contains("Validator method called"));
