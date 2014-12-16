@@ -15,7 +15,7 @@ public class ResourceCacheTest {
     public void noMemoryLeakWithContracts() {
         ResourceCache cache = new ResourceCache(-1L);
         ResourceInfo resourceInfo = new ResourceInfo(new ContractInfo("foo"), "bar.gif", null, null);
-        List<String> contracts = new ArrayList<>(Arrays.asList("foo", "baz"));
+        List<String> contracts = new ArrayList<String>(Arrays.asList("foo", "baz"));
         cache.add(resourceInfo, contracts);
         // now we clear the contracts list, which was used to create the cache entry.
         contracts.clear();
