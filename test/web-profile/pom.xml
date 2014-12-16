@@ -67,7 +67,6 @@
         <module>flow</module>
         <module>multi_templating</module>
         <module>renderKit</module>
-        <module>scope</module>
         <module>stateSaving</module>
     </modules>
 </project>

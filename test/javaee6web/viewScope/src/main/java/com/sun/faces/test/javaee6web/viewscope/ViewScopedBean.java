@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.scope.view;
+package com.sun.faces.test.javaee6web.viewscope;
 
 import java.io.Serializable;
 
@@ -73,7 +73,7 @@ public class ViewScopedBean implements Serializable {
         Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
         Integer result = (Integer) sessionMap.get(SESSION_KEY);
         if (null == result) {
-            result = new Integer(0);
+            result = 0;
             sessionMap.put(SESSION_KEY, result);
         }
         sessionMap.put(SESSION_KEY, ++result);

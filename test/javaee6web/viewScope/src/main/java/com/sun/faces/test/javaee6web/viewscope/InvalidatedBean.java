@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.scope.view;
+package com.sun.faces.test.javaee6web.viewscope;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -86,6 +86,8 @@ public class InvalidatedBean implements Serializable {
 
     /**
      * Get the text.
+     * 
+     * @return the text.
      */
     public String getText() {
         return this.text;

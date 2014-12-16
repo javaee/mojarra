@@ -66,5 +66,6 @@
     <modules>
         <module>ajax</module>        
         <module>el</module>
+	<module>viewScope</module>
     </modules>
 </project>

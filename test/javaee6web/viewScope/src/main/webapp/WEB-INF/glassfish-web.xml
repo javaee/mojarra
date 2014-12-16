@@ -42,7 +42,7 @@
 
 -->
 <glassfish-web-app error-url="">
-  <context-root>/test-webprofile-scope-view</context-root>
+  <context-root>/test-javaee6web-viewScope</context-root>
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">

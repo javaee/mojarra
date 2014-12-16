@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.scope.view;
+package com.sun.faces.test.javaee6web.viewscope;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
@@ -130,23 +130,21 @@ public class Issue2641IT {
     @Test
     public void testInvalidatedSession() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/invalidatedSession.xhtml");
-        assertTrue(page.asText().indexOf("This is from the @PostConstruct") != -1);
+        assertTrue(page.asXml().contains("This is from the @PostConstruct"));
         webClient.getPage(webUrl + "faces/invalidatedPerform.xhtml");
         page = webClient.getPage(webUrl + "faces/invalidatedVerify.xhtml");
-        assertTrue(page.asText().indexOf("true") != -1);
+        assertTrue(page.asXml().contains("true"));
     }
-    
+
     @Test
     public void testViewScopedInput() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewScopedInput.xhtml");
         HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
-        String value = ""+System.currentTimeMillis();
+        String value = "" + System.currentTimeMillis();
         input.setValueAttribute(value);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("stay");
         page = button.click();
         DomElement output = page.getElementById("output");
         assertTrue(output.asText().contains(value));
-        
-        
     }
 }
