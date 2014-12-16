@@ -63,7 +63,6 @@
     </dependencies>
     <modules>
         <module>flow</module>
-        <module>multi_templating</module>
         <module>renderKit</module>
     </modules>
 </project>
