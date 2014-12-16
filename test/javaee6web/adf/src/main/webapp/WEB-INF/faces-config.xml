@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -45,21 +46,15 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
               version="2.0">
-    <name>D</name>
-
-    <!-- this ordering info shouldn't be considered -->
+    <name>ADF</name>
     <ordering>
         <before>
             <others/>
         </before>
     </ordering>
     <application>
-      <default-render-kit-id>
-        org.apache.myfaces.trinidad.core
-      </default-render-kit-id>
+        <default-render-kit-id>
+            org.apache.myfaces.trinidad.core
+        </default-render-kit-id>
     </application>
-     
-    
-
-
 </faces-config>

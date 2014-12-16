@@ -64,6 +64,7 @@
         </dependency>
     </dependencies>
     <modules>
+        <module>adf</module>
         <module>ajax</module>        
         <module>el</module>
 	<module>viewScope</module>

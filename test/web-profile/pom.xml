@@ -61,12 +61,10 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <modules>
-        <module>adf</module>	
+    <modules>	
         <module>facelets</module>
         <module>flow</module>
         <module>multi_templating</module>
         <module>renderKit</module>
-        <module>stateSaving</module>
     </modules>
 </project>
