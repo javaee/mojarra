@@ -40,7 +40,6 @@
 package com.sun.faces.test.agnostic.facelets.ui;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
@@ -48,7 +47,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class Issue2717IT {
 
@@ -66,7 +64,6 @@ public class Issue2717IT {
         webClient.closeAllWindows();
     }
 
-    @Ignore
     @Test
     public void testIssue2717() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/repeatResetNull.xhtml");
