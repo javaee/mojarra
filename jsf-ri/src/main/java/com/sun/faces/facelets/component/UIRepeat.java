@@ -608,8 +608,6 @@ public class UIRepeat extends UINamingContainer {
             return false;
         }
         
-        this.setDataModel(null);
-
         FacesContext facesContext = context.getFacesContext();
         boolean visitRows = requiresRowIteration(context);
 
@@ -618,6 +616,8 @@ public class UIRepeat extends UINamingContainer {
             oldRowIndex = getDataModel().getRowIndex();
             setIndex(facesContext, -1);
         }
+
+        this.setDataModel(null);
 
         // Push ourselves to EL
         pushComponentToEL(facesContext, null);
