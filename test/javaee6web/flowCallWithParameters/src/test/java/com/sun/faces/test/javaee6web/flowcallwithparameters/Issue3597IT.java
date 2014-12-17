@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,58 +37,27 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.parameter_faces_flow_call;
+package com.sun.faces.test.javaee6web.flowcallwithparameters;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.assertTrue;
 
-public class FlowACallsFlowBIT {
-    /**
-     * Stores the web URL.
-     */
+public class Issue3597IT {
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
@@ -98,46 +67,41 @@ public class FlowACallsFlowBIT {
     public void testFlowANoInboundNoOutboundFlowBNoInboundNoOutbound() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
-        assertTrue(page.getBody().asText().indexOf("Outside of flow") != -1);
+        assertTrue(page.getBody().asText().contains("Outside of flow"));
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("flow-a-no-inbound-no-outbound");
         page = button.click();
-        assertTrue(page.getBody().asText().indexOf("flow-a-no-inbound-no-outbound") != -1);
-        
+        assertTrue(page.getBody().asText().contains("flow-a-no-inbound-no-outbound"));
+
         button = (HtmlSubmitInput) page.getElementById("callB");
         page = button.click();
-        assertTrue(page.getBody().asText().indexOf("flow-b-no-inbound-no-outbound") != -1);
-        
+        assertTrue(page.getBody().asText().contains("flow-b-no-inbound-no-outbound"));
     }
-    
+
     @Test
     public void testFlowAYesInboundNoOutboundFlowBNoInboundNoOutbound() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
-        assertTrue(page.getBody().asText().indexOf("Outside of flow") != -1);
+        assertTrue(page.getBody().asText().contains("Outside of flow"));
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("flow-a-yes-inbound-no-outbound");
         page = button.click();
-        assertTrue(page.getBody().asText().indexOf("flow-a-yes-inbound-no-outbound") != -1);
-        
+        assertTrue(page.getBody().asText().contains("flow-a-yes-inbound-no-outbound"));
+
         button = (HtmlSubmitInput) page.getElementById("callB");
         page = button.click();
-        assertTrue(page.getBody().asText().indexOf("flow-b-no-inbound-no-outbound") != -1);
-        
+        assertTrue(page.getBody().asText().contains("flow-b-no-inbound-no-outbound"));
     }
-    
+
     @Test
     public void testFlowANoInboundYesOutboundFlowBNoInboundNoOutbound() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
-        assertTrue(page.getBody().asText().indexOf("Outside of flow") != -1);
+        assertTrue(page.getBody().asText().contains("Outside of flow"));
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("flow-a-no-inbound-yes-outbound");
         page = button.click();
-        assertTrue(page.getBody().asText().indexOf("flow-a-no-inbound-yes-outbound") != -1);
-        
+        assertTrue(page.getBody().asText().contains("flow-a-no-inbound-yes-outbound"));
+
         button = (HtmlSubmitInput) page.getElementById("callB");
         page = button.click();
-        assertTrue(page.getBody().asText().indexOf("flow-b-no-inbound-no-outbound") != -1);
-        
+        assertTrue(page.getBody().asText().contains("flow-b-no-inbound-no-outbound"));
     }
-    
-    
 }

@@ -69,6 +69,7 @@
         <module>el</module>
         <module>facelets</module>
         <module>flowCall</module>
+        <module>flowCallWithParameters</module>
         <module>flowFactory</module>
         <module>flowMethodCall</module>
         <module>flowSwitchCall</module>
