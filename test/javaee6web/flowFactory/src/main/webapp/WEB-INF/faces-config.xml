@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -41,18 +42,18 @@
 
 -->
 
-<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="
-        http://xmlns.jcp.org/xml/ns/javaee
-        http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
-            <factory>
-                <flow-handler-factory>com.sun.faces.test.webprofile.flow.factory.FlowHandlerFactoryTestImpl</flow-handler-factory>
-            </factory>
-        <flow-definition id="flow">
-            <start-node>start</start-node>
-            <view id="start">
-                <vdl-document>/start.xhtml</vdl-document>                
-            </view>
-        </flow-definition>
+<faces-config 
+    version="2.2" 
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+    <factory>
+        <flow-handler-factory>com.sun.faces.test.javaee6web.flowfactory.FlowHandlerFactoryImpl</flow-handler-factory>
+    </factory>
+    <flow-definition id="flow">
+        <start-node>start</start-node>
+        <view id="start">
+            <vdl-document>/start.xhtml</vdl-document>
+        </view>
+    </flow-definition>
 </faces-config>

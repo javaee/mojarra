@@ -68,6 +68,7 @@
         <module>ajax</module>
         <module>el</module>
         <module>facelets</module>
+        <module>flowFactory</module>
         <module>viewScope</module>
     </modules>
 </project>

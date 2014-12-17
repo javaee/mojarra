@@ -64,7 +64,6 @@
         <module>basic_method_call</module>
         <module>basic_switch</module>
         <module>defining_document_id</module>
-        <module>factory</module>
         <module>intermediate</module>
         <module>multi-page-from-jar</module>
         <module>nested_flows</module>

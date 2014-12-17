@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.factory;
+package com.sun.faces.test.javaee6web.flowfactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
@@ -48,27 +48,19 @@ import javax.faces.flow.FlowHandlerFactoryWrapper;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-/**
- * A simple wrapped flow handler factory.
- */
 @Named
 @ApplicationScoped
-public class FlowHandlerFactoryTestImpl extends FlowHandlerFactoryWrapper {
+public class FlowHandlerFactoryImpl extends FlowHandlerFactoryWrapper {
 
-    public FlowHandlerFactoryTestImpl() {
+    public FlowHandlerFactoryImpl() {
     }
-    
+
     private FlowHandlerFactory wrapped;
-    
+
     @Inject
     private AppBean appBean;
 
-    /**
-     * Constructor.
-     *
-     * @param wrapped the wrapped flow handler factory.
-     */
-    public FlowHandlerFactoryTestImpl(FlowHandlerFactory wrapped) {
+    public FlowHandlerFactoryImpl(FlowHandlerFactory wrapped) {
         this.wrapped = wrapped;
     }
 
@@ -86,10 +78,11 @@ public class FlowHandlerFactoryTestImpl extends FlowHandlerFactoryWrapper {
      */
     @Override
     public FlowHandler createFlowHandler(FacesContext context) {
-        System.out.println("createFlowHandler");
-        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("flowHandlerFactoryWrapped", true);
+        FacesContext.getCurrentInstance().getExternalContext().
+                getApplicationMap().put("flowHandlerFactoryWrapped", true);
         String id = (null != appBean) ? appBean.getId() : "null";
-        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("appBean", id);
+        FacesContext.getCurrentInstance().getExternalContext().
+                getApplicationMap().put("appBean", id);
         return getWrapped().createFlowHandler(context);
     }
 }
