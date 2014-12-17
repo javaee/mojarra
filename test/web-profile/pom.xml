@@ -63,6 +63,5 @@
     </dependencies>
     <modules>
         <module>flow</module>
-        <module>renderKit</module>
     </modules>
 </project>

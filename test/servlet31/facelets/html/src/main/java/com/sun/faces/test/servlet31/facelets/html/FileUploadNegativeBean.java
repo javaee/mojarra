@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,54 +37,40 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.renderKit.fileUploadFailure;
+package com.sun.faces.test.servlet31.facelets.html;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlFileInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.test.junit.JsfServerExclude;
-import com.sun.faces.test.junit.JsfTest;
-import com.sun.faces.test.junit.JsfTestRunner;
-import com.sun.faces.test.junit.JsfVersion;
-import java.io.File;
-import org.junit.After;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.servlet.http.Part;
 
-@RunWith(JsfTestRunner.class)
-public class Issue2326IT {
+@ManagedBean(name = "fileUploadNegativeBean")
+@RequestScoped
+public class FileUploadNegativeBean {
 
-    private String webUrl;
-    private WebClient webClient;
+    private Part uploadedFile;
 
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
+    public Part getUploadedFile() {
+        return uploadedFile;
     }
 
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
+    public void setUploadedFile(Part uploadedFile) {
+        this.uploadedFile = uploadedFile;
     }
 
-    @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
-    public void testFileException() throws Exception {
-        webClient = new WebClient();
-        HtmlPage page = webClient.getPage(webUrl + "faces/inputFile.xhtml");
+    public String getFileText() {
+        String text = "";
 
-        String basedir = System.getProperty("basedir");
-        HtmlFileInput fileInput = (HtmlFileInput) page.getElementById("file");
-        fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess.txt");
+        if (null != uploadedFile) {
+            try {
+                InputStream is = uploadedFile.getInputStream();
+                text = new Scanner(is).useDelimiter("\\A").next();
+            } catch (IOException ex) {
 
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
-
-        webClient.setThrowExceptionOnFailingStatusCode(false);
-        page = button.click();
-
-        String pageText = page.getBody().asText();
-        assertTrue(pageText.contains("Negative test, intentional failure"));
+            }
+        }
+        return text;
     }
 }

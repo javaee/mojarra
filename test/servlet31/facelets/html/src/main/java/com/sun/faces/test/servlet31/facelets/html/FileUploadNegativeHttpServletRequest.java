@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,37 +38,28 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.renderKit.fileUploadFailure;
+package com.sun.faces.test.servlet31.facelets.html;
 
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.context.FacesContextWrapper;
+import java.io.IOException;
+import java.util.Collection;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.Part;
 
-public class FacesContextImpl extends FacesContextWrapper {
+public class FileUploadNegativeHttpServletRequest extends HttpServletRequestWrapper {
     
-    private FacesContext wrapped;
+    private HttpServletRequest wrapped;
 
-    public FacesContextImpl(FacesContext wrapped) {
-        this.wrapped = wrapped;
+    public FileUploadNegativeHttpServletRequest(HttpServletRequest request) {
+        super(request);
+        this.wrapped = request;
     }
-    
-    @Override
-    public FacesContext getWrapped() {
-        return wrapped;
-    }
-    
-    private ExternalContextImpl extContext;
 
     @Override
-    public ExternalContext getExternalContext() {
-        if (null == extContext) {
-            extContext = new ExternalContextImpl(getWrapped().getExternalContext());
-            
-        }
-        return extContext;
+    public Collection<Part> getParts() throws IOException, ServletException {
+        throw new IOException("Negative test, intentional failure");
     }
-    
-    
     
     
     
