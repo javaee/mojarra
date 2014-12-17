@@ -1,8 +1,8 @@
 /*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.      
- *  
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
- *  
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -37,39 +37,62 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet31.facelets.html;
 
-package test.webprofile.renderKit.basic;
-
-import javax.faces.application.FacesMessage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
+import javax.faces.application.ProjectStage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
 
-@ManagedBean
-public class Issue2941Bean {
-    private Part file;
+@ManagedBean(name = "fileUploadBean")
+@RequestScoped
+public class FileUploadBean {
 
-	public Part getFile()
-	{
-		return null;
-	}
-	public void setFile(Part p)
-	{
-		FacesMessage msg=new FacesMessage("file 1 is saved");
-		msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-	}
-	
-	public Part getFile1()
-	{
-		return null;
-	}
-	public void setFile1(Part p)
-	{
-		FacesMessage msg=new FacesMessage("file 2 is saved");
-		msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-	}
+    public FileUploadBean() {
+    }
+    private Part uploadedFile;
+
+    public Part getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(Part uploadedFile) {
+        this.uploadedFile = uploadedFile;
+    }
+
+    public String getFileText() {
+        String fileText = "";
+
+        if (null != uploadedFile) {
+            try {
+                InputStream is = uploadedFile.getInputStream();
+                fileText = new Scanner(is).useDelimiter("\\A").next();
+            } catch (IOException ex) {
+
+            }
+        }
+        return fileText;
+    }
+
+    private String text;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getProjectStage() {
+        String projectStage = null;
+        if (FacesContext.getCurrentInstance().isProjectStage(ProjectStage.Development)) {
+            projectStage = "ProjectStage.Development";
+        }
+        return projectStage;
+    }
 }

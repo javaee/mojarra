@@ -54,7 +54,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Web-Profile - RenderKit</name>
     <modules>
-        <module>basic</module>
         <module>fileUploadFailure</module>
     </modules>
 </project>

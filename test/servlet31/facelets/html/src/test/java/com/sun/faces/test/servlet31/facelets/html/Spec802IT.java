@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.renderKit.basic;
+package com.sun.faces.test.servlet31.facelets.html;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlFileInput;
@@ -122,7 +122,7 @@ public class Spec802IT {
     @Test
     public void testFileUploadNoEncType() throws Exception {
         webClient = new WebClient();
-        HtmlPage page = webClient.getPage(webUrl + "faces/inputFileNoEncTyoe.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/inputFileNoEncType.xhtml");
         if (page.asText().contains("ProjectStage.Development")) {
             assertTrue(page.asText().contains(
                     "File upload component requires a form with an enctype of multipart/form-data"));

@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,63 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet31.facelets.html;
 
-package com.sun.faces.test.webprofile.renderKit.basic;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Scanner;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.ProjectStage;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-import javax.servlet.http.Part;
+public class Issue2941IT {
 
-@Named
-@RequestScoped
-public class FileUploadBean {
+    private String webUrl;
+    private WebClient webClient;
 
-    public FileUploadBean() {
-    }
-    private Part uploadedFile;
-
-    public Part getUploadedFile() {
-        return uploadedFile;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public void setUploadedFile(Part uploadedFile) {
-        this.uploadedFile = uploadedFile;
-    }
-    
-    public String getFileText() {
-        String text = "";
-
-        if (null != uploadedFile) {
-            try {
-                InputStream is = uploadedFile.getInputStream();
-                text = new Scanner( is ).useDelimiter("\\A").next();
-            } catch (IOException ex) {
-                
-            }
-        }
-        return text;
-    }
-    
-    private String text;
-
-    public String getText() {
-        return text;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+    @Test
+    public void testFileAjaxUpload() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/inputFileAjaxUpload.xhtml");
 
-    public String getProjectStage() {
-        String projectStage = null;
-        if (FacesContext.getCurrentInstance().isProjectStage(ProjectStage.Development)) {
-            projectStage = "ProjectStage.Development";
-        }
-        return projectStage;
+        /*
+         * NOTE: There is NO HtmlUnit test for this issue because HtmlUnit 
+         * cannot handle programmatic creation of IFrame onload callback 
+         * (done in JSF) for IE. IFrame is still used because the form is 
+         * multipart/form-data.
+         */
     }
 }
