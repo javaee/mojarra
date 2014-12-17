@@ -75,6 +75,7 @@
         <module>flowReturnFromDepth</module>
         <module>flowSwitchCall</module>
         <module>flowViewNodeDifferent</module>
+        <module>nestedFlow</module>
         <module>viewScope</module>
     </modules>
 </project>
