@@ -73,6 +73,7 @@
         <module>flowCall</module>
         <module>flowCallWithParameters</module>
         <module>flowFactory</module>
+        <module>flowInXmlAndJava</module>
         <module>flowMethodCall</module>
         <module>flowReturnFromDepth</module>
         <module>flowSwitchCall</module>

@@ -59,6 +59,5 @@
         <module>basic-multi-page</module>
         <module>basic-multi-page-fdl-in-web-inf</module>
         <module>defining_document_id</module>
-        <module>intermediate</module>
     </modules>
 </project>

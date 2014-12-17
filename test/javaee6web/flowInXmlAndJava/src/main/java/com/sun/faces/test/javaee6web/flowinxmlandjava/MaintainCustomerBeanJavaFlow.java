@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.intermediate;
+package com.sun.faces.test.javaee6web.flowinxmlandjava;
 
 import javax.inject.Named;
 

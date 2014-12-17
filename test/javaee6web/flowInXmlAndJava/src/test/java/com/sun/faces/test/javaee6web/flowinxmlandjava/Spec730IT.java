@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.intermediate;
+package com.sun.faces.test.javaee6web.flowinxmlandjava;
 
 import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
@@ -55,7 +55,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class FlowEntryExitIntermediateIT {
+public class Spec730IT {
     /**
      * Stores the web URL.
      */

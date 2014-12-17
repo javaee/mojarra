@@ -38,63 +38,35 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.intermediate;
+package com.sun.faces.test.javaee6web.flowinxmlandjava;
 
-import java.io.Serializable;
-import java.util.Map;
-import javax.faces.context.FacesContext;
-import javax.faces.flow.FlowHandler;
-
-public class MaintainCustomerBean implements Serializable
+public class CustomerBean
 {
-   public MaintainCustomerBean() {
+    private static int lastId = 0;
+    
+    private int myId;
+    
+    private boolean upgraded = false;
+
+    public boolean isUpgraded() {
+        return upgraded;
+    }
+
+    public void setUpgraded(boolean upgraded) {
+        this.upgraded = upgraded;
+    }
+    
+   public CustomerBean()
+   {
       super();
+      myId = incrementId();
    }
    
-   public String createCustomer() {
-       //  Logic to create a new customer object.
-       FacesContext context = FacesContext.getCurrentInstance();
-       CustomerBean customer = new CustomerBean();
-       FlowHandler flowHandler = context.getApplication().getFlowHandler();
-       Map<Object, Object> flowScope = flowHandler.getCurrentFlowScope();
-       if (null == flowScope) {
-           throw new IllegalStateException("Must have a flow handler");
-       }
-       flowScope.put("customerId", customer.getCustomerId());
-       flowScope.put("customerIdValue", customer);
-       return "router1";
+   public int getCustomerId() {
+       return myId;
    }
    
-   public String fetchCustomer() {
-      //  Logic to fetch a customer.
-      return "success";
-   }
-   
-   public void upgradeCustomer() {
-       FacesContext context = FacesContext.getCurrentInstance();
-       FlowHandler flowHandler = context.getApplication().getFlowHandler();
-       Map<Object, Object> flowScope = flowHandler.getCurrentFlowScope();
-       if (null == flowScope) {
-           throw new IllegalStateException("Must have a flow handler");
-       }
-       CustomerBean customer = (CustomerBean) flowScope.get("customerIdValue");
-       customer.setUpgraded(true);
-
-   }
-   
-   public void initializeFlow() {
-       FacesContext context = FacesContext.getCurrentInstance();
-       Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-       requestMap.put("initializerMessage", "Initializer called");
-
-   }
-   
-   public void cleanUpFlow() {
-       Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-       requestMap.put("finalizerMessage", "Finalizer called");
-   }
-   
-   public String action01() {
-       return "pageB";
+   private synchronized int incrementId() {
+       return ++lastId;
    }
 }
