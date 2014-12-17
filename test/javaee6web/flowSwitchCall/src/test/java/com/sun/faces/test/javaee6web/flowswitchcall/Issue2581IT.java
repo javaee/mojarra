@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,112 +37,79 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.basic_switch;
+package com.sun.faces.test.javaee6web.flowswitchcall;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 
-public class SwitchCallIT {
-    /**
-     * Stores the web URL.
-     */
+public class Issue2581IT {
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
     }
 
     @Test
-    public void testBuilderDefinedFlowWithMethodCall() throws Exception {
+    public void testBuilderDefinedFlowWithSwitchCall() throws Exception {
         doTest("start_a");
     }
 
     @Test
-    public void testXmlDefinedFlowWithMethodCall() throws Exception {
+    public void testXmlDefinedFlowWithSwitchCall() throws Exception {
         doTest("start_b");
     }
 
     public void doTest(String startId) throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
-        assertTrue(page.getBody().asText().indexOf("Outside of flow") != -1);
-        
+        assertTrue(page.getBody().asText().contains("Outside of flow"));
+
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById(startId);
         page = button.click();
-        
+
         button = (HtmlSubmitInput) page.getElementById("switchA");
         page = button.click();
-        
+
         String pageText = page.asText();
         assertTrue(pageText.contains("switchA_result"));
 
         page = webClient.getPage(webUrl);
 
-        assertTrue(page.getBody().asText().indexOf("Outside of flow") != -1);
-        
+        assertTrue(page.getBody().asText().contains("Outside of flow"));
+
         button = (HtmlSubmitInput) page.getElementById(startId);
         page = button.click();
-        
+
         button = (HtmlSubmitInput) page.getElementById("switchB");
         page = button.click();
-        
+
         pageText = page.asText();
         assertTrue(pageText.contains("switchB_result"));
 
         page = webClient.getPage(webUrl);
 
-        assertTrue(page.getBody().asText().indexOf("Outside of flow") != -1);
-        
+        assertTrue(page.getBody().asText().contains("Outside of flow"));
+
         button = (HtmlSubmitInput) page.getElementById(startId);
         page = button.click();
-        
+
         button = (HtmlSubmitInput) page.getElementById("switchC");
         page = button.click();
-        
+
         pageText = page.asText();
         assertTrue(pageText.contains("switchC_result"));
     }

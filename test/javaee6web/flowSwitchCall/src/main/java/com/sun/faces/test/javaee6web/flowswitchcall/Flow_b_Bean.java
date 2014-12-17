@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,63 +37,61 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.basic_switch;
+package com.sun.faces.test.javaee6web.flowswitchcall;
 
 import javax.faces.flow.FlowScoped;
 import java.io.Serializable;
-
 import javax.inject.Named;
 
 @Named
-@FlowScoped("flow-a")
-public class Flow_a_Bean implements Serializable {
+@FlowScoped("flow-b")
+public class Flow_b_Bean implements Serializable {
 
-   public String getName() {
-       return "Flow_a_Bean";
-   }
-   
-   public String getReturnValue() {
-       return "/return1";
-   }
-   
-   public boolean isSwitchA_Case01() {
-       return false;
-   }
-   
-   public boolean isSwitchA_Case02() {
-       return false;
-   }
-   
-   public boolean isSwitchA_Case03() {
-       return true;
-   }
+    public String getName() {
+        return "Flow_B_Bean";
+    }
 
-   public boolean isSwitchB_Case01() {
-       return false;
-   }
-   
-   public boolean isSwitchB_Case02() {
-       return true;
-   }
-   
-   public boolean isSwitchB_Case03() {
-       return false;
-   }
+    public String getReturnValue() {
+        return "/return1";
+    }
 
-   public boolean isSwitchC_Case01() {
-       return false;
-   }
-   
-   public boolean isSwitchC_Case02() {
-       return false;
-   }
-   
-   public boolean isSwitchC_Case03() {
-       return false;
-   }
-   
-   public String getDefaultOutcome() {
-       return "switchC_result";
-   }
-   
+    public boolean isSwitchA_Case01() {
+        return false;
+    }
+
+    public boolean isSwitchA_Case02() {
+        return false;
+    }
+
+    public boolean isSwitchA_Case03() {
+        return true;
+    }
+
+    public boolean isSwitchB_Case01() {
+        return false;
+    }
+
+    public boolean isSwitchB_Case02() {
+        return true;
+    }
+
+    public boolean isSwitchB_Case03() {
+        return false;
+    }
+
+    public boolean isSwitchC_Case01() {
+        return false;
+    }
+
+    public boolean isSwitchC_Case02() {
+        return false;
+    }
+
+    public boolean isSwitchC_Case03() {
+        return false;
+    }
+
+    public String getDefaultOutcome() {
+        return "switchC_result";
+    }
 }

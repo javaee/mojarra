@@ -71,6 +71,7 @@
         <module>flowCall</module>
         <module>flowFactory</module>
         <module>flowMethodCall</module>
+        <module>flowSwitchCall</module>
         <module>viewScope</module>
     </modules>
 </project>

@@ -60,7 +60,6 @@
         <module>basic-multi-page-fdl-in-web-inf</module>
         <module>basic_implicit_in_jar</module>
         <module>basic_implicit_template</module>
-        <module>basic_switch</module>
         <module>defining_document_id</module>
         <module>intermediate</module>
         <module>multi-page-from-jar</module>
