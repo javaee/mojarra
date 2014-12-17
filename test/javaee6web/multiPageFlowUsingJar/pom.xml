@@ -45,22 +45,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.webprofile</groupId>
+        <groupId>com.sun.faces.test.javaee6web</groupId>
         <artifactId>pom</artifactId>
         <version>2.3.0-m01-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.webprofile.flow</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Web-Profile - Flow</name>
-    <modules>
-        <module>basic-empty-flow-def</module>
-        <module>basic-implicit</module>
-        <module>basic-multi-page</module>
-        <module>basic-multi-page-fdl-in-web-inf</module>
-        <module>basic_implicit_in_jar</module>
-        <module>basic_implicit_template</module>
-        <module>defining_document_id</module>
-        <module>intermediate</module>
-    </modules>
+    <artifactId>multiPageFlowUsingJar</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - JavaEE 6 Web - Multi-page Flow using a JAR</name>
+    <build>
+        <finalName>test-javaee6web-multiPageFlowUsingJar</finalName>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>com.sun.faces.test.javaee6web</groupId>
+            <artifactId>multiPageFlowInJar</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    <properties>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+    </properties>
 </project>

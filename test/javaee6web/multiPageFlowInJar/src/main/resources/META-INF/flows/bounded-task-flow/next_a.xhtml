@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version='1.0' encoding='UTF-8' ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -42,42 +41,20 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.3.0-m01-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee6web</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 6 Web</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>adf</module>
-        <module>ajax</module>
-        <module>el</module>
-        <module>facelets</module>
-        <module>flowCall</module>
-        <module>flowCallWithParameters</module>
-        <module>flowFactory</module>
-        <module>flowMethodCall</module>
-        <module>flowReturnFromDepth</module>
-        <module>flowSwitchCall</module>
-        <module>flowViewNodeDifferent</module>
-        <module>multiPageFlowInJar</module>
-        <module>multiPageFlowUsingJar</module>
-        <module>nestedFlow</module>
-        <module>viewScope</module>
-    </modules>
-</project>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">   
+    <head>
+        <title>Second page in the flow</title>
+    </head>
+    <body>
+        <h:form prependId="false">
+            <p>Second page in the flow</p>
+            <p>Flow bean name: #{flowBean.name}</p>
+            <p>value: <h:inputText id="input" value="#{flowScope.value}" /></p>
+            <p><h:commandButton id="start" value="back" action="bounded-task-flow" /></p>
+            <p><h:commandButton id="next" value="next" action="next_b" /></p>
+        </h:form>
+    </body>
+</html>

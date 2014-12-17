@@ -44,40 +44,17 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test</groupId>
+        <groupId>com.sun.faces.test.javaee6web</groupId>
         <artifactId>pom</artifactId>
         <version>2.3.0-m01-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.javaee6web</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 6 Web</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>adf</module>
-        <module>ajax</module>
-        <module>el</module>
-        <module>facelets</module>
-        <module>flowCall</module>
-        <module>flowCallWithParameters</module>
-        <module>flowFactory</module>
-        <module>flowMethodCall</module>
-        <module>flowReturnFromDepth</module>
-        <module>flowSwitchCall</module>
-        <module>flowViewNodeDifferent</module>
-        <module>multiPageFlowInJar</module>
-        <module>multiPageFlowUsingJar</module>
-        <module>nestedFlow</module>
-        <module>viewScope</module>
-    </modules>
+    <artifactId>multiPageFlowInJar</artifactId>
+    <packaging>jar</packaging>
+    <name>Mojarra ${project.version} - Test - JavaEE 6 Web - Multi-page Flow in JAR</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>
