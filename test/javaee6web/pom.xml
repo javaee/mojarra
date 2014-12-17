@@ -73,6 +73,7 @@
         <module>flowFactory</module>
         <module>flowMethodCall</module>
         <module>flowSwitchCall</module>
+        <module>flowViewNodeDifferent</module>
         <module>viewScope</module>
     </modules>
 </project>
