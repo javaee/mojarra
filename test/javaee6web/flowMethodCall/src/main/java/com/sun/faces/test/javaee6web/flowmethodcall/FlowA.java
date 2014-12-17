@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -36,9 +36,8 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
-package com.sun.faces.test.webprofile.flow.basic_method_call;
+package com.sun.faces.test.javaee6web.flowmethodcall;
 
 import java.io.Serializable;
 import javax.enterprise.inject.Produces;
@@ -47,15 +46,15 @@ import javax.faces.flow.Flow;
 import javax.faces.flow.builder.FlowBuilderParameter;
 import javax.faces.flow.builder.FlowDefinition;
 
-
 public class FlowA implements Serializable {
-    
+
     private static final long serialVersionUID = -7623501087369765218L;
 
     public FlowA() {
     }
-    
-    @Produces @FlowDefinition
+
+    @Produces
+    @FlowDefinition
     public Flow defineFlow(@FlowBuilderParameter FlowBuilder flowBuilder) {
         String flowId = "flow-a";
         flowBuilder.id("", flowId);
@@ -63,8 +62,7 @@ public class FlowA implements Serializable {
                 fromOutcome("#{flow_a_Bean.returnValue}");
         flowBuilder.methodCallNode("outcome-from-method").expression("#{flow_a_Bean.methodWithOutcome}").defaultOutcome("taskFlowReturn1");
         flowBuilder.methodCallNode("outcome-from-markup").expression("#{flow_a_Bean.voidMethod}").defaultOutcome("taskFlowReturn1");
-        
+
         return flowBuilder.getFlow();
     }
-    
 }

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.basic_method_call;
+package com.sun.faces.test.javaee6web.flowmethodcall;
 
 import javax.faces.flow.FlowScoped;
 import java.io.Serializable;
@@ -46,35 +46,23 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 @Named
-@FlowScoped("flow-b")
-public class Flow_b_Bean implements Serializable {
+@FlowScoped("flow-a")
+public class Flow_a_Bean implements Serializable {
 
-   public String getName() {
-       return "Flow_B_Bean";
-   }
-   
-   public String getReturnValue() {
-       return "/return1";
-   }
-   
-   public String methodWithOutcome(String strParam, Integer intParam) {
-       if (!strParam.equals("param1Value")) {
-           throw new IllegalArgumentException();
-       }
-       if (!intParam.equals(getInteger())) {
-           throw new IllegalArgumentException();
-       }
-       
-       return "next_b";
-   }
-   
-   public void voidMethod() {
-       FacesContext context = FacesContext.getCurrentInstance();
-       context.getExternalContext().getRequestMap().put("message", "voidMethod called in flow-b");
-       
-   }
-   
-   public Integer getInteger() {
-       return Integer.valueOf(Integer.MAX_VALUE);
-   }
+    public String getName() {
+        return "Flow_a_Bean";
+    }
+
+    public String getReturnValue() {
+        return "/return1";
+    }
+
+    public String methodWithOutcome() {
+        return "next_b";
+    }
+
+    public void voidMethod() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getRequestMap().put("message", "voidMethod called in flow-a");
+    }
 }

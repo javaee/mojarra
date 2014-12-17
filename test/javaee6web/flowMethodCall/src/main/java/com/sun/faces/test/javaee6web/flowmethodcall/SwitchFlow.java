@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,20 +38,19 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.basic_method_call;
+package com.sun.faces.test.javaee6web.flowmethodcall;
 
 import java.io.Serializable;
 import javax.faces.flow.FlowScoped;
 import javax.inject.Named;
 
 @Named
-@FlowScoped(value="switch-start-node")
+@FlowScoped(value = "switch-start-node")
 public class SwitchFlow implements Serializable {
-    
+
     private static final long serialVersionUID = 5651420988399505348L;
-    
+
     public boolean isFirstPage() {
         return true;
     }
-    
 }
