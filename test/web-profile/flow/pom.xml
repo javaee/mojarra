@@ -64,6 +64,5 @@
         <module>intermediate</module>
         <module>multi-page-from-jar</module>
         <module>nested_flows</module>
-        <module>return_from_depth</module>
     </modules>
 </project>

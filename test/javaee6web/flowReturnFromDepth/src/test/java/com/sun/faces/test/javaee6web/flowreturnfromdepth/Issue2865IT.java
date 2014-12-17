@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.return_from_depth;
+package com.sun.faces.test.javaee6web.flowreturnfromdepth;
 
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import org.junit.After;
@@ -52,7 +52,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.runner.RunWith;
 
 @RunWith(JsfTestRunner.class)
-public class ReturnFromDepthIT {
+public class Issue2865IT {
 
     private String webUrl;
     private WebClient webClient;
