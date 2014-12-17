@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,13 +37,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.basic_faces_flow_call;
+package com.sun.faces.test.javaee6web.flowcall;
 
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -51,46 +49,17 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
-public class FlowACallsFlowBIT {
-    /**
-     * Stores the web URL.
-     */
+public class Spec730IT {
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
@@ -109,109 +78,106 @@ public class FlowACallsFlowBIT {
     public void doTestFacesFlowCall(String flowInvocationSuffix) throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
-        assertTrue(page.getBody().asText().indexOf("Outside of flow") != -1);
-        
+        assertTrue(page.getBody().asText().contains("Outside of flow"));
+
         HtmlInput button = (HtmlInput) page.getElementById("start_a" + flowInvocationSuffix);
         page = button.click();
         String pageText = page.asText();
         assertTrue(pageText.contains("Flow_a_Bean"));
         assertTrue(pageText.matches("(?s).*Has a flow:\\s+true\\..*"));
-        
+
         String param1Value = page.getElementById("param1FromFlowB").getTextContent();
         assertEquals("", param1Value);
         String param2Value = page.getElementById("param2FromFlowB").getTextContent();
         assertEquals("", param2Value);
-        
-        
+
         button = (HtmlInput) page.getElementById("next_a");
         page = button.click();
         pageText = page.asText();
         assertTrue(pageText.contains("Second page in the flow"));
-        
+
         HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
         String value = "" + System.currentTimeMillis();
         input.setValueAttribute(value);
-        
+
         button = (HtmlInput) page.getElementById("next");
         page = button.click();
-        
+
         pageText = page.asText();
         assertTrue(pageText.contains(value));
-        
+
         button = (HtmlInput) page.getElementById("callB" + flowInvocationSuffix);
         page = button.click();
-        
+
         pageText = page.asText();
         assertTrue(pageText.contains("Flow_B_Bean"));
         assertTrue(!pageText.contains("Flow_A_Bean"));
-        
+
         param1Value = page.getElementById("param1FromFlowA").getTextContent();
         assertEquals("param1Value", param1Value);
         param2Value = page.getElementById("param2FromFlowA").getTextContent();
         assertEquals("param2Value", param2Value);
-        
-        
+
         button = (HtmlInput) page.getElementById("next_a");
         page = button.click();
         pageText = page.asText();
         assertTrue(pageText.contains("Second page in the flow"));
-        
+
         input = (HtmlTextInput) page.getElementById("input");
         value = "" + System.currentTimeMillis();
         input.setValueAttribute(value);
-        
+
         button = (HtmlInput) page.getElementById("next");
         page = button.click();
-        
+
         pageText = page.asText();
         assertTrue(pageText.contains(value));
-        
+
         button = (HtmlInput) page.getElementById("callA" + flowInvocationSuffix);
         page = button.click();
-        
+
         param1Value = page.getElementById("param1FromFlowB").getTextContent();
         assertEquals("param1Value", param1Value);
         param2Value = page.getElementById("param2FromFlowB").getTextContent();
         assertEquals("param2Value", param2Value);
-        
+
         button = (HtmlInput) page.getElementById("next_a");
         page = button.click();
         pageText = page.asText();
         assertTrue(pageText.contains("Second page in the flow"));
-        
+
         button = (HtmlInput) page.getElementById("next");
         page = button.click();
-        
+
         button = (HtmlInput) page.getElementById("return" + flowInvocationSuffix);
         page = button.click();
-        
+
         pageText = page.asText();
         assertTrue(pageText.contains("Flow bean name: Flow_B_Bean"));
-        
+
         button = (HtmlInput) page.getElementById("next_a");
         page = button.click();
-        
+
         button = (HtmlInput) page.getElementById("next");
         page = button.click();
-        
+
         button = (HtmlInput) page.getElementById("return" + flowInvocationSuffix);
         page = button.click();
-        
+
         pageText = page.asText();
         assertTrue(pageText.contains("Flow bean name: Flow_a_Bean"));
-        
+
         button = (HtmlInput) page.getElementById("next_a");
         page = button.click();
-        
+
         button = (HtmlInput) page.getElementById("next");
         page = button.click();
-        
+
         button = (HtmlInput) page.getElementById("return" + flowInvocationSuffix);
         page = button.click();
-        
+
         pageText = page.asText();
         assertTrue(pageText.matches("(?s).*flowScope value,\\s+should be empty:\\s+\\..*"));
         assertTrue(pageText.matches("(?s).*Has a flow:\\s+false\\..*"));
-
     }
 }

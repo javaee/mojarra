@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -36,9 +36,8 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
-package com.sun.faces.test.webprofile.flow.basic;
+package com.sun.faces.test.javaee6web.flowcall;
 
 import java.io.Serializable;
 import javax.enterprise.inject.Produces;
@@ -47,22 +46,22 @@ import javax.faces.flow.builder.FlowBuilder;
 import javax.faces.flow.builder.FlowDefinition;
 import javax.faces.flow.builder.FlowBuilderParameter;
 
-
 public class FlowC implements Serializable {
 
     private static final long serialVersionUID = -758160342621469893L;
-    
+
     public FlowC() {
     }
-    
-    @Produces @FlowDefinition
+
+    @Produces
+    @FlowDefinition
     public Flow buildMyFlow(@FlowBuilderParameter FlowBuilder flowBuilder) {
         String flowId = "flow-c";
         flowBuilder.id("", flowId);
         flowBuilder.returnNode("taskFlowReturn1").
                 fromOutcome("#{flow_c_Bean.returnValue}");
         flowBuilder.flowCallNode("callA").flowReference("unique", "flow-a");
-        
+
         return flowBuilder.getFlow();
     }
 }
