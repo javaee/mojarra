@@ -54,7 +54,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Web-Profile - Flow</name>
     <modules>
-        <module>basic-multi-page</module>
         <module>defining_document_id</module>
     </modules>
 </project>

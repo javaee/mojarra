@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.webprofile.flow.basic_multi_page.issue2997;
+package com.sun.faces.test.javaee6web.basicflow;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -74,42 +74,42 @@ public class Issue2997IT {
     @Test
     public void testGlobalReturn() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-        assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);
+        assertTrue(page.getBody().asText().contains("Page with link to flow entry"));
 
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("flow-with-templates");
         page = button.click();
         String pageText = page.getBody().asText();
-        assertTrue(pageText.indexOf("Bottom From Template") != -1);
+        assertTrue(pageText.contains("Bottom From Template"));
 
         button = (HtmlSubmitInput) page.getElementById("issue2997Home");
         page = button.click();
         pageText = page.getBody().asText();
-        assertTrue(pageText.indexOf("Issue2997Home") != -1);
+        assertTrue(pageText.contains("Issue2997Home"));
 
         page = webClient.getPage(webUrl);
-        assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);
+        assertTrue(page.getBody().asText().contains("Page with link to flow entry"));
 
         button = (HtmlSubmitInput) page.getElementById("flow-with-templates");
         page = button.click();
         pageText = page.getBody().asText();
-        assertTrue(pageText.indexOf("Bottom From Template") != -1);
+        assertTrue(pageText.contains("Bottom From Template"));
 
         button = (HtmlSubmitInput) page.getElementById("issue2997UserList");
         page = button.click();
         pageText = page.getBody().asText();
-        assertTrue(pageText.indexOf("Issue2997UserList") != -1);
+        assertTrue(pageText.contains("Issue2997UserList"));
 
         page = webClient.getPage(webUrl);
-        assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);
+        assertTrue(page.getBody().asText().contains("Page with link to flow entry"));
 
         button = (HtmlSubmitInput) page.getElementById("flow-with-templates");
         page = button.click();
         pageText = page.getBody().asText();
-        assertTrue(pageText.indexOf("Bottom From Template") != -1);
+        assertTrue(pageText.contains("Bottom From Template"));
 
         button = (HtmlSubmitInput) page.getElementById("issue2997PageInFacesConfig");
         page = button.click();
         pageText = page.getBody().asText();
-        assertTrue(pageText.indexOf("Issue2997PageInFacesConfig") != -1);
+        assertTrue(pageText.contains("Issue2997PageInFacesConfig"));
     }
 }

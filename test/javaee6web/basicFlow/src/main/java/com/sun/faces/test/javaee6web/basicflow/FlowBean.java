@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,22 +37,21 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.basic;
+package com.sun.faces.test.javaee6web.basicflow;
 
 import javax.faces.flow.FlowScoped;
 import java.io.Serializable;
-
 import javax.inject.Named;
 
 @Named
 @FlowScoped("bounded-task-flow")
 public class FlowBean implements Serializable {
 
-   public String getName() {
-       return "basicFlow";
-   }
-   
-   public String getReturnValue() {
-       return "/return1";
-   }
+    public String getName() {
+        return "basicFlow";
+    }
+
+    public String getReturnValue() {
+        return "/return1";
+    }
 }
