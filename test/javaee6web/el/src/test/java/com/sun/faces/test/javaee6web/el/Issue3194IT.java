@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,16 +37,16 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.javaee6web.el.basic;
+package com.sun.faces.test.javaee6web.el;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import org.junit.*;
-import static org.junit.Assert.*;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-public class Issue2397IT {
-
+public class Issue3194IT {
     private String webUrl;
     private WebClient webClient;
 
@@ -62,29 +62,37 @@ public class Issue2397IT {
     }
 
     @Test
-    public void testExceptionDuringValueChangeEL() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/exceptionDuringValueChangeEL.xhtml");
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
-        page = button.click();
-        assertTrue(page.asXml().contains("java.lang.NullPointerException"));
-    }
-
-    @Test
-    public void testExceptionDuringMethodExpressionEL() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/exceptionDuringMethodExpressionEL.xhtml");
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        HtmlSubmitInput input = (HtmlSubmitInput) page.getElementById("submit");
-        page = input.click();
-        assertTrue(page.asXml().contains("IllegalStateException"));
-    }
-
-    @Test
-    public void testAbortDuringMethodExpressionEL() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/abortDuringMethodExpressionEL.xhtml");
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        HtmlSubmitInput input = (HtmlSubmitInput) page.getElementById("submit");
-        page = input.click();
-        assertEquals(200, page.getWebResponse().getStatusCode());
+    public void testViewExpired() throws Exception {
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        assertTrue(page.asXml().contains("1"));
+        page = webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        assertTrue(page.asXml().contains("2"));
+        page = webClient.getPage(webUrl + "faces/viewExpired.xhtml");
+        assertTrue(page.asXml().contains("3"));
     }
 }

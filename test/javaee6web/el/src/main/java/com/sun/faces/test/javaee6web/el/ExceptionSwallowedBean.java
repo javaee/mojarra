@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- *
+ * 
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- *
+ * 
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- *
+ * 
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,32 +36,39 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+
  */
-package com.sun.faces.test.javaee6web.el.basic;
+package com.sun.faces.test.javaee6web.el;
 
 import java.io.Serializable;
-import java.util.Map;
-import javax.annotation.PreDestroy;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 
-@Named(value = "viewExpiredBean")
-@ViewScoped
-public class ViewExpiredBean implements Serializable {
+@Named(value = "exceptionSwallowedBean")
+@SessionScoped
+public class ExceptionSwallowedBean implements Serializable {
 
-    @PreDestroy
-    public void destroy() {
-        Map<String, Object> applicationMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
-        if (!applicationMap.containsKey("count")) {
-            applicationMap.put("count", 1);
-        } else {
-            int count = ((Integer) applicationMap.get("count")) + 1;
-            applicationMap.put("count", count);
-        }
+    private String property;
+
+    public String getProperty() {
+        return property;
     }
 
-    public Integer getCount() {
-        return (Integer) FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get("count");
+    public void setProperty(String property) {
+        this.property = property;
+    }
+
+    public void actionWithException() throws AbortProcessingException {
+        throw new IllegalStateException();
+    }
+
+    public void actionWithAbort() throws AbortProcessingException {
+        throw new AbortProcessingException();
+    }
+
+    public void throwException(ValueChangeEvent vce) throws AbortProcessingException {
+        throw new NullPointerException();
     }
 }
