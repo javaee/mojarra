@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8' ?>
 
 <!--
 
@@ -41,53 +41,21 @@
     holder.
 
 -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.3.0-m01-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee6web</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 6 Web</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>adf</module>
-        <module>ajax</module>
-        <module>basicFlow</module>
-        <module>el</module>
-        <module>emptyFlowDefinition</module>
-        <module>facelets</module>
-        <module>flowAndTemplateInJar</module>
-        <module>flowAndTemplateUsingJar</module>
-        <module>flowCall</module>
-        <module>flowCallWithParameters</module>
-        <module>flowDefiningDocumentId</module>
-        <module>flowDefiningDocumentIdJar1</module>
-        <module>flowDefiningDocumentIdJar2</module>
-        <module>flowDefinitionInWebinf</module>
-        <module>flowFactory</module>
-        <module>flowInXmlAndJava</module>
-        <module>flowMethodCall</module>
-        <module>flowReturnFromDepth</module>
-        <module>flowSwitchCall</module>
-        <module>flowViewNodeDifferent</module>
-        <module>implicitFlow</module>
-        <module>multiPageFlowInJar</module>
-        <module>multiPageFlowUsingJar</module>
-        <module>nestedFlow</module>
-        <module>viewScope</module>
-    </modules>
-</project>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="
+        http://xmlns.jcp.org/xml/ns/javaee
+        http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+    <name>flow01</name>
+    <flow-definition id="bounded-task-flow">
+        <flow-return id="taskFlowReturn1">
+            <from-outcome>#{flowBean01.returnValue}</from-outcome>
+        </flow-return>
+        <flow-call id="call-flow-02">
+            <flow-reference>
+                <flow-document-id>flow02</flow-document-id>
+                <flow-id>bounded-task-flow</flow-id>
+            </flow-reference>
+        </flow-call>
+    </flow-definition>
+</faces-config>
