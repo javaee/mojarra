@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.basic_in_web_inf;
+package com.sun.faces.test.javaee6web.flowdefinitioninwebinf;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
@@ -50,7 +50,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static org.junit.Assert.assertTrue;
 
-public class BasicInWebInfFlowEntryExitIT {
+public class Spec730IT {
     /**
      * Stores the web URL.
      */

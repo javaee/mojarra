@@ -73,6 +73,7 @@
         <module>flowAndTemplateUsingJar</module>
         <module>flowCall</module>
         <module>flowCallWithParameters</module>
+        <module>flowDefinitionInWebinf</module>
         <module>flowFactory</module>
         <module>flowInXmlAndJava</module>
         <module>flowMethodCall</module>

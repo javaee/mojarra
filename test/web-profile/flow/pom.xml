@@ -55,7 +55,6 @@
     <name>Mojarra ${project.version} - Test - Web-Profile - Flow</name>
     <modules>
         <module>basic-multi-page</module>
-        <module>basic-multi-page-fdl-in-web-inf</module>
         <module>defining_document_id</module>
     </modules>
 </project>
