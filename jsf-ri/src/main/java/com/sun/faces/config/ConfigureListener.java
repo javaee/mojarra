@@ -182,6 +182,8 @@ public class ConfigureListener implements ServletRequestListener,
                                 "No FacesServlet found in deployment descriptor - bypassing configuration");
                     }
                     WebConfiguration.clear(context);
+                    configManager.destroy(context);
+                    ConfigManager.removeInstance(context);
                     InitFacesContext.cleanupInitMaps(context);
                     return;
                 }
@@ -293,8 +295,15 @@ public class ConfigureListener implements ServletRequestListener,
 
     public void contextDestroyed(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
+        
+        ConfigManager configManager = ConfigManager.getInstance(context);
+        if (null == configManager) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Unexpected state during contextDestroyed: no ConfigManager instance in current ServletContext but one is expected to exist.");
+            }
+        }
 
-        if (!ConfigManager.getInstance(context).hasBeenInitialized(context)) {
+        if (null == configManager || !configManager.hasBeenInitialized(context)) {
             return;
         }
 
@@ -348,7 +357,8 @@ public class ConfigureListener implements ServletRequestListener,
             ApplicationAssociate.clearInstance(context);
             ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
-            ConfigManager.getInstance(context).destroy(context);
+            configManager.destroy(context);
+            ConfigManager.removeInstance(context);
             FactoryFinder.releaseFactories();
             ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
             WebConfiguration.clear(context);
@@ -563,8 +573,15 @@ public class ConfigureListener implements ServletRequestListener,
                     .clearInstance(initContext.getExternalContext());
             ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
-            ConfigManager.getInstance(sc).destroy(sc);
-            ConfigManager.removeInstance(sc);
+            ConfigManager configManager = ConfigManager.getInstance(sc);
+            if (null != configManager) {
+                configManager.destroy(sc);
+                ConfigManager.removeInstance(sc);
+            } else {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "Unexpected state during reload: no ConfigManager instance in current ServletContext but one is expected to exist.");
+                }
+            }
             initContext.release();
             ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
             WebConfiguration.clear(sc);
@@ -583,9 +600,14 @@ public class ConfigureListener implements ServletRequestListener,
                 .initCache(Thread.currentThread().getContextClassLoader());
 
         try {
-            ConfigManager configManager = ConfigManager.getInstance(sc);
-            configManager.initialize(sc);
-
+            ConfigManager configManager = ConfigManager.createInstance(sc);
+            if (null != configManager) {
+                configManager.initialize(sc);
+            } else {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "Unexpected state during reload: no ConfigManager instance in current ServletContext but one is expected to exist.");
+                }
+            }
 
             registerELResolverAndListenerWithJsp(sc, true);
             ApplicationAssociate associate =
