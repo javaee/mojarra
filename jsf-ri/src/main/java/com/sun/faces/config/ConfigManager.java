@@ -305,17 +305,17 @@ public class ConfigManager {
     /**
      * @return a <code>ConfigManager</code> instance
      */
-    public static ConfigManager getInstance(ServletContext sc) {
+    static ConfigManager getInstance(ServletContext sc) {
         return (ConfigManager) sc.getAttribute(CONFIG_MANAGER_INSTANCE_KEY);
     }
     
-    public static ConfigManager createInstance(ServletContext sc) {
+    static ConfigManager createInstance(ServletContext sc) {
         ConfigManager result = new ConfigManager();
         sc.setAttribute(CONFIG_MANAGER_INSTANCE_KEY, result);
         return result;
     }
     
-    public static void removeInstance(ServletContext sc) {
+    static void removeInstance(ServletContext sc) {
         sc.removeAttribute(CONFIG_MANAGER_INSTANCE_KEY);
     }
     
