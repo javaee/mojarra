@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,59 +37,28 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.webprofile.flow.basic_empty_flow_def;
+package com.sun.faces.test.javaee6web.emptyflowdefinition;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static org.junit.Assert.assertTrue;
 
-public class BasicEmptyFlowDefEntryExitIT {
-    /**
-     * Stores the web URL.
-     */
+public class Glassfish19937IT {
+
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    /**
-     * Cleanup after testing.
-     * 
-     * @throws Exception when a serious error occurs.
-     */
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
@@ -99,58 +68,54 @@ public class BasicEmptyFlowDefEntryExitIT {
     public void testFlowEntryExit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
 
-        assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);
+        assertTrue(page.getBody().asText().contains("Page with link to flow entry"));
 
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("start");
         page = button.click();
-        
+
         String pageText = page.getBody().asText();
-        assertTrue(pageText.indexOf("First page in the flow") != -1);
+        assertTrue(pageText.contains("First page in the flow"));
         assertTrue(pageText.contains("basicFlow"));
-        
+
         page = webClient.getPage(webUrl);
 
-        assertTrue(page.getBody().asText().indexOf("Page with link to flow entry") != -1);
+        assertTrue(page.getBody().asText().contains("Page with link to flow entry"));
 
         button = (HtmlSubmitInput) page.getElementById("start");
         page = button.click();
-        
+
         pageText = page.getBody().asText();
-        assertTrue(pageText.indexOf("First page in the flow") != -1);
-        assertTrue(pageText.contains("basicFlow"));   
-        
+        assertTrue(pageText.contains("First page in the flow"));
+        assertTrue(pageText.contains("basicFlow"));
     }
-    
+
     @Test
     public void testFacesFlowScope() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-        
+
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("start");
         page = button.click();
 
         String pageText = page.getBody().asText();
-        assertTrue(pageText.indexOf("First page in the flow") != -1);
+        assertTrue(pageText.contains("First page in the flow"));
         assertTrue(pageText.contains("basicFlow"));
 
         button = (HtmlSubmitInput) page.getElementById("next_a");
         page = button.click();
-        
+
         HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
         final String flowScopeValue = "Value in faces flow scope";
         input.setValueAttribute(flowScopeValue);
-        
+
         button = (HtmlSubmitInput) page.getElementById("next");
         page = button.click();
-        
+
         assertTrue(page.asText().contains(flowScopeValue));
-        
+
         button = (HtmlSubmitInput) page.getElementById("return");
         page = button.click();
-        
+
         assertTrue(page.asText().contains("return page"));
         assertTrue(!page.asText().contains(flowScopeValue));
-        
-        
-        
     }
 }

@@ -54,7 +54,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Web-Profile - Flow</name>
     <modules>
-        <module>basic-empty-flow-def</module>
         <module>basic-implicit</module>
         <module>basic-multi-page</module>
         <module>basic-multi-page-fdl-in-web-inf</module>

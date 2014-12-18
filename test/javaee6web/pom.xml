@@ -67,6 +67,7 @@
         <module>adf</module>
         <module>ajax</module>
         <module>el</module>
+        <module>emptyFlowDefinition</module>
         <module>facelets</module>
         <module>flowAndTemplateInJar</module>
         <module>flowAndTemplateUsingJar</module>
