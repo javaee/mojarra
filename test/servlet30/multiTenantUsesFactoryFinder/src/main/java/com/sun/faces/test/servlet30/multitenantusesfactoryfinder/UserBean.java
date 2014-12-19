@@ -1,4 +1,4 @@
-package com.sun.faces.test.servlet30.multi_tenant.app_servlet_uses_factoryfinder_from_init;
+package com.sun.faces.test.servlet30.multitenantusesfactoryfinder;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,8 +38,7 @@
  * holder.
 
  */
-
-package com.sun.faces.test.servlet30.multi_tenant.app_servlet_uses_factoryfinder_from_init;
+package com.sun.faces.test.servlet30.multitenantusesfactoryfinder;
 
 import java.io.IOException;
 import javax.faces.FactoryFinder;
@@ -53,11 +52,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class BeforeServlet extends HttpServlet {
+
     private static final long serialVersionUID = 2759083267171493482L;
-    
+
     private static final String INIT_HAS_LIFECYCLE_KEY = "BeforeServlet_hasLifecycle";
     private static final String INIT_HAS_INITFACESCONTEXT_KEY = "BeforeServlet_hasInitFacesContext";
-    
+
     private static final String REQUEST_HAS_LIFECYCLE = "BeforeServlet_requestHasLifecycle";
     private static final String REQUEST_HAS_FACESCONTEXT = "BeforeServlet_requestHasFacesContext";
 
@@ -66,28 +66,23 @@ public class BeforeServlet extends HttpServlet {
         super.init(config);
         LifecycleFactory lifecycle = (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
         ServletContext sc = config.getServletContext();
-        sc.setAttribute(INIT_HAS_LIFECYCLE_KEY, 
-                (null != lifecycle) ? "TRUE":"FALSE");
+        sc.setAttribute(INIT_HAS_LIFECYCLE_KEY,
+                (null != lifecycle) ? "TRUE" : "FALSE");
         FacesContext initFacesContext = FacesContext.getCurrentInstance();
-        sc.setAttribute(INIT_HAS_INITFACESCONTEXT_KEY, 
-                (null != initFacesContext) ? "TRUE":"FALSE");
+        sc.setAttribute(INIT_HAS_INITFACESCONTEXT_KEY,
+                (null != initFacesContext) ? "TRUE" : "FALSE");
     }
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        
+
         LifecycleFactory lifecycle = (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        req.setAttribute(REQUEST_HAS_LIFECYCLE, 
-                (null != lifecycle) ? "TRUE":"FALSE");
+        req.setAttribute(REQUEST_HAS_LIFECYCLE,
+                (null != lifecycle) ? "TRUE" : "FALSE");
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        req.setAttribute(REQUEST_HAS_FACESCONTEXT, 
-                (null != facesContext) ? "TRUE":"FALSE");
-        
+        req.setAttribute(REQUEST_HAS_FACESCONTEXT,
+                (null != facesContext) ? "TRUE" : "FALSE");
+
         getServletContext().getRequestDispatcher("/faces/index.xhtml").forward(req, resp);
     }
-    
-    
-
-
-
 }

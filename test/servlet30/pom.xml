@@ -72,8 +72,8 @@
         <module>factory</module>
 	<module>implicitContract</module>
         <module>mapping</module>
-        <module>multi-tenant</module>
         <module>multiTenantSetsTccl</module>
+        <module>multiTenantUsesFactoryFinder</module>
         <module>navigation</module>
         <module>systest</module>
         <module>stateViewExpiredExceptionMissing</module>

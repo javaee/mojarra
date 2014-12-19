@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.servlet30.multi_tenant.app_servlet_uses_factoryfinder_from_init;
+package com.sun.faces.test.servlet30.multitenantusesfactoryfinder;
 
 import org.junit.After;
 import org.junit.AfterClass;

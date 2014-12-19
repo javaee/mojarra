@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -39,22 +40,28 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>pom</artifactId>
-    <groupId>com.sun.faces.test.servlet30.multi-tenant</groupId>
-    <version>2.3.0-m01-SNAPSHOT</version>
-  </parent>
-  
-  <groupId>com.sun.faces.test.servlet30.multi-tenant</groupId>
-  <artifactId>app-servlet-uses-factoryfinder-from-init</artifactId>
-  <version>2.3.0-m01-SNAPSHOT</version>
-  <packaging>war</packaging>
-  <name>Mojarra ${project.version} - Test - Servlet 3.0 - Multi-Tenant - App Servlet Uses FactoryFinder From init</name>
-  
-  <build>
-    <finalName>test-app-servlet-uses-factoryfinder-from-init</finalName>
-  </build>
-  
-</project>
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <h:form prependId="false">
+            <h:inputText value="#{userBean.firstName}" />
+            <h:commandButton value="submit" />
+
+            <p>First name: <h:outputText id="firstName" value="#{userBean.firstName}" /></p>
+            <p>BeforeServlet init found Lifecycle: <h:outputText id="initHasLifecycle"
+                                                                 value="#{applicationScope.BeforeServlet_hasLifecycle}"/></p>
+            <p>BeforeServlet init found FacesContext: <h:outputText id="initHasInitFacesContext"
+                                                                    value="#{applicationScope.BeforeServlet_hasInitFacesContext}"/></p>
+            <p>BeforeServlet request found Lifecycle: <h:outputText id="requestHasLifecycle"
+                                                                    value="#{requestScope.BeforeServlet_requestHasLifecycle}"/></p>
+            <p>BeforeServlet request found FacesContext: <h:outputText id="requestHasInitFacesContext"
+                                                                       value="#{requestScope.BeforeServlet_requestHasFacesContext}"/></p>
+        </h:form>
+    </body>
+</html>
+
