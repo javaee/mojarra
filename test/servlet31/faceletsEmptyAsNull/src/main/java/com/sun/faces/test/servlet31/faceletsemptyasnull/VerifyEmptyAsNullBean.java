@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.servlet31.facelets.coreEmptyAsNull;
+package com.sun.faces.test.servlet31.faceletsemptyasnull;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;

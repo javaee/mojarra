@@ -51,7 +51,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Servlet 3.1 - Facelets</name>
     <modules>
-        <module>coreEmptyAsNull</module>
         <module>html</module>
     <module>ui</module>
   </modules>
