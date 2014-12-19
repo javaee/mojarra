@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.servlet30.statesaving.viewexpiredexception;
+package com.sun.faces.test.servlet30.stateviewexpiredexceptionmissing;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -86,9 +86,9 @@ public class Issue3359IT {
         page = button.click();
         
         if ( "client".equalsIgnoreCase( savingMethod ) ) {
-            assertTrue(page.asXml().indexOf("Go back to the index page") != -1);
+            assertTrue(page.asXml().contains("Go back to the index page"));
         } else {
-            assertTrue(page.asXml().indexOf("ViewExpiredException") != -1);
+            assertTrue(page.asXml().contains("ViewExpiredException"));
         }
     }
 

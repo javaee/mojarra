@@ -75,6 +75,6 @@
         <module>multi-tenant</module>
         <module>navigation</module>
         <module>systest</module>
-        <module>stateSaving</module>
+        <module>stateViewExpiredExceptionMissing</module>
     </modules>
 </project>
