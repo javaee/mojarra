@@ -83,7 +83,7 @@ public class Issue2827IT {
      * 
      * @throws Exception
      */
-    @JsfTest(value=JSF_2_2_0, excludes={GLASSFISH_4_0})
+    @JsfTest(value=JSF_2_2_0)
     @Test
     public void testValidateEmptyFields() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
