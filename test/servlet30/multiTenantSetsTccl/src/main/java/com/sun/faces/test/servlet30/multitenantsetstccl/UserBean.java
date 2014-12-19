@@ -1,4 +1,4 @@
-package com.sun.faces.test.servlet30.multi_tenant.app_sets_tccl;
+package com.sun.faces.test.servlet30.multitenantsetstccl;
 
 import java.io.Serializable;
 import java.util.Date;

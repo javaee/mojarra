@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,30 +41,21 @@
     holder.
 
 -->
-<actions>
-    <action>
-        <actionName>debug.test.single</actionName>
-        <goals>
-            <goal>test-compile</goal>
-            <goal>surefire:test</goal>
-        </goals>
-        <properties>
-            <test>${packageClassName}</test>
-            <forkMode>once</forkMode>
-            <maven.surefire.debug>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
-            <jpda.listen>true</jpda.listen>
-            <integration.url>http://localhost:8080/test-app-sets-tccl/</integration.url>
-        </properties>
-    </action>
-    <action>
-        <actionName>test.single</actionName>
-        <goals>
-            <goal>test-compile</goal>
-            <goal>surefire:test</goal>
-        </goals>
-        <properties>
-            <integration.url>http://localhost:8080/test-app-sets-tccl/</integration.url>
-            <test>${packageClassName}</test>
-        </properties>
-    </action>
-</actions>
+
+<project 
+    xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>pom</artifactId>
+        <groupId>com.sun.faces.test.servlet30</groupId>
+        <version>2.3.0-m01-SNAPSHOT</version>
+    </parent>
+    <artifactId>app-sets-tccl</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Multi-Tenant Sets TCCL</name>
+    <build>
+        <finalName>test-servlet30-multiTenantSetsTccl</finalName>
+    </build>
+</project>

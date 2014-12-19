@@ -52,6 +52,5 @@
     <name>Mojarra ${project.version} - Test - Servlet 3.0 - Multi-Tenant</name>
     <modules>
       <module>app-servlet-uses-factoryfinder-from-init</module>
-      <module>app-sets-tccl</module>
     </modules>
 </project>
