@@ -4,14 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>pom</artifactId>
-        <groupId>com.sun.faces.test.servlet30.mapping</groupId>
+        <groupId>com.sun.faces.test.servlet30</groupId>
         <version>2.3.0-m01-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.servlet30.mapping</groupId>
-    <artifactId>exact</artifactId>
-    <version>2.3.0-m01-SNAPSHOT</version>
+    <artifactId>exactMapping</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Mapping - Exact</name>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Exact Mapping</name>
+    <build>
+        <finalName>test-servlet30-exactMapping</finalName>
+    </build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

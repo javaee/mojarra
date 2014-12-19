@@ -68,10 +68,10 @@
         <module>custom-viewroot-viewscope</module>
         <module>dynamic</module>
         <module>el</module>
+        <module>exactMapping</module>
         <module>facelets</module>
         <module>factory</module>
 	<module>implicitContract</module>
-        <module>mapping</module>
         <module>multiTenantSetsTccl</module>
         <module>multiTenantUsesFactoryFinder</module>
         <module>navigation</module>
