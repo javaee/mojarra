@@ -37,29 +37,58 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.servlet30.facelets.coreEmptyAsNull;
+package com.sun.faces.test.servlet30.faceletsemptyasnull;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
-@ManagedBean(name = "validateEmptyFieldsBean")
-@RequestScoped
-public class ValidateEmptyFieldsBean {
+@RunWith(JsfTestRunner.class)
+public class Issue1508IT {
 
-    private String value;
+    private String webUrl;
+    private WebClient webClient;
 
-    public String getValue() {
-        return value;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
-    
-    public void validate(FacesContext facesContext, UIComponent component, Object value) {
-        facesContext.addMessage(null, new FacesMessage("We got called!"));
+
+    /**
+     * Test to validate empty fields.
+     *
+     * Note: this test is excluded on Tomcat because the included EL parser
+     * requires a System property for this test to work, which would cause
+     * problems with other tests. See
+     * http://tomcat.apache.org/tomcat-7.0-doc/config/systemprops.html and look
+     * for COERCE_TO_ZERO
+     * 
+     * @throws Exception
+     */
+    @JsfTest(JsfVersion.JSF_2_2_1)
+    @Test
+    public void testValidateEmptyFields() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        if (page.getWebResponse().getResponseHeaderValue("Server") == null
+                || !page.getWebResponse().getResponseHeaderValue("Server").startsWith("Apache-Coyote")) {
+            page = webClient.getPage(webUrl + "faces/validateEmptyFields.xhtml");
+            HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form:submitButton");
+            page = button.click();
+            assertTrue(page.asXml().contains("We got called!"));
+        }
     }
 }

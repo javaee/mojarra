@@ -42,7 +42,7 @@
 
 -->
 <glassfish-web-app error-url="">
-  <context-root>/test-servlet30-facelets-coreEmptyAsNull</context-root>
+  <context-root>/test-servlet30-faceletsEmptyAsNull</context-root>
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">

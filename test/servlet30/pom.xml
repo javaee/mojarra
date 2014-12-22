@@ -70,6 +70,7 @@
         <module>el</module>
         <module>exactMapping</module>
         <module>facelets</module>
+        <module>faceletsEmptyAsNull</module>
         <module>factory</module>
 	<module>implicitContract</module>
         <module>multiTenantSetsTccl</module>
