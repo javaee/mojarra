@@ -55,6 +55,5 @@
     <name>Mojarra ${project.version} - Test - Servlet 3.0 - EL</name>
     <modules>
       <module>basic</module>
-      <module>decorate-context</module>
     </modules>
 </project>
