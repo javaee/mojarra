@@ -125,26 +125,28 @@ public class UserBean implements Serializable {
                 .getJspApplicationContext(sc);
         ExpressionFactory ef = jspAppContext.getExpressionFactory();
         
-//        Field delegateField = WeldExpressionFactory.class.getDeclaredField("delegate");
-//        delegateField.setAccessible(true);
-//        Object delegateInstance = delegateField.get(ef);
-        
-//        if (!(delegateInstance instanceof ExpressionFactoryImpl)) {
+        Class weldExpFactory = Class.forName("org.jboss.weld.el.WeldExpressionFactory");
+        Field delegateField = weldExpFactory.getDeclaredField("delegate");
+        delegateField.setAccessible(true);
+        Object delegateInstance = delegateField.get(ef);
+  
+        Class expFactoryImp = Class.forName("com.sun.el.ExpressionFactoryImpl");        
+        if (!(expFactoryImp.isInstance(delegateInstance))) {
         
             // dereference twice to get the true ExpressionFactoryImpl instance
-//            delegateInstance = delegateField.get(delegateInstance);
-//        }
-                
-//        Field isBackwardCompatible22Field = ExpressionFactoryImpl.class.getDeclaredField(flagName);
-//        isBackwardCompatible22Field.setAccessible(true);
+            delegateInstance = delegateField.get(delegateInstance);
+        }
+        
+        Field isBackwardCompatible22Field = expFactoryImp.getDeclaredField(flagName);
+        isBackwardCompatible22Field.setAccessible(true);
         
         boolean flagValue = true;
-//        Map<String, String> params = extContext.getRequestParameterMap();
-//        if (params.containsKey(flagName)) {
-//            flagValue = Boolean.valueOf(params.get(flagName));
-//        }
+        Map<String, String> params = extContext.getRequestParameterMap();
+        if (params.containsKey(flagName)) {
+            flagValue = Boolean.valueOf(params.get(flagName));
+        }
         
-//        isBackwardCompatible22Field.setBoolean(delegateInstance, flagValue);
+        isBackwardCompatible22Field.setBoolean(delegateInstance, flagValue);
         
     }
     
