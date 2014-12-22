@@ -54,6 +54,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Weblogic - WLS 12.1.4 - Facelets</name>
     <modules>
-	<module>core</module>
+	
     </modules>
 </project>

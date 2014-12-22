@@ -42,15 +42,20 @@
 
 -->
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-    version="2.0">
-
-    <managed-bean>
-      <managed-bean-name>annotationTestBean</managed-bean-name>
-      <managed-bean-class>com.sun.faces.test.weblogic.wls1214.facelets.core.AnnotationTestBean</managed-bean-class>
-      <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>  
-    
-</faces-config>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.sun.faces.test.weblogic</groupId>
+        <artifactId>pom</artifactId>
+        <version>2.3.0-m01-SNAPSHOT</version>
+    </parent>
+    <artifactId>facelets</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - Weblogic - Facelets</name>
+    <build>
+        <finalName>test-weblogic-facelets</finalName>
+    </build>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+</project>

@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.weblogic.wls1214.facelets.core;
+package com.sun.faces.test.weblogic.facelets;
 
 import java.util.Set;
 import java.util.logging.Level;
@@ -48,7 +48,6 @@ import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 
-import com.sun.faces.annotation.AnnotatedValidatorNoValue;
 
 public class AnnotationTestBean {
     

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,28 +37,36 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.weblogic.facelets;
 
-package com.sun.faces.annotation;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import javax.faces.validator.Validator;
-import javax.faces.validator.ValidatorException;
-import javax.faces.validator.FacesValidator;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
+import static org.junit.Assert.assertTrue;
 
-@FacesValidator
-public class AnnotatedValidatorNoValue implements Validator {
-    public void validate(FacesContext context,
-                         UIComponent component,
-                         Object value) throws ValidatorException {
-        return;
+public class Issue3334IT {
+
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    private String welcomeMessage ="AnnotatedValidatorNoValue";
-
-    public String getWelcomeMessage() {
-        return welcomeMessage;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
+    @Test
+    public void testAnnotations() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/annotationtest.xhtml");
+        String pageText = page.getBody().asText();
+        assertTrue(pageText.contains("true"));
+    }
 }
-
