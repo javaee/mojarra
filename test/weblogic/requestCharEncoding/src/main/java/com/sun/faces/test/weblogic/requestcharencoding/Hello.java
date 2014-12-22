@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.weblogic.request_char_encoding;
+package com.sun.faces.test.weblogic.requestcharencoding;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;

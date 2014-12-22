@@ -52,10 +52,10 @@
         <artifactId>pom</artifactId>
         <version>2.3.0-m01-SNAPSHOT</version>
     </parent>
-    <artifactId>request_char_encoding</artifactId>
+    <artifactId>requestCharEncoding</artifactId>
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Weblogic - Request Character Encoding</name>
     <build>
-        <finalName>test-weblogic-request_char_encoding</finalName>
+        <finalName>test-weblogic-requestCharEncoding</finalName>
     </build>
 </project>
