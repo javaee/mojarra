@@ -49,15 +49,14 @@
         <artifactId>pom</artifactId>
         <version>2.3.0-m01-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.servlet30.facelets</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>facelets</artifactId>
+    <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Servlet 3.0 - Facelets</name>
-    <modules>
-        <module>c</module>
-	<module>core</module>
-	
-    	<module>html</module>
-        <module>ui</module>
-    </modules>
+    <build>
+        <finalName>test-servlet30-facelets</finalName>
+    </build>
+    <properties>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>
