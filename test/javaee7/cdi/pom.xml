@@ -56,6 +56,5 @@
     <modules>
         <module>beanValidatorCdi</module>
         <module>initDestroy</module>
-        <module>multi-tenant</module>
     </modules>
 </project>

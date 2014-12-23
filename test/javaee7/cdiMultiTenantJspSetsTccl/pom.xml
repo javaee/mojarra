@@ -45,15 +45,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.javaee7.cdi</groupId>
+        <groupId>com.sun.faces.test.javaee7</groupId>
         <artifactId>pom</artifactId>
         <version>2.3.0-m01-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.javaee7.cdi.multi-tenant</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI - Multi-Tenant</name>
-    <modules>
-        <module>cdi-jsp-only-app-sets-tccl</module>
-    </modules>
+    <artifactId>cdiMultiTenantJspSetsTccl</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI Multi-Tenant JSP Sets TCCL</name>
+    <build>
+        <finalName>test-javaee7-cdiMultiTenantJspSetsTccl</finalName>
+    </build>  
 </project>

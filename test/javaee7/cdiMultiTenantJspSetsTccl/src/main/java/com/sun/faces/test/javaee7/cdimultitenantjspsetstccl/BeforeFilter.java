@@ -39,7 +39,7 @@
 
  */
 
-package com.sun.faces.test.javaee7.multi_tenant.cdi_jsp_only_app_sets_tccl;
+package com.sun.faces.test.javaee7.cdimultitenantjspsetstccl;
 
 import java.io.IOException;
 import java.io.PrintWriter;
