@@ -68,6 +68,7 @@
     <modules>
 	<module>action</module>
         <module>cdi</module>
+        <module>cdiMultiTenantSetsTccl</module>
         <module>cdiNoBeansXml</module>
         <module>el</module>
         <module>beanValidation</module>

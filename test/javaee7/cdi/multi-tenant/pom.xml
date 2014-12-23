@@ -55,6 +55,5 @@
     <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI - Multi-Tenant</name>
     <modules>
         <module>cdi-jsp-only-app-sets-tccl</module>
-        <module>cdi-app-sets-tccl</module>
     </modules>
 </project>

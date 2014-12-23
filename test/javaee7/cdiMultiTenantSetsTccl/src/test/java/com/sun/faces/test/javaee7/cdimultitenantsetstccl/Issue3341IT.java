@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.javaee7.cdi.multi_tenant.cdi_app_sets_tccl;
+package com.sun.faces.test.javaee7.cdimultitenantsetstccl;
 
 import org.junit.After;
 import org.junit.AfterClass;
