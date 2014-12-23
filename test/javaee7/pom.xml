@@ -68,6 +68,7 @@
     <modules>
 	<module>action</module>
         <module>cdi</module>
+        <module>cdiInitDestroyEvent</module>
         <module>cdiMultiTenantJspSetsTccl</module>
         <module>cdiMultiTenantSetsTccl</module>
         <module>cdiNoBeansXml</module>
