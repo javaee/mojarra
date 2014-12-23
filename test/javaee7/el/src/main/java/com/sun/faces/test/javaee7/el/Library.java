@@ -39,7 +39,7 @@
 
  */
 
-package com.sun.faces.test.javaee7.el.basicLambda;
+package com.sun.faces.test.javaee7.el;
 
 import java.io.Serializable;
 import java.util.List;

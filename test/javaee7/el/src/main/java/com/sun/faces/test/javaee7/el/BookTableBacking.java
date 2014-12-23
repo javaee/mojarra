@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- *
+ * 
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- *
+ * 
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- *
+ * 
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -36,40 +36,30 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+
  */
 
-package com.sun.faces.test.javaee7.el.basicLambda;
+package com.sun.faces.test.javaee7.el;
 
-import java.io.Serializable;
-import javax.enterprise.context.SessionScoped;
+import java.util.List;
+import javax.enterprise.context.Dependent;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 @Named
-@SessionScoped
-public class Book implements Serializable {
+@Dependent
+public class BookTableBacking {
     
-    private String title;
-    private String category;
-
-    public Book(String title, String category) {
-        this.title = title;
-        this.category = category;
-    }
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public String getValue() {
+        String result = "";
+        FacesContext context = FacesContext.getCurrentInstance();
+        List<Book> books = context.getApplication().evaluateExpressionGet(context, 
+                "#{library.books.stream()." +
+                                "filter(b->b.category == 'Philosophical Fiction').toList()}", List.class);
+        if (!books.isEmpty()) {
+            result = books.get(0).getTitle();
+        }
+        return result;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-    
 }
-
