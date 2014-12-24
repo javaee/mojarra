@@ -140,7 +140,16 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
     public void endDocument() throws IOException {
         endChangesIfNecessary();
         ResponseWriter writer = getWrapped();
-        writer.endElement("partial-response");
+        /*
+         * Because during a <script> writing an exception can occur we need to
+         * make sure the wrapped response only writes one partial-response, but
+         * also calls to end the document (so we can properly cleanup in the 
+         * wrapped HtmlResponseWriter). See issue #3473.
+         */
+        if (!(writer instanceof PartialResponseWriter)) {
+            writer.endElement("partial-response");
+        }
+        writer.endDocument();
     }
 
     /**
