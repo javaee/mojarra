@@ -40,9 +40,9 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.RIConstants;
 import java.io.OutputStream;
 import javax.faces.FacesException;
+import javax.faces.application.ProjectStage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
@@ -75,6 +75,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SendPoweredByHeader;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
@@ -729,7 +730,10 @@ public class ExternalContextImpl extends ExternalContext {
         if (mimeType == null) {
             mimeType = getFallbackMimeType(file);
         }
-        if (mimeType == null && LOGGER.isLoggable(Level.WARNING)) {
+        
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        if (mimeType == null && LOGGER.isLoggable(Level.WARNING) 
+            && ctx.isProjectStage(ProjectStage.Development) ) {
             LOGGER.log(Level.WARNING,
                        "jsf.externalcontext.no.mime.type.found",
                        new Object[] { file });
