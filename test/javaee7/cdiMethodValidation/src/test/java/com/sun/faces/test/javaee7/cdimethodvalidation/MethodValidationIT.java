@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.javaee7.beanValidator.methodValidator;
+package com.sun.faces.test.javaee7.cdimethodvalidation;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -55,7 +55,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(JsfTestRunner.class)
-public class MethodValidatorIT {
+public class MethodValidationIT {
 
     private String webUrl;
     private WebClient webClient;

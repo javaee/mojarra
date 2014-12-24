@@ -36,19 +36,28 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+
  */
-package com.sun.faces.test.javaee7.beanValidator.methodValidator;
+package com.sun.faces.test.javaee7.cdimethodvalidation;
 
-import java.io.Serializable;
-import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
-@Dependent
-public class HelloService implements Serializable {
+public class FooConstraintValidator implements ConstraintValidator<FooConstraint, String> {
     
-    public String sayHello(@FooConstraint String mustBeFoo) {
-        String result = "value is foo";
+    @Override
+    public void initialize(FooConstraint a) {
+    }
+
+    @Override
+    public boolean isValid(String t, ConstraintValidatorContext cvc) {
+        boolean result = false;
+        result = (t != null && "foo".equals(t));
         
         return result;
     }
+    
+    
     
 }

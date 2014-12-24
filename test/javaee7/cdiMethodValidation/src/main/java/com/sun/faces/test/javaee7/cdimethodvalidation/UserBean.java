@@ -1,4 +1,4 @@
-package com.sun.faces.test.javaee7.beanValidator.methodValidator;
+package com.sun.faces.test.javaee7.cdimethodvalidation;
 
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
