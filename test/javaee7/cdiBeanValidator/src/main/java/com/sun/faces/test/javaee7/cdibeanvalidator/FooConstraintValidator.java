@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.javaee7.cdi.beanValidatorCdi;
+package com.sun.faces.test.javaee7.cdibeanvalidator;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintValidator;

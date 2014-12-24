@@ -53,7 +53,5 @@
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI</name>
-    <modules>
-        <module>beanValidatorCdi</module>
-    </modules>
+    <modules></modules>
 </project>

@@ -9,5 +9,5 @@
         <keepgenerated>true</keepgenerated>
         <debug>true</debug>
     </jsp-descriptor>
-    <context-root>/test-javaee7-cdi-beanValidatorCdi</context-root>
+    <context-root>/test-javaee7-cdiBeanValidator</context-root>
 </weblogic-web-app>

@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.javaee7.cdi.beanValidatorCdi;
+package com.sun.faces.test.javaee7.cdibeanvalidator;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

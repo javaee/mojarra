@@ -1,4 +1,4 @@
-package com.sun.faces.test.javaee7.cdi.beanValidatorCdi;
+package com.sun.faces.test.javaee7.cdibeanvalidator;
 
 import java.io.Serializable;
 import java.util.Date;

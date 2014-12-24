@@ -4,7 +4,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -47,16 +47,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
+        <groupId>com.sun.faces.test.javaee7</groupId>
         <artifactId>pom</artifactId>
-        <groupId>com.sun.faces.test.javaee7.cdi</groupId>
         <version>2.3.0-m01-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.javaee7.cdi</groupId>
-    <artifactId>beanValidatorCdi</artifactId>
+    <artifactId>cdiBeanValidator</artifactId>
     <version>2.3.0-m01-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI - beanValidatorCdi</name>  
+    <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI BeanValidator</name>  
     <build>
-        <finalName>test-javaee7-cdi-beanValidatorCdi</finalName>
+        <finalName>test-javaee7-cdiBeanValidator</finalName>
     </build>
 </project>
