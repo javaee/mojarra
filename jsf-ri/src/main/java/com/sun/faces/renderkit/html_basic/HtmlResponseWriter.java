@@ -427,6 +427,18 @@ public class HtmlResponseWriter extends ResponseWriter {
     /** Output the text for the end of a document. */
     public void endDocument() throws IOException {
 
+        /*
+         * If the FastStringWriter is kept because of an error in <script>
+         * writing we get it here and write out the result. See issue #3473
+         */
+        if (writer instanceof FastStringWriter) {
+            FastStringWriter fastStringWriter = (FastStringWriter) writer;
+            String result = fastStringWriter.getBuffer().toString();
+            fastStringWriter.reset();
+            writer = origWriter;
+            writer.write(result);
+        }
+        
         writer.flush();
 
     }
