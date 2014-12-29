@@ -72,7 +72,6 @@
         <module>flash</module>
         <module>lifecycle</module>
         <module>renderKit</module>
-        <module>resource</module>
         <module>vdl</module>
     </modules>
 </project>
