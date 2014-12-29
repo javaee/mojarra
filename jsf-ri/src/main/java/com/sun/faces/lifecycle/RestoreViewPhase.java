@@ -210,7 +210,7 @@ public class RestoreViewPhase extends Phase {
                         throw new ViewExpiredException(
                                 MessageUtils.getExceptionMessageString(
                                 MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID,
-                                params),
+                 params),
                                 viewId);
                     }
                 }
@@ -224,16 +224,16 @@ public class RestoreViewPhase extends Phase {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("New request: creating a view for " + viewId);
                 }
-                
+
                 String derivedViewId = viewHandler.deriveLogicalViewId(facesContext, viewId);
                 ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(facesContext, derivedViewId);
                 
-                maybeTakeProtectedViewAction(facesContext, viewHandler, vdl, viewId);
+                maybeTakeProtectedViewAction(facesContext, viewHandler, vdl, derivedViewId);
                     
                 ViewMetadata metadata  = null;
                 if (vdl != null) {
                     // If we have one, get the ViewMetadata...
-                    metadata = vdl.getViewMetadata(facesContext, viewId);
+                    metadata = vdl.getViewMetadata(facesContext, derivedViewId);
                     
                     if (metadata != null) { // perhaps it's not supported
                         // and use it to create the ViewRoot.  This will have, at most
@@ -252,7 +252,7 @@ public class RestoreViewPhase extends Phase {
 
                 if (null == viewRoot) {
                     viewRoot = (Util.getViewHandler(facesContext)).
-                        createView(facesContext, viewId);
+                        createView(facesContext, derivedViewId);
                 }
                 facesContext.setViewRoot(viewRoot);
                 assert (null != viewRoot);
