@@ -81,6 +81,7 @@
         <module>multiTenantSetsTccl</module>
         <module>multiTenantUsesFactoryFinder</module>
         <module>navigation</module>
+        <module>passthrough</module>
         <module>resource</module>
         <module>serializeServerState</module>
         <module>sessionScope</module>
