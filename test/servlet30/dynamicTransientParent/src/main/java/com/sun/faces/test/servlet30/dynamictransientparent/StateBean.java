@@ -37,10 +37,9 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.statesaving.basic;
+package com.sun.faces.test.servlet30.dynamictransientparent;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 
 import java.io.Serializable;
 
@@ -51,38 +50,31 @@ import javax.faces.event.ActionEvent;
 
 @ManagedBean
 public class StateBean
-  implements Serializable
-{
+        implements Serializable {
 
+    public void temporaryMoveComponent(ActionEvent ae) {
+        UIComponent button = ae.getComponent();
+        UIComponent moveme = button.findComponent("moveme");
+        UIComponent moveto = button.findComponent("moveto");
+        UIComponent parent = moveme.getParent();
 
-  public void temporaryMoveComponent(ActionEvent ae)
-  {
-    System.out.println("Temporarily moving a component");
-    UIComponent button = ae.getComponent();
-    UIComponent moveme = button.findComponent("moveme");
-    UIComponent moveto = button.findComponent("moveto");
-    UIComponent parent = moveme.getParent();
+        parent.getChildren().remove(moveme);
+        moveto.getChildren().add(moveme);
+        moveto.getChildren().remove(moveme);
+        parent.getChildren().add(moveme);
+    }
 
-    parent.getChildren().remove(moveme);
-    moveto.getChildren().add(moveme);
-    moveto.getChildren().remove(moveme);
-    parent.getChildren().add(moveme);
-  }
-  
+    public void transientRoot(ActionEvent ae) {
+        UIComponent button = ae.getComponent();
+        UIComponent addto = button.findComponent("addto");
 
-  public void transientRoot(ActionEvent ae)
-  {
-    System.out.println("Adding a subtree with a transient root");
-    UIComponent button = ae.getComponent();
-    UIComponent addto = button.findComponent("addto");
-    
-    HtmlPanelGroup transientRoot = new HtmlPanelGroup();
-    transientRoot.setTransient(true);
-    HtmlOutputText text = new HtmlOutputText();
-    text.setValue("transient parent");
-    transientRoot.getChildren().add(text);
-    addto.getChildren().add(transientRoot);
-    
-  }
+        HtmlPanelGroup transientRoot = new HtmlPanelGroup();
+        transientRoot.setTransient(true);
+        HtmlOutputText text = new HtmlOutputText();
+        text.setValue("transient parent");
+        transientRoot.getChildren().add(text);
+        addto.getChildren().add(transientRoot);
+
+    }
 
 }

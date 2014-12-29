@@ -68,6 +68,7 @@
         <module>custom-viewroot-viewscope</module>
         <module>disableIdUniqueness</module>
         <module>dynamic</module>
+        <module>dynamicTransientParent</module>
         <module>el</module>
         <module>elDecoratedFacesContext</module>
         <module>exactMapping</module>
