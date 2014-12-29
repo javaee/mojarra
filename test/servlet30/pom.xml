@@ -78,6 +78,7 @@
         <module>multiTenantSetsTccl</module>
         <module>multiTenantUsesFactoryFinder</module>
         <module>navigation</module>
+        <module>serializeServerState</module>
         <module>systest</module>
         <module>stateViewExpiredExceptionMissing</module>
     </modules>

@@ -42,7 +42,7 @@
 
 -->
 <glassfish-web-app error-url="">
-  <context-root>/test-agnostic-statesaving-serializeserverstate</context-root>
+  <context-root>/test-agnostic-servlet30-serializeServerState</context-root>
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">
