@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.renderkit.nolinkdecoration;
+package com.sun.faces.test.servlet30.facelets;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -72,7 +72,7 @@ public class Issue3054IT {
     @JsfTest(JsfVersion.JSF_2_2_5)
     @Test
     public void testNoLinkDecoration() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/hlink.xhtml");
         List<HtmlAnchor> anchors = page.getAnchors();
         String href = anchors.get(0).getHrefAttribute();
         assertTrue(!href.contains("jftfdi"));

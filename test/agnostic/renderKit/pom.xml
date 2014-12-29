@@ -55,6 +55,5 @@
     <name>Mojarra ${project.version} - Test - Agnostic - RenderKit</name>
     <modules>
         <module>basic</module>
-        <module>noLinkDecoration</module>
     </modules>
 </project>
