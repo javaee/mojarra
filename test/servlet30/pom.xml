@@ -81,6 +81,7 @@
         <module>multiTenantUsesFactoryFinder</module>
         <module>navigation</module>
         <module>serializeServerState</module>
+        <module>sessionScope</module>
         <module>systest</module>
         <module>stateViewExpiredExceptionMissing</module>
     </modules>
