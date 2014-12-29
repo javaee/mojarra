@@ -66,6 +66,7 @@
         <module>component</module>
         <module>composite</module>
         <module>custom-viewroot-viewscope</module>
+        <module>disableIdUniqueness</module>
         <module>dynamic</module>
         <module>el</module>
         <module>elDecoratedFacesContext</module>

@@ -55,7 +55,6 @@
     <name>Mojarra ${project.version} - Test - Agnostic - State Saving</name>
     <modules>
         <module>basic</module>
-        <module>disableIdUniqueness</module>
         <module>serializeServerState</module>
     </modules>
 </project>
