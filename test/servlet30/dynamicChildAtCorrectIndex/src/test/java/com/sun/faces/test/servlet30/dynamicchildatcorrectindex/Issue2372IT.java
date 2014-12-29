@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,42 +37,43 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.statesaving.basic;
+package com.sun.faces.test.servlet30.dynamicchildatcorrectindex;
 
-import java.io.IOException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.render.FacesRenderer;
-import javax.faces.render.Renderer;
+import org.junit.*;
+import static org.junit.Assert.*;
 
-@FacesRenderer(componentFamily = "com.sun.faces.test.agnostic.statesaving.basic.DynamicParentComponent",
-rendererType = "com.sun.faces.test.agnostic.statesaving.basic.DynamicParentComponentRenderer")
-public class DynamicParentComponentRenderer extends Renderer {
+public class Issue2372IT {
+
     /**
-     * Encode the begin.
-     * 
-     * @param context the Faces context.
-     * @param component the UI component.
-     * @throws IOException 
+     * Stores the web URL.
      */
-    @Override
-    public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
-        context.getResponseWriter().write("<div>");
-        super.encodeBegin(context, component);
+    private String webUrl;
+    /**
+     * Stores the web client.
+     */
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
-    
-    /**
-     * Encode the end.
-     * 
-     * @param context the Faces context.
-     * @param component the UI component.
-     * @throws IOException 
-     */
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component)
-            throws IOException {
-        context.getResponseWriter().write("</div>");
-        super.encodeEnd(context, component);
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testDynamicChildAtCorrectIndex() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/dynamicChildAtCorrectIndex.xhtml");
+        assertTrue(page.asText().contains("Static Text Dynamic Text Static Text"));
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("form1:submit");
+        page = button.click();
+        assertTrue(page.asText().contains("Static Text Dynamic Text Static Text"));
     }
 }
