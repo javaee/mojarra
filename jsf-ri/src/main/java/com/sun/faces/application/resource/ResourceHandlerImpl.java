@@ -342,12 +342,11 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
                         buf.rewind();
                         buf.limit(thisRead);
+                        size += thisRead; 
                         do {
                             totalWritten += out.write(buf);
                         } while (totalWritten < size);
                         buf.clear();
-                        size += thisRead;
-
                     }
 
                     if (!extContext.isResponseCommitted()) {
