@@ -55,7 +55,6 @@
     <name>Mojarra ${project.version} - Test - Agnostic - Resource</name>
     <modules>
         <module>basic</module>
-        <module>relocated</module>
     </modules>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>

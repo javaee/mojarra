@@ -66,6 +66,7 @@
         <module>component</module>
         <module>composite</module>
         <module>custom-viewroot-viewscope</module>
+        <module>customResourcesDirectory</module>
         <module>disableIdUniqueness</module>
         <module>dynamic</module>
         <module>dynamicChildAtCorrectIndex</module>
