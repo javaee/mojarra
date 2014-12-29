@@ -73,7 +73,6 @@
         <module>lifecycle</module>
         <module>renderKit</module>
         <module>resource</module>
-        <module>scope</module>
         <module>vdl</module>
     </modules>
 </project>
