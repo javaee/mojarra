@@ -431,7 +431,11 @@ final class FactoryFinderInstance {
         lock.writeLock().lock();
         try {
             if (result instanceof List) {
-                TypedCollections.dynamicallyCastList((List) result, String.class).add(0, implementation);
+                /*
+                 * REVIEW removed usage of TypedCollections as implementation var
+                 *        is already to be a string for sure.
+                 */
+                ((List) result).add(0, implementation);
             }
         } finally {
             lock.writeLock().unlock();
