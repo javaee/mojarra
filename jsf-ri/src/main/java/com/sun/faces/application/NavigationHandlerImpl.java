@@ -42,6 +42,7 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.InitFacesContext;
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.flow.FlowHandlerImpl;
 import com.sun.faces.flow.FlowImpl;
 import com.sun.faces.flow.builder.MutableNavigationCase;
@@ -208,7 +209,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 String redirectUrl =
                       viewHandler.getRedirectURL(context,
                                                  caseStruct.viewId,
-                                                 SharedUtils.evaluateExpressions(context, caseStruct.navCase.getParameters()),
+                                                 ELUtils.evaluateExpressions(context, caseStruct.navCase.getParameters()),
                                                  caseStruct.navCase.isIncludeViewParams());
                 try {
                     if (LOGGER.isLoggable(Level.FINE)) {

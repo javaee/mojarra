@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -461,7 +461,7 @@ public abstract class BeanBuilder {
         String scope = beanInfo.getScope();
         if (!ELUtils.isScopeValid(scope)) {
             // custom scope - make sure it's valid
-            if (!SharedUtils.isExpression(scope)) {
+            if (!ELUtils.isExpression(scope)) {
                 String message = MessageUtils.getExceptionMessageString(
                          MessageUtils.MANAGED_BEAN_INVALID_SCOPE_ERROR_ID,
                          beanInfo.getName());
@@ -498,7 +498,7 @@ public abstract class BeanBuilder {
             this.expressionString = expressionString;
             this.expectedType = expectedType;
 
-            if (SharedUtils.isExpression(this.expressionString)) {
+            if (ELUtils.isExpression(this.expressionString)) {
                 List<String> expressions = ELUtils.getExpressionsFromString(this.expressionString);
                 if (!expressions.isEmpty()) {
                     for (String expression : expressions) {
@@ -514,7 +514,7 @@ public abstract class BeanBuilder {
                         segment[0] = null;
                     }
                 }
-                if (!SharedUtils.isExpression(beanInfo.getScope())) {
+                if (!ELUtils.isExpression(beanInfo.getScope())) {
                     ELUtils.Scope expressionScope = ELUtils
                           .getNarrowestScopeFromExpression(this.expressionString);
                     if (expressionScope != null) {
