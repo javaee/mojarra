@@ -79,6 +79,7 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SendPoweredByHeader;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
+import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
@@ -529,10 +530,7 @@ public class ExternalContextImpl extends ExternalContext {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "path");
             throw new NullPointerException(message);
         }
-        /*
-         * REVIEW why are doing a dynamicallyCastSet here?
-         */
-        return Util.dynamicallyCastSet(servletContext.getResourcePaths(path), String.class);
+        return TypedCollections.dynamicallyCastSet(servletContext.getResourcePaths(path), String.class);
     }
 
 
