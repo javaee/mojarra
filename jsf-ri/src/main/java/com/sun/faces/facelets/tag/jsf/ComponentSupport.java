@@ -63,15 +63,20 @@ import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
 import com.sun.faces.util.Util;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ComponentHandler;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import javax.faces.view.facelets.Tag;
+import javax.faces.event.PhaseId;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -82,7 +87,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import javax.faces.event.PhaseId;
 
 /**
  * 
@@ -102,13 +106,36 @@ public final class ComponentSupport {
     // have been removed from a parent component.
     public final static String REMOVED_CHILDREN = "com.sun.faces.facelets.REMOVED_CHILDREN";
 
+    // Expando attribute used to mark dynamic UIComponents that have had their
+    // ComponentSupport.MARK_CREATED expando removed.
+    public static final String MARK_CREATED_REMOVED =  StateContext.class.getName() + "_MARK_CREATED_REMOVED";
+    
     private final static String IMPLICIT_PANEL = "com.sun.faces.facelets.IMPLICIT_PANEL";
-
+    
     /**
      * Key to a FacesContext scoped Map where the keys are UIComponent instances and the
      * values are Tag instances.
      */
     public static final String COMPONENT_TO_TAG_MAP_NAME = "com.sun.faces.facelets.COMPONENT_TO_LOCATION_MAP";
+    
+    public static boolean handlerIsResourceRelated(ComponentHandler handler){
+      ComponentConfig config = handler.getComponentConfig();
+      if ( !"javax.faces.Output".equals(config.getComponentType()) ) {
+        return false;
+      }
+ 
+      String rendererType = config.getRendererType();
+      return ("javax.faces.resource.Script".equals(rendererType) ||
+                               "javax.faces.resource.Stylesheet".equals(rendererType));
+    }
+    
+    public static boolean isBuildingNewComponentTree(FacesContext context){
+      return !context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW);
+    }
+ 
+    public static boolean isImplicitPanel(UIComponent component){
+      return component.getAttributes().containsKey(IMPLICIT_PANEL);
+    }
     
     /**
      * Used in conjunction with markForDeletion where any UIComponent marked
@@ -229,7 +256,7 @@ public final class ComponentSupport {
     
     public static UIComponent findUIInstructionChildByTagId(FacesContext context, UIComponent parent, String id) {
         UIComponent result = null;
-        if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+        if (isBuildingNewComponentTree(context)) {
             return null;
         }
         Map<Object, Object> attrs = context.getAttributes();
@@ -251,7 +278,7 @@ public final class ComponentSupport {
      * @return the UI component
      */
     public static UIComponent findChildByTagId(FacesContext context, UIComponent parent, String id) {
-        if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+        if (isBuildingNewComponentTree(context)) {
             return null;
         }
         UIComponent c = null;
