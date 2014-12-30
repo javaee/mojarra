@@ -65,7 +65,6 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SerializeServerState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.GenerateUniqueServerStateIds;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.LRUMap;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
@@ -195,7 +194,11 @@ public class ServerSideStateHelper extends StateHelper {
 
                 //noinspection SynchronizationOnLocalVariableOrMethodParameter
                 synchronized (sessionObj) {
-                    Map<String, Map> logicalMap = TypedCollections.dynamicallyCastMap(
+                    /*
+                     * REVIEW Why are we checking this if we are ever the only
+                     *        ones populating this?
+                     */
+                    Map<String, Map> logicalMap = Util.dynamicallyCastMap(
                           (Map) sessionMap
                                 .get(LOGICAL_VIEW_MAP), String.class, Map.class);
                     if (logicalMap == null) {
@@ -224,7 +227,7 @@ public class ServerSideStateHelper extends StateHelper {
                                                         : createIncrementalRequestId(ctx));
                     }
                     Map<String, Object[]> actualMap =
-                          TypedCollections.dynamicallyCastMap(
+                          Util.dynamicallyCastMap(
                                 logicalMap.get(idInLogicalMap), String.class, Object[].class);
                     if (actualMap == null) {
                         actualMap = new LRUMap<>(numberOfViews);

@@ -44,9 +44,9 @@ import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.ManagedBeanInfo;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.TypedCollections;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.util.Util;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
@@ -394,9 +394,12 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
                                 ? values.toString()
                                 : "none"));
             }
+            /*
+             * REVIEW Why are we using dynamicallyCastList here if we know the list is empty?
+             */
             return (new ManagedBeanInfo.ListEntry(valueClass,
                                                   (values == null)
-                                                  ? TypedCollections.dynamicallyCastList(Collections.emptyList(), String.class)
+                                                  ? Util.dynamicallyCastList(Collections.emptyList(), String.class)
                                                   : values));
         }
 

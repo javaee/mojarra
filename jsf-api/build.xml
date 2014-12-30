@@ -294,18 +294,18 @@
 
         <filter token="protection" value=""/>
 
-        <filter token="package" value="javax.faces"/>
+<!--        <filter token="package" value="javax.faces"/>
         <copy file="${tools.dir}/template-src/TypedCollections.java"
               todir="${build.generate.dir}/javax/faces"
-              filtering="true"/>
+              filtering="true"/>-->
 
         <filter token="package" value="javax.faces.component"/>
         <copy file="${tools.dir}/template-src/MessageFactory.java"
               todir="${build.generate.dir}/javax/faces/component"
               filtering="true"/>
-        <copy file="${tools.dir}/template-src/TypedCollections.java"
+<!--        <copy file="${tools.dir}/template-src/TypedCollections.java"
               todir="${build.generate.dir}/javax/faces/component"
-              filtering="true"/>
+              filtering="true"/>-->
         <copy file="${tools.dir}/template-src/StateHolderSaver.java"
               todir="${build.generate.dir}/javax/faces/component"
               filtering="true"/>
@@ -328,9 +328,6 @@
 
         <filter token="package" value="javax.faces.webapp"/>
         <copy file="${tools.dir}/template-src/MessageFactory.java"
-              todir="${build.generate.dir}/javax/faces/webapp"
-              filtering="true"/>
-        <copy file="${tools.dir}/template-src/TypedCollections.java"
               todir="${build.generate.dir}/javax/faces/webapp"
               filtering="true"/>
 
