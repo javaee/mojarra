@@ -344,7 +344,6 @@ public class Issue1111IT {
         HtmlTextInput email = (HtmlTextInput)page.getElementById("email");
         email.focus();
 
-        webClient.waitForBackgroundJavaScript(60000);
         waiter.waitForSuccess();
         
         System.out.println(page.asXml());
@@ -367,7 +366,7 @@ public class Issue1111IT {
 
         private int sleepTime = 10;
 
-        private int maxWaitTime = 10000;
+        private int maxWaitTime = 60000;
 
         @Override
         public void statusMessageChanged(Page page, String message) {
