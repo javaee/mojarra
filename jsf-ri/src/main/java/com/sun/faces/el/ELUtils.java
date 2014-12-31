@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -69,14 +69,12 @@ import javax.faces.component.UIViewRoot;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
-import javax.faces.application.Application;
 import javax.servlet.ServletContext;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
@@ -766,7 +764,7 @@ public class ELUtils {
 
     public static Scope getScopeForExpression(String expression) {
 
-        if (isMixedExpression(expression)) {
+        if (SharedUtils.isMixedExpression(expression)) {
             return (getNarrowestScopeFromExpression(expression));
         } else {
             return (getScopeForSingleExpression(expression));
@@ -945,68 +943,5 @@ public class ELUtils {
         }
         
         return result;
-    }
-
-    public static Map<String, List<String>> evaluateExpressions(FacesContext context, Map<String, List<String>> map) {
-        if (map != null && !map.isEmpty()) {
-            Map<String, List<String>> ret = new HashMap<>(map.size());
-            for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-                ret.put(entry.getKey(), evaluateExpressions(context, entry.getValue()));
-            }
-            
-            return ret;
-        }
-        
-        return map;
-    }
-    
-    public static List<String> evaluateExpressions(FacesContext context, List<String> values) {
-         if (!values.isEmpty()) {
-             List<String> ret = new ArrayList<>(values.size());
-             Application app = context.getApplication();
-             for (String val : values) {
-                 if (val != null) {
-                     String value = val.trim();
-                     if (isExpression(value)) {
-                         value = app.evaluateExpressionGet(context,
-                                                           value,
-                                                           String.class);
-                     }
-                     ret.add(value);
-                 }
-             }
-             
-             return ret;
-         }
-         return values;
-     }
-
-    /*
-     * Determine whether String is a value binding expression or not.
-     */
-    public static boolean isExpression(String expression) {
-
-        if (null == expression) {
-            return false;
-        }
-
-        //check to see if attribute has an expression
-        int start = expression.indexOf("#{");
-        return start != -1 && expression.indexOf('}', start+2) != -1;
-    }
-
-    /*
-     * Determine whether String is a mixed value binding expression or not.
-     */
-    public static boolean isMixedExpression(String expression) {
-
-        if (null == expression) {
-            return false;
-        }
-
-        // if it doesn't start and end with delimiters
-        return (!(expression.startsWith("#{") && expression.endsWith("}")))
-                  && isExpression(expression);
-
     }
 }

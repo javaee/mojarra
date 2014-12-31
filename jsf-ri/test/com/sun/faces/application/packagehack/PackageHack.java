@@ -40,7 +40,6 @@
  */
 package com.sun.faces.application.packagehack;
 
-import com.sun.faces.el.ELUtils;
 import java.util.List;
 import java.util.Map;
 import javax.faces.context.FacesContext;
@@ -48,7 +47,7 @@ import javax.faces.context.FacesContext;
 public class PackageHack {
     
     public static Map<String, List<String>> evaluateExpressions(FacesContext context, Map<String, List<String>> map) {    
-        Map<String, List<String>> result = ELUtils.evaluateExpressions(context, map);
+        Map<String, List<String>> result = SharedUtils.evaluateExpressions(context, map);
         
         return result;
     }
