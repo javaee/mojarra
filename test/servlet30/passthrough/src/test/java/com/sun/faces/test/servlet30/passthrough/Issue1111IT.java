@@ -344,7 +344,7 @@ public class Issue1111IT {
         HtmlTextInput email = (HtmlTextInput)page.getElementById("email");
         email.focus();
 
-        webClient.setJavaScriptTimeout(60000);
+        webClient.waitForBackgroundJavaScript(60000);
         waiter.waitForSuccess();
         
         System.out.println(page.asXml());
