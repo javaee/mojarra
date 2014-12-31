@@ -95,7 +95,7 @@ public class ActionListenerImplIT {
 
     @Test
     public void testIllegalArgException() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "/faces/login.jsp");
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:submit2");
         TextPage page1 = button.click();

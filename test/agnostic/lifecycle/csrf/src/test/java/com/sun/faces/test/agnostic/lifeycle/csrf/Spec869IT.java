@@ -75,7 +75,7 @@ public class Spec869IT {
         String pageText = page.getBody().asText();
         assertTrue(pageText.contains("protected view"));
         
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         page = webClient.getPage(webUrl + "faces/i_spec_869_war_protected.xhtml");
         pageText = page.getBody().asText();
         
@@ -98,7 +98,7 @@ public class Spec869IT {
     public void testBadRefererCSRF() throws Exception {
         webClient.removeRequestHeader("Referer");
         webClient.addRequestHeader("Referer", "foobar");
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl);
         HtmlButtonInput button = (HtmlButtonInput) page.getElementById("button");
         page = button.click();
@@ -111,7 +111,7 @@ public class Spec869IT {
     public void testBadOriginCSRF() throws Exception {
         webClient.removeRequestHeader("Origin");
         webClient.addRequestHeader("Origin", "foobar");
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl);
         HtmlButtonInput button = (HtmlButtonInput) page.getElementById("button");
         page = button.click();
@@ -126,7 +126,7 @@ public class Spec869IT {
     public void testGoodRefererCSRF() throws Exception {
         webClient.removeRequestHeader("Referer");
         webClient.addRequestHeader("Referer", "i_spec_869_war.xhtml");
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl);
         HtmlButtonInput button = (HtmlButtonInput) page.getElementById("button");
         page = button.click();
@@ -141,7 +141,7 @@ public class Spec869IT {
     public void testGoodOriginCSRF() throws Exception {
         webClient.removeRequestHeader("Origin");
         webClient.addRequestHeader("Origin", "i_spec_869_war.xhtml");
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl);
         HtmlButtonInput button = (HtmlButtonInput) page.getElementById("button");
         page = button.click();

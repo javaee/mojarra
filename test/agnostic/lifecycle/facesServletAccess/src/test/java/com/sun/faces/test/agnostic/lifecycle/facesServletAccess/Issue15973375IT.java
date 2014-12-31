@@ -65,42 +65,42 @@ public class Issue15973375IT {
 
     @Test
     public void testWebInfWebXml() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/faces/WEB-INF/web.xml");
         assertEquals(404, page.getWebResponse().getStatusCode());
     }
 
     @Test
     public void testWebInfYouCantGetMe() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/faces/WEB-INF/youcantgetme.xhtml");
         assertEquals(404, page.getWebResponse().getStatusCode());
     }
 
     @Test
     public void testWebInfFacesConfig() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/faces/WEB-INF/faces-config.xml");
         assertEquals(404, page.getWebResponse().getStatusCode());
     }
 
     @Test
     public void testNormalPage() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         assertEquals(200, page.getWebResponse().getStatusCode());
     }
 
     @Test
     public void testMetaInf() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/META-INF");
         assertEquals(404, page.getWebResponse().getStatusCode());
     }
 
     @Test
     public void testMetaInfYouCantGetMe() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/META-INF/youcantgetme.xhtml");
         assertEquals(404, page.getWebResponse().getStatusCode());
     }

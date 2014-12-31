@@ -88,7 +88,7 @@ public class FlashViewParamIT {
     @Test 
     public void testSecure() throws Exception {
         webClient.getCookieManager().clearCookies();
-        webClient.setUseInsecureSSL(true);
+        webClient.getOptions().setUseInsecureSSL(true);
         String httpsUrl = System.getProperty("integration.url.https");
 
         doTestBooleanCheckboxSubmittedValue(httpsUrl);
