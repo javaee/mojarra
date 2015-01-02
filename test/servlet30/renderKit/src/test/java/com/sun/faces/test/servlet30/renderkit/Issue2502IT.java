@@ -43,7 +43,6 @@ package com.sun.faces.test.servlet30.renderkit;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -84,7 +83,7 @@ public class Issue2502IT {
          * We don't want this to be simulated as an IE browser since IE
          * does some automatic replacing.
          */
-        webClient = new WebClient(BrowserVersion.FIREFOX_24);
+        webClient = new WebClient(BrowserVersion.FIREFOX_17);
         HtmlPage page = webClient.getPage(webUrl+"faces/outputEscape.xhtml");
         assertTrue(page.asXml().contains(expected1));
         assertTrue(page.asXml().contains(expected2));
