@@ -79,11 +79,6 @@ public class StateContext {
 
     private static final String KEY = StateContext.class.getName() + "_KEY";
     
-    // Expando attribute used to mark dynamic UIComponents that have had their
-    // ComponentSupport.MARK_CREATED expando removed.
-    private static final String MARK_CREATED_REMOVED =
-            StateContext.class.getName() + "_MARK_CREATED_REMOVED";
-    
     private boolean partial;
     private boolean partialLocked;
     private boolean trackMods = true;
@@ -493,7 +488,7 @@ public class StateContext {
                 // Actually, we don't just remove the MARK_CREATED - we need
                 // to stash it away so that we can restore it later if the
                 // component happens to be re-added to its original parent.
-                attrs.put(MARK_CREATED_REMOVED, tagId);
+                attrs.put(ComponentSupport.MARK_CREATED_REMOVED, tagId);
                 childRemovedFromParent(component.getParent(), tagId);
             }
         }
@@ -531,13 +526,13 @@ public class StateContext {
             }
             
             Map<String, Object> attrs = component.getAttributes();
-            String tagId = (String)attrs.get(MARK_CREATED_REMOVED);
+            String tagId = (String)attrs.get(ComponentSupport.MARK_CREATED_REMOVED);
             
             if (childAddedToSameParentAsBefore(component.getParent(), tagId)) {
                 
                 // Restore MARK_CREATED if the added component was originally
                 // created as a tag-based child of this parent.
-                attrs.remove(MARK_CREATED_REMOVED);
+                attrs.remove(ComponentSupport.MARK_CREATED_REMOVED);
                 attrs.put(ComponentSupport.MARK_CREATED, tagId);
             }
             

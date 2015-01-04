@@ -225,6 +225,10 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
     }
 
+    protected boolean isIterating(FaceletContext context){
+      return IterationIdManager.isIterating(context);
+    }
+
     // Tests whether the component associated with the specified tagId was
     // a child of the parent component that has been dynamically removed.  If
     // so, we want to suppress re-creation of this child
