@@ -1,4 +1,4 @@
-package com.sun.faces.test.vdl.facelets.contracts.vhosts;
+package com.sun.faces.test.servlet30.contractusinghostheader;
 
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewDeclarationLanguage;

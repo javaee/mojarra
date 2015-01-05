@@ -60,6 +60,5 @@
         <module>extended</module>
         <module>sample</module>
         <module>simple</module>
-        <module>vhosts</module>
     </modules>
 </project>

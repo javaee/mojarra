@@ -6,7 +6,7 @@
               version="2.0">
     <factory>
         <view-declaration-language-factory>
-            com.sun.faces.test.vdl.facelets.contracts.vhosts.VDLFactory
+            com.sun.faces.test.servlet30.contractusinghostheader.VDLFactory
         </view-declaration-language-factory>
     </factory>
 </faces-config>

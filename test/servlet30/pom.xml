@@ -63,9 +63,10 @@
     </dependencies>
     <modules>
         <module>ajax</module>
-        <module>contractUsingViewRoot</module>
         <module>component</module>
         <module>composite</module>
+        <module>contractUsingHostHeader</module>
+        <module>contractUsingViewRoot</module>
         <module>custom-viewroot-viewscope</module>
         <module>customResourcesDirectory</module>
         <module>customViewHandler</module>
