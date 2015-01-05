@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.vdl.facelets.contracts.viewroot;
+package com.sun.faces.test.servlet30.contractusingviewroot;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -46,7 +46,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class Issue2671IT {
+public class Issue2654IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -62,21 +62,21 @@ public class Issue2671IT {
         webClient.closeAllWindows();
     }
 
-    /**
-     * Test that loads up a page where the f:view tag was placed incorrectly.
-     * 
-     * <p>
-     * It will silently ignore the wrong placement, but to verify it did deal
-     * with the scenario correctly look in the server.log for the following 
-     * message:
-     * </p>
-     * <pre>
-     *  INFO: f:view contracts attribute found, but not used at top level
-     * </pre>
-     */
     @Test
-    public void testWrong() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/wrong.xhtml?style=wrong");
-        assertEquals("wrong", page.getTitleText());
+    public void testLayout1() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml?style=layout1");
+        assertEquals("layout1", page.getTitleText());
+    }
+
+    @Test
+    public void testLayout2() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml?style=layout2");
+        assertEquals("layout2", page.getTitleText());
+    }
+
+    @Test
+    public void testLayout3() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml?style=layout3");
+        assertEquals("layout3", page.getTitleText());
     }
 }

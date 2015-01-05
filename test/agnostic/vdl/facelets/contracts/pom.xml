@@ -61,6 +61,5 @@
         <module>sample</module>
         <module>simple</module>
         <module>vhosts</module>
-        <module>viewroot</module>
     </modules>
 </project>

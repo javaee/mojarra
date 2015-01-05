@@ -37,22 +37,34 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.vdl.facelets.contracts.viewroot;
+package com.sun.faces.test.servlet30.contractusingviewroot;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-@RequestScoped
-@ManagedBean(name = "viewRootConstractsELBean")
-public class ViewRootContractsELBean {
+public class Issue2736IT {
 
-    private String contracts = null;
+    private String webUrl;
+    private WebClient webClient;
 
-    public String getContracts() {
-        return contracts;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public void setContracts(String contracts) {
-        this.contracts = contracts;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testViewRootConstractsEL() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/viewRootContractsEL.xhtml");
+        assertEquals(200, page.getWebResponse().getStatusCode());
     }
 }
