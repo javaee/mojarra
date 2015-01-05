@@ -37,77 +37,42 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.faces.application;
+package com.sun.faces.cdi;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.util.AnnotationLiteral;
+import javax.faces.application.ApplicationMap;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import org.xml.sax.InputSource;
 
 /**
  * <p class="changed_added_2_3">
- * The ApplicationMapProducer is the CDI producer that allows injection of the
- * application map using @Inject and allows EL resolving of #{applicationScope}
+ * The ApplicationProducer is the CDI producer that allows allows EL resolving 
+ * of #{application}
  * </p>
  *
  * @since 2.3
- * @see ExternalContext#getApplicationMap()
+ * @see ExternalContext
  */
-public class ApplicationMapProducer implements Bean<Map<String, Object>> {
+public class ApplicationProducer extends CdiProducer implements Bean<Object> {
 
     /**
-     * Stores the active boolean.
+     * Inner class defining an annotation literal for @Default.
      */
-    private Boolean active;
-
-    /**
-     * Inner class defining an annotation literal for @ApplicationMap.
-     */
-    public class ApplicationMapAnnotationLiteral
+    public class DefaultAnnotationLiteral
             extends AnnotationLiteral<ApplicationMap> {
 
-        @Override
-        public Class<? extends Annotation> annotationType() {
-            return ApplicationMap.class;
-        }
-
         private static final long serialVersionUID = 1L;
-    }
-
-    /**
-     * Check if we are active.
-     */
-    protected void checkActive() {
-        if (active == null) {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            active = getWebXmlVersion(facesContext).equals("4.0")
-                    || getFacesConfigXmlVersion(facesContext).equals("2.3");
-        }
-
-        if (!active) {
-            throw new IllegalStateException("Cannot use @Inject without stating JSF 2.3 version or Servlet 4.0 version");
-        }
     }
 
     /**
@@ -117,9 +82,9 @@ public class ApplicationMapProducer implements Bean<Map<String, Object>> {
      * @return the Faces context.
      */
     @Override
-    public Map<String, Object> create(CreationalContext<Map<String, Object>> creationalContext) {
+    public Object create(CreationalContext<Object> creationalContext) {
         checkActive();
-        return FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+        return FacesContext.getCurrentInstance().getExternalContext().getContext();
     }
 
     /**
@@ -134,7 +99,7 @@ public class ApplicationMapProducer implements Bean<Map<String, Object>> {
      * @param creationalContext the creational context.
      */
     @Override
-    public void destroy(Map<String, Object> instance, CreationalContext<Map<String, Object>> creationalContext) {
+    public void destroy(Object instance, CreationalContext<Object> creationalContext) {
     }
 
     /**
@@ -144,7 +109,7 @@ public class ApplicationMapProducer implements Bean<Map<String, Object>> {
      */
     @Override
     public Class<?> getBeanClass() {
-        return Map.class;
+        return Object.class;
     }
 
     /**
@@ -164,7 +129,7 @@ public class ApplicationMapProducer implements Bean<Map<String, Object>> {
      */
     @Override
     public String getName() {
-        return "applicationScope";
+        return "application";
     }
 
     /**
@@ -174,7 +139,7 @@ public class ApplicationMapProducer implements Bean<Map<String, Object>> {
      */
     @Override
     public Set<Annotation> getQualifiers() {
-        return singleton((Annotation) new ApplicationMapAnnotationLiteral());
+        return singleton((Annotation) new DefaultAnnotationLiteral());
     }
 
     /**
@@ -204,7 +169,7 @@ public class ApplicationMapProducer implements Bean<Map<String, Object>> {
      */
     @Override
     public Set<Type> getTypes() {
-        return new HashSet<>(asList(Map.class));
+        return new HashSet<>(asList(Object.class));
     }
 
     /**
@@ -225,85 +190,5 @@ public class ApplicationMapProducer implements Bean<Map<String, Object>> {
     @Override
     public boolean isNullable() {
         return false;
-    }
-
-    /**
-     * Get the web.xml version (if any).
-     *
-     * @param facesContext the Faces context.
-     * @return the version found, or "" if none found.
-     */
-    protected String getWebXmlVersion(FacesContext facesContext) {
-        String result = "";
-        InputStream stream = null;
-        try {
-            URL url = facesContext.getExternalContext().getResource("/WEB-INF/web.xml");
-            if (url != null) {
-                XPathFactory factory = XPathFactory.newInstance();
-                XPath xpath = factory.newXPath();
-                xpath.setNamespaceContext(new JavaeeNamespaceContext());
-                stream = url.openStream();
-                result = xpath.evaluate("string(/javaee:web-app/@version)", new InputSource(stream));
-            }
-        } catch (MalformedURLException mue) {
-        } catch (XPathExpressionException | IOException xpee) {
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException ioe) {
-                }
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Get the faces-config.xml version (if any).
-     *
-     * @param facesContext the Faces context.
-     * @return the version found, or "" if none found.
-     */
-    protected String getFacesConfigXmlVersion(FacesContext facesContext) {
-        String result = "";
-        InputStream stream = null;
-        try {
-            URL url = facesContext.getExternalContext().getResource("/WEB-INF/faces-config.xml");
-            if (url != null) {
-                XPathFactory factory = XPathFactory.newInstance();
-                XPath xpath = factory.newXPath();
-                xpath.setNamespaceContext(new JavaeeNamespaceContext());
-                stream = url.openStream();
-                result = xpath.evaluate("string(/javaee:faces-config/@version)", new InputSource(stream));
-            }
-        } catch (MalformedURLException mue) {
-        } catch (XPathExpressionException | IOException xpee) {
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException ioe) {
-                }
-            }
-        }
-        return result;
-    }
-
-    public class JavaeeNamespaceContext implements NamespaceContext {
-
-        @Override
-        public String getNamespaceURI(String prefix) {
-            return "http://xmlns.jcp.org/xml/ns/javaee";
-        }
-
-        @Override
-        public String getPrefix(String namespaceURI) {
-            return "javaee";
-        }
-
-        @Override
-        public Iterator getPrefixes(String namespaceURI) {
-            return null;
-        }
     }
 }

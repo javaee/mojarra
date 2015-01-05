@@ -37,18 +37,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces;
+package com.sun.faces.cdi;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
-import javax.faces.application.ApplicationProducer;
-import javax.faces.application.ApplicationMapProducer;
-import javax.faces.context.ExternalContextProducer;
-import javax.faces.context.FacesContextProducer;
-import javax.faces.context.SessionProducer;
-import javax.faces.view.ViewMapProducer;
-import javax.faces.view.ViewProducer;
 
 /**
  * The FacesContext extension.
@@ -59,7 +52,7 @@ import javax.faces.view.ViewProducer;
  * documentation.
  * </p>
  */
-public class FacesCDIExtension implements Extension {
+public class CdiExtension implements Extension {
 
     /**
      * After bean discovery.

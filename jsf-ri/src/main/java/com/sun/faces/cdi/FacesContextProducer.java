@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.faces.context;
+package com.sun.faces.cdi;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -52,17 +52,18 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.util.AnnotationLiteral;
+import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_3">
- * The ExternalContextProducer is the CDI producer that allows injection of the
- * ExternalContext using @Inject and allows EL resolving of #{externalContext}
+ * The FacesContextProducer is the CDI producer that allows injection of the
+ * FacesContext using @Inject and allows EL resolving of #{facesContext}
  * </p>
  *
  * @since 2.3
  * @see FacesContext
  */
-public class ExternalContextProducer extends CdiProducer implements Bean<ExternalContext> {
+public class FacesContextProducer extends CdiProducer implements Bean<FacesContext> {
 
     /**
      * Inner class defining an annotation literal for @Default.
@@ -80,19 +81,24 @@ public class ExternalContextProducer extends CdiProducer implements Bean<Externa
      * @return the Faces context.
      */
     @Override
-    public ExternalContext create(CreationalContext<ExternalContext> creationalContext) {
+    public FacesContext create(CreationalContext<FacesContext> creationalContext) {
         checkActive();
-        return FacesContext.getCurrentInstance().getExternalContext();
+        return FacesContext.getCurrentInstance();
     }
 
     /**
      * Destroy the instance.
      *
+     * <p>
+     * Since the FacesContext is a JSF artifact that the JSF runtime really is
+     * managing the destroy method here does not need to do anything.
+     * </p>
+     *
      * @param instance the instance.
      * @param creationalContext the creational context.
      */
     @Override
-    public void destroy(ExternalContext instance, CreationalContext<ExternalContext> creationalContext) {
+    public void destroy(FacesContext instance, CreationalContext<FacesContext> creationalContext) {
     }
 
     /**
@@ -122,7 +128,7 @@ public class ExternalContextProducer extends CdiProducer implements Bean<Externa
      */
     @Override
     public String getName() {
-        return "externalContext";
+        return "facesContext";
     }
 
     /**
@@ -162,7 +168,7 @@ public class ExternalContextProducer extends CdiProducer implements Bean<Externa
      */
     @Override
     public Set<Type> getTypes() {
-        return new HashSet<>(asList(ExternalContext.class));
+        return new HashSet<>(asList(FacesContext.class));
     }
 
     /**

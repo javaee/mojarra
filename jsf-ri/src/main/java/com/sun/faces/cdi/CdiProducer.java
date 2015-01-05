@@ -37,13 +37,14 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.faces.context;
+package com.sun.faces.cdi;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import javax.faces.context.FacesContext;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
@@ -66,44 +67,12 @@ abstract class CdiProducer {
     protected void checkActive() {
         if (active == null) {
             FacesContext facesContext = FacesContext.getCurrentInstance();
-            active = getWebXmlVersion(facesContext).equals("4.0")
-                    || getFacesConfigXmlVersion(facesContext).equals("2.3");
+            active = getFacesConfigXmlVersion(facesContext).equals("2.3");
         }
 
         if (!active) {
-            throw new IllegalStateException("Cannot use @Inject without stating JSF 2.3 version or Servlet 4.0 version");
+            throw new IllegalStateException("Cannot use @Inject without stating JSF 2.3 version");
         }
-    }
-
-    /**
-     * Get the web.xml version (if any).
-     *
-     * @param facesContext the Faces context.
-     * @return the version found, or "" if none found.
-     */
-    protected String getWebXmlVersion(FacesContext facesContext) {
-        String result = "";
-        InputStream stream = null;
-        try {
-            URL url = facesContext.getExternalContext().getResource("/WEB-INF/web.xml");
-            if (url != null) {
-                XPathFactory factory = XPathFactory.newInstance();
-                XPath xpath = factory.newXPath();
-                xpath.setNamespaceContext(new JavaeeNamespaceContext());
-                stream = url.openStream();
-                result = xpath.evaluate("string(/javaee:web-app/@version)", new InputSource(stream));
-            }
-        } catch (MalformedURLException mue) {
-        } catch (XPathExpressionException | IOException xpee) {
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException ioe) {
-                }
-            }
-        }
-        return result;
     }
 
     /**

@@ -37,19 +37,14 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.faces.view;
+package com.sun.faces.cdi;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.spi.CreationalContext;
@@ -59,11 +54,6 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import org.xml.sax.InputSource;
 
 /**
  * <p class="changed_added_2_3">
@@ -74,28 +64,8 @@ import org.xml.sax.InputSource;
  * @since 2.3
  * @see UIViewRoot
  */
-public class ViewProducer implements Bean<UIViewRoot> {
+public class ViewProducer extends CdiProducer implements Bean<UIViewRoot> {
 
-    /**
-     * Stores the active flag.
-     */
-    protected Boolean active;
-
-    /**
-     * Check if we are active.
-     */
-    protected void checkActive() {
-        if (active == null) {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            active = getWebXmlVersion(facesContext).equals("4.0")
-                    || getFacesConfigXmlVersion(facesContext).equals("2.3");
-        }
-
-        if (!active) {
-            throw new IllegalStateException("Cannot use @Inject without stating JSF 2.3 version or Servlet 4.0 version");
-        }
-    }    
-    
     /**
      * Inner class defining an annotation literal for @Default.
      */
@@ -215,85 +185,5 @@ public class ViewProducer implements Bean<UIViewRoot> {
     @Override
     public boolean isNullable() {
         return true;
-    }
-
-    /**
-     * Get the web.xml version (if any).
-     *
-     * @param facesContext the Faces context.
-     * @return the version found, or "" if none found.
-     */
-    protected String getWebXmlVersion(FacesContext facesContext) {
-        String result = "";
-        InputStream stream = null;
-        try {
-            URL url = facesContext.getExternalContext().getResource("/WEB-INF/web.xml");
-            if (url != null) {
-                XPathFactory factory = XPathFactory.newInstance();
-                XPath xpath = factory.newXPath();
-                xpath.setNamespaceContext(new JavaeeNamespaceContext());
-                stream = url.openStream();
-                result = xpath.evaluate("string(/javaee:web-app/@version)", new InputSource(stream));
-            }
-        } catch (MalformedURLException mue) {
-        } catch (XPathExpressionException | IOException xpee) {
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException ioe) {
-                }
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Get the faces-config.xml version (if any).
-     *
-     * @param facesContext the Faces context.
-     * @return the version found, or "" if none found.
-     */
-    protected String getFacesConfigXmlVersion(FacesContext facesContext) {
-        String result = "";
-        InputStream stream = null;
-        try {
-            URL url = facesContext.getExternalContext().getResource("/WEB-INF/faces-config.xml");
-            if (url != null) {
-                XPathFactory factory = XPathFactory.newInstance();
-                XPath xpath = factory.newXPath();
-                xpath.setNamespaceContext(new JavaeeNamespaceContext());
-                stream = url.openStream();
-                result = xpath.evaluate("string(/javaee:faces-config/@version)", new InputSource(stream));
-            }
-        } catch (MalformedURLException mue) {
-        } catch (XPathExpressionException | IOException xpee) {
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException ioe) {
-                }
-            }
-        }
-        return result;
-    }
-
-    public class JavaeeNamespaceContext implements NamespaceContext {
-
-        @Override
-        public String getNamespaceURI(String prefix) {
-            return "http://xmlns.jcp.org/xml/ns/javaee";
-        }
-
-        @Override
-        public String getPrefix(String namespaceURI) {
-            return "javaee";
-        }
-
-        @Override
-        public Iterator getPrefixes(String namespaceURI) {
-            return null;
-        }
     }
 }

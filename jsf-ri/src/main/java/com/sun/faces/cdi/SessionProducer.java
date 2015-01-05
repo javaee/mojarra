@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.faces.context;
+package com.sun.faces.cdi;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -53,6 +53,7 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.PassivationCapable;
 import javax.enterprise.util.AnnotationLiteral;
+import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_3">
