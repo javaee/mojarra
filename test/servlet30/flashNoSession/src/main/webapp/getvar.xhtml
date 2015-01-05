@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <head>
+        <f:view transient="true"/>
+        <title>Start Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <f:metadata>
+            <f:viewAction action="#{session.invalidate()}"/>
+        </f:metadata>
+    </head>
+    <body>
+        <h1>NPE Bug Reproducer</h1>
+        Session: #{facesContext.externalContext.sessionMap} <br/>
+        Flash Variable: #{flashBean.variable}
+    </body>
+</html>

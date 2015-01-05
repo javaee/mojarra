@@ -45,51 +45,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test</groupId>
+        <groupId>com.sun.faces.test.servlet30</groupId>
         <artifactId>pom</artifactId>
         <version>2.3.0-m01-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.servlet30</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Servlet 3.0</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>ajax</module>
-        <module>contractUsingViewRoot</module>
-        <module>component</module>
-        <module>composite</module>
-        <module>custom-viewroot-viewscope</module>
-        <module>customResourcesDirectory</module>
-        <module>customViewHandler</module>
-        <module>disableIdUniqueness</module>
-        <module>dynamic</module>
-        <module>dynamicChildAtCorrectIndex</module>
-        <module>dynamicTransientParent</module>
-        <module>el</module>
-        <module>elDecoratedFacesContext</module>
-        <module>exactMapping</module>
-        <module>facelets</module>
-        <module>faceletsEmptyAsNull</module>
-        <module>factory</module>
-        <module>flashNoSession</module>
-        <module>implicitContract</module>
-        <module>multiTenantSetsTccl</module>
-        <module>multiTenantUsesFactoryFinder</module>
-        <module>navigation</module>
-        <module>passthrough</module>
-        <module>renderKit</module>
-        <module>resource</module>
-        <module>serializeServerState</module>
-        <module>sessionScope</module>
-        <module>systest</module>
-        <module>stateViewExpiredExceptionMissing</module>
-    </modules>
+    <artifactId>flashNoSession</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Flash and no Session</name>
+    <build>
+        <finalName>test-servlet30-flashNoSession</finalName>
+    </build>
+    <properties>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>
