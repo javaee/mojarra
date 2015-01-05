@@ -269,17 +269,15 @@ final class WriteBehindStateWriter extends Writer {
                         // push us past the last '~' at the end of the marker
                         pos += (len + STATE_MARKER_LEN);
                         tildeIdx = getNextDelimiterIndex(builder, pos);
+                        
+                        stateBuilder = getState(stateManager, origWriter);
+                        stateLen = stateBuilder.length();        
                     } else {
                         pos = tildeIdx;
                         tildeIdx = getNextDelimiterIndex(builder,
                                                          tildeIdx + 1);
-
                     }
                 }
-                
-                stateBuilder = getState(stateManager, origWriter);
-                stateLen = stateBuilder.length();
-                
             } else {
                 // we've written all of the state field markers.
                 // finish writing content
