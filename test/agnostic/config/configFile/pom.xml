@@ -47,7 +47,7 @@
     <parent>
         <groupId>com.sun.faces.test.agnostic.config</groupId>
         <artifactId>pom</artifactId>
-        <version>2.3.0-m01-SNAPSHOT</version>
+        <version>2.3.0-m02-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.agnostic.config</groupId>
     <artifactId>configFile</artifactId>
