@@ -40,6 +40,14 @@
 
 package com.sun.faces.application.resource;
 
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+
+import javax.faces.application.ProjectStage;
+import javax.faces.application.ResourceHandler;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,20 +57,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import javax.faces.application.ProjectStage;
-import javax.faces.application.ResourceHandler;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.config.WebConfiguration;
 
 /**
  * This class is used to lookup {@link ResourceInfo} instances
@@ -468,7 +467,8 @@ public class ResourceManager {
             library = classpathHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         }
         
-        if (library == null) {
+        if (library == null && contract == null) {
+            // FCAPUTO facelets in contracts should have been found by the webapphelper already
             library = faceletResourceHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         }
 

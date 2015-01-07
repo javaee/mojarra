@@ -44,6 +44,13 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
+
+import javax.faces.FacesException;
+import javax.faces.application.Application;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.flow.Flow;
+import javax.faces.flow.FlowHandler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -51,12 +58,6 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.NoSuchElementException;
-import javax.faces.FacesException;
-import javax.faces.application.Application;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.flow.Flow;
-import javax.faces.flow.FlowHandler;
 
 public class FaceletWebappResourceHelper extends ResourceHelper {
     
@@ -82,36 +83,16 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
 
     @Override
     public LibraryInfo findLibrary(String libraryName, String localePrefix, String contract, FacesContext ctx) {
-        LibraryInfo result = null;
-
-        try {
-            String path = libraryName;
-            // prepend the leading '/' if necessary.
-            if ('/' != path.charAt(0)) {
-                path = "/" + path;
-            }
-            if(contract != null) {
-                path = webAppContractsDirectory + '/' + contract + path;
-            }
-            if ('/' != path.charAt(0)) {
-                path = "/" + path;
-            }
-            URL url = Resource.getResourceUrl(ctx, path);
-            // By definition, FaceletWebappResourceHelper only deals with files
-            // in the web app root, not in the resource directories
-            if (null != url && -1 == url.getPath().indexOf("/META-INF/")) {
-                result = new FaceletLibraryInfo(libraryName, null, localePrefix, contract, this, url);
-            }
-        } catch (MalformedURLException ex) {
-            throw new FacesException(ex);
-        }
-        
-        
-        return result;
+        // FCAPUTO libraries are handled by WebappResourceHelper
+        return null;
     }
 
     @Override
     public ResourceInfo findResource(LibraryInfo library, String resourceName, String localePrefix, boolean compressable, FacesContext ctx) {
+        if(localePrefix != null) {
+            // FCAPUTO localized facelets are not yet allowed
+            return null;
+        }
         FaceletResourceInfo result = null;
         try {
             String path = resourceName;
