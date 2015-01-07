@@ -73,7 +73,7 @@ public class Spec1327IT {
     @JsfTest(value = JsfVersion.JSF_2_3_0_M01,
             excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
     public void testInjectSessionBean() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/injectSessionBean.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/injectSession.xhtml");
         assertTrue(page.asXml().contains("Session"));
     }
 }
