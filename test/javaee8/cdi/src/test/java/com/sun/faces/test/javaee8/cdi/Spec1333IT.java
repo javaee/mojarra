@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -39,19 +39,40 @@
  */
 package com.sun.faces.test.javaee8.cdi;
 
-import javax.enterprise.context.RequestScoped;
-import javax.faces.component.UIViewRoot;
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-@Named(value = "injectUIViewRootBean")
-@RequestScoped
-public class InjectUIViewRootBean {
+@RunWith(JsfTestRunner.class)
+public class Spec1333IT {
 
-    @Inject
-    UIViewRoot viewRoot;
+    private String webUrl;
+    private WebClient webClient;
 
-    public String getValue() {
-        return viewRoot.toString();
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    @JsfTest(value = JsfVersion.JSF_2_3_0_M02)
+    public void testInjectFacesContext() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/injectView.xhtml");
+        assertTrue(page.asXml().contains("UIViewRoot"));
     }
 }
