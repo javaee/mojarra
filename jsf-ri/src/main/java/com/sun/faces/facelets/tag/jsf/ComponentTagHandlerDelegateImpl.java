@@ -224,6 +224,10 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
     }
 
+    protected boolean isIterating(FaceletContext context){
+      return IterationIdManager.isIterating(context);
+    }
+
     /**
      * Get the mark id for the given tag.
      * 

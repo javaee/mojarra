@@ -41,6 +41,7 @@
 package com.sun.faces.component.validator;
 
 
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.util.RequestStateManager;
 
 import javax.faces.context.FacesContext;
@@ -49,7 +50,9 @@ import javax.faces.validator.Validator;
 import javax.faces.application.Application;
 import javax.faces.view.facelets.ValidatorHandler;
 import javax.faces.view.facelets.FaceletContext;
+
 import java.util.*;
+
 import javax.faces.event.PhaseId;
 
 /**
@@ -134,7 +137,7 @@ public class ComponentValidators {
     public static void addDefaultValidatorsToComponent(FacesContext ctx,
                                                        EditableValueHolder editableValueHolder) {
 
-        if (!ctx.isPostback() || ctx.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+        if (ComponentSupport.isBuildingNewComponentTree(ctx)) {
             Set<String> keySet = ctx.getApplication().getDefaultValidatorInfo().keySet();
             List<String> validatorIds = new ArrayList<String>(keySet.size());
             Set<String> disabledValidatorIds = (Set<String>)
