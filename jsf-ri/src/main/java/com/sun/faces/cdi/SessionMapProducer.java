@@ -41,18 +41,17 @@ package com.sun.faces.cdi;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import static java.util.Arrays.asList;
 import java.util.Collections;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.enterprise.inject.spi.PassivationCapable;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -67,7 +66,13 @@ import javax.faces.context.SessionMap;
  * @since 2.3
  * @see ExternalContext#getSessionMap()
  */
-public class SessionMapProducer extends CdiProducer implements Bean<Map<String, Object>> {
+public class SessionMapProducer extends CdiProducer
+        implements Bean<Map<String, Object>>, PassivationCapable {
+
+    /**
+     * Stores our id.
+     */
+    private String id = SessionMapProducer.class.getName();
 
     /**
      * Stores our types.
@@ -162,7 +167,7 @@ public class SessionMapProducer extends CdiProducer implements Bean<Map<String, 
      */
     @Override
     public Class<? extends Annotation> getScope() {
-        return Dependent.class;
+        return RequestScoped.class;
     }
 
     /**
@@ -178,27 +183,12 @@ public class SessionMapProducer extends CdiProducer implements Bean<Map<String, 
     /**
      * Get the types.
      *
-     * <p>
-     * We use HashMap<String, Object> here so we can get the type of the
-     * Map<K,V> interface.
-     * </p>
-     *
      * @return the types.
      */
     @Override
     public Set<Type> getTypes() {
         if (types == null) {
             types = new HashSet<>();
-            HashMap<String, Object> sessionMap = new HashMap<>();
-            Type[] interfaceTypes = sessionMap.getClass().getGenericInterfaces();
-
-            for (Type interfaceType : interfaceTypes) {
-                String typeName = interfaceType.getTypeName();
-                if (typeName.contains("Map")) {
-                    types.add(interfaceType);
-                    break;
-                }
-            }
             types.add(Map.class);
         }
 
@@ -223,5 +213,15 @@ public class SessionMapProducer extends CdiProducer implements Bean<Map<String, 
     @Override
     public boolean isNullable() {
         return false;
+    }
+
+    /**
+     * Get the id.
+     *
+     * @return the id.
+     */
+    @Override
+    public String getId() {
+        return id;
     }
 }

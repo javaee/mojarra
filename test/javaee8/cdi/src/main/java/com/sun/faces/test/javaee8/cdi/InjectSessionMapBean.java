@@ -39,19 +39,20 @@
  */
 package com.sun.faces.test.javaee8.cdi;
 
-import javax.faces.context.SessionMap;
+import java.io.Serializable;
 import java.util.Map;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.context.SessionMap;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named(value = "injectSessionMapBean")
-@RequestScoped
-public class InjectSessionMapBean {
+@ApplicationScoped
+public class InjectSessionMapBean implements Serializable {
 
     @SessionMap
     @Inject
-    Map<String, Object> sessionMap;
+    Map sessionMap;
 
     public String getValue() {
         sessionMap.put("key", "value");
