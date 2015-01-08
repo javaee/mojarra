@@ -40,21 +40,20 @@
 
 package com.sun.faces.application.resource;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.component.UIViewRoot;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import javax.faces.application.ProjectStage;
-import javax.faces.context.FacesContext;
-
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableMissingResourceLibraryDetection;
+import javax.faces.application.ProjectStage;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.*;
 
 
 /**
@@ -359,8 +358,12 @@ public class ClasspathResourceHelper extends ResourceHelper {
         URL result = null;
         
         if (library != null) {
-        	contracts = new ArrayList<String>(1);
-        	contracts.add(library.getContract());
+            if(library.getContract() == null) {
+                contracts = Collections.emptyList();
+            } else {
+                contracts = new ArrayList<String>(1);
+                contracts.add(library.getContract());
+            }
         } else if (root == null) {
             String contractName = ctx.getExternalContext().getRequestParameterMap()
                   .get("con");

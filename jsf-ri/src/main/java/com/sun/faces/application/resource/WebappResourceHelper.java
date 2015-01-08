@@ -40,23 +40,23 @@
 
 package com.sun.faces.application.resource;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.FacesLogger;
+
+import javax.faces.FacesException;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.faces.FacesException;
-import javax.faces.application.ProjectStage;
-import javax.faces.context.FacesContext;
-
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.util.FacesLogger;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
 
@@ -318,8 +318,12 @@ public class WebappResourceHelper extends ResourceHelper {
         List<String> contracts = null;
 
         if (library != null) {
-        	  contracts = new ArrayList<String>(1);
-        	  contracts.add(library.getContract());
+            if(library.getContract() == null) {
+                contracts = Collections.emptyList();
+            } else {
+                contracts = new ArrayList<String>(1);
+                contracts.add(library.getContract());
+            }
         } else if (root == null) {
             String contractName = ctx.getExternalContext().getRequestParameterMap()
                   .get("con");
