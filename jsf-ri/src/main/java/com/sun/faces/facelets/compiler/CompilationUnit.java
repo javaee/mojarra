@@ -101,6 +101,10 @@ class CompilationUnit {
         }
         this.children.add(unit);
     }
+    
+    public void removeChildren() {
+        this.children.clear();
+    }
 
     public FaceletHandler createFaceletHandler() {
         return this.getNextFaceletHandler();

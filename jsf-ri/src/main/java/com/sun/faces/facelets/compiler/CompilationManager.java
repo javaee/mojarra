@@ -267,6 +267,7 @@ final class CompilationManager {
                     .toNamespaceUnit(this.tagLibrary);
             this.units.push(nsUnit);
             if (viewRootUnit != null) {
+                viewRootUnit.removeChildren();
                 this.currentUnit().addChild(viewRootUnit);
             }
             this.startUnit(new TrimmedTagUnit(this.tagLibrary, qname[0], qname[1], t, this
