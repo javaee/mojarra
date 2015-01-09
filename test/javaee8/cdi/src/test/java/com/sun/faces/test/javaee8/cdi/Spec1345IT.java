@@ -41,6 +41,8 @@ package com.sun.faces.test.javaee8.cdi;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import com.sun.faces.test.junit.JsfVersion;
@@ -68,7 +70,8 @@ public class Spec1345IT {
     }
 
     @Test
-    @JsfTest(value = JsfVersion.JSF_2_3_0_M02)
+    @JsfTest(value = JsfVersion.JSF_2_3_0_M02,
+            excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
     public void testInjectSessionMap() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/injectSessionMap.xhtml");
         assertTrue(page.asXml().contains("key=value"));
