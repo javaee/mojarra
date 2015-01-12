@@ -72,22 +72,19 @@ public class UpdateModelValuesPhase extends Phase {
         }
         UIComponent component = facesContext.getViewRoot();
         assert (null != component);
-        String exceptionMessage = null;
 
         try {
             component.processUpdates(facesContext);
-        } catch (IllegalStateException | FacesException e) {
-            exceptionMessage = e.getMessage();
+        } catch (RuntimeException re) {
+            String exceptionMessage = re.getMessage();
+            if (null != exceptionMessage) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING, exceptionMessage, re);
+                }
+            }
+            throw new FacesException(exceptionMessage, re);
         }
 
-        // Just log the exception.  Any exception occurring from
-        // processUpdates should have been stored as a message
-        // on FacesContext.
-        if (exceptionMessage != null) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.warning(exceptionMessage);
-            }
-        }
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting UpdateModelValuesPhase");
         }
