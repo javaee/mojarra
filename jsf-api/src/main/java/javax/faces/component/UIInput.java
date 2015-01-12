@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -70,7 +70,7 @@ import javax.faces.validator.ValidatorException;
 
 /**
  * <p><span class="changed_modified_2_0 changed_modified_2_0_rev_a
- * changed_modified_2_2"><strong>UIInput</strong></span> is a {@link
+ * changed_modified_2_2 changed_modified_2_3"><strong>UIInput</strong></span> is a {@link
  * UIComponent} that represents a component that both displays output to
  * the user (like {@link UIOutput} components do) and processes request
  * parameters on the subsequent request that need to be decoded.  There
@@ -117,10 +117,6 @@ import javax.faces.validator.ValidatorException;
  */
 
 public class UIInput extends UIOutput implements EditableValueHolder {
-
-    /* PENDING_2_1 (edburns,rogerk) this should be exposed as public constant */
-    private static final String EMPTY_STRING_AS_NULL =
-          "javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL";
 
     private static final String BEANS_VALIDATION_AVAILABLE =
           "javax.faces.private.BEANS_VALIDATION_AVAILABLE";
@@ -177,6 +173,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     public static final String VALIDATE_EMPTY_FIELDS_PARAM_NAME = 
 	"javax.faces.VALIDATE_EMPTY_FIELDS";
+
+    /**
+     * <p class="changed_modified_2_3">The name of an application parameter
+     * that indicates how empty strings need to be interpreted.</p>
+     */
+    public static final String EMPTY_STRING_AS_NULL_PARAM_NAME =
+          "javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL";
     
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
 
@@ -1488,7 +1491,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     private boolean considerEmptyStringNull(FacesContext ctx) {
 
         if (emptyStringIsNull == null) {
-            String val = ctx.getExternalContext().getInitParameter(EMPTY_STRING_AS_NULL);
+            String val = ctx.getExternalContext().getInitParameter(EMPTY_STRING_AS_NULL_PARAM_NAME);
             emptyStringIsNull = Boolean.valueOf(val);
         }
 
