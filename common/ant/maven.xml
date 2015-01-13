@@ -291,7 +291,14 @@
                     <obtain.javadoc.jar 
                         artifactId="${impl-artifact-id}"
                         version="@{version}"
-                        target.parent.dir="${mvn.impl.dir}" /> 
+                        target.parent.dir="${mvn.impl.dir}" />
+                    <!--
+
+                        Create a separate documentation JAR to be uploaded.
+                    
+                        -->
+                    <copy file="${mvn.impl.dir}/target/${impl-artifact-id}-@{version}-javadoc.jar"
+                        tofile="${mvn.impl.dir}/target/${impl-artifact-id}-@{version}-documentation.jar"/>    
                     <!--
                         A bit of a brute force hack, but it works for now.
                         -->
