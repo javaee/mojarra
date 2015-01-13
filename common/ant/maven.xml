@@ -136,48 +136,48 @@
     </macrodef>
 
     <macrodef name="obtain.javadoc.jar">
-      <attribute name="artifactId" />
-      <attribute name="version" />
-      <attribute name="target.parent.dir" />
+        <attribute name="artifactId" />
+        <attribute name="version" />
+        <attribute name="target.parent.dir" />
 
-      <sequential>
-        <property name="documentation.zip"
+        <sequential>
+            <property name="documentation.zip"
                   value="${jsf.build.home}/jsf-demo/dist/docs/mojarra-@{version}-documentation.zip" />
-        <property name="javadoc.jar"
+            <property name="javadoc.jar"
                   value="@{target.parent.dir}/target/@{artifactId}-@{version}-javadoc.jar" />
-        <if>
-          <isset property="skip.javadoc.jar" />
-          <then>
-            <echo file="@{target.parent.dir}/target/index.html" append="false">
+            <if>
+                <isset property="skip.javadoc.jar" />
+                <then>
+                    <echo file="@{target.parent.dir}/target/index.html" append="false">
 &lt;html&gt;
 &lt;head&gt;&lt;title&gt;javadoc generation skipped&lt;/title&gt;&lt;/head&gt;
 &lt;body&gt;
-javadoc generation skipped
+                        javadoc generation skipped
 &lt;/body&gt;
 &lt;/html&gt;
-            </echo>
-            <jar destfile="@{target.parent.dir}/target/@{artifactId}-@{version}-javadoc.jar" 
+                    </echo>
+                    <jar destfile="@{target.parent.dir}/target/@{artifactId}-@{version}-javadoc.jar" 
                  basedir="@{target.parent.dir}/target/" includes="index.html"/>
-          </then>
-          <else>
-            <if>
-              <not>
-                <resourceexists>
-                  <file file="${documentation.zip}" />
-                </resourceexists>
-              </not>
-              <then>
-                <echo message="Generating documentation for inclusion as ${javadoc.jar}"/>
-                <property name="documentation.version" value="@{version}" />
-                <ant dir="${demo.dir}" 
-                  target="generate.documentatation.given.documentation.version" />
-              </then>
-            </if>
-            <copy file="${documentation.zip}" tofile="${javadoc.jar}"
+                </then>
+                <else>
+                    <if>
+                        <not>
+                            <resourceexists>
+                                <file file="${documentation.zip}" />
+                            </resourceexists>
+                        </not>
+                        <then>
+                            <echo message="Generating documentation for inclusion as ${javadoc.jar}"/>
+                            <property name="documentation.version" value="@{version}" />
+                            <ant dir="${demo.dir}" 
+                     target="generate.documentatation.given.documentation.version" />
+                        </then>
+                    </if>
+                    <copy file="${documentation.zip}" tofile="${javadoc.jar}"
                   overwrite="true" failonerror="false"/> 
-          </else>
-        </if>
-      </sequential>
+                </else>
+            </if>
+        </sequential>
     </macrodef>
 
     <macrodef name="do.mvn">
@@ -191,35 +191,35 @@ javadoc generation skipped
                 <then>
                     <delete failonerror="false" dir="${mvn.api.dir}"/>
                     <create.pom
-                          template.file="${current.dir}/template/jsf-api-pom-template.xml"
-                          output.file="${mvn.api.dir}/jsf-api-pom.xml"
-                          version="@{version}"
-                          groupId="@{groupId}"/>
+                        template.file="${current.dir}/template/jsf-api-pom-template.xml"
+                        output.file="${mvn.api.dir}/jsf-api-pom.xml"
+                        version="@{version}"
+                        groupId="@{groupId}"/>
                     <mkdir dir="${mvn.api.dir}/target/classes"/>
                     <mkdir dir="${mvn.api.dir}/src/main/java"/>
                     <copy overwrite="true" 
                           todir="${mvn.api.dir}/src/main/java">
-                      <fileset dir="${api.dir}/doc">
-                        <include name="**/*.png" />
-                        <include name="*.xsd" />
-                        <include name="*.dtd" />
-                        <include name="standard-html-renderkit.xml" />
-                        <exclude name="xml.xsd" />
-                        <exclude name="javaee*.xsd" />
-                        <exclude name="XMLSchema.dtd" />
-                        <exclude name="datatypes.dtd" />
-                        <exclude name="changed_*.png" />
-                      </fileset>
-                      <fileset dir="${api.dir}/src/main/java">
-                        <include name="**/*" />
-                        <exclude name="**/*.png" />
-                      </fileset>
-                      <fileset dir="${api.dir}/${build.dir}/generate/">
-                        <include name="**/*" />
-                        <exclude name="**/last-generation" />
-                        <exclude name="facesdoc/**/*.*" />
-                        <exclude name="**/*.png" />
-                      </fileset>
+                        <fileset dir="${api.dir}/doc">
+                            <include name="**/*.png" />
+                            <include name="*.xsd" />
+                            <include name="*.dtd" />
+                            <include name="standard-html-renderkit.xml" />
+                            <exclude name="xml.xsd" />
+                            <exclude name="javaee*.xsd" />
+                            <exclude name="XMLSchema.dtd" />
+                            <exclude name="datatypes.dtd" />
+                            <exclude name="changed_*.png" />
+                        </fileset>
+                        <fileset dir="${api.dir}/src/main/java">
+                            <include name="**/*" />
+                            <exclude name="**/*.png" />
+                        </fileset>
+                        <fileset dir="${api.dir}/${build.dir}/generate/">
+                            <include name="**/*" />
+                            <exclude name="**/last-generation" />
+                            <exclude name="facesdoc/**/*.*" />
+                            <exclude name="**/*.png" />
+                        </fileset>
                     </copy>
                     <unjar src="${javax.faces-api.jar}"
                            overwrite="yes"
@@ -229,84 +229,91 @@ javadoc generation skipped
                              dir="${mvn.api.dir}"
                              goals="xml:transform" />
                     <obtain.javadoc.jar 
-                            artifactId="${api-artifact-id}"
-                            version="@{version}"
-                            target.parent.dir="${mvn.api.dir}" />
+                        artifactId="${api-artifact-id}"
+                        version="@{version}"
+                        target.parent.dir="${mvn.api.dir}" />
                     <jsf.mvn pomFile="${mvn.api.dir}/jsf-api-pom.xml"
                              mvnSpecVersion="@{version}"
                              dir="${mvn.api.dir}"
                              goals="@{goal}" />
                     <if>
-                      <isset property="mvn.jar.echo" />
-                      <then>
-                        <output.jar.contents
-                            locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}.jar" />
-                        <output.jar.contents
-                            locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}-javadoc.jar" />
-                        <output.jar.contents
-                            locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}-sources.jar" />
-                      </then>
+                        <isset property="mvn.jar.echo" />
+                        <then>
+                            <output.jar.contents
+                                locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}.jar" />
+                            <output.jar.contents
+                                locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}-javadoc.jar" />
+                            <output.jar.contents
+                                locally.deployed.jar="${maven.repo.local}/javax/faces/javax.faces-api/@{version}/javax.faces-api-@{version}-sources.jar" />
+                        </then>
                     </if>
 
                 </then>
                 <else>
-                     <delete failonerror="false" dir="${mvn.impl.dir}"/>
-                     <create.pom
-                          template.file="${current.dir}/template/jsf-impl-pom-template.xml"
-                          output.file="${mvn.impl.dir}/jsf-impl-pom.xml"
-                          version="@{version}"/>
+                    <delete failonerror="false" dir="${mvn.impl.dir}"/>
+                    <create.pom
+                        template.file="${current.dir}/template/jsf-impl-pom-template.xml"
+                        output.file="${mvn.impl.dir}/jsf-impl-pom.xml"
+                        version="@{version}"/>
                     <mkdir dir="${mvn.impl.dir}/target/classes"/>
                     <mkdir dir="${mvn.impl.dir}/src/main/java"/>
                     <copy overwrite="true" 
                           todir="${mvn.impl.dir}/src/main/java">
-                      <fileset dir="${impl.dir}/src/main/java" includes="**/*" />
-                      <fileset dir="${impl.dir}/${build.dir}/generate/"> 
-                        <include name="**/*" />
-                        <exclude name="last-generation" />
-                        <exclude name="conf/**" />
-                        <exclude name="facesdoc/**" />
-                        <exclude name="**/*.xsd" />
-                      </fileset>
+                        <fileset dir="${impl.dir}/src/main/java" includes="**/*" />
+                        <fileset dir="${impl.dir}/${build.dir}/generate/"> 
+                            <include name="**/*" />
+                            <exclude name="last-generation" />
+                            <exclude name="conf/**" />
+                            <exclude name="facesdoc/**" />
+                            <exclude name="**/*.xsd" />
+                        </fileset>
 
-                      <fileset dir="${api.dir}/src/main/java">
-                        <include name="**/*" />
-                        <exclude name="last-generation" />
-                        <exclude name="conf/**" />
-                        <exclude name="facesdoc/**" />
-                        <exclude name="**/*.xsd" />
-                      </fileset>
-                      <fileset dir="${api.dir}/build/generate/">
-                        <include name="**/*" />
-                        <exclude name="last-generation" />
-                        <exclude name="conf/**" />
-                        <exclude name="facesdoc/**" />
-                        <exclude name="**/*.xsd" />
-                      </fileset>
+                        <fileset dir="${api.dir}/src/main/java">
+                            <include name="**/*" />
+                            <exclude name="last-generation" />
+                            <exclude name="conf/**" />
+                            <exclude name="facesdoc/**" />
+                            <exclude name="**/*.xsd" />
+                        </fileset>
+                        <fileset dir="${api.dir}/build/generate/">
+                            <include name="**/*" />
+                            <exclude name="last-generation" />
+                            <exclude name="conf/**" />
+                            <exclude name="facesdoc/**" />
+                            <exclude name="**/*.xsd" />
+                        </fileset>
 
                     </copy>
                     <unjar src="${impl.dir}/build/lib/javax.faces.jar"
                            overwrite="yes"
                            dest="${mvn.impl.dir}/target/classes"/>
-                    <property name="skip.javadoc.jar" value="true" />
+                    <!--<property name="skip.javadoc.jar" value="true" />-->
                     <obtain.javadoc.jar 
-                            artifactId="${impl-artifact-id}"
-                            version="@{version}"
-                            target.parent.dir="${mvn.impl.dir}" />
+                        artifactId="${impl-artifact-id}"
+                        version="@{version}"
+                        target.parent.dir="${mvn.impl.dir}" /> 
+                    <!--
+                        A bit of a brute force hack, but it works for now.
+                        -->
+                    <unzip src="${mvn.impl.dir}/target/${impl-artifact-id}-@{version}-javadoc.jar"
+                           dest="${mvn.impl.dir}/target/javadoc-repackage"/>
+                    <jar destfile="${mvn.impl.dir}/target/${impl-artifact-id}-@{version}-javadoc.jar"
+                         basedir="${mvn.impl.dir}/target/javadoc-repackage/javadocs"/>
                     <jsf.mvn pomFile="${mvn.impl.dir}/jsf-impl-pom.xml"
                              mvnSpecVersion="@{version}"
                              dir="${mvn.impl.dir}"
                              goals="@{goal}"/>
 
                     <if>
-                      <isset property="mvn.jar.echo" />
-                      <then>
-                        <output.jar.contents
-                            locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}.jar" />
-                        <output.jar.contents
-                            locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}-javadoc.jar" />
-                        <output.jar.contents
-                            locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}-sources.jar" />
-                      </then>
+                        <isset property="mvn.jar.echo" />
+                        <then>
+                            <output.jar.contents
+                                locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}.jar" />
+                            <output.jar.contents
+                                locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}-javadoc.jar" />
+                            <output.jar.contents
+                                locally.deployed.jar="${maven.repo.local}/org/glassfish/javax.faces/@{version}/javax.faces-@{version}-sources.jar" />
+                        </then>
                     </if>
 
 
@@ -316,26 +323,26 @@ javadoc generation skipped
     </macrodef>
 
     <macrodef name="output.jar.contents">
-      <attribute name="locally.deployed.jar" />
-      <sequential>
-        <var name="jar.contents.raw" unset="true" />
-        <var name="jar.contents" unset="true" />
+        <attribute name="locally.deployed.jar" />
+        <sequential>
+            <var name="jar.contents.raw" unset="true" />
+            <var name="jar.contents" unset="true" />
 
-        <pathconvert pathsep="${line.separator}" 
+            <pathconvert pathsep="${line.separator}" 
                      property="jar.contents.raw">
-          <zipfileset src="@{locally.deployed.jar}" />
-        </pathconvert>
-        <!-- Remove the leading fully qualified paths. -->
-<!--        <propertyregex property="jar.contents" 
-                       input="${jar.contents.raw}" override="true"
-                       regexp="@{locally.deployed.jar}:" replace="" 
-                       global="true" />-->
-        <echo>
-+++++++++++++++++++++++++++++++ START contents of @{locally.deployed.jar}:
-${jar.contents.raw}
-+++++++++++++++++++++++++++++++ END contents of @{locally.deployed.jar}:
-        </echo>
-      </sequential>                    
+                <zipfileset src="@{locally.deployed.jar}" />
+            </pathconvert>
+            <!-- Remove the leading fully qualified paths. -->
+            <!--        <propertyregex property="jar.contents" 
+            input="${jar.contents.raw}" override="true"
+            regexp="@{locally.deployed.jar}:" replace="" 
+            global="true" />-->
+            <echo>
+                +++++++++++++++++++++++++++++++ START contents of @{locally.deployed.jar}:
+                ${jar.contents.raw}
+                +++++++++++++++++++++++++++++++ END contents of @{locally.deployed.jar}:
+            </echo>
+        </sequential>                    
     </macrodef>
 
     <macrodef name="jsf.mvn">
@@ -405,8 +412,8 @@ ${jar.contents.raw}
             </if>
             <if>
                 <and>
-                  <isset property="http.proxy.host" />
-                  <length string="${http.proxy.host}" when="greater" length="0" />
+                    <isset property="http.proxy.host" />
+                    <length string="${http.proxy.host}" when="greater" length="0" />
                 </and>
                 <then>
                     <property name="httpProxyProperty" value="-Dhttp.proxyHost=${http.proxy.host} -Dhttp.proxyPort=${http.proxy.port}"/>
@@ -417,8 +424,8 @@ ${jar.contents.raw}
             </if>
             <if>
                 <and>
-                  <isset property="gpg.passphrase" />
-                  <length string="${gpg.passphrase}" when="greater" length="0" />
+                    <isset property="gpg.passphrase" />
+                    <length string="${gpg.passphrase}" when="greater" length="0" />
                 </and>
                 <then>
                     <property name="gpgPassphraseProperty" value="-Prelease-sign-artifacts -Dgpg.passphrase=${gpg.passphrase}"/>
@@ -429,8 +436,8 @@ ${jar.contents.raw}
             </if>
             <if>
                 <and>
-                  <isset property="https.proxy.host" />
-                  <length string="${https.proxy.host}" when="greater" length="0" />
+                    <isset property="https.proxy.host" />
+                    <length string="${https.proxy.host}" when="greater" length="0" />
                 </and>
                 <then>
                     <property name="httpsProxyProperty" value="-Dhttps.proxyHost=${https.proxy.host} -Dhttps.proxyPort=${https.proxy.port}"/>
