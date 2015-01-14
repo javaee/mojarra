@@ -103,7 +103,11 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashSet;
 
 import java.util.LinkedHashSet;
@@ -120,10 +124,19 @@ import java.util.TimeZone;
 import java.util.LinkedHashMap;
 
 import javax.el.ValueExpression;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.util.AnnotationLiteral;
 import javax.faces.application.Resource;
+import javax.faces.convert.FacesConverter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.view.ViewDeclarationLanguage;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import org.xml.sax.InputSource;
 
 
 /**
@@ -1331,7 +1344,20 @@ public class ApplicationImpl extends Application {
     public Converter createConverter(String converterId) {
 
         Util.notNull("converterId", converterId);
-        Converter returnVal = (Converter) newThing(converterId, converterIdMap);
+        Converter returnVal;
+        
+        if (isJsf23()) {
+            BeanManager beanManager = getBeanManager();
+            FacesConverterAnnotation annotation = new FacesConverterAnnotation(converterId, Object.class);
+            Set<Bean<?>> beanSet = beanManager.getBeans(Converter.class, annotation);
+            Bean<?> bean = beanManager.resolve(beanSet);
+            returnVal = (Converter) beanManager.getReference(bean, 
+                    Converter.class, beanManager.createCreationalContext(bean));
+            return returnVal;
+        }
+        
+        returnVal = (Converter) newThing(converterId, converterIdMap);
+        
         if (returnVal == null) {
             Object[] params = {converterId};
             if (LOGGER.isLoggable(Level.SEVERE)) {
@@ -1351,6 +1377,29 @@ public class ApplicationImpl extends Application {
         return returnVal;
     }
 
+    class FacesConverterAnnotation 
+        extends AnnotationLiteral<FacesConverter> 
+        implements FacesConverter {
+
+        private String value;
+        private Class forClass;
+        
+        public FacesConverterAnnotation(String value, Class forClass) {
+            this.value = value;
+            this.forClass = forClass;
+        }
+        
+        @Override
+        public String value() {
+            return value;
+        }
+
+        @Override
+        public Class forClass() {
+            return forClass;
+        }
+        
+    }
 
     /**
      * @see javax.faces.application.Application#createConverter(Class)
@@ -1358,7 +1407,19 @@ public class ApplicationImpl extends Application {
     public Converter createConverter(Class<?> targetClass) {
 
         Util.notNull("targetClass", targetClass);
-        Converter returnVal = (Converter) newConverter(targetClass,
+        Converter returnVal = null;
+        
+        if (isJsf23()) {
+            BeanManager beanManager = getBeanManager();
+            FacesConverterAnnotation annotation = new FacesConverterAnnotation("", targetClass);
+            Set<Bean<?>> beanSet = beanManager.getBeans(Converter.class, annotation);
+            Bean<?> bean = beanManager.resolve(beanSet);
+            returnVal = (Converter) beanManager.getReference(bean, 
+                    Converter.class, beanManager.createCreationalContext(bean));
+            return returnVal;
+        }
+        
+        returnVal = (Converter) newConverter(targetClass,
                                                    converterTypeMap,targetClass);
         if (returnVal != null) {
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -2529,4 +2590,85 @@ public class ApplicationImpl extends Application {
 
     private static final class ComponentResourceClassNotFound { }
 
+    private Boolean isJsf23;
+    
+        /**
+     * Get the faces-config.xml version (if any).
+     *
+     * @param facesContext the Faces context.
+     * @return the version found, or "" if none found.
+     */
+    private String getFacesConfigXmlVersion(FacesContext facesContext) {
+        String result = "";
+        InputStream stream = null;
+        try {
+            URL url = facesContext.getExternalContext().getResource("/WEB-INF/faces-config.xml");
+            if (url != null) {
+                XPathFactory factory = XPathFactory.newInstance();
+                XPath xpath = factory.newXPath();
+                xpath.setNamespaceContext(new JavaeeNamespaceContext());
+                stream = url.openStream();
+                result = xpath.evaluate("string(/javaee:faces-config/@version)", new InputSource(stream));
+            }
+        } catch (MalformedURLException mue) {
+        } catch (XPathExpressionException | IOException xpee) {
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ioe) {
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Are we running in JSF 2.3
+     * 
+     * @return true if we are, false otherwise.
+     */
+    private boolean isJsf23() {
+        if (isJsf23 == null) {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            isJsf23 = getFacesConfigXmlVersion(facesContext).equals("2.3");
+        }
+        return true;
+    }
+
+    public class JavaeeNamespaceContext implements NamespaceContext {
+
+        @Override
+        public String getNamespaceURI(String prefix) {
+            return "http://xmlns.jcp.org/xml/ns/javaee";
+        }
+
+        @Override
+        public String getPrefix(String namespaceURI) {
+            return "javaee";
+        }
+
+        @Override
+        public Iterator getPrefixes(String namespaceURI) {
+            return null;
+        }
+    }
+    
+    /**
+     * Stores the bean manager.
+     */
+    private BeanManager beanManager;
+    
+    /**
+     * Get the bean manager.
+     * 
+     * @return the bean manager.
+     */
+    private BeanManager getBeanManager() {
+        if (beanManager == null) {        
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            beanManager = Util.getCdiBeanManager(facesContext);
+        }       
+        return beanManager;
+    }
 }

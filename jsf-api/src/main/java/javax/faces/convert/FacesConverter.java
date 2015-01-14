@@ -45,6 +45,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.annotation.Inherited;
+import javax.inject.Qualifier;
 
 /**
  * <p class="changed_added_2_0"><span
@@ -94,8 +95,9 @@ import java.lang.annotation.Inherited;
  */
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Inherited
+@Qualifier
 public @interface FacesConverter {
 
     /**
