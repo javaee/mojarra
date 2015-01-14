@@ -170,7 +170,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
         URL url = null;
         if (null != nonDefaultResourceResolver) {
             url = nonDefaultResourceResolver.resolveUrl(path);
-        } else {
+        }
+        if (null == url) {
             ClassLoader loader = Util.getCurrentLoader(this.getClass());
             url = loader.getResource(path);
             if (url == null) {

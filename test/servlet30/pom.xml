@@ -74,6 +74,7 @@
         <module>el</module>
         <module>elDecoratedFacesContext</module>
         <module>exactMapping</module>
+        <module>faceletResourceResolver</module>
         <module>facelets</module>
         <module>faceletsEmptyAsNull</module>
         <module>factory</module>
@@ -89,7 +90,6 @@
         <module>sessionScope</module>
         <module>systest</module>
         <module>stateViewExpiredExceptionMissing</module>
-    <module>viewScopeFailover</module>
-    <module>faceletResourceResolver</module>
+        <module>viewScopeFailover</module>
   </modules>
 </project>
