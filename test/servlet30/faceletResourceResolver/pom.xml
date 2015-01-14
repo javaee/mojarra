@@ -51,7 +51,7 @@
   <artifactId>faceletResourceResolver</artifactId>
   <version>2.3.0-m02-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>Mojarra ${project.version} - Test - Agnostic - Servlet 3.0 - Facelets ResourceResolver</name>
+  <name>Mojarra ${project.version} - Test - Servlet 3.0 - Facelets ResourceResolver</name>
   <build>
     <finalName>test-servlet30-faceletResourceResolver</finalName>
   </build>
