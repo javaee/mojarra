@@ -121,4 +121,11 @@ public @interface FacesConverter {
     Class forClass() default Object.class;
 
 
+    /**
+     * <p class="changed_added_2_3">The value of this annotation attribute is
+     * taken to be an indicator that flags whether or not the given converter
+     * is a CDI managed converter. </p>
+     */
+    
+    boolean managed() default false;
 }

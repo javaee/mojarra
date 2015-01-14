@@ -89,6 +89,7 @@ import javax.faces.flow.FlowHandler;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.cdi.CdiConverter;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
@@ -1354,7 +1355,7 @@ public class ApplicationImpl extends Application {
                 Bean<?> bean = beanManager.resolve(beanSet);
                 returnVal = (Converter) beanManager.getReference(bean, 
                     Converter.class, beanManager.createCreationalContext(bean));
-                return returnVal;
+                return new CdiConverter(converterId, Object.class, returnVal);
             }
         }
         
@@ -1400,7 +1401,11 @@ public class ApplicationImpl extends Application {
         public Class forClass() {
             return forClass;
         }
-        
+
+        @Override
+        public boolean managed() {
+            return true;
+        }
     }
 
     /**
@@ -1419,7 +1424,7 @@ public class ApplicationImpl extends Application {
                 Bean<?> bean = beanManager.resolve(beanSet);
                 returnVal = (Converter) beanManager.getReference(bean, 
                     Converter.class, beanManager.createCreationalContext(bean));
-                return returnVal;
+                return new CdiConverter("", targetClass, returnVal);
             }
         }
         

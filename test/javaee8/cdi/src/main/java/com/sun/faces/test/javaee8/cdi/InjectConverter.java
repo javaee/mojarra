@@ -44,12 +44,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@FacesConverter(value = "injectConverter")
+@FacesConverter(value = "injectConverter", managed = true)
 public class InjectConverter implements Converter {
 
     public InjectConverter() {
     }
-    
+
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         throw new UnsupportedOperationException("InjectConverter was called");

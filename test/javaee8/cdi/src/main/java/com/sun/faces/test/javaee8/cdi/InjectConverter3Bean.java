@@ -48,7 +48,7 @@ import javax.inject.Named;
 @RequestScoped
 public class InjectConverter3Bean {
 
-    @FacesConverter("injectConverter3")
+    @FacesConverter(value = "injectConverter3", managed = true)
     @Inject
     private InjectConverter3 injectConverter3;
     
