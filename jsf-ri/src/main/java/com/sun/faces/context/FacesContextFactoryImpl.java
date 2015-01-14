@@ -43,6 +43,7 @@ package com.sun.faces.context;
 
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
+import com.sun.faces.facelets.impl.DefaultResourceResolver;
 import com.sun.faces.util.Util;
 
 import java.util.Map;
@@ -111,7 +112,8 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
      * this request to our FacesContext attribute map.  
      */
     private void savePerRequestInitParams(FacesContext context, WebConfiguration webConfig) {
-        String val = context.getExternalContext().getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
+        ExternalContext extContext = context.getExternalContext();
+        String val = extContext.getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
         boolean setCurrentComponent = Boolean.valueOf(val);
         Map<Object, Object> attrs = context.getAttributes();
         attrs.put(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME, 
@@ -119,6 +121,10 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
         attrs.put(PartialStateSaving, webConfig.isOptionEnabled(PartialStateSaving) ?
                 Boolean.TRUE : Boolean.FALSE);
         
+        Object nonDefaultResourceResolver = extContext.getApplicationMap().get(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME);
+        if (null != nonDefaultResourceResolver) {
+            attrs.put(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME, nonDefaultResourceResolver);
+        }
     }
 
     // The testcase for this class is TestSerlvetFacesContextFactory.java

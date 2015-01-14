@@ -59,6 +59,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
+import com.sun.faces.facelets.impl.DefaultResourceResolver;
+import javax.faces.view.facelets.ResourceResolver;
 
 /**
  * <p>
@@ -156,9 +158,14 @@ public class WebappResourceHelper extends ResourceHelper {
      * @see ResourceHelper#getURL(com.sun.faces.application.resource.ResourceInfo, javax.faces.context.FacesContext) 
      */
     public URL getURL(ResourceInfo resource, FacesContext ctx) {
+        ResourceResolver nonDefaultResourceResolver = (ResourceResolver) ctx.getAttributes().get(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME);
+        String path = resource.getPath();
+        if (null != nonDefaultResourceResolver) {
+            return nonDefaultResourceResolver.resolveUrl(path);
+        }
 
         try {
-            return ctx.getExternalContext().getResource(resource.getPath());
+            return ctx.getExternalContext().getResource(path);
         } catch (MalformedURLException e) {
             return null;
         }

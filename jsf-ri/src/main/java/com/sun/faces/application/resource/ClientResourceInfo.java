@@ -51,7 +51,7 @@ import com.sun.faces.util.FacesLogger;
 /**
  * <p/>
  * <code>ClientResourceInfo</code> is a simple wrapper class for information
- * pertainant to building a complete resource path using a Library.
+ * pertinent to building a complete resource path using a Library.
  * <p/>
  */
 public class ClientResourceInfo extends ResourceInfo {
