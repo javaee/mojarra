@@ -90,6 +90,8 @@ import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.cdi.CdiConverter;
+import com.sun.faces.cdi.CdiValidator;
+import com.sun.faces.cdi.CdiValidatorAnnotation;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
@@ -1656,7 +1658,22 @@ public class ApplicationImpl extends Application {
     public Validator createValidator(String validatorId) throws FacesException {
 
         Util.notNull("validatorId", validatorId);
-        Validator returnVal = (Validator) newThing(validatorId, validatorMap);
+
+        Validator returnVal;
+
+        if (isJsf23()) {
+            BeanManager beanManager = getBeanManager();
+            CdiValidatorAnnotation annotation = new CdiValidatorAnnotation(validatorId, false);
+            Set<Bean<?>> beanSet = beanManager.getBeans(Validator.class, annotation);
+            if (!beanSet.isEmpty()) {
+                Bean<?> bean = beanManager.resolve(beanSet);
+                returnVal = (Validator) beanManager.getReference(bean, 
+                    Validator.class, beanManager.createCreationalContext(bean));
+                return new CdiValidator(validatorId, returnVal);
+            }
+        }
+
+        returnVal = (Validator) newThing(validatorId, validatorMap);
         if (returnVal == null) {
             Object[] params = {validatorId};
             if (LOGGER.isLoggable(Level.SEVERE)) {

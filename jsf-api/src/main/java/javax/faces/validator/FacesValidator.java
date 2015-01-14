@@ -45,6 +45,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.annotation.Inherited;
+import javax.inject.Qualifier;
 
 /**
  * <p class="changed_added_2_0"><span class="changed_modified_2_2">The</span>
@@ -68,6 +69,7 @@ import java.lang.annotation.Inherited;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
+@Qualifier
 public @interface FacesValidator {
 
     /**
@@ -95,4 +97,13 @@ public @interface FacesValidator {
     boolean isDefault() default false;
 
 
+    /**
+     * <p class="changed_added_2_3">The value of this annotation attribute is
+     * taken to be an indicator that flags whether or not the given converter
+     * is a CDI managed converter. </p>
+     * 
+     * @return true if CDI managed, false otherwise.
+     */
+    
+    boolean managed() default false;
 }
