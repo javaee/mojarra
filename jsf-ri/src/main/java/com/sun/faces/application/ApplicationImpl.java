@@ -1350,10 +1350,12 @@ public class ApplicationImpl extends Application {
             BeanManager beanManager = getBeanManager();
             FacesConverterAnnotation annotation = new FacesConverterAnnotation(converterId, Object.class);
             Set<Bean<?>> beanSet = beanManager.getBeans(Converter.class, annotation);
-            Bean<?> bean = beanManager.resolve(beanSet);
-            returnVal = (Converter) beanManager.getReference(bean, 
+            if (!beanSet.isEmpty()) {
+                Bean<?> bean = beanManager.resolve(beanSet);
+                returnVal = (Converter) beanManager.getReference(bean, 
                     Converter.class, beanManager.createCreationalContext(bean));
-            return returnVal;
+                return returnVal;
+            }
         }
         
         returnVal = (Converter) newThing(converterId, converterIdMap);
@@ -1413,10 +1415,12 @@ public class ApplicationImpl extends Application {
             BeanManager beanManager = getBeanManager();
             FacesConverterAnnotation annotation = new FacesConverterAnnotation("", targetClass);
             Set<Bean<?>> beanSet = beanManager.getBeans(Converter.class, annotation);
-            Bean<?> bean = beanManager.resolve(beanSet);
-            returnVal = (Converter) beanManager.getReference(bean, 
+            if (!beanSet.isEmpty()) {
+                Bean<?> bean = beanManager.resolve(beanSet);
+                returnVal = (Converter) beanManager.getReference(bean, 
                     Converter.class, beanManager.createCreationalContext(bean));
-            return returnVal;
+                return returnVal;
+            }
         }
         
         returnVal = (Converter) newConverter(targetClass,
