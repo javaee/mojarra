@@ -2633,7 +2633,7 @@ public class ApplicationImpl extends Application {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             isJsf23 = getFacesConfigXmlVersion(facesContext).equals("2.3");
         }
-        return true;
+        return isJsf23;
     }
 
     public class JavaeeNamespaceContext implements NamespaceContext {
