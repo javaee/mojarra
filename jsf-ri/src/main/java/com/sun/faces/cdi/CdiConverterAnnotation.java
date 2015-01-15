@@ -40,7 +40,7 @@
 package com.sun.faces.cdi;
 
 import javax.enterprise.util.AnnotationLiteral;
-import javax.faces.validator.FacesValidator;
+import javax.faces.convert.FacesConverter;
 
 /**
  * A helper class.
@@ -50,29 +50,35 @@ import javax.faces.validator.FacesValidator;
  * the BeanManager API.
  * </p>
  */
-class CdiValidatorAnnotation
-        extends AnnotationLiteral<FacesValidator>
-        implements FacesValidator {
+class CdiConverterAnnotation
+        extends AnnotationLiteral<FacesConverter>
+        implements FacesConverter {
 
     /**
-     * Stores the value.
+     * Stores the value attribute.
      */
     private String value;
+    
+    /**
+     * Stores the forClass attribute.
+     */
+    private Class forClass;
 
     /**
      * Constructor.
-     *
-     * @param value the value.
-     * @param defaultValue the default value.
+     * 
+     * @param value the value attribute.
+     * @param forClass the forClass attribute.
      */
-    public CdiValidatorAnnotation(String value) {
+    public CdiConverterAnnotation(String value, Class forClass) {
         this.value = value;
+        this.forClass = forClass;
     }
 
     /**
-     * Get the value.
-     *
-     * @return the value.
+     * Get the value attribute.
+     * 
+     * @return the value attribute. 
      */
     @Override
     public String value() {
@@ -80,19 +86,19 @@ class CdiValidatorAnnotation
     }
 
     /**
-     * Is default.
-     *
-     * @return false.
+     * Get the forClass attribute.
+     * 
+     * @return the forClass attribute. 
      */
     @Override
-    public boolean isDefault() {
-        return false;
+    public Class forClass() {
+        return forClass;
     }
 
     /**
-     * Is managed.
-     *
-     * @return true.
+     * Get the managed attribute.
+     * 
+     * @return true. 
      */
     @Override
     public boolean managed() {

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -89,9 +89,7 @@ import javax.faces.flow.FlowHandler;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.cdi.CdiConverter;
-import com.sun.faces.cdi.CdiValidator;
-import com.sun.faces.cdi.CdiValidatorAnnotation;
+import com.sun.faces.cdi.CdiUtils;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
@@ -127,11 +125,8 @@ import java.util.TimeZone;
 import java.util.LinkedHashMap;
 
 import javax.el.ValueExpression;
-import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.util.AnnotationLiteral;
 import javax.faces.application.Resource;
-import javax.faces.convert.FacesConverter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.view.ViewDeclarationLanguage;
@@ -1351,13 +1346,9 @@ public class ApplicationImpl extends Application {
         
         if (isJsf23()) {
             BeanManager beanManager = getBeanManager();
-            FacesConverterAnnotation annotation = new FacesConverterAnnotation(converterId, Object.class);
-            Set<Bean<?>> beanSet = beanManager.getBeans(Converter.class, annotation);
-            if (!beanSet.isEmpty()) {
-                Bean<?> bean = beanManager.resolve(beanSet);
-                returnVal = (Converter) beanManager.getReference(bean, 
-                    Converter.class, beanManager.createCreationalContext(bean));
-                return new CdiConverter(converterId, Object.class, returnVal);
+            returnVal = CdiUtils.createConverter(beanManager, converterId);
+            if (returnVal != null) {
+                return returnVal;
             }
         }
         
@@ -1382,34 +1373,6 @@ public class ApplicationImpl extends Application {
         return returnVal;
     }
 
-    class FacesConverterAnnotation 
-        extends AnnotationLiteral<FacesConverter> 
-        implements FacesConverter {
-
-        private String value;
-        private Class forClass;
-        
-        public FacesConverterAnnotation(String value, Class forClass) {
-            this.value = value;
-            this.forClass = forClass;
-        }
-        
-        @Override
-        public String value() {
-            return value;
-        }
-
-        @Override
-        public Class forClass() {
-            return forClass;
-        }
-
-        @Override
-        public boolean managed() {
-            return true;
-        }
-    }
-
     /**
      * @see javax.faces.application.Application#createConverter(Class)
      */
@@ -1420,13 +1383,9 @@ public class ApplicationImpl extends Application {
         
         if (isJsf23()) {
             BeanManager beanManager = getBeanManager();
-            FacesConverterAnnotation annotation = new FacesConverterAnnotation("", targetClass);
-            Set<Bean<?>> beanSet = beanManager.getBeans(Converter.class, annotation);
-            if (!beanSet.isEmpty()) {
-                Bean<?> bean = beanManager.resolve(beanSet);
-                returnVal = (Converter) beanManager.getReference(bean, 
-                    Converter.class, beanManager.createCreationalContext(bean));
-                return new CdiConverter("", targetClass, returnVal);
+            returnVal = CdiUtils.createConverter(beanManager, targetClass);
+            if (returnVal != null) {
+                return returnVal;
             }
         }
         
@@ -1663,13 +1622,9 @@ public class ApplicationImpl extends Application {
 
         if (isJsf23()) {
             BeanManager beanManager = getBeanManager();
-            CdiValidatorAnnotation annotation = new CdiValidatorAnnotation(validatorId, false);
-            Set<Bean<?>> beanSet = beanManager.getBeans(Validator.class, annotation);
-            if (!beanSet.isEmpty()) {
-                Bean<?> bean = beanManager.resolve(beanSet);
-                returnVal = (Validator) beanManager.getReference(bean, 
-                    Validator.class, beanManager.createCreationalContext(bean));
-                return new CdiValidator(validatorId, returnVal);
+            returnVal = CdiUtils.createValidator(beanManager, validatorId);
+            if (returnVal != null) {
+                return returnVal;
             }
         }
 
