@@ -813,7 +813,8 @@ public class ApplicationAssociate {
         long period = Long.parseLong(refreshPeriod);
 
         // resource resolver
-        ResourceResolver resolver = new DefaultResourceResolver(app.getResourceHandler());
+        ResourceResolver defaultResourceResolver = new DefaultResourceResolver(app.getResourceHandler());
+        ResourceResolver resolver = defaultResourceResolver;
 
         String resolverName = webConfig.getOptionValue(FaceletsResourceResolver);
         if (resolverName != null && resolverName.length() > 0) {
@@ -837,6 +838,12 @@ public class ApplicationAssociate {
                         ResourceResolver.class,
                         resolver);
             } 
+        }
+        
+        // If our resourceResolver is not the one we created above
+        if (!(resolver == defaultResourceResolver)) {
+            ctx.getExternalContext().getApplicationMap().put(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME,
+                    resolver);
         }
         
         FaceletCache cache = null;

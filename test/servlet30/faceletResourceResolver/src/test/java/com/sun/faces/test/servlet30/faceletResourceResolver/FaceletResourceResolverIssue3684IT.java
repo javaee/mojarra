@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -36,58 +36,68 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
- *
- *
- * This file incorporates work covered by the following copyright and
- * permission notice:
- *
- * Copyright 2005-2007 The Apache Software Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
+package com.sun.faces.test.servlet30.faceletResourceResolver;
 
-package com.sun.faces.facelets.impl;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static org.junit.Assert.assertTrue;
 
-import com.sun.faces.RIConstants;
-import javax.faces.view.facelets.ResourceResolver;
-import java.net.URL;
-import javax.faces.application.ResourceHandler;
-import javax.faces.application.ViewResource;
-import javax.faces.context.FacesContext;
+public class FaceletResourceResolverIssue3684IT {
+    /**
+     * Stores the web URL.
+     */
+    private String webUrl;
+    /**
+     * Stores the web client.
+     */
+    private WebClient webClient;
 
-public class DefaultResourceResolver extends ResourceResolver {
-    
-    private ResourceHandler resourceHandler = null;
-    
-    public static final String NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME = RIConstants.FACES_PREFIX + "NDRRPN";
-
-    public DefaultResourceResolver(ResourceHandler resourceHandler) {
-        super();
-        this.resourceHandler = resourceHandler;
+    /**
+     * Setup before testing.
+     * 
+     * @throws Exception when a serious error occurs.
+     */
+    @BeforeClass
+    public static void setUpClass() throws Exception {
     }
 
-    public URL resolveUrl(String path) {
-        ViewResource faceletResource = resourceHandler.createViewResource(FacesContext.getCurrentInstance(), path);
-        URL result = null;
-        if (null != faceletResource) {
-            result = faceletResource.getURL();
-        }
-        return result;
+    /**
+     * Cleanup after testing.
+     * 
+     * @throws Exception when a serious error occurs.
+     */
+    @AfterClass
+    public static void tearDownClass() throws Exception {
     }
 
-    @Override
-    public String toString() {
-        return "DefaultResourceResolver";
+    /**
+     * Setup before testing.
+     */
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
+    /**
+     * Tear down after testing.
+     */
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testWebAppCC() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+
+        assertTrue(page.getBody().asText().indexOf("This is coming from a composite component.") != -1);
+        
+    }
 }

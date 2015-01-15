@@ -52,6 +52,8 @@ import javax.faces.context.FacesContext;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
+import com.sun.faces.facelets.impl.DefaultResourceResolver;
+import javax.faces.view.facelets.ResourceResolver;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableMissingResourceLibraryDetection;
@@ -164,12 +166,19 @@ public class ClasspathResourceHelper extends ResourceHelper {
      * @see ResourceHelper#getURL(com.sun.faces.application.resource.ResourceInfo, javax.faces.context.FacesContext)
      */
     public URL getURL(ResourceInfo resource, FacesContext ctx) {
-
-        ClassLoader loader = Util.getCurrentLoader(this.getClass());
-        URL url = loader.getResource(resource.getPath());
-        if (url == null) {
-            // try using this class' loader (necessary when running in OSGi)
-            url = this.getClass().getClassLoader().getResource(resource.getPath());
+        ResourceResolver nonDefaultResourceResolver = (ResourceResolver) ctx.getAttributes().get(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME);
+        String path = resource.getPath();
+        URL url = null;
+        if (null != nonDefaultResourceResolver) {
+            url = nonDefaultResourceResolver.resolveUrl(path);
+        }
+        if (null == url) {
+            ClassLoader loader = Util.getCurrentLoader(this.getClass());
+            url = loader.getResource(path);
+            if (url == null) {
+                // try using this class' loader (necessary when running in OSGi)
+                url = this.getClass().getClassLoader().getResource(resource.getPath());
+            }
         }
         return url;
 
