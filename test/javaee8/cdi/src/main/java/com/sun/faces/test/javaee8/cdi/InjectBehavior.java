@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,39 +37,23 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.javaee8.cdi;
 
-package javax.faces.component.behavior;
+import javax.faces.component.behavior.ClientBehaviorBase;
+import javax.faces.component.behavior.ClientBehaviorContext;
+import javax.faces.component.behavior.FacesBehavior;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import javax.inject.Qualifier;
+@FacesBehavior(value = "injectBehavior", managed = true)
+public class InjectBehavior extends ClientBehaviorBase {
 
-/**
- * <p class="changed_added_2_0 changed_modified_2_3">The presence of this annotation on a
- * class automatically registers the class with the runtime as a {@link
- * Behavior}.  The value of this annotation attribute is taken to be the 
- * <em>behavior-id</em> with which instances of this class of behavior 
- * can be instantiated by calling {@link
- * javax.faces.application.Application#createBehavior(java.lang.String)}</p>
- *
- * @since 2.0
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Inherited
-@Qualifier
-public @interface FacesBehavior {
-    String value();
-    
     /**
-     * <p class="changed_added_2_3">The value of this annotation attribute is
-     * taken to be an indicator that flags whether or not the given converter
-     * is a CDI managed converter. </p>
-     * 
-     * @return true if CDI managed, false otherwise.
+     * Get the script.
+     *
+     * @param behaviorContext the behavior context.
+     * @return the script.
      */
-    boolean managed() default false;
+    @Override
+    public String getScript(ClientBehaviorContext behaviorContext) {
+        return "<!--injectBehavior-->";
+    }
 }

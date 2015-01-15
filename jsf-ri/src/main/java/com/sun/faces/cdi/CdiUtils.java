@@ -42,6 +42,7 @@ package com.sun.faces.cdi;
 import java.util.Set;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.convert.Converter;
 import javax.faces.validator.Validator;
 
@@ -100,6 +101,28 @@ public class CdiUtils {
         return result;
     }
 
+    /**
+     * Create a behavior using the FacesBehavior value attribute.
+     * 
+     * @param beanManager the bean manager.
+     * @param value the value attribute.
+     * @return the behavior, or null if we could not match one.
+     */
+    public static Behavior createBehavior(BeanManager beanManager, String value) {
+        Behavior result = null;
+        CdiBehaviorAnnotation annotation = new CdiBehaviorAnnotation(value);
+        Set<Bean<?>> beanSet = beanManager.getBeans(Behavior.class, annotation);
+        if (!beanSet.isEmpty()) {
+            Bean<?> bean = beanManager.resolve(beanSet);
+            if (bean != null) {
+                result = new CdiBehavior(value, (Behavior) beanManager.
+                        getReference(bean, Behavior.class,
+                                beanManager.createCreationalContext(bean)));
+            }
+        }
+        return result;
+    }
+    
     /**
      * Create a validator using the FacesValidator value attribute.
      *

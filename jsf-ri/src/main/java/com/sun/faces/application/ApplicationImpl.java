@@ -891,7 +891,18 @@ public class ApplicationImpl extends Application {
     public Behavior createBehavior(String behaviorId) throws FacesException {
 
         Util.notNull("behaviorId", behaviorId);
-        Behavior returnVal = (Behavior) newThing(behaviorId, behaviorMap);
+        
+        Behavior returnVal;
+        
+        if (isJsf23()) {
+            BeanManager beanManager = getBeanManager();
+            returnVal = CdiUtils.createBehavior(beanManager, behaviorId);
+            if (returnVal != null) {
+                return returnVal;
+            }
+        }
+        
+        returnVal = (Behavior) newThing(behaviorId, behaviorMap);
         if (returnVal == null) {
             Object[] params = {behaviorId};
             if (LOGGER.isLoggable(Level.SEVERE)) {
