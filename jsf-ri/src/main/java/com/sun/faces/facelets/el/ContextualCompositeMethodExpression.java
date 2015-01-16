@@ -219,26 +219,11 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
 
                     }
 
-                } catch(ELException ex) {
-                    
-                    /*
-                     * If we got a validator exception it is actually correct to 
-                     * immediately bubble it up. 
-                     */
-                    if (ex.getCause() != null && ex.getCause() instanceof ValidatorException) {
-                        throw (ValidatorException) ex.getCause();
-                    }
-                    
+                } catch(Exception ex) {
                     if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING, ele.toString());
                         LOGGER.log(Level.WARNING,
-                            "jsf.facelets.el.method.expression.invoke.error: {0} {1}",
-                                   new Object[] { ex.toString(),
-                                                  source.getExpressionString() });
-                    }
-                    
-                    if (!(ex instanceof MethodNotFoundException)) {
-                        throw ex;
+                            "jsf.facelets.el.method.expression.invoke.error:"+ex.toString(),
+                            new Object[] { source.getExpressionString() });
                     }
                 }
             }
