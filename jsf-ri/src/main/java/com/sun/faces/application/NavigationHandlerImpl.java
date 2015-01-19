@@ -508,7 +508,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         // If we still don't have a match, see if this is a method-call
         if (null == caseStruct && null != fromAction && null != outcome) {
-            caseStruct = findMethodCallMatch(ctx, fromAction, outcome);
+            caseStruct = findMethodCallMatch(ctx, fromAction, outcome, toFlowDocumentId);
         }
         
         // If we still don't have a match, see if this is a faces-flow-call
@@ -1036,7 +1036,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         return result;
     }
     
-    private CaseStruct findMethodCallMatch(FacesContext context, String fromAction, String outcome) {
+    private CaseStruct findMethodCallMatch(FacesContext context, String fromAction, String outcome, String toFlowDocumentId) {
         CaseStruct result = null;
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         if (null == flowHandler) {
@@ -1068,17 +1068,26 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                         }
                     }
                     outcome = invokeResult.toString();
-                    result = synthesizeCaseStruct(context, currentFlow, fromAction, outcome);
-                    if (null != result) {
-                        // Here we need to detect the case when the
-                        // synthesizeCaseStruct() ended up hitting a <flow-return>.
-                        // In this case, we must ensure the new flow of null
-                        // is honored.
-                        result.currentFlow = currentFlow;
-                        if (result.newFlow == FlowImpl.SYNTHESIZED_RETURN_CASE_FLOW) {
-                            result.newFlow = null;
-                        } else {
-                            result.newFlow = currentFlow;
+                    FlowNode targetNode = currentFlow.getNode(outcome);
+                    if (targetNode instanceof MethodCallNode) {
+                        result = findMethodCallMatch(context, fromAction, outcome, toFlowDocumentId);
+                    } else if (targetNode instanceof SwitchNode) {
+                        result = findSwitchMatch(context, fromAction, outcome, toFlowDocumentId);
+                    } else if (targetNode instanceof FlowCallNode) { 
+                        result = findFacesFlowCallMatch(context, fromAction, outcome, toFlowDocumentId);
+                    } else {
+                        result = synthesizeCaseStruct(context, currentFlow, fromAction, outcome);
+                        if (null != result) {
+                            // Here we need to detect the case when the
+                            // synthesizeCaseStruct() ended up hitting a <flow-return>.
+                            // In this case, we must ensure the new flow of null
+                            // is honored.
+                            result.currentFlow = currentFlow;
+                            if (result.newFlow == FlowImpl.SYNTHESIZED_RETURN_CASE_FLOW) {
+                                result.newFlow = null;
+                            } else {
+                                result.newFlow = currentFlow;
+                            }
                         }
                     }
                 }

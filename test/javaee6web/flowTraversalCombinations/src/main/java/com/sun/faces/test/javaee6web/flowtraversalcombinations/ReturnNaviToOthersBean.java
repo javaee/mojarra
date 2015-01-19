@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,53 +37,24 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.javaee6web.flowmethodcall;
+package com.sun.faces.test.javaee6web.flowtraversalcombinations;
 
 import java.io.Serializable;
 import javax.faces.flow.FlowScoped;
 import javax.inject.Named;
 
 @Named
-@FlowScoped(value = "method-call-start-node")
-public class Pflow implements Serializable {
-
-    private static final long serialVersionUID = -8810904955483635554L;
-
-    public String firstPage() {
-        return "myFirstViewNode";
-    }
-    public String methodCall02() {
-        return "method-call-03";
-    }
-    
-    public String methodCall03() {
-        return "method-call-04";
-    }
-    
-    public String methodCall04() {
-        return "viewNodeAtEndOfMethodCalls";
-    }
-    
-    public String callFlowCallNode() {
-        return "call-switch-start-node";
-    }
-
-    public String callSwitchNode() {
-        return "switchA";
-    }
-    
-    public boolean isSwitchA_Case01() {
-        return false;
-    }
-
-    public boolean isSwitchA_Case02() {
-        return false;
-    }
-
-    public boolean isSwitchA_Case03() {
+@FlowScoped(value = "start-from-return-node")
+public class ReturnNaviToOthersBean implements Serializable {
+    public boolean isCase1() {
         return true;
     }
     
-
-
+    public boolean isCase2() {
+        return false;
+    }
+    
+    public String toLastPage() {
+        return "DestinationView";
+    }
 }

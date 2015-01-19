@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -41,27 +41,16 @@
 
 -->
 
-<!DOCTYPE html>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-    
-    <head>
-        <title>First page in the flow</title>
-    </head>
-    <body bgcolor="orange">
-    <h:form prependId="false">
-        <p>First page in the flow</p>
-        
-        <p><h:commandButton id="method-call-button" value="call switch-start-node" action="call-switch-start-node" /></p>
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
 
-        <p><h:commandButton id="method-call-button-02" value="call method-call-02" action="method-call-02" /></p>
-         
-        <p><h:commandButton id="method-call-button-03" value="call method-call-to-flow-call" action="method-call-to-flow-call" /></p>
+        Great! You are now in the correct destination view.
         
-        <p><h:commandButton id="method-call-button-04" value="call method-call-to-switch" action="method-call-to-switch" /></p>
-        
-    </h:form>
-    </body>
+    </h:body>
 </html>
+

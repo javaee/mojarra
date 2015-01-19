@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -46,66 +46,42 @@
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
                                   http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
   
-  <flow-definition id="method-call-start-node">
-    <start-node>firstpage</start-node>
+  <flow-definition id="start-from-flow-call-node">
+    <start-node>SourcePage</start-node>
     
-    <method-call id="firstpage" >
-      <method>#{pflow.firstPage()}</method>
-      <default-outcome>delay_event</default-outcome>
-    </method-call>
+    <view id="SourcePage">
+        <vdl-document>/start-from-flow-call-node/SourceView.xhtml</vdl-document>
+    </view>
     
-    <flow-call id="call-switch-start-node">
+    <flow-call id="CallFlowStartFromViewNode">
         <flow-reference>
-            <flow-id>switch-start-node</flow-id>
+            <flow-id>child-flow-start-from-view-node</flow-id>
         </flow-reference>
     </flow-call>
-    <!-- method-call -> method-call -->
-
-    <method-call id="method-call-02" >
-      <method>#{pflow.methodCall02()}</method>
-      <default-outcome>delay_event</default-outcome>
-    </method-call>
     
-    <method-call id="method-call-03" >
-      <method>#{pflow.methodCall03()}</method>
-      <default-outcome>delay_event</default-outcome>
-    </method-call>
+    <flow-call id="CallFlowStartFromMethodCallNode">
+        <flow-reference>
+            <flow-id>child-flow-start-from-method-call-node</flow-id>
+        </flow-reference>
+    </flow-call>
     
-    <method-call id="method-call-04" >
-      <method>#{pflow.methodCall04()}</method>
-      <default-outcome>delay_event</default-outcome>
-    </method-call>
+    <flow-call id="CallFlowStartFromSwitchNode">
+        <flow-reference>
+            <flow-id>child-flow-start-from-switch-node</flow-id>
+        </flow-reference>
+    </flow-call>
     
-    <!-- method-call -> flow call -->
+    <flow-call id="CallFlowStartFromReturnNode">
+        <flow-reference>
+            <flow-id>child-flow-start-from-return-node</flow-id>
+        </flow-reference>
+    </flow-call>
     
-    <method-call id="method-call-to-flow-call">
-        <method>#{pflow.callFlowCallNode()}</method>
-        <default-outcome>delay_event</default-outcome>
-    </method-call>
-    
-    <!-- method-call -> switch -->
-
-    <method-call id="method-call-to-switch">
-        <method>#{pflow.callSwitchNode()}</method>
-        <default-outcome>delay_event</default-outcome>
-    </method-call>
-    
-    <switch id="switchA">
-      <case>
-        <if>#{pflow.switchA_Case01}</if>
-        <from-outcome>page01</from-outcome>
-      </case>
-      <case>
-        <if>#{pflow.switchA_Case02}</if>
-        <from-outcome>page02</from-outcome>
-      </case>
-      <case>
-        <if>#{pflow.switchA_Case03}</if>
-        <from-outcome>viewNodeAtEndOfMethodCalls</from-outcome>
-      </case>
-      <default-outcome>firstpage</default-outcome>
-    </switch>
-    
+    <flow-call id="CallFlowStartFromFlowCallNode">
+        <flow-reference>
+            <flow-id>child-flow-start-from-flow-call-node</flow-id>
+        </flow-reference>
+    </flow-call>
   </flow-definition>  
   
 </faces-config>

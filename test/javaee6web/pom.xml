@@ -83,6 +83,7 @@
         <module>flowMethodCall</module>
         <module>flowReturnFromDepth</module>
         <module>flowSwitchCall</module>
+        <module>flowTraversalCombinations</module>
         <module>flowViewNodeDifferent</module>
         <module>implicitFlow</module>
         <module>multiPageFlowInJar</module>
