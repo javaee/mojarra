@@ -7,7 +7,7 @@ REM The contents of this file are subject to the terms of either the GNU
 REM General Public License Version 2 only ("GPL") or the Common Development
 REM and Distribution License("CDDL") (collectively, the "License").  You
 REM may not use this file except in compliance with the License. You can obtain
-REM a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+REM a copy of the License at https://glassfish.java.net/public/CDDL+GPL.html
 REM or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
 REM language governing permissions and limitations under the License.
 REM 
