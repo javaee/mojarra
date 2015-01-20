@@ -72,9 +72,13 @@ public class RequestParameterMap extends BaseContextMap<String> {
 
     public RequestParameterMap(ServletRequest request) {
         this.request = request;
-            WebConfiguration webConfig = WebConfiguration.getInstance(request.getServletContext());
-            namespaceParameters = webConfig.isOptionEnabled(
-                  BooleanWebContextInitParameter.NamespaceParameters);
+            try {
+                WebConfiguration webConfig = WebConfiguration.getInstance(request.getServletContext());
+                namespaceParameters = webConfig.isOptionEnabled(
+                    BooleanWebContextInitParameter.NamespaceParameters);
+            } catch(AbstractMethodError ame) {
+                // FIXME Remove the catch when all Cactus tests are migrated
+            }
         }
 
 
