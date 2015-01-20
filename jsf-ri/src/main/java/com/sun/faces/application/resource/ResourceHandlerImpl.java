@@ -132,7 +132,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
             if (!development && "application/x-groovy".equals(ctype)) {
                 return null;
             }
-            logMissingResource(facesContext, resourceName, null, null);
             return null;
         } else {
             return new ResourceImpl(info, ctype, creationTime, maxAge);
@@ -209,7 +208,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
             if (!development && "application/x-groovy".equals(ctype)) {
                 return null;
             }
-            logMissingResource(ctx, resourceName, libraryName, null);
             return null;
         } else {
             return new ResourceImpl(info, ctype, creationTime, maxAge);
@@ -373,7 +371,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         } else {
             // already logged elsewhere
-            send404(context, resourceName, libraryName, false);
+            send404(context, resourceName, libraryName, true);
         }
 
     }
