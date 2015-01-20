@@ -40,30 +40,31 @@
 
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
-<head>
-    <title>forEach</title>
-</head>
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-<body>
-   <c:forEach items="${fn:split('1,2,3', ',')}" var="item" varStatus="vs">
-        #{item}
-    </c:forEach>
+<h:head>
+<title>includedLiterally</title>
+</h:head>
 
-   <c:forEach var="item" items="#{repeatBean.flavorsList}">
-       <h:inputText value="#{item}" /> 
-   </c:forEach>
+<h:body>
 
-   <c:forEach var="item" items="#{repeatBean.flavorsList}">
-       <h:inputText id="text1" value="#{item}" /> 
-   </c:forEach>
+<ui:composition>
 
+<p> 
 
-</body>
+<h:inputText disabled="true" value="noLiteralId includedDynamically02" /> 
+
+<h:inputText disabled="true" id="literalIdincludedDynamically02" value="literalIdincludedDynamically02" /> 
+
+</p>
+
+</ui:composition>
+
+</h:body>
+
 </html>
