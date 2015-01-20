@@ -62,7 +62,7 @@ import com.sun.faces.util.Util;
 public class RequestParameterMap extends BaseContextMap<String> {
 
     private String namingContainerId;
-    private final boolean namespaceParameters;
+    private boolean namespaceParameters;
     private final ServletRequest request;
     private boolean inspectedParameterNames = false;
 
@@ -78,6 +78,7 @@ public class RequestParameterMap extends BaseContextMap<String> {
                     BooleanWebContextInitParameter.NamespaceParameters);
             } catch(AbstractMethodError ame) {
                 // FIXME Remove the catch when all Cactus tests are migrated
+                namespaceParameters = false;
             }
         }
 
