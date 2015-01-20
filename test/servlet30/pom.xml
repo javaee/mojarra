@@ -71,6 +71,7 @@
         <module>contractUsingHostHeader</module>
         <module>contractUsingViewRoot</module>
         <module>custom-viewroot-viewscope</module>
+        <module>customResolvers</module>
         <module>customResourcesDirectory</module>
         <module>customViewHandler</module>
         <module>disableIdUniqueness</module>
