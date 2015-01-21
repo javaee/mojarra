@@ -40,35 +40,30 @@
     holder.
 
 -->
+
 <!DOCTYPE html>
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
-
     <f:view>
-    
-    <h:head>
-        <title>Ajax Name spacing</title>
-    </h:head>
-        
-    <body>
-        <h:form id="ajaxForm" prependId="false">
-            <h:inputText id="ajaxInput" value="#{userBean.firstName}">
-                <f:ajax render="@form" />
-            </h:inputText>
-              <h:outputText id="ajaxOutput" value="#{userBean.firstName}" />
-        </h:form>
-        
-        <br />
-        
-        <h:form id="nonAjaxForm" prependId="false">
-            <h:inputText id="nonAjaxInput" value="#{userBean.lastName}" />
-               <h:outputText id="nonAjaxOutput" value="#{userBean.lastName}" />
-            <h:commandButton id="nonAjaxSubmit" value="submit" />
-        </h:form>
-        
-    </body>
-        
+        <h:head>
+            <title>Ajax Name spacing</title>
+        </h:head>
+        <body>
+            <h:form id="ajaxForm" prependId="false">
+                <h:inputText id="ajaxInput" value="#{ajaxNamespaceBean.firstName}">
+                    <f:ajax render="@form" />
+                </h:inputText>
+                <h:outputText id="ajaxOutput" value="#{ajaxNamespaceBean.firstName}" />
+            </h:form>
+            <br />
+            <h:form id="nonAjaxForm" prependId="false">
+                <h:inputText id="nonAjaxInput" value="#{ajaxNamespaceBean.lastName}" />
+                <h:outputText id="nonAjaxOutput" value="#{ajaxNamespaceBean.lastName}" />
+                <h:commandButton id="nonAjaxSubmit" value="submit" />
+            </h:form>
+        </body>
     </f:view>
 </html>
 

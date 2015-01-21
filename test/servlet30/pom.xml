@@ -66,6 +66,7 @@
     </dependencies>
     <modules>
         <module>ajax</module>
+        <module>ajaxNamespace</module>
         <module>component</module>
         <module>composite</module>
         <module>contractUsingHostHeader</module>

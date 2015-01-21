@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -36,41 +36,38 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
+package com.sun.faces.test.servlet30.ajaxnamespace;
 
-package com.sun.faces.test.agnostic.ajax_namespace;
-
-import javax.faces.FacesException;
 import javax.faces.application.Application;
-import javax.faces.application.ApplicationWrapper;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
+import javax.faces.application.ApplicationFactory;
 
-public class ApplicationImpl extends ApplicationWrapper {
+public class ApplicationFactoryImpl extends ApplicationFactory {
 
-    private final Application parent;
+    private final ApplicationFactory parent;
+    private Application myApplication;
 
-    public ApplicationImpl(Application parent) {
+    public ApplicationFactoryImpl(ApplicationFactory parent) {
         this.parent = parent;
     }
 
     @Override
-    public Application getWrapped() {
+    public ApplicationFactory getWrapped() {
         return parent;
     }
 
     @Override
-    public UIComponent createComponent(String componentType) throws FacesException {
-        UIComponent result = null;
-        if (UIViewRoot.COMPONENT_TYPE.equals(componentType)) {
-            result = new NamingContainerViewRoot();
-        } else {
-            result = parent.createComponent(componentType); 
+    public Application getApplication() {
+        if (null == myApplication) {
+            Application fromParent = parent.getApplication();
+            myApplication = new ApplicationImpl(fromParent);
         }
-        return result;
+
+        return myApplication;
     }
-    
-    
-    
+
+    @Override
+    public void setApplication(Application application) {
+        this.myApplication = application;
+    }
 }
