@@ -247,7 +247,7 @@ public class StateContext {
         return parent.getAttributes().containsKey(DYNAMIC_CHILD_COUNT);
     }
 
-    private int incrementDynamicChildCount(UIComponent parent) {
+    private int incrementDynamicChildCount(FacesContext context, UIComponent parent) {
         int result;
         Map<String, Object> attrs = parent.getAttributes();
         Integer cur = (Integer) attrs.get(DYNAMIC_CHILD_COUNT);
@@ -257,11 +257,12 @@ public class StateContext {
             result = 1;
         }
         attrs.put(DYNAMIC_CHILD_COUNT, (Integer) result);
+        context.getViewRoot().getAttributes().put(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS, Boolean.TRUE);
 
         return result;
     }
 
-    private int decrementDynamicChildCount(UIComponent parent) {
+    private int decrementDynamicChildCount(FacesContext context, UIComponent parent) {
         int result = 0;
         Map<String, Object> attrs = parent.getAttributes();
         Integer cur = (Integer) attrs.get(DYNAMIC_CHILD_COUNT);
@@ -272,6 +273,7 @@ public class StateContext {
         if (0 == result && null != cur){
             attrs.remove(DYNAMIC_CHILD_COUNT);
         }
+        context.getViewRoot().getAttributes().put(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS, Boolean.TRUE);
 
         return result;
     }
@@ -343,10 +345,12 @@ public class StateContext {
             if (event instanceof PreRemoveFromViewEvent) {
                 if (stateCtx.trackViewModifications()) {
                     handleRemove(ctx, ((PreRemoveFromViewEvent) event).getComponent());
+                    ctx.getViewRoot().getAttributes().put(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS, Boolean.TRUE);
                 }
             } else {
                 if (stateCtx.trackViewModifications()) {
                     handleAdd(ctx, ((PostAddToViewEvent) event).getComponent());
+                    ctx.getViewRoot().getAttributes().put(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS, Boolean.TRUE);
                 }
             }
         }
@@ -620,7 +624,7 @@ public class StateContext {
         @Override
         protected void handleRemove(FacesContext context, UIComponent component) {
             if (component.isInView()) {
-                decrementDynamicChildCount(component.getParent());
+                decrementDynamicChildCount(context, component.getParent());
                 ComponentStruct struct = new ComponentStruct();
                 struct.action = ComponentStruct.REMOVE;
                 struct.clientId = component.getClientId(context);
@@ -651,7 +655,7 @@ public class StateContext {
 
                 String facetName = findFacetNameForComponent(component);
                 if (facetName != null) {
-                    incrementDynamicChildCount(component.getParent());
+                    incrementDynamicChildCount(context, component.getParent());
                     component.clearInitialState();
                     component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
                     ComponentStruct struct = new ComponentStruct();
@@ -663,7 +667,7 @@ public class StateContext {
                     handleAddRemoveWithAutoPrune(component, struct);
                 }
                 else {
-                    incrementDynamicChildCount(component.getParent());
+                    incrementDynamicChildCount(context, component.getParent());
                     component.clearInitialState();
                     component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
                     ComponentStruct struct = new ComponentStruct();
