@@ -37,31 +37,16 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.cdi;
+package javax.faces.context;
 
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.Extension;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
 
-/**
- * The CDI extension.
- */
-public class CdiExtension implements Extension {
-
-    /**
-     * After bean discovery.
-     *
-     * @param afterBeanDiscovery the after bean discovery.
-     */
-    public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery) {
-        afterBeanDiscovery.addBean(new ApplicationProducer());
-        afterBeanDiscovery.addBean(new ApplicationMapProducer());
-        afterBeanDiscovery.addBean(new ExternalContextProducer());
-        afterBeanDiscovery.addBean(new FacesContextProducer());
-        afterBeanDiscovery.addBean(new RequestCookieMapProducer());
-        afterBeanDiscovery.addBean(new SessionProducer());
-        afterBeanDiscovery.addBean(new SessionMapProducer());
-        afterBeanDiscovery.addBean(new ViewMapProducer());
-        afterBeanDiscovery.addBean(new ViewProducer());
-    }
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
+@Qualifier
+@Retention(value = RetentionPolicy.RUNTIME)
+public @interface RequestCookieMap {
 }

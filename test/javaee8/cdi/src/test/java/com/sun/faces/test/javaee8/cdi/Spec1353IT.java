@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,31 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.cdi;
+package com.sun.faces.test.javaee8.cdi;
 
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.Extension;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-/**
- * The CDI extension.
- */
-public class CdiExtension implements Extension {
+@RunWith(JsfTestRunner.class)
+public class Spec1353IT {
 
-    /**
-     * After bean discovery.
-     *
-     * @param afterBeanDiscovery the after bean discovery.
-     */
-    public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery) {
-        afterBeanDiscovery.addBean(new ApplicationProducer());
-        afterBeanDiscovery.addBean(new ApplicationMapProducer());
-        afterBeanDiscovery.addBean(new ExternalContextProducer());
-        afterBeanDiscovery.addBean(new FacesContextProducer());
-        afterBeanDiscovery.addBean(new RequestCookieMapProducer());
-        afterBeanDiscovery.addBean(new SessionProducer());
-        afterBeanDiscovery.addBean(new SessionMapProducer());
-        afterBeanDiscovery.addBean(new ViewMapProducer());
-        afterBeanDiscovery.addBean(new ViewProducer());
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    @JsfTest(value = JsfVersion.JSF_2_3_0_M02,
+            excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
+    public void testInjectRequestCookieMap() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/injectRequestCookieMap.xhtml");
+        assertTrue(page.asXml().contains("{}"));
     }
 }

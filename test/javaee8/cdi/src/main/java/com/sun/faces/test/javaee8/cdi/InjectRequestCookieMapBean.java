@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,31 +37,24 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.cdi;
+package com.sun.faces.test.javaee8.cdi;
 
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.Extension;
+import java.io.Serializable;
+import java.util.Map;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.context.RequestCookieMap;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-/**
- * The CDI extension.
- */
-public class CdiExtension implements Extension {
+@Named(value = "injectRequestCookieMapBean")
+@SessionScoped
+public class InjectRequestCookieMapBean implements Serializable {
 
-    /**
-     * After bean discovery.
-     *
-     * @param afterBeanDiscovery the after bean discovery.
-     */
-    public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery) {
-        afterBeanDiscovery.addBean(new ApplicationProducer());
-        afterBeanDiscovery.addBean(new ApplicationMapProducer());
-        afterBeanDiscovery.addBean(new ExternalContextProducer());
-        afterBeanDiscovery.addBean(new FacesContextProducer());
-        afterBeanDiscovery.addBean(new RequestCookieMapProducer());
-        afterBeanDiscovery.addBean(new SessionProducer());
-        afterBeanDiscovery.addBean(new SessionMapProducer());
-        afterBeanDiscovery.addBean(new ViewMapProducer());
-        afterBeanDiscovery.addBean(new ViewProducer());
+    @RequestCookieMap
+    @Inject
+    Map requestCookieMap;
+
+    public String getValue() {
+        return requestCookieMap.toString();
     }
 }
