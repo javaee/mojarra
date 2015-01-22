@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.systest;
+package com.sun.faces.test.servlet30.systest;
 
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
