@@ -41,7 +41,6 @@ package com.sun.faces.cdi;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.Collections;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import java.util.HashSet;
@@ -137,7 +136,7 @@ public class SessionMapProducer extends CdiProducer
      */
     @Override
     public Set<InjectionPoint> getInjectionPoints() {
-        return Collections.emptySet();
+        return emptySet();
     }
 
     /**
