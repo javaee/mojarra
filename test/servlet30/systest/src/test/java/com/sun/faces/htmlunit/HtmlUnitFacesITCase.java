@@ -621,7 +621,7 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         String currentContainer = System.getProperty("container");
         boolean doRunTest = true;
         if(currentContainer == null) {
-            log.warning("Test exclusions not taken into account since no container property could be found");
+//            log.warning("Test exclusions not taken into account since no container property could be found");
         } else if(exclusions != null) {
             Vector<String> excludedTests = this.exclusions.get(Container.valueOf(currentContainer.toUpperCase().replaceAll("\\.", "_")));
             if(null != excludedTests && !excludedTests.isEmpty() && excludedTests.contains(testName)) {
