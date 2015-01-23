@@ -429,7 +429,7 @@ public class StateContext {
             super(context);
         }
  
-        private boolean thisEventCorrespondsToSubtreeRootRemove(FacesContext context, UIComponent c) {
+        private boolean thisEventCorrespondsToSubtreeRootRemove(UIComponent c) {
             boolean result = false;
             if (null != c) {
                 c = c.getParent();
@@ -477,7 +477,7 @@ public class StateContext {
         
         @Override
         protected void handleRemove(FacesContext context, UIComponent component) {
-            if (!thisEventCorrespondsToSubtreeRootRemove(context, component)) {
+            if (!thisEventCorrespondsToSubtreeRootRemove(component)) {
                 return;
             }
             

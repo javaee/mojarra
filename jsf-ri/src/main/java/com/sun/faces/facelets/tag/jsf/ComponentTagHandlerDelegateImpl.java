@@ -163,7 +163,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         }
         
         boolean componentFound = false;
-        boolean parentModified = false;
         if (c != null) {
             componentFound = true;
             doExistingComponentActions(ctx, id, c);
@@ -205,6 +204,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         }
 
         // finish cleaning up orphaned children
+        boolean parentModified = false;
         if (componentFound) {
                parentModified = isParentChildrenModified(parent);
                doOrphanedChildCleanup(ctx, parent, c, parentModified);

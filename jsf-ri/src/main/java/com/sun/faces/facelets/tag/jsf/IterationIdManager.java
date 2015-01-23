@@ -16,7 +16,7 @@ public class IterationIdManager {
      * @return true if the same Id is already being tracked, false otherwise
      */
     public static boolean registerLiteralId(FaceletContext ctx, String id) {
-        Set<String> trackedIds = _getStackOfTrackedIds(ctx).peek();
+        Set<String> trackedIds = getStackOfTrackedIds(ctx).peek();
         
         if (trackedIds == null) {
             return false;
@@ -31,7 +31,7 @@ public class IterationIdManager {
     }
     
     public static void startIteration(FaceletContext ctx) {
-        Deque<Set<String>> stack = _getStackOfTrackedIds(ctx);
+        Deque<Set<String>> stack = getStackOfTrackedIds(ctx);
         
         // Reuse existing set of Ids if we are already tracking them for the parent iteration
         Set<String> current = stack.peek();
@@ -44,20 +44,20 @@ public class IterationIdManager {
     }
     
     public static void stopIteration(FaceletContext ctx) {
-        _getStackOfTrackedIds(ctx).pop();
+        getStackOfTrackedIds(ctx).pop();
     }
     
     public static void startNamingContainer(FaceletContext ctx) {
         // Push null on the stack to suspend Id tracking
-        _getStackOfTrackedIds(ctx).push(null);
+        getStackOfTrackedIds(ctx).push(null);
     }
     
     public static void stopNamingContainer(FaceletContext ctx) {
-        _getStackOfTrackedIds(ctx).pop();
+        getStackOfTrackedIds(ctx).pop();
     }
     
     
-    private static Deque<Set<String>> _getStackOfTrackedIds(FaceletContext ctx) {
+    private static Deque<Set<String>> getStackOfTrackedIds(FaceletContext ctx) {
         Deque<Set<String>> stack = (Deque<Set<String>>)ctx.getAttribute(_STACK_OF_TRACKED_IDS);
         if (stack == null) {
             stack = new LinkedList<Set<String>>();

@@ -62,7 +62,6 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
-import com.sun.faces.util.Util;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
@@ -228,15 +227,13 @@ public final class ComponentSupport {
     // never be in the tree at this point, so we can return null and skip iterating.
     
     public static UIComponent findUIInstructionChildByTagId(FacesContext context, UIComponent parent, String id) {
-        UIComponent result = null;
         if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
             return null;
         }
         Map<Object, Object> attrs = context.getAttributes();
-        if (attrs.containsKey(PartialStateSaving)) {
-            if ((Boolean)attrs.get(PartialStateSaving)) {
-                result = findChildByTagId(context, parent, id);
-            }
+        UIComponent result = null;
+        if (attrs.containsKey(PartialStateSaving) && (Boolean)attrs.get(PartialStateSaving)) {
+            result = findChildByTagId(context, parent, id);
         }
 
         
@@ -256,10 +253,7 @@ public final class ComponentSupport {
         }
         UIComponent c = null;
         UIViewRoot root = context.getViewRoot();
-        boolean hasDynamicComponents = (null != root && 
-                root.getAttributes().containsKey(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS));
         String cid = null;
-        List<UIComponent> components;
         String facetName = getFacetName(parent);
         if (null != facetName) {
             c = parent.getFacet(facetName);
@@ -273,6 +267,7 @@ public final class ComponentSupport {
                 }
             } 
         }
+        List<UIComponent> components;
         if (0 < parent.getFacetCount()) {
             components = new ArrayList<UIComponent>();
             components.addAll(parent.getFacets().values());
@@ -296,7 +291,8 @@ public final class ComponentSupport {
                     }
                 }
             }
-            if (hasDynamicComponents) {
+            if ((null != root && 
+                root.getAttributes().containsKey(RIConstants.TREE_HAS_DYNAMIC_COMPONENTS))) {
                 /*
                  * Make sure we look for the child recursively it might have moved
                  * into a different parent in the parent hierarchy. Note currently
