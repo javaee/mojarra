@@ -479,7 +479,7 @@ public class WebConfiguration {
             URL[] candidateURLs = Classpath.search(Util.getCurrentLoader(this),
                                           META_INF_CONTRACTS_DIR,
                                           RESOURCE_CONTRACT_SUFFIX,
-                    Classpath.SearchAdvice.FirstMatchOnly);
+                    Classpath.SearchAdvice.AllMatches);
             for (URL curURL : candidateURLs) {
                 String cur = curURL.toExternalForm();
                 

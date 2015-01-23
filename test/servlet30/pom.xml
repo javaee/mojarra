@@ -67,6 +67,7 @@
     <modules>
         <module>ajax</module>
         <module>ajaxNamespace</module>
+        <module>appUsingJarWithExactlyTwoContracts</module>
         <module>component</module>
         <module>composite</module>
         <module>contractUsingHostHeader</module>
@@ -91,6 +92,7 @@
         <module>factory</module>
         <module>flashNoSession</module>
         <module>implicitContract</module>
+        <module>jarWithExactlyTwoContracts</module>
         <module>initRequestParameterMap</module>
         <module>multiTenantSetsTccl</module>
         <module>multiTenantUsesFactoryFinder</module>

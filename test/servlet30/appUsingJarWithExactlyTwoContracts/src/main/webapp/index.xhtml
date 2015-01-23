@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="/topNav_Template.xhtml">
+
+            <ui:define name="title">
+                title
+            </ui:define>
+
+            <ui:define name="nav">
+                nav
+            </ui:define>
+
+            <ui:define name="content">
+                
+                <h:form prependId="false">                
+                    
+                <p><h:commandButton id="button" value="next" action="page2" /></p>
+                
+                <h:graphicImage id="img01" library="resourcesInContractInJar" name="img01.gif" />
+                <h:graphicImage id="img02" library="resourcesInContractInJar" name="img02.gif" />
+                
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
