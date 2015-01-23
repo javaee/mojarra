@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.annotation;
+package com.sun.faces.test.servlet30.systest;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -48,6 +48,7 @@ import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import junit.framework.Test;
+import static junit.framework.TestCase.assertTrue;
 import junit.framework.TestSuite;
 
 
@@ -59,10 +60,10 @@ public class AnnotatedComponentsITCase extends HtmlUnitFacesITCase {
 
     public AnnotatedComponentsITCase(String name) {
         super(name);
-        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testAnnotations");
-        addExclusion(Container.WLS_12_1_1_NO_CLUSTER, "testAnnotations");
-        addExclusion(Container.TOMCAT6, "testAnnotations");
-        addExclusion(Container.TOMCAT7, "testAnnotations");
+        addExclusion(HtmlUnitFacesITCase.Container.WLS_10_3_4_NO_CLUSTER, "testAnnotations");
+        addExclusion(HtmlUnitFacesITCase.Container.WLS_12_1_1_NO_CLUSTER, "testAnnotations");
+        addExclusion(HtmlUnitFacesITCase.Container.TOMCAT6, "testAnnotations");
+        addExclusion(HtmlUnitFacesITCase.Container.TOMCAT7, "testAnnotations");
     }
 
     /**
