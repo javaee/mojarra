@@ -2,7 +2,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,8 +38,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest.composite.behavior;
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -55,9 +54,9 @@ public class CompositeBehaviorITCase extends HtmlUnitFacesITCase {
 
     public CompositeBehaviorITCase(String name) {
         super(name);
-        addExclusion(Container.TOMCAT6, "test01");
-        addExclusion(Container.TOMCAT7, "test01");
-        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "test01");
+        addExclusion(HtmlUnitFacesITCase.Container.TOMCAT6, "test01");
+        addExclusion(HtmlUnitFacesITCase.Container.TOMCAT7, "test01");
+        addExclusion(HtmlUnitFacesITCase.Container.WLS_10_3_4_NO_CLUSTER, "test01");
 
     }
 
@@ -84,6 +83,6 @@ public class CompositeBehaviorITCase extends HtmlUnitFacesITCase {
 //            assertTrue("Can't find the message: \"Reaching this page indicates that the method expression retargeting was successful.\"",
 //                    page.asXml().contains("Reaching this page indicates that the method expression retargeting was successful."));
 //        }
-    }
+        }
 
 }
