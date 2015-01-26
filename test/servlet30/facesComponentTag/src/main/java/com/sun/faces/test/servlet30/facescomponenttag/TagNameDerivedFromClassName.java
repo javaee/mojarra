@@ -38,12 +38,12 @@
  * holder.
 
  */
-package com.sun.faces.test.i_spec_594_war.components;
+package com.sun.faces.test.servlet30.facescomponenttag;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.component.html.HtmlInputText;
 
-@FacesComponent(value="TagNameExplicitlyDeclared", createTag=true, tagName="myTag")
-public class TagNameExplicitlyDeclared extends HtmlInputText {
+@FacesComponent(createTag=true)
+public class TagNameDerivedFromClassName extends HtmlInputText {
     
 }

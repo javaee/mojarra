@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -36,14 +36,37 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
-package com.sun.faces.test.i_spec_594_war.components;
+package com.sun.faces.test.servlet30.facescomponenttag;
 
-import javax.faces.component.FacesComponent;
-import javax.faces.component.html.HtmlInputText;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-@FacesComponent(createTag=true)
-public class TagNameDerivedFromClassName extends HtmlInputText {
-    
+public class Spec594IT {
+
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testFacesComponentTag() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        String pageXml = page.asXml();
+        assertTrue(pageXml.matches("(?s).*<input\\s+id=\"tagNameExplicitlyDeclared\"\\s+type=\"text\"\\s+name=\"tagNameExplicitlyDeclared\"/>.*<input\\s+id=\"myTag\"\\s+type=\"text\"\\s+name=\"myTag\"/>.*"));
+        assertTrue(pageXml.contains("javax.faces.ViewState"));
+    }
 }

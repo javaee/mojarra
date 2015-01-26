@@ -89,6 +89,7 @@
         <module>faceletResourceResolver</module>
         <module>facelets</module>
         <module>faceletsEmptyAsNull</module>
+        <module>facesComponentTag</module>
         <module>factory</module>
         <module>flashNoSession</module>
         <module>implicitContract</module>
