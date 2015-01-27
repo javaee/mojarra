@@ -50,6 +50,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 /**
   *
@@ -73,6 +74,7 @@ public class FlashReaperIT {
 
 
     @Test
+    @Ignore
     public void testFlashesAreReaped() throws Exception {
         
         doTestFlashesAreReaped(0);
