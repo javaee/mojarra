@@ -1,8 +1,7 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,18 +37,14 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest.jsp.converter;
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-
-
 public class ConverterITCase extends HtmlUnitFacesITCase {
-
 
     public ConverterITCase(String name) {
         super(name);
@@ -60,10 +55,7 @@ public class ConverterITCase extends HtmlUnitFacesITCase {
     }
 
     public void test05() throws Exception {
-
         HtmlPage page = getPage("/faces/converter05.jsp");
         assertTrue(page.asXml().matches("(?s).*<body>\\s*<span\\s*id=\\\"outputDatetime1\\\">\\s*7/10/96\\s*3:31:31\\s*PM\\s*EDT\\s*</span>\\s*<span\\s*id=\\\"outputDatetime2\\\">\\s*7/10/96\\s*3:31:31\\s*PM\\s*EDT\\s*</span>\\s*<span\\s*id=\\\"outputDatetime3\\\">\\s*7/10/96\\s*3:31:31\\s*PM\\s*EDT\\s*</span>\\s*<span\\s*id=\\\"outputNumber1\\\">\\s*10.000\\s*</span>\\s*<span\\s*id=\\\"outputNumber2\\\">\\s*10,000\\s*</span>\\s*<span\\s*id=\\\"outputNumber3\\\">\\s*10,000\\s*</span>\\s*</body>.*"));
     }
-
-
 }
