@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -45,13 +45,13 @@ import javax.faces.application.ApplicationMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-@Named(value = "injectApplicationMapBean")
+@Named(value = "injectApplicationMap2Bean")
 @RequestScoped
-public class InjectApplicationMapBean {
+public class InjectApplicationMap2Bean {
 
     @ApplicationMap
     @Inject
-    Map applicationMap;
+    Map<String, Object> applicationMap;
     
     public String getValue() {
         return Boolean.toString(applicationMap.containsKey("com.sun.faces.config.WebConfiguration"));

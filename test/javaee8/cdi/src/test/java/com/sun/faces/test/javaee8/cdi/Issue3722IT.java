@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -39,21 +39,41 @@
  */
 package com.sun.faces.test.javaee8.cdi;
 
-import java.util.Map;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.ApplicationMap;
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-@Named(value = "injectApplicationMapBean")
-@RequestScoped
-public class InjectApplicationMapBean {
+@RunWith(JsfTestRunner.class)
+public class Issue3722IT {
 
-    @ApplicationMap
-    @Inject
-    Map applicationMap;
-    
-    public String getValue() {
-        return Boolean.toString(applicationMap.containsKey("com.sun.faces.config.WebConfiguration"));
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    @JsfTest(value = JsfVersion.JSF_2_3_0_M01,
+            excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
+    public void testInjectApplicationMap2() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/injectApplicationMap2.xhtml");
+        assertTrue(page.asXml().contains("true"));
     }
 }

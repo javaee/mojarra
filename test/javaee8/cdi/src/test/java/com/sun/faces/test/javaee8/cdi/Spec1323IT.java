@@ -74,6 +74,6 @@ public class Spec1323IT {
             excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
     public void testInjectApplicationMap() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/injectApplicationMap.xhtml");
-        assertTrue(page.asXml().contains("TRUE"));
+        assertTrue(page.asXml().contains("true"));
     }
 }
