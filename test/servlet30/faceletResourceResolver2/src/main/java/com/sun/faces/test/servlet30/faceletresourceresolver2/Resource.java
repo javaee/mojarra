@@ -56,7 +56,7 @@
  * limitations under the License.
  */
 
-package com.sun.faces.test.i_spec_719_old_resource_resolver_war;
+package com.sun.faces.test.servlet30.faceletresourceresolver2;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;

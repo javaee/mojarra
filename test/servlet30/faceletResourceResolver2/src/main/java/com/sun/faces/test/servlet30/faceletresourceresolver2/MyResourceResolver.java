@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.i_spec_719_old_resource_resolver_war;
+package com.sun.faces.test.servlet30.faceletresourceresolver2;
 
 import java.io.IOException;
 import java.net.URL;

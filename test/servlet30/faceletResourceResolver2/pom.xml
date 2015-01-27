@@ -1,9 +1,10 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,45 +41,18 @@
     holder.
 
 -->
-<!-- ************ JSF build file ************************************** -->
-<project name="JAVASERVERFACES-i_spec_719" default="test" basedir=".">
 
-    <property file="../../build.properties"/>
-    <path id="i_spec_719.classpath">  
-        <path refid="html.classpath" />
-        <pathelement location="${basedir}/i_spec_719_htmlunit/target/classes"/>
-    </path>
-
-    <import file="${jsf.build.home}/common/ant/common.xml"/>
-
-    <target name="build">
-        <jsf.mvn dir="${basedir}/i_spec_719_old_resource_resolver_war" goals="install" />
-    </target>    
-
-    <target name="clean">
-        <jsf.mvn dir="${basedir}/i_spec_719_old_resource_resolver_war" goals="clean" />
-    </target>    
-
-    <target name="install">
-        <deploy.artifact
-              artifact="${basedir}/i_spec_719_old_resource_resolver_war/target/i_spec_719_old_resource_resolver_war.war"
-              appName="i_spec_719_old_resource_resolver_war"/>
-    </target>    
-
-    <target name="remove">
-        <undeploy.artifact
-              artifact="${basedir}/i_spec_719_old_resource_resolver_war/target/i_spec_719_old_resource_resolver_war.war"
-              appName="i_spec_719_old_resource_resolver_war"/>
-    </target>    
-
-    <target name="test" depends="define.scenario.aware.port">
-
-        <jsf.tester request="/faces/i_spec_719_old_resource_resolver.xhtml"
-                     context-path="/i_spec_719_old_resource_resolver_war"
-                     classpath-refid="html.classpath"
-                     test-results-dir="${regression.test.results.dir}"
-                     regexp="(?s).*com.sun.faces.test.i_spec_719_old_resource_resolver_war.MyResourceResolver.*"/>
-
-    </target>    
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>pom</artifactId>
+        <groupId>com.sun.faces.test.servlet30</groupId>
+        <version>2.3.0-m02-SNAPSHOT</version>
+    </parent>
+    <artifactId>faceletResourceResolver2</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Facelets ResourceResolver 2</name>
+    <build>
+        <finalName>test-servlet30-faceletResourceResolver2</finalName>
+    </build>
 </project>
