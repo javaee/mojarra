@@ -1,8 +1,7 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,30 +37,26 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest.jsp.managed;
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
+import static junit.framework.TestCase.assertTrue;
 import junit.framework.TestSuite;
 
+public class JspManagedITCase extends HtmlUnitFacesITCase {
 
-
-public class ManagedTestCase extends HtmlUnitFacesTestCase {
-
-
-    public ManagedTestCase(String name) {
+    public JspManagedITCase(String name) {
         super(name);
     }
 
     public static Test suite() {
-        return (new TestSuite(ManagedTestCase.class));
+        return (new TestSuite(JspManagedITCase.class));
     }
 
     public void test04() throws Exception {
         HtmlPage page = getPage("/faces/managed04.jsp");
         assertTrue(page.asText().matches("(?s).*one two three fourfivesixseveneight.*"));
     }
-
 }
