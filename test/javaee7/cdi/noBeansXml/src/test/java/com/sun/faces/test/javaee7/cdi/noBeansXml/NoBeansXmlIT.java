@@ -50,6 +50,7 @@ import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -70,8 +71,14 @@ public class NoBeansXmlIT {
         webClient.closeAllWindows();
     }
 
+    /*
+     * This test is ignored because we are waiting for upstream resolution of
+     * BugDB #18719488 / OWLS-13010. Once the upstream resolution happens we 
+     * should turn this test back on.
+     */
     @JsfTest(value = JSF_2_2_0)
     @Test
+    @Ignore
     public void testFlowWithNoBeansXml() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("enterFlow");
