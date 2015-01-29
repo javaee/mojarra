@@ -86,6 +86,22 @@
         </component>
         <attribute>
             <description>
+                <![CDATA[<p class="changed_added_2_3">Flag indicating that this element must never
+                receive focus or be included in a subsequent
+                submit.</p>]]>
+            </description>
+            <name>
+                disabled
+            </name>
+            <required>
+                false
+            </required>
+            <type>
+                boolean
+            </type>
+        </attribute>
+        <attribute>
+            <description>
                 <![CDATA[<p class="changed_added_2_2">Per the WAI-ARIA spec and its
                 relationship to HTML5 (Section title ARIA Role Attriubute),
                 every HTML element may have a "role" attribute whose value

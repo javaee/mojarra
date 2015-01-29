@@ -15050,6 +15050,23 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
     <property>
       <description>
+            Flag indicating that this element must never receive focus or
+            be included in a subsequent submit.  A value of false causes
+            no attribute to be rendered, while a value of true causes the
+            attribute to be rendered as disabled="disabled".            
+        </description>
+      <display-name>Disabled Flag</display-name>
+      <icon/>
+      <property-name>disabled</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <ignored-by-renderer>false</ignored-by-renderer>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
           CSS style(s) to be applied when this component is rendered.
         </description>
       <display-name>CSS Styles</display-name>
@@ -29961,6 +29978,23 @@ this application, and passing the result through the
         <attribute-class>java.lang.Boolean</attribute-class>
         <attribute-extension>
           <default-value>false</default-value>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+            Flag indicating that this element must never receive focus or
+            be included in a subsequent submit.  A value of false causes
+            no attribute to be rendered, while a value of true causes the
+            attribute to be rendered as disabled="disabled".            
+        </description>
+        <display-name>Disabled Flag</display-name>
+        <icon/>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <ignored-by-renderer>false</ignored-by-renderer>
         </attribute-extension>
       </attribute>
 

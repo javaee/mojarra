@@ -131,6 +131,7 @@
                 <exclude name="editable-props.xml"/>
                 <exclude name="valueholder-props.xml"/>
                 <exclude name="ui*-props.xml"/>
+                <include name="outcometargetbutton-props.xml"/>
             </fileset>
         </copy>
 

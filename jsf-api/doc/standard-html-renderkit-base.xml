@@ -771,6 +771,7 @@
         <component-class>javax.faces.component.html.HtmlOutcomeTargetButton</component-class>
 
         <xi:include href="uioutcometarget-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="outcometargetbutton-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
@@ -2789,6 +2790,7 @@ this application, and passing the result through the
             <xi:include href="image-button-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="direct-link-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="get-link-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="outcometargetbutton-attrs.xml" xpointer="xpointer(/root/*)"/>
 
             <renderer-extension>
                 <renders-children>true</renders-children>
