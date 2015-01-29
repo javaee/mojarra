@@ -93,6 +93,7 @@
         <module>faceletsEmptyAsNull</module>
         <module>facesComponentTag</module>
         <module>factory</module>
+        <module>flashForceWriteCookie</module>
         <module>flashNoSession</module>
         <module>implicitContract</module>
         <module>jarWithExactlyTwoContracts</module>
