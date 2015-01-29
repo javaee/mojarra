@@ -41,6 +41,7 @@ package com.sun.faces.cdi;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import java.util.HashSet;
@@ -69,14 +70,18 @@ public class SessionMapProducer extends CdiProducer
         implements Bean<Map<String, Object>>, PassivationCapable {
 
     /**
+     * The set of types that this producer is capable of producing, and hence
+     * can be used as the type of an injection point.
+     */
+    private final Set<Type> types = new HashSet<>(asList(
+            new ParameterizedTypeImpl(Map.class, new Type[]{String.class, Object.class}),
+            Map.class,
+            Object.class));
+
+    /**
      * Stores our id.
      */
     private String id = SessionMapProducer.class.getName();
-
-    /**
-     * Stores our types.
-     */
-    private HashSet<Type> types;
 
     /**
      * Inner class defining an annotation literal for @SessionMap.
@@ -186,11 +191,6 @@ public class SessionMapProducer extends CdiProducer
      */
     @Override
     public Set<Type> getTypes() {
-        if (types == null) {
-            types = new HashSet<>();
-            types.add(Map.class);
-        }
-
         return types;
     }
 
