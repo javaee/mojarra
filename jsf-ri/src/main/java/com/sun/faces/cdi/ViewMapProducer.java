@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -58,14 +58,23 @@ import javax.faces.view.ViewMap;
 
 /**
  * <p class="changed_added_2_3">
- * The ViewMapProducer is the CDI producer that allows injection of the
- * view map using @Inject and allows EL resolving of #{viewScope}
+ * The ViewMapProducer is the CDI producer that allows injection of the view map
+ * using @Inject and allows EL resolving of #{viewScope}
  * </p>
  *
  * @since 2.3
  * @see UIViewRoot#getViewMap()
  */
 public class ViewMapProducer extends CdiProducer implements Bean<Map<String, Object>> {
+
+    /**
+     * The set of types that this producer is capable of producing, and hence
+     * can be used as the type of an injection point.
+     */
+    private final Set<Type> types = new HashSet<>(asList(
+            new ParameterizedTypeImpl(Map.class, new Type[]{String.class, Object.class}),
+            Map.class,
+            Object.class));
 
     /**
      * Inner class defining an annotation literal for @ViewMap.
@@ -175,7 +184,7 @@ public class ViewMapProducer extends CdiProducer implements Bean<Map<String, Obj
      */
     @Override
     public Set<Type> getTypes() {
-        return new HashSet<>(asList(Map.class));
+        return types;
     }
 
     /**
