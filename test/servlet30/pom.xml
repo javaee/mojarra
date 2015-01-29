@@ -70,6 +70,7 @@
         <module>appUsingJarWithExactlyTwoContracts</module>
         <module>component</module>
         <module>composite</module>
+        <module>compositeComponentForAttribute</module>
         <module>contractUsingHostHeader</module>
         <module>contractUsingViewRoot</module>
         <module>custom-viewroot-viewscope</module>
