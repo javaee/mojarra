@@ -66,8 +66,17 @@ import javax.faces.context.FacesContext;
  * @since 2.3
  * @see ExternalContext#getRequestCookieMap()
  */
-public class RequestCookieMapProducer extends CdiProducer 
-    implements Bean<Map<String, Object>>, PassivationCapable {
+public class RequestCookieMapProducer extends CdiProducer
+        implements Bean<Map<String, Object>>, PassivationCapable {
+
+    /**
+     * The set of types that this producer is capable of producing, and hence
+     * can be used as the type of an injection point.
+     */
+    private final Set<Type> types = new HashSet<>(asList(
+            new ParameterizedTypeImpl(Map.class, new Type[]{String.class, Object.class}),
+            Map.class,
+            Object.class));
 
     /**
      * Inner class defining an annotation literal for @RequestCookieMap.
@@ -122,7 +131,7 @@ public class RequestCookieMapProducer extends CdiProducer
 
     /**
      * Get the id (for the producer).
-     * 
+     *
      * @return the id.
      */
     @Override
@@ -187,7 +196,7 @@ public class RequestCookieMapProducer extends CdiProducer
      */
     @Override
     public Set<Type> getTypes() {
-        return new HashSet<>(asList(Map.class));
+        return types;
     }
 
     /**
