@@ -72,6 +72,7 @@
         <module>el</module>
         <module>facelets</module>
         <module>flash</module>
+        <module>flashForceWriteCookie</module>
         <module>lifecycle</module>
         <module>renderKit</module>
         <module>resource</module>

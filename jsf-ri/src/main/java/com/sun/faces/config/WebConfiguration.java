@@ -1249,6 +1249,9 @@ public class WebConfiguration {
         ),
         DisableIdUniquenessCheck(
             "com.sun.faces.disableIdUniquenessCheck",
+            false),
+        ForceAlwaysWriteFlashCookie(
+            "com.sun.faces.forceAlwaysWriteFlashCookie",
             false);
 
         private BooleanWebContextInitParameter alternate;

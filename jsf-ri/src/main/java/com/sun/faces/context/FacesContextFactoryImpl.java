@@ -43,6 +43,7 @@ package com.sun.faces.context;
 
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceAlwaysWriteFlashCookie;
 import com.sun.faces.util.Util;
 import java.util.Map;
 import javax.faces.FacesException;
@@ -111,6 +112,8 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
     private void savePerRequestInitParams(FacesContext context, WebConfiguration webConfig) {
         Map<Object, Object> attrs = context.getAttributes();
         attrs.put(PartialStateSaving, webConfig.isOptionEnabled(PartialStateSaving) ?
+                Boolean.TRUE : Boolean.FALSE);
+        attrs.put(ForceAlwaysWriteFlashCookie, webConfig.isOptionEnabled(ForceAlwaysWriteFlashCookie) ?
                 Boolean.TRUE : Boolean.FALSE);
         
     }

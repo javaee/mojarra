@@ -41,6 +41,7 @@
 package com.sun.faces.context.flash;
 
 import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceAlwaysWriteFlashCookie;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.facelets.tag.ui.UIDebug;
 import com.sun.faces.util.FacesLogger;
@@ -550,15 +551,27 @@ public class ELFlash extends Flash {
         contextMap.put(CONSTANTS.SavedResponseCompleteFlagValue,
                 context.getResponseComplete());
 
+        Cookie cookie = null;
         if (currentPhase.equals(PhaseId.RESTORE_VIEW)) {
-            Cookie cookie = null;
-
             if (null != (cookie = getCookie(context.getExternalContext()))) {
                 getCurrentFlashManager(context, contextMap, cookie);
             }
 
             if (this.isKeepMessages()) {
                 this.restoreAllMessages(context);
+            }
+        } else if (currentPhase.equals(PhaseId.RENDER_RESPONSE) && 
+            contextMap.containsKey(ForceAlwaysWriteFlashCookie) && 
+                (Boolean) contextMap.get(ForceAlwaysWriteFlashCookie)) {
+            PreviousNextFlashInfoManager flashManager = getCurrentFlashManager(contextMap, true);
+            cookie = flashManager.encode();
+            if (null != cookie) {
+                setCookie(context, flashManager, cookie, true);
+            } else {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                            "jsf.externalcontext.flash.force.write.cookie.failed");
+                }
             }
         }
     }
@@ -633,7 +646,7 @@ public class ELFlash extends Flash {
         }
 
 
-        setCookie(context, flashManager, flashManager.encode());
+        setCookie(context, flashManager, flashManager.encode(), false);
 
     }
 
@@ -650,7 +663,7 @@ public class ELFlash extends Flash {
                     flashManager.copyWithoutInnerMap();
             copiedFlashManager.expirePrevious();
             setCookie(context, flashManager,
-                    copiedFlashManager.encode());
+                    copiedFlashManager.encode(), false);
         }
     }
 
@@ -920,7 +933,7 @@ public class ELFlash extends Flash {
 
     private void setCookie(FacesContext context, 
             PreviousNextFlashInfoManager flashManager,
-            Cookie toSet) {
+            Cookie toSet, boolean forceWrite) {
         Map<Object, Object> contextMap = context.getAttributes();
         ExternalContext extContext = context.getExternalContext();
         if (contextMap.containsKey(CONSTANTS.DidWriteCookieAttributeName)) {
@@ -931,7 +944,7 @@ public class ELFlash extends Flash {
                 prevFlash = flashManager.getPreviousRequestFlashInfo();
 
         // Don't try to write the cookie unless there is data in the flash.
-        if ((null != nextFlash && !nextFlash.getFlashMap().isEmpty()) ||
+        if (forceWrite || (null != nextFlash && !nextFlash.getFlashMap().isEmpty()) ||
             (null != prevFlash && !prevFlash.getFlashMap().isEmpty())) {
             if (extContext.isResponseCommitted()) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
