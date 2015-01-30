@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.jsf2jsp;
+package com.sun.faces.test.servlet30.systest;
 
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -47,6 +47,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.jsptest.ValidatorITCase;
 import junit.framework.Test;
+import static junit.framework.TestCase.assertTrue;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 
