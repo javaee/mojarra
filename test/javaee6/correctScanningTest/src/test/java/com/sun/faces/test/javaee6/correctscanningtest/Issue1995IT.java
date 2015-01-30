@@ -47,7 +47,6 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 public class Issue1995IT {
 
@@ -80,7 +79,6 @@ public class Issue1995IT {
     }
 
     @Test
-    @Ignore
     public void testScanning1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "1/faces/index.xhtml");
         assertTrue(page.asXml().contains("javax.faces.ViewState"));
@@ -88,7 +86,6 @@ public class Issue1995IT {
     }
 
     @Test
-    @Ignore
     public void testScanning2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "2/faces/index.xhtml");
         assertTrue(page.asXml().contains("javax.faces.ViewState"));

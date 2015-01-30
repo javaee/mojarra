@@ -21,6 +21,18 @@
                     <encoding>UTF-8</encoding>
                     <version>6</version>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <webModule>
+                            <groupId>com.sun.faces.test.javaee6</groupId>
+                            <artifactId>correctScanningWar1</artifactId>
+                            <contextRoot>/test-javaee6-correctScanningWar1</contextRoot>
+                        </webModule>
+                        <webModule>
+                            <groupId>com.sun.faces.test.javaee6</groupId>
+                            <artifactId>correctScanningWar2</artifactId>
+                            <contextRoot>/test-javaee6-correctScanningWar2</contextRoot>
+                        </webModule>
+                    </modules>
                 </configuration>
             </plugin>
         </plugins>

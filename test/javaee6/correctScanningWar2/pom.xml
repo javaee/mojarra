@@ -56,7 +56,7 @@
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - JavaEE 6 - Correct Scanning WAR 2</name>
     <build>
-        <finalName>test-javaee6-correctScanningWar2</finalName>
+        <finalName>test-javaee6-correctScanningWar2-war</finalName>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
