@@ -1412,6 +1412,9 @@ public class WebConfiguration {
                 false),
         NamespaceParameters(
             "com.sun.faces.namespaceParameters",
+            false),
+        ForceAlwaysWriteFlashCookie(
+            "com.sun.faces.forceAlwaysWriteFlashCookie",
             false);
 
         private BooleanWebContextInitParameter alternate;
