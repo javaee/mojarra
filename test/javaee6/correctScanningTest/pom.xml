@@ -57,6 +57,18 @@
     <name>Mojarra ${project.version} - Test - JavaEE 6 - Correct Scanning Test</name>
     <build>
         <finalName>test-javaee6-correctScanningWar</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>run-test</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>                        
+            </plugin>
+        </plugins>
     </build>
     <dependencies>
         <dependency>
