@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -59,7 +59,9 @@ import java.util.logging.Logger;
  */
 public class AbstractValidatorTag extends ValidatorELTag {
 
-     private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
+    private static final long serialVersionUID = 8941293586160549920L;
+
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
     /**
      * <p>The {@link javax.el.ValueExpression} that evaluates to an object that

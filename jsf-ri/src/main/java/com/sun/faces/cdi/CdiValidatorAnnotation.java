@@ -55,6 +55,11 @@ class CdiValidatorAnnotation
         implements FacesValidator {
 
     /**
+     * Stores the serial version UID.
+     */
+    private static final long serialVersionUID = -6266044469152347882L;
+    
+    /**
      * Stores the value.
      */
     private String value;

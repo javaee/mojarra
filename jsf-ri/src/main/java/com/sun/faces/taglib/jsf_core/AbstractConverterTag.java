@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -58,6 +58,8 @@ import java.util.logging.Logger;
  * <p>Base class for all <code>ConverterTag<code>s.</p>
  */
 public class AbstractConverterTag extends ConverterELTag {
+
+    private static final long serialVersionUID = -8219789624438804540L;
 
     private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 

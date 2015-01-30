@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -55,6 +55,8 @@ import java.io.Serializable;
  * @author driscoll
  */
 public class CreditCardValidator implements Validator, Serializable {
+
+    private static final long serialVersionUID = 3534760827770436010L;
 
     /**
      * Validate a String against a regular expression pattern...  The full regex

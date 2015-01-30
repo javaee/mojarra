@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -162,6 +162,8 @@ public class SetPropertyActionListenerHandler extends TagHandlerImpl implements 
     private static class LegacySetPropertyListener implements ActionListener,
             Serializable {
 
+        private static final long serialVersionUID = 3004987947382293693L;
+
         private ValueBinding value;
 
         private ValueBinding target;
@@ -185,6 +187,8 @@ public class SetPropertyActionListenerHandler extends TagHandlerImpl implements 
 
     private static class SetPropertyListener implements ActionListener,
             Serializable {
+
+        private static final long serialVersionUID = -2760242070551459725L;
 
         private ValueExpression value;
 

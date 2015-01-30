@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -91,6 +91,7 @@ import java.util.logging.Logger;
 
 public class LoadBundleTag extends TagSupport {
     
+    private static final long serialVersionUID = -584139192758868254L;
     static final String 
             PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME = 
             "com.sun.faces.taglib.jsf_core.PRE_VIEW_LOADBUNDLES_LIST";

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -51,6 +51,8 @@ package com.sun.faces.taglib.jsf_core;
 
 public abstract class MaxMinValidatorTag extends AbstractValidatorTag {
 
+
+    private static final long serialVersionUID = 5666097564448276941L;
 
     /**
      * <p>Flag indicating whether a maximum limit has been set.</p>

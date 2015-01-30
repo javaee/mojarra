@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -76,6 +76,8 @@ public class ActionPhase extends Phase {
          * 1. Find the bean + method that matches the correct @RequestMapping. 
          */
         Set<Bean<?>> beans = getBeanManager(context).getBeans(Object.class, new AnnotationLiteral<Any>() {
+
+            private static final long serialVersionUID = -6222362018576116578L;
         });
         Iterator<Bean<?>> beanIterator = beans.iterator();
         RequestMappingInfo current = null;
@@ -99,6 +101,8 @@ public class ActionPhase extends Phase {
              */
             Instance instance = CDI.current().select(
                     current.getBean().getBeanClass(), new AnnotationLiteral<Any>() {
+
+                        private static final long serialVersionUID = 712321596615027132L;
                     });
 
             try {

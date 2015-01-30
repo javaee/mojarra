@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -46,6 +46,8 @@ import javax.faces.FacesException;
  * <p>Represents errors from managed bean pre-processing.
  */
 public class ManagedBeanPreProcessingException extends FacesException {
+
+    private static final long serialVersionUID = 5355477597212764294L;
 
     public enum Type {
         CHECKED,

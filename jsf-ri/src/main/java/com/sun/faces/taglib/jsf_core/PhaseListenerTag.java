@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -70,6 +70,8 @@ import java.util.logging.Logger;
 
 public class PhaseListenerTag extends TagSupport {
 
+
+    private static final long serialVersionUID = -387813302573848228L;
 
     private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
@@ -189,6 +191,7 @@ public class PhaseListenerTag extends TagSupport {
     private static class BindingPhaseListener
          implements PhaseListener, Serializable {
 
+        private static final long serialVersionUID = -3748298130133609119L;
         private ValueExpression type;
         private ValueExpression binding;
 

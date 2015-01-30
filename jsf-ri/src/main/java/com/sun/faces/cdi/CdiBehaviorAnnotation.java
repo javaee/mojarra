@@ -55,6 +55,11 @@ class CdiBehaviorAnnotation
         implements FacesBehavior {
 
     /**
+     * Stores the serial version UID.
+     */
+    private static final long serialVersionUID = -258069073667018312L;
+    
+    /**
      * Stores the value.
      */
     private String value;
