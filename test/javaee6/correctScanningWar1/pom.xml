@@ -48,28 +48,26 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test</groupId>
+        <groupId>com.sun.faces.test.javaee6</groupId>
         <artifactId>pom</artifactId>
         <version>2.3.0-m02-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.javaee6</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 6</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>    
-    <modules>
-        <module>correctScanningEar</module>
-        <module>correctScanningJar</module>
-        <module>correctScanningTest</module>
-        <module>correctScanningWar1</module>
-        <module>correctScanningWar2</module>
-        <module>resource</module>
-    </modules>
+    <artifactId>correctScanningWar1</artifactId>
+    <packaging>war</packaging>
+    <name>Mojarra ${project.version} - Test - JavaEE 6 - Correct Scanning WAR 1</name>
+    <build>
+        <finalName>test-javaee6-correctScanningWar1</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>run-test</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>                        
+            </plugin>
+        </plugins>
+    </build> 
 </project>

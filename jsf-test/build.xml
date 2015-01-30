@@ -64,8 +64,7 @@
                      JAVASERVERFACES-1338,
                      admingui" />
 
-    <property name="container-agnostic-applications" value="
-                    JAVASERVERFACES-1995" />
+    <property name="container-agnostic-applications" value="" />
 
     <target name="clean" depends="define.applications"
             description="">
