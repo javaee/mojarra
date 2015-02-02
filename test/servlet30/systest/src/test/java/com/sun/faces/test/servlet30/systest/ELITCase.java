@@ -37,18 +37,17 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest.el;
+package com.sun.faces.test.servlet30.systest;
 
 import java.util.List;
 import java.util.ArrayList;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Validate new EL features such as the component implicit object
@@ -59,7 +58,6 @@ public class ELITCase extends HtmlUnitFacesITCase {
         super(name);
     }
 
-
     /**
      * Set up instance variables required by this test case.
      */
@@ -67,14 +65,12 @@ public class ELITCase extends HtmlUnitFacesITCase {
         super.setUp();
     }
 
-
     /**
      * Return the tests included in this test suite.
      */
     public static Test suite() {
         return (new TestSuite(ELITCase.class));
     }
-
 
     /**
      * Tear down instance variables required by this test case.
@@ -84,13 +80,11 @@ public class ELITCase extends HtmlUnitFacesITCase {
     }
 
     // ------------------------------------------------------------ Test Methods
-
-
     public void testComponentImplicitObject() throws Exception {
         HtmlPage page = getPage("/faces/componentImplicitObject.jsp");
         List<HtmlSpan> outputs = new ArrayList<HtmlSpan>(2);
         getAllElementsOfGivenClass(page, outputs, HtmlSpan.class);
-        assertTrue(outputs.size() ==2);
+        assertTrue(outputs.size() == 2);
         HtmlSpan s = outputs.get(0);
         assertTrue("ot".equals(s.getId()));
         assertTrue("ot".equals(s.asText()));
@@ -105,15 +99,10 @@ public class ELITCase extends HtmlUnitFacesITCase {
         i = inputs.get(3);
         assertTrue(i.getId().contains("1:it"));
         assertTrue("it".equals(i.asText()));
-
     }
-
 
     public void testProgrammaticExpressionFunctionEval() throws Exception {
-
         HtmlPage page = getPage("/faces/elfunction.xhtml");
         assertTrue(page.asText().contains("PASSED"));
-        
     }
-
 }
