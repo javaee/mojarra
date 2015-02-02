@@ -57,6 +57,10 @@
         <param-name>javax.faces.FACELETS_RESOURCE_RESOLVER</param-name>
         <param-value>com.sun.faces.test.servlet30.faceletResourceResolver.CustomResourceResolver</param-value>
     </context-param>
+    <context-param>
+        <param-name>com.sun.faces.enableFaceletsResourceResolverCompositeComponents</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
