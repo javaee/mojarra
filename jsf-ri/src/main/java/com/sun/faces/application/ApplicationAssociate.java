@@ -76,6 +76,7 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.*;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableFaceletsResourceResolverResolveCompositeComponents;
 import com.sun.faces.el.DemuxCompositeELResolver;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
@@ -843,7 +844,9 @@ public class ApplicationAssociate {
         }
         
         // If our resourceResolver is not the one we created above
-        if (!(resolver == defaultResourceResolver)) {
+        // and the use of this ResousrecResolver for Composite Components
+        // is acceptable.
+        if (!(resolver == defaultResourceResolver) && webConfig.isOptionEnabled(EnableFaceletsResourceResolverResolveCompositeComponents)) {
             ctx.getExternalContext().getApplicationMap().put(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME,
                     resolver);
         }

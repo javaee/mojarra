@@ -1381,6 +1381,10 @@ public class WebConfiguration {
               "com.sun.faces.enableDistributable",
               false
         ),
+        EnableFaceletsResourceResolverResolveCompositeComponents(
+              "com.sun.faces.enableFaceletsResourceResolverCompositeComponents",
+              false
+        ),
         EnableMissingResourceLibraryDetection(
               "com.sun.faces.enableMissingResourceLibraryDetection",
               false
