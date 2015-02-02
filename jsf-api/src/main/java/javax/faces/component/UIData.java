@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -2479,6 +2479,8 @@ class SavedState implements Serializable {
 // Private class to wrap an event with a row index
 class WrapperEvent extends FacesEvent {
 
+
+    private static final long serialVersionUID = -1064272913195655452L;
 
     public WrapperEvent(UIComponent component, FacesEvent event, int rowIndex) {
         super(component);
