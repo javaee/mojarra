@@ -71,14 +71,8 @@ public class NoBeansXmlIT {
         webClient.closeAllWindows();
     }
 
-    /*
-     * This test is ignored because we are waiting for upstream resolution of
-     * BugDB #18719488 / OWLS-13010. Once the upstream resolution happens we 
-     * should turn this test back on.
-     */
     @JsfTest(value = JSF_2_2_0)
     @Test
-    @Ignore
     public void testFlowWithNoBeansXml() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("enterFlow");
