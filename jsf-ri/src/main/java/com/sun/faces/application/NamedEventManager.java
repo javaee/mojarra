@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -47,6 +47,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FacesException;
 import javax.faces.event.PostAddToViewEvent;
+import javax.faces.event.PostRenderViewEvent;
 import javax.faces.event.PostValidateEvent;
 import javax.faces.event.PreValidateEvent;
 import javax.faces.event.ComponentSystemEvent;
@@ -67,11 +68,13 @@ public class NamedEventManager {
     public NamedEventManager() {
         namedEvents.put("javax.faces.event.PreRenderComponent", PreRenderComponentEvent.class);
         namedEvents.put("javax.faces.event.PreRenderView", PreRenderViewEvent.class);
+        namedEvents.put("javax.faces.event.PostRenderView", PostRenderViewEvent.class);
         namedEvents.put("javax.faces.event.PostAddToView", PostAddToViewEvent.class);
         namedEvents.put("javax.faces.event.PreValidate", PreValidateEvent.class);
         namedEvents.put("javax.faces.event.PostValidate", PostValidateEvent.class);
         namedEvents.put("preRenderComponent", PreRenderComponentEvent.class);
         namedEvents.put("preRenderView", PreRenderViewEvent.class);
+        namedEvents.put("postRenderView", PostRenderViewEvent.class);
         namedEvents.put("postAddToView", PostAddToViewEvent.class);
         namedEvents.put("preValidate", PreValidateEvent.class);
         namedEvents.put("postValidate", PostValidateEvent.class);

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -51,6 +51,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.PostRenderViewEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.view.facelets.ComponentHandler;
 import javax.faces.view.facelets.FaceletContext;
@@ -81,7 +82,7 @@ public class EventHandler extends TagHandler {
             UIViewRoot viewRoot = ctx.getFacesContext().getViewRoot();
             // ensure that f:event can be used anywhere on the page for preRenderView,
             // not just as a direct child of the viewRoot
-            if (null != viewRoot && PreRenderViewEvent.class == eventClass &&
+            if (null != viewRoot && (PreRenderViewEvent.class == eventClass || PostRenderViewEvent.class == eventClass) &&
                 parent != viewRoot) {
                 parent = viewRoot;
             }
