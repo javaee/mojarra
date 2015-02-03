@@ -80,7 +80,7 @@ public class EventHandler extends TagHandler {
         if (ComponentHandler.isNew(parent)) {
             Class<? extends SystemEvent> eventClass = getEventClass(ctx);
             UIViewRoot viewRoot = ctx.getFacesContext().getViewRoot();
-            // ensure that f:event can be used anywhere on the page for preRenderView,
+            // ensure that f:event can be used anywhere on the page for preRenderView and postRenderView,
             // not just as a direct child of the viewRoot
             if (null != viewRoot && (PreRenderViewEvent.class == eventClass || PostRenderViewEvent.class == eventClass) &&
                 parent != viewRoot) {
