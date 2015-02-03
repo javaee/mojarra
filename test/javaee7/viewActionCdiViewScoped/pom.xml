@@ -40,36 +40,26 @@
     holder.
 
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.10-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee7</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
     <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 7</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>    
-    <modules>
-	<module>action</module>
-        <module>cdi</module>
-        <module>el</module>
-        <module>beanValidation</module>
-        <module>facelets</module>
-        <module>viewActionCdiViewScoped</module>
-  </modules>
+    <groupId>com.sun.faces.test.javaee7</groupId>
+    <version>2.2.10-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.sun.faces.test.javaee7</groupId>
+  <artifactId>viewActionCdiViewScoped</artifactId>
+  <version>2.2.10-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Mojarra ${project.version} - Test - JavaEE 7 - ViewAction CDI ViewScoped</name>
+  
+  <build>
+    <finalName>test-javaee7-viewActionCdiViewScoped</finalName>
+  </build>
+  
+
+  
+
+    
+
 </project>
