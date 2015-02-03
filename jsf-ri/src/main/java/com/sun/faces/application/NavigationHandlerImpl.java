@@ -974,6 +974,14 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             }
             
         }
+        if (null != result) {
+            result.currentFlow = currentFlow;
+            if (result.newFlow == FlowImpl.SYNTHESIZED_RETURN_CASE_FLOW) {
+                result.newFlow = null;
+            } else {
+                result.newFlow = currentFlow;
+            }
+       }
         
         return result;
     }
@@ -1287,7 +1295,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                         null,
                                         false,
                                         false);
-                                
                             }
                         }
                     }
@@ -1297,7 +1304,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 }
             }
         }
-        if (null != result) {
+        
+        if (null != result && result.facesFlowCallNode == null ) {
             result.currentFlow = currentFlow;
             result.newFlow = null;
         }
