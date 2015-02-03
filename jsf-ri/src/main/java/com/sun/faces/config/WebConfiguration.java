@@ -1322,7 +1322,7 @@ public class WebConfiguration {
         ),
         SerializeServerState(
               StateManager.SERIALIZE_SERVER_STATE_PARAM_NAME,
-              false
+              true
         ),
         SerializeServerStateDeprecated(
               "com.sun.faces.serializeServerState",
