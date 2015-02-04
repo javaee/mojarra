@@ -206,17 +206,8 @@ public class DefaultFaceletFactory {
                     return createMetadataFacelet(key);
                 }
             };
-        try {
-            // We must call this method using reflection because it is protected.
-            Method m = FaceletCache.class.getDeclaredMethod("setMemberFactories", FaceletCache.MemberFactory.class, FaceletCache.MemberFactory.class);
-            m.setAccessible(true);
-            m.invoke(cache, faceletFactory, metadataFaceletFactory);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            if (log.isLoggable(Level.SEVERE)) {
-                log.log(Level.SEVERE, null, ex);
-            }
-            throw new FacesException(ex);
-        }
+        
+        cache.setMemberFactoriesPublic(faceletFactory, metadataFaceletFactory);
         return cache;
     }
 

@@ -87,6 +87,7 @@
         <module>el</module>
         <module>elDecoratedFacesContext</module>
         <module>exactMapping</module>
+        <module>faceletCacheFactory</module>
         <module>faceletResourceResolver</module>
         <module>faceletResourceResolver2</module>
         <module>facelets</module>
