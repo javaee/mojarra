@@ -60,7 +60,6 @@
     <property name="applications-for-V3.1_no_cluster-only"
               value="GLASSFISH-11636,
                      GLASSFISH-15985,
-                     GLASSFISH-16847,
                      admingui" />
 
     <property name="container-agnostic-applications" value="" />
