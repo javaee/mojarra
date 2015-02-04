@@ -38,18 +38,14 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest.jsp.config;
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-
-
 public class ConfigITCase extends HtmlUnitFacesITCase {
-
 
     public ConfigITCase(String name) {
         super(name);
