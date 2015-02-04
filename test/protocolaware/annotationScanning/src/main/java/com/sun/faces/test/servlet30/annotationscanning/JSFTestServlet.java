@@ -38,7 +38,7 @@
  * holder.
  */
 
-package org.glassfish.tests.embedded.jsftest;
+package com.sun.faces.test.servlet30.annotationscanning;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;

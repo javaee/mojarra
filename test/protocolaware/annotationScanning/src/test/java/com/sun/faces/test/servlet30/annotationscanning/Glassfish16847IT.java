@@ -38,8 +38,9 @@
  * holder.
  */
 
-package org.glassfish.tests.embedded.jsftest;
+package com.sun.faces.test.servlet30.annotationscanning;
 
+import com.gargoylesoftware.htmlunit.WebClient;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -51,23 +52,43 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import org.junit.After;
+import org.junit.Before;
 
-public class JSFTest {
+public class Glassfish16847IT {
 
+    private String webUrl;
+    private String webUrl2;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webUrl2 = System.getProperty("integration.url.https");
+        webClient = new WebClient();
+    }
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+    
     @Test
     public void testWeb() throws Exception {
 
         disableCertValidation();
 
-        goGet("http://localhost:8080/hellojsf/JSFTestServlet", "Created viewRoot");
+        goGet(webUrl + "JSFTestServlet", "Created viewRoot");
         
         // test non secure access.
-        goGet("http://localhost:8080/hellojsf", "BHAVANI", "SHANKAR", "Mr. X");
+        goGet(webUrl + "faces/index.xhtml", "BHAVANI", "SHANKAR", "Mr. X");
 
         // test secure access.
-        goGet("https://localhost:8181/hellojsf", "BHAVANI", "SHANKAR", "Mr. X");
+        goGet(webUrl2 + "faces/index.xhtml", "BHAVANI", "SHANKAR", "Mr. X");
     }
 
     private static void goGet(String url, String... match) throws Exception {
@@ -80,31 +101,29 @@ public class JSFTest {
                 throw new Exception("Servlet did not return 200 OK response code");
             }
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    uc.getInputStream()));
-            String line = null;
-            boolean[] found = new boolean[match.length];
-
-            int count = 0;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-                for (String m : match) {
-                    int index = line.indexOf(m);
-                    if (index != -1 && count < match.length) {
-                        found[count++] = true;
-                        System.out.println("Found [" + m + "] in the response, index = " + count);
-                        break;
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()))) {
+                String line;
+                boolean[] found = new boolean[match.length];
+                
+                int count = 0;
+                while ((line = in.readLine()) != null) {
+                    System.out.println(line);
+                    for (String m : match) {
+                        int index = line.indexOf(m);
+                        if (index != -1 && count < match.length) {
+                            found[count++] = true;
+                            System.out.println("Found [" + m + "] in the response, index = " + count);
+                            break;
+                        }
                     }
                 }
+                
+                for (boolean f : found) {
+                    Assert.assertTrue(f);
+                }
+                System.out.println("\n***** SUCCESS **** Found all matches in the response.*****\n");
             }
-
-            for (boolean f : found) {
-                Assert.assertTrue(f);
-            }
-            System.out.println("\n***** SUCCESS **** Found all matches in the response.*****\n");
-            in.close();
         } catch (Exception e) {
-            e.printStackTrace();
             throw e;
         }
     }
@@ -112,16 +131,17 @@ public class JSFTest {
     public static void disableCertValidation() {
         // Create a trust manager that does not validate certificate chains
         TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+            @Override
             public X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
 
+            @Override
             public void checkClientTrusted(X509Certificate[] certs, String authType) {
-                return;
             }
 
+            @Override
             public void checkServerTrusted(X509Certificate[] certs, String authType) {
-                return;
             }
         }};
 
@@ -129,8 +149,7 @@ public class JSFTest {
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, trustAllCerts, new SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        } catch (Exception e) {
-            return;
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
         }
     }
 
