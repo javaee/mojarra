@@ -62,8 +62,8 @@ public final class MDSFaceletCache
   }
 
   @Override
-  public void setMemberFactoriesPublic(MemberFactory faceletFactory, MemberFactory viewMetadataFaceletFactory) {
-      _defaultFaceletCache.setMemberFactoriesPublic(faceletFactory, viewMetadataFaceletFactory); 
+  public void setCacheFactories(MemberFactory faceletFactory, MemberFactory viewMetadataFaceletFactory) {
+      _defaultFaceletCache.setCacheFactories(faceletFactory, viewMetadataFaceletFactory); 
   }
 
   @Override

@@ -161,7 +161,7 @@ public abstract class FaceletCache<V> {
 
      * @throws NullPointerException if either argument is <code>null</code>
      */
-    public void setMemberFactoriesPublic(MemberFactory<V> faceletFactory,
+    public void setCacheFactories(MemberFactory<V> faceletFactory,
             MemberFactory<V> viewMetadataFaceletFactory) {
         this.setMemberFactories(faceletFactory, viewMetadataFaceletFactory);
     }

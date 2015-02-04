@@ -80,8 +80,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 
 import java.util.List;
@@ -91,10 +89,12 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.view.facelets.FaceletException;
 
 
 /**
@@ -207,7 +207,7 @@ public class DefaultFaceletFactory {
                 }
             };
         
-        cache.setMemberFactoriesPublic(faceletFactory, metadataFaceletFactory);
+        cache.setCacheFactories(faceletFactory, metadataFaceletFactory);
         return cache;
     }
 
