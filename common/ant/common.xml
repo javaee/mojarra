@@ -222,7 +222,7 @@
 
     <!-- this is hard coded to match the values in ${basedir}/jsf-tools/pom.xml -->
     <property name="jsf-tools.jar" 
-              value="${maven.repo.local}/com/sun/faces/build/jsf-tools/${snapshot.version}/jsf-tools-${snapshot.version}.jar" />
+		value="${maven.repo.local}/com/sun/faces/build/jsf-tools/${impl.version.number}/jsf-tools-${impl.version.number}.jar" />
 
     <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">
