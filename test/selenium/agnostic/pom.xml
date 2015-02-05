@@ -47,7 +47,7 @@
     <parent>
         <groupId>com.sun.faces.test.selenium</groupId>
         <artifactId>pom</artifactId>
-        <version>2.2.10-SNAPSHOT</version>
+        <version>2.2.11-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.selenium.agnostic</groupId>
     <artifactId>pom</artifactId>
