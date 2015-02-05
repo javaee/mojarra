@@ -66,7 +66,7 @@
     </modules>
     <profiles>
          <profile>
-            <id>integration-glassfish-osgi-deploy</id>
+            <id>glassfish-osgi-deploy</id>
             <build>
                 <plugins>
                     <plugin>
@@ -96,11 +96,11 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Glassfish4.1</integration.container.home>
+                <glassfish.osgi.deploy.home>C:/Glassfish4.1</glassfish.osgi.deploy.home>
             </properties>
         </profile>
         <profile>
-            <id>integration-glassfish-osgi-undeploy</id>
+            <id>glassfish-osgi-undeploy</id>
             <build>
                 <plugins>
                     <plugin>
@@ -130,7 +130,7 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.home>C:/Glassfish4.1</integration.container.home>
+                <glassfish.osgi.undeploy.home>C:/Glassfish4.1</glassfish.osgi.undeploy.home>
             </properties>
         </profile>
     </profiles>
