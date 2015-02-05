@@ -42,19 +42,19 @@
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.sun.faces.test.servlet30</groupId>
+    <groupId>com.sun.faces.test.servlet40</groupId>
     <artifactId>pom</artifactId>
     <version>2.3.0-m02-SNAPSHOT</version>
   </parent>
   
-  <groupId>com.sun.faces.test.servlet30</groupId>
+  <groupId>com.sun.faces.test.servlet40</groupId>
   <artifactId>faceletCacheFactory</artifactId>
   <version>2.3.0-m02-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Mojarra ${project.version} - Test - Servlet 3.0 - Facelets - FaceletCacheFactory</name>
 
   <build>
-    <finalName>test-servlet30-facelets-faceletCacheFactory</finalName>
+    <finalName>test-servlet40-facelets-faceletCacheFactory</finalName>
   </build>
   
     

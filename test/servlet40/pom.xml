@@ -63,6 +63,7 @@
     </dependencies>
     <modules>
         <module>el</module>
+        <module>faceletCacheFactory</module>
         <module>systemEvent</module>
     </modules>
 </project>
