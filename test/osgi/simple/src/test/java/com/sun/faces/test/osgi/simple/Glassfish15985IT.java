@@ -37,41 +37,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.osgi.simple;
 
-package com.sun.faces.i_gf_15985_htmlunit;
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+public class Glassfish15985IT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-public class IssueGlassFish15985TestCase extends HtmlUnitFacesTestCase {
-
-    public IssueGlassFish15985TestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(IssueGlassFish15985TestCase.class));
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
-    public void testBasicAppFunctionality() throws Exception {
-        
-        HtmlPage page = getPageWithRetry("/", 10);
-        
+    @Test
+    public void testOSGi() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
         String text = page.asText();
         assertTrue(text.matches("(?s).*Hello\\s*from\\s*CDI.*Hello\\s*from\\s*JSF.*"));
-
     }
-
-
 }
