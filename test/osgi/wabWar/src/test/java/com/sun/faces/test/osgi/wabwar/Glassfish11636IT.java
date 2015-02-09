@@ -37,41 +37,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.osgi.wabwar;
 
-package com.sun.faces.i_gf_11636_htmlunit;
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+public class Glassfish11636IT {
+    
+    private String webUrl;
+    private WebClient webClient;
 
-
-public class IssueGlassFish11636TestCase extends HtmlUnitFacesTestCase {
-
-    public IssueGlassFish11636TestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(IssueGlassFish11636TestCase.class));
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
-    public void testBasicAppFunctionality() throws Exception {
-        
-        HtmlPage page = getPageWithRetry("/i_gf_11636.page", 10);
-        
+    @Test
+    public void testPage() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "i_gf_11636.page");   
         String text = page.asText();
         assertTrue(text.matches("(?s).*bean:\\s*bar.*"));
-
     }
-
-
 }
