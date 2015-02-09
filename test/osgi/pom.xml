@@ -84,11 +84,14 @@
                                 <configuration>
                                     <target>
                                         <echo>=== Deploying ${project.build.finalName} ===</echo>
+                                        <echo file="${glassfish.osgi.deploy.home}/password.txt" append="false">
+AS_ADMIN_PASSWORD=adminadmin                                           
+                                        </echo>
                                         <exec executable="${glassfish.osgi.deploy.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="deploy --force --domain cargo-domain --osgi ${project.build.directory}/${project.build.finalName}.war"/>
+                                            <arg line="deploy --force --passwordfile ${glassfish.osgi.deploy.home}/password.txt --domain cargo-domain --osgi ${project.build.directory}/${project.build.finalName}.war"/>
                                         </exec>
                                         <exec executable="${glassfish.osgi.deploy.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="deploy --force --domain cargo-domain --osgi ${project.build.directory}/${project.build.finalName}.war"/>
+                                            <arg line="deploy --force --passwordfile ${glassfish.osgi.deploy.home}/password.txt --domain cargo-domain --osgi ${project.build.directory}/${project.build.finalName}.war"/>
                                         </exec>
                                     </target>
                                 </configuration>
