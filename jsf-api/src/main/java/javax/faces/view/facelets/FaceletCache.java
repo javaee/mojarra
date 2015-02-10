@@ -46,8 +46,9 @@ import java.net.URL;
 
 
 /**
- * <p class="changed_added_2_1">This API defines the facility by which
- * the Facelets {@link javax.faces.view.ViewDeclarationLanguage}
+ * <p class="changed_added_2_1"><span
+ * class="changed_modified_2_3">This</span> API defines the facility by
+ * which the Facelets {@link javax.faces.view.ViewDeclarationLanguage}
  * creates and caches instances of Facelets.</p>
 
  * <p class="changed_added_2_1">The cache handles two different kinds of
@@ -145,7 +146,7 @@ public abstract class FaceletCache<V> {
 
     /**
      * 
-     * <p class="changed_added_2_2">This must be called by the runtime
+     * <p class="changed_added_2_3">This must be called by the runtime
      * at startup time, before any requests are serviced, and allows for
      * the <code>FaceletCache</code> implementation to provide the
      * {@link MemberFactory} instances that will be used to create
@@ -160,6 +161,8 @@ public abstract class FaceletCache<V> {
      * Facelets.
 
      * @throws NullPointerException if either argument is <code>null</code>
+
+     * @since 2.3
      */
     public void setCacheFactories(MemberFactory<V> faceletFactory,
             MemberFactory<V> viewMetadataFaceletFactory) {
