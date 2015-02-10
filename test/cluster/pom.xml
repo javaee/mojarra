@@ -159,6 +159,9 @@
                                 <configuration>
                                     <target>
                                         <echo>=== Starting ${integration.container.cluster.domain} ===</echo>
+                                        <exec executable="chmod" osfamily="unix">
+                                            <arg line="a+x ${integration.container.home}/glassfish/lib/nadmin"/>
+                                        </exec>
                                         <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
                                             <arg line="start-domain ${integration.container.cluster.domain}"/>
                                         </exec>
