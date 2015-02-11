@@ -55,6 +55,10 @@
         <param-value>${webapp.stateSavingMethod}</param-value>
     </context-param>
     <context-param>
+        <param-name>javax.faces.SERIALIZE_SERVER_STATE</param-name>
+        <param-value>${webapp.serializeServerState}</param-value>
+    </context-param>
+    <context-param>
         <param-name>com.sun.faces.namespaceParameters</param-name>
         <param-value>true</param-value>
     </context-param>
