@@ -62,6 +62,7 @@
         </dependency>
     </dependencies>    
     <modules>
+        <module>admingui</module>
         <module>bundle22</module>
         <module>facelets</module>
         <module>request_char_encoding</module>
