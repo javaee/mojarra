@@ -37,13 +37,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest.tags;
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import java.util.List;
 import java.util.ArrayList;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.Test;
@@ -52,7 +50,8 @@ import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Validate new EL features such as the component implicit object
@@ -63,7 +62,6 @@ public class EventITCase extends HtmlUnitFacesITCase {
         super(name);
     }
 
-
     /**
      * Set up instance variables required by this test case.
      */
@@ -71,14 +69,12 @@ public class EventITCase extends HtmlUnitFacesITCase {
         super.setUp();
     }
 
-
     /**
      * Return the tests included in this test suite.
      */
     public static Test suite() {
         return (new TestSuite(EventITCase.class));
     }
-
 
     /**
      * Tear down instance variables required by this test case.
@@ -88,8 +84,6 @@ public class EventITCase extends HtmlUnitFacesITCase {
     }
 
     // ------------------------------------------------------------ Test Methods
-
-
     public void testValidEvents() throws Exception {
         HtmlPage page = getPage("/faces/eventTag.xhtml");
         List<HtmlSpan> outputs = new ArrayList<HtmlSpan>(4);
@@ -115,17 +109,16 @@ public class EventITCase extends HtmlUnitFacesITCase {
 
     }
 
-
     public void testInvalidEvent() throws Exception {
         try {
             getPage("/faces/eventTagInvalid.xhtml");
-            fail ("An exception should be thrown for an invalid event name in Development mode");
+            fail("An exception should be thrown for an invalid event name in Development mode");
         } catch (FailingHttpStatusCodeException fail) {
             //
         }
     }
 
-    public static void main (String... args) {
+    public static void main(String... args) {
         try {
             EventITCase etc = new EventITCase("foo");
             etc.setUp();
@@ -138,8 +131,6 @@ public class EventITCase extends HtmlUnitFacesITCase {
     }
 
     // --------------------------------------------------------- Private Methods
-
-
     private void validateOutput(List<HtmlSpan> outputs) {
 
         HtmlSpan s;
