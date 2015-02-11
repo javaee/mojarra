@@ -99,12 +99,7 @@
     </macrodef>
 
     <target name="clean"
-            description="Clean build and distribution directories">       
-        <subant target="clean" inheritAll="false">
-          <filelist dir="${regression.test.dir}">
-            <file name="build.xml"/>
-          </filelist>
-        </subant>
+            description="Clean build and distribution directories">
         <delete file="mojarra-samples.zip"/>
         <delete dir="${basedir}/build"/>
         <delete dir="${dist.dir}"/>
@@ -144,12 +139,6 @@
 
     <target name="test" description="Run API, Impl, and Demo automated tests">
         <call.modules target="test"/>
-        <subant target="test" inheritAll="false" failonerror="true">
-          <filelist dir="${regression.test.dir}">
-              <file name="build.xml"/>
-          </filelist>
-        </subant>
-
     </target>
 
     <target name="test.with.cactus.tests" description="Run API, Impl, and Demo automated tests">
@@ -160,12 +149,6 @@
             <file name="build.xml"/>
           </filelist>
         </subant>
-        <subant target="test" inheritAll="false" failonerror="true">
-          <filelist dir="${regression.test.dir}">
-              <file name="build.xml"/>
-          </filelist>
-        </subant>
-
     </target>
 
 
