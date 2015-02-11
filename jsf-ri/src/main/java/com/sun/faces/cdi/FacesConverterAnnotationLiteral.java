@@ -50,7 +50,7 @@ import javax.faces.convert.FacesConverter;
  * the BeanManager API.
  * </p>
  */
-class CdiConverterAnnotation
+class FacesConverterAnnotationLiteral
         extends AnnotationLiteral<FacesConverter>
         implements FacesConverter {
 
@@ -75,7 +75,7 @@ class CdiConverterAnnotation
      * @param value the value attribute.
      * @param forClass the forClass attribute.
      */
-    public CdiConverterAnnotation(String value, Class forClass) {
+    public FacesConverterAnnotationLiteral(String value, Class forClass) {
         this.value = value;
         this.forClass = forClass;
     }

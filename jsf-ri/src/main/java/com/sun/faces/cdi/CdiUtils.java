@@ -39,7 +39,8 @@
  */
 package com.sun.faces.cdi;
 
-import java.util.Set;
+import java.lang.annotation.Annotation;
+
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.component.behavior.Behavior;
@@ -49,7 +50,7 @@ import javax.faces.validator.Validator;
 /**
  * A static utility class for CDI.
  */
-public class CdiUtils {
+public final class CdiUtils {
 
     /**
      * Constructor.
@@ -65,18 +66,19 @@ public class CdiUtils {
      * @return the converter, or null if we could not match one.
      */
     public static Converter createConverter(BeanManager beanManager, String value) {
-        Converter result = null;
-        CdiConverterAnnotation annotation = new CdiConverterAnnotation(value, Object.class);
-        Set<Bean<?>> beanSet = beanManager.getBeans(Converter.class, annotation);
-        if (!beanSet.isEmpty()) {
-            Bean<?> bean = beanManager.resolve(beanSet);
-            if (bean != null) {
-                result = new CdiConverter(value, Object.class, (Converter) beanManager.
-                        getReference(bean, Converter.class,
-                                beanManager.createCreationalContext(bean)));
-            }
+        Converter delegatingConverter = null;
+        
+        Converter managedConverter = getBeanReference(
+            beanManager,
+            Converter.class,
+            new FacesConverterAnnotationLiteral(value, Object.class)
+        );
+        
+        if (managedConverter != null) {
+            delegatingConverter = new CdiConverter(value, Object.class, managedConverter);
         }
-        return result;
+       
+        return delegatingConverter;
     }
 
     /**
@@ -87,18 +89,19 @@ public class CdiUtils {
      * @return the converter, or null if we could not match one.
      */
     public static Converter createConverter(BeanManager beanManager, Class forClass) {
-        Converter result = null;
-        CdiConverterAnnotation annotation = new CdiConverterAnnotation("", forClass);
-        Set<Bean<?>> beanSet = beanManager.getBeans(Converter.class, annotation);
-        if (!beanSet.isEmpty()) {
-            Bean<?> bean = beanManager.resolve(beanSet);
-            if (bean != null) {
-                result = new CdiConverter("", forClass, (Converter) beanManager.
-                        getReference(bean, Converter.class,
-                                beanManager.createCreationalContext(bean)));
-            }
+        Converter delegatingConverter = null;
+        
+        Converter managedConverter = getBeanReference(
+            beanManager,
+            Converter.class,
+            new FacesConverterAnnotationLiteral("", forClass)
+        );
+        
+        if (managedConverter != null) {
+            delegatingConverter = new CdiConverter("", forClass, managedConverter);
         }
-        return result;
+       
+        return delegatingConverter;
     }
 
     /**
@@ -109,18 +112,19 @@ public class CdiUtils {
      * @return the behavior, or null if we could not match one.
      */
     public static Behavior createBehavior(BeanManager beanManager, String value) {
-        Behavior result = null;
-        CdiBehaviorAnnotation annotation = new CdiBehaviorAnnotation(value);
-        Set<Bean<?>> beanSet = beanManager.getBeans(Behavior.class, annotation);
-        if (!beanSet.isEmpty()) {
-            Bean<?> bean = beanManager.resolve(beanSet);
-            if (bean != null) {
-                result = new CdiBehavior(value, (Behavior) beanManager.
-                        getReference(bean, Behavior.class,
-                                beanManager.createCreationalContext(bean)));
-            }
+        Behavior delegatingBehavior = null;
+        
+        Behavior managedBehavior = getBeanReference(
+            beanManager,
+            Behavior.class,
+            new FacesBehaviorAnnotationLiteral(value)
+        );
+        
+        if (managedBehavior != null) {
+            delegatingBehavior = new CdiBehavior(value, managedBehavior);
         }
-        return result;
+        
+        return delegatingBehavior;
     }
     
     /**
@@ -131,17 +135,40 @@ public class CdiUtils {
      * @return the validator, or null if we could not match one.
      */
     public static Validator createValidator(BeanManager beanManager, String value) {
-        Validator result = null;
-        CdiValidatorAnnotation annotation = new CdiValidatorAnnotation(value);
-        Set<Bean<?>> beanSet = beanManager.getBeans(Validator.class, annotation);
-        if (!beanSet.isEmpty()) {
-            Bean<?> bean = beanManager.resolve(beanSet);
-            if (bean != null) {
-                result = new CdiValidator(value, (Validator) beanManager.
-                        getReference(bean, Validator.class,
-                                beanManager.createCreationalContext(bean)));
-            }
+        
+        Validator delegatingValidator = null;
+        
+        Validator managedValidator = getBeanReference(
+            beanManager,
+            Validator.class,
+            new FacesValidatorAnnotationLiteral(value)
+        );
+        
+        if (managedValidator != null) {
+            delegatingValidator = new CdiValidator(value, managedValidator);
         }
-        return result;
+    
+        return delegatingValidator;
+    }
+    
+    /**
+     * 
+     * @param beanManager the bean manager
+     * @param type the required bean type the reference must have
+     * @param qualifier the required qualifiers the reference must have
+     * @return a bean reference adhering to the required type and qualifiers
+     */
+    public static <T> T getBeanReference(BeanManager beanManager, Class<T> type, Annotation qualifier) {
+        
+        Object beanReference = null;
+              
+        Bean<?> bean = beanManager.resolve(beanManager.getBeans(type, qualifier));
+        if (bean != null) {
+            beanReference = beanManager.getReference(
+                bean, type, beanManager.createCreationalContext(bean)
+            );
+        }
+                
+        return type.cast(beanReference);
     }
 }

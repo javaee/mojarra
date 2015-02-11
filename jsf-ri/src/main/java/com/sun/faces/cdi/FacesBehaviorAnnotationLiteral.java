@@ -40,7 +40,7 @@
 package com.sun.faces.cdi;
 
 import javax.enterprise.util.AnnotationLiteral;
-import javax.faces.validator.FacesValidator;
+import javax.faces.component.behavior.FacesBehavior;
 
 /**
  * A helper class.
@@ -50,14 +50,14 @@ import javax.faces.validator.FacesValidator;
  * the BeanManager API.
  * </p>
  */
-class CdiValidatorAnnotation
-        extends AnnotationLiteral<FacesValidator>
-        implements FacesValidator {
+class FacesBehaviorAnnotationLiteral
+        extends AnnotationLiteral<FacesBehavior>
+        implements FacesBehavior {
 
     /**
      * Stores the serial version UID.
      */
-    private static final long serialVersionUID = -6266044469152347882L;
+    private static final long serialVersionUID = -258069073667018312L;
     
     /**
      * Stores the value.
@@ -68,9 +68,8 @@ class CdiValidatorAnnotation
      * Constructor.
      *
      * @param value the value.
-     * @param defaultValue the default value.
      */
-    public CdiValidatorAnnotation(String value) {
+    public FacesBehaviorAnnotationLiteral(String value) {
         this.value = value;
     }
 
@@ -82,16 +81,6 @@ class CdiValidatorAnnotation
     @Override
     public String value() {
         return value;
-    }
-
-    /**
-     * Is default.
-     *
-     * @return false.
-     */
-    @Override
-    public boolean isDefault() {
-        return false;
     }
 
     /**
