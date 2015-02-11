@@ -157,7 +157,6 @@ More specific testing
 Testing using other servers
 ===========================
 
-  Please see README-Tomcat.txt file for using Tomcat.
   Please see README-Weblogic.text for using Weblogic.
 
 Pitfalls
@@ -177,22 +176,24 @@ Pitfalls
 Function of sub-directories in top-level test directory
 =======================================================
 
- * agnostic - Application server agnostic tests (do not put any new projects in here).
- * cluster - Cluster specific tests.
- * glassfish - Glassfish specific tests.
- * groovy - Groovy specific tests.
- * javaee6 - JavaEE 6 specific tests.
- * javaee6web - JavaEE 6 Web-Profile specific tests.
- * javaee7 - JavaEE 7 specific tests.
- * performance - Performance related tests.
- * protocolaware - Protocol-aware tests (HTTP(S) switching related).
- * quality - Quality project that tracks source code quality.
- * selenium - Selenium tests.
- * servlet30 - Servlet 3.0 specific tests.
- * servlet31 - Servlet 3.1 specific tests.
- * unit - Unit tests.
- * util - Utililty JAR project for use by test projects.
- * web-profile - JavaEE 6 Web-Profile specific tests (do not put any new projects in here).
- * weblogic - Weblogic specific tests.
+ * agnostic         - Application server agnostic tests (do not put any new projects in here).
+ * cluster          - Cluster specific tests.
+ * glassfish        - Glassfish specific tests.
+ * groovy           - Groovy specific tests.
+ * javaee6          - JavaEE 6 specific tests.
+ * javaee6web       - JavaEE 6 Web-Profile specific tests.
+ * javaee7          - JavaEE 7 specific tests.
+ * javaee8          - JavaEE 8 specific tests.
+ * osgi             - Glassfish OSGi specific tests.
+ * performance      - Performance related tests.
+ * protocolaware    - Protocol-aware tests (HTTP(S) switching related).
+ * quality          - Quality project that tracks source code quality.
+ * selenium         - Selenium tests.
+ * servlet30        - Servlet 3.0 specific tests.
+ * servlet31        - Servlet 3.1 specific tests.
+ * servlet40        - Servlet 4.0 specific tests.
+ * unit             - Unit tests.
+ * util             - Utililty JAR project for use by test projects.
+ * weblogic         - Weblogic specific tests.
 
 --END
