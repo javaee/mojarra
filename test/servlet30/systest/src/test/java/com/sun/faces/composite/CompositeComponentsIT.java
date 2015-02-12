@@ -193,4 +193,17 @@ public class CompositeComponentsIT {
         assertNotNull(input);
         return (HtmlPage) input.click();
     }
+    
+    /**
+     * Added for issue 1298.
+     */
+    @Test
+    @Ignore
+    public void testMethodExpressionNesting() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/composite/nesting08.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
+        assertNotNull(button);
+        page = button.click();
+        assertTrue(page.asText().contains("Action invoked"));
+    }
 }
