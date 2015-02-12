@@ -129,37 +129,28 @@ public class Spec745IT {
     @Test
     public void testType8() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attribute/attributeType.xhtml?test=typedXunset");
-        if (!(page.asXml().contains("Partial State Saving: false")
-                && page.asXml().contains("State Saving Method: client"))) {
-            assertTrue(page.asXml().contains("type of @typedXunset: Dog"));
-            HtmlElement button = (HtmlElement) page.getElementById("form:submit");
-            page = button.click();
-            assertTrue(page.asXml().contains("type of @typedXunset: Dog"));
-        }
+        assertTrue(page.asXml().contains("type of @typedXunset: Dog"));
+        HtmlElement button = (HtmlElement) page.getElementById("form:submit");
+        page = button.click();
+        assertTrue(page.asXml().contains("type of @typedXunset: Dog"));
     }
 
     @Test
     public void testType9() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attribute/attributeType.xhtml?test=typedXliteral");
-        if (!(page.asXml().contains("Partial State Saving: false")
-                && page.asXml().contains("State Saving Method: client"))) {
-            assertTrue(page.asXml().contains("type of @typedXliteral: Integer"));
-            HtmlElement button = (HtmlElement) page.getElementById("form:submit");
-            page = button.click();
-            assertTrue(page.asXml().contains("type of @typedXliteral: Integer"));
-        }
+        assertTrue(page.asXml().contains("type of @typedXliteral: Integer"));
+        HtmlElement button = (HtmlElement) page.getElementById("form:submit");
+        page = button.click();
+        assertTrue(page.asXml().contains("type of @typedXliteral: Integer"));
     }
 
     @Test
     public void testType10() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attribute/attributeType.xhtml?test=typedXwideEL");
-        if (!(page.asXml().contains("Partial State Saving: false")
-                && page.asXml().contains("State Saving Method: client"))) {
-            assertTrue(page.asXml().contains("type of @typedXwideEL: Dog"));
-            HtmlElement button = (HtmlElement) page.getElementById("form:submit");
-            page = button.click();
-            assertTrue(page.asXml().contains("type of @typedXwideEL: Dog"));
-        }
+        assertTrue(page.asXml().contains("type of @typedXwideEL: Dog"));
+        HtmlElement button = (HtmlElement) page.getElementById("form:submit");
+        page = button.click();
+        assertTrue(page.asXml().contains("type of @typedXwideEL: Dog"));
     }
 
     @Test
@@ -192,12 +183,9 @@ public class Spec745IT {
     @Test
     public void testType14() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/attribute/attributeType.xhtml?test=typedXsetByApi");
-        if (!(page.asXml().contains("Partial State Saving: false")
-                && page.asXml().contains("State Saving Method: client"))) {
-            assertTrue(page.asXml().contains("type of @typedXsetByApi: Dog"));
-            HtmlElement button = (HtmlElement) page.getElementById("form:submit");
-            page = button.click();
-            assertTrue(page.asXml().contains("type of @typedXsetByApi: Dog"));
-        }
+        assertTrue(page.asXml().contains("type of @typedXsetByApi: Dog"));
+        HtmlElement button = (HtmlElement) page.getElementById("form:submit");
+        page = button.click();
+        assertTrue(page.asXml().contains("type of @typedXsetByApi: Dog"));
     }
 }
