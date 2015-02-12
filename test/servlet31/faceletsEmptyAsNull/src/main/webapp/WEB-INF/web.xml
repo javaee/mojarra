@@ -58,6 +58,10 @@
         <param-value>${webapp.stateSavingMethod}</param-value>
     </context-param>
     <context-param>
+        <param-name>javax.faces.SERIALIZE_SERVER_STATE</param-name>
+        <param-value>${webapp.serializeServerState}</param-value>
+    </context-param>
+    <context-param>
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
         <param-value>true</param-value>
     </context-param>
