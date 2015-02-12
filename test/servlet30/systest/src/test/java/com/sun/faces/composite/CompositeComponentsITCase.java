@@ -165,23 +165,6 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
         
     }
 
-
-    /**
-     * <p>
-     *  Maps Validator to inputText within composite/validator1.xhtml using
-     *   only the name attribute.
-     * </p>
-     */
-    public void testValidator1() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
-        validateValidatorMessagePresent(page,
-                                        "form:s1",
-                                        "form:validator1:input");
-
-    }
-
-
     /**
      * <p>
      *   Maps Validator to inputText within composite/validator2.xhtml using

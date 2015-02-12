@@ -40,16 +40,24 @@
 package com.sun.faces.composite;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
+import java.util.List;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.fail;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class CompositeComponentsIT {
+
     private String webUrl;
     private WebClient webClient;
 
@@ -95,10 +103,10 @@ public class CompositeComponentsIT {
         page = submit.click();
         assertTrue(page.asText().contains("ValueChange invoked"));
     }
-    
+
     /**
      * Added for issue 1255.
-     * 
+     *
      * @throws Exception when an error occurs.
      */
     @Test
@@ -131,5 +139,58 @@ public class CompositeComponentsIT {
         submit = (HtmlSubmitInput) page.getHtmlElementById("nesting10:nesting6:nesting7:form5:command");
         page = submit.click();
         assertTrue(page.asText().contains("ValueChange invoked"));
+    }
+
+    /**
+     * <p>
+     * Maps Validator to inputText within composite/validator1.xhtml using only
+     * the name attribute.
+     * </p>
+     */
+    @Test
+    @Ignore
+    public void testValidator1() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/composite/attachedvalidator.xhtml");
+        validateValidatorMessagePresent(page,
+                "form:s1",
+                "form:validator1:input");
+    }
+
+    private void validateValidatorMessagePresent(HtmlPage page, String commandId, String inputId)
+            throws Exception {
+        page = pushButton(page, commandId);
+        validateMessage(page, "Validator Invoked", inputId);
+    }
+
+    private void validateMessage(HtmlPage page,
+            String messagePrefix,
+            String messageSuffix) {
+
+        List<HtmlUnorderedList> list = page.getBody().getHtmlElementsByTagName("ul");
+        HtmlUnorderedList ulist = list.get(0);
+        assertEquals("messages", ulist.getId());
+        int count = 0;
+        String message = (messagePrefix + " : " + messageSuffix);
+        for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+            if (count > 1) {
+                fail("Expected only one message to be displayed");
+            }
+            count++;
+            assertTrue(e instanceof HtmlListItem);
+            assertEquals(message, message, e.asText());
+        }
+
+        if (list.size() == 2) {
+            ulist = list.get(1);
+            for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+                fail("Messages have been redisplayed");
+            }
+        }
+    }
+
+    private HtmlPage pushButton(HtmlPage page, String commandId) throws Exception {
+        HtmlSubmitInput input = (HtmlSubmitInput) page.getHtmlElementById(commandId);
+        assertNotNull(input);
+        return (HtmlPage) input.click();
     }
 }
