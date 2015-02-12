@@ -44,10 +44,10 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_2"><strong>FlowHandler</strong> is the main
- * entry point that enables the runtime to interact with the faces flows
- * feature.  {@link
- * javax.faces.application.NavigationHandler} uses this
+ * <p class="changed_added_2_2"><strong
+ * class="changed_modified_2_3">FlowHandler</strong> is the main entry
+ * point that enables the runtime to interact with the faces flows
+ * feature.  {@link javax.faces.application.NavigationHandler} uses this
  * class when it needs to make navigational decisions related to flows.
  * The faces flow feature entirely depends on the {@link
  * javax.faces.lifecycle.ClientWindow} feature and also on CDI.</p>
@@ -75,7 +75,20 @@ import javax.faces.context.FacesContext;
  * current {@link javax.faces.lifecycle.ClientWindow}.  Furthermore,
  * Flows may be nested.  These requirements strongly suggest managing
  * the flows with a stack-like runtime data structure, stored in a
- * per-user fashion and associated with the {@code ClientWindow}.</p>
+ * per-user fashion and associated with the {@code ClientWindow}.  <span
+ * class="changed_added_2_3">Because Flow instances are immutable,
+ * yet the flow stack is per-user, implementations must make allowance
+ * for flow scoped data (managed beans declared to be {@link FlowScoped}
+ * and data stored in the <code>Map</code> returned by {@link
+ * #getCurrentFlowScope}) to be fully re-entrant.  For example, consider
+ * an application with two flows, A and B, each with a single
+ * <code>FlowScoped</code> bean <code>MyBeanA</code> and
+ * <code>MyBeanB</code>, respectively.  Entry into flow A causes
+ * <code>MyBeanA</code> to become active.  Calling from A into B causes
+ * <code>MyBeanB</code> to become active.  Calling back into A causes a
+ * new instance of <code>MyBeanA</code> to become active, rather than
+ * reactivating the earlier instance of <code>MyBeanA</code>.
+ * </span></p>
 
  * <p><strong>The Flow Graph</strong></p>
 

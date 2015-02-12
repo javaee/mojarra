@@ -1868,8 +1868,8 @@ private void doFind(FacesContext context, String clientId) {
       return elStack;
     }
     
-    // bugdb 18090503 
-    
+    // bugdb 18090503
+
     /*
      * Respecting the fact that someone may have decorated FacesContextFactory
      * and thus skipped our saving of this init param, look for the init
