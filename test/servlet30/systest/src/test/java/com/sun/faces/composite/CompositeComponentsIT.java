@@ -206,4 +206,19 @@ public class CompositeComponentsIT {
         page = button.click();
         assertTrue(page.asText().contains("Action invoked"));
     }
+
+    //issue 1696
+    @Test
+    @Ignore
+    public void testForNoNPE() throws Exception {
+//        HtmlPage page = getPage("/faces/composite/simpleCompositeComponentUsingPage.xhtml");
+//        List list = getAllElementsOfGivenClass(page, null,
+//                HtmlSubmitInput.class);
+//        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+//        page = (HtmlPage) button.click();
+//        String pageAsText = page.asText();
+//        assertTrue(pageAsText.contains("Unable to find matching navigation case with from-view-id " +
+//                "'/composite/simpleCompositeComponentUsingPage.xhtml' for action '#{hello.getNextAction}' " +
+//                "with outcome '/submit.xhtml'"));
+    }
 }
