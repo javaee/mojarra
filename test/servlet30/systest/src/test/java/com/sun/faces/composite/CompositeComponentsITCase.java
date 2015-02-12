@@ -973,12 +973,19 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
         assertTrue(text.contains("<ez:required01>"));
         assertTrue(text.contains("The following attribute(s) are required, but no values have been supplied for them: table."));
     }
-    
+
+    /*
+     * Because this test relies on a message added by the runtime that only happens
+     * during ProjectStage.Development this test should only be executed on 
+     * ProjectStage.Development.
+     */
     public void testMissingRequiredFacet() throws Exception {
         client.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/requiredFacet.xhtml");
         String text = page.asText();
-        assertTrue(text.contains("The following facets(s) are required, but no facets have been supplied for them: table."));
+        if (page.asXml().contains("Development")) {
+            assertTrue(text.contains("The following facets(s) are required, but no facets have been supplied for them: table."));
+        }
     }
 
     public void testDefaultAttributeValueELOverrides() throws Exception {
