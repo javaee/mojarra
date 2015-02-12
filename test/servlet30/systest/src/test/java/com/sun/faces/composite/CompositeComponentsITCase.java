@@ -521,43 +521,6 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
         
     }
 
-
-    /**
-     * Added for issue 1255.
-     */
-    public void testNesting08() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/nesting06.xhtml");
-        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting10:nesting6:nesting7:form1:command");
-        page = submit.click();
-        assertTrue(page.asText().contains("Action invoked"));
-
-        page = getPage("/faces/composite/nesting06.xhtml");
-        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting10:nesting6:nesting7:form2:command2");
-        page = submit.click();
-        assertTrue(page.asText().contains("ActionListener invoked"));
-
-        page = getPage("/faces/composite/nesting06.xhtml");
-        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting10:nesting6:nesting7:form3:command3");
-        page = submit.click();
-        assertTrue(page.asText().contains("Custom action invoked"));
-
-        page = getPage("/faces/composite/nesting06.xhtml");
-        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting10:nesting6:nesting7:form4:command");
-        HtmlTextInput text = (HtmlTextInput) getInputContainingGivenId(page, "nesting10:nesting6:nesting7:form4:input");
-        text.setValueAttribute("foo");
-        page = submit.click();
-        assertTrue(page.asText().contains("validator invoked"));
-
-        page = getPage("/faces/composite/nesting06.xhtml");
-        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting10:nesting6:nesting7:form5:command");
-        page = submit.click();
-        assertTrue(page.asText().contains("ValueChange invoked"));
-
-    }
-    
-
-
     public void testChildrenAndFacets() throws Exception {
 
         HtmlPage page = getPage("/faces/composite/childrenfacets.xhtml");
@@ -764,9 +727,9 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
     }
 
     public void testMetadataCache() throws Exception {
-//        HtmlPage page = getPage("/faces/composite/boostrapCompositeComponentMetadata.xhtml");
-//        String text = page.asText();
-//        assertTrue(text.contains("First call longer than second call"));
+        HtmlPage page = getPage("/faces/composite/boostrapCompositeComponentMetadata.xhtml");
+        String text = page.asText();
+        assertTrue(text.contains("First call longer than second call"));
     }
 
     public void testMethodExprNotRequired() throws Exception {
@@ -908,7 +871,6 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
     /**
      * Added for issue 1298.
      */
-    /*
     public void testMethodExpressionNesting() throws Exception {
 
         HtmlPage page = getPage("/faces/composite/nesting08.xhtml");
@@ -920,7 +882,6 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
         assertTrue(page.asText().contains("Action invoked"));
 
     }
-    */
 
 
     public void testMethodExpressionDefaults() throws Exception {
