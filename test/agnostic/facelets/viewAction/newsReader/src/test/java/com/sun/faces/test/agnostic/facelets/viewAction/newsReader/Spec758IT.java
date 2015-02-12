@@ -53,6 +53,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 /**
  * Test cases for Facelets functionality
@@ -105,6 +106,7 @@ public class Spec758IT {
      * Added for issue 917.
      */
     @Test
+    @Ignore
     public void testViewParameters() throws Exception {
 
         doTestExtensionMapped(0);
