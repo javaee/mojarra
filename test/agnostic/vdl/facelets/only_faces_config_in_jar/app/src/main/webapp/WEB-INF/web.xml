@@ -57,6 +57,10 @@
         <param-value>${webapp.stateSavingMethod}</param-value>
     </context-param>
     <context-param>
+        <param-name>javax.faces.SERIALIZE_SERVER_STATE</param-name>
+        <param-value>${webapp.serializeServerState}</param-value>
+    </context-param>
+    <context-param>
         <param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
         <param-value>3600</param-value>
     </context-param>

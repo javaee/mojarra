@@ -42,31 +42,31 @@
 -->
 
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-  <context-param>
-    <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
-    <param-value>.xhtml</param-value>
-  </context-param>
-  <context-param>
-    <param-name>javax.faces.FACELETS_VIEW_MAPPINGS</param-name>
-    <param-value>*.xhtml</param-value>
-  </context-param>
-  <context-param>
-    <param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
-    <!-- Minimal performance difference -->
-    <param-value>-1</param-value>
-  </context-param>
-  <context-param>
-    <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
-    <param-value>true</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sun.faces.responseBufferSize</param-name>
-    <param-value>500000</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sun.faces.verifyObjects</param-name>
-    <param-value>false</param-value>
-  </context-param>
+    <context-param>
+        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+        <param-value>.xhtml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.FACELETS_VIEW_MAPPINGS</param-name>
+        <param-value>*.xhtml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
+        <!-- Minimal performance difference -->
+        <param-value>-1</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.sun.faces.responseBufferSize</param-name>
+        <param-value>500000</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.sun.faces.verifyObjects</param-name>
+        <param-value>false</param-value>
+    </context-param>
   
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
@@ -80,14 +80,18 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>${webapp.stateSavingMethod}</param-value>
     </context-param>
+    <context-param>
+        <param-name>javax.faces.SERIALIZE_SERVER_STATE</param-name>
+        <param-value>${webapp.serializeServerState}</param-value>
+    </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-      <servlet-name>Faces Servlet</servlet-name>
-      <url-pattern>*.xhtml</url-pattern>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
@@ -97,6 +101,6 @@
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
     <session-config>
-      <session-timeout>5</session-timeout>
+        <session-timeout>5</session-timeout>
     </session-config>
 </web-app>
