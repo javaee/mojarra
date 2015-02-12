@@ -453,39 +453,6 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
         
     }
 
-
-    public void testNesting05() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/nesting05.xhtml");
-        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting6:nesting7:form1:command");
-        page = submit.click();
-        assertTrue(page.asText().contains("Action invoked"));
-
-        page = getPage("/faces/composite/nesting05.xhtml");
-        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting6:nesting7:form2:command2");
-        page = submit.click();
-        assertTrue(page.asText().contains("ActionListener invoked"));
-
-        page = getPage("/faces/composite/nesting05.xhtml");
-        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting6:nesting7:form3:command3");
-        page = submit.click();
-        assertTrue(page.asText().contains("Custom action invoked"));
-
-        page = getPage("/faces/composite/nesting05.xhtml");
-        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting6:nesting7:form4:command");
-        HtmlTextInput text = (HtmlTextInput) getInputContainingGivenId(page, "nesting6:nesting7:form4:input");
-        text.setValueAttribute("foo");
-        page = submit.click();
-        assertTrue(page.asText().contains("validator invoked"));
-
-        page = getPage("/faces/composite/nesting05.xhtml");
-        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting6:nesting7:form5:command");
-        page = submit.click();
-        assertTrue(page.asText().contains("ValueChange invoked"));
-        
-    }
-
-
     public void testNesting06() throws Exception {
         HtmlPage page = getPage("/faces/composite/addPhaseListener.xhtml");
         assertTrue(page.asText().contains("/composite/addPhaseListener.xhtml PASSED"));
