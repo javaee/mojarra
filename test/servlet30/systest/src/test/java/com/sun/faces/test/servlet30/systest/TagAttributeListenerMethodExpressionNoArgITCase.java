@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.methodref;
+package com.sun.faces.test.servlet30.systest;
 
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
@@ -48,6 +48,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import java.io.IOException;
 import junit.framework.Test;
+import static junit.framework.TestCase.assertTrue;
 import junit.framework.TestSuite;
 
 /**

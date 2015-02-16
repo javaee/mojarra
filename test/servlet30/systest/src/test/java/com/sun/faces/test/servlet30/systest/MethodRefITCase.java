@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.methodref;
+package com.sun.faces.test.servlet30.systest;
 
 
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -56,6 +56,9 @@ import junit.framework.TestSuite;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIViewRoot;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 
 /**
