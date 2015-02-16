@@ -138,27 +138,43 @@ public class FlowCDIContext implements Context, Serializable {
      */
     private static class FlowScopeMapHelper {
         // <editor-fold defaultstate="collapsed">  
-        private transient final String flowBeansForClientWindowKey;
-        private transient final String creationalForClientWindowKey;
+        private transient String flowBeansForClientWindowKey;
+        private transient String creationalForClientWindowKey;
         private transient final Map<String, Object> sessionMap;
         
         private FlowScopeMapHelper(FacesContext facesContext) {
             ExternalContext extContext = facesContext.getExternalContext();
             this.sessionMap = extContext.getSessionMap();
+            
+            generateKeyForCDIBeansBelongToAFlow(facesContext);
+        }
+
+        private void generateKeyForCDIBeansBelongToAFlow(FacesContext facesContext) {
+          
             Flow currentFlow = getCurrentFlow(facesContext);
             if (null != currentFlow) {
                 ClientWindow curWindow = facesContext.getExternalContext().getClientWindow();
                 if (null == curWindow) { 
                     throw new IllegalStateException("Unable to obtain current ClientWindow.  Is the ClientWindow feature enabled?");
                 }
+                
                 final String clientWindow = currentFlow.getClientWindowFlowId(curWindow);
                 
-                flowBeansForClientWindowKey = clientWindow + "_beans";
-                creationalForClientWindowKey = clientWindow + "_creational";
+                FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
+                if ( flowHandler instanceof FlowHandlerImpl) {
+                    FlowHandlerImpl flowHandlerImpl = (FlowHandlerImpl)facesContext.getApplication().getFlowHandler();
+                    int currentFlowDepth = flowHandlerImpl.getCurrentFlowDepth(facesContext);
+                    
+                    flowBeansForClientWindowKey = clientWindow +  ":" + currentFlowDepth + "_beans";
+                    creationalForClientWindowKey = clientWindow + ":" + currentFlowDepth + "_creational";
+                } else {
+                    flowBeansForClientWindowKey = clientWindow +  "_beans";
+                    creationalForClientWindowKey = clientWindow +  "_creational";
+                }
+                
             } else {
                 flowBeansForClientWindowKey = creationalForClientWindowKey = null;
             }
-            
         }
         
         private void createMaps() {

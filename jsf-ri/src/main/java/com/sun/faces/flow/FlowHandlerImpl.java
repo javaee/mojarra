@@ -417,6 +417,11 @@ public class FlowHandlerImpl extends FlowHandler {
         
     }
     
+    public int getCurrentFlowDepth(FacesContext context) {
+      FlowDeque<Flow>  flowStack = getFlowStack(context);
+      return flowStack.getCurrentFlowDepth();
+    }
+    
     private void callFinalizer(FacesContext context, Flow currentFlow) {
         MethodExpression me  = currentFlow.getFinalizer();
         if (null != me) {
@@ -450,6 +455,7 @@ public class FlowHandlerImpl extends FlowHandler {
         private static final long serialVersionUID = 7915803727932706270L;
         
         private int returnDepth = 0;
+        private int currentFlowDepth=0;
         private ArrayDeque<E> data;
         private static class RideAlong implements Serializable {
             private static final long serialVersionUID = -1899365746835118058L;
@@ -485,11 +491,16 @@ public class FlowHandlerImpl extends FlowHandler {
         public void addFirst(E e, String lastDisplayedViewId) {
             rideAlong.addFirst(new RideAlong(lastDisplayedViewId));
             data.addFirst(e);
+            currentFlowDepth++;
         }
         
         public E pollFirst() {
             rideAlong.pollFirst();
             return data.pollFirst();
+        }
+        
+        public int getCurrentFlowDepth() {
+          return this.currentFlowDepth;
         }
         
         public E peekFirst() {
@@ -554,6 +565,7 @@ public class FlowHandlerImpl extends FlowHandler {
         public void pushReturnMode() {
             this.incrementMaxReturnDepth();
             this.returnDepth++;
+            this.currentFlowDepth--;
         }
         
         public void popReturnMode() {
