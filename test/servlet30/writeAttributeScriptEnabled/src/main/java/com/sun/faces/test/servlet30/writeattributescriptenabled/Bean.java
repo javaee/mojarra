@@ -38,65 +38,15 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.writeattributescriptenabled;
 
-import java.net.URL;
+public class Bean {
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
-import java.util.List;
+    public String getScriptAttribute() {
+	String result = "javascript:var element = document.getElementById(\"modifiedByScript\");element.innerHTML = \"<b>new value!</b>\";";
 
-public class WriteAttributeScriptEnabledTestCase extends HtmlUnitFacesTestCase {
-
-    public WriteAttributeScriptEnabledTestCase(String name) {
-        super(name);
+	return result;
     }
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(WriteAttributeScriptEnabledTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    public void tearDown() {
-        super.tearDown();
-    }
-    
-    
-    // ------------------------------------------------------------ Test Methods
-    
-    public void testWriteAttributeDisabled() throws Exception {
-        client.setThrowExceptionOnFailingStatusCode(false);
-
-        // HACK: The first request to the page will result in the value
-        // having jsessionid encoded in the link value.  Making a second
-        // request to the page means we've joined the session and the value
-        // will no longer include the jsessionid (at least when cookies are enabled)
-        // and clicking the link will not produce JS errors.
-        HtmlPage page = getPage("/faces/test.jsp");
-        page = getPage("/faces/test.jsp");
-
-        HtmlAnchor link = (HtmlAnchor) page.getAnchors().get(0);
-
-        HtmlPage errorPage = (HtmlPage) link.click();
-        assertTrue(errorPage.asText().indexOf("new value!") >= 0);
-    }
+	  
 }

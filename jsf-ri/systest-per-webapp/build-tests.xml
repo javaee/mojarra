@@ -99,12 +99,8 @@
               value="com/sun/faces/systest/PropertyResolverJspTestCase.class"/>
     <property name="never-unwrap-exceptions"
               value="com/sun/faces/systest/NeverUnwrapExceptionsTestCase.class"/>
-    <property name="write-attribute-script-enabled"
-              value="com/sun/faces/systest/WriteAttributeScriptEnabledTestCase.class"/>
     <property name="write-attribute-script-disabled"
               value="com/sun/faces/systest/WriteAttributeScriptDisabledTestCase.class"/>
-    <property name="write-attribute-script-enabled"
-              value="com/sun/faces/systest/WriteAttributeScriptEnabledTestCase.class"/>
     <property name="disable-unicode-escaping"
               value="com/sun/faces/systest/UnicodeTestCase.class"/>
     <property name="wcag-datatable"
