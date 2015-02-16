@@ -75,10 +75,10 @@ public class FlowHandlerImpl extends FlowHandler {
     private boolean flowFeatureIsEnabled;
 
     // key: definingDocumentId, value: Map<flowId, Flow>
-    private Map<String, Map<String, Flow>> flows;
+    private final Map<String, Map<String, Flow>> flows;
     
     // key: flowId, List<Flow>
-    private Map<String, List<Flow>> flowsByFlowId;
+    private final Map<String, List<Flow>> flowsByFlowId;
 
     @Override
     public Map<Object, Object> getCurrentFlowScope() {
@@ -417,11 +417,6 @@ public class FlowHandlerImpl extends FlowHandler {
         
     }
     
-    public int getCurrentFlowDepth(FacesContext context) {
-      FlowDeque<Flow>  flowStack = getFlowStack(context);
-      return flowStack.getCurrentFlowDepth();
-    }
-    
     private void callFinalizer(FacesContext context, Flow currentFlow) {
         MethodExpression me  = currentFlow.getFinalizer();
         if (null != me) {
@@ -430,7 +425,7 @@ public class FlowHandlerImpl extends FlowHandler {
         FlowCDIContext.flowExited();
     }
     
-    private FlowDeque<Flow> getFlowStack(FacesContext context) {
+    static FlowDeque<Flow> getFlowStack(FacesContext context) {
         FlowDeque<Flow> result = null;
         ExternalContext extContext = context.getExternalContext();
         String sessionKey = extContext.getClientWindow().getId() + "_flowStack";
@@ -450,7 +445,7 @@ public class FlowHandlerImpl extends FlowHandler {
         sessionMap.put(stack.getSessionKey(), stack);
     }
     
-    private static class FlowDeque<E> implements Iterable<E>, Serializable {
+    static class FlowDeque<E> implements Iterable<E>, Serializable {
         
         private static final long serialVersionUID = 7915803727932706270L;
         

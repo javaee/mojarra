@@ -160,17 +160,11 @@ public class FlowCDIContext implements Context, Serializable {
                 
                 final String clientWindow = currentFlow.getClientWindowFlowId(curWindow);
                 
-                FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
-                if ( flowHandler instanceof FlowHandlerImpl) {
-                    FlowHandlerImpl flowHandlerImpl = (FlowHandlerImpl)facesContext.getApplication().getFlowHandler();
-                    int currentFlowDepth = flowHandlerImpl.getCurrentFlowDepth(facesContext);
-                    
-                    flowBeansForClientWindowKey = clientWindow +  ":" + currentFlowDepth + "_beans";
-                    creationalForClientWindowKey = clientWindow + ":" + currentFlowDepth + "_creational";
-                } else {
-                    flowBeansForClientWindowKey = clientWindow +  "_beans";
-                    creationalForClientWindowKey = clientWindow +  "_creational";
-                }
+                FlowHandlerImpl.FlowDeque<Flow> flowStack = FlowHandlerImpl.getFlowStack(facesContext);
+                int currentFlowDepth = (null != flowStack) ? flowStack.getCurrentFlowDepth() : 0;
+                
+                flowBeansForClientWindowKey = clientWindow +  ":" + currentFlowDepth + "_beans";
+                creationalForClientWindowKey = clientWindow + ":" + currentFlowDepth + "_creational";
                 
             } else {
                 flowBeansForClientWindowKey = creationalForClientWindowKey = null;
