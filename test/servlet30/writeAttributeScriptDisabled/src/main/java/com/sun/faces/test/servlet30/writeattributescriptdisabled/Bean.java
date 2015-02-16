@@ -38,60 +38,15 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.writeattributescriptdisabled;
 
-import java.net.URL;
-
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-import java.util.List;
+public class Bean {
 
 
-public class WriteAttributeScriptDisabledTestCase extends HtmlUnitFacesTestCase {
+    public String getScriptAttribute() {
+	String result = "javascript:var element = document.getElementById(\"modifiedByScript\");element.innerHTML = \"<b>new value!</b>\";";
 
-    public WriteAttributeScriptDisabledTestCase(String name) {
-        super(name);
+	return result;
     }
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(WriteAttributeScriptDisabledTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    public void tearDown() {
-        super.tearDown();
-    }
-    
-    
-    // ------------------------------------------------------------ Test Methods
-    
-    public void testWriteAttributeDisabled() throws Exception {
-        client.setThrowExceptionOnFailingStatusCode(false);
-       
-        HtmlPage page = getPage("/faces/test.jsp");
-
-        HtmlAnchor link = (HtmlAnchor) page.getAnchors().get(0);
-
-        HtmlPage errorPage = (HtmlPage) link.click();
-        assertTrue(errorPage.asText().indexOf("new value!") == -1);
-    }
+	  
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,34 +41,13 @@
 
 -->
 
-<web-app version="2.5" 
-         xmlns="http://java.sun.com/xml/ns/javaee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee web-app_2_5.xsd">
-  <description>
-       Webapp to test that script content may not be written as an attribute, by default.
-  </description>
-  <display-name>Write Attribute Script Disabled</display-name>
-  <!-- Validate the Application Configuration Resources -->
-  <context-param>
-        <param-name>com.sun.faces.enableThreading</param-name>
-        <param-value>true</param-value>
-    </context-param>
-  <context-param>
-    <param-name>com.sun.faces.enableScriptsInAttributeValues</param-name>
-    <param-value>false</param-value>
-  </context-param>
-
-  <!-- Faces Servlet -->
-  <servlet>
-    <servlet-name>Faces Servlet</servlet-name>
-    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-    <load-on-startup> 1 </load-on-startup>
-  </servlet>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
+    <managed-bean>
+        <managed-bean-name>bean</managed-bean-name>
+        <managed-bean-class>com.sun.faces.test.servlet30.writeattributescriptdisabled.Bean</managed-bean-class>
     
-  <servlet-mapping>
-    <servlet-name>Faces Servlet</servlet-name>
-    <url-pattern>/faces/*</url-pattern>
-  </servlet-mapping>
-    
-</web-app>
+        <managed-bean-scope>request</managed-bean-scope></managed-bean>
+</faces-config>
