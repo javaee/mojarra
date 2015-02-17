@@ -60,6 +60,7 @@ package com.sun.faces.facelets.tag.composite;
 
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.beans.SimpleBeanInfo;
 import java.io.Externalizable;
@@ -68,6 +69,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.FacesException;
 
 
 public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanInfo, Externalizable {
@@ -107,14 +109,39 @@ public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanIn
     public void writeExternal(ObjectOutput out) throws IOException {
 
         out.writeObject(descriptor.getBeanClass());
-
+        if (propertyDescriptors != null && propertyDescriptors.size() > 0) {
+            out.writeObject(propertyDescriptors.size());
+            for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+                out.writeObject(propertyDescriptor.getName());
+                out.writeObject(propertyDescriptor.getValue("type"));
+            }
+        } else {
+            out.writeObject(0);
+        }
     }
 
 
     public void readExternal(ObjectInput in)
-    throws IOException, ClassNotFoundException {
+            throws IOException, ClassNotFoundException {
 
         descriptor = new BeanDescriptor((Class) in.readObject());
-
+        int size = ((Integer) in.readObject()).intValue();
+        for (int i = 0; i < size; i++) {
+            
+            try {
+                String name = (String) in.readObject();
+                CompositeAttributePropertyDescriptor pd =
+                        new CompositeAttributePropertyDescriptor(name, null, null);
+                
+                Object type = in.readObject();
+                if (type != null) {
+                    pd.setValue("type", type);
+                }
+                
+                getPropertyDescriptorsList().add(pd);
+            } catch (IntrospectionException ex) {
+                throw new FacesException(ex);
+            }
+        }
     }
 }
