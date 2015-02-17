@@ -70,7 +70,7 @@ public class CompositeAttributePropertyDescriptor extends PropertyDescriptor {
 
                     this.setValue(attributeName, result);
                 } catch (ClassNotFoundException ex) {
-                    classStr = "java.lang." + classStr;
+                    classStr = "java.lang." + classStr; // NOPMD
                     boolean throwException = false;
                     try {
                         result = ReflectionUtil.forName(classStr);
