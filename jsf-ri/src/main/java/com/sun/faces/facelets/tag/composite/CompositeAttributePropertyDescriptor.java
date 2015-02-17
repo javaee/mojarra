@@ -60,33 +60,30 @@ public class CompositeAttributePropertyDescriptor extends PropertyDescriptor {
     @Override
     public Object getValue(String attributeName) {
         Object result = super.getValue(attributeName);
-        if ("type".equals(attributeName)) {
-            if ((null != result) && !(result instanceof Class)) {
-                FacesContext context = FacesContext.getCurrentInstance();
-                ELContext elContext = context.getELContext();
-                String classStr = (String) ((ValueExpression) result).getValue(elContext);
-                if (null != classStr) {
+        if ("type".equals(attributeName) && (null != result) && !(result instanceof Class)) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            ELContext elContext = context.getELContext();
+            String classStr = (String) ((ValueExpression) result).getValue(elContext);
+            if (null != classStr) {
+                try {
+                    result = ReflectionUtil.forName(classStr);
+
+                    this.setValue(attributeName, result);
+                } catch (ClassNotFoundException ex) {
+                    classStr = "java.lang." + classStr;
+                    boolean throwException = false;
                     try {
                         result = ReflectionUtil.forName(classStr);
 
                         this.setValue(attributeName, result);
-                    } catch (ClassNotFoundException ex) {
-                        classStr = "java.lang." + classStr;
-                        boolean throwException = false;
-                        try {
-                            result = ReflectionUtil.forName(classStr);
-
-                            this.setValue(attributeName, result);
-                        } catch (ClassNotFoundException ex2) {
-                            throwException = true;
-                        }
-                        if (throwException) {
-                            String message = "Unable to obtain class for " + classStr;
-                            throw new FacesException(message, ex);
-                        }
+                    } catch (ClassNotFoundException ex2) {
+                        throwException = true;
+                    }
+                    if (throwException) {
+                        String message = "Unable to obtain class for " + classStr;
+                        throw new FacesException(message, ex);
                     }
                 }
-
             }
         }
         return result;
