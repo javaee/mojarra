@@ -130,8 +130,8 @@ public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanIn
             
             try {
                 String name = (String) in.readObject();
-                CompositeAttributePropertyDescriptor pd =
-                        new CompositeAttributePropertyDescriptor(name, null, null);
+                CompositeAttributePropertyDescriptor pd = 
+                        new CompositeAttributePropertyDescriptor(name, null, null); // NOPMD
                 
                 Object type = in.readObject();
                 if (type != null) {
