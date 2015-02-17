@@ -77,7 +77,7 @@ import javax.faces.view.ViewMetadata;
 public class MultiViewHandler extends ViewHandler {
 
     // Log instance for this class
-    private static final Logger logger = FacesLogger.APPLICATION.getLogger();
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private String[] configuredExtensions;
     private Set<String> protectedViews;
@@ -243,8 +243,8 @@ public class MultiViewHandler extends ViewHandler {
 
         Util.notNull("context", context);
         if (!context.getPartialViewContext().isAjaxRequest()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Begin writing marker for viewId " +
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Begin writing marker for viewId " +
                             context.getViewRoot().getViewId());
             }
 
@@ -255,8 +255,8 @@ public class MultiViewHandler extends ViewHandler {
             }
             context.getResponseWriter()
                   .write(RIConstants.SAVESTATE_FIELD_MARKER);
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End writing marker for viewId " +
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("End writing marker for viewId " +
                             context.getViewRoot().getViewId());
             }
         }
@@ -324,8 +324,8 @@ public class MultiViewHandler extends ViewHandler {
                   MessageUtils.getExceptionMessageString(
                         MessageUtils.ILLEGAL_VIEW_ID_ID,
                         viewId);
-            if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, "jsf.illegal_view_id_error", viewId);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "jsf.illegal_view_id_error", viewId);
             }
         throw new IllegalArgumentException(message);
         }
@@ -517,9 +517,9 @@ public class MultiViewHandler extends ViewHandler {
             String mappingMod = builder.toString();
             boolean logged = false;
             while (uri.startsWith(mappingMod)) {
-                if (!logged && logger.isLoggable(Level.WARNING)) {
+                if (!logged && LOGGER.isLoggable(Level.WARNING)) {
                     logged = true;
-                    logger.log(Level.WARNING,
+                    LOGGER.log(Level.WARNING,
                                "jsf.viewhandler.requestpath.recursion",
                                new Object[] {uri, mapping});
                 }
