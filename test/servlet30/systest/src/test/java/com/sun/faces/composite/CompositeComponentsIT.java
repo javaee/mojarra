@@ -41,6 +41,7 @@ package com.sun.faces.composite;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -73,7 +74,6 @@ public class CompositeComponentsIT {
     }
 
     @Test
-    @Ignore
     public void testNesting05() throws Exception {
 
         HtmlPage page = webClient.getPage(webUrl + "faces/composite/nesting05.xhtml");
@@ -110,7 +110,6 @@ public class CompositeComponentsIT {
      * @throws Exception when an error occurs.
      */
     @Test
-    @Ignore
     public void testNesting08() throws Exception {
 
         HtmlPage page = webClient.getPage(webUrl + "faces/composite/nesting06.xhtml");
@@ -209,17 +208,16 @@ public class CompositeComponentsIT {
 
     //issue 1696
     @Test
-    @Ignore
     public void testForNoNPE() throws Exception {
-//        HtmlPage page = getPage("/faces/composite/simpleCompositeComponentUsingPage.xhtml");
-//        List list = getAllElementsOfGivenClass(page, null,
-//                HtmlSubmitInput.class);
-//        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-//        page = (HtmlPage) button.click();
-//        String pageAsText = page.asText();
-//        assertTrue(pageAsText.contains("Unable to find matching navigation case with from-view-id " +
-//                "'/composite/simpleCompositeComponentUsingPage.xhtml' for action '#{hello.getNextAction}' " +
-//                "with outcome '/submit.xhtml'"));
+        HtmlPage page = webClient.getPage(webUrl + "faces/composite/simpleCompositeComponentUsingPage.xhtml");
+        if (page.asXml().contains("Development")) {        
+            HtmlSubmitInput element = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
+            page = element.click();
+            String pageAsText = page.asText();
+            assertTrue(pageAsText.contains("Unable to find matching navigation case with from-view-id " +
+                    "'/composite/simpleCompositeComponentUsingPage.xhtml' for action '#{hello.getNextAction}' " +
+                    "with outcome '/submit.xhtml'"));
+        }
     }
 
     /**
