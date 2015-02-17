@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.systest.model;
+package com.sun.faces.test.servlet30.wcagdatatable;
 
 import java.util.ArrayList;
 import java.util.List;

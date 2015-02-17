@@ -37,93 +37,37 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.wcagdatatable;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
+public class WcagDataTableIT {
 
-import javax.faces.component.NamingContainer;
+    private String webUrl;
+    private WebClient webClient;
 
-
-/**
- * <p>Make sure that an application that replaces the ApplicationFactory
- * but uses the decorator pattern to allow the existing ApplicationImpl
- * to do the bulk of the requests works.</p>
- */
-public class WcagDataTableTestCase extends HtmlUnitFacesTestCase {
-
-
-    // ------------------------------------------------------------ Constructors
-
-
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
-    public WcagDataTableTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
-
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(WcagDataTableTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-
-    // ------------------------------------------------- Individual Test Methods
 
     /*
-     *
      * <p>Verify that the bean is successfully resolved</p>
      */
+    @Test
     public void testReplaceStateManager() throws Exception {
-        HtmlPage page = getPage("/faces/index.jsp");
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.jsp");
         String pageText = page.asXml();
         //System.out.println(pageText);
         // (?s) is an "embedded flag expression" for the "DOTALL" operator.
@@ -139,25 +83,23 @@ public class WcagDataTableTestCase extends HtmlUnitFacesTestCase {
         // the page contains a table tag followed immediately by the caption element as follows.
         assertTrue(pageText.matches("(?sm).*<table.*>\\s*<caption>.*CODE-PAGE SUPPORT IN MICROSOFT WINDOWS.*</caption>.*"));
         // the page contains a close caption tag followed immediately by a three colgroup tags as follows.
-        assertTrue(pageText.matches("(?sm).*</caption>\\s*" +
-                "<colgroup align=.center.\\s*/>\\s*" +
-                "<colgroup align=.left.\\s*/>\\s*" +
-                "<colgroup align=.center.*span=.2.*/>\\s*" +
-                "<colgroup align=.center.*span=.3.*/>.*"));
+        assertTrue(pageText.matches("(?sm).*</caption>\\s*"
+                + "<colgroup align=.center.\\s*/>\\s*"
+                + "<colgroup align=.left.\\s*/>\\s*"
+                + "<colgroup align=.center.*span=.2.*/>\\s*"
+                + "<colgroup align=.center.*span=.3.*/>.*"));
 
         // A table with a thead, with a tr with a th scope=col
-        assertTrue(pageText.matches("(?sm).*<table.*>.*<thead>\\s*" +
-                "<tr>\\s*" +
-                "<th\\s*scope=.col.*"));
-        
-        // A table with a tbody, with a tr with a th scope=row
-        assertTrue(pageText.matches("(?sm).*<table.*>.*<tbody>.*" +
-                "<th\\s*scope=.row.*"));
+        assertTrue(pageText.matches("(?sm).*<table.*>.*<thead>\\s*"
+                + "<tr>\\s*"
+                + "<th\\s*scope=.col.*"));
 
         // A table with a tbody, with a tr with a th scope=row
-        assertTrue(pageText.matches("(?sm).*<table.*>.*<tbody>.*" +
-                "</tbody>.*<tbody>.*</tbody>.*</table>.*"));
+        assertTrue(pageText.matches("(?sm).*<table.*>.*<tbody>.*"
+                + "<th\\s*scope=.row.*"));
 
+        // A table with a tbody, with a tr with a th scope=row
+        assertTrue(pageText.matches("(?sm).*<table.*>.*<tbody>.*"
+                + "</tbody>.*<tbody>.*</tbody>.*</table>.*"));
     }
-
 }

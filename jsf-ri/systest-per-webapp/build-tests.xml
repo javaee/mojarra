@@ -101,8 +101,6 @@
               value="com/sun/faces/systest/NeverUnwrapExceptionsTestCase.class"/>
     <property name="disable-unicode-escaping"
               value="com/sun/faces/systest/UnicodeTestCase.class"/>
-    <property name="wcag-datatable"
-              value="com/sun/faces/systest/WcagDataTableTestCase.class"/>
     <property name="disable-bean-validator"
               value="com/sun/faces/systest/DisableBeanValidatorTestCase.class"/>
     <property  name="no-web-xml"

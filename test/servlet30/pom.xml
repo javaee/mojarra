@@ -109,6 +109,7 @@
         <module>systest</module>
         <module>stateViewExpiredExceptionMissing</module>
         <module>viewScopeFailover</module>
+        <module>wcagDataTable</module>
         <module>writeAttributeScriptDisabled</module>
         <module>writeAttributeScriptEnabled</module>
     </modules>
