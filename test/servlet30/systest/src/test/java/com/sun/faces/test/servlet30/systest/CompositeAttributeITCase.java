@@ -38,27 +38,30 @@
  * holder.
  */
 
-package com.sun.faces.systest.composite;
+package com.sun.faces.test.servlet30.systest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.*;
 
 import java.util.List;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Unit tests for Composite Component Attributes
  */
-public class CompositeAttributeTestCase extends HtmlUnitFacesTestCase {
+public class CompositeAttributeITCase extends HtmlUnitFacesITCase {
 
 
     @SuppressWarnings({"UnusedDeclaration"})
-    public CompositeAttributeTestCase() {
+    public CompositeAttributeITCase() {
         this("CompositeAttributeTestCase");
     }
 
-    public CompositeAttributeTestCase(String name) {
+    public CompositeAttributeITCase(String name) {
         super(name);
     }
 
@@ -76,7 +79,7 @@ public class CompositeAttributeTestCase extends HtmlUnitFacesTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(CompositeAttributeTestCase.class));
+        return (new TestSuite(CompositeAttributeITCase.class));
     }
 
 

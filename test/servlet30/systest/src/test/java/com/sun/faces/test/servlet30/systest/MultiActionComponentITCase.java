@@ -39,25 +39,25 @@
  * holder.
  */
 
-package com.sun.faces.systest.composite;
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
 
-public class MultiActionComponentTestCase extends HtmlUnitFacesTestCase {
+public class MultiActionComponentITCase extends HtmlUnitFacesITCase {
 
 
-    public MultiActionComponentTestCase(String name) {
+    public MultiActionComponentITCase(String name) {
         super(name);
     }
 
     public static Test suite() {
-        return (new TestSuite(MultiActionComponentTestCase.class));
+        return (new TestSuite(MultiActionComponentITCase.class));
     }
 
     public void test01() throws Exception {
