@@ -449,8 +449,8 @@ public class FlowHandlerImpl extends FlowHandler {
         
         private static final long serialVersionUID = 7915803727932706270L;
         
-        private int returnDepth = 0;
-        private int currentFlowDepth=0;
+        private int returnDepth;
+        private int currentFlowDepth;
         private ArrayDeque<E> data;
         private static class RideAlong implements Serializable {
             private static final long serialVersionUID = -1899365746835118058L;
