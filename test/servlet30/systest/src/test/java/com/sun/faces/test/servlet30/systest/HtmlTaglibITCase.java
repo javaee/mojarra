@@ -39,11 +39,12 @@
  * holder.
  */
 
-package com.sun.faces.systest.jsp.htmltaglib;
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
+import static junit.framework.TestCase.assertTrue;
 import junit.framework.TestSuite;
 
 
@@ -53,9 +54,9 @@ public class HtmlTaglibITCase extends HtmlUnitFacesITCase {
 
     public HtmlTaglibITCase(String name) {
         super(name);
-        addExclusion(Container.TOMCAT6, "test04");
-        addExclusion(Container.TOMCAT7, "test04");
-        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "test04");
+        addExclusion(HtmlUnitFacesITCase.Container.TOMCAT6, "test04");
+        addExclusion(HtmlUnitFacesITCase.Container.TOMCAT7, "test04");
+        addExclusion(HtmlUnitFacesITCase.Container.WLS_10_3_4_NO_CLUSTER, "test04");
 
 
     }
