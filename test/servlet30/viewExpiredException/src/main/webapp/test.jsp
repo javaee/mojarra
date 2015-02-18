@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<%--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
@@ -39,40 +38,24 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
+--%>
 
-<web-app version="2.5" 
-         xmlns="http://java.sun.com/xml/ns/javaee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee web-app_2_5.xsd">
-  <description>
-       Webapp to validate ViewExpiredException is properly handled.
-  </description>
-  <display-name>View Expired Test</display-name>
-  <!-- Validate the Application Configuration Resources -->
-  <context-param>
-        <param-name>com.sun.faces.enableThreading</param-name>
-        <param-value>true</param-value>
-    </context-param>
-  <!-- Faces Servlet -->
-  <servlet>
-    <servlet-name>Faces Servlet</servlet-name>
-    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-    <load-on-startup> 1 </load-on-startup>
-  </servlet>
-    
-  <servlet-mapping>
-    <servlet-name>Faces Servlet</servlet-name>
-    <url-pattern>/faces/*</url-pattern>
-  </servlet-mapping>
-    
-    <error-page>
-        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/error.jsp</location>
-    </error-page>
- 
-  <session-config>
-      <session-timeout>1</session-timeout>
-  </session-config>  
-  
-</web-app>
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <title>test</title>
+        <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
+        <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
+    </head>
+    <body>
+        <h1>test</h1>
+        <f:view>
+            <h:form id="form">        
+                <h:commandButton id="submit" value="Click me in about 1 minute"/>
+            </h:form>
+        </f:view>
+        <hr>
+    </body>
+</html>

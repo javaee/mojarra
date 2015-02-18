@@ -37,60 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest;
-
-import java.net.URL;
+package com.sun.faces.test.servlet30.viewexpiredexception;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
+public class ViewExpiredExceptionIT {
 
-public class ViewExpiredExceptionTestCase extends HtmlUnitFacesTestCase {
+    private String webUrl;
+    private WebClient webClient;
 
-    public ViewExpiredExceptionTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(ViewExpiredExceptionTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
-    
-    
-    // ------------------------------------------------------------ Test Methods
-    
-    public void testViewExpiredExceptionErrorPage() throws Exception {
-        WebClient client = new WebClient();
-        client.setThrowExceptionOnFailingStatusCode(false);
-        client.setTimeout(0);
-       
-        HtmlPage page = (HtmlPage) client.getPage("/faces/test.jsp", client);
 
-        HtmlSubmitInput submit = (HtmlSubmitInput) 
-            getInputContainingGivenId(page, "submit");
+    @Test
+    public void testViewExpiredExceptionErrorPage() throws Exception {
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setTimeout(0);
+
+        HtmlPage page = (HtmlPage) webClient.getPage(webUrl + "faces/test.jsp");
+        HtmlSubmitInput submit = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
 
         Thread.sleep(65000);
 

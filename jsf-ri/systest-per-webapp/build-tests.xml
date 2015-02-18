@@ -131,8 +131,6 @@
 
         <property name="core-tags
                   value="com/sun/faces/systest/CoreTagsTestCase.class"/>
-        <property name="view-expired"
-                  value="com/sun/faces/systest/ViewExpiredExceptionTestCase.class"/>
     -->
 
 

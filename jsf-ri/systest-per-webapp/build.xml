@@ -120,7 +120,6 @@
     <!--
 
        EXCLUDED APPLICATIONS:
-          view-expired
           core-tags
           el-performance
           command-link-redirect,
