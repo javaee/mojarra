@@ -8,14 +8,15 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        Hello from Facelets
+        Hello from Facelets <br/>
+        ProjectStage: <h:outputText value="#{facesContext.application.projectStage}"/>
         <h:messages/>
-        <h:form>
+        <h:form id="form">
             username :
             <f:validateBean>
             <mycc:simpleCompositeComponent value="#{hello.fname}"/> <br/>
             </f:validateBean>
-            <h:commandButton value="submit" action="#{hello.getNextAction}"/>
+            <h:commandButton id="submit" value="submit" action="#{hello.getNextAction}"/>
         </h:form>
     </h:body>
 </html>
