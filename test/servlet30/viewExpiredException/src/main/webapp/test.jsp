@@ -52,7 +52,8 @@
     <body>
         <h1>test</h1>
         <f:view>
-            <h:form id="form">        
+            <h:form id="form">
+                Client-size State Saving: <h:outputText value="#{facesContext.application.stateManager.isSavingStateInClient(facesContext)}"/> <br/>
                 <h:commandButton id="submit" value="Click me in about 1 minute"/>
             </h:form>
         </f:view>
