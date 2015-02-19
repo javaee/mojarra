@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,7 @@
 package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
+import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
@@ -847,7 +848,7 @@ public class ConfigManager {
             this.containerConnector = containerConnector;
         }
 
-        private void initializeIvars() {
+        private void initializeIvars(Set<Class<?>> annotatedSet) {
             if (null != uris || null != jarNames) {
                 assert(null != uris && null != jarNames);
                 return;
@@ -864,21 +865,41 @@ public class ConfigManager {
                         if (!configInfo.isMetadataComplete()) {
                             uris.add(sourceURI);
                             jarNames.add(jarName);
+                        } else {
+                            /*
+                             * Because the container annotation scanning does not 
+                             * know anything about faces-config.xml metadata-complete
+                             * the annotatedSet of classes will include classes that
+                             * are not supposed to be included.
+                             *
+                             * The code below looks at the CodeSource of the class
+                             * and determines whether or not it should be removed
+                             * from the annotatedSet because the faces-config.xml that
+                             * owns it has metadata-complete="true".
+                             */
+                            ArrayList<Class<?>> toRemove = new ArrayList<>(1);
+                            String sourceURIString = sourceURI.toString();
+                            for (Class<?> clazz : annotatedSet) {
+                                if (sourceURIString.contains(clazz.getProtectionDomain().getCodeSource().getLocation().toString())) {
+                                    toRemove.add(clazz);
+                                }
+                            }
+                            annotatedSet.removeAll(toRemove);
                         }
                     }
                 }
             }
         }
 
-        private Set<URI> getAnnotationScanURIs() {
-            initializeIvars();
+        private Set<URI> getAnnotationScanURIs(Set<Class<?>> annotatedSet) {
+            initializeIvars(annotatedSet);
 
             return uris;
 
         }
 
-        private Set<String> getJarNames() {
-            initializeIvars();
+        private Set<String> getJarNames(Set<Class<?>> annotatedSet) {
+            initializeIvars(annotatedSet);
 
             return jarNames;
         }
@@ -903,6 +924,7 @@ public class ConfigManager {
         private InitFacesContext facesContext;
         private AnnotationProvider provider;
         private ProvideMetadataToAnnotationScanTask metadataGetter;
+        private Set<Class<?>> annotatedSet;
 
         // -------------------------------------------------------- Constructors
 
@@ -911,7 +933,7 @@ public class ConfigManager {
             this.facesContext = facesContext;
             this.provider = AnnotationProviderFactory.createAnnotationProvider(sc);
             this.metadataGetter = metadataGetter;
-
+            this.annotatedSet = (Set<Class<?>>) sc.getAttribute(ANNOTATED_CLASSES);
         }
 
 
@@ -938,11 +960,11 @@ public class ConfigManager {
                 // This InjectionProvider is capable of annotation scanning *and*
                 // injection.
                 ((DelegatingAnnotationProvider)provider).setAnnotationScanner(annotationScanner,
-                        metadataGetter.getJarNames());
+                        metadataGetter.getJarNames(annotatedSet));
                 scanUris = Collections.emptySet();
             } else {
                 // This InjectionProvider is capable of annotation scanning only
-                scanUris = metadataGetter.getAnnotationScanURIs();
+                scanUris = metadataGetter.getAnnotationScanURIs(annotatedSet);
             }
             //AnnotationScanner scanner = new AnnotationScanner(sc);
             Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses =

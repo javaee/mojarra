@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2009-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2009-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,7 +42,7 @@ package com.sun.faces.config;
 
 
 import com.sun.faces.RIConstants;
-
+import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
 import javax.faces.bean.ManagedBean;
@@ -65,6 +65,12 @@ import javax.servlet.annotation.HandlesTypes;
 import java.util.Set;
 import java.util.Map;
 import java.net.MalformedURLException;
+import java.util.HashSet;
+import javax.annotation.Resource;
+import javax.faces.component.behavior.FacesBehavior;
+import javax.faces.event.NamedEvent;
+import javax.faces.event.PhaseListener;
+import javax.faces.view.facelets.FaceletsResourceResolver;
 
 /**
  * Adds mappings <em>/faces</em>, <em>*.jsf</em>, and <em>*.faces</em> for the
@@ -95,8 +101,12 @@ import java.net.MalformedURLException;
       UIComponent.class,
       Validator.class,
       Converter.class,
-      Renderer.class
-
+      Renderer.class,
+      FacesBehavior.class,
+      PhaseListener.class,
+      FaceletsResourceResolver.class,
+      Resource.class,
+      NamedEvent.class
 })
 public class FacesInitializer implements ServletContainerInitializer {
 
@@ -109,6 +119,12 @@ public class FacesInitializer implements ServletContainerInitializer {
 
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
         throws ServletException {
+
+        Set<Class<?>> annotatedClasses = new HashSet<Class<?>>();
+        if (classes != null) {
+            annotatedClasses.addAll(classes);
+        }
+        servletContext.setAttribute(ANNOTATED_CLASSES, annotatedClasses);
 
         if (shouldCheckMappings(classes, servletContext)) {
             InitFacesContext initFacesContext = new InitFacesContext(servletContext);
