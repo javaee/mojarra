@@ -2,7 +2,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,14 +41,9 @@
 
 package com.sun.faces.config;
 
-import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
-import static com.sun.faces.config.AnnotationScanner.FACES_ANNOTATION_TYPE;
 import com.sun.faces.spi.AnnotationProvider;
 import java.lang.annotation.Annotation;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import javax.servlet.ServletContext;
@@ -84,9 +79,10 @@ public class DelegatingAnnotationProvider extends AnnotationProvider {
 
     @Override
     public Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClasses(Set<URI> urls) {
-        HashMap<Class<? extends Annotation>, Set<Class<?>>> annotatedMap = new HashMap<>();
-        createAnnotatedMap(annotatedMap, (Set<Class<?>>) sc.getAttribute(ANNOTATED_CLASSES));
-        return annotatedMap;
+        if (null == scanner) {
+            scanner = new JavaClassScanningAnnotationScanner(sc);
+        }
+        return scanner.getAnnotatedClasses(urls);
     }
     
     /*
@@ -103,33 +99,5 @@ public class DelegatingAnnotationProvider extends AnnotationProvider {
         scanner = impl;
     }
 
-    /**
-     * Go over the annotated set and converter it to a hash map.
-     *
-     * @param annotatedMap
-     * @param annotatedSet
-     */
-    private void createAnnotatedMap(HashMap<Class<? extends Annotation>, Set<Class<?>>> annotatedMap, Set<Class<?>> annotatedSet) {
-        if (annotatedSet != null && !annotatedSet.isEmpty()) {
-            Iterator<Class<?>> iterator = annotatedSet.iterator();
-            while (iterator.hasNext()) {
-                try {
-                    Class<?> clazz = iterator.next();
-                    Annotation[] annotations = clazz.getAnnotations();
-                    for (Annotation annotation : annotations) {
-                        Class<? extends Annotation> annoType = annotation.annotationType();
-                        if (FACES_ANNOTATION_TYPE.contains(annoType)) {
-                            Set<Class<?>> classes = annotatedMap.get(annoType);
-                            if (classes == null) {
-                                classes = new HashSet<>();
-                                annotatedMap.put(annoType, classes);
-}
-                            classes.add(clazz);
-                        }
-                    }
-                } catch (NoClassDefFoundError ncdfe) {
-                }
-            }
-        }
-    }
+
 }
