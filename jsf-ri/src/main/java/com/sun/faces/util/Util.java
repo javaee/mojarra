@@ -73,9 +73,12 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UINamingContainer;
 import javax.faces.render.ResponseStateManager;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
@@ -149,9 +152,45 @@ public class Util {
         return result;
     }
     
-    public static Object getCDIBeanManager(Map<String, Object> appMap) {
-        Object beanManager = appMap.get(CDI_AVAILABLE_PER_APP_KEY);
-        return beanManager;
+    /**
+     * Get the CDI bean manager.
+     * 
+     * @param facesContext the Faces context to consult
+     * @return the CDI bean manager.
+     */
+    public static BeanManager getCdiBeanManager(FacesContext facesContext) {
+        BeanManager result = null;
+        
+        if (facesContext != null && facesContext.getAttributes().containsKey(RIConstants.CDI_BEAN_MANAGER)) {
+            result = (BeanManager) facesContext.getAttributes().get(RIConstants.CDI_BEAN_MANAGER);
+        } else if (facesContext != null && facesContext.getExternalContext().getApplicationMap().containsKey(RIConstants.CDI_BEAN_MANAGER)) {
+            result = (BeanManager) facesContext.getExternalContext().getApplicationMap().get(RIConstants.CDI_BEAN_MANAGER);
+        } else {
+            try {
+                InitialContext initialContext = new InitialContext();
+                result = (BeanManager) initialContext.lookup("java:comp/BeanManager");
+            }
+            catch (NamingException ne) {
+                try {
+                    InitialContext initialContext = new InitialContext();
+                    result = (BeanManager) initialContext.lookup("java:comp/env/BeanManager");
+                }
+                catch (NamingException ne2) {
+                }
+            }
+            
+            if (result == null && facesContext != null) {
+                Map<String, Object> applicationMap = facesContext.getExternalContext().getApplicationMap();
+                result = (BeanManager) applicationMap.get("org.jboss.weld.environment.servlet.javax.enterprise.inject.spi.BeanManager");
+            }
+            
+            if (result != null && facesContext != null) {
+                facesContext.getAttributes().put(RIConstants.CDI_BEAN_MANAGER, result);
+                facesContext.getExternalContext().getApplicationMap().put(RIConstants.CDI_BEAN_MANAGER, result);
+            }
+        }
+        
+        return result;
     }
     
     public static void setCDIAvailable(ServletContext sc, Object beanManager) {

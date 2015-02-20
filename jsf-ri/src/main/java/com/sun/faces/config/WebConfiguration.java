@@ -54,6 +54,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.StateManager;
@@ -847,28 +848,9 @@ public class WebConfiguration {
                     envEntries.put(entry, value);
                 }
             }
-            try {
-                Object beanManager = initialContext.lookup("java:comp/BeanManager");
-                if (null != beanManager) {
-                    Util.setCDIAvailable(servletContext, beanManager);
-                }
-            } catch (NamingException root) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine(root.toString());
-                }
-            }
-            // JAVASERVERFACES-2922 Martin Kouba
-            if (!Util.isCDIAvailable(servletContext)) {
-                try {
-                    Object beanManager = initialContext.lookup("java:comp/env/BeanManager");
-                    if (null != beanManager) {
-                        Util.setCDIAvailable(servletContext, beanManager);
-                    }
-                } catch (NamingException root) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.fine(root.toString());
-                    }
-                }
+            BeanManager beanManager = Util.getCdiBeanManager(FacesContext.getCurrentInstance());
+            if (null != beanManager) {
+                Util.setCDIAvailable(servletContext, beanManager);
             }
         }
 

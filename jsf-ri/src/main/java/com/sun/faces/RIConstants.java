@@ -155,6 +155,11 @@ public class RIConstants {
     
     public static final String JAVAEE_XMLNS = "http://xmlns.jcp.org/xml/ns/javaee";
 
+    /**
+     * Convenience key to store / get BeanManager.
+     */
+    public static final String CDI_BEAN_MANAGER = FACES_PREFIX + "cdi.BeanManager";
+
     private RIConstants() {
 
         throw new IllegalStateException();

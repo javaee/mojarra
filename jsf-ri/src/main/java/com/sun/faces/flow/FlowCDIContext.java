@@ -341,7 +341,7 @@ public class FlowCDIContext implements Context, Serializable {
         assert(!flowScopedBeanMap.isEmpty());
         assert(!creationalMap.isEmpty());
         List<String> flowScopedBeansToRemove = new ArrayList<String>();
-        BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+        BeanManager beanManager = (BeanManager) Util.getCdiBeanManager(facesContext);
         
         for (Entry<String, Object> entry : flowScopedBeanMap.entrySet()) {
             String passivationCapableId = entry.getKey();
@@ -404,7 +404,7 @@ public class FlowCDIContext implements Context, Serializable {
                 }
             }
             if (null != flowCDIEventFireHelperImplClass) {
-                BeanManager beanManager = (BeanManager) Util.getCDIBeanManager(facesContext.getExternalContext().getApplicationMap());
+                BeanManager beanManager = (BeanManager) Util.getCdiBeanManager(facesContext);
                 Set<Bean<?>> availableBeans = beanManager.getBeans(flowCDIEventFireHelperImplClass);
                 if (null != availableBeans && !availableBeans.isEmpty()) {
                     Bean<?> bean = beanManager.resolve(availableBeans);

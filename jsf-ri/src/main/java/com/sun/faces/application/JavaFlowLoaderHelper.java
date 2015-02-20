@@ -62,7 +62,7 @@ class JavaFlowLoaderHelper {
     
     synchronized void loadFlows(FacesContext context, FlowHandler flowHandler) throws IOException {
         BeanManager beanManager = (BeanManager) 
-                Util.getCDIBeanManager(context.getExternalContext().getApplicationMap());
+                Util.getCdiBeanManager(context);
         Bean<?> extensionImpl = beanManager.resolve(beanManager.getBeans(FlowDiscoveryCDIExtension.class));
         if (null == extensionImpl) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
