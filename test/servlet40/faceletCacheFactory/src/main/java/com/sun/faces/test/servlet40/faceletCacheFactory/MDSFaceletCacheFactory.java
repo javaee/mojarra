@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2010-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,26 +37,22 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.test.servlet30.facelets.faceletCacheFactory;
+package com.sun.faces.test.servlet40.faceletCacheFactory;
 
 import javax.faces.view.facelets.FaceletCache;
 import javax.faces.view.facelets.FaceletCacheFactory;
 
-public class MDSFaceletCacheFactory extends FaceletCacheFactory
-{
-  public MDSFaceletCacheFactory(FaceletCacheFactory wrapped)
-  {
-    _wrapped = wrapped;
-  }
+public class MDSFaceletCacheFactory extends FaceletCacheFactory {
 
-  @Override
-  public FaceletCache getFaceletCache()
-  {
-//    FaceletCacheFactory wrapped = getWrapped();
-    FaceletCache defaultCache = _wrapped.getFaceletCache();
-    return new MDSFaceletCache(defaultCache);
-  }
-  
-  private final FaceletCacheFactory _wrapped;
+    public MDSFaceletCacheFactory(FaceletCacheFactory wrapped) {
+        _wrapped = wrapped;
+    }
+
+    @Override
+    public FaceletCache getFaceletCache() {
+        FaceletCache defaultCache = _wrapped.getFaceletCache();
+        return new MDSFaceletCache(defaultCache);
+    }
+
+    private final FaceletCacheFactory _wrapped;
 }
