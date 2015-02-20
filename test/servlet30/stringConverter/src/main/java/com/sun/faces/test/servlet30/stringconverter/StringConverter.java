@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.stringconverter;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

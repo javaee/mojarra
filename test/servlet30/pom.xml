@@ -107,6 +107,7 @@
         <module>serializeServerState</module>
         <module>sessionScope</module>
         <module>stateViewExpiredExceptionMissing</module>
+        <module>stringConverter</module>
         <module>suppressXmlDeclaration</module>
         <module>systest</module>
         <module>viewExpiredException</module>

@@ -81,8 +81,6 @@
               value="com/sun/faces/systest/JarOrderingTestCase.class"/>
     <property name="replace-lifecycle"
               value="com/sun/faces/systest/ReplaceLifecycleTestCase.class"/>
-    <property name="string-converter"
-              value="com/sun/faces/systest/StringConverterTestCase.class"/>
     <property name="replace-variableresolver" 
               value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
     <property name="replace-variableresolver-programmatically" 

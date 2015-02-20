@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!--
+<%--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
@@ -39,23 +38,31 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
+--%>
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
-    version="1.2">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-  <converter>
-    <converter-for-class>java.lang.String</converter-for-class>
-    <converter-class>com.sun.faces.systest.StringConverter</converter-class>
-  </converter>
-
-  <managed-bean>
-    <managed-bean-name>bean</managed-bean-name>
-    <managed-bean-class>com.sun.faces.systest.model.TestBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-  </managed-bean>
-
-
-</faces-config>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+    <head> <title>Hello</title> </head>
+    <%@ page contentType="application/xhtml+xml" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+    <body bgcolor="white">
+        <f:view>
+            <h:form id="form">
+                <h:panelGrid columns="2">
+                    Input String <h:inputText id="inputText" value="#{bean.stringProperty}"/>
+                    Output String <h:outputText id="outputText" value="#{bean.stringProperty}"/>
+                    <h:commandButton id="submit" value="reload" />
+                </h:panelGrid>
+            </h:form>
+        </f:view>
+        <p>
+            <a href="http://validator.w3.org/check?uri=referer"><img
+                    src="http://www.w3.org/Icons/valid-xhtml10"
+                    alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+        </p>
+    </body>
+</html>  

@@ -38,112 +38,49 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.stringconverter;
 
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
-
-import javax.faces.component.NamingContainer;
-
-
-/**
- * <p>Make sure that an application that replaces the ApplicationFactory
- * but uses the decorator pattern to allow the existing ApplicationImpl
- * to do the bulk of the requests works.</p>
- */
-
-public class StringConverterTestCase extends HtmlUnitFacesTestCase {
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 
-    // ------------------------------------------------------------ Constructors
+public class StringConverterIT  {
 
+    private String webUrl;
+    private WebClient webClient;
 
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
-    public StringConverterTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
-
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(StringConverterTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-
-    // ------------------------------------------------- Individual Test Methods
-
+    @Test
     public void testStringConverter() throws Exception {
-	HtmlPage page = getPage("/faces/index.jsp");
-	List list;
+	HtmlPage page = webClient.getPage(webUrl + "faces/index.jsp");
 
-	HtmlTextInput input = null;
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
-	((HtmlTextInput)list.get(0)).setValueAttribute("newString");
+	HtmlTextInput input = (HtmlTextInput) page.getHtmlElementById("form:inputText");
+	input.setValueAttribute("newString");
 
-	HtmlSubmitInput button = null;
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlSubmitInput.class); 
-	button = (HtmlSubmitInput) list.get(0);
+	HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
 	page = (HtmlPage) button.click();
-
 	assertTrue(-1 != page.asText().indexOf("String_newString"));
-
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlSubmitInput.class); 
-	button = (HtmlSubmitInput) list.get(0);
+        
+	button = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
 	page = (HtmlPage) button.click();
-
 	assertTrue(-1 != page.asText().indexOf("String_String_newString"));
-
     }
-
 }
