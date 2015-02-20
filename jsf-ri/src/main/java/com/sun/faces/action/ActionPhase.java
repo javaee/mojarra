@@ -61,8 +61,10 @@ public class ActionPhase extends Phase {
     private BeanManager beanManager;
 
     public BeanManager getBeanManager(FacesContext facesContext) {
-
-        return Util.getCdiBeanManager(facesContext);
+        if (beanManager == null) {
+            beanManager = Util.getCdiBeanManager(facesContext);
+        }
+        return beanManager;
     }
 
     @Override
@@ -127,7 +129,7 @@ public class ActionPhase extends Phase {
     private RequestMappingInfo findMethodRequestMapping(FacesContext context, Bean<?> bean) {
         RequestMappingInfo result = null;
         Class clazz = bean.getBeanClass();
-        AnnotatedType annotatedType = beanManager.createAnnotatedType(clazz);
+        AnnotatedType annotatedType = getBeanManager(context).createAnnotatedType(clazz);
         Set<AnnotatedMethod> annotatedMethodSet = annotatedType.getMethods();
         for (AnnotatedMethod method : annotatedMethodSet) {
             if (method.isAnnotationPresent(RequestMapping.class)) {
