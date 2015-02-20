@@ -38,13 +38,14 @@
  * holder.
  */
 
-package com.sun.faces.systest.projectstage;
+package com.sun.faces.test.servlet30.systest;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * <p>Test Case for checking if metadata is omitted when there is a UIViewAction or UIViewParameter
