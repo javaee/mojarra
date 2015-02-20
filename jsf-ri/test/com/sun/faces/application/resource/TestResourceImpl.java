@@ -40,33 +40,30 @@
 
 package com.sun.faces.application.resource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.application.Resource;
-import javax.faces.application.ResourceHandler;
-
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.cactus.TestingUtil;
 import com.sun.faces.util.Util;
-import com.sun.faces.util.RequestStateManager;
+import org.apache.cactus.WebRequest;
+
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
+import javax.faces.context.FacesContext;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-import javax.faces.context.FacesContext;
-import org.apache.cactus.WebRequest;
 
 /**
  * Test class for com.sun.faces.application.resource.ResourceImpl
@@ -159,13 +156,9 @@ public class TestResourceImpl extends ServletFacesTestCase {
     public void testFaceletResources() throws Exception {
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
         assertTrue (handler != null);
-        
-        Resource resource = handler.createResource("rootLibrary-duke.gif", "rootLibrary");
+
+        Resource resource = handler.createResource("test.xhtml");
         assertNotNull(resource);
-        
-        resource = handler.createResource("root-duke.gif");
-        
-        
     }
 
     public void beginToURIExtensionMapping(WebRequest req) {
