@@ -112,7 +112,6 @@
                    never-unwrap-exceptions,
                    flash,
                    jsp-flash,
-                   suppress-xml-decl,
                    process-as-jspx,
                    request-char-encoding-no-session,
                    bogus-render-kit-id,
@@ -145,7 +144,6 @@
                    late-bindings,
                    property-resolver-jsp,
                    never-unwrap-exceptions,
-                   suppress-xml-decl,
                    process-as-jspx,
                    bogus-render-kit-id,
                    characterCombat"/>

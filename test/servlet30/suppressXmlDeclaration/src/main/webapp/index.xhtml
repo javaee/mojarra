@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,20 +41,17 @@
 
 -->
 
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee web-app_3_0.xsd">
-    <description>
-       test suppress xml config param
-    </description>
-    <display-name>test suppress xml config param</display-name>
-    <!-- Faces Servlet -->
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup> 1 </load-on-startup>
-    </servlet>
-    <!-- Faces Servlet Mapping -->
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
-    </servlet-mapping>
-</web-app>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.0//EN"
+    "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>issue 696 test</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:commandButton value="reload" />
+        </h:form>
+    </h:body>
+</html>

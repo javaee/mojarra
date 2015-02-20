@@ -106,8 +106,9 @@
         <module>resource</module>
         <module>serializeServerState</module>
         <module>sessionScope</module>
-        <module>systest</module>
         <module>stateViewExpiredExceptionMissing</module>
+        <module>suppressXmlDeclaration</module>
+        <module>systest</module>
         <module>viewExpiredException</module>
         <module>viewScopeFailover</module>
         <module>wcagDataTable</module>

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,59 +37,42 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.suppressxmldeclaration;
 
-package com.sun.faces.systest;
-
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-
-public class SuppressXmlDeclTestCase extends HtmlUnitFacesTestCase {
+public class SuppressXmlDeclIT {
 
     private final static Pattern XmlDeclaration = Pattern.compile("^<\\?xml.+?version=['\"](.+?)['\"](.+?encoding=['\"]((.+?))['\"])?.*?\\?>");
 
+    private String webUrl;
+    private WebClient webClient;
 
-    public SuppressXmlDeclTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(SuppressXmlDeclTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
-    
-    
-    // ------------------------------------------------------------ Test Methods
-    
+
+    @Test
     public void testSuppressXmlDecl() throws Exception {
-        URL url = getURL("/faces/index.xhtml");
-        InputStreamReader reader = new InputStreamReader(url.openStream());
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        InputStreamReader reader = new InputStreamReader(page.getWebResponse().getContentAsStream());
         BufferedReader bufferedReader = new BufferedReader(reader);
         String line = bufferedReader.readLine();
         while (0 == line.length()) {
@@ -98,9 +81,8 @@ public class SuppressXmlDeclTestCase extends HtmlUnitFacesTestCase {
         Matcher m = XmlDeclaration.matcher(line);
         assertFalse(m.find());
 
-        HtmlPage page = getPage("/faces/index.xhtml");
+        page = webClient.getPage(webUrl + "faces/index.xhtml");
         String xml = page.asXml();
         assertTrue(xml.contains("javax.faces.ViewState"));
-
     }
 }
