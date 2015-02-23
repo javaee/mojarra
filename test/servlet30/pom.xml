@@ -103,6 +103,7 @@
         <module>navigation</module>
         <module>passthrough</module>
         <module>renderKit</module>
+        <module>requestCharEncodingNoSession</module>
         <module>resource</module>
         <module>serializeServerState</module>
         <module>sessionScope</module>

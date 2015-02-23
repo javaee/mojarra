@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.requestcharencodingnosession;
 
 import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;

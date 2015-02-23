@@ -37,70 +37,50 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.requestcharencodingnosession;
 
-package com.sun.faces.systest;
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+public class NoSessionCharEncIT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-public class NoSessionCharEncTestCase extends HtmlUnitFacesTestCase {
-
-    public NoSessionCharEncTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(NoSessionCharEncTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
+    @Test
     public void testCharEnc() throws Exception {
 
-        HtmlPage page = getPageSticky("/faces/utf8.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/utf8.xhtml");
 
         // force creation of the session
-        getPageSticky("/faces/utf8.xhtml?makeSession=true");
+        webClient.getPage(webUrl + "faces/utf8.xhtml?makeSession=true");
 
         // try again, this time make sure the session shows the encoding
-        page = getPageSticky("/faces/utf8.xhtml");
+        page = webClient.getPage(webUrl + "faces/utf8.xhtml");
         assertTrue("Incorrect encoding.  extContextCharEnc: UTF-8 hasSession: true sessionCharEnc: UTF-8\n"
                 + "\nactual: " + page.asText(),
                 page.asText().matches("(?s).*extContextCharEnc:.*UTF-8.*hasSession:.*true.*sessionCharEnc:.*UTF-8.*"));
 
-        page = getPageSticky("/faces/ascii.xhtml");
+        page = webClient.getPage(webUrl + "faces/ascii.xhtml");
         assertTrue("Incorrect encoding.  extContextCharEnc: UTF-8 hasSession: true sessionCharEnc: US-ASCII",
                 page.asText().matches("(?s).*extContextCharEnc:.*US-ASCII.*hasSession:.*true.*sessionCharEnc:.*US-ASCII.*"));
 
         // force invalidation of the session
-        getPageSticky("/faces/utf8.xhtml?invalidateSession=true");
-
-
+        webClient.getPage(webUrl + "faces/utf8.xhtml?invalidateSession=true");
     }
-
-        
 }

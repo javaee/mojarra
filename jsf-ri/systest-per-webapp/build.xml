@@ -112,7 +112,6 @@
                    flash,
                    jsp-flash,
                    process-as-jspx,
-                   request-char-encoding-no-session,
                    bogus-render-kit-id,
                    characterCombat"/>
     <!--
