@@ -10,7 +10,7 @@
     and Distribution License("CDDL") (collectively, the "License").  You
     may not use this file except in compliance with the License.  You can
     obtain a copy of the License at
-    https://glassfish.java.net/public/CDDL+GPL_1_1.html
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
     or packager/legal/LICENSE.txt.  See the License for the specific
     language governing permissions and limitations under the License.
 
@@ -40,29 +40,21 @@
     holder.
 
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.3.0-m02-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.servlet40</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
     <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Servlet 4.0</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>el</module>
-        <module>explicitRefreshPeriod</module>
-        <module>faceletCacheFactory</module>
-        <module>productionRefreshPeriod</module>
-        <module>systemEvent</module>
-  </modules>
+    <groupId>com.sun.faces.test.servlet40</groupId>
+    <version>2.3.0-m02-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.sun.face.test.servlet40</groupId>
+  <artifactId>explicitRefreshPeriod</artifactId>
+  <packaging>war</packaging>
+  <name>Mojarra ${project.version} - Test - Servlet 4.0 - ProjectStage Explicit RefreshPeriod</name>
+  
+  <build>
+    <finalName>test-servlet40-explicitRefreshPeriod</finalName>
+  </build>
+  
+
 </project>

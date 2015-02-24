@@ -61,7 +61,7 @@ import javax.faces.view.ViewDeclarationLanguage;
 
 /**
  * <p><strong><span
- * class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2">
+ * class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2 changed_modified_2_3">
  * ViewHandler</span></strong> is the
  * pluggablity mechanism for allowing implementations of or applications
  * using the JavaServer Faces specification to provide their own
@@ -203,13 +203,17 @@ public abstract class ViewHandler {
             "javax.faces.FACELETS_BUFFER_SIZE";
     
     /**
-     * <p class="changed_added_2_2">When a page is requested, what interval in seconds should the compiler
+     * <p class="changed_added_2_2"><span class="changed_modified_2_3">When</span> 
+     * a page is requested, what interval in seconds should the compiler
      * check for changes. If you don't want the compiler to check for changes
      * once the page is compiled, then use a value of -1. Setting a low
      * refresh period helps during development to be able to edit pages in a
      * running application.The runtime must also consider the
      * facelets.REFRESH_PERIOD param name as an alias to this param name for
      * backwards compatibility with existing facelets tag libraries.
+     * <span class="changed_added_2_3">If {@link javax.faces.application.ProjectStage} 
+     * is set to {@code Production} and this value is not otherwise specified, 
+     * the runtime must act as if it is set to -1.</span>
      * </p>
      * 
      * @since 2.0
