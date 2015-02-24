@@ -39,12 +39,14 @@
  * holder.
  */
 
-package com.sun.faces.systest.state;
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import junit.framework.TestSuite;
 
 
