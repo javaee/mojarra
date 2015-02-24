@@ -241,33 +241,37 @@ public class ViewScopeContextManager {
         ExternalContext externalContext = facesContext.getExternalContext();
         if (externalContext != null) {
             Map<String, Object> sessionMap = externalContext.getSessionMap();
-            Map<Object, Map<String, ViewScopeContextObject>> activeViewScopeContexts =
-                    (Map<Object, Map<String, ViewScopeContextObject>>) sessionMap.get(ACTIVE_VIEW_CONTEXTS);
-            Map<String, Object> viewMap = facesContext.getViewRoot().getViewMap(false);
+            HttpSession session = (HttpSession) externalContext.getSession(create);
 
-            if (activeViewScopeContexts == null && create) {
-                synchronized (sessionMap) {
-                    activeViewScopeContexts = new ConcurrentHashMap<>();
-                    sessionMap.put(ACTIVE_VIEW_CONTEXTS, activeViewScopeContexts);
-                }
-            }
+            if (session != null) {
+                Map<Object, Map<String, ViewScopeContextObject>> activeViewScopeContexts =
+                        (Map<Object, Map<String, ViewScopeContextObject>>) session.getAttribute(ACTIVE_VIEW_CONTEXTS);
+                Map<String, Object> viewMap = facesContext.getViewRoot().getViewMap(false);
 
-            if (activeViewScopeContexts != null && create) {
-                synchronized (activeViewScopeContexts) {
-                    if (!activeViewScopeContexts.containsKey(System.identityHashCode(viewMap)) && create) {
-                        activeViewScopeContexts.put(System.identityHashCode(viewMap),
-                                new ConcurrentHashMap<>());
-                        // If we are distributable, this will result in a dirtying of the
-                        // session data, forcing replication.  If we are not distributable,
-                        // this is a no-op.
+                if (activeViewScopeContexts == null && create) {
+                    synchronized (session) {
+                        activeViewScopeContexts = new ConcurrentHashMap<>();
                         sessionMap.put(ACTIVE_VIEW_CONTEXTS, activeViewScopeContexts);
-                        
                     }
                 }
-            }
 
-            if (activeViewScopeContexts != null) {
-                result = activeViewScopeContexts.get(System.identityHashCode(viewMap));
+                if (activeViewScopeContexts != null && create) {
+                    synchronized (activeViewScopeContexts) {
+                        if (!activeViewScopeContexts.containsKey(System.identityHashCode(viewMap)) && create) {
+                            activeViewScopeContexts.put(System.identityHashCode(viewMap),
+                                    new ConcurrentHashMap<>());
+                            // If we are distributable, this will result in a dirtying of the
+                            // session data, forcing replication.  If we are not distributable,
+                            // this is a no-op.
+                            sessionMap.put(ACTIVE_VIEW_CONTEXTS, activeViewScopeContexts);
+
+                        }
+                    }
+                }
+
+                if (activeViewScopeContexts != null) {
+                    result = activeViewScopeContexts.get(System.identityHashCode(viewMap));
+                }
             }
         }
 
