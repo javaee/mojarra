@@ -170,6 +170,11 @@ public class RIConstants {
      */
     public static final String CDI_1_1_OR_LATER = FACES_PREFIX + "cdi.OneOneOrLater";
     
+    /**
+     * Convenience key in App map and FacesContext map for spec version of faces-config.xml
+     */
+    public static final String FACES_CONFIG_VERSION = FACES_PREFIX + "facesConfigVersion";
+    
     private RIConstants() {
         throw new IllegalStateException();
     }

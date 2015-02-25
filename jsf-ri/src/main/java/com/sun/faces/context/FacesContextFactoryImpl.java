@@ -41,6 +41,7 @@
 package com.sun.faces.context;
 
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceAlwaysWriteFlashCookie;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
@@ -114,6 +115,7 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
      */
     private void savePerRequestInitParams(FacesContext context, WebConfiguration webConfig) {
         ExternalContext extContext = context.getExternalContext();
+        Map<String, Object> appMap = extContext.getApplicationMap();
         String val = extContext.getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
         boolean setCurrentComponent = Boolean.valueOf(val);
         Map<Object, Object> attrs = context.getAttributes();
@@ -128,6 +130,8 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
         if (null != nonDefaultResourceResolver) {
             attrs.put(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME, nonDefaultResourceResolver);
         }
+        String facesConfigVersion = "" + appMap.get(RIConstants.FACES_CONFIG_VERSION);
+        attrs.put(RIConstants.FACES_CONFIG_VERSION, facesConfigVersion);
     }
 
     // The testcase for this class is TestSerlvetFacesContextFactory.java

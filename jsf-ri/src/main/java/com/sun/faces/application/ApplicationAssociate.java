@@ -311,6 +311,9 @@ public class ApplicationAssociate {
             // ctor called at this time.
             viewHandler.getViewDeclarationLanguage(context, 
                     RIConstants.FACES_PREFIX + "xhtml");
+            
+            String facesConfigVersion = Util.getFacesConfigXmlVersion(context);
+            context.getExternalContext().getApplicationMap().put(RIConstants.FACES_CONFIG_VERSION, facesConfigVersion);
 
         }
         
