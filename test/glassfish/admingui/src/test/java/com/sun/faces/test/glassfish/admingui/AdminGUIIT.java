@@ -135,7 +135,7 @@ public class AdminGUIIT {
         cm.clearCookies();
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         webClient.getOptions().setJavaScriptEnabled(false);
-        webClient.getOptions().setTimeout(600000);
+        webClient.getOptions().setTimeout(6000000);
         
         String url = "http://localhost:4848/";
 
