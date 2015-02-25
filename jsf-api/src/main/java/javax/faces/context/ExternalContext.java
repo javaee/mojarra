@@ -764,6 +764,17 @@ public abstract class ExternalContext {
      * <p class="changed_added_2_0">Returns a String containing the real
      * path for a given virtual path. </p>
      *
+     * <p class="changed_added_2_3">It is valid to call this method
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this method calls through to the
+     * <code>getRealPath()</code> method on the same container
+     * context instance (<code>ServletContext</code> or
+     * <code>PortletContext</code>) as the one used when calling
+     * <code>getRealPath()</code> on the
+     * <code>ExternalContext</code> returned by the
+     * <code>FacesContext</code> during an actual request.
+     * </p>
+     * 
      * <div class="changed_added_2_0">
      *
      * <p><em>Servlet:</em> This must be the value returned by the

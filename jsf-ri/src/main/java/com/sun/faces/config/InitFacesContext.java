@@ -669,7 +669,11 @@ public class InitFacesContext extends FacesContext {
             return null; 
         }
 
-
+        @Override
+        public String getRealPath(String path) {
+            return servletContext.getRealPath(path);
+        }
+        
     } // END ServletContextAdapter
 
     static Map getThreadInitContextMap() {
