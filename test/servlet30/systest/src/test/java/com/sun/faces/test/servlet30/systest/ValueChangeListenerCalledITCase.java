@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.event;
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -48,6 +48,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
+import static junit.framework.TestCase.assertTrue;
 
 
 /**
