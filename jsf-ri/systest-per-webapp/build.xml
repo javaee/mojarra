@@ -102,7 +102,6 @@
                    jar-ordering,
                    replace-lifecycle,
                    replace-variableresolver,
-                   replace-variableresolver-programmatically,
                    add-er-replace-vr,
                    converter-property-editor,
                    disable-unicode-escaping,

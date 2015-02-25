@@ -37,86 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet.customvariableresolverprogrammatically;
 
-
-package com.sun.faces.systest;
-
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
+public class CustomVariableResolverIT  {
 
+    private String webUrl;
+    private WebClient webClient;
 
-
-/**
- * <p>Make sure that an application that replaces the ApplicationFactory
- * but uses the decorator pattern to allow the existing ApplicationImpl
- * to do the bulk of the requests works.</p>
- */
-
-public class ReplaceVariableResolverTestCase extends HtmlUnitFacesTestCase {
-
-
-    // ------------------------------------------------------------ Constructors
-
-
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
-    public ReplaceVariableResolverTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
-
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(ReplaceVariableResolverTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-
-    // ------------------------------------------------- Individual Test Methods
 
     /**
      *
      * <p>Verify that the bean is successfully resolved</p>
      */
-
+    @Test
     public void testReplaceVariableResolver() throws Exception {
-	HtmlPage page = getPage("/faces/test.jsp");
+	HtmlPage page = webClient.getPage(webUrl + "faces/test.jsp");
 	assertTrue(-1 != page.asText().indexOf("Invoking the resolver chain: success."));
 	assertTrue(-1 != page.asText().indexOf("Invoking the resolver directly: success."));
     }
-
 }

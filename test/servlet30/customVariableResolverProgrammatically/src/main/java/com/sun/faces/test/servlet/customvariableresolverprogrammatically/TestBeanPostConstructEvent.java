@@ -38,27 +38,17 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet.customvariableresolverprogrammatically;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.Application;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
-import javax.faces.el.VariableResolver;
+/**
+ *
+ * @author edburns
+ */
+public class TestBeanPostConstructEvent extends TestBeanEventClass {
 
-@ManagedBean(eager=true)
-@ApplicationScoped
-public class EagerApplicationScopedBean {
-
-    @PostConstruct
-    public void installProgrammaticListener() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        Application app = context.getApplication();
-        VariableResolver oldVr = app.getVariableResolver();
-        VariableResolver newVr = new NewVariableResolver(oldVr, context);
-        app.setVariableResolver(newVr);
-
+    public TestBeanPostConstructEvent(TestBean source) {
+        super(source);
     }
+    
 
 }

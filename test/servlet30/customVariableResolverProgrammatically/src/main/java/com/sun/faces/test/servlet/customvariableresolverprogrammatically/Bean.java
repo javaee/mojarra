@@ -39,82 +39,78 @@
  */
 
 /*
- * NewVariableResolver.java
+ * Bean.java
  *
- * Created on April 29, 2006, 1:50 PM
+ * Created on April 29, 2006, 1:57 PM
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet.customvariableresolverprogrammatically;
 
-import com.sun.faces.util.Util;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.VariableResolver;
-import javax.servlet.ServletContext;
 
 /**
  *
  * @author edburns
  */
-public class NewVariableResolver extends VariableResolver {
+public class Bean {
     
-    private VariableResolver original = null;
+    /** Creates a new instance of Bean */
+    public Bean() {
+    }
     
-    /** Creates a new instance of NewVariableResolver */
-    public NewVariableResolver(VariableResolver original) {
-        this.original = original;
-        
-        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("newVR", this);
-    }
-
-    public NewVariableResolver(VariableResolver original, FacesContext context) {
-        this.original = original;
-
-        context.getExternalContext().getApplicationMap().put("newVR", this);
-    }
-
-    public Object resolveVariable(FacesContext context, String name) throws EvaluationException {
+    public String callMethodsOnVariableResolver(FacesContext context, 
+            VariableResolver vr) throws EvaluationException {
         Object result = null;
         
-        // This expects a plain old bean that is not configured as a Faces
-        // managed bean.  However, an additional check is done to make sure
-        // that is not configured as a managed bean.  So, we've resolved 
-        // the name as a "non" managed bean, but want to do some additional
-        // checks to make sure that name does not also resolve to a 
-        // managed bean. 
-        //  
-        if (name.equals("nonmanaged")) {
-            Object bean = null;
-            Object managedBean = null;             
-            try {
-                Class clazz = Util.loadClass("com.sun.faces.systest.model.TestBean", context);
-                bean = clazz.newInstance();
-            } catch (Exception e) {
-            } 
-            managedBean = original.resolveVariable(context, name); 
-            if (bean == null) {
-                if (managedBean==null) {
-                    return null;
-                } else {
-                    result = managedBean;
-                }
-            } else {
-                result = bean;
-            }
-            return result;
-        }
-
-        if (name.equals("custom")) {
-            result = "custom";
-        }
-        else {
-            result = original.resolveVariable(context, name);
+        result = vr.resolveVariable(context, "noneBean");
+        
+        if (!(result instanceof TestBean)) {
+            throw new IllegalStateException("Bean not of correct type");
         }
         
-        return result;
+        result = vr.resolveVariable(context, "custom");
+        
+        if (!result.equals("custom")) {
+            throw new IllegalStateException("Bean not of correct type");
+        }
+        
+        return "success";
     }
     
+    public String getInvokeVariableResolverThruChain() throws EvaluationException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        VariableResolver vr = context.getApplication().getVariableResolver();
+        return callMethodsOnVariableResolver(context, vr);
+    }
+    
+    public String getInvokeVariableResolverDirectly() throws EvaluationException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        VariableResolver vr = (VariableResolver) context.getExternalContext().getApplicationMap().get("newVR");
+        return callMethodsOnVariableResolver(context, vr);
+    }
+    
+    public String getInvokeVariableResolverThruChain1() throws EvaluationException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        VariableResolver vr = context.getApplication().getVariableResolver();
+        Object result = vr.resolveVariable(context, "nonmanaged");
+        if (!(result instanceof TestBean)) {
+            throw new IllegalStateException("Bean not of correct type");
+        }
+        return "success";
+    }
+    
+    public String getInvokeVariableResolverDirectly1() throws EvaluationException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        VariableResolver vr = (VariableResolver) context.getExternalContext().getApplicationMap().get("newVR");
+        Object result = vr.resolveVariable(context, "nonmanaged");
+        if (!(result instanceof TestBean)) {
+            throw new IllegalStateException("Bean not of correct type");
+        }
+        return "success";
+    }
 }
