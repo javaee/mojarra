@@ -810,7 +810,16 @@ public class ApplicationAssociate {
             Compiler c, WebConfiguration webConfig) {
 
         // refresh period
-        String refreshPeriod = webConfig.getOptionValue(FaceletsDefaultRefreshPeriod);
+        boolean isProduction = app.getProjectStage() == ProjectStage.Production;
+        String refreshPeriod;
+        if (webConfig.isSet(FaceletsDefaultRefreshPeriod) || webConfig.isSet(FaceletsDefaultRefreshPeriodDeprecated)) {
+            refreshPeriod = webConfig.getOptionValue(FaceletsDefaultRefreshPeriod);
+        } else if (isProduction) {
+            refreshPeriod = "-1";
+        } else {
+            refreshPeriod = FaceletsDefaultRefreshPeriod.getDefaultValue();
+        }
+        
         long period = Long.parseLong(refreshPeriod);
 
         // resource resolver
