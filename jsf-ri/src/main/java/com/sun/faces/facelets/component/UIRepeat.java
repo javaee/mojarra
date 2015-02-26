@@ -437,7 +437,7 @@ public class UIRepeat extends UINamingContainer {
                     SavedState initialState = initialChildState.get(childId);
                     initialState.apply(evh);
                 } else {
-                    NullState.apply(evh);
+                    NULL_STATE.apply(evh);
                 }
             }
         }
@@ -889,7 +889,7 @@ public class UIRepeat extends UINamingContainer {
         app.publishEvent(faces, PostValidateEvent.class, this);
     }
 
-    private final static SavedState NullState = new SavedState();
+    private final static SavedState NULL_STATE = new SavedState();
 
     // from RI
     private final static class SavedState implements Serializable {
