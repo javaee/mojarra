@@ -41,7 +41,6 @@
 package com.sun.faces.ajax;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
-import com.sun.faces.render.MessageRenderITCase;
 import com.gargoylesoftware.htmlunit.html.*;
 import com.gargoylesoftware.htmlunit.javascript.host.Node;
 import junit.framework.Test;
