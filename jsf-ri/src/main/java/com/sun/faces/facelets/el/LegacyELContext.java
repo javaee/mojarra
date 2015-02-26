@@ -82,7 +82,7 @@ public final class LegacyELContext extends ELContext {
             "header", "headerValues", "initParam", "param", "paramValues",
             "request", "requestScope", "session", "sessionScope", "view" };
 
-    private final static FunctionMapper functions = new EmptyFunctionMapper();
+    private final static FunctionMapper FUNCTIONS = new EmptyFunctionMapper();
 
     private final FacesContext faces;
 
@@ -101,7 +101,7 @@ public final class LegacyELContext extends ELContext {
     }
 
     public FunctionMapper getFunctionMapper() {
-        return functions;
+        return FUNCTIONS;
     }
 
     public VariableMapper getVariableMapper() {
