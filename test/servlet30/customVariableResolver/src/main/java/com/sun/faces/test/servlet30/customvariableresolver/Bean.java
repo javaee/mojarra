@@ -47,9 +47,8 @@
  * and open the template in the editor.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.customvariableresolver;
 
-import com.sun.faces.systest.model.TestBean;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.VariableResolver;

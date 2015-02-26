@@ -47,7 +47,7 @@
  * and open the template in the editor.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.customvariableresolver;
 
 import com.sun.faces.config.ConfigureListener;
 import com.sun.faces.util.Util;
