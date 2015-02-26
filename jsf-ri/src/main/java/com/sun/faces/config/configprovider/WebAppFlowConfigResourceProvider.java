@@ -64,7 +64,7 @@ import javax.servlet.ServletContext;
 public class WebAppFlowConfigResourceProvider implements
       ConfigurationResourceProvider {
     
-    private static final Logger logger = FacesLogger.CONFIG.getLogger();
+    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     // ------------------------------ Methods from ConfigurationResourceProvider
 
@@ -122,12 +122,12 @@ public class WebAppFlowConfigResourceProvider implements
                     curUrl = context.getResource(cur);
                     list.add(curUrl.toURI());
                 } catch (MalformedURLException ex) {
-                    if (logger.isLoggable(Level.SEVERE)) {
-                        logger.log(Level.SEVERE, "Unable to get resource for {0}" + cur, ex);
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, "Unable to get resource for {0}" + cur, ex);
                     }
                 } catch (URISyntaxException use) {
-                    if (logger.isLoggable(Level.SEVERE)) {
-                        logger.log(Level.SEVERE, "Unable to get URI for {0}" + curUrl.toExternalForm(), use);
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, "Unable to get URI for {0}" + curUrl.toExternalForm(), use);
                     }
                     
                 }
