@@ -212,36 +212,30 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         // because we just need to know if this command caused the submission. We
         // can get the command name by calling currentValue. This way we can
         // get around the IE bug.
-        
-        if (context.getPartialViewContext().isAjaxRequest()){
-            Map<String, String> requestParameterMap = context.getExternalContext()
-                  .getRequestParameterMap();
 
-            return requestParameterMap.get("javax.faces.source").contains(clientId);
-        } else {
-            if (clientId == null) {
-                clientId = component.getClientId(context);
-            }
-
-            Map<String, String> requestParameterMap = context.getExternalContext()
-                  .getRequestParameterMap();
-            if (requestParameterMap.get(clientId) == null) {
-
-                // Check to see whether we've got an action event
-                // as a result of a partial/behavior postback.
-                if (RenderKitUtils.isPartialOrBehaviorAction(context, clientId)) {
-                    return true;
-                }
-
-                StringBuilder builder = new StringBuilder(clientId);
-                String xValue = builder.append(".x").toString();
-                builder.setLength(clientId.length());
-                String yValue = builder.append(".y").toString();
-                return (requestParameterMap.get(xValue) != null
-                        && requestParameterMap.get(yValue) != null);
-            }
-            return true;
+        if (clientId == null) {
+            clientId = component.getClientId(context);
         }
+
+        Map<String, String> requestParameterMap = context.getExternalContext()
+              .getRequestParameterMap();
+        if (requestParameterMap.get(clientId) == null) {
+
+            // Check to see whether we've got an action event
+            // as a result of a partial/behavior postback.
+            if (RenderKitUtils.isPartialOrBehaviorAction(context, clientId)) {
+                return true;
+            }
+
+            StringBuilder builder = new StringBuilder(clientId);
+            String xValue = builder.append(".x").toString();
+            builder.setLength(clientId.length());
+            String yValue = builder.append(".y").toString();
+            return (requestParameterMap.get(xValue) != null
+                    && requestParameterMap.get(yValue) != null);
+        }
+        return true;
+
     }
 
     /**
