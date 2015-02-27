@@ -488,12 +488,20 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             caseStruct = findDefaultMatch(ctx, fromAction, outcome, toFlowDocumentId, navMap);
         }
         
+        FlowHandler fh = ctx.getApplication().getFlowHandler();
         // If the preceding steps found a match, but it was a flow call...
         if (null != caseStruct && caseStruct.isFlowEntryFromExplicitRule) {
             // Override the toFlowDocumentId with the value from the navigation-case, if present
             toFlowDocumentId = (null != caseStruct.navCase.getToFlowDocumentId()) ? caseStruct.navCase.getToFlowDocumentId() : toFlowDocumentId;
             // and try to call into the flow
-            caseStruct = findFacesFlowCallMatch(ctx, fromAction, outcome, toFlowDocumentId);
+            caseStruct = findFacesFlowCallMatch(ctx, fromAction, convertToViewIdToFlowOrNodeId(ctx, caseStruct), toFlowDocumentId);
+        } else if ( null != caseStruct && fh != null && fh.getCurrentFlow() != null) {
+            String nodeId = convertToViewIdToFlowOrNodeId(ctx, caseStruct);
+            FlowNode node = fh.getCurrentFlow().getNode(nodeId);
+            if ( node != null) {
+                caseStruct =null;
+                outcome = nodeId;
+            }
         }
         
         // If we still don't have a match, see if this is a viewNode
@@ -1361,7 +1369,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     if (null != toFlowDocumentId) {
                         FlowHandler fh = ctx.getApplication().getFlowHandler();
                         if (null != outcome) {
-                            result.isFlowEntryFromExplicitRule = null != fh.getFlow(ctx, toFlowDocumentId, outcome);
+                            result.isFlowEntryFromExplicitRule = null != fh.getFlow(ctx, toFlowDocumentId, convertToViewIdToFlowOrNodeId(ctx, result));
                         }
                     }
                     return result;
@@ -1370,6 +1378,19 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         }
 
         return null;
+    }
+
+
+    /**
+     *  To look for the Flow or Node by the id, the '/' in the id got from navCase should be trimmed.
+     * 
+     * @param ctx the {@link FacesContext} for the current request
+     * @param caseStruct the {@link CaseStruct} to look for the to view id
+     * @return id of possible Node or Flow without '/' in the string
+     */
+    private String convertToViewIdToFlowOrNodeId(FacesContext ctx, CaseStruct caseStruct) {
+        String viewId = caseStruct.navCase.getToViewId(ctx);
+        return viewId.substring(viewId.lastIndexOf('/')+1);
     }
     
     // ---------------------------------------------------------- Nested Classes
