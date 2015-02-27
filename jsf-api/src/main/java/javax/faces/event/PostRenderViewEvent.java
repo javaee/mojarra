@@ -67,8 +67,7 @@ public class PostRenderViewEvent extends ComponentSystemEvent {
      * </p>
      *
      * @param root the <code>UIViewRoot</code> that has just been rendered.
-     * @throws <code>IllegalArgumentException</code> if the argument is
-     * <code>null</code>.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
     public PostRenderViewEvent(UIViewRoot root) {
         super(root);
