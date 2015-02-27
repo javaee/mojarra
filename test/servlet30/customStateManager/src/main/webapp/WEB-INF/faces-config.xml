@@ -104,15 +104,6 @@
         </managed-property>
     </managed-bean>
 
-    <!-- Managed Bean #3, No Property Overrides -->
-    <managed-bean>
-        <managed-bean-name>test3</managed-bean-name>
-        <managed-bean-class>
-            com.sun.faces.systest.model.TestBean
-        </managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-
     <managed-bean>
         <managed-bean-name>replaceApplication</managed-bean-name>
         <managed-bean-class>com.sun.faces.test.servlet30.customstatemanager.ReplaceApplicationBean</managed-bean-class>
