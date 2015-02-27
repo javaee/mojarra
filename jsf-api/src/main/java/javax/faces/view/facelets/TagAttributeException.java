@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -55,7 +55,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package javax.faces.view.facelets;
 
 /**
@@ -67,29 +66,56 @@ package javax.faces.view.facelets;
 public final class TagAttributeException extends FaceletException {
 
     /**
-     * 
+     * Stores the serial version UID.
      */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor.
+     * 
+     * @param attr the {@link TagAttribute}.
+     */
     public TagAttributeException(TagAttribute attr) {
         super(attr.toString());
     }
 
+    /**
+     * Constructor.
+     * 
+     * @param attr the {@link TagAttribute}.
+     * @param message the message.
+     */
     public TagAttributeException(TagAttribute attr, String message) {
         super(attr + " " + message);
     }
 
+    /**
+     * Constructor.
+     * 
+     * @param attr the {@link TagAttribute}.
+     * @param cause the cause.
+     */
     public TagAttributeException(TagAttribute attr, Throwable cause) {
         super(attr + " " + cause.getMessage(), cause);
     }
 
+    /**
+     * Constructor.
+     * 
+     * @param attr the {@link TagAttribute}.
+     * @param message the message.
+     * @param cause the cause.
+     */
     public TagAttributeException(TagAttribute attr, String message,
             Throwable cause) {
         super(attr + " " + message, cause);
     }
 
     /**
-     * 
+     * Constructor.
+     *
+     * @param tag the {@link Tag}.
+     * @param attr the {@link TagAttribute}.
      */
     public TagAttributeException(Tag tag, TagAttribute attr) {
         super(print(tag, attr));
@@ -101,26 +127,37 @@ public final class TagAttributeException extends FaceletException {
     }
 
     /**
-     * @param message
+     * Constructor.
+     * 
+     * @param tag the {@link Tag}.
+     * @param attr the {@link TagAttribute}.
+     * @param message the message.
      */
     public TagAttributeException(Tag tag, TagAttribute attr, String message) {
         super(print(tag, attr) + " " + message);
     }
 
     /**
-     * @param cause
+     * Constructor.
+     * 
+     * @param tag the {@link Tag}.
+     * @param attr the {@link TagAttribute}.
+     * @param cause the cause.
      */
     public TagAttributeException(Tag tag, TagAttribute attr, Throwable cause) {
         super(print(tag, attr) + " " + cause.getMessage(), cause);
     }
 
     /**
-     * @param message
-     * @param cause
+     * Constructor.
+     *
+     * @param tag the {@link Tag}.
+     * @param attr the {@link TagAttribute}.
+     * @param message the message.
+     * @param cause the cause.
      */
     public TagAttributeException(Tag tag, TagAttribute attr, String message,
             Throwable cause) {
         super(print(tag, attr) + " " + message, cause);
     }
-
 }

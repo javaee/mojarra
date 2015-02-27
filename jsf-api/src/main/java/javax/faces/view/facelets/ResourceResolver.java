@@ -98,11 +98,11 @@ public abstract class ResourceResolver {
 
     /**
      * <p class="changed_added_2_0">Returns the <code>URL</code> of a
-     * Facelet template file.  Called by the Facelets Runtime to load a
+     * Facelet template file. Called by the Facelets Runtime to load a
      * template file referred to in a Facelets page.</p>
-
+     *
      * @param path the internal path to the template resource.
-
+     * @return the resolved URL.
      */
     abstract public URL resolveUrl(String path);
 }
