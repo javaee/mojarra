@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,7 +37,6 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package javax.faces.bean;
 
 import java.lang.annotation.Retention;
@@ -50,17 +49,16 @@ import java.lang.annotation.Inherited;
  * <p class="changed_added_2_0">When this annotation, along with {@link
  * ManagedBean} is found on a class, the runtime must act as if a
  * <code>&lt;managed-bean-scope&gt;VALUE&lt;managed-bean-scope&gt;</code>
- * element was declared for the corresponding managed bean, where VALUE
- * is the value of the {@link #value} attribute, which must be an EL
- * expression that evaluates to a <code>Map</code>.</p>
-
- * <p class="changed_added_2_0">Developers must take care when using
- * custom scopes to ensure that any object references made to or from a
- * custom scoped bean consider the necessary scope lifetimes.  The
- * runtime is not required to perform any validations for such
- * considerations.</p>
-
-
+ * element was declared for the corresponding managed bean, where VALUE is the
+ * value of the {@link #value} attribute, which must be an EL expression that
+ * evaluates to a <code>Map</code>.</p>
+ *
+ * <p class="changed_added_2_0">Developers must take care when using custom
+ * scopes to ensure that any object references made to or from a custom scoped
+ * bean consider the necessary scope lifetimes. The runtime is not required to
+ * perform any validations for such considerations.</p>
+ *
+ *
  * @since 2.0
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -68,5 +66,10 @@ import java.lang.annotation.Inherited;
 @Inherited
 public @interface CustomScoped {
 
+    /**
+     * Get the value.
+     * 
+     * @return the value.
+     */
     public String value();
 }

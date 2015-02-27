@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,7 +37,6 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package javax.faces.bean;
 
 import java.lang.annotation.ElementType;
@@ -46,42 +45,42 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p class="changed_added_2_0">The presence of this annotation on a
- * field of a class annotated with {@link ManagedBean} instructs the
- * system to inject a value into this property as described in section
- * JSF.5.3 of the spec prose document in the
- * <code>&lt;managed-property&gt;</code> subsection. The time of
- * instantiation is dictated by the value of the attributes on the usage
- * of <code>ManagedBean</code> and by the application logic itself.  The
- * value of the {@link #value} attribute may be a literal
- * <code>String</code> or a <code>ValueExpression</code>.  If the
- * latter, the expression must not be evaluated until the bean is
- * instantiated.  The value of the name attribute is taken to be the
- * <em>managed-property-name</em> for this property.  If not specified,
- * the <em>managed-property-name</em> is taken to be the name of the
- * field to which this is attribute is attached.</p>
+ * <p class="changed_added_2_0">The presence of this annotation on a field of a
+ * class annotated with {@link ManagedBean} instructs the system to inject a
+ * value into this property as described in section JSF.5.3 of the spec prose
+ * document in the <code>&lt;managed-property&gt;</code> subsection. The time of
+ * instantiation is dictated by the value of the attributes on the usage of
+ * <code>ManagedBean</code> and by the application logic itself. The value of
+ * the {@link #value} attribute may be a literal <code>String</code> or a
+ * <code>ValueExpression</code>. If the latter, the expression must not be
+ * evaluated until the bean is instantiated. The value of the name attribute is
+ * taken to be the
+ * <em>managed-property-name</em> for this property. If not specified, the
+ * <em>managed-property-name</em> is taken to be the name of the field to which
+ * this is attribute is attached.</p>
  *
- * <p class="changed_added_2_0">If this annotation is present on a class
- * that does not have the <code>ManagedBean</code> annotation, the
- * implementation must take no action on this annotation.</p>
+ * <p class="changed_added_2_0">If this annotation is present on a class that
+ * does not have the <code>ManagedBean</code> annotation, the implementation
+ * must take no action on this annotation.</p>
  */
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ManagedProperty {
 
-    /** <p class="changed_added_2_0">Taken to be the
-     * <code>managed-property-name</code>.  See class documentation for
+    /**
+     * <p class="changed_added_2_0">Taken to be the
+     * <code>managed-property-name</code>. See class documentation for
      * details.</p>
+     *
+     * @return the managed property name.
      */
     String name() default "";
 
-
-    /** <p class="changed_added_2_0">Taken to be the value that is
-     * injected into the field.  See class documentation for
-     * details.</p>
+    /**
+     * <p class="changed_added_2_0">Taken to be the value that is injected into
+     * the field. See class documentation for details.</p>
+     *
+     * @return the value.
      */
     String value();
-
-
 }
