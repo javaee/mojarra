@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.customstatemanager;
 
 import javax.faces.application.StateManager;
 import javax.faces.application.StateManagerWrapper;

@@ -38,25 +38,20 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.customstatemanager;
 
-import javax.faces.context.FacesContext;
+import javax.faces.application.ViewHandler;
+import javax.faces.application.ViewHandlerWrapper;
 
-public class ReplaceApplicationBean {
+public class NewViewHandler extends ViewHandlerWrapper {
 
-    public String getStateManagerClass() {
-	FacesContext context = FacesContext.getCurrentInstance();
-	return context.getApplication().getStateManager().toString();
+    private ViewHandler oldViewHandler = null;
+
+    public NewViewHandler(ViewHandler oldViewHandler) {
+	this.oldViewHandler = oldViewHandler;
     }
 
-    public String getViewHandlerClass() {
-	FacesContext context = FacesContext.getCurrentInstance();
-	return context.getApplication().getViewHandler().toString();
+    public ViewHandler getWrapped() {
+	return oldViewHandler;
     }
-
-    public String getApplicationClass() {
-	FacesContext context = FacesContext.getCurrentInstance();
-	return context.getApplication().toString();
-    }
-
 }

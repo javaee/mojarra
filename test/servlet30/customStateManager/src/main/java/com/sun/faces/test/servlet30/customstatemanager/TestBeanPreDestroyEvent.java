@@ -38,20 +38,15 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.customstatemanager;
 
-import javax.faces.application.ViewHandler;
-import javax.faces.application.ViewHandlerWrapper;
 
-public class NewViewHandler extends ViewHandlerWrapper {
+public class TestBeanPreDestroyEvent extends TestBeanEventClass {
+    private static final long serialVersionUID = -732534303887158542L;
 
-    private ViewHandler oldViewHandler = null;
-
-    public NewViewHandler(ViewHandler oldViewHandler) {
-	this.oldViewHandler = oldViewHandler;
+    public TestBeanPreDestroyEvent(TestBean source) {
+        super(source);
     }
+    
 
-    public ViewHandler getWrapped() {
-	return oldViewHandler;
-    }
 }

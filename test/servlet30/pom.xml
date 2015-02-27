@@ -77,6 +77,7 @@
         <module>customFaceletsResolver</module>
         <module>customResolvers</module>
         <module>customResourcesDirectory</module>
+        <module>customStateManager</module>
         <module>customVariableResolver</module>
         <module>customVariableResolverProgrammatically</module>
         <module>customViewHandler</module>

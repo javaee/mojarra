@@ -38,37 +38,17 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.customstatemanager;
 
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.Application;
+/**
+ *
+ * @author edburns
+ */
+public class TestBeanPostConstructEvent extends TestBeanEventClass {
 
-public class NewApplicationFactory extends ApplicationFactory {
-
-    public NewApplicationFactory() {
+    public TestBeanPostConstructEvent(TestBean source) {
+        super(source);
     }
     
-    private ApplicationFactory oldFactory = null;
-
-    private NewApplication newApp = null;
-    
-    public NewApplicationFactory(ApplicationFactory yourOldFactory) {
-	oldFactory = yourOldFactory;
-    }
-    
-    public Application getApplication() {
-	if (null == newApp) {
-	    newApp = new NewApplication(oldFactory.getApplication());
-	}
-	return newApp;
-    }
-    
-    public void setApplication(Application application) {
-	newApp = (NewApplication) application;
-    }
-
-    public String toString() {
-	return "NewApplicationFactory";
-    }
 
 }
