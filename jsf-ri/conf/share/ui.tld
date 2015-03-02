@@ -1027,11 +1027,11 @@ size of the collection, or a <code>FacesException</code> must be thrown.</p>
             <description>
 
                 <![CDATA[
-<div class="changed_added_2_0">
+<div class="changed_added_2_0 changed_modified_2_3">
 
 <p>The name of a collection of items that this tag iterates over.  The
 collection may be a <code>List</code>, <code>array</code>,
-<code>java.sql.ResultSet</code>, or an individual java Object.  If the
+<code>java.sql.ResultSet</code>, <code>java.lang.Iterable</code> or an individual java Object.  If the
 collection is null, this tag does nothing.</p>
 
 </div>]]>
