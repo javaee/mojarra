@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.customlifecycle;
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;

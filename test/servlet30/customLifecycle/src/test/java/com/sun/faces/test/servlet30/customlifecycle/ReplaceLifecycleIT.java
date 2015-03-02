@@ -37,56 +37,54 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.customlifecycle;
 
-package com.sun.faces.systest;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+/**
+ * <p>
+ * Replace the LifecycleFactory with an impl that knows about a new LifecycleId
+ * that is passed to the app as a ServletContext init parameter. Make sure that
+ * a phaseListener still gets called with a replaced lifecycle id.</p>
+ */
+public class ReplaceLifecycleIT {
 
-import javax.faces.FactoryFinder;
-import javax.faces.FacesException;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.LifecycleFactory;
+    private String webUrl;
+    private WebClient webClient;
 
-import java.util.Iterator;
-
-public class LifecycleFactoryImpl extends LifecycleFactory {
-
-    public LifecycleFactoryImpl() {
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    private LifecycleFactory previous = null;
-
-    private Lifecycle newLifecycle = null;
-
-    public LifecycleFactoryImpl(LifecycleFactory previous) {
-	this.previous = previous;
-	try {
-	    newLifecycle = new NewLifecycle("com.sun.faces.systest.NewLifecycle");
-	    this.previous.addLifecycle("com.sun.faces.systest.NewLifecycle",
-				       newLifecycle);
-            newLifecycle = new NewLifecycle("com.sun.faces.systest.AlternateLifecycle");
-            this.previous.addLifecycle("com.sun.faces.systest.AlternateLifecycle",
-				       newLifecycle);
-	}
-	catch (Throwable e) {
-	    throw new FacesException(e);
-	}
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    public void addLifecycle(String lifecycleId,
-			     Lifecycle lifecycle) {
-	previous.addLifecycle(lifecycleId, lifecycle);
+    @Test
+    public void testReplaceLifecycle() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/test.jsp");
+        String pageText = page.asText();
+        assertTrue(-1 != pageText.indexOf("beforePhase"));
+        // Ensure the phaseListener is only called once.
+        assertTrue(!pageText.matches("(?s).*beforePhase.*beforePhase.*"));
+
     }
 
-    public Lifecycle getLifecycle(String lifecycleId) {
-	return previous.getLifecycle(lifecycleId);
-    }
-
-
-    public Iterator getLifecycleIds() {
-	return previous.getLifecycleIds();
+    @Test
+    public void testAlternateLifecycle() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "alternate/test2.jsp");
+        assertTrue(-1 != page.asText().indexOf("beforePhase"));
+        assertTrue(-1 != page.asText().indexOf("AlternateLifecycle"));
+        page = webClient.getPage(webUrl + "faces/test2.jsp");
+        assertTrue(-1 != page.asText().indexOf("beforePhase"));
+        assertTrue(-1 != page.asText().indexOf("NewLifecycle"));
     }
 }

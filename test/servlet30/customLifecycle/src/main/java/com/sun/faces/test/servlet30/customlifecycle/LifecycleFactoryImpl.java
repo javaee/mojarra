@@ -38,20 +38,55 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.customlifecycle;
 
-import com.sun.faces.lifecycle.LifecycleImpl;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
-public class NewLifecycle extends LifecycleImpl {
-    
-    private String lifecycleId = null;
+import javax.faces.FactoryFinder;
+import javax.faces.FacesException;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
 
-    public NewLifecycle(String lifecycleId) {
-        this.lifecycleId = lifecycleId;
+import java.util.Iterator;
+
+public class LifecycleFactoryImpl extends LifecycleFactory {
+
+    public LifecycleFactoryImpl() {
     }
-    
-    public String getLifecycleId() {
-        return lifecycleId;
+
+    private LifecycleFactory previous = null;
+
+    private Lifecycle newLifecycle = null;
+
+    public LifecycleFactoryImpl(LifecycleFactory previous) {
+	this.previous = previous;
+	try {
+	    newLifecycle = new NewLifecycle("com.sun.faces.test.servlet30.customlifecycle.NewLifecycle");
+	    this.previous.addLifecycle("com.sun.faces.test.servlet30.customlifecycle.NewLifecycle",
+				       newLifecycle);
+            newLifecycle = new NewLifecycle("com.sun.faces.test.servlet30.customlifecycle.AlternateLifecycle");
+            this.previous.addLifecycle("com.sun.faces.test.servlet30.customlifecycle.AlternateLifecycle",
+				       newLifecycle);
+	}
+	catch (Throwable e) {
+	    throw new FacesException(e);
+	}
     }
 
+    public void addLifecycle(String lifecycleId,
+			     Lifecycle lifecycle) {
+	previous.addLifecycle(lifecycleId, lifecycle);
+    }
+
+    public Lifecycle getLifecycle(String lifecycleId) {
+	return previous.getLifecycle(lifecycleId);
+    }
+
+
+    public Iterator getLifecycleIds() {
+	return previous.getLifecycleIds();
+    }
 }
