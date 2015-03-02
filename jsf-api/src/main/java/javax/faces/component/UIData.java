@@ -71,6 +71,7 @@ import javax.faces.event.PreValidateEvent;
 import javax.faces.model.ArrayDataModel;
 import javax.faces.model.CollectionDataModel;
 import javax.faces.model.DataModel;
+import javax.faces.model.IterableDataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.ResultDataModel;
 import javax.faces.model.ResultSetDataModel;
@@ -1845,6 +1846,8 @@ public class UIData extends UIComponentBase
             setDataModel(new ResultDataModel((Result) current));
         } else if (current instanceof Collection) {
             setDataModel(new CollectionDataModel((Collection) current));
+        } else if (current instanceof Iterable) {
+            setDataModel(new IterableDataModel<>((Iterable<?>) current));
         } else {
             setDataModel(new ScalarDataModel(current));
         }

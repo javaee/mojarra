@@ -82,10 +82,12 @@ import javax.faces.event.PostValidateEvent;
 import javax.faces.event.PreValidateEvent;
 import javax.faces.model.ArrayDataModel;
 import javax.faces.model.DataModel;
+import javax.faces.model.IterableDataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.ResultSetDataModel;
 import javax.faces.model.ScalarDataModel;
 import javax.faces.render.Renderer;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -96,6 +98,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
+
 import static javax.faces.component.UINamingContainer.getSeparatorChar;
 
 
@@ -265,6 +268,8 @@ public class UIRepeat extends UINamingContainer {
                 this.model = new ArrayDataModel<>((Object[]) val);
             } else if (val instanceof ResultSet) {
                 this.model = new ResultSetDataModel((ResultSet) val);
+            } else if (val instanceof Iterable) {
+                this.model = new IterableDataModel<>((Iterable<?>) val);
             } else {
                 this.model = new ScalarDataModel<>(val);
             }
