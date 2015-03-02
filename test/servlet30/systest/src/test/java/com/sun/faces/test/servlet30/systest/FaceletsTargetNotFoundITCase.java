@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.facelets;
+package com.sun.faces.test.servlet30.systest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +48,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -55,18 +57,18 @@ import junit.framework.TestSuite;
 /**
  * Test cases for Facelets functionality
  */
-public class csetITCase extends HtmlUnitFacesITCase {
+public class FaceletsTargetNotFoundITCase extends HtmlUnitFacesITCase {
 
 
     // --------------------------------------------------------------- Test Init
 
 
-    public csetITCase() {
-        this("csetTestCase");
+    public FaceletsTargetNotFoundITCase() {
+        this("FaceletsTargetNotFoundTestCase");
     }
 
 
-    public csetITCase(String name) {
+    public FaceletsTargetNotFoundITCase(String name) {
         super(name);
     }
 
@@ -83,7 +85,7 @@ public class csetITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(csetITCase.class));
+        return (new TestSuite(FaceletsTargetNotFoundITCase.class));
     }
 
 
@@ -97,15 +99,57 @@ public class csetITCase extends HtmlUnitFacesITCase {
 
     // ------------------------------------------------------------ Test Methods
 
-
     /*
-     * Added for issue 917.
+     * Check that not found errors give a 500 status, instead of the 404 that
+     * they used to give.
      */
-    public void testSetPropertyActionListener1() throws Exception {
+    public void testFaillingCode() throws Exception {
 
-        lastpage = getPage("/faces/facelets/csetTagBody.xhtml") ;
+        WebClient client = new WebClient();
+        client.setThrowExceptionOnFailingStatusCode(true);
+        HtmlPage page;
+        int code;
 
-        checkTrue("output", "y bop alice bop yes");
+        try {
+            page = getPage("/faces/facelets/compositionnotfound.xhtml", client) ;
+            fail("A Failing status code was not received");
+        } catch (FailingHttpStatusCodeException fail) {
+            code = fail.getStatusCode();
+            assertTrue("Expected 500, got: "+code, code==500);
+        }
+        try {
+            page = getPage("/faces/facelets/decoratenotfound.xhtml", client) ;
+            fail("A Failing status code was not received");
+        } catch (FailingHttpStatusCodeException fail) {
+            code = fail.getStatusCode();
+            assertTrue("Expected 500, got: "+code, code==500);
+        }
+        try {
+            page = getPage("/faces/facelets/includenotfound.xhtml", client) ;
+            fail("A Failing status code was not received");
+        } catch (FailingHttpStatusCodeException fail) {
+            code = fail.getStatusCode();
+            assertTrue("Expected 500, got: "+code, code==500);
+        }
+
+    }
+
+    public void testNotFoundCode() throws Exception {
+        WebClient client = new WebClient();
+        client.setThrowExceptionOnFailingStatusCode(true);
+        HtmlPage page;
+        int code;
+
+        try {
+            page = getPage("/faces/missing-top-level-page.xhtml", client) ;
+            fail("A Failing status code was not received");
+        } catch (FailingHttpStatusCodeException fail) {
+            code = fail.getStatusCode();
+            assertTrue("Expected 404, got: "+code, code==404);
+        }
+
+        
+
     }
 
 }

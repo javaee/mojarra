@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.facelets;
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.WebWindow;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -53,6 +53,8 @@ import junit.framework.TestSuite;
 
 import java.util.ArrayList;
 import java.util.List;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Test cases for Facelets functionality
@@ -67,9 +69,9 @@ public class UIRepeatITCase extends HtmlUnitFacesITCase {
         this("UIRepeatTestCase");
 
         // this test is excluded because it won't pass in tomcat due to an issue with NumberConverter
-        addExclusion(Container.TOMCAT6, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
-        addExclusion(Container.TOMCAT7, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
-        addExclusion(Container.WLS_10_3_4_NO_CLUSTER, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
+        addExclusion(HtmlUnitFacesITCase.Container.TOMCAT6, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
+        addExclusion(HtmlUnitFacesITCase.Container.TOMCAT7, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
+        addExclusion(HtmlUnitFacesITCase.Container.WLS_10_3_4_NO_CLUSTER, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
 
     }
 

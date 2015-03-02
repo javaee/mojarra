@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.facelets;
+package com.sun.faces.test.servlet30.systest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +59,11 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.URL;
 import junit.framework.Test;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.fail;
 import junit.framework.TestSuite;
 
 
