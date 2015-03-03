@@ -1236,6 +1236,10 @@ public class HtmlResponseWriter extends ResponseWriter {
     private String pushElementName(String original) {
         
         if (original.equals("option")) {
+            if(elementNames == null) {
+                elementNames = new LinkedList<>();
+            }
+            elementNames.push(original);
             return original;
         }
         
