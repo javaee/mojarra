@@ -38,23 +38,29 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
-public class AjaxRequestMultiRenderITCase extends HtmlUnitFacesITCase {
+import java.util.ArrayList;
+import java.util.List;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 
-    public AjaxRequestMultiRenderITCase(String name) {
+
+public class AjaxEvalITCase extends HtmlUnitFacesITCase {
+
+
+     public AjaxEvalITCase(String name) {
         super(name);
     }
 
-    /**
+    /*
      * Set up instance variables required by this test case.
      */
     public void setUp() throws Exception {
@@ -62,15 +68,15 @@ public class AjaxRequestMultiRenderITCase extends HtmlUnitFacesITCase {
     }
 
 
-    /**
+    /*
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxRequestMultiRenderITCase.class));
+        return (new TestSuite(AjaxEvalITCase.class));
     }
 
 
-    /**
+    /*
      * Tear down instance variables required by this test case.
      */
     public void tearDown() {
@@ -78,38 +84,24 @@ public class AjaxRequestMultiRenderITCase extends HtmlUnitFacesITCase {
     }
 
 
-    public void testAjaxMultiRender() throws Exception {
-        getPage("/faces/ajax/ajaxRequestMultiRender.xhtml");
-        System.out.println("Start ajax multi render test");
+    // ------------------------------------------------------------ Test Methods
 
-        // First we'll check the first page was output correctly
-        assertTrue(check("out1","0"));
-        assertTrue(check("out2","0"));
-        assertTrue(check("out3","0"));
-        assertTrue(check("out4","0"));
 
-        // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("button1");
-        lastpage = (HtmlPage) button1.click();
+    public void testAjaxEval() throws Exception {
 
-        // Check that the request succeeds
-        assertTrue(check("out1","1"));
-        assertTrue(check("out2","1"));
-        assertTrue(check("out3","1"));
+        List<String> collectedAlerts = new ArrayList<String>(1);
+        client.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
 
-        // Check that the request did NOT update the rest of the page.
-        assertTrue(check("out4","0"));
+        HtmlPage page = getPage("/faces/ajax/ajaxEval.xhtml");
 
-        // Submit the reset
-        HtmlSubmitInput reset = (HtmlSubmitInput) lastpage.getHtmlElementById("reset");
-        lastpage = (HtmlPage) reset.click();
+        HtmlSubmitInput button = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:eval");
+        assertNotNull(button);
 
-        // Check that reset succeeds
-        assertTrue(check("out1","0"));
-        assertTrue(check("out2","0"));
-        assertTrue(check("out3","0"));
-        assertTrue(check("out4","0"));
+        button.click();
+
+        assertEquals(1, collectedAlerts.size());
+        assertEquals("test", collectedAlerts.get(0));
 
     }
-
 }

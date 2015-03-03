@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
@@ -47,6 +47,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import static junit.framework.TestCase.assertTrue;
 
 public class AjaxRequestITCase extends HtmlUnitFacesITCase {
 

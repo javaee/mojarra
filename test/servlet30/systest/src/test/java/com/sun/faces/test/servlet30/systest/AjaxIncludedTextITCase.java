@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;

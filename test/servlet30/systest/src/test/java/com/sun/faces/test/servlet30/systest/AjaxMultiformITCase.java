@@ -38,20 +38,20 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
-import com.gargoylesoftware.htmlunit.html.*;
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import com.gargoylesoftware.htmlunit.html.*;
 
-public class AjaxBadXMLITCase extends HtmlUnitFacesITCase {
+public class AjaxMultiformITCase extends HtmlUnitFacesITCase {
 
-    public AjaxBadXMLITCase(String name) {
+    public AjaxMultiformITCase(String name) {
         super(name);
     }
 
-    /*
+    /**
      * Set up instance variables required by this test case.
      */
     public void setUp() throws Exception {
@@ -63,11 +63,11 @@ public class AjaxBadXMLITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxBadXMLITCase.class));
+        return (new TestSuite(AjaxMultiformITCase.class));
     }
 
 
-    /*
+    /**
      * Tear down instance variables required by this test case.
      */
     public void tearDown() {
@@ -75,17 +75,33 @@ public class AjaxBadXMLITCase extends HtmlUnitFacesITCase {
     }
 
 
-    // Test basic ajax functionality
-    public void testAjaxBadXML() throws Exception {
-        getPage("/faces/ajax/ajaxInvalidXML.xhtml");
-
+    public void testAjaxMultiform() throws Exception {
+        getPage("/faces/ajax/ajaxMultiform.xhtml");
+        System.out.println("Start ajax multiform test");
+        // First we'll check the first page was output correctly
+        checkTrue("countForm1:out1","0");
+        checkTrue("countForm2:out1","1");
+        checkTrue("countForm3:out1","2");
+        checkTrue("out2","3");
 
         // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:bad");
+        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm1:button1");
         lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
-        checkTrue("h2","Bread & Butter");
-    }
+        checkTrue("countForm1:out1","4");
 
+        // Check that the request did NOT update the rest of the page.
+        checkTrue("out2","3");
+
+        // Submit the ajax request
+        button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm2:button1");
+        lastpage = (HtmlPage) button1.click();
+
+        // Check that the ajax request succeeds
+        checkTrue("countForm2:out1","5");
+
+        // Check that the request did NOT update the rest of the page.
+        checkTrue("out2","3");
+    }
 }

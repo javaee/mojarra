@@ -38,16 +38,17 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.*;
+import static junit.framework.TestCase.assertTrue;
 
-public class AjaxMultiformITCase extends HtmlUnitFacesITCase {
+public class AjaxTableITCase extends HtmlUnitFacesITCase {
 
-    public AjaxMultiformITCase(String name) {
+    public AjaxTableITCase(String name) {
         super(name);
     }
 
@@ -63,11 +64,11 @@ public class AjaxMultiformITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxMultiformITCase.class));
+        return (new TestSuite(AjaxTableITCase.class));
     }
 
 
-    /**
+    /*
      * Tear down instance variables required by this test case.
      */
     public void tearDown() {
@@ -75,33 +76,48 @@ public class AjaxMultiformITCase extends HtmlUnitFacesITCase {
     }
 
 
-    public void testAjaxMultiform() throws Exception {
-        getPage("/faces/ajax/ajaxMultiform.xhtml");
-        System.out.println("Start ajax multiform test");
-        // First we'll check the first page was output correctly
-        checkTrue("countForm1:out1","0");
-        checkTrue("countForm2:out1","1");
-        checkTrue("countForm3:out1","2");
-        checkTrue("out2","3");
+    /*
+       Test each component to see that it behaves correctly when used with an Ajax tag
+     */
+    public void testAjaxTable() throws Exception {
+        getPage("/faces/ajax/ajaxTable.xhtml");
+        System.out.println("Start ajax table test");
 
-        // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm1:button1");
-        lastpage = (HtmlPage) button1.click();
+        assertTrue(check("table:2:inCity","Boston"));
 
-        // Check that the ajax request succeeds
-        checkTrue("countForm1:out1","4");
+        // Check on the text field
+        HtmlTextInput intext = ((HtmlTextInput)lastpage.getHtmlElementById("table:2:inCity"));
+        intext.setValueAttribute("");
+        intext.focus();
+        intext.type("test");
+        intext.blur();
 
-        // Check that the request did NOT update the rest of the page.
-        checkTrue("out2","3");
+        checkTrue("table:2:inCity","test");
+        System.out.println("Text Checked");
 
-        // Submit the ajax request
-        button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm2:button1");
-        lastpage = (HtmlPage) button1.click();
+        // Check on the checkbox
 
-        // Check that the ajax request succeeds
-        checkTrue("countForm2:out1","5");
+        checkTrue("table:3:cheesepref","Eww");
 
-        // Check that the request did NOT update the rest of the page.
-        checkTrue("out2","3");
+        HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("table:3:cheesecheck"));
+        lastpage = (HtmlPage)checked.click();
+
+        checkTrue("table:3:cheesepref","Cheese Please");
+        System.out.println("Boolean Checkbox Checked");
+
+        checkTrue("table:4:count", "4");
+        HtmlAnchor countlink = (HtmlAnchor) lastpage.getHtmlElementById("table:4:countlink");
+        lastpage = countlink.click();
+
+        checkTrue("table:4:count", "5");
+        checkTrue("count","1");
+
+
+        HtmlSubmitInput button = (HtmlSubmitInput)lastpage.getHtmlElementById("submitButton");
+        lastpage = button.click();
+        checkTrue("table:0:count", "6");
+        checkTrue("count","1");
+        
     }
+
 }

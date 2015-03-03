@@ -38,27 +38,21 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
-import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import com.gargoylesoftware.htmlunit.html.*;
+import static junit.framework.TestCase.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
+public class AjaxViewStateITCase extends HtmlUnitFacesITCase {
 
-
-public class AjaxAttrsITCase extends HtmlUnitFacesITCase {
-
-
-     public AjaxAttrsITCase(String name) {
+    public AjaxViewStateITCase(String name) {
         super(name);
     }
 
-    /*
+    /**
      * Set up instance variables required by this test case.
      */
     public void setUp() throws Exception {
@@ -70,11 +64,11 @@ public class AjaxAttrsITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxAttrsITCase.class));
+        return (new TestSuite(AjaxViewStateITCase.class));
     }
 
 
-    /*
+    /**
      * Tear down instance variables required by this test case.
      */
     public void tearDown() {
@@ -82,53 +76,21 @@ public class AjaxAttrsITCase extends HtmlUnitFacesITCase {
     }
 
 
-    // ------------------------------------------------------------ Test Methods
+    public void testAjaxViewState() throws Exception {
+        getPage("/faces/ajax/ajaxViewState.xhtml");
+        System.out.println("Start ajax view state test");
 
+        // Check ajax checkbox
+        HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox1"));
+        lastpage = (HtmlPage)checked.click();
 
-    public void testAjaxAttrs() throws Exception {
+        System.out.println(getText("checkedvalue1"));
+        checkTrue("checkedvalue1","true");
 
-        List<String> collectedAlerts = new ArrayList<String>(1);
-        client.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
+        HtmlSubmitInput button = (HtmlSubmitInput) lastpage.getHtmlElementById("viewState");
+        button.click();
+        assertTrue(-1 != lastpage.asText().indexOf("&checkbox1=on"));
 
-        HtmlPage page = getPage("/faces/ajax/ajaxAttrs.xhtml");
-
-        HtmlSubmitInput button = (HtmlSubmitInput)
-              getInputContainingGivenId(page, "form:attr");
-        assertNotNull(button);
-
-        String value = button.getValueAttribute();
-
-        assertTrue("expected Dummy but got "+value, "Dummy".equals(value));
-
-        page = button.click();
-
-        button = (HtmlSubmitInput)
-              getInputContainingGivenId(page, "form:attr");
-
-        value = button.getValueAttribute();
-
-        assertTrue("expected New Value but got "+value, "New Value".equals(value));
-
-        String onclick = button.getOnClickAttribute();
-        assertTrue(onclick.matches("(?s).*'delay':'none'.*"));
-        
-        button = (HtmlSubmitInput)
-              getInputContainingGivenId(page, "form:attrImplicitDelay");
-
-        value = button.getValueAttribute();
-        
-        assertTrue("expected Dummy Implicit Delay but got "+value, "Dummy Implicit Delay".equals(value));
-        onclick = button.getOnClickAttribute();
-        assertTrue(!onclick.matches("(?s).*'delay':'none'.*"));
-        
-        button = (HtmlSubmitInput)
-              getInputContainingGivenId(page, "form:attrDelay");
-
-        value = button.getValueAttribute();
-        
-        assertTrue("expected Dummy Delay but got "+value, "Dummy Delay".equals(value));
-        onclick = button.getOnClickAttribute();
-        assertTrue(onclick.matches("(?s).*'delay':'200'.*"));
-        
     }
+
 }

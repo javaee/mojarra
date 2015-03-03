@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
@@ -51,10 +51,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AjaxEvalITCase extends HtmlUnitFacesITCase {
+public class AjaxAttrsITCase extends HtmlUnitFacesITCase {
 
 
-     public AjaxEvalITCase(String name) {
+     public AjaxAttrsITCase(String name) {
         super(name);
     }
 
@@ -70,7 +70,7 @@ public class AjaxEvalITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxEvalITCase.class));
+        return (new TestSuite(AjaxAttrsITCase.class));
     }
 
 
@@ -85,21 +85,50 @@ public class AjaxEvalITCase extends HtmlUnitFacesITCase {
     // ------------------------------------------------------------ Test Methods
 
 
-    public void testAjaxEval() throws Exception {
+    public void testAjaxAttrs() throws Exception {
 
         List<String> collectedAlerts = new ArrayList<String>(1);
         client.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
 
-        HtmlPage page = getPage("/faces/ajax/ajaxEval.xhtml");
+        HtmlPage page = getPage("/faces/ajax/ajaxAttrs.xhtml");
 
         HtmlSubmitInput button = (HtmlSubmitInput)
-              getInputContainingGivenId(page, "form:eval");
+              getInputContainingGivenId(page, "form:attr");
         assertNotNull(button);
 
-        button.click();
+        String value = button.getValueAttribute();
 
-        assertEquals(1, collectedAlerts.size());
-        assertEquals("test", collectedAlerts.get(0));
+        assertTrue("expected Dummy but got "+value, "Dummy".equals(value));
 
+        page = button.click();
+
+        button = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:attr");
+
+        value = button.getValueAttribute();
+
+        assertTrue("expected New Value but got "+value, "New Value".equals(value));
+
+        String onclick = button.getOnClickAttribute();
+        assertTrue(onclick.matches("(?s).*'delay':'none'.*"));
+        
+        button = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:attrImplicitDelay");
+
+        value = button.getValueAttribute();
+        
+        assertTrue("expected Dummy Implicit Delay but got "+value, "Dummy Implicit Delay".equals(value));
+        onclick = button.getOnClickAttribute();
+        assertTrue(!onclick.matches("(?s).*'delay':'none'.*"));
+        
+        button = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:attrDelay");
+
+        value = button.getValueAttribute();
+        
+        assertTrue("expected Dummy Delay but got "+value, "Dummy Delay".equals(value));
+        onclick = button.getOnClickAttribute();
+        assertTrue(onclick.matches("(?s).*'delay':'200'.*"));
+        
     }
 }

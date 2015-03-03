@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
@@ -49,6 +49,9 @@ import junit.framework.TestSuite;
 
 import java.util.ArrayList;
 import java.util.List;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 public class AjaxErrorITCase extends HtmlUnitFacesITCase {
 

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,20 +38,21 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.gargoylesoftware.htmlunit.html.*;
 
-public class AjaxJsfJsITCase extends HtmlUnitFacesITCase {
+public class AjaxAllKeywordITCase extends HtmlUnitFacesITCase {
 
-    public AjaxJsfJsITCase(String name) {
+    public AjaxAllKeywordITCase(String name) {
         super(name);
     }
 
-    /**
+    /*
      * Set up instance variables required by this test case.
      */
     public void setUp() throws Exception {
@@ -63,11 +64,11 @@ public class AjaxJsfJsITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxJsfJsITCase.class));
+        return (new TestSuite(AjaxAllKeywordITCase.class));
     }
 
 
-    /**
+    /*
      * Tear down instance variables required by this test case.
      */
     public void tearDown() {
@@ -75,14 +76,52 @@ public class AjaxJsfJsITCase extends HtmlUnitFacesITCase {
     }
 
 
-    public void testAjaxJsfJs() throws Exception {
-        getPage("/faces/ajax/jsfJS.xhtml");
-        System.out.println("Start ajax jsf js test");
-        HtmlSubmitInput button = (HtmlSubmitInput) lastpage.getHtmlElementById("button");
-        button.click();
-        assertTrue(-1 != lastpage.asText().indexOf("child nodes 0"));
-        assertTrue(-1 != lastpage.asText().indexOf("child nodes 1"));
+    public void testAjaxAllKeyword1() throws Exception {
+
+        getPage("/faces/ajax/ajaxAllKeyword1.xhtml");
+        System.out.println("Start ajax All Keyword test");
+
+        // First we'll check the first page was output correctly
+        checkTrue("form1:out1","testtext");
+
+        // Submit the ajax request
+        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:allKeyword");
+        HtmlPage lastpage = (HtmlPage) button1.click();
+
+        // Check that the ajax request succeeds - if the page is rewritten, this will be the same
+        checkTrue("form1:out1","testtext");
 
     }
+    public void testAjaxAllKeyword2() throws Exception {
 
+        getPage("/faces/ajax/ajaxAllKeyword2.xhtml");
+        System.out.println("Start ajax All Keyword test");
+
+        // First we'll check the first page was output correctly
+        checkTrue("form1:out1","testtext");
+
+        // Submit the ajax request
+        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:allKeyword");
+        HtmlPage lastpage = (HtmlPage) button1.click();
+
+        // Check that the ajax request succeeds - if the page is rewritten, this will be the same
+        checkTrue("form1:out1","testtext");
+
+    }
+    public void testAjaxAllKeyword3() throws Exception {
+
+        getPage("/faces/ajax/ajaxAllKeyword3.xhtml");
+        System.out.println("Start ajax All Keyword test");
+
+        // First we'll check the first page was output correctly
+        checkTrue("form1:out1","testtext");
+
+        // Submit the ajax request
+        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:allKeyword");
+        HtmlPage lastpage = (HtmlPage) button1.click();
+
+        // Check that the ajax request succeeds - if the page is rewritten, this will be the same
+        checkTrue("form1:out1","testtext");
+
+    }
 }

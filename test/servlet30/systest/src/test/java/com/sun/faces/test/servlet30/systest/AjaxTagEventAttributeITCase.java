@@ -38,25 +38,20 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
+import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSpan;
+import com.gargoylesoftware.htmlunit.html.*;
 
-import java.util.ArrayList;
-import java.util.List;
+public class AjaxTagEventAttributeITCase extends HtmlUnitFacesITCase {
 
-public class AjaxRedirectITCase extends HtmlUnitFacesITCase {
-
-    public AjaxRedirectITCase(String name) {
+    public AjaxTagEventAttributeITCase(String name) {
         super(name);
     }
 
-    /*
+    /**
      * Set up instance variables required by this test case.
      */
     public void setUp() throws Exception {
@@ -68,11 +63,11 @@ public class AjaxRedirectITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxRedirectITCase.class));
+        return (new TestSuite(AjaxTagEventAttributeITCase.class));
     }
 
 
-    /*
+    /**
      * Tear down instance variables required by this test case.
      */
     public void tearDown() {
@@ -80,23 +75,52 @@ public class AjaxRedirectITCase extends HtmlUnitFacesITCase {
     }
 
 
-    // ------------------------------------------------------------ Test Methods
+    public void testAjaxTagEventAttribute() throws Exception {
+        getPage("/faces/ajax/ajaxTagEventAttribute.xhtml");
+        System.out.println("Start ajax tag event attribute test");
+
+        // Check initial values
+        checkTrue("out1","0");
+        checkTrue("out2","1");
+        checkTrue("out3","");
+        checkTrue("checkedvalue1","false");
+        checkTrue("checkedvalue2","false");
+
+        // Press Count
+        HtmlSubmitInput button = (HtmlSubmitInput) lastpage.getHtmlElementById("button");
+        lastpage = (HtmlPage) button.click();
+
+        checkTrue("out1","0");
+        checkTrue("out2","0");
+
+        HtmlInput input = (HtmlInput) lastpage.getHtmlElementById("in1");
+        lastpage = (HtmlPage) input.setValueAttribute("test");
+
+        checkTrue("out3","test");
 
 
-    public void testAjaxRedirect() throws Exception {
+        // Check ajax checkbox
+        HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox1"));
+        lastpage = (HtmlPage)checked.click();
 
-        HtmlPage page = getPage("/faces/ajax/ajaxRedirect.xhtml");
-        HtmlSubmitInput button = (HtmlSubmitInput)
-              getInputContainingGivenId(page, "form:redirect");
-        assertNotNull(button);
+        checkTrue("checkedvalue1","true");
 
-        page = button.click();
+        // Check ajax checkbox
+        checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox2"));
+        lastpage = (HtmlPage)checked.click();
 
-        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(1);
-        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
-        assertEquals(1, spans.size());
-        HtmlSpan span = spans.get(0);
-        assertEquals("Redirect Target", span.asText());
-        
+        checkTrue("checkedvalue2","true");
+
+        // Check ajax checkbox
+        checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox3"));
+        lastpage = (HtmlPage)checked.click();
+
+        checkTrue("checkedvalue3","true");
+
+
+        // Check that all ajax requests didn't result in a reload
+        checkTrue("out4","2");
+
     }
+
 }

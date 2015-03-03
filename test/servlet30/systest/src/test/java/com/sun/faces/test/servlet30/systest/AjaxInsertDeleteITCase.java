@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -46,6 +46,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlHorizontalRule;
 import com.gargoylesoftware.htmlunit.html.HtmlHeading2;
 import junit.framework.Test;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
 import junit.framework.TestSuite;
 
 public class AjaxInsertDeleteITCase extends HtmlUnitFacesITCase {

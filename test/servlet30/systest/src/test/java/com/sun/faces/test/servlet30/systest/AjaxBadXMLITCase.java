@@ -38,20 +38,20 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
+import com.gargoylesoftware.htmlunit.html.*;
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.gargoylesoftware.htmlunit.html.*;
 
-public class AjaxViewStateITCase extends HtmlUnitFacesITCase {
+public class AjaxBadXMLITCase extends HtmlUnitFacesITCase {
 
-    public AjaxViewStateITCase(String name) {
+    public AjaxBadXMLITCase(String name) {
         super(name);
     }
 
-    /**
+    /*
      * Set up instance variables required by this test case.
      */
     public void setUp() throws Exception {
@@ -63,11 +63,11 @@ public class AjaxViewStateITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxViewStateITCase.class));
+        return (new TestSuite(AjaxBadXMLITCase.class));
     }
 
 
-    /**
+    /*
      * Tear down instance variables required by this test case.
      */
     public void tearDown() {
@@ -75,21 +75,17 @@ public class AjaxViewStateITCase extends HtmlUnitFacesITCase {
     }
 
 
-    public void testAjaxViewState() throws Exception {
-        getPage("/faces/ajax/ajaxViewState.xhtml");
-        System.out.println("Start ajax view state test");
+    // Test basic ajax functionality
+    public void testAjaxBadXML() throws Exception {
+        getPage("/faces/ajax/ajaxInvalidXML.xhtml");
 
-        // Check ajax checkbox
-        HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox1"));
-        lastpage = (HtmlPage)checked.click();
 
-        System.out.println(getText("checkedvalue1"));
-        checkTrue("checkedvalue1","true");
+        // Submit the ajax request
+        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:bad");
+        lastpage = (HtmlPage) button1.click();
 
-        HtmlSubmitInput button = (HtmlSubmitInput) lastpage.getHtmlElementById("viewState");
-        button.click();
-        assertTrue(-1 != lastpage.asText().indexOf("&checkbox1=on"));
-
+        // Check that the ajax request succeeds
+        checkTrue("h2","Bread & Butter");
     }
 
 }

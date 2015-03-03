@@ -38,23 +38,27 @@
  * holder.
  */
 
-package com.sun.faces.ajax;
+package com.sun.faces.test.servlet30.systest;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 
-public class AjaxRequestScriptITCase extends HtmlUnitFacesITCase {
+import java.util.ArrayList;
+import java.util.List;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 
-    public AjaxRequestScriptITCase(String name) {
+public class AjaxRedirectITCase extends HtmlUnitFacesITCase {
+
+    public AjaxRedirectITCase(String name) {
         super(name);
     }
 
-    /**
+    /*
      * Set up instance variables required by this test case.
      */
     public void setUp() throws Exception {
@@ -62,15 +66,15 @@ public class AjaxRequestScriptITCase extends HtmlUnitFacesITCase {
     }
 
 
-    /**
+    /*
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxRequestScriptITCase.class));
+        return (new TestSuite(AjaxRedirectITCase.class));
     }
 
 
-    /**
+    /*
      * Tear down instance variables required by this test case.
      */
     public void tearDown() {
@@ -78,23 +82,23 @@ public class AjaxRequestScriptITCase extends HtmlUnitFacesITCase {
     }
 
 
-    public void testAjaxAndScript() throws Exception {
-        getPage("/faces/ajax/ajaxIncludedScript.xhtml");
-        System.out.println("Start ajax script test");
+    // ------------------------------------------------------------ Test Methods
 
-        // First we'll check the first page was output correctly
-        assertTrue(check("countForm:out1","0"));
-        assertTrue(check("out2","1"));
 
-        // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button1");
-        HtmlPage lastpage = (HtmlPage) button1.click();
+    public void testAjaxRedirect() throws Exception {
 
-        // Check that the ajax request succeeds
-        assertTrue(check("countForm:out1","2"));
+        HtmlPage page = getPage("/faces/ajax/ajaxRedirect.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:redirect");
+        assertNotNull(button);
 
-        // Check that the request did NOT update the rest of the page.
-        assertTrue(check("out2","1"));
+        page = button.click();
+
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(1);
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertEquals(1, spans.size());
+        HtmlSpan span = spans.get(0);
+        assertEquals("Redirect Target", span.asText());
+        
     }
-
 }
