@@ -217,6 +217,13 @@ public class WebConfiguration {
         return webConfig;
 
     }
+    
+    public static WebConfiguration getInstanceWithoutCreating(ServletContext servletContext) {
+        WebConfiguration webConfig = (WebConfiguration)
+              servletContext.getAttribute(WEB_CONFIG_KEY);
+
+        return webConfig;
+    }
 
 
     /**
