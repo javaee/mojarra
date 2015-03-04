@@ -76,6 +76,7 @@
         <module>custom-viewroot-viewscope</module>
         <module>customFaceletsResolver</module>
         <module>customLifecycle</module>
+        <module>customPropertyResolverJsp</module>
         <module>customResolvers</module>
         <module>customResourcesDirectory</module>
         <module>customStateManager</module>

@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.custompropertyresolverjsp;
 
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.EvaluationException;

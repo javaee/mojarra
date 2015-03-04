@@ -81,8 +81,6 @@
               value="com/sun/faces/systest/ConverterPropertyEditorTestCase.class"/>
     <property name="late-bindings"
               value="com/sun/faces/systest/LateBindingTestCase.class"/>
-    <property name="property-resolver-jsp"
-              value="com/sun/faces/systest/PropertyResolverJspTestCase.class"/>
     <property name="never-unwrap-exceptions"
               value="com/sun/faces/systest/NeverUnwrapExceptionsTestCase.class"/>
     <property name="disable-unicode-escaping"

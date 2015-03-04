@@ -37,75 +37,38 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.custompropertyresolverjsp;
 
-package com.sun.faces.systest;
-
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
- * <p>If a custom PropertyResolver is added, ensure the
- * JSP layer still works.</p>
+ * <p>
+ * If a custom PropertyResolver is added, ensure the JSP layer still works.</p>
  */
+public class PropertyResolverJspIT {
 
-public class PropertyResolverJspTestCase extends HtmlUnitFacesTestCase {
+    private String webUrl;
+    private WebClient webClient;
 
-    // ------------------------------------------------------------ Constructors
-
-
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
-    public PropertyResolverJspTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    // ------------------------------------------------------ Instance Variables
-
-    // ---------------------------------------------------- Overall Test Methods
-
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(PropertyResolverJspTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-    // ------------------------------------------------------ Instance Variables
-
-    // ------------------------------------------------- Individual Test Methods
-
-    /**
-     * <p>Verify that selectOne conversion has successfully occurred.</p>
-     */
-
-    public void testConverterPropertyEditor() throws Exception {
-
-        HtmlPage page = getPage("/faces/Test.jsp");
+    @Test
+    public void testCustomPropertyResolver() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/Test.jsp");
         assertTrue(page.asText().contains("resolved!"));
-
     }
-
 }
