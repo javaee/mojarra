@@ -105,7 +105,6 @@
                    never-unwrap-exceptions,
                    flash,
                    jsp-flash,
-                   process-as-jspx,
                    bogus-render-kit-id,
                    characterCombat"/>
     <!--
@@ -130,7 +129,6 @@
                    converter-property-editor,
                    late-bindings,
                    never-unwrap-exceptions,
-                   process-as-jspx,
                    bogus-render-kit-id,
                    characterCombat"/>
 

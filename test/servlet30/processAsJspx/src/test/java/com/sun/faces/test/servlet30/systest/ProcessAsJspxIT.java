@@ -37,22 +37,22 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest;
-
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.regex.Pattern;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 
-
-public class ProcessAsJspxTestCase extends HtmlUnitFacesTestCase {
+public class ProcessAsJspxIT {
 
     private final static Pattern XmlDeclaration = Pattern.compile("(?s)^<\\?xml(\\s)*version=.*\\?>.*");
     private final static Pattern XmlDoctype = Pattern.compile("(?s).*<!DOCTYPE.*>.*");
@@ -62,37 +62,23 @@ public class ProcessAsJspxTestCase extends HtmlUnitFacesTestCase {
     private final static Pattern EscapedText = Pattern.compile("(?s).*&amp;lt;context-param&amp;gt;.*");
     private final static Pattern NotEscapedText = Pattern.compile("(?s).*&lt;context-param&gt;.*");
 
+    private String webUrl;
+    private WebClient webClient;
 
-    public ProcessAsJspxTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(ProcessAsJspxTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
-    
+
     private String getRawMarkup(String path) throws Exception {
-        URL url = getURL(path);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+                webClient.getPage(path).getWebResponse().getContentAsStream()));
         StringBuilder builder = new StringBuilder();
         String cur;
         while (null != (cur = reader.readLine())) {
@@ -102,11 +88,8 @@ public class ProcessAsJspxTestCase extends HtmlUnitFacesTestCase {
         String xml = builder.toString();
         return xml;
     }
-    
-    // ------------------------------------------------------------ Test Methods
-    
-    public void testProcessAsXhtml() throws Exception {
 
+    public void testProcessAsXhtml() throws Exception {
         String xml = getRawMarkup("/faces/xhtmlview.xhtml");
         assertTrue(XmlDoctype.matcher(xml).matches());
         assertTrue(XmlDeclaration.matcher(xml).matches());
@@ -146,7 +129,7 @@ public class ProcessAsJspxTestCase extends HtmlUnitFacesTestCase {
         String xml = getRawMarkup("/faces/mathmlview.view.xml");
         assertTrue(xml.matches("(?s).*<html.*xmlns=\"http://www.w3.org/1999/xhtml\">.*<head>.*<title>.*Raw.*XML.*View.*with.*MathML</title>.*</head>.*<body>.*<p>.*<math.*xmlns=\"http://www.w3.org/1998/Math/MathML\">.*<msup>.*<msqrt>.*<mrow>.*<mi>.*a</mi>.*<mo>.*\\+</mo>.*<mi>.*b</mi>.*</mrow>.*</msqrt>.*<mn>.*27</mn>.*</msup>.*</math>.*</p>.*</body>.*</html>.*"));
 
-        Page page = client.getPage(getURL("/faces/mathmlview.view.xml"));
+        Page page = webClient.getPage(webUrl + "faces/mathmlview.view.xml");
         WebResponse response = page.getWebResponse();
         assertEquals("Content-type should be text/xml", "text/xml", response.getContentType());
 
@@ -163,5 +146,4 @@ public class ProcessAsJspxTestCase extends HtmlUnitFacesTestCase {
         assertTrue(NotEscapedText.matcher(xml).matches());
         assertFalse(Comment.matcher(xml).matches());
     }
-
 }
