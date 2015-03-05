@@ -38,29 +38,25 @@
  * holder.
  */
 
-package com.sun.faces.composite;
-
-import org.w3c.dom.NodeList;
+package com.sun.faces.test.servlet30.systest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
+import com.gargoylesoftware.htmlunit.html.*;
 
 
 /**
  * Unit tests for Composite Components.
  */
-public class ResourceDependencyComponentITCase extends HtmlUnitFacesITCase {
+public class JavaTopLevelComponentITCase extends HtmlUnitFacesITCase {
 
 
-    public ResourceDependencyComponentITCase() {
-        this("ResourceDependencyComponentTestCase");
+    public JavaTopLevelComponentITCase() {
+        this("JavaTopLevelComponentTestCase");
     }
 
-    public ResourceDependencyComponentITCase(String name) {
+    public JavaTopLevelComponentITCase(String name) {
         super(name);
     }
 
@@ -77,7 +73,7 @@ public class ResourceDependencyComponentITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(ResourceDependencyComponentITCase.class));
+        return (new TestSuite(JavaTopLevelComponentITCase.class));
     }
 
 
@@ -91,27 +87,31 @@ public class ResourceDependencyComponentITCase extends HtmlUnitFacesITCase {
 
     // -------------------------------------------------------------- Test Cases
 
-    public void testForwardingToNextPageProcessesResourceDependencies() throws Exception {
-        HtmlPage page = getPage("/faces/composite/resourceDependencyComponentUsingPage.xhtml");
-        assertNrOfLinksPresent(page, 1);
-        HtmlInput button = getInputContainingGivenId(page, "navigateAway");
-        page = button.click();
-        assertTrue(-1 != page.asText().indexOf("Next page"));
-        assertNrOfLinksPresent(page, 1);
+    public void testJavaBeanPropertyOnTopLevelComponentHasExpectedValue() throws Exception {
+//
+//        HtmlPage page = getPage("/faces/composite/javaTopLevelComponentUsingPage.xhtml?q=foo");
+//        String text = page.asText();
+//        assertTrue(-1 != text.indexOf("Get out java property of type String Smallberries"));
+//        assertTrue(-1 != text.indexOf("Get out java property of type int 5"));
+    }
+
+    public void testDefaultActionAttribute() throws Exception {
+//
+//        HtmlPage page = getPage("/faces/composite/javaTopLevelComponentUsingPage.xhtml?q=foo");
+//        HtmlSubmitInput button = (HtmlSubmitInput)
+//                getInputContainingGivenId(page, "loginPanel1:loginAction");
+//        page = button.click();
+//        String text = page.asText();
+//        assertTrue(-1 != text.indexOf("Made it to page 2"));
+//
+    }
+
+    public void testDefaultAttribute() throws Exception {
+//
+//        HtmlPage page = getPage("/faces/composite/defaultAttributeValuesUsingPage.xhtml");
+//        String text = page.asXml();
+//        assertTrue(-1 != text.indexOf("User ID:"));
+//        assertTrue(-1 != text.indexOf("value=\"Login"));
     }
     
-    public void testStayingOnSamePageProcessesResourceDependencies() throws Exception {
-        HtmlPage page = getPage("/faces/composite/resourceDependencyComponentUsingPage.xhtml");
-        assertNrOfLinksPresent(page, 1);
-        HtmlInput button = getInputContainingGivenId(page, "stay");
-        page = button.click();
-        assertTrue(-1 != page.asText().indexOf("Using page"));
-        assertNrOfLinksPresent(page, 1);
-    }
-
-    private void assertNrOfLinksPresent(HtmlPage page, int number) {
-        NodeList nodeList = page.getElementsByTagName("link");
-        assertEquals(1, nodeList.getLength());
-    }
-
 }

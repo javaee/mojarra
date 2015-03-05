@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.composite;
+package com.sun.faces.test.servlet30.systest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -47,6 +47,8 @@ import com.gargoylesoftware.htmlunit.html.*;
 
 import java.util.List;
 import java.util.ArrayList;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Unit tests for Composite Components.

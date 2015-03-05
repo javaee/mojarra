@@ -38,7 +38,9 @@
  * holder.
  */
 
-package com.sun.faces.composite;
+package com.sun.faces.test.servlet30.systest;
+
+import org.w3c.dom.NodeList;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -46,19 +48,21 @@ import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 
 /**
  * Unit tests for Composite Components.
  */
-public class JavaTopLevelActionListenerComponentITCase extends HtmlUnitFacesITCase {
+public class ResourceDependencyComponentITCase extends HtmlUnitFacesITCase {
 
 
-    public JavaTopLevelActionListenerComponentITCase() {
-        this("JavaTopLevelActionListenerComponentTestCase");
+    public ResourceDependencyComponentITCase() {
+        this("ResourceDependencyComponentTestCase");
     }
 
-    public JavaTopLevelActionListenerComponentITCase(String name) {
+    public ResourceDependencyComponentITCase(String name) {
         super(name);
     }
 
@@ -75,7 +79,7 @@ public class JavaTopLevelActionListenerComponentITCase extends HtmlUnitFacesITCa
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(JavaTopLevelActionListenerComponentITCase.class));
+        return (new TestSuite(ResourceDependencyComponentITCase.class));
     }
 
 
@@ -89,16 +93,27 @@ public class JavaTopLevelActionListenerComponentITCase extends HtmlUnitFacesITCa
 
     // -------------------------------------------------------------- Test Cases
 
-    public void testActionListeningComponentWasInvokedSuccessFully() throws Exception {
-        HtmlPage page = getPage("/faces/composite/javaTopLevelActionListenerComponentUsingPage.xhtml");
-        HtmlInput htmlInput = getInputContainingGivenId(page, "loginAction");
-        HtmlPage newPage = htmlInput.click();
-        String text = newPage.asText();
-        assertTrue(-1 != text.indexOf("javax.faces.Command"));
-        assertTrue(-1 != text.indexOf("Action was processed successfully"));
+    public void testForwardingToNextPageProcessesResourceDependencies() throws Exception {
+        HtmlPage page = getPage("/faces/composite/resourceDependencyComponentUsingPage.xhtml");
+        assertNrOfLinksPresent(page, 1);
+        HtmlInput button = getInputContainingGivenId(page, "navigateAway");
+        page = button.click();
+        assertTrue(-1 != page.asText().indexOf("Next page"));
+        assertNrOfLinksPresent(page, 1);
+    }
+    
+    public void testStayingOnSamePageProcessesResourceDependencies() throws Exception {
+        HtmlPage page = getPage("/faces/composite/resourceDependencyComponentUsingPage.xhtml");
+        assertNrOfLinksPresent(page, 1);
+        HtmlInput button = getInputContainingGivenId(page, "stay");
+        page = button.click();
+        assertTrue(-1 != page.asText().indexOf("Using page"));
+        assertNrOfLinksPresent(page, 1);
     }
 
-
-
+    private void assertNrOfLinksPresent(HtmlPage page, int number) {
+        NodeList nodeList = page.getElementsByTagName("link");
+        assertEquals(1, nodeList.getLength());
+    }
 
 }

@@ -38,25 +38,29 @@
  * holder.
  */
 
-package com.sun.faces.composite;
+package com.sun.faces.test.servlet30.systest;
+
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import com.gargoylesoftware.htmlunit.html.*;
+
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
+import static junit.framework.TestCase.assertTrue;
 
 
 /**
  * Unit tests for Composite Components.
  */
-public class JavaTopLevelComponentTestCase extends HtmlUnitFacesTestCase {
+public class DefaultActionITCase extends HtmlUnitFacesITCase {
 
 
-    public JavaTopLevelComponentTestCase() {
-        this("JavaTopLevelComponentTestCase");
+    public DefaultActionITCase() {
+        this("ResourceDependencyComponentTestCase");
     }
 
-    public JavaTopLevelComponentTestCase(String name) {
+    public DefaultActionITCase(String name) {
         super(name);
     }
 
@@ -73,7 +77,7 @@ public class JavaTopLevelComponentTestCase extends HtmlUnitFacesTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(JavaTopLevelComponentTestCase.class));
+        return (new TestSuite(DefaultActionITCase.class));
     }
 
 
@@ -87,31 +91,11 @@ public class JavaTopLevelComponentTestCase extends HtmlUnitFacesTestCase {
 
     // -------------------------------------------------------------- Test Cases
 
-    public void testJavaBeanPropertyOnTopLevelComponentHasExpectedValue() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/javaTopLevelComponentUsingPage.xhtml?q=foo");
-        String text = page.asText();
-        assertTrue(-1 != text.indexOf("Get out java property of type String Smallberries"));
-        assertTrue(-1 != text.indexOf("Get out java property of type int 5"));
-    }
-
-    public void testDefaultActionAttribute() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/javaTopLevelComponentUsingPage.xhtml?q=foo");
-        HtmlSubmitInput button = (HtmlSubmitInput)
-                getInputContainingGivenId(page, "loginPanel1:loginAction");
+    public void testDefaultAction() throws Exception {
+        HtmlPage page = getPage("/faces/composite/defaultActionUsingPage.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("ccTag:loginButton");
         page = button.click();
-        String text = page.asText();
-        assertTrue(-1 != text.indexOf("Made it to page 2"));
-
+        assertTrue(page.asText().contains("defaultActionNext"));
     }
 
-    public void testDefaultAttribute() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/defaultAttributeValuesUsingPage.xhtml");
-        String text = page.asXml();
-        assertTrue(-1 != text.indexOf("User ID:"));
-        assertTrue(-1 != text.indexOf("value=\"Login"));
-    }
-    
 }

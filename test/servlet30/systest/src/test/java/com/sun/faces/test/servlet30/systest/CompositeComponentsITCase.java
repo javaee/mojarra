@@ -38,11 +38,11 @@
  * holder.
  */
 
-package com.sun.faces.composite;
+package com.sun.faces.test.servlet30.systest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.*;
 
 import java.util.List;
@@ -51,15 +51,15 @@ import java.util.ArrayList;
 /**
  * Unit tests for Composite Components.
  */
-public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
+public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
 
 
     @SuppressWarnings({"UnusedDeclaration"})
-    public CompositeComponentsTestCase() {
+    public CompositeComponentsITCase() {
         this("CompositeComponentsTestCase");
     }
 
-    public CompositeComponentsTestCase(String name) {
+    public CompositeComponentsITCase(String name) {
         super(name);
         addExclusion(Container.TOMCAT6, "testForNoNPE");
         addExclusion(Container.TOMCAT7, "testForNoNPE");
@@ -82,7 +82,7 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(CompositeComponentsTestCase.class));
+        return (new TestSuite(CompositeComponentsITCase.class));
     }
 
 
@@ -100,180 +100,6 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
         HtmlPage page = getPage("/faces/composite/isCompositeComponentUsing.xhtml");
         assertTrue(page.asText().contains("isCompositeComponent: true"));
     }
-
-    /**
-     * <p>
-     *  Maps ActionListener to commandButton within composite/actionSource1.xhtml using
-     *   only the name attribute.
-     * </p>
-     */
-    public void testActionSource1() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/actionsource.xhtml");
-        validateActionMessagePresent(page,
-                                     "form:actionsource1:command");
-
-    }
-
-
-    /**
-     * <p>
-     *   Maps ActionListener to commandButton within composite/actionSource2.xhtml using
-     *   name and target attributes.
-     * </p>
-     */
-    public void testActionSource2() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/actionsource.xhtml");
-        validateActionMessagePresent(page,
-                                     "form:actionsource2:ac2");
-
-    }
-
-
-    /**
-     * <p>
-     *  Maps ActionListener to a commandButton within a composite/actionSource1.xhtml
-     *   which is nested within composite/actionSource3.xhtml. Using the same ID
-     *   in the nesting.
-     * </p>
-     */
-    public void testActionSource3() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/actionsource.xhtml");
-        validateActionMessagePresent(page,
-                                     "form:actionsource3:command:command");
-        
-    }
-
-
-    /**
-     * <p>
-     *  Ensure actionListeners are properly re-targeted when the
-     *  target of the actionListener is nested within another naming
-     *  container.  Note that the value of the 'for' attribute doesn't
-     *  mimic the NamingContainer hierarchy, that's handled by the
-     *  'targets' attribute within the composite:implementation section
-     *  of actionSource4.xhtml.
-     * </p>
-     */
-    public void testActionSource4() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/actionsource.xhtml");
-        validateActionMessagePresent(page,
-                                     "form:actionsource4:naming:command");
-        
-    }
-
-
-    /**
-     * <p>
-     *  Maps Validator to inputText within composite/validator1.xhtml using
-     *   only the name attribute.
-     * </p>
-     */
-    public void testValidator1() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
-        validateValidatorMessagePresent(page,
-                                        "form:s1",
-                                        "form:validator1:input");
-
-    }
-
-
-    /**
-     * <p>
-     *   Maps Validator to inputText within composite/validator2.xhtml using
-     *   name and target attributes.
-     * </p>
-     */
-    public void testValidator2() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
-        validateValidatorMessagePresent(page,
-                                        "form2:s2",
-                                        "form2:validator2:it2");
-
-    }
-
-
-    /**
-     * <p>
-     *   Maps Validator to inputText within composite/validator2.xhtml using
-     *   name and target attributes.
-     * </p>
-     */
-    public void testValidator3() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
-        validateValidatorMessagePresent(page,
-                                        "form3:s3",
-                                        "form3:validator3:input:input");
-
-    }
-
-
-    /**
-     * <p>
-     *  Ensure validators are properly re-targeted when the
-     *  target of the validator is nested within another naming
-     *  container.  Note that the value of the 'for' attribute doesn't
-     *  mimic the NamingContainer hierarchy, that's handled by the
-     *  'targets' attribute within the composite:implementation section
-     *  of validator4.xhtml.
-     * </p>
-     */
-    public void testValidator4() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
-        validateValidatorMessagePresent(page,
-                                        "form4:s4",
-                                        "form4:validator4:naming:input");
-
-    }
-
-    /**
-     * <p>
-     *  Maps Converter to inputText within composite/validator1.xhtml using
-     *   only the name attribute.
-     * </p>
-     *
-     * <p>
-     *   Maps Converter to inputText within composite/validator2.xhtml using
-     *   name and target attributes.
-     * </p>
-     *
-     * <p>
-     *   Maps Converter to inputText within composite/validator2.xhtml using
-     *   name and target attributes.
-     * </p>
-     *
-     * <p>
-     *  Ensure validators are properly re-targeted when the
-     *  target of the validator is nested within another naming
-     *  container.  Note that the value of the 'for' attribute doesn't
-     *  mimic the NamingContainer hierarchy, that's handled by the
-     *  'targets' attribute within the composite:implementation section
-     *  of validator4.xhtml.
-     * </p>
-     */
-    public void testConverters() throws Exception {
-
-        String[] messageSuffixes = new String[] {
-              "form:converter1:input",
-              "form2:converter2:it2",
-              "form3:converter3:input:input",
-              "form4:converter4:naming:input"
-        };
-
-        HtmlPage page = getPage("/faces/composite/attachedconverter.xhtml");
-        validateConverterMessages(page, messageSuffixes);
-        page = pushButton(page, "cf:clear");
-        validateConverterMessages(page, messageSuffixes);
-
-    }
-
 
     public void testActions() throws Exception {
 
@@ -834,25 +660,6 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
 
     }
 
-
-    /**
-     * Added for issue 1298.
-     */
-    /*
-    public void testMethodExpressionNesting() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/nesting08.xhtml");
-
-        HtmlSubmitInput button = (HtmlSubmitInput) getInputContainingGivenId(page, "form:submit");
-        assertNotNull(button);
-
-        page = button.click();
-        assertTrue(page.asText().contains("Action invoked"));
-
-    }
-    */
-
-
     public void testMethodExpressionDefaults() throws Exception {
 
         HtmlPage page = getPage("/faces/composite/defaultAttributeMethodExpression.xhtml");
@@ -895,7 +702,36 @@ public class CompositeComponentsTestCase extends HtmlUnitFacesTestCase {
         assertTrue(pageText.contains("validator value is"));
         assertTrue(pageText.contains("valueChangeListener value is"));
     }
-    
+
+    /*
+     * Because this test relies on a message added by the runtime that only happens
+     * during ProjectStage.Development this test should only be executed on 
+     * ProjectStage.Development.
+     */
+    public void testMissingRequiredAttribute() throws Exception {
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/requiredAttribute.xhtml");
+        String text = page.asText();
+        if (page.asXml().contains("Development")) {
+            assertTrue(text.contains("<ez:required01>"));
+            assertTrue(text.contains("The following attribute(s) are required, but no values have been supplied for them: table."));
+        }
+    }
+
+    /*
+     * Because this test relies on a message added by the runtime that only happens
+     * during ProjectStage.Development this test should only be executed on 
+     * ProjectStage.Development.
+     */
+    public void testMissingRequiredFacet() throws Exception {
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/requiredFacet.xhtml");
+        String text = page.asText();
+        if (page.asXml().contains("Development")) {
+            assertTrue(text.contains("The following facets(s) are required, but no facets have been supplied for them: table."));
+        }
+    }
+
     public void testDefaultAttributeValueELOverrides() throws Exception {
         HtmlPage page = getPage("/faces/composite/issue-1782-using.xhtml");
         String text = page.asText();

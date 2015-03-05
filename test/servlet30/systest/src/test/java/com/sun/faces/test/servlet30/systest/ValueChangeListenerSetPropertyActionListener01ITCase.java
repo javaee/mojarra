@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.composite;
+package com.sun.faces.test.servlet30.systest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
