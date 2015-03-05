@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  * 
@@ -36,45 +36,34 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
-package com.sun.faces.test.webprofile.flow.basic_switch;
+
+package com.sun.faces.test.javaee6web.flowtraversalcombinations;
 
 import java.io.Serializable;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.flow.Flow;
 import javax.faces.flow.builder.FlowBuilder;
-import javax.faces.flow.builder.FlowDefinition;
 import javax.faces.flow.builder.FlowBuilderParameter;
+import javax.faces.flow.builder.FlowDefinition;
+import javax.inject.Named;
 
-
-public class FlowA implements Serializable {
+@Named
+@ApplicationScoped
+public class TargetFlowFactory implements Serializable {
     
-    private static final long serialVersionUID = -7623501087369765218L;
-
-    public FlowA() {
-    }
-    
-    @Produces @FlowDefinition
+    @Produces
+    @FlowDefinition
     public Flow defineFlow(@FlowBuilderParameter FlowBuilder flowBuilder) {
-        String flowId = "flow-a";
+        String flowId = "target-flow";
         flowBuilder.id("", flowId);
-        flowBuilder.returnNode("taskFlowReturn1").
-                fromOutcome("#{flow_a_Bean.returnValue}");
-        flowBuilder.switchNode("switchA").defaultOutcome("defaultPage").
-                switchCase().condition("#{flow_a_Bean.switchA_Case01}").fromOutcome("page01").
-                switchCase().condition("#{flow_a_Bean.switchA_Case02}").fromOutcome("page02").
-                switchCase().condition("#{flow_a_Bean.switchA_Case03}").fromOutcome("switchA_result");
-        flowBuilder.switchNode("switchB").defaultOutcome("defaultPage").
-                switchCase().condition("#{flow_a_Bean.switchB_Case01}").fromOutcome("page01").
-                switchCase().condition("#{flow_a_Bean.switchB_Case02}").fromOutcome("switchB_result").
-                switchCase().condition("#{flow_a_Bean.switchB_Case03}").fromOutcome("page03");
-        flowBuilder.switchNode("switchC").defaultOutcome("#{flow_a_Bean.defaultOutcome}").
-                switchCase().condition("#{flow_a_Bean.switchC_Case01}").fromOutcome("page01").
-                switchCase().condition("#{flow_a_Bean.switchC_Case02}").fromOutcome("page02").
-                switchCase().condition("#{flow_a_Bean.switchC_Case03}").fromOutcome("page03");
-        
+        flowBuilder.viewNode(flowId, "/" + flowId + "/" + flowId + ".xhtml").markAsStartNode();
+         
+        flowBuilder.returnNode("ParentDestinationView")
+                   .fromOutcome("DestinationView");
+         
         return flowBuilder.getFlow();
     }
-    
 }
+

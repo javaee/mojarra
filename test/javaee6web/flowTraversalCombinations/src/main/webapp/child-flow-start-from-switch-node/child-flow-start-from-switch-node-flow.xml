@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version='1.0' encoding='UTF-8' ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
     and Distribution License("CDDL") (collectively, the "License").  You
     may not use this file except in compliance with the License.  You can
     obtain a copy of the License at
-    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    https://glassfish.java.net/public/CDDL+GPL_1_1.html
     or packager/legal/LICENSE.txt.  See the License for the specific
     language governing permissions and limitations under the License.
 
@@ -42,30 +41,26 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.11-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee6web</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 6 Web</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>ajax</module>        
-        <module>el</module>
-        <module>flowTraversalCombinations</module>
-    </modules>
-</project>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                                  http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+  
+  <flow-definition id="child-flow-start-from-switch-node">
+    <start-node>SwitchNodeToBeCalled</start-node>
+    
+    <switch id="SwitchNodeToBeCalled">
+      <case>
+        <if>#{childFlowSwitchStartingBean.case1}</if>
+        <from-outcome>DestinationView</from-outcome>
+      </case>
+      <case>
+        <if>#{childFlowSwitchStartingBean.case2}</if>
+        <from-outcome>PageShouldNotBe</from-outcome>
+      </case>
+      <default-outcome>PageShouldNotBe</default-outcome>
+    </switch>
+
+  </flow-definition>  
+  
+</faces-config>

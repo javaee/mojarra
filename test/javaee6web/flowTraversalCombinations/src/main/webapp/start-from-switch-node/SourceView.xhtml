@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version='1.0' encoding='UTF-8' ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
     and Distribution License("CDDL") (collectively, the "License").  You
     may not use this file except in compliance with the License.  You can
     obtain a copy of the License at
-    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    https://glassfish.java.net/public/CDDL+GPL_1_1.html
     or packager/legal/LICENSE.txt.  See the License for the specific
     language governing permissions and limitations under the License.
 
@@ -42,30 +41,25 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.11-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee6web</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 6 Web</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>ajax</module>        
-        <module>el</module>
-        <module>flowTraversalCombinations</module>
-    </modules>
-</project>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"  
+      >
+    <h:head>
+        <title>Source View Page</title>
+    </h:head>
+    <h:body>
+        <h:form prependId="false">
+            <h:selectOneRadio id="select_destination_node" value="#{switchNaviToOthersBean.data}">
+               <f:selectItem itemValue="1" itemLabel="Item 1" />
+               <f:selectItem itemValue="2" itemLabel="Item 2" />
+               <f:selectItem itemValue="3" itemLabel="Item 3" />
+               <f:selectItem itemValue="4" itemLabel="Item 4" />
+               <f:selectItem itemValue="5" itemLabel="Item 5" />
+            </h:selectOneRadio>
+            <h:commandButton id="navigate_to_initial_swtich_node" value="navigate_to_initial_swtich_node" action="InitialSwitchNode" />
+        </h:form>
+    </h:body>
+</html>
+
