@@ -277,23 +277,29 @@ public class FlowHandlerImpl extends FlowHandler {
             
             performPops(context, sourceFlow, targetFlow);
             if (null != targetFlow && !targetFlow.equals(FlowImpl.ABANDONED_FLOW)) {
-                pushFlow(context, targetFlow, toViewId);
-            }
-            // Now the new flow is active, it's time to evaluate the inbound
-            // parameters.
-            if (null != evaluatedParams) {
-                Map<String, Parameter> inboundParameters = targetFlow.getInboundParameters();
-                ELContext elContext = context.getELContext();
-                String curName;
-                ValueExpression toSet;
-                for (Map.Entry<String, Object> curOutbound : evaluatedParams.entrySet()) {
-                    curName = curOutbound.getKey();
-                    assert(inboundParameters.containsKey(curName));
-                    toSet = inboundParameters.get(curName).getValue();
-                    toSet.setValue(elContext, curOutbound.getValue());
-                }
+                pushFlow(context, targetFlow, toViewId, evaluatedParams);
+            } else {
+                assignInboundParameters(context, targetFlow, evaluatedParams);
             }
         } 
+    }
+
+    private void assignInboundParameters(FacesContext context, Flow calledFlow,
+                                                                Map<String, Object> evaluatedParams) {
+      // Now the new flow is active, it's time to evaluate the inbound
+      // parameters.
+      if (null != evaluatedParams) {
+          Map<String, Parameter> inboundParameters = calledFlow.getInboundParameters();
+          ELContext elContext = context.getELContext();
+          String curName;
+          ValueExpression toSet;
+          for (Map.Entry<String, Object> curOutbound : evaluatedParams.entrySet()) {
+              curName = curOutbound.getKey();
+              assert(inboundParameters.containsKey(curName));
+              toSet = inboundParameters.get(curName).getValue();
+              toSet.setValue(elContext, curOutbound.getValue());
+          }
+      }
     }
 
     @Override
@@ -379,10 +385,14 @@ public class FlowHandlerImpl extends FlowHandler {
     
     // <editor-fold defaultstate="collapsed" desc="Helper Methods">
     
-    private void pushFlow(FacesContext context, Flow toPush, String lastDisplayedViewId) {
+    private void pushFlow(FacesContext context, Flow toPush, String lastDisplayedViewId, 
+                                    Map<String, Object> evaluatedParams) {
         FlowDeque<Flow> flowStack = getFlowStack(context);
         flowStack.addFirst(toPush, lastDisplayedViewId);
         FlowCDIContext.flowEntered();
+        
+        assignInboundParameters(context, toPush, evaluatedParams);
+        
         MethodExpression me  = toPush.getInitializer();
         if (null != me) {
             me.invoke(context.getELContext(), null);
