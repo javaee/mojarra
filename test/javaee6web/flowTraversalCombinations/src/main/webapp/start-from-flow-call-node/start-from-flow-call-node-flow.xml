@@ -81,6 +81,11 @@
         <flow-reference>
             <flow-id>child-flow-start-from-flow-call-node</flow-id>
         </flow-reference>
+        
+        <outbound-parameter>
+            <name>Para2</name>
+            <value>#{flowCallNaviToOthersBean.inBoundPara2}</value>
+        </outbound-parameter>
     </flow-call>
     
     <flow-call id="CallFlowWithParameterAndInitializer">

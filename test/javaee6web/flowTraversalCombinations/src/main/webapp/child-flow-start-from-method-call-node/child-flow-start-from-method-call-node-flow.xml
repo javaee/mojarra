@@ -49,6 +49,11 @@
   <flow-definition id="child-flow-start-from-method-call-node">
     <start-node>MethodCallNodeToBeCalled</start-node>
     
+    <inbound-parameter>
+        <name>Para2</name>
+        <value>#{flowScope.Para2}</value>
+    </inbound-parameter>
+    
     <method-call id="MethodCallNodeToBeCalled" >
       <method>#{childFlowMethodCallStartingBean.toLastPage()}</method>
       <default-outcome>delay_event</default-outcome>
