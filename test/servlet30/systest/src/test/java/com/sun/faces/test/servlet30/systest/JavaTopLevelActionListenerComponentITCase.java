@@ -45,7 +45,6 @@ import junit.framework.TestSuite;
 
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 
 
 /**

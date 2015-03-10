@@ -47,7 +47,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 //import com.gargoylesoftware.htmlunit.javascript.host.HTMLAnchorElement;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import static junit.framework.TestCase.assertTrue;
 
 

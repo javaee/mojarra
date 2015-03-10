@@ -42,7 +42,6 @@ package com.sun.faces.test.servlet30.systest;
 
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import junit.framework.Test;
 import static junit.framework.TestCase.assertTrue;

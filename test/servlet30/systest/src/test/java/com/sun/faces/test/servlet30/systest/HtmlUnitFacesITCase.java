@@ -27,7 +27,7 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-package com.sun.faces.htmlunit;
+package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.CookieManager;

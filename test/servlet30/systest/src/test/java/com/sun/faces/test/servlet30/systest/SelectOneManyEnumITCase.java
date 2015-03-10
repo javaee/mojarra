@@ -45,7 +45,6 @@ import javax.faces.component.NamingContainer;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;

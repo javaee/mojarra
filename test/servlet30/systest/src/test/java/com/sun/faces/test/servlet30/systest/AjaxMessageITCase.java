@@ -40,7 +40,6 @@
 
 package com.sun.faces.test.servlet30.systest;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.*;
 import com.gargoylesoftware.htmlunit.javascript.host.Node;
 import junit.framework.Test;

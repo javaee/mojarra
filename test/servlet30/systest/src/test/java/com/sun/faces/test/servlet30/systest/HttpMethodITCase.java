@@ -39,7 +39,6 @@
  */
 package com.sun.faces.test.servlet30.systest;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;

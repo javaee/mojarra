@@ -44,7 +44,6 @@ import java.util.List;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import java.net.URL;
 import junit.framework.Test;
 import static junit.framework.TestCase.assertTrue;

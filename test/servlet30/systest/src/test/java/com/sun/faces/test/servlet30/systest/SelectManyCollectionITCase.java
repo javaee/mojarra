@@ -43,7 +43,6 @@ package com.sun.faces.test.servlet30.systest;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;

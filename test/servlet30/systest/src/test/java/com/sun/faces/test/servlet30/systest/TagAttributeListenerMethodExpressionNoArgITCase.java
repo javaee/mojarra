@@ -42,7 +42,6 @@ package com.sun.faces.test.servlet30.systest;
 
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;

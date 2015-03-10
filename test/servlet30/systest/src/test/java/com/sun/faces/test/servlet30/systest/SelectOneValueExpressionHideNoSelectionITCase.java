@@ -46,7 +46,6 @@ import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import static junit.framework.TestCase.assertEquals;
 
 

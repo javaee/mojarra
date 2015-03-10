@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import junit.framework.Test;

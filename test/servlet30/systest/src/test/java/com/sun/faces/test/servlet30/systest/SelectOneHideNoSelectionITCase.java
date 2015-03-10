@@ -45,7 +45,6 @@ import junit.framework.TestSuite;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.sun.faces.htmlunit.HtmlUnitFacesITCase;
 
 
 public class SelectOneHideNoSelectionITCase extends HtmlUnitFacesITCase {
