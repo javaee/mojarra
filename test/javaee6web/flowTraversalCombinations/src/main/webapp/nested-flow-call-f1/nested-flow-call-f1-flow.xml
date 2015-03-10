@@ -41,34 +41,48 @@
 
 -->
 
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <head>
-        <title>Outside of flow</title>
-    </head>
-    <body>
-        <h1>Outside of flow</h1>
-        
-    <h:form prependId="false">
-        <p><h:commandButton id="go_to_view_to_view_flow" value="view_to_view_test" 
-                            action="start-from-view-node" /></p>
-        
-        <p><h:commandButton id="go_to_start_from_method_call_flow" value="method call node navigates to other node" 
-                            action="start-from-method-call-node" /></p>
-        
-        <p><h:commandButton id="go_to_start_from_switch_flow" value="go_to_start_from_switch_flow" 
-                            action="start-from-switch-node" /></p>
-        
-        <p><h:commandButton id="go_to_start_from_return_flow" value="go_to_start_from_return_flow" 
-                            action="start-from-return-node" /></p>
-
-        <p><h:commandButton id="go_to_start_from_flow_call_node" value="go_to_start_from_flow_call_node" 
-                            action="start-from-flow-call-node" /></p>
-        
-        <p><h:commandButton id="go_to_nested_flow_call_f1" value="go_to_nested_flow_call_f1" 
-                            action="nested-flow-call-f1" /></p>
-    </h:form>
-</body>
-</html>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                                  http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+  
+  <flow-definition id="nested-flow-call-f1">
+    <start-node>SwithToCorrectNode</start-node>
+    
+    <inbound-parameter>
+        <name>paraF2T0F1</name>
+        <value>#{flowScope.para3}</value>
+    </inbound-parameter>
+    
+    <switch id="SwithToCorrectNode">
+        <case>
+            <if>#{flowScope.para3 != null}</if>
+            <from-outcome>MethodToChangeTheBeanVariable</from-outcome>
+        </case>
+        <default-outcome>CallF2</default-outcome>
+    </switch>
+    
+    <method-call id="MethodToChangeTheBeanVariable">
+        <method>#{nestedFlowCallF1Bean.addCount}</method>
+        <default-outcome>ReturnToF2</default-outcome>
+    </method-call>
+    
+    <flow-call id="CallF2">
+        <flow-reference>
+            <flow-id>nested-flow-call-f2</flow-id>
+        </flow-reference>
+    </flow-call>
+    
+    <flow-return id="ReturnToF2">
+        <from-outcome>VerifyTheBeanIsSameAsBefore</from-outcome>
+    </flow-return>
+    
+    <view id="ReturnPage">
+        <vdl-document>/nested-flow-call-f1/ReturnPage.xhtml</vdl-document>
+    </view>
+    <!-- here maybe a problem: the finalizer is not called when return from upper stack frame    
+    <finalizer>#{nestedFlowCallF1Bean.addcount}</finalizer>
+    -->
+    
+  </flow-definition>  
+</faces-config>

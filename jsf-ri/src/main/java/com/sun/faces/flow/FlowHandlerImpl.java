@@ -75,10 +75,10 @@ public class FlowHandlerImpl extends FlowHandler {
     private boolean flowFeatureIsEnabled;
 
     // key: definingDocumentId, value: Map<flowId, Flow>
-    private Map<String, Map<String, Flow>> flows;
+    private final Map<String, Map<String, Flow>> flows;
     
     // key: flowId, List<Flow>
-    private Map<String, List<Flow>> flowsByFlowId;
+    private final Map<String, List<Flow>> flowsByFlowId;
 
     @Override
     public Map<Object, Object> getCurrentFlowScope() {
@@ -425,7 +425,7 @@ public class FlowHandlerImpl extends FlowHandler {
         FlowCDIContext.flowExited();
     }
     
-    private FlowDeque<Flow> getFlowStack(FacesContext context) {
+    static FlowDeque<Flow> getFlowStack(FacesContext context) {
         FlowDeque<Flow> result = null;
         ExternalContext extContext = context.getExternalContext();
         String sessionKey = extContext.getClientWindow().getId() + "_flowStack";
@@ -445,11 +445,12 @@ public class FlowHandlerImpl extends FlowHandler {
         sessionMap.put(stack.getSessionKey(), stack);
     }
     
-    private static class FlowDeque<E> implements Iterable<E>, Serializable {
+    static class FlowDeque<E> implements Iterable<E>, Serializable {
         
         private static final long serialVersionUID = 7915803727932706270L;
         
-        private int returnDepth = 0;
+        private int returnDepth;
+        private int currentFlowDepth;
         private ArrayDeque<E> data;
         private static class RideAlong implements Serializable {
             String lastDisplayedViewId;
@@ -484,11 +485,16 @@ public class FlowHandlerImpl extends FlowHandler {
         public void addFirst(E e, String lastDisplayedViewId) {
             rideAlong.addFirst(new RideAlong(lastDisplayedViewId));
             data.addFirst(e);
+            currentFlowDepth++;
         }
         
         public E pollFirst() {
             rideAlong.pollFirst();
             return data.pollFirst();
+        }
+        
+        public int getCurrentFlowDepth() {
+          return this.currentFlowDepth;
         }
         
         public E peekFirst() {
@@ -553,6 +559,7 @@ public class FlowHandlerImpl extends FlowHandler {
         public void pushReturnMode() {
             this.incrementMaxReturnDepth();
             this.returnDepth++;
+            this.currentFlowDepth--;
         }
         
         public void popReturnMode() {
