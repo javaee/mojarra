@@ -106,6 +106,7 @@
         <module>multiTenantSetsTccl</module>
         <module>multiTenantUsesFactoryFinder</module>
         <module>navigation</module>
+        <module>noWebXml</module>
         <module>passthrough</module>
         <module>processAsJspx</module>
         <module>renderKit</module>

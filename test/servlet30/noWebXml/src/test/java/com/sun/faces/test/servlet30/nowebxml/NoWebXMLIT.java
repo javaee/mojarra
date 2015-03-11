@@ -38,86 +38,60 @@
  * holder.
  */
 
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.nowebxml;
 
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+public class NoWebXMLIT {
 
-import java.util.List;
+    private String webUrl;
+    private WebClient webClient;
 
-public class NoWebXMLTestCase extends HtmlUnitFacesTestCase {
-
-    public NoWebXMLTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(NoWebXMLTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
-
-
-    // ------------------------------------------------------------ Test Methods
-
+    
+    @Test
     public void testNoWebXML() throws Exception {
 
-        HtmlPage page = getPage("/faces/hello.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/hello.xhtml");
 
-        List list = getAllElementsOfGivenClass(page, null,
-                HtmlSubmitInput.class);
-        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        HtmlSubmitInput button = page.getHtmlElementById("form:command");
         page = (HtmlPage) button.click();
         String pageAsText = page.asText();
         assertTrue(pageAsText.contains("Good Morning"));
         String pageText = page.asXml();
         assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
 
-        page = getPage("/hello.jsf");
+        page = webClient.getPage(webUrl + "hello.jsf");
 
-        list = getAllElementsOfGivenClass(page, null,
-                HtmlSubmitInput.class);
-        button = (HtmlSubmitInput) list.get(0);
+        button = page.getHtmlElementById("form:command");
         page = (HtmlPage) button.click();
         pageAsText = page.asText();
         assertTrue(pageAsText.contains("Good Morning"));
         pageText = page.asXml();
         assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
 
-        page = getPage("/hello.faces");
+        page = webClient.getPage(webUrl + "hello.faces");
 
-        list = getAllElementsOfGivenClass(page, null,
-                HtmlSubmitInput.class);
-        button = (HtmlSubmitInput) list.get(0);
+        button = page.getHtmlElementById("form:command");
         page = (HtmlPage) button.click();
         pageAsText = page.asText();
         assertTrue(pageAsText.contains("Good Morning"));        
         pageText = page.asXml();
         assertTrue(pageText.contains("<input type=\"hidden\" name=\"javax.faces.ViewState\" id="));
-
     }
 }
