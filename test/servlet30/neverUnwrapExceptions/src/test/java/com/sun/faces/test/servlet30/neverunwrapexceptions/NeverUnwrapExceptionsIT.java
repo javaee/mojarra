@@ -41,11 +41,17 @@ package com.sun.faces.test.servlet30.neverunwrapexceptions;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfServerExclude;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class NeverUnwrapExceptionsIT {
 
     private String webUrl;
@@ -61,7 +67,9 @@ public class NeverUnwrapExceptionsIT {
     public void tearDown() {
         webClient.closeAllWindows();
     }
-    
+
+    @JsfTest(value = JsfVersion.JSF_2_2_0_M02,
+            excludes = {JsfServerExclude.WEBLOGIC_12_1_4, JsfServerExclude.WEBLOGIC_12_2_1})
     @Test
     public void testNeverUnwrapExceptions() throws Exception {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
