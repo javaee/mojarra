@@ -37,24 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.neverunwrapexceptions;
 
-package com.sun.faces.systest.model;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-public class ThrowWrappedExceptionOnPropertyGet {
+public class NeverUnwrapExceptionsIT {
+
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
     
-    private String stringProperty = "This is a String property";
-
-    public String getStringProperty() {
-	if (null != stringProperty) {
-	    throw new IllegalStateException(new IllegalArgumentException(new UnsupportedOperationException()));
-	}
-        return (this.stringProperty);
+    @Test
+    public void testNeverUnwrapExceptions() throws Exception {
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setPrintContentOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl + "faces/test.jsp");
+        String text = page.asText();
+        assertTrue(text.contains("Exception class: javax.servlet.ServletException"));
+        assertTrue(text.contains("Root cause: java.lang.IllegalStateException"));
+        assertTrue(text.contains("Exception message: java.lang.IllegalArgumentException: java.lang.UnsupportedOperationException"));
     }
-
-
-    public void setStringProperty(String stringProperty) {
-        this.stringProperty = stringProperty;
-    }
-
-
 }

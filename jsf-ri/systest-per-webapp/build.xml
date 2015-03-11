@@ -99,7 +99,6 @@
                    converter-property-editor,
                    disable-unicode-escaping,
                    late-bindings,
-                   never-unwrap-exceptions,
                    flash,
                    jsp-flash,
                    bogus-render-kit-id,
@@ -125,7 +124,6 @@
                    jar-ordering,
                    converter-property-editor,
                    late-bindings,
-                   never-unwrap-exceptions,
                    bogus-render-kit-id,
                    characterCombat"/>
 

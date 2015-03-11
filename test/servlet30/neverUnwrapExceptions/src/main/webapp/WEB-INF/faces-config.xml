@@ -50,7 +50,7 @@
     
     <managed-bean>
         <managed-bean-name>bean</managed-bean-name>
-        <managed-bean-class>com.sun.faces.systest.model.ThrowWrappedExceptionOnPropertyGet</managed-bean-class>
+        <managed-bean-class>com.sun.faces.test.servlet30.neverunwrapexceptions.ThrowWrappedExceptionOnPropertyGet</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     
