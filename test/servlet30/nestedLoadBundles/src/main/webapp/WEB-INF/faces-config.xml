@@ -1,4 +1,5 @@
-<%--
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
@@ -38,18 +39,17 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---%>
+-->
 
-
-<%@ page contentType="text/html" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
-<%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
-<%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
-
-<f:loadBundle var="bundle" basename="com.sun.faces.systest.model.BundleB" />
-
-<p>Output 02 from bundle: <h:outputText id="outputO2" value="#{bundle.okLabel}" /></p>
-
-<f:subview id="inner01">
-<h:outputText value="foo01"/>
-</f:subview>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
+    
+    <application>
+        <locale-config>
+            <default-locale>en</default-locale>
+        </locale-config>
+    </application>
+    
+</faces-config>

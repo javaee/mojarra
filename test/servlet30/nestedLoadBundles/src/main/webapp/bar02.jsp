@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!--
+<%--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
@@ -39,17 +38,18 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
+--%>
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
-    version="1.2">
-    
-    <application>
-        <locale-config>
-        <default-locale>en</default-locale>
-        </locale-config>
-    </application>
-    
-</faces-config>
+
+<%@ page contentType="text/html" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
+<%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
+
+<f:loadBundle var="bundle" basename="com.sun.faces.test.servlet30.nestedloadbundles.BundleE" />
+
+<p>Output 06 from bundle: <h:outputText id="output06" value="#{bundle.okLabel}" /></p>
+
+
+<h:outputText value="bar02"/>
+

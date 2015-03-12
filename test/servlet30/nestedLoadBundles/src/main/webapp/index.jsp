@@ -93,7 +93,7 @@ viewRoot
 </code></pre>
 
 
-<f:loadBundle var="bundle" basename="com.sun.faces.systest.model.BundleA" />
+<f:loadBundle var="bundle" basename="com.sun.faces.test.servlet30.nestedloadbundles.BundleA" />
 
 <f:view>
 

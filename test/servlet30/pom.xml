@@ -106,6 +106,7 @@
         <module>multiTenantSetsTccl</module>
         <module>multiTenantUsesFactoryFinder</module>
         <module>navigation</module>
+        <module>nestedLoadBundles</module>
         <module>neverUnwrapExceptions</module>
         <module>noWebXml</module>
         <module>passthrough</module>

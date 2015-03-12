@@ -46,11 +46,11 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
-<f:subview id="inner02">
 
-<f:loadBundle var="bundle" basename="com.sun.faces.systest.model.BundleC" />
+<f:loadBundle var="bundle" basename="com.sun.faces.test.servlet30.nestedloadbundles.BundleD" />
 
-<p>Output 03 from bundle: <h:outputText id="output03" value="#{bundle.okLabel}" /></p>
+<p>Output 05 from bundle: <h:outputText id="output05" value="#{bundle.okLabel}" /></p>
 
-<h:outputText value="bar01"/>
-</f:subview>
+
+<h:outputText value="foo02"/>
+
