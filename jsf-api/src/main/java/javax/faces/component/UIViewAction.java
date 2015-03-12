@@ -328,7 +328,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
             PhaseId.RENDER_RESPONSE.equals(myPhaseId)) {
             throw new FacesException("View actions cannot be executed in specified phase: [" + myPhaseId.toString() + "]");
         }
-        getStateHelper().put(PropertyKeys.phase, myPhaseId);
+        getStateHelper().put(PropertyKeys.phase, myPhaseId.getName());
     }
     
     private void setIsProcessingUIViewActionBroadcast(FacesContext context, boolean value) {
@@ -360,7 +360,11 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
     }
 
     private PhaseId getPhaseId() {
-        PhaseId myPhaseId = (PhaseId) getStateHelper().eval(PropertyKeys.phase);
+        PhaseId myPhaseId = null;
+        String phaseIdString  = (String) getStateHelper().eval(PropertyKeys.phase);
+        if (phaseIdString != null) {
+            myPhaseId = PhaseId.phaseIdValueOf(phaseIdString);
+        }
         return myPhaseId;
     }
 

@@ -106,7 +106,6 @@ public class Spec758IT {
      * Added for issue 917.
      */
     @Test
-    @Ignore
     public void testViewParameters() throws Exception {
 
         doTestExtensionMapped(0);
