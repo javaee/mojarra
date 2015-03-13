@@ -42,7 +42,6 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.InitFacesContext;
-import com.sun.faces.config.processor.FacesFlowDefinitionConfigProcessor;
 import com.sun.faces.flow.FlowHandlerImpl;
 import com.sun.faces.flow.FlowImpl;
 import com.sun.faces.flow.builder.MutableNavigationCase;
@@ -254,7 +253,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     // --------------------------------------------------------- Private Methods
     private static final String ROOT_NAVIGATION_MAP_ID = NavigationHandlerImpl.class.getName() + ".NAVIGATION_MAP";
     
-    private Map<String, Set<NavigationCase>> getRootNavigationMap(FacesContext context) {
+    private Map<String, Set<NavigationCase>> getRootNaviMap() {
         Map<String, Set<NavigationCase>> result = null;
         NavigationInfo info = null;
         if (null == navigationMaps) {
@@ -499,7 +498,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         
         // If we still don't have a match, see if this is a viewNode
         if (null == caseStruct && null != fromAction && null != outcome) {
-            caseStruct = findViewNodeMatch(ctx, fromAction, outcome, toFlowDocumentId);
+            caseStruct = findViewNodeMatch(ctx, fromAction, outcome);
         }
 
         // If we still don't have a match, see if this is a switch
@@ -541,7 +540,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             if (null != flowHandler) {
 
                 Flow currentFlow = null;
-                Flow newFlow = null;
                 currentFlow = flowHandler.getCurrentFlow(ctx);
                 if (null != currentFlow) {
                     caseStruct = findRootNavigationMapAbandonedFlowMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId);
@@ -632,6 +630,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                       Map<String, Set<NavigationCase>> navMap) {
         CaseStruct result = null;
 
+        StringBuilder sb = new StringBuilder(32);
         for (String fromViewId : getWildCardMatchList(ctx)) {
             // See if the entire wildcard string (without the trailing "*" is
             // contained in the incoming viewIdToTest.  
@@ -645,7 +644,10 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
             // Append the trailing "*" so we can do our map lookup;
 
-            String wcFromViewId = new StringBuilder(32).append(fromViewId).append('*').toString();
+            if ( sb.length() != 0 ) {
+                sb.delete(0, sb.length());
+            }
+            String wcFromViewId = sb.append(fromViewId).append('*').toString();
             Set<NavigationCase> ccaseSet = navMap.get(wcFromViewId);
 
             if (ccaseSet == null) {
@@ -725,7 +727,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                          String fromAction,
                                          String outcome, String toFlowDocumentId) {
         CaseStruct caseStruct = null;
-        Map<String, Set<NavigationCase>> navMap = getRootNavigationMap(ctx);
+        Map<String, Set<NavigationCase>> navMap = getRootNaviMap();
         
         if (viewId != null) {
             caseStruct = findExactMatch(ctx, viewId, fromAction, outcome, toFlowDocumentId, navMap);
@@ -835,22 +837,24 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         }
 
         // If the viewIdToTest needs an extension, take one from the currentViewId.
+        StringBuilder viewIdBuf = new StringBuilder(viewIdToTest);
         if (viewIdToTest.lastIndexOf('.') == -1) {
             int idx = currentViewId.lastIndexOf('.');
             if (idx != -1) {
-                viewIdToTest = viewIdToTest + currentViewId.substring(idx);
+                viewIdBuf.append(currentViewId.substring(idx));
             }
         }
-
-        if (!viewIdToTest.startsWith("/")) {
-            int lastSlash = currentViewId.lastIndexOf("/");
+        
+        if (viewIdToTest.charAt(0) != '/') {
+            int lastSlash = currentViewId.lastIndexOf('/');
             if (lastSlash != -1) {
                 currentViewId = currentViewId.substring(0, lastSlash + 1);
-                viewIdToTest = currentViewId + viewIdToTest;
+                viewIdBuf.insert(0, currentViewId);
             } else {
-                viewIdToTest = "/" + viewIdToTest;
+                viewIdBuf.insert(0, "/");
             }
         }
+       viewIdToTest =  viewIdBuf.toString();
 
         ViewHandler viewHandler = Util.getViewHandler(context);
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
@@ -914,12 +918,13 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     
     private CaseStruct findSwitchMatch(FacesContext context, String fromAction, 
                                        String outcome, String toFlowDocumentId) {
+          FlowHandler flowHandler = context.getApplication().getFlowHandler();
+          if (null == flowHandler) {
+              return null;
+          }
+        
         CaseStruct result = null;
         NavigationInfo info = getNavigationInfo(context, toFlowDocumentId, fromAction);
-        FlowHandler flowHandler = context.getApplication().getFlowHandler();
-        if (null == flowHandler) {
-            return null;
-        }
         Flow currentFlow = flowHandler.getCurrentFlow(context);
                 
         if (null != info && null != info.switches && !info.switches.isEmpty()) {
@@ -1049,11 +1054,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     }
     
     private CaseStruct findMethodCallMatch(FacesContext context, String fromAction, String outcome, String toFlowDocumentId) {
+          FlowHandler flowHandler = context.getApplication().getFlowHandler();
+          if (null == flowHandler) {
+              return null;
+          }
+        
         CaseStruct result = null;
-        FlowHandler flowHandler = context.getApplication().getFlowHandler();
-        if (null == flowHandler) {
-            return null;
-        }
         Flow currentFlow = flowHandler.getCurrentFlow(context);
         if (null != currentFlow) {
             FlowNode node = currentFlow.getNode(outcome);
@@ -1112,12 +1118,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     
     private CaseStruct findFacesFlowCallMatch(FacesContext context, 
             String fromAction, String outcome, String toFlowDocumentId) {
-        CaseStruct result = null;
-
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         if (null == flowHandler) {
             return null;
         }
+        
+        CaseStruct result = null;
         Flow currentFlow = flowHandler.getCurrentFlow(context);
         Flow newFlow = null;
         FlowCallNode facesFlowCallNode = null;
@@ -1220,20 +1226,18 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     }
     
     private CaseStruct findViewNodeMatch(FacesContext context, 
-            String fromAction, String outcome, String toFlowDocumentId) {
-        CaseStruct result = null;
-
+            String fromAction, String outcome) {
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         if (null == flowHandler) {
             return null;
         }
+        
+        CaseStruct result = null;
         Flow currentFlow = flowHandler.getCurrentFlow(context);
         if (null != currentFlow) {
             FlowNode node = currentFlow.getNode(outcome);
-            if (null != node) {
-                if (node instanceof ViewNode) {
-                    result = synthesizeCaseStruct(context, currentFlow, fromAction, outcome);
-                }
+            if (null != node && node instanceof ViewNode) {
+                result = synthesizeCaseStruct(context, currentFlow, fromAction, outcome);
             }
         }
         if (null != result) {
@@ -1249,11 +1253,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     
     private CaseStruct findReturnMatch(FacesContext context, 
             String fromAction, String outcome) {
-        CaseStruct result = null;
         FlowHandler flowHandler = context.getApplication().getFlowHandler();
         if (null == flowHandler) {
             return null;
         }
+        
+        CaseStruct result = null;
         Flow currentFlow = flowHandler.getCurrentFlow(context);
         if (null != currentFlow) {
             // If so, see if the outcome is one of this flow's 
@@ -1323,35 +1328,24 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             String cncFromOutcome = cnc.getFromOutcome();
             boolean cncHasCondition = cnc.hasCondition();
             String cncToViewId = cnc.getToViewId(ctx);
-           
-            if ((cncFromAction != null) && (cncFromOutcome != null)) {
-                if ((cncFromAction.equals(fromAction)) &&
-                    (cncFromOutcome.equals(outcome))) {
-                    result.viewId = cncToViewId;
-                    result.navCase = cnc;
+
+            if ((cncFromAction != null && cncFromAction.equals(fromAction) ) 
+                              && (cncFromOutcome != null && cncFromOutcome.equals(outcome))) {
                     match = true;
-                }
-            } else if ((cncFromAction == null) && (cncFromOutcome != null)) {
-                if (cncFromOutcome.equals(outcome)) {
-                    result.viewId = cncToViewId;
-                    result.navCase = cnc;
+              } else if ((cncFromAction == null) 
+                             && (cncFromOutcome != null && cncFromOutcome.equals(outcome) )) {
                     match = true;
-                }
-            } else if ((cncFromAction != null) && (cncFromOutcome == null)) {
-                if (cncFromAction.equals(fromAction) && (outcome != null || cncHasCondition)) {
-                    result.viewId = cncToViewId;
-                    result.navCase = cnc;
+              } else if ((cncFromAction != null && cncFromAction.equals(fromAction) ) 
+                            && (cncFromOutcome == null) && (outcome != null || cncHasCondition)) {
                     match = true;
-                }
-            } else if ((cncFromAction == null) && (cncFromOutcome == null)) {
-                if (outcome != null || cncHasCondition) {
-                    result.viewId = cncToViewId;
-                    result.navCase = cnc;
+              } else if ((cncFromAction == null) && (cncFromOutcome == null) 
+                            && (outcome != null || cncHasCondition)) {
                     match = true;
-                }
-            }
+              }
 
             if (match) {
+                result.viewId = cncToViewId;
+                result.navCase = cnc;
                 if (cncHasCondition && Boolean.FALSE.equals(cnc.getCondition(ctx))) {
                     match = false;
                 } else {
@@ -1369,8 +1363,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         return null;
     }
-
-
+    
     // ---------------------------------------------------------- Nested Classes
 
 
@@ -1380,7 +1373,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         Flow currentFlow;
         Flow newFlow;
         FlowCallNode facesFlowCallNode;
-        boolean isFlowEntryFromExplicitRule = false;
+        boolean isFlowEntryFromExplicitRule;
     }
     
     private static final class NavigationInfo {
@@ -1391,7 +1384,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
     private static final class NavigationMap extends AbstractMap<String,Set<NavigationCase>> {
 
-        private HashMap<String,Set<NavigationCase>> navigationMap =
+        private HashMap<String,Set<NavigationCase>> mapToLookForNavCase =
               new HashMap<String,Set<NavigationCase>>();
         private TreeSet<String> wildcardMatchList =
               new TreeSet<String>(new Comparator<String>() {
@@ -1406,13 +1399,13 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         @Override
         public int size() {
-            return navigationMap.size();
+            return mapToLookForNavCase.size();
         }
 
 
         @Override
         public boolean isEmpty() {
-            return navigationMap.isEmpty();
+            return mapToLookForNavCase.isEmpty();
         }
 
         
@@ -1425,9 +1418,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 throw new IllegalArgumentException();
             }
             updateWildcards(key);
-            Set<NavigationCase> existing = navigationMap.get(key);
+            Set<NavigationCase> existing = mapToLookForNavCase.get(key);
             if (existing == null) {
-                navigationMap.put(key, value);
+                mapToLookForNavCase.put(key, value);
                 return null;
             } else {
                 existing.addAll(value);
@@ -1444,9 +1437,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             for (Map.Entry<? extends String, ? extends Set<NavigationCase>> entry : m.entrySet()) {
                 String key = entry.getKey();
                 updateWildcards(key);
-                Set<NavigationCase> existing = navigationMap.get(key);
+                Set<NavigationCase> existing = mapToLookForNavCase.get(key);
                 if (existing == null) {
-                    navigationMap.put(key, entry.getValue());
+                    mapToLookForNavCase.put(key, entry.getValue());
                 } else {
                     existing.addAll(entry.getValue());
                 }
@@ -1532,7 +1525,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     return new Iterator<Entry<String,Set<NavigationCase>>>() {
 
                         Iterator<Entry<String, Set<NavigationCase>>> i =
-                              navigationMap.entrySet().iterator();
+                              mapToLookForNavCase.entrySet().iterator();
 
                         @Override
                         public boolean hasNext() {
@@ -1563,13 +1556,10 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         private void updateWildcards(String fromViewId) {
 
-            if (!navigationMap.containsKey(fromViewId)) {
-                if (fromViewId.endsWith("*")) {
+            if (!mapToLookForNavCase.containsKey(fromViewId) && fromViewId.endsWith("*")) {
                     wildcardMatchList.add(fromViewId.substring(0, fromViewId.lastIndexOf('*')));
-                }
             }
-            
         }
-
+            
     }
 }
