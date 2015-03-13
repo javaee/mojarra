@@ -49,7 +49,6 @@ import org.junit.After;
 import org.junit.Before;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
 
 public class Issue2973IT {
 
@@ -68,7 +67,6 @@ public class Issue2973IT {
     }
 
     @Test
-    @Ignore
     public void testServerRestartHandledGracefully() throws Exception {
 
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2973/page1.xhtml") ;

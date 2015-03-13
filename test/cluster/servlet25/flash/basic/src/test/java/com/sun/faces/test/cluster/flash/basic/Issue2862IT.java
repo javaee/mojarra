@@ -48,7 +48,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import org.junit.After;
 import org.junit.Before;
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
 
 public class Issue2862IT {
 
@@ -67,7 +66,6 @@ public class Issue2862IT {
     }
 
     @Test
-    @Ignore
     public void testDropFlashCookie() throws Exception {
 
         HtmlPage page = webClient.getPage(webUrl + "faces/flashDropCookie.xhtml") ;

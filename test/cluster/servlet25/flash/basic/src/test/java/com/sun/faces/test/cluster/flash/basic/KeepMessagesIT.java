@@ -52,7 +52,6 @@ import org.junit.After;
 import org.junit.Before;
 
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
 
 public class KeepMessagesIT {
 
@@ -74,7 +73,6 @@ public class KeepMessagesIT {
     // ------------------------------------------------------------ Test Methods
 
     @Test
-    @Ignore
     public void testMessagesAreKeptAfterRedirect() throws Exception {
 
         HtmlPage page = webClient.getPage(webUrl + "/faces/keepMessages.xhtml") ;
@@ -92,7 +90,6 @@ public class KeepMessagesIT {
     }
     
     @Test
-    @Ignore
     public void testMessagesAreKeptAfterRedirectAfterDoubleValidationError() throws Exception {
     	
     	HtmlPage page = webClient.getPage(webUrl + "/faces/keepMessages.xhtml") ;
