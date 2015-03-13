@@ -45,12 +45,18 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfServerExclude;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import java.net.URL;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue2398IT {
 
     private String webUrl;
@@ -72,13 +78,21 @@ public class Issue2398IT {
     /**
      * Test for issue #2398.
      *
+     * <p>
      * 1. Test if the undeploy #1 application is active. 2. Test if the undeploy
      * #2 application is active. 3. Get the number of active InitFacesContexts.
      * 4. Undeploy 'undeploy #1' 5. Verify the number of active
      * InitFacesContexts stayed the same.
+     * </p>
+     * 
+     * <p>
+     *  The test has been turned off for automatic running against Glassfish 4.1 
+     *  as this would require enabling secure admin (which is not on by default).
+     * </p>
      *
      * @throws Exception when a serious error occurs.
      */
+    @JsfTest(value = JsfVersion.JSF_2_2_0_M02, excludes = {JsfServerExclude.GLASSFISH_4_1})
     @Test
     public void testIssue2398() throws Exception {
         HtmlPage page = webClient.getPage(webUrl.substring(0, webUrl.length() - 2) + "2/faces/index.xhtml");
