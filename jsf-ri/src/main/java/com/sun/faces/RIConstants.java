@@ -175,6 +175,11 @@ public class RIConstants {
      */
     public static final String FACES_CONFIG_VERSION = FACES_PREFIX + "facesConfigVersion";
     
+    /**
+     * Convenience key to temporarily store the set of annotated classes in the servlet context.
+     */
+    public static final String ANNOTATED_CLASSES = FACES_PREFIX + "AnnotatedClasses";
+    
     private RIConstants() {
         throw new IllegalStateException();
     }
