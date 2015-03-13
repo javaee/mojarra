@@ -122,18 +122,17 @@ public class ReturnNaviToOtherNodesIT {
         assertTrue(page.asXml().contains("flowScope value, should be empty: ."));
     } 
     
-//    comment out this to make hudson clean, will uncomment once the issue fixed.     
-//    @Test
-//    public void testReturnNaviToFlowCallNode() throws Exception {
-//        HtmlPage page = webClient.getPage(webUrl);
-//        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("go_to_start_from_return_flow");
-//        page = button.click();
-//        button = (HtmlSubmitInput) page.getHtmlElementById("go_to_initial_return_node_flow");
-//        page = button.click();
-//        HtmlTextInput returnNode = (HtmlTextInput)page.getHtmlElementById("parent-node-to-be-returned");
-//        returnNode.setValueAttribute("FlowCallNodeToBeCalled");
-//        button = (HtmlSubmitInput) page.getHtmlElementById("return-to-method-call-node");
-//        page = button.click();
-//        assertTrue(page.asXml().contains("Great! You are now in the correct destination view."));
-//    }
+    @Test
+    public void testReturnNaviToFlowCallNode() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("go_to_start_from_return_flow");
+        page = button.click();
+        button = (HtmlSubmitInput) page.getHtmlElementById("go_to_initial_return_node_flow");
+        page = button.click();
+        HtmlTextInput returnNode = (HtmlTextInput)page.getHtmlElementById("parent-node-to-be-returned");
+        returnNode.setValueAttribute("FlowCallNodeToBeCalled");
+        button = (HtmlSubmitInput) page.getHtmlElementById("return-to-method-call-node");
+        page = button.click();
+        assertTrue(page.asXml().contains("Great! You are now in the correct destination view."));
+    }
 }

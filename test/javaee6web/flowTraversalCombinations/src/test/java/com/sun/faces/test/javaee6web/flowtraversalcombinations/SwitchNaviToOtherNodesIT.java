@@ -100,19 +100,18 @@ public class SwitchNaviToOtherNodesIT {
         assertTrue(page.asXml().contains("Great! You are now in the correct destination view."));
     } 
 
-//    comment out this to make hudson clean, will uncomment once the issue fixed.    
-//    @Test
-//    public void testSwitchNaviToReturn() throws Exception {
-//        HtmlPage page = webClient.getPage(webUrl);
-//        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("go_to_start_from_switch_flow");
-//        page = button.click();
-//        HtmlRadioButtonInput radio = (HtmlRadioButtonInput) page.getHtmlElementById("select_destination_node:3");
-//        page = radio.click();
-//        button = (HtmlSubmitInput) page.getHtmlElementById("navigate_to_initial_swtich_node");
-//        page = button.click();
-//        assertTrue(page.asXml().contains("Has a flow: false."));
-//        assertTrue(page.asXml().contains("flowScope value, should be empty: ."));
-//    }  
+    @Test
+    public void testSwitchNaviToReturn() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("go_to_start_from_switch_flow");
+        page = button.click();
+        HtmlRadioButtonInput radio = (HtmlRadioButtonInput) page.getHtmlElementById("select_destination_node:3");
+        page = radio.click();
+        button = (HtmlSubmitInput) page.getHtmlElementById("navigate_to_initial_swtich_node");
+        page = button.click();
+        assertTrue(page.asXml().contains("Has a flow: false."));
+        assertTrue(page.asXml().contains("flowScope value, should be empty: ."));
+    }  
     
     @Test
     public void testSwitchNaviToFlowCall() throws Exception {
