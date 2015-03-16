@@ -67,6 +67,7 @@
     <modules>
         <module>ajax</module>
         <module>ajaxNamespace</module>
+        <module>annotationRestrictions</module>
         <module>appUsingJarWithExactlyTwoContracts</module>
         <module>component</module>
         <module>composite</module>

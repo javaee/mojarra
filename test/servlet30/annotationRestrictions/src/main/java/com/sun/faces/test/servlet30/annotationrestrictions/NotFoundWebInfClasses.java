@@ -38,32 +38,10 @@
  * holder.
  */
 
-package com.sun.faces.systest.model;
-
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.mgbean.BeanManager;
+package com.sun.faces.test.servlet30.annotationrestrictions;
 
 import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name="ap")
-public class AnnotationProcessingBean {
-
-    public String getValidationResult() {
-
-        ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
-        BeanManager manager = associate.getBeanManager();
-        if (manager.isManaged("notFoundWebInfClasses")) {
-            return "FAILED : FOUND NotFoundWebInfClasses";
-        }
-        if (manager.isManaged("notFoundWebInfLib")) {
-            return "FAILED : FOUND NotFoundWebInfLib";
-        }
-        if (manager.isManaged("notFoundWebInfLib2")) {
-            return "FAILED : FOUND NotFoundWebInfLib2";
-        }
-        if (!manager.isManaged("foundWebInfLib")) {
-            return "FAILED : NOT FOUND FoundWebInfLib";
-        }
-        return "PASSED";
-    }
+@ManagedBean
+public class NotFoundWebInfClasses {
 }

@@ -37,52 +37,34 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.annotationrestrictions;
 
-package com.sun.faces.systest;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-public class AnnotationProcessingTestCase extends HtmlUnitFacesTestCase {
+public class AnnotationProcessingIT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-    public AnnotationProcessingTestCase(String name) {
-           super(name);
-       }
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
 
-       /**
-        * Set up instance variables required by this test case.
-        */
-       public void setUp() throws Exception {
-           super.setUp();
-       }
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
 
-
-       /**
-        * Return the tests included in this test suite.
-        */
-       public static Test suite() {
-           return (new TestSuite(AnnotationProcessingTestCase.class));
-       }
-
-
-       /**
-        * Tear down instance variables required by this test case.
-        */
-       public void tearDown() {
-           super.tearDown();
-       }
-
-
-       // ------------------------------------------------------------ Test Methods
-
-       public void testAnnotationProcessing() throws Exception {
-
-
-           HtmlPage page = getPage("/faces/test.xhtml");
-           assertTrue(page.asText().contains("PASSED"));
-           
-       }
+    @Test
+    public void testAnnotationProcessing() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/test.xhtml");
+        assertTrue(page.asText().contains("PASSED"));
+    }
 }
