@@ -1157,7 +1157,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                             // that we must not enter it later.
                             try {
                                 setDidTransition(context, true);
-                                flowHandler.transition(context, currentFlow, newFlow, null, startNodeId);
+                                flowHandler.transition(context, currentFlow, newFlow, facesFlowCallNode, startNodeId);
                                 result = getViewId(context, fromAction, startNodeId, toFlowDocumentId);
                             }
                             finally {

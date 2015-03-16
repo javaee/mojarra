@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- * 
+ *
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- * 
+ *
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- * 
+ *
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -37,32 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 package com.sun.faces.test.javaee6web.flowtraversalcombinations;
 
-import java.io.Serializable;
-import javax.faces.flow.FlowScoped;
-import javax.inject.Named;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-@Named
-@FlowScoped(value = "start-from-flow-call-node")
-public class FlowCallNaviToOthersBean implements Serializable {
-    private String inBoundPara1 = "CorrectString";
-    
-    public String getInBoundPara1() {
-        return inBoundPara1;
+public class Issue3476IT {
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
+
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
     
-    public void setInBoundPara1(String para1) {
-        this.inBoundPara1 = para1;
-    }
-    
-    private String inBoundPara2 = "ExpectedString";
-    
-    public String getInBoundPara2() {
-        return this.inBoundPara2;
-    }
-    
-    public void setInBoundPara2(String para) {
-        this.inBoundPara2 = para;
-    }
+    @Test
+    public void testFlowCallNaviToMethodCallWithCorrectParameter() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("go_to_start_from_flow_call_node");
+        page = button.click();
+        button = (HtmlSubmitInput) page.getHtmlElementById("navigate_to_method_call_node");
+        page = button.click();
+        assertTrue(page.asXml().contains("The inbound parameter should be ExpectedString"));
+    }   
 }
