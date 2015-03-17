@@ -52,8 +52,8 @@
     <artifactId>annotationRestrictions</artifactId>
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Servlet 3.0 - Annotation Restrictions</name>
-        <build>
-        <finalName>test-servlet30-annotationRestritions</finalName>
+    <build>
+        <finalName>test-servlet30-annotationRestrictions</finalName>
     </build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.servlet30.annotationrestrictions;
+package com.sun.faces.test.servlet30.annotationrestrictions.notfound;
 
 import javax.faces.bean.ManagedBean;
 
