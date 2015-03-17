@@ -49,6 +49,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 public class FlashViewParamIT {
 
@@ -70,6 +71,7 @@ public class FlashViewParamIT {
      * Added for issue 904.
      */
     @Test
+    @Ignore
     public void testBooleanCheckboxSubmittedValue() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
         HtmlButtonInput button = (HtmlButtonInput) page.getElementById("nextButton");

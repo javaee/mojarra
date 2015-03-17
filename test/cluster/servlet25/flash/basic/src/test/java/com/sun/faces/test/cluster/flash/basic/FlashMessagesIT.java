@@ -48,6 +48,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 /**
   *
@@ -76,6 +77,7 @@ public class FlashMessagesIT {
      * Added for issue 1476.
      */
     @Test
+    @Ignore
     public void testBooleanCheckboxSubmittedValue() throws Exception {
 
         HtmlPage page = webClient.getPage(webUrl + "/faces/flashKeepMessages01.xhtml");

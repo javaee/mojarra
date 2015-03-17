@@ -40,6 +40,7 @@
 
 package com.sun.faces.test.cluster.flash.basic;
 
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -78,12 +79,13 @@ public class FlashClusterIT {
     @Test
     @Ignore
     public void testButton() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/flash01.xhtml");
+        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+        HtmlPage page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
         
         HtmlButton switchPort = (HtmlButton) page.getElementById("switchPort");
         page = switchPort.click();
         
-        webClient.waitForBackgroundJavaScript(60000);
+        Thread.sleep(10000);
         
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("nextCommandButton");
         page = button.click();
@@ -94,13 +96,15 @@ public class FlashClusterIT {
     }
     
     @Test
+    @Ignore
     public void testLink() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/flash01.xhtml");
+        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+        HtmlPage page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
         
         HtmlButton switchPort = (HtmlButton) page.getElementById("switchPort");
         page = switchPort.click();
         
-        webClient.waitForBackgroundJavaScript(60000);
+        Thread.sleep(10000);
         
         HtmlAnchor link = (HtmlAnchor) page.getElementById("nextCommandLink");
         page = link.click();
