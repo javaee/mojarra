@@ -826,10 +826,19 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 for (int i = 0, len = queryElements.length; i < len; i ++) {
                     String[] elements = Util.split(appMap, queryElements[i], "=");
                     if (elements.length == 2) {
+                        String rightHandSide = elements[1];
+                        String sanitized = null != rightHandSide && 2 < rightHandSide.length() ? rightHandSide.trim() : "";
+                        if (sanitized.contains("#{") || sanitized.contains("${")) {
+                            if (LOGGER.isLoggable(Level.INFO)) {
+                                LOGGER.log(Level.INFO, "jsf.navigation_invalid_query_string",
+                                        rightHandSide);
+                            }
+                            rightHandSide = "";
+                        }
                         if (parameters == null) {
                             parameters = new LinkedHashMap<>(len / 2, 1.0f);
                             List<String> values = new ArrayList<>(2);
-                            values.add(elements[1]);
+                            values.add(rightHandSide);
                             parameters.put(elements[0], values);
                         } else {
                             List<String> values = parameters.get(elements[0]);
@@ -837,7 +846,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                 values = new ArrayList<>(2);
                                 parameters.put(elements[0], values);
                             }
-                            values.add(elements[1]);
+                            values.add(rightHandSide);
                         }
                     }
                 }
