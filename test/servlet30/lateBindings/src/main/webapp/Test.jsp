@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!--
+<%--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
@@ -39,38 +38,35 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
+--%>
 
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee web-app_2_5.xsd"
-         version="2.5">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-    <description>
-        Validate late binding Validator and Converters
-    </description>
-    <display-name>JSF Systests</display-name>
 
-    <!-- Added for passive validation of issue 610 -->
-    <context-param>
-        <param-name>javax.faces.CONFIG_FILES</param-name>
-        <param-value></param-value>
-    </context-param>
-    <context-param>
-        <param-name>com.sun.faces.enableThreading</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    <!-- Faces Servlet -->
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
+<html>
+  <head><title>Simple jsp page</title></head>
+  <body>
+  <f:view>
+      <h:messages />
+      <h:form id="form">
+          <h:inputText value="hello">
+              <f:converter binding="#{bean.converter}"/>
+          </h:inputText>
+          <h:inputText value="hello2">
+              <f:validator binding="#{bean.validator}"/>
+          </h:inputText>
+          <h:inputText value="hello3">
+              <f:validator validatorId="lbv" binding="#{bean.validator2}"/>
+              <f:converter converterId="lbc" binding="#{bean.converter2}"/>
+          </h:inputText>
 
-    <!-- Faces Servlet Mapping -->
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
-    </servlet-mapping>
+          <h:commandButton id="submit" value="#{fn:toUpperCase('click me')}"
+                           type="submit"/>
 
-</web-app>
+      </h:form>
+  </f:view>
+  </body>
+</html>

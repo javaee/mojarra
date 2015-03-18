@@ -38,19 +38,24 @@
  * holder.
  */
 
-package com.sun.faces.systest.late;
+package com.sun.faces.test.servlet30.latebindings;
 
-import javax.faces.validator.Validator;
-import javax.faces.validator.ValidatorException;
+import javax.faces.convert.Converter;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 
 
-public class LBValidator implements Validator {
+public class LBConverter implements Converter {
 
-    public void validate(FacesContext context,
-                         UIComponent component,
-                         Object value) throws ValidatorException {
-        // no-op
+    public Object getAsObject(FacesContext context,
+                              UIComponent component,
+                              String value) {
+        return value;
+    }
+
+    public String getAsString(FacesContext context,
+                              UIComponent component,
+                              Object value) {
+        return ((value != null) ? value.toString() : "");
     }
 }

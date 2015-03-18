@@ -95,7 +95,6 @@
                    add-er-replace-vr,
                    converter-property-editor,
                    disable-unicode-escaping,
-                   late-bindings,
                    flash,
                    jsp-flash,
                    bogus-render-kit-id,
@@ -117,7 +116,6 @@
                    invalid-mapping,
                    jar-ordering,
                    converter-property-editor,
-                   late-bindings,
                    bogus-render-kit-id,
                    characterCombat"/>
 

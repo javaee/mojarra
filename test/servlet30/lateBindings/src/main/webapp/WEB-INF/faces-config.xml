@@ -1,4 +1,6 @@
-<%--
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
@@ -38,35 +40,23 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---%>
+-->
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
-<%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
-
-<html>
-  <head><title>Simple jsp page</title></head>
-  <body>
-  <f:view>
-      <h:messages />
-      <h:form>
-          <h:inputText value="hello">
-              <f:converter binding="#{bean.converter}"/>
-          </h:inputText>
-          <h:inputText value="hello2">
-              <f:validator binding="#{bean.validator}"/>
-          </h:inputText>
-          <h:inputText value="hello3">
-              <f:validator validatorId="lbv" binding="#{bean.validator2}"/>
-              <f:converter converterId="lbc" binding="#{bean.converter2}"/>
-          </h:inputText>
-
-          <h:commandButton value="#{fn:toUpperCase('click me')}"
-                           type="submit"/>
-
-      </h:form>
-  </f:view>
-  </body>
-</html>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
+    <managed-bean>
+        <managed-bean-name>bean</managed-bean-name>
+        <managed-bean-class>com.sun.faces.test.servlet30.latebindings.Bean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <converter>
+        <converter-id>lbc</converter-id>
+        <converter-class>com.sun.faces.test.servlet30.latebindings.LBConverter</converter-class>
+    </converter>
+    <validator>
+        <validator-id>lbv</validator-id>
+        <validator-class>com.sun.faces.test.servlet30.latebindings.LBValidator</validator-class>
+    </validator>
+</faces-config>

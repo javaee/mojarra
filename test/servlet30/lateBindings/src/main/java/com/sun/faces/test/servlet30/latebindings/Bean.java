@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.systest.late;
+package com.sun.faces.test.servlet30.latebindings;
 
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;

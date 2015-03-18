@@ -104,6 +104,7 @@
         <module>implicitContract</module>
         <module>jarWithExactlyTwoContracts</module>
         <module>initRequestParameterMap</module>
+        <module>lateBindings</module>
         <module>multiTenantSetsTccl</module>
         <module>multiTenantUsesFactoryFinder</module>
         <module>navigation</module>
