@@ -984,8 +984,8 @@
                 <p>The name of a collection of items that this tag
                 iterates over. The
                 collection may be a <code>List</code>, <code>array</code>,
-                <code>java.sql.ResultSet</code>, <code>java.lang.Iterable</code>, or an individual
-                java Object. If the
+                <code>java.sql.ResultSet</code>, <code>java.lang.Iterable</code>, 
+                <code>java.util.Map</code> or an individual java Object. If the
                 collection is null, this tag does nothing.</p>
 
                 </div>

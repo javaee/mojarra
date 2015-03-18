@@ -270,6 +270,8 @@ public class UIRepeat extends UINamingContainer {
                 this.model = new ResultSetDataModel((ResultSet) val);
             } else if (val instanceof Iterable) {
                 this.model = new IterableDataModel<>((Iterable<?>) val);
+            } else if (val instanceof Map) {
+                this.model = new IterableDataModel<>(((Map<?, ?>) val).entrySet());
             } else {
                 this.model = new ScalarDataModel<>(val);
             }

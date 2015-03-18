@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+        START
+        <h:dataTable var="current" value="#{mapBean.map}">
+            <h:column>#{current.key}</h:column>
+            <h:column>#{current.value}</h:column>
+        </h:dataTable>
+        END
+    </h:body>
+
+</html>

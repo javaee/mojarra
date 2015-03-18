@@ -1848,6 +1848,8 @@ public class UIData extends UIComponentBase
             setDataModel(new CollectionDataModel((Collection) current));
         } else if (current instanceof Iterable) {
             setDataModel(new IterableDataModel<>((Iterable<?>) current));
+        } else if (current instanceof Map) {
+            setDataModel(new IterableDataModel<>(((Map<?, ?>) current).entrySet()));
         } else {
             setDataModel(new ScalarDataModel(current));
         }
