@@ -41,7 +41,7 @@
 package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationAssociate;
+import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
@@ -928,7 +928,7 @@ public class ConfigManager {
             this.facesContext = facesContext;
             this.provider = AnnotationProviderFactory.createAnnotationProvider(sc);
             this.metadataGetter = metadataGetter;
-
+            this.annotatedSet = (Set<Class<?>>) sc.getAttribute(ANNOTATED_CLASSES);
         }
 
 
