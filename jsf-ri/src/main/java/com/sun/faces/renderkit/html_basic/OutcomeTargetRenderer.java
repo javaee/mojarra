@@ -217,7 +217,8 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                 if (!existingParams.containsKey(navParamName)) {
                     if (entry.getValue().size() == 1) {
                         String value = entry.getValue().get(0);
-                        if (value.trim().startsWith("#{") || value.trim().startsWith("${")) {
+                        String sanitized = null != value && 2 < value.length() ? value.trim() : "";
+                        if (sanitized.contains("#{") || sanitized.contains("${")) {
                             FacesContext fc = FacesContext.getCurrentInstance();
                             value = fc.getApplication().evaluateExpressionGet(fc, value, String.class);
                             List<String> values = new ArrayList<String>();
