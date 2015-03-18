@@ -131,6 +131,7 @@ public class DelegatingAnnotationProvider extends AnnotationProvider {
                             Set<Class<?>> classes = annotatedMap.get(annoType);
                             if (classes == null) {
                                 classes = new HashSet<Class<?>>();
+                                annotatedMap.put(annoType, classes);
                             }
                             if (annotationScanPackagesSet) {
                                 if (matchesAnnotationScanPackages(clazz, annotationScanPackages)) {
