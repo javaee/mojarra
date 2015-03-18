@@ -160,6 +160,11 @@ public class RIConstants {
      */
     public static final String CDI_BEAN_MANAGER = FACES_PREFIX + "cdi.BeanManager";
 
+    /**
+     * Convenience key to temporarily store the set of annotated classes in the servlet context.
+     */
+    public static final String ANNOTATED_CLASSES = FACES_PREFIX + "AnnotatedClasses";
+
     private RIConstants() {
 
         throw new IllegalStateException();
