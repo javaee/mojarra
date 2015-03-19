@@ -155,6 +155,11 @@ public class RIConstants {
     
     public static final String JAVAEE_XMLNS = "http://xmlns.jcp.org/xml/ns/javaee";
 
+    /**
+     * Convenience key to temporarily store the set of annotated classes in the servlet context.
+     */
+    public static final String ANNOTATED_CLASSES = FACES_PREFIX + "AnnotatedClasses";
+
     private RIConstants() {
 
         throw new IllegalStateException();

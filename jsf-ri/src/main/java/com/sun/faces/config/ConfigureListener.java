@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,6 +40,7 @@
 package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
+import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.WebappLifecycleListener;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableGroovyScripting;
@@ -275,6 +276,8 @@ public class ConfigureListener implements ServletRequestListener,
             caughtThrowable = t;
 
         } finally {
+            sce.getServletContext().removeAttribute(ANNOTATED_CLASSES);
+            
             Verifier.setCurrentInstance(null);
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
