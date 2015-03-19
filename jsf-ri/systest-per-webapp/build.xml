@@ -96,7 +96,6 @@
                    converter-property-editor,
                    disable-unicode-escaping,
                    flash,
-                   jsp-flash,
                    bogus-render-kit-id,
                    characterCombat"/>
     <!--
@@ -106,7 +105,6 @@
           el-performance
           command-link-redirect,
                    flash,
-                   jsp-flash
     -->
 
    <property name="applications-for-V3.1_no_cluster-virtual-server"

@@ -45,62 +45,53 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
               version="2.0">
-
-  <managed-bean>
-    <managed-bean-name>ResultSetBean</managed-bean-name>
-    <managed-bean-class>com.sun.faces.run_time_test.model.ResultSetBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-  </managed-bean>
-  
-  <managed-bean>
-    <managed-bean-name>ResetUniqueRequestIdBean</managed-bean-name>
-    <managed-bean-class>
-      com.sun.faces.application.ResetUniqueRequestIdBean
-    </managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-        
-  <navigation-rule>
-    <from-view-id>/home-flash.jsp</from-view-id>
-    <navigation-case>
-      <from-outcome>next</from-outcome>
-      <to-view-id>/flash2.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-  </navigation-rule>
-
-  <navigation-rule>
-    <from-view-id>/flash2.jsp</from-view-id>
-    <navigation-case>
-      <from-outcome>back</from-outcome>
-      <to-view-id>/home-flash.jsp</to-view-id>
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>next</from-outcome>
-      <to-view-id>/flash3.jsp</to-view-id>
-    </navigation-case>
-  </navigation-rule>
-
-  <navigation-rule>
-    <from-view-id>/flash3.jsp</from-view-id>
-    <navigation-case>
-      <from-outcome>next</from-outcome>
-      <to-view-id>/flash4.jsp</to-view-id>
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>back</from-outcome>
-      <to-view-id>/flash2.jsp</to-view-id>
-    </navigation-case>
-  </navigation-rule>
-
-  <navigation-rule>
-    <from-view-id>/flash4.jsp</from-view-id>
-    <navigation-case>
-      <from-outcome>back</from-outcome>
-      <to-view-id>/flash3.jsp</to-view-id>
-    </navigation-case>
-  </navigation-rule>
-
-
-
+    <managed-bean>
+        <managed-bean-name>ResultSetBean</managed-bean-name>
+        <managed-bean-class>com.sun.faces.run_time_test.model.ResultSetBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ResetUniqueRequestIdBean</managed-bean-name>
+        <managed-bean-class>
+            com.sun.faces.application.ResetUniqueRequestIdBean
+        </managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <navigation-rule>
+        <from-view-id>/home-flash.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>next</from-outcome>
+            <to-view-id>/flash2.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/flash2.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>back</from-outcome>
+            <to-view-id>/home-flash.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>next</from-outcome>
+            <to-view-id>/flash3.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/flash3.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>next</from-outcome>
+            <to-view-id>/flash4.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>back</from-outcome>
+            <to-view-id>/flash2.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/flash4.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>back</from-outcome>
+            <to-view-id>/flash3.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

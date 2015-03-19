@@ -103,6 +103,7 @@
         <module>flashNoSession</module>
         <module>implicitContract</module>
         <module>jarWithExactlyTwoContracts</module>
+        <module>jspFlash</module>
         <module>initRequestParameterMap</module>
         <module>lateBindings</module>
         <module>multiTenantSetsTccl</module>

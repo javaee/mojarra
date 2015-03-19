@@ -37,87 +37,37 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.jspflash;
 
-package com.sun.faces.systest;
-
-
-import com.sun.faces.systest.*;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
+public class JspFlashIT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-
-/**
- * <p>Make sure that an application that replaces the ApplicationFactory
- * but uses the decorator pattern to allow the existing ApplicationImpl
- * to do the bulk of the requests works.</p>
- */
-
-public class JspFlashTestCase extends HtmlUnitFacesTestCase {
-
-
-    // ------------------------------------------------------------ Constructors
-
-
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
-    public JspFlashTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
-
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(JspFlashTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-
-    // ------------------------------------------------- Individual Test Methods
-
-    /**
-     *
-     * <p>Verify that the bean is successfully resolved</p>
-     */
-
+    @Test
     public void testFlash() throws Exception {
         // Get the first page
-        HtmlPage page = getPage("/home-flash.jsf");
+        HtmlPage page = webClient.getPage(webUrl + "home-flash.jsf");
         String pageText = page.asXml();
         // (?s) is an "embedded flag expression" for the "DOTALL" operator.
         // It says, "let . match any character including line terminators."
@@ -127,7 +77,7 @@ public class JspFlashTestCase extends HtmlUnitFacesTestCase {
 
         // the page contains the following span, with the following id, with no contents
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"fooValueId\">\\s*</span>.*"));
-        
+
         // Click the reload button
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("reload");
         page = (HtmlPage) button.click();
@@ -136,12 +86,12 @@ public class JspFlashTestCase extends HtmlUnitFacesTestCase {
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"fooValueId\">\\s*fooValue\\s*</span>.*"));
 
         // Get the first page, again
-        page = getPage("/home-flash.jsf");
-        
+        page = webClient.getPage(webUrl + "home-flash.jsf");
+
         // fill in "addMessage" in the textBox
         HtmlTextInput text = (HtmlTextInput) page.getHtmlElementById("inputText");
         text.setValueAttribute("addMessage");
-        
+
         // go to the next page
         button = (HtmlSubmitInput) page.getHtmlElementById("next");
         page = (HtmlPage) button.click();
@@ -152,44 +102,42 @@ public class JspFlashTestCase extends HtmlUnitFacesTestCase {
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash2BarValueId\">\\s*barValue\\s*</span>.*"));
         // See that it has the message
         assertTrue(-1 != pageText.indexOf("test that this persists across the redirect"));
-        
+
         // click the reload button
         button = (HtmlSubmitInput) page.getHtmlElementById("reload");
         page = (HtmlPage) button.click();
-        pageText = page.asXml();        
-        
+        pageText = page.asXml();
+
         // See that it doesn't have the message
         assertTrue(-1 == pageText.indexOf("test that this persists across the redirect"));
-        
+
         // Click the back button
         button = (HtmlSubmitInput) page.getHtmlElementById("back");
         page = (HtmlPage) button.click();
         pageText = page.asXml();
-        
+
         // Click the next button
         button = (HtmlSubmitInput) page.getHtmlElementById("next");
         page = (HtmlPage) button.click();
         pageText = page.asXml();
-        
+
         // See that the page does not have the message
         assertTrue(-1 == pageText.indexOf("test that this persists across the redirect"));
-        
+
         // Click the next button
         button = (HtmlSubmitInput) page.getHtmlElementById("next");
         page = (HtmlPage) button.click();
         pageText = page.asXml();
-        
+
         // See that it has banzai
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash3NowValueId\">\\s*banzai\\s*</span>.*"));
-        
+
         // Click the next button
         button = (HtmlSubmitInput) page.getHtmlElementById("next");
         page = (HtmlPage) button.click();
         pageText = page.asXml();
-        
+
         // See that it still has banzai
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash4BuckarooValueId\">\\s*banzai\\s*</span>.*"));
-        
     }
-
 }
