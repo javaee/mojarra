@@ -42,9 +42,14 @@ package com.sun.faces.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
@@ -363,6 +368,16 @@ public class DocumentOrderingWrapper {
             }
             throw new ConfigurationException(msg);
         }
+
+        // Sort the documents such that specified ordering will be considered.
+        //
+        // It turns out that some of the specified ordering, if it was not discovered by the sort routine 
+        // until later in its processing, was not being considered correctly in the ordering algorithm.
+        //
+        // This preSort method puts all of the documents with specified ordering as early on in the
+        // list of documents as possible for Mojarra to consider it quickly, and be 
+        // able to use its ordering algorithm to the best of its ability.
+        preSort(documents);
 
         boolean doMore = true;
         int numberOfPasses = 0;
@@ -692,9 +707,70 @@ public class DocumentOrderingWrapper {
 
     }
 
+    public static HashMap<String, DocumentOrderingWrapper> getDocumentHashMap(DocumentOrderingWrapper[] documents) {
+        HashMap<String, DocumentOrderingWrapper> configMap = new HashMap<String, DocumentOrderingWrapper>();
+    
+        for (DocumentOrderingWrapper document : documents) {
+            String name = document.id;
+            if (name != null && !"".equals(name)) {
+                configMap.put(name, document);
+            }
+        }
+    
+        return configMap;
+    }
+
+    public static void preSort(DocumentOrderingWrapper[] documents) {
+        List<DocumentOrderingWrapper> unnamedList = new ArrayList<DocumentOrderingWrapper>();
+        Map<String, Integer> namedMap = new LinkedHashMap<String, Integer>();
+
+        for (DocumentOrderingWrapper w : documents) {
+            
+            String[] bfs = w.getBeforeIds();
+            String[] afs = w.getAfterIds();
+            int knowledge = bfs.length + afs.length;
+
+            if (w.id == null || "".equals(w.id)) {
+                unnamedList.add(w);
+            } else {
+                namedMap.put(w.id, knowledge);
+            }
+        }
+        
+        namedMap = descendingByValue(namedMap);
+
+        HashMap<String, DocumentOrderingWrapper> documentHashMap = DocumentOrderingWrapper
+                .getDocumentHashMap(documents);
+
+        int i = 0;
+        for (Map.Entry<String, Integer> entry : namedMap.entrySet()) {
+            String key = entry.getKey();
+            documents[i] = documentHashMap.get(key);            
+            i++;
+        }
+        for (DocumentOrderingWrapper w : unnamedList) {
+            documents[i] = w;
+            i++;
+        }
+
+    }
+    
+    public static <K, V extends Comparable<? super V>> Map<K, V> descendingByValue(Map<K, V> map) {
+        List<Map.Entry<K, V>> list = new LinkedList<Map.Entry<K, V>>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+            public int compare(Map.Entry<K, V> a, Map.Entry<K, V> b) {
+                return (b.getValue()).compareTo(a.getValue());
+            }
+        });
+
+        Map<K, V> result = new LinkedHashMap<K, V>();
+        for (Map.Entry<K, V> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
+    }
 
     // ---------------------------------------------------------- Nested Classes
-
 
     @SuppressWarnings({"ComparatorNotSerializable"})
     private static final class DocumentOrderingComparator implements Comparator<DocumentOrderingWrapper> {
