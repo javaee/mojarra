@@ -39,7 +39,7 @@
 
  */
 
-package com.sun.faces.component.html;
+package javax.faces.component.html;
 
 import java.util.ArrayList;
 import java.util.Arrays;
