@@ -65,8 +65,6 @@
               value="com/sun/faces/systest/FlashTestCase.class"/>
     <property name="invalid-mapping"
               value="com/sun/faces/systest/InvalidMappingTestCase.class"/>
-    <property name="jar-ordering"
-              value="com/sun/faces/systest/JarOrderingTestCase.class"/>
     <property name="add-er-replace-vr" 
               value="com/sun/faces/systest/AddELResolverAndReplaceVariableresolverProgrammaticallyTestCase.class"/>
     <property name="converter-property-editor" 

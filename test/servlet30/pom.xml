@@ -102,6 +102,7 @@
         <module>flashForceWriteCookie</module>
         <module>flashNoSession</module>
         <module>implicitContract</module>
+        <module>jarOrdering</module>
         <module>jarWithExactlyTwoContracts</module>
         <module>jspFlash</module>
         <module>initRequestParameterMap</module>

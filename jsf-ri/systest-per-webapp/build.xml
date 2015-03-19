@@ -91,7 +91,6 @@
                    absolute-ordering,
                    document-ordering,
                    invalid-mapping,
-                   jar-ordering,
                    add-er-replace-vr,
                    converter-property-editor,
                    disable-unicode-escaping,
@@ -112,7 +111,6 @@
                    find-resources-in-jar,
                    clientside-statesaving,
                    invalid-mapping,
-                   jar-ordering,
                    converter-property-editor,
                    bogus-render-kit-id,
                    characterCombat"/>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!--
+<%--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
@@ -39,53 +38,24 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
+--%>
 
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee web-app_2_5.xsd"
-         version="2.5">
 
-    <description>
-       JSF Systests
-    </description>
-    <display-name>JSF Systests</display-name>
 
-    <!-- Validate the Application Configuration Resources -->
-    <context-param>
-      <param-name>com.sun.faces.validateXml</param-name>
-      <param-value>true</param-value>
-    </context-param>
-    <context-param>
-        <param-name>com.sun.faces.enableThreading</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    <context-param>
-        <param-name>com.sun.faces.enableHtmlTagLibValidator</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    
-    <context-param>
-        <param-name>com.sun.faces.managedBeanFactoryDecoratorClass</param-name>
-        <param-value>com.sun.faces.systest.NewManagedBeanFactory</param-value>
-    </context-param>
-    
-    <context-param>
-        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>client</param-value>
-    </context-param>
-
-    <!-- Faces Servlet -->
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup> 1 </load-on-startup>
-    </servlet>
-
-    <!-- Faces Servlet Mapping -->
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
-    </servlet-mapping>
-
-</web-app>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <title>test</title>
+        <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
+        <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
+    </head>
+    <body>
+        <h1>test</h1>
+        <f:view>
+            <h:form id="form">
+                <h:outputText id="viewHandler" value="#{facesContext.application.viewHandler}" />
+            </h:form>
+        </f:view>
+        <hr>
+    </body>
+</html>
