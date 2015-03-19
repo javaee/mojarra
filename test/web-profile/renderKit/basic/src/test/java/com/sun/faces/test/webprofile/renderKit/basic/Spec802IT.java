@@ -125,4 +125,43 @@ public class Spec802IT {
                     "File upload component requires a form with an enctype of multipart/form-data"));
         }
     }
+
+    @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
+    @Test
+    public void testFileUploadMultipleTimes() throws Exception {
+        webClient = new WebClient();
+        HtmlPage page = webClient.getPage(webUrl + "faces/uploadMultipleTimes.xhtml");
+
+        String basedir = System.getProperty("basedir");
+        HtmlFileInput fileInput = (HtmlFileInput) page.getElementById("file");
+        fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess.txt");
+
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+
+        page = button.click();
+
+        String pageText = page.getBody().asXml();
+        assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+83.*"));
+        
+        fileInput = (HtmlFileInput) page.getElementById("file");
+        fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess2.txt");
+
+        button = (HtmlSubmitInput) page.getElementById("button");
+
+        page = button.click();
+
+        pageText = page.getBody().asXml();
+        assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+107.*"));
+        
+        fileInput = (HtmlFileInput) page.getElementById("file");
+        fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess3.txt");
+
+        button = (HtmlSubmitInput) page.getElementById("button");
+
+        page = button.click();
+
+        pageText = page.getBody().asXml();
+        assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+124.*"));
+        
+    }
 }
