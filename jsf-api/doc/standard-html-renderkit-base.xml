@@ -517,6 +517,7 @@
         <xi:include href="text-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
+            <ignore>true</ignore>
             <base-component-type>javax.faces.Input</base-component-type>
             <renderer-type>javax.faces.File</renderer-type>
         </component-extension>

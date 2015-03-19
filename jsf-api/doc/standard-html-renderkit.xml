@@ -9032,6 +9032,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
 
     <component-extension>
+      <ignore>true</ignore>
       <base-component-type>javax.faces.Input</base-component-type>
       <renderer-type>javax.faces.File</renderer-type>
     </component-extension>
