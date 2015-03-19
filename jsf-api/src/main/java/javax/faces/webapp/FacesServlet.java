@@ -72,7 +72,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p><strong class="changed_modified_2_0 changed_modified_2_0_rev_a
- * changed_modified_2_1 changed_modified_2_2">FacesServlet</strong> is a
+ * changed_modified_2_1 changed_modified_2_2 changed_modified_2_2_mr1">FacesServlet</strong> is a
  * servlet that manages the request processing lifecycle for web
  * applications that are utilizing JavaServer Faces to construct the
  * user interface.</p>
@@ -150,13 +150,21 @@ import javax.servlet.http.HttpServletResponse;
 
  * 	<ul>
 
- *         <li>/faces</li>
+ *         <li>/faces/*</li>
  *         <li>*.jsf</li>
  *         <li>*.faces</li>
-
+ *         <li class="changed_added_2_3">*.xhtml</li>
  *	</ul>
 
  * </div>
+ * 
+ * <p class="changed_added_2_2_mr1">Note that the automatic mapping to {@code *.xhtml}
+ * can be disabled with the context param "{@code javax.faces.DISABLE_FACESSERVLET_TO_XHTML}".
+ * The runtime must consult this parameter to tell if the automatic
+ * mapping of the {@code FacesServlet} to the extension {@code *.xhtml}
+ * should be disabled.  The implementation must disable this automatic
+ * mapping if and only if the value of this parameter is equal, ignoring
+ * case, to {@code true}.</p>
 
  * <div class="changed_added_2_2">
  * 
@@ -206,7 +214,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @MultipartConfig
 public final class FacesServlet implements Servlet {
-
+    
     /*
      * A white space separated list of case sensitive HTTP method names
      * that are allowed to be processed by this servlet. * means allow all
