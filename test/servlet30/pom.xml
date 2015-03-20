@@ -106,6 +106,7 @@
         <module>jarWithExactlyTwoContracts</module>
         <module>jspFlash</module>
         <module>initRequestParameterMap</module>
+        <module>invalidMapping</module>
         <module>lateBindings</module>
         <module>multiTenantSetsTccl</module>
         <module>multiTenantUsesFactoryFinder</module>

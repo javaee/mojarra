@@ -37,53 +37,36 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest;
+package com.sun.faces.test.servlet30.invalidmapping;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
+public class InvalidMappingIT {
 
-public class InvalidMappingTestCase extends HtmlUnitFacesTestCase {
+    private String webUrl;
+    private WebClient webClient;
 
-    public InvalidMappingTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(InvalidMappingTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
-    
-    
-    // ------------------------------------------------------------ Test Methods
-    
+
+    @Test
     public void testInvalidMapping() throws Exception {
-        WebClient client = new WebClient();
-        client.setThrowExceptionOnFailingStatusCode(false);
-        client.setTimeout(0);                
-        HtmlPage page = (HtmlPage) getPage("/test.jsp", client);
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.setTimeout(0);
+        HtmlPage page = (HtmlPage) webClient.getPage(webUrl + "test.jsp");
         // this assert will fail on machines with system locale other then en-us: 
         //assertTrue(page.asText(), page.asText().contains("The FacesServlet cannot have a url-pattern of /*"));
 
@@ -100,6 +83,5 @@ public class InvalidMappingTestCase extends HtmlUnitFacesTestCase {
         assertEquals(exceptionMsg, 2, exceptionMsg.split("FacesServlet").length); // split must result in two parts
         assertEquals(exceptionMsg, 3, exceptionMsg.split("url-pattern").length); // split must result in three parts
         assertEquals(exceptionMsg, 2, exceptionMsg.split("/\\*").length); // split must result in three parts
-        
     }
 }

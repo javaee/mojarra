@@ -90,7 +90,6 @@
                    clientside-statesaving,
                    absolute-ordering,
                    document-ordering,
-                   invalid-mapping,
                    add-er-replace-vr,
                    converter-property-editor,
                    disable-unicode-escaping,
@@ -110,7 +109,6 @@
              value="
                    find-resources-in-jar,
                    clientside-statesaving,
-                   invalid-mapping,
                    converter-property-editor,
                    bogus-render-kit-id,
                    characterCombat"/>
