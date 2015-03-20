@@ -43,11 +43,17 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.sun.faces.test.junit.JsfServerExclude;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class JspFlashIT {
 
     private String webUrl;
@@ -64,6 +70,8 @@ public class JspFlashIT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(value = JsfVersion.JSF_2_3_0_M02, excludes = {
+        JsfServerExclude.WEBLOGIC_12_1_4, JsfServerExclude.WEBLOGIC_12_2_1})
     @Test
     public void testFlash() throws Exception {
         // Get the first page
