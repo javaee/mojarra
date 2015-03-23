@@ -309,19 +309,23 @@ public class ELFlash extends Flash {
                 }
             }            
         }
-            
-        // If we are in a clustered environment, store a helper to ensure
-        // our innerMap gets successfully replicated
-        if (null != appMap.get(EnableDistributable.getQualifiedName())) {
-            synchronized (extContext.getContext()) {            
-                SessionHelper sessionHelper = 
-                        SessionHelper.getInstance(extContext);
-                if (null == sessionHelper) {
-                    sessionHelper = new SessionHelper();
+        
+        /*
+         * If we are in a clustered environment and a session is active, store
+         * a helper to ensure our innerMap gets successfully replicated.
+         */
+        if (appMap.get(EnableDistributable.getQualifiedName()) != null) {
+            synchronized (extContext.getContext()) {
+                if (extContext.getSession(false) != null) {
+                    SessionHelper sessionHelper = SessionHelper.getInstance(extContext);
+                    if (sessionHelper == null) {
+                        sessionHelper = new SessionHelper();
+                    }
+                    sessionHelper.update(extContext, flash);
                 }
-                sessionHelper.update(extContext, flash);
             }
         }
+        
         return flash;
     }
     
