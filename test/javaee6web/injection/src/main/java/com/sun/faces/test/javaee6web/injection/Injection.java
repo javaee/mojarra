@@ -37,9 +37,43 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.javaee6web.injection;
 
-package com.sun.faces.systest;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.inject.Inject;
 
-public class Foo {
+@ManagedBean(name = "injection")
+@SessionScoped
+public class Injection {
 
+    private boolean initCalled = false;
+
+    private int postConstructCalled = 0;
+
+    @Inject
+    private Foo foo;
+
+    @Inject
+    public void initialize(Foo foo) {
+        initCalled = foo != null;
+    }
+
+    public boolean isInitCalled() {
+        return initCalled;
+    }
+
+    public boolean isFooInjected() {
+        return foo != null;
+    }
+
+    @PostConstruct
+    public void concall() {
+        postConstructCalled++;
+    }
+
+    public String getPostConstructCalled() {
+        return Integer.toString(postConstructCalled);
+    }
 }

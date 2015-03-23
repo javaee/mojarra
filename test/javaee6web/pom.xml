@@ -87,6 +87,7 @@
         <module>flowViewNodeDifferent</module>
         <module>implicitFlow</module>
         <module>injectArtifacts</module>
+        <module>injection</module>
         <module>multiPageFlowInJar</module>
         <module>multiPageFlowUsingJar</module>
         <module>nestedFlow</module>
