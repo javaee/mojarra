@@ -193,6 +193,8 @@
                 <artifactId>taglist-maven-plugin</artifactId>
                 <version>2.4</version>
             </plugin>
+            <!--
+             Disabling until Clirr support Java8 properly
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>clirr-maven-plugin</artifactId>
@@ -207,6 +209,7 @@
                     </comparisonArtifacts>
                 </configuration>
             </plugin>
+             -->
             <!--        
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
