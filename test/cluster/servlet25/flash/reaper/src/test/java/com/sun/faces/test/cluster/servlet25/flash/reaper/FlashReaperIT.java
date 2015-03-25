@@ -74,7 +74,6 @@ public class FlashReaperIT {
 
 
     @Test
-    @Ignore
     public void testFlashesAreReaped() throws Exception {
         
         doTestFlashesAreReaped(0);
