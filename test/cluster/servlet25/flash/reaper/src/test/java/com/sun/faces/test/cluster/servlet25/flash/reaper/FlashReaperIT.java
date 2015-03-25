@@ -84,18 +84,16 @@ public class FlashReaperIT {
     public void doTestFlashesAreReaped(int instanceNumber) throws Exception {
         
         String [] baseUrls = ClusterUtils.getBaseUrls();
-
-        URL makeZombie = new URL(baseUrls[instanceNumber] + "faces/flashReaper.xhtml");
-        URLConnection zombieConnection;
+        
         HtmlPage page;
         int numberOfReaps = 0, numberEntriesInInnerMap = 0;
         boolean didReap = false;
 
-
         for (int i = 0; i < 50; i++) {
-            zombieConnection = makeZombie.openConnection();
-            zombieConnection.getContent();
-            zombieConnection.getInputStream().close();
+            WebClient zombieClient = new WebClient();
+            HtmlPage zombiePage = zombieClient.getPage(baseUrls[instanceNumber] + "faces/flashReaper.xhtml");
+            System.out.println(zombiePage.asXml());
+            
             page = webClient.getPage(baseUrls[instanceNumber] + "faces/flashReaper.xhtml");
 
             numberEntriesInInnerMap = Integer.parseInt(page.asText().trim());
