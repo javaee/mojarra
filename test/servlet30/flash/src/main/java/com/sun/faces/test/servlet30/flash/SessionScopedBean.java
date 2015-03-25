@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.model;
+package com.sun.faces.test.servlet30.flash;
 
 import java.util.Map;
 import javax.annotation.PreDestroy;
@@ -46,7 +46,6 @@ import javax.faces.application.Application;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.context.Flash;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostKeepFlashValueEvent;
 import javax.faces.event.PostPutFlashValueEvent;
@@ -59,41 +58,41 @@ import java.io.Serializable;
 @ManagedBean
 @SessionScoped
 public class SessionScopedBean implements Serializable {
-    
+
     private FlashListener listener;
-    
+
     public SessionScopedBean() {
         FacesContext context = FacesContext.getCurrentInstance();
         Application app = context.getApplication();
         listener = new FlashListener();
-        
+
         app.subscribeToEvent(PreRemoveFlashValueEvent.class, listener);
         app.subscribeToEvent(PostKeepFlashValueEvent.class, listener);
         app.subscribeToEvent(PreClearFlashEvent.class, listener);
         app.subscribeToEvent(PostPutFlashValueEvent.class, listener);
-        
+
     }
 
     @PreDestroy
     public void destroy() {
         FacesContext context = FacesContext.getCurrentInstance();
         Application app = context.getApplication();
-        
+
         app.unsubscribeFromEvent(PreRemoveFlashValueEvent.class, listener);
         app.unsubscribeFromEvent(PostKeepFlashValueEvent.class, listener);
         app.unsubscribeFromEvent(PreClearFlashEvent.class, listener);
         app.unsubscribeFromEvent(PostPutFlashValueEvent.class, listener);
-        
+
     }
-    
+
     public String getMessage() {
         FacesContext context = FacesContext.getCurrentInstance();
         Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
-        String result = (sessionMap.containsKey("builder")) ? ((StringBuilder)sessionMap.get("builder")).toString() : "no message";
-        
+        String result = (sessionMap.containsKey("builder")) ? ((StringBuilder) sessionMap.get("builder")).toString() : "no message";
+
         return result;
     }
-    
+
     public static class FlashListener implements SystemEventListener {
 
         public boolean isListenerForSource(Object source) {
@@ -102,10 +101,10 @@ public class SessionScopedBean implements Serializable {
 
         public void processEvent(SystemEvent event) throws AbortProcessingException {
             appendMessage("[received " + event.getClass().getName() + " source:"
-                          + event.getSource() + "]");
-            
+                    + event.getSource() + "]");
+
         }
-        
+
         private void appendMessage(String message) {
             FacesContext context = FacesContext.getCurrentInstance();
             Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
@@ -117,9 +116,7 @@ public class SessionScopedBean implements Serializable {
             }
             builder.append(message);
         }
-        
-        
-        
+
     }
-    
+
 }

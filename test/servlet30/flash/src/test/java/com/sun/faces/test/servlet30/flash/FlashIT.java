@@ -37,87 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.flash;
 
-package com.sun.faces.systest;
-
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
+public class FlashIT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-
-/**
- * <p>Make sure that an application that replaces the ApplicationFactory
- * but uses the decorator pattern to allow the existing ApplicationImpl
- * to do the bulk of the requests works.</p>
- */
-
-public class FlashTestCase extends HtmlUnitFacesTestCase {
-
-
-    // ------------------------------------------------------------ Constructors
-
-
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
-    public FlashTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
-
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(FlashTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-
-    // ------------------------------------------------- Individual Test Methods
-
-    /**
-     *
-     * <p>Verify that the bean is successfully resolved</p>
-     */
-
+    @Test
     public void testFlash() throws Exception {
         // Get the first page
-        HtmlPage page = getPage("/faces/index.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
         String pageText = page.asXml();
         // (?s) is an "embedded flag expression" for the "DOTALL" operator.
         // It says, "let . match any character including line terminators."
@@ -127,7 +79,7 @@ public class FlashTestCase extends HtmlUnitFacesTestCase {
 
         // the page contains the following span, with the following id, with no contents
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"fooValueId\">\\s*</span>.*"));
-        
+
         // Click the reload button
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("reload");
         page = (HtmlPage) button.click();
@@ -136,19 +88,15 @@ public class FlashTestCase extends HtmlUnitFacesTestCase {
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"fooValueId\">\\s*fooValue\\s*</span>.*"));
 
         // Get the first page, again
-        page = getPage("/faces/index.xhtml");
-        pageText = page.asXml();
+        page = webClient.getPage(webUrl + "faces/index.xhtml");
 
         // the page contains the following span, with the following id, with no contents
         // meaning the flash has no value for foo
         //assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"fooValueId\">\\s*</span>.*"));
-
-
-        
         // fill in "addMessage" in the textBox
         HtmlTextInput text = (HtmlTextInput) page.getHtmlElementById("inputText");
         text.setValueAttribute("addMessage");
-        
+
         // go to the next page
         button = (HtmlSubmitInput) page.getHtmlElementById("next");
         page = (HtmlPage) button.click();
@@ -159,84 +107,83 @@ public class FlashTestCase extends HtmlUnitFacesTestCase {
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash2BarValueId\">\\s*barValue\\s*</span>.*"));
         // See that it has the message
         assertTrue(-1 != pageText.indexOf("test that this persists across the redirect"));
-        
+
         // click the reload button
         button = (HtmlSubmitInput) page.getHtmlElementById("reload");
         page = (HtmlPage) button.click();
-        pageText = page.asXml();        
-        
+        pageText = page.asXml();
+
         // See that it doesn't have the message
         assertTrue(-1 == pageText.indexOf("test that this persists across the redirect"));
-        
+
         // Click the back button
         button = (HtmlSubmitInput) page.getHtmlElementById("back");
         page = (HtmlPage) button.click();
-        pageText = page.asXml();
-        
+
         // Click the next button
         button = (HtmlSubmitInput) page.getHtmlElementById("next");
         page = (HtmlPage) button.click();
         pageText = page.asXml();
-        
+
         // See that the page does not have the message
         assertTrue(-1 == pageText.indexOf("test that this persists across the redirect"));
-        
+
         // Click the next button
         button = (HtmlSubmitInput) page.getHtmlElementById("next");
         page = (HtmlPage) button.click();
         pageText = page.asXml();
-        
+
         // See that it has banzai
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash3NowValueId\">\\s*banzai\\s*</span>.*"));
-        
+
         // Click the next button
         button = (HtmlSubmitInput) page.getHtmlElementById("next");
         page = (HtmlPage) button.click();
         pageText = page.asXml();
-        
+
         // See that it still has banzai
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash4BuckarooValueId\">\\s*banzai\\s*</span>.*"));
 
-        // click the link http://localhost:${container.port}/jsf-flash/flash5.jsf?id=1
+        // click the link
         HtmlAnchor link = (HtmlAnchor) page.getElementById("link");
         page = link.click();
 
         // on flash5
         link = (HtmlAnchor) page.getElementById("link");
-        page = link.click(); // clicks http://localhost:${container.port}/jsf-flash/flash6.jsf
+        page = link.click();
 
         assertTrue(page.asText().contains("Value is 1."));
 
         // click the link on the next page
-        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:${container.port}/jsf-flash/flash7.jsf
+        link = (HtmlAnchor) page.getElementById("link");
         page = link.click();
 
         assertTrue(page.asText().contains("Value is 1."));
 
         // click the link on the same page
-        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:${container.port}/jsf-flash/flash7.jsf
+        link = (HtmlAnchor) page.getElementById("link");
         page = link.click();
 
         assertTrue(page.asText().contains("Value is 1."));
 
         // click the link on the same page
-        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:${container.port}/jsf-flash/flash7.jsf
+        link = (HtmlAnchor) page.getElementById("link");
         page = link.click();
 
         assertTrue(page.asText().contains("Value is 1."));
 
-        link = (HtmlAnchor) page.getElementById("link2"); // http://localhost:${container.port}/jsf-flash/flash8.jsf
+        link = (HtmlAnchor) page.getElementById("link2");
         page = link.click();
 
         assertTrue(page.asText().contains("Value is 1."));
 
-        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:${container.port}/jsf-flash/flash8.jsf
+        link = (HtmlAnchor) page.getElementById("link");
         page = link.click();
 
         // it went away because there was no keep
         assertTrue(page.asText().contains("Value is ."));
 
-        page = getPage("/faces/flash9.xhtml"); // http://localhost:${container.port}/jsf-flash/flash9.jsf
+        page = webClient.getPage(webUrl + "faces/flash9.xhtml");
 
         text = (HtmlTextInput) page.getHtmlElementById("valueA");
         text.setValueAttribute("a value");
@@ -248,7 +195,7 @@ public class FlashTestCase extends HtmlUnitFacesTestCase {
         text.setValueAttribute("c value");
 
         button = (HtmlSubmitInput) page.getHtmlElementById("keep");
-        page = (HtmlPage) button.click();  // http://localhost:${container.port}/jsf-flash/flash11.jsf
+        page = (HtmlPage) button.click();
 
         pageText = page.asText();
 
@@ -256,7 +203,7 @@ public class FlashTestCase extends HtmlUnitFacesTestCase {
         assertTrue(pageText.contains("valueB: b value"));
         assertTrue(pageText.contains("valueC: c value"));
 
-        link = (HtmlAnchor) page.getElementById("flash9"); // http://localhost:${container.port}/jsf-flash/flash9.jsf
+        link = (HtmlAnchor) page.getElementById("flash9");
         page = link.click();
 
         text = (HtmlTextInput) page.getHtmlElementById("valueA");
@@ -268,7 +215,7 @@ public class FlashTestCase extends HtmlUnitFacesTestCase {
         text = (HtmlTextInput) page.getHtmlElementById("valueC");
         assertEquals(text.getValueAttribute(), "c value");
 
-        page = getPage("/faces/flash9.xhtml"); // http://localhost:${container.port}/jsf-flash/flash9.jsf
+        page = webClient.getPage(webUrl + "faces/flash9.xhtml");
         text = (HtmlTextInput) page.getHtmlElementById("valueA");
         assertEquals(text.getValueAttribute(), "");
 
@@ -288,7 +235,7 @@ public class FlashTestCase extends HtmlUnitFacesTestCase {
         text.setValueAttribute("C value");
 
         button = (HtmlSubmitInput) page.getHtmlElementById("nokeep");
-        page = (HtmlPage) button.click();  // http://localhost:${container.port}/jsf-flash/flash10.jsf
+        page = (HtmlPage) button.click();
 
         pageText = page.asText();
 
@@ -297,7 +244,7 @@ public class FlashTestCase extends HtmlUnitFacesTestCase {
         assertTrue(pageText.contains("valueC: C value"));
 
         button = (HtmlSubmitInput) page.getHtmlElementById("reload");
-        page = (HtmlPage) button.click();  // http://localhost:${container.port}/jsf-flash/flash10.jsf
+        page = (HtmlPage) button.click();
 
         pageText = page.asText();
 
@@ -306,9 +253,9 @@ public class FlashTestCase extends HtmlUnitFacesTestCase {
         assertTrue(!pageText.contains("valueC: C value"));
 
         // content from Sebastian Hennebrueder
-        page = getPage("/faces/flash12.xhtml");
+        page = webClient.getPage(webUrl + "faces/flash12.xhtml");
         button = (HtmlSubmitInput) page.getHtmlElementById("start");
-        page = (HtmlPage) button.click();  // http://localhost:${container.port}/jsf-flash/flash10.jsf
+        page = (HtmlPage) button.click();
 
         pageText = page.asText();
         assertTrue(pageText.contains("4711"));
@@ -319,30 +266,23 @@ public class FlashTestCase extends HtmlUnitFacesTestCase {
         assertTrue(!pageText.contains("4711"));
 
         // Test for JAVASERVERFACES-2087
-        page = getPage("/faces/flash13.xhtml");
+        page = webClient.getPage(webUrl + "faces/flash13.xhtml");
         button = (HtmlSubmitInput) page.getHtmlElementById("flashbtn");
-        page = (HtmlPage) button.click();  // http://localhost:${container.port}/jsf-flash/flash13.jsf
-        
+        page = (HtmlPage) button.click();
+
         pageText = page.asText();
         assertTrue(pageText.contains("read strobist"));
 
-        page = getPage("/faces/flash13.xhtml");
+        page = webClient.getPage(webUrl + "faces/flash13.xhtml");
         pageText = page.asText();
         assertTrue(!pageText.contains("read strobist"));
 
-        page = getPage("/faces/flash13.xhtml");
+        page = webClient.getPage(webUrl + "faces/flash13.xhtml");
         pageText = page.asText();
         assertTrue(!pageText.contains("read strobist"));
 
-        // Only execute this assertion 
-        // in non-cluster scenario
-        if (getInstanceNumbers().size() < 2) {
-            page = getPage("/faces/flash14.xhtml");
-            pageText = page.asText();
-            assertTrue(pageText.matches("(?s).*\\[received javax.faces.event.PreClearFlashEvent source:\\{\\}\\].*"));
-        }
-        
-
+        page = webClient.getPage(webUrl + "faces/flash14.xhtml");
+        pageText = page.asText();
+        assertTrue(pageText.matches("(?s).*\\[received javax.faces.event.PreClearFlashEvent source:\\{\\}\\].*"));
     }
-
 }

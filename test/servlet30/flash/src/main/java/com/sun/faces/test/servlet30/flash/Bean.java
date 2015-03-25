@@ -37,8 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.model;
+package com.sun.faces.test.servlet30.flash;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -47,9 +46,9 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.event.ComponentSystemEvent;
 
 @RequestScoped
-@ManagedBean(name="bean")
+@ManagedBean(name = "bean")
 public class Bean {
-    
+
     protected String stringVal;
 
     private Long selectedEventId;
@@ -72,11 +71,11 @@ public class Bean {
 
     public void setStringVal(String stringVal) {
         this.stringVal = stringVal;
-        
+
         if (null != stringVal && stringVal.equals("addMessage")) {
             FacesContext context = FacesContext.getCurrentInstance();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "test that this persists across the redirect", 
+                    "test that this persists across the redirect",
                     "This message must persist across the redirect");
             context.addMessage(null, message);
             context.getExternalContext().getFlash().setKeepMessages(true);

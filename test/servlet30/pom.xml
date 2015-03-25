@@ -99,6 +99,7 @@
         <module>faceletsEmptyAsNull</module>
         <module>facesComponentTag</module>
         <module>factory</module>
+        <module>flash</module>
         <module>flashForceWriteCookie</module>
         <module>flashNoSession</module>
         <module>implicitContract</module>

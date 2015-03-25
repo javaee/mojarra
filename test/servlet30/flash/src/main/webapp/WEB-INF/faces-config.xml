@@ -46,62 +46,54 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
               version="2.0">
 
-  <managed-bean>
-    <managed-bean-name>ResultSetBean</managed-bean-name>
-    <managed-bean-class>com.sun.faces.run_time_test.model.ResultSetBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-  </managed-bean>
-  
-  <managed-bean>
-    <managed-bean-name>ResetUniqueRequestIdBean</managed-bean-name>
-    <managed-bean-class>
-      com.sun.faces.application.ResetUniqueRequestIdBean
-    </managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-        
-  <navigation-rule>
-    <from-view-id>/index.xhtml</from-view-id>
-    <navigation-case>
-      <from-outcome>next</from-outcome>
-      <to-view-id>/flash2.xhtml</to-view-id>
-      <redirect />
-    </navigation-case>
-  </navigation-rule>
-
-  <navigation-rule>
-    <from-view-id>/flash2.xhtml</from-view-id>
-    <navigation-case>
-      <from-outcome>back</from-outcome>
-      <to-view-id>/index.xhtml</to-view-id>
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>next</from-outcome>
-      <to-view-id>/flash3.xhtml</to-view-id>
-    </navigation-case>
-  </navigation-rule>
-
-  <navigation-rule>
-    <from-view-id>/flash3.xhtml</from-view-id>
-    <navigation-case>
-      <from-outcome>next</from-outcome>
-      <to-view-id>/flash4.xhtml</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>back</from-outcome>
-      <to-view-id>/flash2.xhtml</to-view-id>
-    </navigation-case>
-  </navigation-rule>
-
-  <navigation-rule>
-    <from-view-id>/flash4.xhtml</from-view-id>
-    <navigation-case>
-      <from-outcome>back</from-outcome>
-      <to-view-id>/flash3.xhtml</to-view-id>
-    </navigation-case>
-  </navigation-rule>
-
-
-
+    <managed-bean>
+        <managed-bean-name>ResultSetBean</managed-bean-name>
+        <managed-bean-class>com.sun.faces.test.servlet30.flash.ResultSetBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ResetUniqueRequestIdBean</managed-bean-name>
+        <managed-bean-class>
+            com.sun.faces.application.ResetUniqueRequestIdBean
+        </managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <navigation-rule>
+        <from-view-id>/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>next</from-outcome>
+            <to-view-id>/flash2.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/flash2.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>back</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>next</from-outcome>
+            <to-view-id>/flash3.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/flash3.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>next</from-outcome>
+            <to-view-id>/flash4.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>back</from-outcome>
+            <to-view-id>/flash2.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/flash4.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>back</from-outcome>
+            <to-view-id>/flash3.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>
