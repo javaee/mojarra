@@ -94,8 +94,8 @@
             </build>
             <properties>
                 <integration.protocol>http</integration.protocol>
-                <integration.serverName1>localhost</integration.serverName1>
-                <integration.serverName2>localhost</integration.serverName2>
+                <integration.serverName1>127.0.0.1</integration.serverName1>
+                <integration.serverName2>127.0.0.1</integration.serverName2>
                 <integration.serverPort1>18080</integration.serverPort1>
                 <integration.serverPort2>28080</integration.serverPort2>
             </properties>
