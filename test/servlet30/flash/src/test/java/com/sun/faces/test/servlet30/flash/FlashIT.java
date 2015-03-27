@@ -47,13 +47,16 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0_M02;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class FlashIT {
 
     private String webUrl;
