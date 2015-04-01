@@ -237,11 +237,11 @@ public class ClientSideStateHelper extends StateHelper {
         if (stateString == null) {
             return null;
         }
-        String token = getCryptographicallyStrongTokenFromSession(ctx);
-        if (token.equals(stateString)) {
-            return token;
-        }
         
+        if ("stateless".equals(stateString)) {
+            return "stateless";
+        }
+
         return doGetState(stateString);
     }
 
@@ -257,7 +257,11 @@ public class ClientSideStateHelper extends StateHelper {
      * @return the view state reconstructed from <code>stateString</code>
      */
     protected Object doGetState(String stateString) {
-                
+        
+        if ("stateless".equals(stateString)) {
+            return null;
+        }
+        
         ObjectInputStream ois = null;
         InputStream bis = new Base64InputStream(stateString);
         try {
@@ -318,12 +322,6 @@ public class ClientSideStateHelper extends StateHelper {
         		LOGGER.log(Level.SEVERE, cnfe.getMessage(), cnfe);
         	}
             throw new FacesException(cnfe);
-        } catch (ArrayIndexOutOfBoundsException aioobe) {
-            /*
-             * Thrown when the state can't be decrypted correctly.  Instead
-             * of blowing up, force a ViewExpiredException
-             */
-            return null;
         } catch (InvalidClassException ice) {
             /*
              * Thrown when the JSF runtime is trying to deserialize a client-side
@@ -363,7 +361,7 @@ public class ClientSideStateHelper extends StateHelper {
     throws IOException {
         
         if (facesContext.getViewRoot().isTransient()) {
-            writer.write(getCryptographicallyStrongTokenFromSession(facesContext));
+            writer.write("stateless");
             writer.flush();
             return;
         }
@@ -573,9 +571,8 @@ public class ClientSideStateHelper extends StateHelper {
             } catch(IOException ioe) {
                 throw new IllegalStateException("Cannot determine whether or not the request is stateless", ioe);
             }
-            String token = getCryptographicallyStrongTokenFromSession(facesContext);
-            if (stateObject instanceof String) {
-                return token.equals(stateObject);
+            if (stateObject instanceof String && "stateless".equals((String) stateObject)) {
+                return true;
             }
 
             return false;

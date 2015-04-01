@@ -50,7 +50,7 @@
         <version>2.3.0-m02-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.agnostic.lifecycle</groupId>
-    <artifactId>test-agnostic-lifecycle-csrf</artifactId>
+    <artifactId>csrf</artifactId>
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - Lifecycle - CSRF Tests</name>
     <build>

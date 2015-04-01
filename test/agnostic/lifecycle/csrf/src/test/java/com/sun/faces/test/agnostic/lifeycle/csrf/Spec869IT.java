@@ -45,9 +45,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 
 
 import static org.junit.Assert.assertTrue;
@@ -151,25 +149,4 @@ public class Spec869IT {
         assertTrue(!pageText.contains("javax.faces.application.ProtectedViewException"));
     }
 
-    @Test
-    public void testStatelessViewState() throws Exception {
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        HtmlPage page = webClient.getPage(webUrl);
-
-        HtmlSpan invokeCount = page.getHtmlElementById("invokeCount");
-        String invokeCountStr = invokeCount.asText();
-        
-        HtmlHiddenInput stateField = (HtmlHiddenInput) page.getHtmlElementById("j_id1:javax.faces.ViewState:0");
-        stateField.setValueAttribute("stateless");
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button_postback");
-        page = button.click();
-        String pageText = page.getBody().asText();
-        assertTrue(pageText.contains("could not be restored"));
-        
-        // Verify the button action was not invoked.
-        page = webClient.getPage(webUrl);
-        assertTrue(invokeCount.asText().equals(invokeCountStr));
-    }
-
-    
 }

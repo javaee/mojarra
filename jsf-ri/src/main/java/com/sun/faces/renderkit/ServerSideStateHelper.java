@@ -77,7 +77,6 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Numb
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfViews;
 import com.sun.faces.config.WebConfiguration;
 import java.util.Collections;
-import javax.faces.application.ViewExpiredException;
 import javax.faces.render.ResponseStateManager;
 
 /**
@@ -251,7 +250,7 @@ public class ServerSideStateHelper extends StateHelper {
                 id = (String) ctx.getAttributes().get("com.sun.faces.ViewStateValue");
             }
         } else {
-            id = getCryptographicallyStrongTokenFromSession(ctx);
+            id = "stateless";
         }
         
         if (stateCapture != null) {
@@ -303,22 +302,14 @@ public class ServerSideStateHelper extends StateHelper {
             return null;
         }
         
-        String token = getCryptographicallyStrongTokenFromSession(ctx);
-        if (token.equals(compoundId)) {
-            return token;
+        if ("stateless".equals(compoundId)) {
+            return "stateless";
         }
 
         int sep = compoundId.indexOf(':');
-        if (-1 == sep) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                        "Unable to restore server side state for view ID {0}. The state is invalid.",
-                        viewId);
-            }
-            
-            return null;
-        }
-        
+        assert (sep != -1);
+        assert (sep < compoundId.length());
+
         String idInLogicalMap = compoundId.substring(0, sep);
         String idInActualMap = compoundId.substring(sep + 1);
 
@@ -510,9 +501,8 @@ public class ServerSideStateHelper extends StateHelper {
     public boolean isStateless(FacesContext facesContext, String viewId) throws IllegalStateException {
         if (facesContext.isPostback()) {
             Object stateObject = getState(facesContext, viewId);
-            if (stateObject instanceof String) {
-                String token = getCryptographicallyStrongTokenFromSession(facesContext);
-                return token.equals(stateObject);
+            if (stateObject instanceof String && "stateless".equals((String) stateObject)) {
+                return true;
             }
 
             return false;
