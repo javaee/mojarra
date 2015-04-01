@@ -62,6 +62,7 @@ import com.sun.faces.util.Util;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CompressViewState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
+import com.sun.faces.util.ByteArrayGuardAESCTR;
 
 
 /**
@@ -157,6 +158,8 @@ public abstract class StateHelper {
      * Flag determining whether or not javax.faces.ViewState should be namespaced.
      */
     protected boolean namespaceParameters;
+    
+    final private ByteArrayGuardAESCTR guard;
 
     // ------------------------------------------------------------ Constructors
 
@@ -186,12 +189,15 @@ public abstract class StateHelper {
         namespaceParameters =
                 webConfig.isOptionEnabled(
                      BooleanWebContextInitParameter.NamespaceParameters);
+        guard = new ByteArrayGuardAESCTR();
 
     }
     
     private String createCryptographicallyStrongToken() {
         // PENDING: http://java.net/jira/browse/JAVASERVERFACES-2204
-        String result = "" + System.currentTimeMillis();
+        String result = null;
+        String time = "" + System.currentTimeMillis();
+        result = guard.encrypt(time);
         
         return result;
     }
