@@ -42,8 +42,6 @@ package com.sun.faces.application.view;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.context.StateContext;
 import javax.faces.view.facelets.Facelet;
 import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
@@ -899,17 +897,17 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
              if (viewId.endsWith(RIConstants.FLOW_DEFINITION_ID_SUFFIX)) {
                  return true;
              }
+             
             // If there's no extensions array or prefixes array, then
             // assume defaults.  .xhtml extension is handled by
             // the FaceletViewHandler and .jsp will be handled by
             // the JSP view handler
-            String[] faceletsSuffix = WebConfiguration.getInstance().getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsSuffix, " ");
-            if ((faceletsSuffix == null || faceletsSuffix.length == 0 ) && (prefixesArray == null)) {
+            if ((extensionsArray == null) && (prefixesArray == null)) {
                 return (viewId.endsWith(ViewHandler.DEFAULT_FACELETS_SUFFIX));
             }
 
-            if (faceletsSuffix != null) {
-                for (String extension : faceletsSuffix) {
+            if (extensionsArray != null) {
+                for (String extension : extensionsArray) {
                     if (viewId.endsWith(extension)) {
                         return true;
                     }

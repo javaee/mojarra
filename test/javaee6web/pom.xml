@@ -67,7 +67,6 @@
         <module>adf</module>
         <module>ajax</module>
         <module>basicFlow</module>
-        <module>faceletDefaultSuffix</module>
         <module>el</module>
         <module>emptyFlowDefinition</module>
         <module>facelets</module>

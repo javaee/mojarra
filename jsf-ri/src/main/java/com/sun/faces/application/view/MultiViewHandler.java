@@ -546,8 +546,7 @@ public class MultiViewHandler extends ViewHandler {
         int length = viewId.length();
         StringBuilder buffer = new StringBuilder(length);
 
-        String[] configuredSuffixes = WebConfiguration.getInstance().getConfiguredExtensions();
-        for (String ext : configuredSuffixes) {
+        for (String ext : configuredExtensions) {
             if (viewId.endsWith(ext)) {
                 return viewId;
             }
