@@ -904,7 +904,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // the FaceletViewHandler and .jsp will be handled by
             // the JSP view handler
             if ((extensionsArray == null) && (prefixesArray == null)) {
-                return (viewId.endsWith(ViewHandler.DEFAULT_FACELETS_SUFFIX));
+                boolean matched = isMatchedWithFaceletsSuffix(viewId)? true:(viewId.endsWith(ViewHandler.DEFAULT_FACELETS_SUFFIX));
+                return matched;
             }
 
             if (extensionsArray != null) {
@@ -924,6 +925,16 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
         }
 
+        return false;
+    }
+
+    private boolean isMatchedWithFaceletsSuffix(String viewId) {
+        String[] defaultsuffixes = webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsSuffix, " ");
+        for ( String suffix :defaultsuffixes ) {
+            if (viewId.endsWith(suffix)) {
+                return true;
+            }                      
+        }
         return false;
     }
 
@@ -1132,11 +1143,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 }
             }
 
+            extensionsArray = new String[extensionsList.size()];
+            extensionsList.toArray(extensionsArray);
+            
             prefixesArray = new String[prefixesList.size()];
             prefixesList.toArray(prefixesArray);
         }
-        
-        extensionsArray = webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsSuffix, " ");
     }
 
 
