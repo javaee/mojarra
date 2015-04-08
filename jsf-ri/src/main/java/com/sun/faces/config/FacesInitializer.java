@@ -143,7 +143,13 @@ public class FacesInitializer implements ServletContainerInitializer {
             ServletRegistration reg =
                   servletContext.addServlet("FacesServlet",
                                             "javax.faces.webapp.FacesServlet");
-            reg.addMapping("/faces/*", "*.jsf", "*.faces");
+            
+            if ("true".equalsIgnoreCase(servletContext.getInitParameter("javax.faces.DISABLE_FACESSERVLET_TO_XHTML")) ) {
+                reg.addMapping("/faces/*", "*.jsf", "*.faces");
+            } else {
+                reg.addMapping("/faces/*", "*.jsf", "*.faces", "*.xhtml");
+            }
+            
             servletContext.setAttribute(RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED, Boolean.TRUE);
 
             // The following line is temporary until we can solve an ordering
