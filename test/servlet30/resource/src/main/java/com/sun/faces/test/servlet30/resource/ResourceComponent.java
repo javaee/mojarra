@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -44,7 +44,7 @@ import javax.faces.application.ResourceDependencies;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UIComponentBase;
 
-@FacesComponent("com.sun.faces.test.agnostic.resource.ResourceComponent")
+@FacesComponent("com.sun.faces.test.servlet30.resource.ResourceComponent")
 @ResourceDependencies({@javax.faces.application.ResourceDependency(library="js", name="foo.js", target="body")})
 public class ResourceComponent extends UIComponentBase {
 
@@ -54,6 +54,6 @@ public class ResourceComponent extends UIComponentBase {
 
     @Override
     public String getFamily() {
-        return "com.sun.faces.test.agnostic.resource";
+        return "com.sun.faces.test.servlet30.resource";
     }
 }
