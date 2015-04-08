@@ -270,6 +270,10 @@ public class ApplicationAssociate {
         definingDocumentIdsToTruncatedJarUrls = new ConcurrentHashMap<>();
         timeOfInstantiation = System.currentTimeMillis();
     }
+    
+    public Application getApplication() {
+        return app;
+    }
 
     private Map<String, List<String>> resourceLibraryContracts;
     
