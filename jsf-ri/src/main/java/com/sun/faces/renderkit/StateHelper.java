@@ -62,21 +62,12 @@ import com.sun.faces.util.Util;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CompressViewState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
-import com.sun.faces.util.ByteArrayGuardAESCTR;
-import com.sun.faces.util.FacesLogger;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.http.HttpSession;
 
 
 /**
  * Common code for the default <code>StateHelper</code> implementations.
  */
 public abstract class StateHelper {
-    
-    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     /**
      * <p>
@@ -198,20 +189,11 @@ public abstract class StateHelper {
 
     }
     
-    public static void createAndStoreCryptographicallyStrongTokenInSession(HttpSession session) {
-        ByteArrayGuardAESCTR guard = new ByteArrayGuardAESCTR();
-        String clearText = "" + System.currentTimeMillis();
-        String result = guard.encrypt(clearText);
-        try {
-            result = URLEncoder.encode(result, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "Unable to URL encode cryptographically strong token, storing clear text in session instead.", e);
-            }
-            result = clearText;
-        }
-        session.setAttribute(TOKEN_NAME, result);
+    private String createCryptographicallyStrongToken() {
+        // PENDING: http://java.net/jira/browse/JAVASERVERFACES-2204
+        String result = "" + System.currentTimeMillis();
         
+        return result;
     }
     
     private static final String TOKEN_NAME = RIConstants.FACES_PREFIX + "TOKEN";
@@ -220,10 +202,9 @@ public abstract class StateHelper {
         String result = (String) 
                 context.getExternalContext().getSessionMap().get(TOKEN_NAME);
         if (null == result) {
-            context.getExternalContext().getSession(true);
+            result = createCryptographicallyStrongToken();
+            context.getExternalContext().getSessionMap().put(TOKEN_NAME, result);
         }
-        result = (String) context.getExternalContext().getSessionMap().get(TOKEN_NAME);
-        
         return result;
     }
 

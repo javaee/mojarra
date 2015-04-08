@@ -65,7 +65,6 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.flow.FlowCDIContext;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.renderkit.StateHelper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import java.util.Map;
@@ -174,7 +173,6 @@ public class WebappLifecycleListener {
                 activeSessions = new ArrayList<>();
             }
             activeSessions.add(event.getSession());
-            StateHelper.createAndStoreCryptographicallyStrongTokenInSession(event.getSession());
         }
     }
 
