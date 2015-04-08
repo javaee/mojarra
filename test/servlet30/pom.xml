@@ -84,6 +84,7 @@
         <module>customVariableResolver</module>
         <module>customVariableResolverProgrammatically</module>
         <module>customViewHandler</module>
+        <module>disableBeanValidator</module>
         <module>disableIdUniqueness</module>
         <module>doctypeHtml5</module>
         <module>doctypeXhtml</module>

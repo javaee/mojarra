@@ -67,8 +67,6 @@
               value="com/sun/faces/systest/ConverterPropertyEditorTestCase.class"/>
     <property name="disable-unicode-escaping"
               value="com/sun/faces/systest/UnicodeTestCase.class"/>
-    <property name="disable-bean-validator"
-              value="com/sun/faces/systest/DisableBeanValidatorTestCase.class"/>
     <property  name="myfaces-uidata-component-state-test"
                value="com/sun/faces/systest/myfaces_uidata_component_state_test/MyFacesUIDataTestCase.class" />
     <property  name="bogus-render-kit-id"

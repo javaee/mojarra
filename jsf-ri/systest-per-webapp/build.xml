@@ -73,14 +73,13 @@
               value="" />
 
     <property name="applications-for-V3-only"
-              value="disable-bean-validator" />
+              value="" />
 
     <property name="applications-for-V3.1-only"
-              value="disable-bean-validator,
-                     cluster-no-agressive-session-dirtying" />
+              value="cluster-no-agressive-session-dirtying" />
 
     <property name="applications-for-V3.1_no_cluster-only"
-              value="disable-bean-validator" />
+              value="" />
 
     <property name="container-agnostic-applications"
               value="
