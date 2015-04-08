@@ -3047,7 +3047,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var formElements = form.elements;
                 for (var i = 0, length = formElements.length; i < length; i++) {
                     var formElement = formElements[i];
-                    if (formElement.name.indexOf('javax.faces.ClientWindow') >= 0) {
+                    if (formElement.name && (formElement.name.indexOf('javax.faces.ClientWindow') >= 0)) {
                         return formElement;
                     }
                 }
