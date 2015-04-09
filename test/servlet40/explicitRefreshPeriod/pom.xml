@@ -44,7 +44,7 @@
   <parent>
     <artifactId>pom</artifactId>
     <groupId>com.sun.faces.test.servlet40</groupId>
-    <version>2.3.0-m02-SNAPSHOT</version>
+    <version>2.3.0-m03-SNAPSHOT</version>
   </parent>
   
   <groupId>com.sun.face.test.servlet40</groupId>
