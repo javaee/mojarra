@@ -302,6 +302,7 @@
                     <!--
                         A bit of a brute force hack, but it works for now.
                         -->
+                    <mkdir dir="${mvn.impl.dir}/target/javadoc-repackage/javadocs"/>    
                     <unzip src="${mvn.impl.dir}/target/${impl-artifact-id}-@{version}-javadoc.jar"
                            dest="${mvn.impl.dir}/target/javadoc-repackage"/>
                     <jar destfile="${mvn.impl.dir}/target/${impl-artifact-id}-@{version}-javadoc.jar"
