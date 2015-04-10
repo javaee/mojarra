@@ -78,14 +78,6 @@
     <property  name="find-resources-in-jar"
                value="com/sun/faces/systest/FindResourcesInJarTestCase.class"/>
 
-    <!--
-        EXCLUDED APPLICATIONS:
-
-        <property name="core-tags
-                  value="com/sun/faces/systest/CoreTagsTestCase.class"/>
-    -->
-
-
     <!-- ======================== Test Execution ============================== -->
 
 

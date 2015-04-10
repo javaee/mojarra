@@ -37,46 +37,47 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.coretags;
 
-package com.sun.faces.systest;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 
 /**
- * <p>Right now, just a minimal listener that sets the java.beans.Beans.DesignTime
- *    property to "true" to test the bypass of the TLV and allowance of not
- *    specifying non required attributes. </p> 
- * <p/>
+ * <p>
+ * Make sure no extra baggage from a previously clicked commandLink is submitted
+ * along with a button press.</p>
  */
-public class CoreTagsListener implements ServletContextListener {
+public class CoreTagsTestIT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-    // -------------------------------------------------------- Static Variables
-
-    /**
-     * <p>The <code>Log</code> instance for this class.</p>
-     */
-    private static Log log = LogFactory.getLog(CoreTagsListener.class);
-
-
-    // ------------------------------------------ ServletContextListener Methods
-    public void contextInitialized(ServletContextEvent sce) {
-        java.beans.Beans.setDesignTime(true);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-
-    public void contextDestroyed(ServletContextEvent sce) {
-
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
+    public void testListenerPage() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/listener_noval.jsp");
+        assertTrue(-1 != page.asText().indexOf("submit with listener no typebinding"));
+    }
 
-    // --------------------------------------------------------- Private Methods
+    public void testConverterPage() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/converter_noval.jsp");
+        assertTrue(-1 != page.asText().indexOf("submit converter page"));
+    }
 
-} 
-
+    public void testValidatorPage() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/validator_noval.jsp");
+        assertTrue(-1 != page.asText().indexOf("submit validator page"));
+    }
+}

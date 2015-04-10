@@ -95,7 +95,6 @@
     <!--
 
        EXCLUDED APPLICATIONS:
-          core-tags
           el-performance
           command-link-redirect,
     -->
