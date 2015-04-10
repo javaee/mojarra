@@ -548,6 +548,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 viewRoot = vdl.createView(context, viewId);                
                 context.setViewRoot(viewRoot);
                 vdl.buildView(context, viewRoot);
+                if (!viewRoot.isTransient()) {
+                    throw new FacesException("Unable to restore view " + viewId);
+                }
                 return viewRoot;
             } catch (IOException ioe) {
                 throw new FacesException(ioe);
