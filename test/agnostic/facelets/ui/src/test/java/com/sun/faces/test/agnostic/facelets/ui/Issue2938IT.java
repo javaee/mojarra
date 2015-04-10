@@ -37,66 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.junit;
+package com.sun.faces.test.agnostic.facelets.ui;
 
-public enum JsfVersion {
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
-    JSF_2_1_2("2.1.2"),
-    JSF_2_1_3("2.1.3"),
-    JSF_2_1_4("2.1.4"),
-    JSF_2_1_5("2.1.5"),
-    JSF_2_1_6("2.1.6"),
-    JSF_2_1_7("2.1.7"),
-    JSF_2_1_8("2.1.8"),
-    JSF_2_1_9("2.1.9"),
-    JSF_2_1_10("2.1.10"),
-    JSF_2_1_11("2.1.11"),
-    JSF_2_1_12("2.1.12"),
-    JSF_2_1_13("2.1.13"),
-    JSF_2_1_14("2.1.14"),
-    JSF_2_1_15("2.1.15"),
-    JSF_2_1_16("2.1.16"),
-    JSF_2_1_17("2.1.17"),
-    JSF_2_1_18("2.1.18"),
-    JSF_2_1_20("2.1.20");
+@RunWith(JsfTestRunner.class)
+public class Issue2938IT {
 
-    /**
-     * Constructor.
-     *
-     * @param version the version.
-     */
-    private JsfVersion(String version) {
-        this.version = version;
+    private String webUrl;
+    private WebClient webClient;
 
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * To string representation.
-     *
-     * @return the string representation.
-     */
-    @Override
-    public String toString() {
-        return version;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    /**
-     * From string.
-     *
-     * @param version the JSF version.
-     * @return the JsfVersion
-     */
-    public static JsfVersion fromString(String version) {
-        JsfVersion[] versions = JsfVersion.values();
-        for (int i = 0; i < versions.length; i++) {
-            if (versions[i].toString().equals(version)) {
-                return versions[i];
-            }
-        }
-        throw new IllegalArgumentException("Unable to determine JSF version");
+    @JsfTest(JsfVersion.JSF_2_1_20)
+    @Test
+    public void testRowRemoved() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/repeatRemoved.xhtml");
+        assertNotNull(page.getHtmlElementById("f:r:0:i"));
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("f:r:0:b");
+        page = button.click();
+        assertNull(page.getElementById("f:r:0:i"));
     }
-    /**
-     * Stores the version.
-     */
-    private String version;
 }
