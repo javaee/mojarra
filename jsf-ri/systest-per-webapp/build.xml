@@ -88,7 +88,6 @@
                    absolute-ordering,
                    document-ordering,
                    add-er-replace-vr,
-                   converter-property-editor,
                    disable-unicode-escaping,
                    bogus-render-kit-id,
                    characterCombat"/>
@@ -103,7 +102,6 @@
              value="
                    find-resources-in-jar,
                    clientside-statesaving,
-                   converter-property-editor,
                    bogus-render-kit-id,
                    characterCombat"/>
 

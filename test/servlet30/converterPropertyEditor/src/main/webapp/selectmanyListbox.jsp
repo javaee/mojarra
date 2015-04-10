@@ -56,7 +56,7 @@
     </head>
     <body>
         <f:view>
-            <h:form>
+            <h:form id="form">
 
 <p>This selectManyListbox is bound to a list of test.Payment instances.  There
 is a converter-for-class registered for the test.Payment class.  This
@@ -79,7 +79,7 @@ Sun's JSF Impl.</p>
 
 <p>Messages: <h:messages /> </p>
 
-<p>                <h:commandButton id="press" value="submit" /></p>
+<p>                <h:commandButton id="submit" value="submit" /></p>
             </h:form>
         </f:view>
     </body>

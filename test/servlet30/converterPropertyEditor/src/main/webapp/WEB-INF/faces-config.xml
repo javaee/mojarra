@@ -44,9 +44,9 @@
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 
 <faces-config version="1.2" 
-    xmlns="http://java.sun.com/xml/ns/javaee" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+              xmlns="http://java.sun.com/xml/ns/javaee" 
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
     
     <converter>
         <converter-for-class>test.Payment</converter-for-class>
@@ -64,12 +64,12 @@
         <managed-bean-class>test.Payment</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
         <managed-property>
-	        <property-name>label</property-name>
-	        <value>Credit Card 4</value>
+            <property-name>label</property-name>
+            <value>Credit Card 4</value>
         </managed-property>
         <managed-property>
-	        <property-name>value</property-name>
-	        <value>4</value>
+            <property-name>value</property-name>
+            <value>4</value>
         </managed-property>
     </managed-bean>
     
