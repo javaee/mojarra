@@ -45,10 +45,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class Spec869IT {
 
@@ -149,4 +152,38 @@ public class Spec869IT {
         assertTrue(!pageText.contains("javax.faces.application.ProtectedViewException"));
     }
 
+    @Test
+    public void testFakeStatelessViewState() throws Exception {
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl + "faces/i_spec_869_war_not_stateless.xhtml");
+
+        HtmlSpan invokeCount = page.getHtmlElementById("invokeCount");
+        String invokeCountStrA = invokeCount.asText();
+        
+        HtmlHiddenInput stateField = (HtmlHiddenInput) page.getHtmlElementById("j_id1:javax.faces.ViewState:0");
+        stateField.setValueAttribute("stateless");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button_postback");
+        page = button.click();
+        assertEquals(500, page.getWebResponse().getStatusCode());
+        
+        // Verify the button action was not invoked.
+        page = webClient.getPage(webUrl + "faces/i_spec_869_war_not_stateless.xhtml");
+        invokeCount = page.getHtmlElementById("invokeCount");
+        String invokeCountStrB = invokeCount.asText();
+        assertEquals(invokeCountStrA, invokeCountStrB);
+        
+        page = webClient.getPage(webUrl + "faces/i_spec_869_war_not_stateless.xhtml");
+        button = (HtmlSubmitInput) page.getElementById("button_postback");
+        page = button.click();
+        assertEquals(200, page.getWebResponse().getStatusCode());     
+        
+        invokeCount = page.getHtmlElementById("invokeCount");
+        String invokeCountStrC = invokeCount.asText();
+        int b = Integer.parseInt(invokeCountStrB);
+        int c = Integer.parseInt(invokeCountStrC);
+        assertTrue(b < c);
+        
+    }
+
+    
 }
