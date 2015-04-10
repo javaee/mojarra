@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<f:view>
+<h:head>
+  <title>This page is not protected.</title>
+</h:head>
+<h:body>
+    <p>Non protected page.</p>
+    
+    <p>Invoke count <span id="invokeCount">#{beanWithActionMethod.invokeCount}</span></p>
+
+    <h:form prependId="false">
+
+        <p><h:commandButton id="button_postback" value="postback navigation to protected view" 
+                            action="#{beanWithActionMethod.incrementAction}"/></p>
+    </h:form>
+</h:body>
+</f:view>
+</html>
