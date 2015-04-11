@@ -69,9 +69,10 @@
     </dependencies>    
     <modules>
         <module>cdi</module>
+        <module>disableFaceletToXhtmlMapping</module>
         <module>disableFaceletsViewHandler</module>
         <module>disableFaceletsViewHandlerDeprecated</module>
         <module>el</module>
-        <module>faceletDefaultMapping</module>
+        <module>xhtmlMappingToFaceletByDefault</module>
     </modules>
 </project>
