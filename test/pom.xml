@@ -25,6 +25,7 @@
         <module>protocolaware</module>
         <module>quality</module>
         <module>servlet30</module>
+        <module>servlet30-isolated</module>
         <module>servlet31</module>
         <module>servlet40</module>
         <module>unit</module>

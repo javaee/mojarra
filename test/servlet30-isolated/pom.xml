@@ -65,6 +65,7 @@
         </dependency>
     </dependencies>
     <modules>
+        <module>converterPropertyEditor</module>
         <module>coreTags</module>
     </modules>
 </project>
