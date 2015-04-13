@@ -75,7 +75,6 @@
         <module>contractUsingHostHeader</module>
         <module>contractUsingViewRoot</module>
         <module>converterPropertyEditor</module>
-        <module>coreTags</module>
         <module>custom-viewroot-viewscope</module>
         <module>customFaceletsResolver</module>
         <module>customLifecycle</module>

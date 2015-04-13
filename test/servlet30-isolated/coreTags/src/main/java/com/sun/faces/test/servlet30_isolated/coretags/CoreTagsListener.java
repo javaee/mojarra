@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.servlet30.coretags;
+package com.sun.faces.test.servlet30_isolated.coretags;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
