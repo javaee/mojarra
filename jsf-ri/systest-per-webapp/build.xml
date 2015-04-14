@@ -95,7 +95,7 @@
 
        EXCLUDED APPLICATIONS:
           el-performance
-          command-link-redirect,
+          
     -->
 
    <property name="applications-for-V3.1_no_cluster-virtual-server"
