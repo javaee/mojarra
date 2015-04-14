@@ -500,8 +500,8 @@ public class ServerSideStateHelper extends StateHelper {
     @Override
     public boolean isStateless(FacesContext facesContext, String viewId) throws IllegalStateException {
         if (facesContext.isPostback()) {
-            Object stateObject = getState(facesContext, viewId);
-            if (stateObject instanceof String && "stateless".equals((String) stateObject)) {
+            String compoundId = getStateParamValue(facesContext);
+            if (compoundId != null && "stateless".equals(compoundId)) {
                 return true;
             }
 
