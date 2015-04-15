@@ -37,95 +37,66 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.cluster.javaee6web.noaggressivesessiondirtying;
 
-package com.sun.faces.systest;
-
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import java.util.List;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import com.sun.faces.test.util.ClusterUtils;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
+public class NoAgressiveSessionDirtyingIT {
 
-public class ClusterNoAgressiveSessionDirtyingTestCase extends HtmlUnitFacesTestCase {
+    private WebClient webClient;
 
-    public ClusterNoAgressiveSessionDirtyingTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webClient = new WebClient();
     }
 
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(ClusterNoAgressiveSessionDirtyingTestCase.class));
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    
-    // ------------------------------------------------------------ Test Methods
-    
+    @Test
     public void testSimpleObject() throws Exception {
-        List<Integer> instNums = getInstanceNumbers();
+        String[] webUrls = ClusterUtils.getRandomizedBaseUrls();
 
-        // Get the page from the first instance in the cluster
-        // and store a simple string into the session.
-        HtmlPage page = getPageFromInstanceN("/faces/session.xhtml", instNums.get(0));
+        HtmlPage page = webClient.getPage(webUrls[0] + "faces/session.xhtml");
         HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
         String inputValue = "simple session value" + System.currentTimeMillis();
         input.setValueAttribute(inputValue);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
         button.click();
 
-        // Get the same page from each of the subsequent intstances
-        // in the cluster and assert that the session value is the same.
-	for (int i = 0; i < instNums.size(); i++) {
-	    assertSimpleObjectOutput(instNums.get(i), inputValue);
-	}
-
+        for (String webUrl : webUrls) {
+            page = webClient.getPage(webUrl + "faces/session.xhtml");
+            String text = page.asText();
+            assertTrue(text.contains(inputValue));
+        }
     }
 
     public void testComplexObject() throws Exception {
-        List<Integer> instNums = getInstanceNumbers();
+        String[] webUrls = ClusterUtils.getRandomizedBaseUrls();
 
-        // Get the page from the first instance in the cluster
-        // and store a simple string into the session.
-        HtmlPage page = getPageFromInstanceN("/faces/sessionComplex.xhtml", instNums.get(0));
+        HtmlPage page = webClient.getPage(webUrls[0] + "faces/sessionComplex.xhtml");
         HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
         String inputValue = "complex session value";
         input.setValueAttribute(inputValue);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
         button.click();
 
-        // Get the same page from each of the subsequent intstances
-        // in the cluster and assert that the session value is the same.
-	for (int i = 0; i < instNums.size(); i++) {
-	    assertComplexObjectOutput(instNums.get(i), inputValue);
-	}
-
-    }
-
-
-    private void assertSimpleObjectOutput(int instanceNumber, 
-					  final String inputValue) throws Exception {
-	HtmlPage page = getPageFromInstanceN("/faces/session.xhtml", 
-					     instanceNumber);
-	String text = page.asText();
-	assertTrue(text.contains(inputValue));
-	Thread.sleep(1000);
-    }
-
-    private void assertComplexObjectOutput(int instanceNumber, 
-					  final String inputValue) throws Exception {
-	HtmlPage page = getPageFromInstanceN("/faces/sessionComplex.xhtml", 
-					     instanceNumber);
-        HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
-	String value = input.getValueAttribute();
-	assertTrue(value.contains(inputValue));
-	assertTrue(inputValue.length() < value.length());
-
-	Thread.sleep(1000);
+        for (String webUrl : webUrls) {
+            page = webClient.getPage(webUrl + "faces/sessionComplex.xhtml");
+            input = (HtmlTextInput) page.getElementById("input");
+            String value = input.getValueAttribute();
+            assertTrue(value.contains(inputValue));
+            assertTrue(inputValue.length() < value.length());
+        }
     }
 }
-

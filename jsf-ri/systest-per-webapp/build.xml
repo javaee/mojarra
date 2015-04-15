@@ -76,7 +76,7 @@
               value="" />
 
     <property name="applications-for-V3.1-only"
-              value="cluster-no-agressive-session-dirtying" />
+              value="" />
 
     <property name="applications-for-V3.1_no_cluster-only"
               value="" />

@@ -38,28 +38,24 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.systest;
 
 import java.io.Serializable;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
-
-
 @Named
-@SessionScoped
-public class SessionScopedBean implements Serializable {
-    private static final long serialVersionUID = -369713870298246712L;
+@RequestScoped
+public class RequestScopedBean implements Serializable {
 
-    String a;
+    private static final long serialVersionUID = 6353708101283353031L;
 
-    public String getA() {
-        return a;
+    @Inject
+    SessionScopedBean bean;
+
+    public void modifyPropertyOfSessionScopedBean() {
+        String a = bean.getA();
+        bean.setA(a + " " + System.currentTimeMillis());
     }
-
-    public void setA(String a) {
-        this.a = a;
-    }
-
 }
