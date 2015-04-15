@@ -47,6 +47,7 @@ import com.sun.faces.test.util.ClusterUtils;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class NoAgressiveSessionDirtyingIT {
@@ -64,6 +65,7 @@ public class NoAgressiveSessionDirtyingIT {
     }
 
     @Test
+    @Ignore
     public void testSimpleObject() throws Exception {
         String[] webUrls = ClusterUtils.getRandomizedBaseUrls();
 
@@ -81,6 +83,8 @@ public class NoAgressiveSessionDirtyingIT {
         }
     }
 
+    @Test
+    @Ignore
     public void testComplexObject() throws Exception {
         String[] webUrls = ClusterUtils.getRandomizedBaseUrls();
 
