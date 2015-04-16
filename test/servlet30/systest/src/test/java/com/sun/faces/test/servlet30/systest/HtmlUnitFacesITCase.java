@@ -411,9 +411,9 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         }
         sb.append(contextPath);
         sb.append(path);
-        if (log.isLoggable(Level.INFO)) {
-           log.info(sb.toString());
-        }
+//        if (log.isLoggable(Level.INFO)) {
+//           log.info(sb.toString());
+//        }
         return (new URL(sb.toString()));
 
     }
