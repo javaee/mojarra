@@ -38,70 +38,83 @@
  * holder.
  */
 
-package com.sun.faces.systest.clientside;
+package com.sun.faces.test.servlet30.clientsidestatesaving;
 
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import com.gargoylesoftware.htmlunit.html.*;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 
-public class AjaxMultiformTestCase extends HtmlUnitFacesTestCase {
+@ManagedBean(name="ajaxrequest")
+@SessionScoped
+public class AjaxRequestBean {
+    private Integer count = 0;
 
-    public AjaxMultiformTestCase(String name) {
-        super(name);
+    private String echo = "echo";
+    private String echo1 = "";
+    private String echo2 = "";
+    private String echo3 = "";
+    private String echo4 = "";
+
+    public String getEcho1() {
+        return echo1;
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
+    public void setEcho1(String echo1) {
+        this.echo1 = echo1;
     }
 
-
-    /*
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(AjaxMultiformTestCase.class));
+    public String getEcho2() {
+        return echo2;
     }
 
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
-    public void tearDown() {
-        super.tearDown();
+    public void setEcho2(String echo2) {
+        this.echo2 = echo2;
     }
 
-
-    public void testAjaxMultiform() throws Exception {
-        getPage("/faces/ajaxMultiform.xhtml");
-        System.out.println("Start ajax multiform test");
-        // First we'll check the first page was output correctly
-        checkTrue("countForm1:out1","0");
-        checkTrue("countForm2:out1","1");
-        checkTrue("countForm3:out1","2");
-        checkTrue("out2","3");
-
-        // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm1:button1");
-        lastpage = (HtmlPage) button1.click();
-
-        // Check that the ajax request succeeds
-        checkTrue("countForm1:out1","4");
-
-        // Check that the request did NOT update the rest of the page.
-        checkTrue("out2","3");
-
-        // Submit the ajax request
-        button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm2:button1");
-        lastpage = (HtmlPage) button1.click();
-
-        // Check that the ajax request succeeds
-        checkTrue("countForm2:out1","5");
-
-        // Check that the request did NOT update the rest of the page.
-        checkTrue("out2","3");
+    public String getEcho3() {
+        return echo3;
     }
+
+    public void setEcho3(String echo3) {
+        this.echo3 = echo3;
+    }
+
+    public String getEcho4() {
+        return echo4;
+    }
+
+    public void setEcho4(String echo4) {
+        this.echo4 = echo4;
+    }
+
+    public String getEcho() {
+        return echo;
+    }
+
+    public void setEcho(String echo) {
+        this.echo = echo;
+    }
+
+    public void echoValue(ValueChangeEvent event) {
+        String str = (String)event.getNewValue();
+        echo = str;
+    }
+
+    public void resetEcho(ActionEvent ae) {
+        echo = "reset";
+        echo1 = "reset";
+        echo2 = "reset";
+        echo3 = "reset";
+        echo4 = "reset";
+    }
+
+    public Integer getCount() {
+        return count++;
+    }
+
+    public void resetCount(ActionEvent ae) {
+        count = 0;
+    }
+
 }

@@ -57,8 +57,6 @@
     <!-- Property definitions to map the application to a JUnit test case -->
     <property name="absolute-ordering"
               value="com/sun/faces/systest/AbsoluteOrderingTestCase.class"/>
-    <property name="clientside-statesaving"
-              value="com/sun/faces/systest/clientside/AjaxMultiformTestCase.class"/>
     <property name="document-ordering"
               value="com/sun/faces/systest/DocumentOrderingTestCase.class"/>
     <property name="add-er-replace-vr" 

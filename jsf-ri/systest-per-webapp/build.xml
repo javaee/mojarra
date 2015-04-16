@@ -84,7 +84,6 @@
     <property name="container-agnostic-applications"
               value="
                    find-resources-in-jar,
-                   clientside-statesaving,
                    absolute-ordering,
                    document-ordering,
                    add-er-replace-vr,
@@ -101,7 +100,6 @@
    <property name="applications-for-V3.1_no_cluster-virtual-server"
              value="
                    find-resources-in-jar,
-                   clientside-statesaving,
                    bogus-render-kit-id,
                    characterCombat"/>
 
