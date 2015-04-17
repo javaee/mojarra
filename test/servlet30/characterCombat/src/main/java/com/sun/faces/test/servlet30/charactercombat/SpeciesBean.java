@@ -23,7 +23,7 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-package characterCombat;
+package com.sun.faces.test.servlet30.charactercombat;
 
 /** <p>SpeciesBean represents the data associated with a species type</p> */
 public class SpeciesBean {

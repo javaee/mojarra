@@ -23,7 +23,7 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-package characterCombat;
+package com.sun.faces.test.servlet30.charactercombat;
 
 import javax.el.ELContext;
 import javax.faces.application.Application;

@@ -38,52 +38,58 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.charactercombat;
 
-package characterCombat;
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
+public class CharacterCombatIT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-public class CharacterCombatTestCase extends HtmlUnitFacesTestCase {
-
-
-    public CharacterCombatTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptTimeout(60000);
     }
 
-    public static Test suite() {
-        return (new TestSuite(CharacterCombatTestCase.class));
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
+    @Test
     public void test01() throws Exception {
 
-       HtmlPage page = getPage("/main.faces");
-       HtmlSubmitInput nextButton = (HtmlSubmitInput) page.getElementById("wizard-buttons:next");
-       page = nextButton.click();
-       String text = page.asText();
-       assertTrue(text.contains("Gandalf"));
-       assertTrue(text.contains("Frodo"));
-       assertTrue(text.contains("Legolas"));
+        HtmlPage page = webClient.getPage(webUrl + "/main.faces");
+        HtmlSubmitInput nextButton = (HtmlSubmitInput) page.getElementById("wizard-buttons:next");
+        page = nextButton.click();
+        String text = page.asText();
+        assertTrue(text.contains("Gandalf"));
+        assertTrue(text.contains("Frodo"));
+        assertTrue(text.contains("Legolas"));
 
-       nextButton = (HtmlSubmitInput) page.getElementById("wizard-buttons:next");
-       page = nextButton.click();
+        nextButton = (HtmlSubmitInput) page.getElementById("wizard-buttons:next");
+        page = nextButton.click();
 
-       text = page.asXml();
-       assertFalse(text.contains("value=\"Gandalf\""));
-       assertTrue(text.contains("Frodo"));
-       assertTrue(text.contains("Legolas"));
+        text = page.asXml();
+        assertFalse(text.contains("value=\"Gandalf\""));
+        assertTrue(text.contains("Frodo"));
+        assertTrue(text.contains("Legolas"));
 
-       nextButton = (HtmlSubmitInput) page.getElementById("wizard-buttons:next");
-       page = nextButton.click();
+        nextButton = (HtmlSubmitInput) page.getElementById("wizard-buttons:next");
+        page = nextButton.click();
 
-       text = page.asText();
-       assertTrue(text.matches("(?s).*If\\s*[a-zA-Z]*\\s*and\\s*[a-zA-Z].*winner\\swould be.*[a-zA-Z]*.*"));
-
-
+        text = page.asText();
+        assertTrue(text.matches("(?s).*If\\s*[a-zA-Z]*\\s*and\\s*[a-zA-Z].*winner\\swould be.*[a-zA-Z]*.*"));
     }
 }

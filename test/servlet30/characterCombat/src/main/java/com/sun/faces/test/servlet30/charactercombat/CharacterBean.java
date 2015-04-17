@@ -23,7 +23,7 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-package characterCombat;
+package com.sun.faces.test.servlet30.charactercombat;
 
 /** <p>CharacterBean represents the data of an individual character</p> */
 public class CharacterBean {

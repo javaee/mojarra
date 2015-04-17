@@ -23,7 +23,7 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-package characterCombat;
+package com.sun.faces.test.servlet30.charactercombat;
 
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;

@@ -69,6 +69,7 @@
         <module>ajaxNamespace</module>
         <module>annotationRestrictions</module>
         <module>appUsingJarWithExactlyTwoContracts</module>
+        <module>characterCombat</module>
         <module>clientsideStateSaving</module>
         <module>component</module>
         <module>composite</module>
