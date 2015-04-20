@@ -87,8 +87,7 @@
                    absolute-ordering,
                    document-ordering,
                    add-er-replace-vr,
-                   disable-unicode-escaping,
-                   bogus-render-kit-id"/>
+                   disable-unicode-escaping"/>
     <!--
 
        EXCLUDED APPLICATIONS:
@@ -98,8 +97,7 @@
 
    <property name="applications-for-V3.1_no_cluster-virtual-server"
              value="
-                   find-resources-in-jar,
-                   bogus-render-kit-id"/>
+                   find-resources-in-jar"/>
 
     <!-- ************ Executable Targets ************************************** -->
 

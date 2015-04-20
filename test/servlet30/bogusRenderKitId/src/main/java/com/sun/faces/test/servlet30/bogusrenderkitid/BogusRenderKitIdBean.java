@@ -38,13 +38,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest.render.model;
+package com.sun.faces.test.servlet30.bogusrenderkitid;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-
 
 @ManagedBean
 @RequestScoped
@@ -60,5 +58,4 @@ public class BogusRenderKitIdBean {
         return context.getViewRoot().getRenderKitId();
 
     }
-
 }

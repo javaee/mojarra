@@ -38,58 +38,63 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.systest.render;
+package com.sun.faces.test.servlet30.bogusrenderkitid;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
+public class BogusRenderKitIdIT {
 
+    private String webUrl;
+    private WebClient webClient;
 
-public class BogusRenderKitIdTestCase extends HtmlUnitFacesTestCase {
-
-
-    public BogusRenderKitIdTestCase(String name) {
-        super(name);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptTimeout(60000);
     }
 
-    public static Test suite() {
-        return (new TestSuite(BogusRenderKitIdTestCase.class));
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
+    @Test
     public void testPerViewRenderKitIdOverride() throws Exception {
 
-        HtmlPage page = getPage("/faces/use-basic-render-kit-id.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/use-basic-render-kit-id.xhtml");
         String text = page.asText();
         assertTrue("Expected: Configured render-kit-id: "
                 + "org.apache.myfaces.trinidad.coreBAD. "
-                + "UIViewRoot render-kit-id: HTML_BASIC." 
+                + "UIViewRoot render-kit-id: HTML_BASIC."
                 + " actual: " + text,
-                text.matches("(?s).*Configured\\s*render-kit-id:\\s*org.apache.myfaces.trinidad.coreBAD.*UIViewRoot\\s*render-kit-id:\\s*HTML_BASIC.*"
-
-));
+                text.matches("(?s).*Configured\\s*render-kit-id:\\s*org.apache.myfaces.trinidad.coreBAD.*UIViewRoot\\s*render-kit-id:\\s*HTML_BASIC.*"));
     }
 
+    @Test
     public void testExceptionContainsConfiguredRenderKitId() throws Exception {
-        client.setThrowExceptionOnFailingStatusCode(false);
-        HtmlPage page = getPage("/faces/use-configured-render-kit-id.xhtml");
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setPrintContentOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(webUrl + "faces/use-configured-render-kit-id.xhtml");
         assertTrue(page.asText().contains("org.apache.myfaces.trinidad.coreBAD"));
 
-        client.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setPrintContentOnFailingStatusCode(false);
         boolean exceptionThrown = false;
         try {
-            page = getPage("/faces/use-configured-render-kit-id.xhtml");
-        }
-        catch (FailingHttpStatusCodeException e) {
+            page = webClient.getPage(webUrl + "faces/use-configured-render-kit-id.xhtml");
+        } catch (FailingHttpStatusCodeException e) {
             exceptionThrown = true;
             assertEquals(500, e.getStatusCode());
         }
         assertTrue(exceptionThrown);
-
-
-
     }
 }
