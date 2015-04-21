@@ -63,6 +63,7 @@ import javax.faces.event.PhaseId;
 import com.sun.faces.util.FacesLogger;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import javax.faces.application.ProjectStage;
 
 
 /**
@@ -200,14 +201,17 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
 
              writer.startDocument();
              writer.startError(t.getClass().toString());
-             String msg = "";
-             if (t.getCause() != null) {
-                 msg = t.getCause().getMessage();
-                 writer.write(((msg != null) ? msg : ""));
+             String msg;
+             if (context.isProjectStage(ProjectStage.Production)) {
+                 msg = "See your server log for more information";
              } else {
-                 msg = t.getMessage();
-                 writer.write(((msg != null) ? msg : ""));
+                 if (t.getCause() != null) {
+                     msg = t.getCause().getMessage();
+                 } else {
+                     msg = t.getMessage();
+                 }
              }
+             writer.write(((msg != null) ? msg : ""));
              writer.endError();
              writer.endDocument();
              
