@@ -86,7 +86,6 @@
                    find-resources-in-jar,
                    absolute-ordering,
                    document-ordering,
-                   add-er-replace-vr,
                    disable-unicode-escaping"/>
     <!--
 

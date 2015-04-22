@@ -59,8 +59,6 @@
               value="com/sun/faces/systest/AbsoluteOrderingTestCase.class"/>
     <property name="document-ordering"
               value="com/sun/faces/systest/DocumentOrderingTestCase.class"/>
-    <property name="add-er-replace-vr" 
-              value="com/sun/faces/systest/AddELResolverAndReplaceVariableresolverProgrammaticallyTestCase.class"/>
     <property name="disable-unicode-escaping"
               value="com/sun/faces/systest/UnicodeTestCase.class"/>
     <property  name="find-resources-in-jar"
