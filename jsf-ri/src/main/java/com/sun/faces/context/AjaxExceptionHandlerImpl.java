@@ -61,6 +61,7 @@ import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.PhaseId;
 
 import com.sun.faces.util.FacesLogger;
+import javax.faces.application.ProjectStage;
 
 
 /**
@@ -197,15 +198,17 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
              PartialResponseWriter writer = context.getPartialViewContext().getPartialResponseWriter();
 
              writer.startDocument();
-             writer.startError(t.getClass().toString());
-             if (t.getCause() != null) {
-                 String msg = t.getCause().getMessage();
-                 writer.write(((msg != null) ? msg : ""));
-             } else {
-                 String msg = t.getMessage();
-                 writer.write(((msg != null) ? msg : ""));
+             String msg;
+             if (context.isProjectStage(ProjectStage.Production)) {
+                 msg = "See your server log for more information";
+              } else {
+                 if (t.getCause() != null) {
+                     msg = t.getCause().getMessage();
+                 } else {
+                     msg = t.getMessage();
+                 }
              }
-             writer.endError();
+             writer.write(((msg != null) ? msg : ""));
              writer.endDocument();
              context.responseComplete();
          } catch (IOException ioe) {
