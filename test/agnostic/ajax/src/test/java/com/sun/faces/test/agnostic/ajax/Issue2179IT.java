@@ -99,6 +99,6 @@ public class Issue2179IT {
         HtmlSubmitInput button = (HtmlSubmitInput)page.getElementById("form:submit");
         page = button.click();
         webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.asXml().contains("decode: A RuntimeException Has Occurred!"));
+        assertTrue(page.asXml().contains("Name: form:submit Error: serverError"));
     }
 }
