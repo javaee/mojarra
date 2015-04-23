@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,47 +37,30 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.absoluteordering;
 
-package com.sun.faces.systest.model;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
+public class AbsoluteOrderingIT {
+    private String webUrl;
+    private WebClient webClient;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.FactoryFinder;
-import javax.faces.event.PhaseListener;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
 
-@ManagedBean
-public class OrderingBean {
-
-    public boolean isOrderCorrect() {
-
-        LifecycleFactory factory = (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        Lifecycle l = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-        PhaseListener[] listeners = l.getPhaseListeners();
-        List<PhaseListener> list = new ArrayList<PhaseListener>();
-        for (PhaseListener listener : listeners) {
-            if (listener.getClass().getName().contains("com.sun.faces.systest.PhaseListener")) {
-                list.add(listener);
-            }
-        }
-        listeners = list.toArray(new PhaseListener[list.size()]);
-        String[] suffixes = { "B", "C", "A", "D"};
-        if (listeners.length != 4) {
-            System.out.println("INCORRECT LISTENER COUNT");
-            return false;
-        }
-        for (int i = 0; i < listeners.length; i++) {
-            if (!listeners[i].getClass().getName().endsWith(suffixes[i])) {
-                System.out.println("INCORRECT DOCUMENT ORDERING: " + Arrays.toString(listeners));
-                return false;
-            }
-        }
-
-        return true;
-
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+    public void testDocumentOrdering() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/test.xhtml");
+        assertTrue(page.asText().contains("Order Correct: true"));
     }
 }

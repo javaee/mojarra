@@ -55,8 +55,6 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <!-- Property definitions to map the application to a JUnit test case -->
-    <property name="absolute-ordering"
-              value="com/sun/faces/systest/AbsoluteOrderingTestCase.class"/>
     <property name="document-ordering"
               value="com/sun/faces/systest/DocumentOrderingTestCase.class"/>
     <property name="disable-unicode-escaping"

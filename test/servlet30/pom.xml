@@ -65,6 +65,7 @@
         </dependency>
     </dependencies>
     <modules>
+        <module>absoluteOrdering</module>
         <module>ajax</module>
         <module>ajaxNamespace</module>
         <module>annotationRestrictions</module>
