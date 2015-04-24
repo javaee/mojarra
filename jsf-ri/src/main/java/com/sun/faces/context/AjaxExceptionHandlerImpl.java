@@ -198,6 +198,7 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
              PartialResponseWriter writer = context.getPartialViewContext().getPartialResponseWriter();
 
              writer.startDocument();
+             writer.startError(t.getClass().toString());
              String msg;
              if (context.isProjectStage(ProjectStage.Production)) {
                  msg = "See your server log for more information";
@@ -209,6 +210,7 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
                  }
              }
              writer.write(((msg != null) ? msg : ""));
+             writer.endError();
              writer.endDocument();
              context.responseComplete();
          } catch (IOException ioe) {
