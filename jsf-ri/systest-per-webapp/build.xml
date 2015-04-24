@@ -84,7 +84,6 @@
     <property name="container-agnostic-applications"
               value="
                    find-resources-in-jar,
-                   document-ordering,
                    disable-unicode-escaping"/>
     <!--
 

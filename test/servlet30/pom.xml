@@ -92,6 +92,7 @@
         <module>disableIdUniqueness</module>
         <module>doctypeHtml5</module>
         <module>doctypeXhtml</module>
+        <module>documentOrdering</module>
         <module>dynamic</module>
         <module>dynamicChildAtCorrectIndex</module>
         <module>dynamicTransientParent</module>
