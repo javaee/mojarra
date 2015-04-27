@@ -57,8 +57,6 @@
     <!-- Property definitions to map the application to a JUnit test case -->
     <property name="disable-unicode-escaping"
               value="com/sun/faces/systest/UnicodeTestCase.class"/>
-    <property  name="find-resources-in-jar"
-               value="com/sun/faces/systest/FindResourcesInJarTestCase.class"/>
 
     <!-- ======================== Test Execution ============================== -->
 

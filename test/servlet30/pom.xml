@@ -105,6 +105,7 @@
         <module>faceletsEmptyAsNull</module>
         <module>facesComponentTag</module>
         <module>factory</module>
+        <module>findResourcesInJar</module>
         <module>flash</module>
         <module>flashForceWriteCookie</module>
         <module>flashNoSession</module>

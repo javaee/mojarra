@@ -37,74 +37,51 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.findresourcesinjar;
 
-package com.sun.faces.systest;
-
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlImage;
-import javax.imageio.ImageReader;
-
-import com.sun.faces.htmlunit.HtmlUnitFacesTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-import java.util.List;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.io.IOException;
+import javax.imageio.ImageReader;
+import org.junit.After;
+import static org.junit.Assert.assertFalse;
+import org.junit.Before;
+import org.junit.Test;
 
-public class FindResourcesInJarTestCase extends HtmlUnitFacesTestCase {
+public class FindResourcesInJarIT {
 
-    public FindResourcesInJarTestCase(String name) {
-        super(name);
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(FindResourcesInJarTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    @After
     public void tearDown() {
-        super.tearDown();
+        webClient.closeAllWindows();
     }
 
-
-    // ------------------------------------------------------------ Test Methods
-
+    @Test
     public void testFindResourcesInJar() throws Exception {
 
-//        HtmlPage page = getPage("/faces/index.xhtml");
-//
-//        List list = getAllElementsOfGivenClass(page, null,
-//                HtmlImage.class);
-//
-//        HtmlImage image = (HtmlImage)list.get(0);
-//        try {
-//            ImageReader iReader = image.getImageReader(); //performance issue with this api
-//            assertTrue(image!=null);
-//        } catch (IOException io) {
-//            assertFalse(image!=null);
-//        }
-//
-//        image = (HtmlImage)list.get(1);
-//        try {
-//            ImageReader iReader = image.getImageReader();
-//            assertTrue(image!=null);
-//        } catch (IOException io) {
-//            assertFalse(image!=null);
-//        }
-          
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+
+        HtmlImage image = (HtmlImage) page.getHtmlElementById("image1");
+        try {
+            ImageReader iReader = image.getImageReader();
+        } catch (IOException io) {
+            assertFalse(image != null);
+        }
+
+        image = (HtmlImage) page.getHtmlElementById("image2");
+        try {
+            ImageReader iReader = image.getImageReader();
+        } catch (IOException io) {
+            assertFalse(image != null);
+        }
     }
 }

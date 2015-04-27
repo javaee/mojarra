@@ -83,7 +83,6 @@
 
     <property name="container-agnostic-applications"
               value="
-                   find-resources-in-jar,
                    disable-unicode-escaping"/>
     <!--
 
@@ -93,8 +92,7 @@
     -->
 
    <property name="applications-for-V3.1_no_cluster-virtual-server"
-             value="
-                   find-resources-in-jar"/>
+             value=""/>
 
     <!-- ************ Executable Targets ************************************** -->
 

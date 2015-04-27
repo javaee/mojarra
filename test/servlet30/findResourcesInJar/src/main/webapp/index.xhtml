@@ -10,13 +10,13 @@
         <h:form id="form">
             Image resource from jar with missing directory entries:
 
-            <img  src="#{resource['images:user.png']}" name="user"/>
+            <img id="image1" src="#{resource['images:user.png']}" name="user"/>
 
             <br/>
 
             Image resource from jar with directory entries:
 
-            <img src="#{resource['images2:delete.png']}" name="delete"/>
+            <img id="image2" src="#{resource['images2:delete.png']}" name="delete"/>
 
         </h:form>
     </body>
