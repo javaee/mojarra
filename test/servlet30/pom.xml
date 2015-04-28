@@ -90,6 +90,7 @@
         <module>customViewHandler</module>
         <module>disableBeanValidator</module>
         <module>disableIdUniqueness</module>
+        <module>disableUnicodeEscaping</module>
         <module>doctypeHtml5</module>
         <module>doctypeXhtml</module>
         <module>documentOrdering</module>

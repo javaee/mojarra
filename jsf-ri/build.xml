@@ -416,9 +416,7 @@
         <delete file="jsf-${impl.version}.zip"/>
         <delete file="jsf-${impl.version}_src.zip"/>
         <ant dir="${basedir}/systest" inheritall="false" target="clean"/>
-        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
-             target="clean"/>
-         <delete dir="${tools.dir}/build"/>
+        <delete dir="${tools.dir}/build"/>
     </target>
 
     <target name="all" depends="clean,prepare,compile"
