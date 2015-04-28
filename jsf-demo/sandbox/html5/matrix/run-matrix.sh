@@ -10,5 +10,5 @@
 
 # exactly two arguments starts the server on args[0]:args[1]
 
-java -cp $JSF_JAR:$DEMO_HOME/target/classes:$DEMO_HOME/target/matrix/WEB-INF/lib/* -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=9010,suspend=y matrix.Main 192.168.1.90 8021
+java -cp $JSF_JAR:$DEMO_HOME/target/classes:$DEMO_HOME/target/matrix/WEB-INF/lib/* -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=9010,suspend=n matrix.Main 192.168.1.90 8021
 
