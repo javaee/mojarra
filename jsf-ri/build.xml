@@ -580,15 +580,6 @@
 
     <target name="run.systest-per-webapp"
             description="Run per-webapp system tests">
-        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
-             target="test">
-          <property name="force.no.cluster" value="${force.no.cluster}" />
-        </ant>       
-
-        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
-             target="remove">
-        <property name="force.no.cluster" value="${force.no.cluster}" />
-        </ant>
     </target>
 
    <target name="run.systest-per-webapp-on-virtual-server"
