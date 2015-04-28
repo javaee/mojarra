@@ -84,12 +84,6 @@
     <property name="container-agnostic-applications"
               value="
                    disable-unicode-escaping"/>
-    <!--
-
-       EXCLUDED APPLICATIONS:
-          el-performance
-          
-    -->
 
    <property name="applications-for-V3.1_no_cluster-virtual-server"
              value=""/>
