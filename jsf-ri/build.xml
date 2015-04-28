@@ -589,19 +589,6 @@
         <container.stop />
         <var name="force.no.cluster" value="true" />
         <container.start />
-        <ant dir="${basedir}/systest-per-webapp" inheritall="true"
-             target="install-virtual-server">
-          <property name="force.no.cluster" value="true" />
-        </ant>
-        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
-             target="test-virtual-server">
-          <property name="force.no.cluster" value="true" />
-          <property name="instance.numbers" value="1,2" />
-        </ant>
-        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
-             target="remove-virtual-server">
-          <property name="force.no.cluster" value="${force.no.cluster}" />
-        </ant>
     </target>
 
 
