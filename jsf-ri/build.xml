@@ -557,7 +557,7 @@
     </target>
 
     <target name="test"
-             depends="update,init.test,compile.test,run.junit.test,run.systest-per-webapp,run.systest-per-webapp-on-virtual-server"
+             depends="update,init.test,compile.test,run.junit.test"
             description="Run all unit and system tests"/>
 
     <target name="test.generate.reports"
@@ -566,19 +566,6 @@
     <target name="init.test">
         <mkdir dir="${impl.test.results.dir}"/>
     </target>
-
-    <target name="run.systest" description="Run system tests">              
-    </target>
-
-   <target name="run.systest-per-webapp-on-virtual-server"
-           depends="discover.container.version" 
-           if="container.is.V3.1_no_cluster"
-           description="Run per-webapp system tests on 3 virtual servers">
-        <container.stop />
-        <var name="force.no.cluster" value="true" />
-        <container.start />
-    </target>
-
 
     <target name="run.junit.test"
             description="Run unit tests not requiring cactus">
