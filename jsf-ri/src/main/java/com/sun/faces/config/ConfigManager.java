@@ -992,6 +992,7 @@ public class ConfigManager {
         private static final String EMPTY_FACES_CONFIG =
                 "com/sun/faces/empty-faces-config.xml";
         private static final String FACES_CONFIG_TAGNAME = "faces-config";
+        private static final String FACELET_TAGLIB_TAGNAME = "facelet-taglib";
         private ServletContext servletContext;
         private URI documentURI;
         private DocumentBuilderFactory factory;
@@ -1095,19 +1096,12 @@ public class ConfigManager {
                     doc = FacesFlowDefinitionConfigProcessor.synthesizeEmptyFlowDefinition(documentURI);
                 }
             } else {
-                documentNS = doc.getDocumentElement().getNamespaceURI();
-                boolean isNonFacesConfigDocument = false;
+                Element documentElement = doc.getDocumentElement();
+                documentNS = documentElement.getNamespaceURI();
+                String rootElementTagName = documentElement.getTagName();
                 
-                if (null == documentNS) {
-                    Element documentElement = doc.getDocumentElement();
-                    if (null != documentElement) {
-                        isNonFacesConfigDocument = !FACES_CONFIG_TAGNAME.equals(documentElement.getTagName());
-                    }
-                } else {
-                    isNonFacesConfigDocument = !JAVAEE_SCHEMA_DEFAULT_NS.equals(documentNS)
-                            && !JAVAEE_SCHEMA_LEGACY_DEFAULT_NS.equals(documentNS);
-                }
-                
+                boolean isNonFacesConfigDocument = !FACES_CONFIG_TAGNAME.equals(rootElementTagName) &&
+                        !FACELET_TAGLIB_TAGNAME.equals(rootElementTagName);
                 
                 if (isNonFacesConfigDocument) {
                     ClassLoader loader = this.getClass().getClassLoader();
