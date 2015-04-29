@@ -136,6 +136,7 @@ public class UnicodeIT {
                 && page.getWebResponse().getContentAsString().contains("b&Auml;b"));
     }
 
+    @JsfTest(value = JSF_2_3_0_M03, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     @Test
     public void testUnicodeEscapingAuto() throws Exception {
         webClient = new WebClient();
