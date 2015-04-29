@@ -507,16 +507,11 @@
     </target>
 
     <target name="test"
-             depends="init.test,run.junit.test,run.cactus.test,run.systest,run.systest-per-webapp"
+             depends="init.test,run.junit.test,run.cactus.test,run.systest-per-webapp"
             description="Run all unit and system tests"/>
 
     <target name="init.test">
         <mkdir dir="${impl.test.results.dir}"/>
-    </target>
-
-    <target name="run.systest" description="Run system tests"
-            depends="init.test">              
-        <ant dir="${basedir}/systest" inheritall="false" target="test"/>        
     </target>
 
     <target name="run.systest-per-webapp"
