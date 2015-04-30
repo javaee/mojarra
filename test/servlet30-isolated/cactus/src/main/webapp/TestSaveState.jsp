@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
+<%--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,34 +38,85 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
--->
+--%>
 
-<project 
-    xmlns="http://maven.apache.org/POM/4.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.3.0-m03-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.servlet30_isolated</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - Servlet 3.0 (Isolated)</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>cactus</module>
-        <module>converterPropertyEditor</module>
-        <module>coreTags</module>
-    </modules>
-</project>
 
+
+<HTML>
+    <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+
+    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+
+    <BODY>
+        <H3> JSF Basic Components Test Page </H3>
+
+<f:view>
+<h:form id="basicForm">
+
+  <TABLE BORDER="1">
+
+      <TR>
+      <td>
+                    <h:inputText id="userName" 
+                                     value="JavaServerFaces" >
+		     <f:validateLength minimum="6" maximum="10"/>
+		     <f:validateRequired/>
+                   </h:inputText>
+
+              </td>
+
+
+	<TD>
+
+	      <h:commandLink id="link" href="hello.html"
+                           styleClass="hyperlinkClass"
+				       value="link text"/>
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+            <h:selectManyCheckbox id="validUser" 
+                   styleClass="selectbooleanClass"/>
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	     <h:selectOneListbox id="appleQuantity" 
+                     title="Select Quantity"
+                     accesskey="N" tabindex="20" >
+
+                <f:selectItem  disabled="true" itemValue="0" itemLabel="0"/>
+                <f:selectItem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
+                <f:selectItem  itemValue="9" itemLabel="9" title="nine" />
+
+              </h:selectOneListbox>
+
+	</TD>
+
+      </TR>
+
+					<TD><h:selectManyMenu id="ManyApples">
+						<f:selectItem itemValue="4" itemLabel="four" selected="true" />
+						<f:selectItem itemValue="6" itemLabel="six" />
+						<f:selectItem itemValue="7" itemLabel="seven" selected="true" />
+					</h:selectManyMenu></TD>
+
+</tr>
+
+  </TABLE>
+
+</h:form>
+</f:view>
+
+    </BODY>
+</HTML>

@@ -642,7 +642,11 @@ public class ConfigureListener implements ServletRequestListener,
         if (context.getMajorVersion() == 2 && context.getMinorVersion() < 5) {
             return context.getServletContextName();
         } else {
-            return context.getContextPath();
+            try {
+                return context.getContextPath();
+            } catch(AbstractMethodError error){
+                return context.getServletContextName();
+            }
         }
     }
 
