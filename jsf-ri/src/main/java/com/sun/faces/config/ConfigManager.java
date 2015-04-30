@@ -991,6 +991,8 @@ public class ConfigManager {
             "http://xmlns.jcp.org/xml/ns/javaee";
         private static final String EMPTY_FACES_CONFIG =
                 "com/sun/faces/empty-faces-config.xml";
+        private static final String FACES_CONFIG_TAGNAME = "faces-config";
+        private static final String FACELET_TAGLIB_TAGNAME = "facelet-taglib";
         private ServletContext servletContext;
         private URI documentURI;
         private DocumentBuilderFactory factory;
@@ -1094,7 +1096,24 @@ public class ConfigManager {
                     doc = FacesFlowDefinitionConfigProcessor.synthesizeEmptyFlowDefinition(documentURI);
                 }
             } else {
-                documentNS = doc.getDocumentElement().getNamespaceURI();
+                Element documentElement = doc.getDocumentElement();
+                documentNS = documentElement.getNamespaceURI();
+                String rootElementTagName = documentElement.getTagName();
+                
+                boolean isNonFacesConfigDocument = !FACES_CONFIG_TAGNAME.equals(rootElementTagName) &&
+                        !FACELET_TAGLIB_TAGNAME.equals(rootElementTagName);
+                
+                if (isNonFacesConfigDocument) {
+                    ClassLoader loader = this.getClass().getClassLoader();
+                    is = new InputSource(getInputStream(loader.getResource(EMPTY_FACES_CONFIG)));
+                    doc = db.parse(is);
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING, MessageFormat.format("Config document {0} with namespace URI {1} is not a faces-config or facelet-taglib file.  Ignoring.", 
+                                documentURI.toURL().toExternalForm(),
+                                documentNS));
+                    }
+                    return doc;
+                }
             }
             
             if (validating && documentNS != null) {
