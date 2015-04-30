@@ -45,6 +45,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ConverterPropertyEditorIT {
@@ -64,6 +65,7 @@ public class ConverterPropertyEditorIT {
     }
 
     @Test
+    @Ignore
     public void testConverterPropertyEditor() throws Exception {
         HtmlPage page;
         HtmlSubmitInput button;
