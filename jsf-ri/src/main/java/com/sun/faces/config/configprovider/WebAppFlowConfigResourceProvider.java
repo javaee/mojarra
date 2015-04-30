@@ -115,21 +115,35 @@ public class WebAppFlowConfigResourceProvider implements
         
         for (String cur : allPaths) {
             if (cur.endsWith(RIConstants.FLOW_DEFINITION_ID_SUFFIX)) {
-                if (null == list) {
-                    list = new ArrayList<>();
+                int suffixIndex = cur.length() - RIConstants.FLOW_DEFINITION_ID_SUFFIX_LENGTH;
+                int slash = cur.lastIndexOf("/", suffixIndex);
+                if (-1 == slash) {
+                    continue;
                 }
-                try {
-                    curUrl = context.getResource(cur);
-                    list.add(curUrl.toURI());
-                } catch (MalformedURLException ex) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE, "Unable to get resource for {0}" + cur, ex);
+                String flowName = cur.substring(slash + 1, suffixIndex);
+                int prevSlash = cur.lastIndexOf("/", slash - 1);
+                if (-1 == prevSlash) {
+                    continue;
+                }
+                // Ensure cur matches the pattern <flowName>/<flowName>-flow.xml
+                String dirName = cur.substring(prevSlash + 1, slash);
+                if (dirName.equals(flowName)) {
+                    if (null == list) {
+                        list = new ArrayList<>();
                     }
-                } catch (URISyntaxException use) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE, "Unable to get URI for {0}" + curUrl.toExternalForm(), use);
+                    try {
+                        curUrl = context.getResource(cur);
+                        list.add(curUrl.toURI());
+                    } catch (MalformedURLException ex) {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE, "Unable to get resource for {0}" + cur, ex);
+                        }
+                    } catch (URISyntaxException use) {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE, "Unable to get URI for {0}" + curUrl.toExternalForm(), use);
+                        }
+                        
                     }
-                    
                 }
             }
         }
