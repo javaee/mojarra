@@ -797,12 +797,12 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
                 <available file="${dependency.base.dir}/jetty-${jetty.version}.zip" property="ignored"/>
             </not>
             <then>
-                <get src="http://dist.codehaus.org/jetty/jetty-${jetty.version.dir}/jetty-${jetty.version}.zip"
+<!--                <get src="http://dist.codehaus.org/jetty/jetty-${jetty.version.dir}/jetty-${jetty.version}.zip"
                      dest="${dependency.base.dir}/jetty-${jetty.version}.zip"
                      usetimestamp="true"/>
                 <unzip
                         src="${dependency.base.dir}/jetty-${jetty.version}.zip"
-                        dest="${dependency.base.dir}"/>
+                        dest="${dependency.base.dir}"/>-->
             </then>
         </if>
         </then>
