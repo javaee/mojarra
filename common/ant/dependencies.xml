@@ -90,7 +90,7 @@
     <property name="maven2.mirror" value="http://repo.exist.com/maven2/"/>
     <property name="java.net.maven" value="http://download.java.net/maven/1"/>
     <property name="java.net.maven2" value="http://download.java.net/maven/2"/>
-    <property name="codehaus.maven" value="http://repository.codehaus.org"/>
+    <property name="codehaus.maven" value="http://repo1.maven.org/maven2"/>
     <property name="download.java.net" value="http://download.java.net/javaee5/external/shared"/>
     <property name="jboss.maven2" value="http://repository.jboss.com/maven2"/>
 
