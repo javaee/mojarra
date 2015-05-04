@@ -154,7 +154,6 @@
     <artifact:remoteRepository id="jboss.repo" url="http://repository.jboss.com/maven2/"/>
     <artifact:remoteRepository id="j.n.repo" url="http://download.java.net/maven/2/"/>
     <artifact:remoteRepository id="gf.repo" url="http://download.java.net/maven/glassfish/"/>
-    <artifact:remoteRepository id="codehaus.repo" url="http://repository.codehaus.org/"/>
     <artifact:remoteRepository id="ibiblio.repo" url="http://mirrors.ibiblio.org/pub/mirrors/maven2/"/>
 
     <artifact:dependencies filesetId="compile.filepath" pathId="compile.path">
