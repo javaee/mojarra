@@ -163,7 +163,6 @@
     
     <artifact:remoteRepository id="j.n.repo" url="https://maven.java.net/content/repositories/releases/"/>
     <artifact:remoteRepository id="j.n.repo.snapshot" url="https://maven.java.net/content/repositories/snapshots/"/>
-    <artifact:remoteRepository id="codehaus.repo" url="http://repository.codehaus.org/"/>
     <artifact:remoteRepository id="ibiblio.repo" url="http://mirrors.ibiblio.org/pub/mirrors/maven2/"/>
 
     <artifact:dependencies filesetId="compile.filepath" pathId="compile.path">
