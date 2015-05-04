@@ -51,6 +51,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 /**
   *
@@ -76,6 +77,7 @@ public class FlashClusterIT {
 
 
     @Test
+    @Ignore
     public void testButton() throws Exception {
         webClient.setAjaxController(new NicelyResynchronizingAjaxController());
         HtmlPage page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
@@ -94,6 +96,7 @@ public class FlashClusterIT {
     }
     
     @Test
+    @Ignore
     public void testLink() throws Exception {
         webClient.setAjaxController(new NicelyResynchronizingAjaxController());
         HtmlPage page = webClient.getPage(webUrl + "/faces/flash01.xhtml");
