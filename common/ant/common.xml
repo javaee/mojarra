@@ -178,7 +178,6 @@
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
-        <remoteRepository refid="codehaus.repo"/>
         <remoteRepository refid="j.n.repo.snapshot"/>
     </artifact:dependencies>
 
