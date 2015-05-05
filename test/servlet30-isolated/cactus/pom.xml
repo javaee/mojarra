@@ -160,12 +160,15 @@
                             </includes>
                             <systemProperties>
                                 <explodedWarDir>${project.build.directoru}/test-servlet30_isolated-cactus</explodedWarDir>
-                                <cactus.contextURL>http://localhost:8080/test-servlet30_isolated-cactus</cactus.contextURL>
+                                <cactus.contextURL>http://localhost:${integration.serverPort}/test-servlet30_isolated-cactus</cactus.contextURL>
                             </systemProperties>
                         </configuration>
                     </plugin>                  
                 </plugins>
             </build>
+            <properties>
+                <integration.serverPort>8080</integration.serverPort>
+            </properties>
         </profile>
     </profiles>
     <properties>
