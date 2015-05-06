@@ -872,7 +872,7 @@ javax.faces.level=ALL
         <property name="exec.name" value="${java.home}/bin/javac"/>
         <property name="exec.arg.1" value=""/>
         <!-- invoke the javac processor to produce stripped .class files -->
-        <exec executable="${exec.name}" failonerror="true">
+<!--        <exec executable="${exec.name}" failonerror="true">
             <arg line="${exec.arg.1}"/>
             <arg line="-XDprocess.packages"/>
             <arg line="-proc:only"/>
@@ -882,7 +882,7 @@ javax.faces.level=ALL
             <arg line="-Acom.sun.tools.javac.sym.ExtraApiClassPath=${javaee-api.jar}"/>
             <arg line="-Acom.sun.tools.javac.sym.Dest=${build.lib.dir}/jsf-api-stripped"/>
             <arg line="${src.paths}"/>
-        </exec>
+        </exec>-->
         <!-- jar up the stripped files into javax.faces-api.jar. -->
         <!-- Extract the original manifest -->
         <unjar src="${build.lib.dir}/${name}.jar"
