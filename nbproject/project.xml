@@ -3,11 +3,11 @@
     <type>org.netbeans.modules.ant.freeform</type>
     <configuration>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
-            <name>mojarra-2.2.11-SNAPSHOT</name>
+            <name>mojarra-2.2.12-SNAPSHOT</name>
         </general-data>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/2">
             <!-- Do not use Project Properties customizer when editing this file manually. -->
-            <name>mojarra-2.2.11-SNAPSHOT</name>
+            <name>mojarra-2.2.12-SNAPSHOT</name>
             <properties>
                 <property-file>build.properties</property-file>
             </properties>

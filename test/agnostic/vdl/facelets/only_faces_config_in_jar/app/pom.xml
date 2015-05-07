@@ -47,7 +47,7 @@
     <parent>
         <groupId>com.sun.faces.test.agnostic.vdl.facelets.only_faces_config_in_jar</groupId>
         <artifactId>pom</artifactId>
-        <version>2.2.11-SNAPSHOT</version>
+        <version>2.2.12-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.agnostic.vdl.facelets.only_faces_config_in_jar</groupId>
     <artifactId>only_faces_config_in_jar_app</artifactId>
