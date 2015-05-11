@@ -45,6 +45,7 @@ import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.util.Classpath;
 import com.sun.faces.lifecycle.HttpMethodRestrictionsPhaseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -158,6 +159,7 @@ public class WebConfiguration {
         getOptionValue(WebContextInitParameter.ResourceExcludes, " ");
         getOptionValue(WebContextInitParameter.DefaultSuffix, " ");
         getOptionValue(WebContextInitParameter.FaceletsViewMappings, ";");
+        getOptionValue(WebContextInitParameter.FaceletsSuffix, " ");
 
     }
 
@@ -450,6 +452,21 @@ public class WebConfiguration {
 
         discoverResourceLibraryContracts();
 
+    }
+
+    /**
+     * To inlcude the facelets suffix into the supported suffixes.
+     * 
+     * @return merged suffixes including both default suffixes and the facelet suffixes.
+     */
+    public String[] getConfiguredExtensions() {
+        String[] defaultSuffix  = getOptionValue(WebContextInitParameter.DefaultSuffix, " ");
+        String[] faceletsSuffix = getOptionValue(WebContextInitParameter.FaceletsSuffix, " ");
+          
+        List<String> mergedList = new ArrayList<String>(Arrays.asList(defaultSuffix));
+        mergedList.addAll(Arrays.asList(faceletsSuffix));
+          
+        return mergedList.toArray(new String[0]);
     }
     
     private void discoverResourceLibraryContracts() {

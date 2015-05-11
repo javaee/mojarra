@@ -93,7 +93,7 @@ public class MultiViewHandler extends ViewHandler {
 
         WebConfiguration config = WebConfiguration.getInstance();
               
-        configuredExtensions = config.getOptionValue(WebConfiguration.WebContextInitParameter.DefaultSuffix, " ");
+        configuredExtensions = config.getConfiguredExtensions();
         extensionsSet = config.isSet(WebConfiguration.WebContextInitParameter.DefaultSuffix);
         vdlFactory = (ViewDeclarationLanguageFactory)
                 FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
