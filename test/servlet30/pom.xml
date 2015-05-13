@@ -129,6 +129,7 @@
         <module>renderKit</module>
         <module>requestCharEncodingNoSession</module>
         <module>resource</module>
+        <module>resourceExposure</module>
         <module>serializeServerState</module>
         <module>sessionScope</module>
         <module>stateViewExpiredExceptionMissing</module>
