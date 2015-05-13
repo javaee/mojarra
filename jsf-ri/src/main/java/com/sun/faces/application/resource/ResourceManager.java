@@ -312,7 +312,7 @@ public class ResourceManager {
         }
 
         String resName = trimLeadingSlash(resourceName);
-        if (nameContainsForbiddenSequence(resName)) {
+        if (nameContainsForbiddenSequence(resName) || (!isViewResource && resName.startsWith("WEB-INF"))) {
             return null;
         }
 
@@ -379,23 +379,26 @@ public class ResourceManager {
         if (name != null) {
         name = name.toLowerCase();
 
-        result = name.startsWith("./..") ||
-                 name.startsWith("..") ||
+        result = name.startsWith(".") ||
                  name.contains("../") ||
                  name.contains("..\\") ||
                  name.startsWith("/") ||
                  name.startsWith("\\") ||
+                 name.endsWith("/") ||
 
                  name.contains("..%2f") ||
                  name.contains("..%5c") ||
                  name.startsWith("%2f") ||
                  name.startsWith("%5c") ||
+                 name.endsWith("%2f") ||
 
                  name.contains("..\\u002f") ||
                  name.contains("..\\u005c") ||
                  name.startsWith("\\u002f") ||
-                 name.startsWith("\\u005c")
-                 ;
+                 name.startsWith("\\u005c") ||
+                 name.endsWith("\\u002f")
+
+                ;
         }
         return result;
     }
@@ -623,7 +626,7 @@ public class ResourceManager {
                 // it is a resource request. look at the parameter con=.
 
                 String param = context.getExternalContext().getRequestParameterMap().get("con");
-                if(param != null && param.trim().length() > 0) {
+                if(!nameContainsForbiddenSequence(param) && param != null && param.trim().length() > 0) {
                     return Arrays.asList(param);
                 }
             }
