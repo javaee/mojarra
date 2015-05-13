@@ -281,6 +281,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     /**
      * @see javax.faces.application.ResourceHandler#handleResourceRequest(javax.faces.context.FacesContext)
      */
+    @Override
     public void handleResourceRequest(FacesContext context) throws IOException {
 
         String resourceId = normalizeResourceRequest(context);
@@ -309,7 +310,18 @@ public class ResourceHandlerImpl extends ResourceHandler {
             libraryName = context.getExternalContext().getRequestParameterMap()
                   .get("ln");
             
-            if ((libraryName != null && !(libraryName.charAt(0) == '.')) || libraryName == null) {
+            boolean createResource;
+            
+            if (libraryName != null) {
+                createResource = libraryNameIsSafe(libraryName);
+                if (!createResource) {
+                    send404(context, resourceName, libraryName, true);
+                    return;
+                }
+            } else {
+                createResource = true;
+            }
+            if (createResource) {
                 resource = context.getApplication().getResourceHandler().createResource(resourceName, libraryName);
             }
         }
@@ -378,7 +390,37 @@ public class ResourceHandlerImpl extends ResourceHandler {
         }
 
     }
-
+    
+    private boolean libraryNameIsSafe(String libraryName) {
+        assert(null != libraryName);
+        boolean result;
+        
+        result = !(libraryName.startsWith(".") || 
+                
+                   libraryName.startsWith("/") ||
+                   libraryName.contains("/") ||
+                
+                   libraryName.startsWith("\\") ||
+                   libraryName.contains("\\") ||
+                
+                   libraryName.startsWith("%2e") ||
+                
+                   libraryName.startsWith("%2f") ||
+                   libraryName.contains("%2f") ||
+                
+                   libraryName.startsWith("%5c") ||
+                   libraryName.contains("%5c") ||
+                
+                   libraryName.startsWith("\\u002e") ||
+                
+                   libraryName.startsWith("\\u002f") ||
+                   libraryName.contains("\\u002f") ||
+                
+                   libraryName.startsWith("\\u005c") ||
+                   libraryName.contains("\\u005c"));
+        
+        return result;
+    }
 
     private void send404(FacesContext ctx,
                          String resourceName,
