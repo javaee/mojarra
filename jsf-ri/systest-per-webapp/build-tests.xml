@@ -117,6 +117,8 @@
                value="com/sun/faces/systest/InjectionTestCase.class" />
     <property  name="replace-vdl"
                value="com/sun/faces/systest/replacevdl/ReplaceViewDeclarationLanguageTestCase.class" />
+    <property name="resourceExposure"
+              value="com/sun/faces/systest/Issue21085364TestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:
