@@ -76,6 +76,7 @@
         <module>lifecycle</module>
         <module>renderKit</module>
         <module>resource</module>
+        <module>resourceExposure</module>
         <module>scope</module>
         <module>shared</module>
         <module>stateSaving</module>
