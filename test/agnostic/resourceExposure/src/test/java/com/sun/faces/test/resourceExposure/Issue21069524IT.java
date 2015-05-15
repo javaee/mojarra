@@ -71,7 +71,7 @@ public class Issue21069524IT {
     }
     
     public void doTest(String url) throws Exception {
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.setThrowExceptionOnFailingStatusCode(false);
         TextPage page = webClient.getPage(webUrl + url);
         String pageXml = page.getContent();
         assertTrue(!pageXml.contains("<h:form"));

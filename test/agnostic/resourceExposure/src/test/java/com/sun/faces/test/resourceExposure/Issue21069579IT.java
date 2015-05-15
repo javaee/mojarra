@@ -65,7 +65,7 @@ public class Issue21069579IT {
 
     @Test
     public void test21069579() throws Exception {
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.setThrowExceptionOnFailingStatusCode(false);
         TextPage page = webClient.getPage(webUrl + "javax.faces.resource/WEB-INF/web.xml.faces?con=..");
         String pageXml = page.getContent();
         
