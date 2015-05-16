@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <name>Mojarra Test Agnostic - POM</name>
     <modules>
+	<module>resourceExposure</module>
         <module>shared</module>
         <module>factory</module>
     </modules>
