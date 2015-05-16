@@ -418,6 +418,58 @@
             </properties>
         </profile>
         <profile>
+            <id>integration</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <integration.serverName>${integration.serverName}</integration.serverName>
+                                <integration.serverPort>${integration.serverPort}</integration.serverPort>
+                                <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
+                                <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
+                                <jsf.version>${jsf.version}</jsf.version>
+                                <project.build.finalName>${project.build.finalName}</project.build.finalName>
+                                <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>                
+                </plugins>
+            </build>
+            <properties>
+                <integration.protocol>http</integration.protocol>
+                <integration.serverName>localhost</integration.serverName>
+                <integration.serverPort>8080</integration.serverPort>
+            </properties>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
+                        <reportSets>
+                            <reportSet>
+                                <id>integration-tests</id>
+                                <reports>
+                                    <report>failsafe-report-only</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+        <profile>
             <id>integration-failsafe</id>
             <build>
                 <plugins>
