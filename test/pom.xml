@@ -734,7 +734,6 @@
                 <tomcat.version>7.0.16</tomcat.version>
             </properties>
         </profile>
-    </profiles>
         <profile>
             <id>weblogic-cargo</id>
             <build>
@@ -782,6 +781,7 @@
                 <timeout>60</timeout>
             </properties>
         </profile>
+    </profiles>
     <properties>
         <glassfish.cargoContainerId>glassfish3x</glassfish.cargoContainerId>
         <glassfish.cargoConfigHome>${glassfish.home}/glassfish/domains</glassfish.cargoConfigHome>
