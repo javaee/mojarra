@@ -42,7 +42,9 @@ package com.sun.faces.test.servlet30.facelets;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,6 +68,7 @@ public class Issue3399IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_3_0_M01)
     @Test
     public void testViewParamRedirect1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewParamRedirect1.xhtml");

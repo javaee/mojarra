@@ -42,11 +42,16 @@ package com.sun.faces.test.servlet30.ajax;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue3351IT {
 
     private String webUrl;
@@ -65,6 +70,7 @@ public class Issue3351IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_3_0_M02)
     @Test
     public void testButtonOnlySubmitsOne() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/buttonOnlySubmitsOne.xhtml");

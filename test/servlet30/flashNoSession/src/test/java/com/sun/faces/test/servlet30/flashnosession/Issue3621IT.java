@@ -41,11 +41,16 @@ package com.sun.faces.test.servlet30.flashnosession;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Issue3621IT {
 
     private String webUrl;
@@ -62,6 +67,7 @@ public class Issue3621IT {
         webClient.closeAllWindows();
     }
 
+    @JsfTest(JsfVersion.JSF_2_3_0_M01)
     @Test
     public void testCdataEscape5() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/setvar.xhtml");
