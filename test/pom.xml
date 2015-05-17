@@ -298,10 +298,10 @@
                                     <target>
                                         <echo>=== Deploying ${project.build.finalName} to ${glassfish.deploy.home} ===</echo>
                                         <exec executable="${glassfish.deploy.home}/glassfish/bin/asadmin.bat" osfamily="windows">
-                                            <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
+                                            <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.${project.packaging}"/>
                                         </exec>
                                         <exec executable="${glassfish.deploy.home}/glassfish/bin/asadmin" osfamily="unix">
-                                            <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
+                                            <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.${project.packaging}"/>
                                         </exec>
                                     </target>
                                 </configuration>
