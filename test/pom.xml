@@ -518,6 +518,7 @@
                                 <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
                                 <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
                                 <jsf.version>${jsf.version}</jsf.version>
+                                <jsf.serverString>${jsf.serverString}</jsf.serverString>
                                 <project.build.finalName>${project.build.finalName}</project.build.finalName>
                                 <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
                             </systemPropertyVariables>
