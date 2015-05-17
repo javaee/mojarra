@@ -169,6 +169,58 @@
     </dependencies>
     <profiles>
         <profile>
+            <id>glassfish-bootstrap</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>=== Starting ${glassfish.bootstrap.home} ===</echo>
+                                        <exec executable="${glassfish.bootstrap.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="start-domain"/>
+                                        </exec>
+                                        <exec executable="${glassfish.bootstrap.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="start-domain"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>=== Stopping ${glassfish.bootstrap.home} ===</echo>
+                                        <exec executable="${glassfish.bootstrap.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                            <arg line="stop-domain"/>
+                                        </exec>
+                                        <exec executable="${glassfish.bootstrap.home}/glassfish/bin/asadmin" osfamily="unix">
+                                            <arg line="stop-domain"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <glassfish.bootstrap.home>${user.home}/Glassfish4.1</glassfish.bootstrap.home>
+            </properties>
+        </profile>
+        <profile>
             <id>glassfish-cargo</id>
             <build>
                 <plugins>
