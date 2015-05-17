@@ -245,10 +245,10 @@
                                 <configuration>
                                     <target>
                                         <echo>=== Deploying ${project.build.finalName} to ${glassfish.deploy.home} ===</echo>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin.bat" osfamily="windows">
+                                        <exec executable="${glassfish.deploy.home}/glassfish/bin/asadmin.bat" osfamily="windows">
                                             <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
                                         </exec>
-                                        <exec executable="${integration.container.home}/glassfish/bin/asadmin" osfamily="unix">
+                                        <exec executable="${glassfish.deploy.home}/glassfish/bin/asadmin" osfamily="unix">
                                             <arg line="deploy --force ${project.build.directory}/${project.build.finalName}.war"/>
                                         </exec>
                                     </target>
