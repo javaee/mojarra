@@ -45,7 +45,7 @@
   <parent>
     <artifactId>pom</artifactId>
     <groupId>com.sun.faces.test.agnostic.faceletdefaultmapping</groupId>
-        <version>2.1.5-04-SNAPSHOT</version>
+        <version>2.1.5-05-SNAPSHOT</version>
   </parent>
   
   <groupId>com.sun.faces.test.agnostic.faceletdefaultmapping</groupId>
