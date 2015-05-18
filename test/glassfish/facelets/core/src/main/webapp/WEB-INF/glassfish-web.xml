@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,11 +41,6 @@
     holder.
 
 -->
-
-<!DOCTYPE glassfish-web-app PUBLIC 
-    "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" 
-    "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
-    
 <glassfish-web-app error-url="">
-    <context-root>/test-glassfish-faceslet-core</context-root>
+  <context-root>/test-glassfish-facelets-core</context-root>
 </glassfish-web-app>
