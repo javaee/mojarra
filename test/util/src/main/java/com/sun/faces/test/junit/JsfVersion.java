@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -63,11 +63,18 @@ public enum JsfVersion {
     JSF_2_2_4("2.2.4"),
     JSF_2_2_5("2.2.5"),
     JSF_2_2_6("2.2.6"),
+    JSF_2_2_7("2.2.7"),
     JSF_2_2_8("2.2.8"),
     JSF_2_2_8_01("2.2.8-01"),
     JSF_2_2_8_02("2.2.8-02"),
     JSF_2_2_8_03("2.2.8-03"),
+    JSF_2_2_8_04("2.2.8-04"),
+    JSF_2_2_8_05("2.2.8-05"),
+    JSF_2_2_8_06("2.2.8-06"),
+    JSF_2_2_8_07("2.2.8-07"),
     JSF_2_2_9("2.2.9"),
+    JSF_2_2_10("2.2.10"),
+    JSF_2_2_11("2.2.11"),
     JSF_2_3_0_M01("2.3.0-m01"),
     JSF_2_3_0_M02("2.3.0-m02"),
     JSF_2_3_0_M03("2.3.0-m03"),
