@@ -137,7 +137,7 @@ public class AdminGUIIT {
         webClient.getOptions().setJavaScriptEnabled(false);
         webClient.getOptions().setTimeout(6000000);
         
-        String url = "https://localhost:4848/";
+        String url = "http://localhost:4848/";
 
         try {
             page = webClient.getPage(url + "common/index.jsf?bare=true");
