@@ -77,6 +77,10 @@
         <from-outcome>VerifyTheBeanIsSameAsBefore</from-outcome>
     </flow-return>
     
+    <flow-return id="returnFromF1">
+        <from-outcome>/return1.xhtml</from-outcome>
+    </flow-return>
+    
     <view id="ReturnPage">
         <vdl-document>/nested-flow-call-f1/ReturnPage.xhtml</vdl-document>
     </view>

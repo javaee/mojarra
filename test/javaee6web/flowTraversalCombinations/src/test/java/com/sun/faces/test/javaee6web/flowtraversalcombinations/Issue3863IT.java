@@ -48,7 +48,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-public class Issue3680IT {
+public class Issue3863IT {
     private String webUrl;
     private WebClient webClient;
 
@@ -64,17 +64,29 @@ public class Issue3680IT {
     }
     
     @Test
-    public void testNestFlowCallNotShareFlowScopedBeans() throws Exception {
+    public void testTheValueIncrement() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-        
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("go_to_nested_flow_call_f1");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("go_to_flow_for_issue3863");
         page = button.click();
-        assertTrue(page.asXml().contains("The count value in the original stack frame should always be 0, even after the flow has been called recursively."));
-        assertTrue(page.asXml().contains("FlowDeque size: 1"));
+        assertTrue(page.asXml().contains("The value is:0"));
         
-        button = (HtmlSubmitInput) page.getHtmlElementById("returnToOutsideOfAnyFlow");
+        button = (HtmlSubmitInput) page.getHtmlElementById("Increment");
         page = button.click();
-        assertTrue(page.asXml().contains("Has a flow: false."));
-        assertTrue(page.asXml().contains("flowScope value, should be empty: ."));
-    } 
+        assertTrue(page.asXml().contains("The value is:1"));      
+
+        button = (HtmlSubmitInput)page.getHtmlElementById("Increment");
+        page = button.click();
+        assertTrue(page.asXml().contains("The value is:2"));
+        
+        button = (HtmlSubmitInput)page.getHtmlElementById("returnOutOfFlow");
+        page = button.click();
+        assertTrue(page.asXml().contains("go_to_flow_for_issue3863"));
+        
+        button = (HtmlSubmitInput) page.getHtmlElementById("go_to_flow_for_issue3863");
+        page = button.click();
+        assertTrue(page.asXml().contains("The value is:0"));        
+    }
+    
+    
+    
 }

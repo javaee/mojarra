@@ -39,7 +39,11 @@
  */
 package com.sun.faces.test.javaee6web.flowtraversalcombinations;
 
+import com.sun.faces.flow.FlowHandlerImpl;
 import java.io.Serializable;
+import java.lang.reflect.Method;
+import javax.faces.context.FacesContext;
+import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowScoped;
 import javax.inject.Named;
 
@@ -63,5 +67,21 @@ public class NestedFlowCallF1Bean implements Serializable {
     
     public void addCount() {
         this.count++;
+    }
+    
+    public int getFlowDequeSize() throws Exception {
+        int result = 0;
+        FacesContext context = FacesContext.getCurrentInstance();
+        FlowHandler flowHandler = context.getApplication().getFlowHandler();
+        Method flowDequeMethod = FlowHandlerImpl.class.getDeclaredMethod("getFlowStack", FacesContext.class);
+        flowDequeMethod.setAccessible(true);
+        Object flowDeque = flowDequeMethod.invoke(null, context);
+        
+        Class flowDequeClass = Class.forName("com.sun.faces.flow.FlowHandlerImpl$FlowDeque");
+        Method flowDequeSizeMethod = flowDequeClass.getDeclaredMethod("getCurrentFlowDepth", (Class[]) null);
+        flowDequeSizeMethod.setAccessible(true);
+        result = (Integer) flowDequeSizeMethod.invoke(flowDeque, (Object[]) null);
+        
+        return result;
     }
 }

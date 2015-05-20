@@ -146,28 +146,33 @@ public class FlowCDIContext implements Context, Serializable {
             ExternalContext extContext = facesContext.getExternalContext();
             this.sessionMap = extContext.getSessionMap();
             
-            generateKeyForCDIBeansBelongToAFlow(facesContext);
-        }
-
-        private void generateKeyForCDIBeansBelongToAFlow(FacesContext facesContext) {
-          
             Flow currentFlow = getCurrentFlow(facesContext);
-            if (null != currentFlow) {
-                ClientWindow curWindow = facesContext.getExternalContext().getClientWindow();
-                if (null == curWindow) { 
-                    throw new IllegalStateException("Unable to obtain current ClientWindow.  Is the ClientWindow feature enabled?");
-                }
-                
-                final String clientWindow = currentFlow.getClientWindowFlowId(curWindow);
-                
-                FlowHandlerImpl.FlowDeque<Flow> flowStack = FlowHandlerImpl.getFlowStack(facesContext);
-                int currentFlowDepth = (null != flowStack) ? flowStack.getCurrentFlowDepth() : 0;
-                
-                flowBeansForClientWindowKey = clientWindow +  ":" + currentFlowDepth + "_beans";
-                creationalForClientWindowKey = clientWindow + ":" + currentFlowDepth + "_creational";
+            int currentFlowDepth = FlowHandlerImpl.getFlowStack(facesContext).getCurrentFlowDepth();
+                        
+            generateKeyForCDIBeansBelongToAFlow(facesContext, currentFlow, currentFlowDepth);
+        }
+        
+        private FlowScopeMapHelper(FacesContext facesContext, Flow flow, int flowDepth) {
+            ExternalContext extContext = facesContext.getExternalContext();
+            this.sessionMap = extContext.getSessionMap();
+            
+            generateKeyForCDIBeansBelongToAFlow(facesContext, flow, flowDepth);
+        } 
+
+        private void generateKeyForCDIBeansBelongToAFlow(FacesContext facesContext, Flow flow, int flowDepth) {
+             if (null != flow) {
+                 ClientWindow curWindow = facesContext.getExternalContext().getClientWindow();
+                 if (null == curWindow) { 
+                     throw new IllegalStateException("Unable to obtain current ClientWindow.  Is the ClientWindow feature enabled?");
+                 }
+                  
+                 final String clientWindow = flow.getClientWindowFlowId(curWindow);
+                  
+                 flowBeansForClientWindowKey = clientWindow +  ":" + flowDepth + "_beans";
+                 creationalForClientWindowKey = clientWindow + ":" + flowDepth + "_creational";
                 
             } else {
-                flowBeansForClientWindowKey = creationalForClientWindowKey = null;
+                 flowBeansForClientWindowKey = creationalForClientWindowKey = null;
             }
         }
         
@@ -343,9 +348,9 @@ public class FlowCDIContext implements Context, Serializable {
         return result; 
     }
         
-    static void flowExited() {
+    static void flowExited(Flow currentFlow, int depth) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        FlowScopeMapHelper mapHelper = new FlowScopeMapHelper(facesContext);
+        FlowScopeMapHelper mapHelper = new FlowScopeMapHelper(facesContext, currentFlow, depth);
         Map<String, Object> flowScopedBeanMap = mapHelper.getFlowScopedBeanMapForCurrentFlow();
         Map<String, CreationalContext<?>> creationalMap = mapHelper.getFlowScopedCreationalMapForCurrentFlow();
         assert(!flowScopedBeanMap.isEmpty());
@@ -391,7 +396,7 @@ public class FlowCDIContext implements Context, Serializable {
                     FlowCDIEventFireHelper eventHelper = 
                             (FlowCDIEventFireHelper)  beanManager.getReference(bean, bean.getBeanClass(),
                             creationalContext);
-                    eventHelper.fireDestroyedEvent(getCurrentFlow(facesContext));
+                    eventHelper.fireDestroyedEvent(currentFlow);
                 }
             }
         }
