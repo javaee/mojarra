@@ -78,7 +78,6 @@
         <module>compositeComponentForAttribute</module>
         <module>contractUsingHostHeader</module>
         <module>contractUsingViewRoot</module>
-        <module>custom-viewroot-viewscope</module>
         <module>customFaceletsResolver</module>
         <module>customLifecycle</module>
         <module>customPropertyResolverJsp</module>
@@ -88,6 +87,7 @@
         <module>customVariableResolver</module>
         <module>customVariableResolverProgrammatically</module>
         <module>customViewHandler</module>
+        <module>customViewRootViewScope</module>
         <module>disableBeanValidator</module>
         <module>disableIdUniqueness</module>
         <module>disableUnicodeEscaping</module>
