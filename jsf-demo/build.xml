@@ -341,6 +341,21 @@
         <copy todir="${dist.home}/javadocs" filtering="true">
             <fileset dir="${api.dir}/build/javadocs"/>
         </copy>
+        <copy overwrite="true" todir="${dist.home}/javadocs">
+          <fileset dir="${api.dir}/doc">
+            <include name="*.png" />
+            <include name="*.cur" />
+          </fileset>
+        </copy>
+        <copy todir="${dist.home}/javadocs/javax/faces/component"
+              file="${api.dir}/src/main/java/javax/faces/component/UIComponentHierarchy.jpg"/>
+        <copy todir="${dist.home}/javadocs/javax/faces/flow"
+              file="${api.dir}/src/main/java/javax/faces/flow/FlowHierarchy.jpg"/>
+        <copy todir="${dist.home}/javadocs/javax/faces/event"
+              file="${api.dir}/src/main/java/javax/faces/event/EventHierarchy.jpg"/>
+        <copy todir="${dist.home}/javadocs/javax/faces/view/facelets"
+              file="${api.dir}/src/main/java/javax/faces/view/facelets/Facelets.jpg"/>
+
         <copy todir="${dist.home}/managed-bean-javadocs" filtering="true">
             <fileset dir="${api.dir}/build/managed-bean-javadocs"/>
         </copy>

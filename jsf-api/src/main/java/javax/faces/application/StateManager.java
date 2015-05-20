@@ -520,8 +520,8 @@ public abstract class StateManager {
     private Boolean savingStateInClient = null;
 
     /**
-     * <p class="changed_modified_2_3">
-     *  Method to determine if the state is saved on the client. 
+     * <p>
+     *  <span class="changed_modified_2_3">Method</span> to determine if the state is saved on the client. 
      * </p>
      * 
      * @param context the Faces context.
