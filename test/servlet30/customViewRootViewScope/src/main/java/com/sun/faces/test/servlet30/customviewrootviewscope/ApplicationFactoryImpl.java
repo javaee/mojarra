@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,13 +38,13 @@
  * holder.
 
  */
-
-package com.sun.faces.test.servlet30.custom_viewroot_viewscope;
+package com.sun.faces.test.servlet30.customviewrootviewscope;
 
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 
 public class ApplicationFactoryImpl extends ApplicationFactory {
+
     private final ApplicationFactory parent;
     private Application myApplication;
 
@@ -63,7 +63,6 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
             Application fromParent = parent.getApplication();
             myApplication = new ApplicationImpl(fromParent);
         }
-        
         return myApplication;
     }
 
@@ -71,7 +70,4 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
     public void setApplication(Application application) {
         this.myApplication = application;
     }
-    
-    
-
 }

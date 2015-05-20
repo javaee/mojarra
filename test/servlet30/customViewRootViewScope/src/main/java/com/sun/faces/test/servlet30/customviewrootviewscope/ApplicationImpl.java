@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,22 +38,35 @@
  * holder.
 
  */
+package com.sun.faces.test.servlet30.customviewrootviewscope;
 
-package com.sun.faces.test.servlet30.custom_viewroot_viewscope;
-
-import java.io.Serializable;
-
-import javax.faces.component.NamingContainer;
+import javax.faces.FacesException;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationWrapper;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
 
-public class NamingContainerViewRoot extends UIViewRoot implements NamingContainer, Serializable {
+public class ApplicationImpl extends ApplicationWrapper {
 
-	private static final long serialVersionUID = 1L;
+    private final Application parent;
 
-	@Override
-    public String getContainerClientId(FacesContext context) {
-        return "MyNamingContainer" + super.getContainerClientId(context); 
+    public ApplicationImpl(Application parent) {
+        this.parent = parent;
     }
-    
+
+    @Override
+    public Application getWrapped() {
+        return parent;
+    }
+
+    @Override
+    public UIComponent createComponent(String componentType) throws FacesException {
+        UIComponent result;
+        if (UIViewRoot.COMPONENT_TYPE.equals(componentType)) {
+            result = new NamingContainerViewRoot();
+        } else {
+            result = parent.createComponent(componentType);
+        }
+        return result;
+    }
 }
