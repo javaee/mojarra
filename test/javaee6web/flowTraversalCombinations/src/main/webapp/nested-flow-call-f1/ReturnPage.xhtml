@@ -48,6 +48,15 @@
     </h:head>
     <h:body>
         The count value in the original stack frame should always be #{nestedFlowCallF1Bean.count}, even after the flow has been called recursively. 
+        
+        <p id="flowDequeSize">FlowDeque size: #{nestedFlowCallF1Bean.flowDequeSize}.</p>
+        
+        <h:form prependId="false">
+            
+            <h:commandButton id="returnToOutsideOfAnyFlow" action="returnFromF1" value="Return from this flow" /> 
+            
+        </h:form> 
+        
     </h:body>
 </html>
 

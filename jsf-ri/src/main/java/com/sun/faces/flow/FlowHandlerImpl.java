@@ -409,7 +409,7 @@ public class FlowHandlerImpl extends FlowHandler {
         FlowDeque<Flow> flowStack = getFlowStack(context);
         Flow currentFlow = peekFlow(context);
         if (null != currentFlow) {
-            callFinalizer(context, currentFlow);
+            callFinalizer(context, currentFlow, flowStack.size());
         }
         Flow result = flowStack.pollFirst();
         forceSessionUpdateForFlowStack(context, flowStack);
@@ -417,12 +417,12 @@ public class FlowHandlerImpl extends FlowHandler {
         
     }
     
-    private void callFinalizer(FacesContext context, Flow currentFlow) {
+    private void callFinalizer(FacesContext context, Flow currentFlow, int depth) {
         MethodExpression me  = currentFlow.getFinalizer();
         if (null != me) {
             me.invoke(context.getELContext(), null);
         }
-        FlowCDIContext.flowExited();
+        FlowCDIContext.flowExited(currentFlow, depth);
     }
     
     static FlowDeque<Flow> getFlowStack(FacesContext context) {
@@ -444,13 +444,12 @@ public class FlowHandlerImpl extends FlowHandler {
         Map<String, Object> sessionMap = extContext.getSessionMap();
         sessionMap.put(stack.getSessionKey(), stack);
     }
-    
+   
     static class FlowDeque<E> implements Iterable<E>, Serializable {
         
         private static final long serialVersionUID = 7915803727932706270L;
         
         private int returnDepth;
-        private int currentFlowDepth;
         private ArrayDeque<E> data;
         private static class RideAlong implements Serializable {
             private static final long serialVersionUID = -1899365746835118058L;
@@ -486,7 +485,6 @@ public class FlowHandlerImpl extends FlowHandler {
         public void addFirst(E e, String lastDisplayedViewId) {
             rideAlong.addFirst(new RideAlong(lastDisplayedViewId));
             data.addFirst(e);
-            currentFlowDepth++;
         }
         
         public E pollFirst() {
@@ -494,8 +492,24 @@ public class FlowHandlerImpl extends FlowHandler {
             return data.pollFirst();
         }
         
-        public int getCurrentFlowDepth() {
-          return this.currentFlowDepth;
+        public int getCurrentFlowDepth( ) {
+            int returnDepth = this.returnDepth;
+            if (data.size() <= returnDepth) {
+                return 0;
+            }
+            
+            int result = data.size();
+            if (0 < returnDepth) {
+                Iterator<E> stackIter = data.iterator();
+                int i = 0;
+                while ( stackIter.hasNext() && i < returnDepth ) {
+                    stackIter.next();
+                    result--;
+                    i++;
+                } 
+            }
+            
+            return result;
         }
         
         public E peekFirst() {
@@ -560,7 +574,6 @@ public class FlowHandlerImpl extends FlowHandler {
         public void pushReturnMode() {
             this.incrementMaxReturnDepth();
             this.returnDepth++;
-            this.currentFlowDepth--;
         }
         
         public void popReturnMode() {

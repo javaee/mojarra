@@ -1042,6 +1042,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                             }
                         }
                     } else {
+//                        setDidTransition(context, true);
+                        flowHandler.transition(context, flow, null, null, result.viewId);
+                        setDidTransition(context, true);
                         result.newFlow = FlowImpl.SYNTHESIZED_RETURN_CASE_FLOW;
                     }
                 }
