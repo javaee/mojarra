@@ -92,6 +92,8 @@ public class AdminGUIIT {
             HtmlElement element = page.getHtmlElementById("Login.username");
             if (element != null) {
                 break;
+            } else {
+                Thread.sleep(30000);
             }
         }
 
