@@ -117,6 +117,16 @@
         </subant>
     </target>  
 
+    <target name="clean.documentation" 
+            description="Delete documentation in jsf-demo so it is built fresh">
+      <delete failonerror="false">
+        <fileset dir="${demo.dir}/dist">
+          <include name="**/*documentation.zip" />
+          <include name="docs/*" />
+        </fileset>
+      </delete>
+    </target>
+
     <target name="main" description="Build Mojarra">
         <call.modules target="main"/>
     </target>
