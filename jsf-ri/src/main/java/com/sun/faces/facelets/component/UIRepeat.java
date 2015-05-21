@@ -775,9 +775,15 @@ public class UIRepeat extends UINamingContainer {
     }
 
     private boolean requiresRowIteration(VisitContext ctx) {
-
-        return !ctx.getHints().contains(VisitHint.SKIP_ITERATION);
-
+        boolean shouldIterate = !ctx.getHints().contains(VisitHint.SKIP_ITERATION); 
+        if (!shouldIterate) {
+            FacesContext faces = ctx.getFacesContext();  
+            String sourceId = faces.getExternalContext().getRequestParameterMap().get("javax.faces.source");  
+            boolean containsSource = sourceId != null ? sourceId.startsWith(super.getClientId(faces) + getSeparatorChar(faces)): false;  
+            return containsSource;
+        } else {
+            return shouldIterate;
+        }
     }
 
     // Tests whether we need to visit our children as part of
