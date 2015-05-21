@@ -43,6 +43,7 @@ import com.gargoylesoftware.htmlunit.CookieManager;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.util.Cookie;
@@ -69,86 +70,35 @@ public class AdminGUIIT {
 
     @Test
     public void testDeployExerciseUndeploy() throws Exception {
-
         HtmlPage page = null;
-        HtmlSubmitInput button = null;
+        HtmlSubmitInput button;
 
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         CookieManager cm = webClient.getCookieManager();
-
-        /*
-         cm.clearCookies();
-         try {
-         page = getPage("/common/index.jsf?bare=true");
-         } catch (Exception e) {
-         page = getPage("/common/index.jsf");
-         }
-         Cookie jSessionID = cm.getCookie("JSESSIONID");
-        
-         Cookie c1 = new Cookie("", "_common_applications_uploadFrame.jsf", "left:0&top:0&badCookieChars:%28%2C%29%2C%3C%2C%3E%2C@%2C%2C%2C%3B%2C%3A%2C%5C%2C%22%2C/%2C%5B%2C%5D%2C%3F%2C%3D%2C%7B%2C%7D%2C%20%2C%09; treeForm_tree-hi=treeForm:tree:applications; JSESSIONID=" + jSessionID.getValue());
-         cm.addCookie(c1);
-        
-         page = getPage("/common/applications/uploadFrame.jsf?bare=true");
-         HtmlRadioButtonInput localPackagedFile = (HtmlRadioButtonInput) page.getElementById("form:sheet1:section1:prop1:fileChooseRdBtn");
-         page = localPackagedFile.click();
-        
-         // Set the war path
-         HtmlTextInput textInput = (HtmlTextInput) page.getElementById("form:sheet1:section1:prop1:dirPath");
-         String dirPathValue = System.getProperty("warfile");
-         System.err.println("DIRPATH:"+dirPathValue);
-         textInput.setValueAttribute(dirPathValue);
-        
-         // Set the appType
-         List<HtmlSelect> selects = new ArrayList<HtmlSelect>(1);
-         selects = getAllElementsOfGivenClass(page.getDocumentElement(), selects, 
-         HtmlSelect.class);
-         HtmlSelect type = selects.get(0);
-         HtmlOption option = type.getOption(1);
-         type.setSelectedAttribute(option, true);
-        
-         // Set the contextRoot
-         textInput = (HtmlTextInput) page.getElementById("form:war:psection:cxp:ctx");
-         textInput.setValueAttribute("admingui_test_war");
-        
-         // Set the appName
-         textInput = (HtmlTextInput) page.getElementById("form:appClient:psection:nameProp:appName");
-         textInput.setValueAttribute("admingui_test_war");
-         textInput.fireEvent(Event.TYPE_CHANGE);
-
-         // Submit the app
-         button = (HtmlSubmitInput) 
-         page.getElementById("form:title:topButtons:uploadButton");
-         button.focus();
-         client.setJavaScriptEnabled(false);
-         page = button.click();
-         client.setJavaScriptEnabled(true);
-        
-         // Now we visit the deployed app and verify it is successfully deployed
-         this.port = 8080;
-         client.setThrowExceptionOnFailingStatusCode(true);
-         cm.clearCookies();
-         Thread.currentThread().sleep(20000L);
-         page = getPage("/admingui_test_war/faces/main.xhtml");
-         assertTrue(page.asXml().contains("javax.faces.ViewState"));
-         */
-        // Now we undeploy the app using the GUI
         cm.clearCookies();
+
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         webClient.getOptions().setJavaScriptEnabled(false);
         webClient.getOptions().setTimeout(6000000);
-        
+
         String url = "http://localhost:4848/";
 
-        try {
-            page = webClient.getPage(url + "common/index.jsf?bare=true");
-        } catch (Exception e) {
-            page = webClient.getPage(url + "common/index.jsf");
+        for (int i = 0; i < 10; i++) {
+            try {
+                page = webClient.getPage(url + "common/index.jsf?bare=true");
+            } catch (Exception e) {
+                page = webClient.getPage(url + "common/index.jsf");
+            }
+            
+            HtmlElement element = page.getHtmlElementById("Login.username");
+            if (element != null) {
+                break;
+            }
         }
 
         page.getHtmlElementById("Login.username").type("admin");
         page.getHtmlElementById("Login.password").type("adminadmin");
         page = page.getHtmlElementById("loginButton").click();
-        
+
         Cookie jSessionID = cm.getCookie("JSESSIONID");
         Cookie c1 = new Cookie("", "_common_applications_uploadFrame.jsf", "left:0&top:0&badCookieChars:%28%2C%29%2C%3C%2C%3E%2C@%2C%2C%2C%3B%2C%3A%2C%5C%2C%22%2C/%2C%5B%2C%5D%2C%3F%2C%3D%2C%7B%2C%7D%2C%20%2C%09; treeForm_tree-hi=treeForm:tree:applications; JSESSIONID=" + jSessionID.getValue());
         cm.addCookie(c1);
