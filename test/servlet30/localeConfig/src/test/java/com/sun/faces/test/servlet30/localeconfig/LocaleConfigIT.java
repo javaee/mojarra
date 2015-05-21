@@ -38,42 +38,25 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.application.localeConfig;
+package com.sun.faces.test.servlet30.localeconfig;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import javax.faces.FacesException;
-import javax.faces.el.MethodNotFoundException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class LocaleConfigIT {
     
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
@@ -81,6 +64,6 @@ public class LocaleConfigIT {
 
     @Test
     public void testLocaleConfigPositive() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "/faces/localeConfigPositive.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/localeConfigPositive.xhtml");
     }
 }

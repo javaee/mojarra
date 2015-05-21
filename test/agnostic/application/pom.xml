@@ -56,7 +56,6 @@
     <modules>
         <module>basic</module>
         <module>listener</module>
-        <module>localeConfig</module>
         <module>navigation</module>
         <module>navigationJSF2</module>
         <module>runtimeConfig</module>

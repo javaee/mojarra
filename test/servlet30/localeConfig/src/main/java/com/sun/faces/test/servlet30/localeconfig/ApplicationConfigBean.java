@@ -37,10 +37,8 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.localeconfig;
 
-package com.sun.faces.test.agnostic.application.localeConfig;
-
-import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -55,8 +53,9 @@ import static org.junit.Assert.*;
 public class ApplicationConfigBean {
 
     private String title = "Test Application Config";
+
     public String getTitle() {
-        return title; 
+        return title;
     }
 
     public ApplicationConfigBean() {
@@ -86,30 +85,26 @@ public class ApplicationConfigBean {
         // expected locales
         for (j = 0; j < len; j++) {
             assertNotNull("Can't get supportedLocales from Application",
-                          iter = app.getSupportedLocales());
+                    iter = app.getSupportedLocales());
             found = false;
             while (iter.hasNext()) {
                 locale = (Locale) iter.next();
-                if (expected[j][0].equals(locale.getLanguage()) &&
-                    expected[j][1].equals(locale.getCountry())) {
+                if (expected[j][0].equals(locale.getLanguage())
+                        && expected[j][1].equals(locale.getCountry())) {
                     found = true;
                 }
             }
-            assertTrue("Can't find expected locale " + expected[j][0] + "_" +
-                       expected[j][1] + " in supported-locales list",
-                       found);
+            assertTrue("Can't find expected locale " + expected[j][0] + "_"
+                    + expected[j][1] + " in supported-locales list",
+                    found);
         }
 
         return "SUCCESS";
     }
 
-
-
-    private String status="";
+    private String status = "";
 
     public String getStatus() {
         return status;
     }
-
 }
-
