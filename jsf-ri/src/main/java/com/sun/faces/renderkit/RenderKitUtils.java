@@ -442,8 +442,15 @@ public class RenderKitUtils {
         final Object userHandler = component.getAttributes().get(handlerName);
         String behaviorEventName = "action";
         if (component instanceof ClientBehaviorHolder) {
-            Map behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
-            if (null != behaviors && behaviors.containsKey("click")) {
+            Map<String, List<ClientBehavior>> behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
+            boolean mixed = null != behaviors && behaviors.containsKey("click") && behaviors.containsKey("action");
+            if ( mixed ) {
+                behaviorEventName = "click";
+                List<ClientBehavior> clickBehaviors = behaviors.get("click");
+                List<ClientBehavior> actionBehaviors = behaviors.get("action");
+                clickBehaviors.addAll(actionBehaviors);
+                actionBehaviors.clear();
+            } else if ( null != behaviors && behaviors.containsKey("click") ) {
                 behaviorEventName = "click";
             }
         }

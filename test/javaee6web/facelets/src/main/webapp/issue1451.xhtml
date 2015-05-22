@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE html>
+<f:view xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:my="http://www.oracle.com/my">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+    <h:head></h:head>
+    <h:body>
+        <h:outputText id="textForBehavior" value="bbbbbbbbbbbbbbbbbbb"></h:outputText>
+        <h:outputText id="textForBehavior2" value="aaaa"></h:outputText>
+        <h:form prependId="false">
+        <f:ajax event="action"> 
+          <h:commandButton id="myButton" type="button" value="Click me">
+            <my:customBehavior2 event="action"/>
+            <my:customBehavior event="click"/>
+          </h:commandButton>
+        </f:ajax> 
+      </h:form>
+    </h:body>
+  </html>
+</f:view>
+
