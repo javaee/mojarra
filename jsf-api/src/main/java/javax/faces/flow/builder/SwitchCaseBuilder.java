@@ -54,7 +54,8 @@ public abstract class SwitchCaseBuilder {
      * <p class="changed_added_2_2">Create a new case in the current switch.</p>
      * 
      * @since 2.2
-     * 
+     *
+     * @return the builder instance
      */
     public abstract SwitchCaseBuilder switchCase();
         
@@ -68,6 +69,7 @@ public abstract class SwitchCaseBuilder {
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
      * 
+     * @return the builder instance
      */
     public abstract SwitchCaseBuilder condition(ValueExpression expression);
     
@@ -81,6 +83,7 @@ public abstract class SwitchCaseBuilder {
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
      * 
+     * @return the builder instance
      */
     public abstract SwitchCaseBuilder condition(String expression);
     
@@ -92,6 +95,8 @@ public abstract class SwitchCaseBuilder {
      * 
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+     *
+     * @return the builder instance
      * 
      */
     public abstract SwitchCaseBuilder fromOutcome(String outcome);

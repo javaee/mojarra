@@ -81,6 +81,8 @@ public abstract class FaceletsAttachedObjectHandler extends DelegatingMetaTagHan
     /**
      * <p class="changed_added_2_0">Return the underlying handler for
      * this tag handler instance.</p>
+     *
+     * @return the handler instance
      */
     protected final AttachedObjectHandler getAttachedObjectHandlerHelper() {
         return (AttachedObjectHandler) this.getTagHandlerDelegate();

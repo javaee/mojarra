@@ -61,6 +61,8 @@ public abstract class MethodCallBuilder implements NodeBuilder {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract MethodCallBuilder expression(MethodExpression methodExpression);
     
@@ -74,6 +76,8 @@ public abstract class MethodCallBuilder implements NodeBuilder {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract MethodCallBuilder expression(String methodExpression);
     
@@ -88,6 +92,8 @@ public abstract class MethodCallBuilder implements NodeBuilder {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract MethodCallBuilder expression(String methodExpression, Class [] paramTypes);
     
@@ -99,6 +105,8 @@ public abstract class MethodCallBuilder implements NodeBuilder {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract MethodCallBuilder parameters(List<Parameter> parameters);
     
@@ -114,6 +122,8 @@ public abstract class MethodCallBuilder implements NodeBuilder {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract MethodCallBuilder defaultOutcome(String outcome);
     
@@ -129,6 +139,8 @@ public abstract class MethodCallBuilder implements NodeBuilder {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract MethodCallBuilder defaultOutcome(ValueExpression outcome);
 

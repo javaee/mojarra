@@ -57,13 +57,11 @@ import javax.faces.context.FacesContext;
  * <p><strong>Defining Flows</strong></p>
 
  * <p>The implementation must support defining faces flows using the
- * <code>&lt;flow-definition&gt;</code> element as specified in
- * the <a target="_"
- * href="../../../web-facesconfig.html#type_faces-config-flow-definitionType">Application
- * Configuration Resources XML Schema Definition</a>, or by using the 
- * {@link javax.faces.flow.builder.FlowBuilder} API.  Additional means
- * of defining flows may be provided by decorating the {@link
- * FlowHandlerFactory}.</p>
+ * <code>&lt;flow-definition&gt;</code> element as specified in the
+ * Application Configuration Resources XML Schema Definition, or by
+ * using the {@link javax.faces.flow.builder.FlowBuilder} API.
+ * Additional means of defining flows may be provided by decorating the
+ * {@link FlowHandlerFactory}.</p>
 
  * <p><strong>Managing Flows</strong></p>
 

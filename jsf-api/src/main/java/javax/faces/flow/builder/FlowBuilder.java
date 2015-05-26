@@ -45,12 +45,10 @@ import javax.el.ValueExpression;
 import javax.faces.flow.Flow;
 
 /**
- * <p class="changed_added_2_2">A Java language API for building {@link Flow}s. 
- * This API is semantically identical to the
- * <code>&lt;flow-definition&gt;</code> element in the
- * <a target="_"
- * href="../../../../web-facesconfig.html#type_faces-config-flow-definitionType">Application
- * Configuration Resources XML Schema Definition</a>.</p>
+ * <p class="changed_added_2_2">A Java language API for building {@link
+ * Flow}s.  This API is semantically identical to the
+ * <code>&lt;flow-definition&gt;</code> element in the Application
+ * Configuration Resources XML Schema Definition.</p>
  * 
  * <div class="changed_added_2_2">
  * 
@@ -93,6 +91,8 @@ public abstract class FlowBuilder  {
      * @param id the id of the flow
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+
+     * @return the builder instance
      */
     public abstract FlowBuilder id(String definingDocumentId, String id);
     
@@ -113,6 +113,8 @@ public abstract class FlowBuilder  {
      * @param vdlDocumentId The fully qualified path to the view node within this flow.
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+
+     * @return the builder instance
      */
 
     public abstract ViewBuilder viewNode(String viewNodeId, String vdlDocumentId);
@@ -123,6 +125,8 @@ public abstract class FlowBuilder  {
      * and the view id of the component tree that should be selected next.</p>
      * 
      * @since 2.2
+
+     * @return the builder instance
      */
     public abstract NavigationCaseBuilder navigationCase();
 
@@ -139,6 +143,7 @@ public abstract class FlowBuilder  {
      * 
      * @since 2.2
      * 
+     * @return the builder instance
      */
     public abstract SwitchBuilder switchNode(String switchNodeId);
     
@@ -152,6 +157,8 @@ public abstract class FlowBuilder  {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+
+     * @return the builder instance
      */
     public abstract ReturnBuilder returnNode(String returnNodeId);
     
@@ -167,6 +174,8 @@ public abstract class FlowBuilder  {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+
+     * @return the builder instance
      */
     public abstract MethodCallBuilder methodCallNode(String methodCallNodeId);
     
@@ -180,6 +189,8 @@ public abstract class FlowBuilder  {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+
+     * @return the builder instance
      */
     public abstract FlowCallBuilder flowCallNode(String flowCallNodeId);
     
@@ -191,6 +202,8 @@ public abstract class FlowBuilder  {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+
+     * @return the builder instance
      */
     public abstract FlowBuilder initializer(MethodExpression methodExpression);
     
@@ -202,6 +215,7 @@ public abstract class FlowBuilder  {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     * @return the builder instance
      */
     public abstract FlowBuilder initializer(String methodExpression);
     
@@ -213,6 +227,7 @@ public abstract class FlowBuilder  {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     * @return the builder instance
      */
     public abstract FlowBuilder finalizer(MethodExpression methodExpression);
     
@@ -224,6 +239,8 @@ public abstract class FlowBuilder  {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract FlowBuilder finalizer(String methodExpression);
 
@@ -240,6 +257,8 @@ public abstract class FlowBuilder  {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract FlowBuilder inboundParameter(String name, ValueExpression expression);
         
@@ -256,6 +275,8 @@ public abstract class FlowBuilder  {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract FlowBuilder inboundParameter(String name, String expression);
 
@@ -270,6 +291,8 @@ public abstract class FlowBuilder  {
      * called prior to this method being called.
      * 
      * @since 2.2
+     * 
+     * @return the completely built {@code Flow}
      */
     public abstract Flow getFlow();
     

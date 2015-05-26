@@ -52,6 +52,8 @@ public abstract class SwitchBuilder implements NodeBuilder {
     /**
      * <p class="changed_added_2_2">Create a switch case in the current switch.</p>
      * @since 2.2
+     *
+     * @return the builder instance
      */
     
     public abstract SwitchCaseBuilder switchCase();
@@ -64,6 +66,7 @@ public abstract class SwitchBuilder implements NodeBuilder {
      * @since 2.2
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
+     * @return the builder instance
      */
     
     public abstract SwitchCaseBuilder defaultOutcome(String outcome);
@@ -75,6 +78,8 @@ public abstract class SwitchBuilder implements NodeBuilder {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     
     public abstract SwitchCaseBuilder defaultOutcome(ValueExpression outcome);

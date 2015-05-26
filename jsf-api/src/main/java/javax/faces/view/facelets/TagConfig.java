@@ -70,6 +70,8 @@ public interface TagConfig {
     /**
      * <p class="changed_added_2_0">Return the <code>Tag</code>
      * representing this handler.</p>
+     *
+     * @return the {@code Tag} instance
      */
     public Tag getTag();
 
@@ -77,12 +79,16 @@ public interface TagConfig {
      * <p class="changed_added_2_0">The next {@link FaceletHandler}
      * (child or children) to be applied.  This must never be
      * <code>null</code>.</p>
+     *
+     * @return the next {@code FaceletHandler} to be applied
      */
     public FaceletHandler getNextHandler();
 
     /**
      * <p class="changed_added_2_0">A document-unique id, follows the
      * convention "_tagId##"</p>
+     *
+     * @return the id of this tag, unique within the current document.
      */
     public String getTagId();
 }

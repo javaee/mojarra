@@ -72,6 +72,9 @@ public interface AttributeHandler {
      * of the attribute name after evaluating EL.</p>
      *
      * @param ctx the <code>FaceletContext</code> for this view execution
+     *
+     * @return the literal string value of the attribute name after
+     * evaluating EL
      */
     public String getAttributeName(FaceletContext ctx);
 }

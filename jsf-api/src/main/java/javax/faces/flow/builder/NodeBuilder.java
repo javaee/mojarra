@@ -54,6 +54,8 @@ public interface NodeBuilder {
      * be the start node.</p>
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     
     public NodeBuilder markAsStartNode();

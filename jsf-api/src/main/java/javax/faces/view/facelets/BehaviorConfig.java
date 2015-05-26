@@ -52,6 +52,8 @@ public interface BehaviorConfig extends TagConfig {
      * <p>Return the value of the behavior-id.</p>
      *
      * @since 2.0
+     *
+     * @return the value of behavior-id
      */
     public String getBehaviorId();
 

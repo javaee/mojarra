@@ -56,6 +56,8 @@ public abstract class NavigationCaseBuilder {
      * @param fromViewId the from-view-id
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+     *
+     * @return the builder instance
      */
 
     public abstract NavigationCaseBuilder fromViewId(String fromViewId);
@@ -67,6 +69,8 @@ public abstract class NavigationCaseBuilder {
      * @param fromAction the from-action
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+     *
+     * @return the builder instance
      */
 
     public abstract NavigationCaseBuilder fromAction(String fromAction);
@@ -78,6 +82,8 @@ public abstract class NavigationCaseBuilder {
      * @param fromOutcome the from-outcome
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+     *
+     * @return the builder instance
      */
 
     public abstract NavigationCaseBuilder fromOutcome(String fromOutcome);
@@ -89,6 +95,8 @@ public abstract class NavigationCaseBuilder {
      * @param toViewId the to-view-id
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+     *
+     * @return the builder instance
      */
 
     public abstract NavigationCaseBuilder toViewId(String toViewId);
@@ -100,6 +108,8 @@ public abstract class NavigationCaseBuilder {
      * @param toFlowDocumentId the to-flow-document-id
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+     *
+     * @return the builder instance
      */
 
     public abstract NavigationCaseBuilder toFlowDocumentId(String toFlowDocumentId);
@@ -111,6 +121,8 @@ public abstract class NavigationCaseBuilder {
      * @param condition the &lt;if&gt;
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+     *
+     * @return the builder instance
      */
 
     public abstract NavigationCaseBuilder condition(String condition);
@@ -122,6 +134,8 @@ public abstract class NavigationCaseBuilder {
      * @param condition the &lt;if&gt;
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+     *
+     * @return the builder instance
      */
 
     public abstract NavigationCaseBuilder condition(ValueExpression condition);
@@ -131,6 +145,8 @@ public abstract class NavigationCaseBuilder {
      * <p class="changed_added_2_2">Create a redirect within this navigation case.</p>
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
 
     public abstract RedirectBuilder redirect();
@@ -141,6 +157,7 @@ public abstract class NavigationCaseBuilder {
      * and setting the includeViewParams option.</p>
      * 
      * @since 2.2
+     *
      */
     
     public abstract class RedirectBuilder {
@@ -152,6 +169,8 @@ public abstract class NavigationCaseBuilder {
          * @param value the value of the redirect parameter.  May not be a {@code ValueExpression}.
          * @throws NullPointerException if any of the parameters are {@code null}
          * @since 2.2
+         *
+         * @return the builder instance
          */
 
         public abstract RedirectBuilder parameter(String name, String value);
@@ -160,6 +179,8 @@ public abstract class NavigationCaseBuilder {
          * <p class="changed_added_2_2">Indicates the current redirect should include view parameters.</p>
          * 
          * @since 2.2
+         *
+         * @return the builder instance
          */
 
         public abstract RedirectBuilder includeViewParams();

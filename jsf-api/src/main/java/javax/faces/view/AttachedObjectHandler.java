@@ -75,6 +75,8 @@ public interface AttachedObjectHandler {
      * <p class="changed_added_2_0">Return the value of the "for"
      * attribute specified by the <em>page author</em> on the tag for
      * this <code>AttachedObjectHandler</code>.</p>
+
+     * @return the value of the "for" attribute for this attached object
      */
     public String getFor();
 

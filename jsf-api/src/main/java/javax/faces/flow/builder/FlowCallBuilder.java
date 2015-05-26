@@ -56,6 +56,8 @@ public abstract class FlowCallBuilder implements NodeBuilder {
      * @param flowId the id of the called flow.  May not be {@code null}
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract FlowCallBuilder flowReference(String flowDocumentId, 
                                                   String flowId);
@@ -67,6 +69,8 @@ public abstract class FlowCallBuilder implements NodeBuilder {
      * @param value the value of the parameter
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract FlowCallBuilder outboundParameter(String name, ValueExpression value);
         
@@ -77,6 +81,8 @@ public abstract class FlowCallBuilder implements NodeBuilder {
      * @param value the value of the parameter
      * @throws NullPointerException if any of the parameters are {@code null}
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract FlowCallBuilder outboundParameter(String name, String value);
 

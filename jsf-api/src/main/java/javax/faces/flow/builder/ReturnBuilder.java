@@ -56,6 +56,8 @@ public abstract class ReturnBuilder implements NodeBuilder {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract ReturnBuilder fromOutcome(String outcome);
     
@@ -67,6 +69,8 @@ public abstract class ReturnBuilder implements NodeBuilder {
      * @throws NullPointerException if any of the parameters are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the builder instance
      */
     public abstract ReturnBuilder fromOutcome(ValueExpression outcome);
 
