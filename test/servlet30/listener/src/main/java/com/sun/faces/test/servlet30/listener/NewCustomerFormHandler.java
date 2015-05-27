@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.application.listener;
+package com.sun.faces.test.servlet30.listener;
 
 import java.util.HashMap;
 import java.util.List;

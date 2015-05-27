@@ -117,6 +117,7 @@
         <module>initRequestParameterMap</module>
         <module>invalidMapping</module>
         <module>lateBindings</module>
+        <module>listener</module>
         <module>localeConfig</module>
         <module>multiTenantSetsTccl</module>
         <module>multiTenantUsesFactoryFinder</module>
