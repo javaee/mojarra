@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -42,21 +42,14 @@
 -->
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-    version="2.0">
-
-  <application>
-    <action-listener>com.sun.faces.test.agnostic.application.runtimeConfig.ActionListenerTestImpl</action-listener>
-    <navigation-handler>com.sun.faces.test.agnostic.application.runtimeConfig.NavigationHandlerTestImpl</navigation-handler>
-    <property-resolver>com.sun.faces.test.agnostic.application.runtimeConfig.PropertyResolverTestImpl</property-resolver>
-    <variable-resolver>com.sun.faces.test.agnostic.application.runtimeConfig.VariableResolverTestImpl</variable-resolver>
-    <view-handler>com.sun.faces.test.agnostic.application.runtimeConfig.ViewHandlerTestImpl</view-handler>
-
-<!--
-    <default-render-kit-id>WackyRenderKit</default-render-kit-id>
--->
-
-  </application>
-
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+              version="2.0">
+    <application>
+        <action-listener>com.sun.faces.test.servlet30.runtimeconfig.ActionListenerTestImpl</action-listener>
+        <navigation-handler>com.sun.faces.test.servlet30.runtimeconfig.NavigationHandlerTestImpl</navigation-handler>
+        <property-resolver>com.sun.faces.test.servlet30.runtimeconfig.PropertyResolverTestImpl</property-resolver>
+        <variable-resolver>com.sun.faces.test.servlet30.runtimeconfig.VariableResolverTestImpl</variable-resolver>
+        <view-handler>com.sun.faces.test.servlet30.runtimeconfig.ViewHandlerTestImpl</view-handler>
+    </application>
 </faces-config>
