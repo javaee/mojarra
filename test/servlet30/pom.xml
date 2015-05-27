@@ -122,6 +122,7 @@
         <module>multiTenantSetsTccl</module>
         <module>multiTenantUsesFactoryFinder</module>
         <module>navigation</module>
+        <module>navigation2</module>
         <module>nestedDataTables</module>
         <module>nestedLoadBundles</module>
         <module>neverUnwrapExceptions</module>

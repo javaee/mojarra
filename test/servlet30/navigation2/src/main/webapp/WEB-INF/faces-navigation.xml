@@ -204,8 +204,8 @@
 
     <managed-bean>
      <managed-bean-name>navbean</managed-bean-name>
-      <managed-bean-class>com.sun.faces.test.agnostic.application.navigation.NavBean</managed-bean-class>
-      <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
+      <managed-bean-class>com.sun.faces.test.servlet30.navigation2.NavBean</managed-bean-class>
+  
+      <managed-bean-scope>request</managed-bean-scope></managed-bean>
 
 </faces-config>

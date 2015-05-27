@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.application.navigation;
+package com.sun.faces.test.servlet30.navigation2;
 
 import java.io.IOException;
 import java.io.Serializable;

@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.application.navigation;
+package com.sun.faces.test.servlet30.navigation2;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

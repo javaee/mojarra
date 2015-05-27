@@ -55,7 +55,6 @@
     <name>Mojarra ${project.version} - Test - Agnostic - Application</name>
     <modules>
         <module>basic</module>
-        <module>navigation</module>
         <module>navigationJSF2</module>
     </modules>
 </project>
