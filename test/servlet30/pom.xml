@@ -131,6 +131,7 @@
         <module>requestCharEncodingNoSession</module>
         <module>resource</module>
         <module>resourceExposure</module>
+        <module>runtimeConfig</module>
         <module>serializeServerState</module>
         <module>sessionScope</module>
         <module>stateViewExpiredExceptionMissing</module>
