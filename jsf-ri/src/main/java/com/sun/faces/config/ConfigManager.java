@@ -879,15 +879,17 @@ public class ConfigManager {
                              */
                             ArrayList<Class<?>> toRemove = new ArrayList<>(1);
                             String sourceURIString = sourceURI.toString();
-                            for (Class<?> clazz : annotatedSet) {
-                                if (sourceURIString.contains(clazz.getProtectionDomain().getCodeSource().getLocation().toString())) {
-                                    toRemove.add(clazz);
+                            if (annotatedSet != null) {
+                                for (Class<?> clazz : annotatedSet) {
+                                    if (sourceURIString.contains(clazz.getProtectionDomain().getCodeSource().getLocation().toString())) {
+                                        toRemove.add(clazz);
+                                    }
+                                }
+                                annotatedSet.removeAll(toRemove);
+                            }
                         }
                     }
-                            annotatedSet.removeAll(toRemove);
                 }
-            }
-        }
             }
         }
 
