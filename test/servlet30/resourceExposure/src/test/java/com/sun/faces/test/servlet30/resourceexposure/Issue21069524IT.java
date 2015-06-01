@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.resourceExposure;
+package com.sun.faces.test.servlet30.resourceexposure;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.TextPage;
@@ -64,16 +64,13 @@ public class Issue21069524IT {
     }
 
     @Test
-    public void test21069524() throws Exception {
+    public void testBugDB21069524() throws Exception {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         TextPage page = webClient.getPage(webUrl + "javax.faces.resource/issue21069579.xhtml/.faces?ln=showcase");
         String pageXml = page.getContent();
         assertTrue(!pageXml.contains("<h:form"));
         assertTrue(!pageXml.contains("<h:body"));
-        
         int status = page.getWebResponse().getStatusCode();
         assertNotEquals(200L, (long) status);
-        
     }
-
 }
