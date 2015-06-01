@@ -39,17 +39,8 @@
  */
 package com.sun.faces.cdi;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Iterator;
+import com.sun.faces.config.WebConfiguration;
 import javax.faces.context.FacesContext;
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import org.xml.sax.InputSource;
 
 /**
  * An abstract base class used by the CDI producers for some common
@@ -67,60 +58,12 @@ abstract class CdiProducer {
     protected void checkActive() {
         if (active == null) {
             FacesContext facesContext = FacesContext.getCurrentInstance();
-            active = getFacesConfigXmlVersion(facesContext).equals("2.3");
+            WebConfiguration webConfig = WebConfiguration.getInstance(facesContext.getExternalContext());
+            active = webConfig.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.EnableCdiResolverChain);
         }
 
         if (!active) {
-            throw new IllegalStateException("Cannot use @Inject without stating JSF 2.3 version");
-        }
-    }
-
-    /**
-     * Get the faces-config.xml version (if any).
-     *
-     * @param facesContext the Faces context.
-     * @return the version found, or "" if none found.
-     */
-    protected String getFacesConfigXmlVersion(FacesContext facesContext) {
-        String result = "";
-        InputStream stream = null;
-        try {
-            URL url = facesContext.getExternalContext().getResource("/WEB-INF/faces-config.xml");
-            if (url != null) {
-                XPathFactory factory = XPathFactory.newInstance();
-                XPath xpath = factory.newXPath();
-                xpath.setNamespaceContext(new JavaeeNamespaceContext());
-                stream = url.openStream();
-                result = xpath.evaluate("string(/javaee:faces-config/@version)", new InputSource(stream));
-            }
-        } catch (MalformedURLException mue) {
-        } catch (XPathExpressionException | IOException xpee) {
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException ioe) {
-                }
-            }
-        }
-        return result;
-    }
-
-    public class JavaeeNamespaceContext implements NamespaceContext {
-
-        @Override
-        public String getNamespaceURI(String prefix) {
-            return "http://xmlns.jcp.org/xml/ns/javaee";
-        }
-
-        @Override
-        public String getPrefix(String namespaceURI) {
-            return "javaee";
-        }
-
-        @Override
-        public Iterator getPrefixes(String namespaceURI) {
-            return null;
+            throw new IllegalStateException("Cannot use @Inject without setting context-param \"javax.faces.ENABLE_CDI_RESOLVER_CHAIN\" to \"true\"");
         }
     }
 }

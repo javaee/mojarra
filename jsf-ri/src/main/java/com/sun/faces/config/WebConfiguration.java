@@ -1422,6 +1422,9 @@ public class WebConfiguration {
             false),
         ForceAlwaysWriteFlashCookie(
             "com.sun.faces.forceAlwaysWriteFlashCookie",
+            false),
+        EnableCdiResolverChain(
+            "javax.faces.ENABLE_CDI_RESOLVER_CHAIN",
             false);
 
         private BooleanWebContextInitParameter alternate;
