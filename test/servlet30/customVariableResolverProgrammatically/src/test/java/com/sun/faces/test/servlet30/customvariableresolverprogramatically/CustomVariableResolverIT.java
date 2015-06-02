@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,20 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.customvariableresolverprogrammatically;
 
-package com.sun.faces.test.servlet.customvariableresolverprogrammatically;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-import javax.faces.event.SystemEvent;
+public class CustomVariableResolverIT  {
 
-/**
- *
- * @author edburns
- */
-public class TestBeanEventClass extends SystemEvent {
-    private static final long serialVersionUID = 9094883372644090191L;
+    private String webUrl;
+    private WebClient webClient;
 
-    public TestBeanEventClass(TestBean source) {
-        super(source);
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    /**
+     *
+     * <p>Verify that the bean is successfully resolved</p>
+     */
+    @Test
+    public void testReplaceVariableResolver() throws Exception {
+	HtmlPage page = webClient.getPage(webUrl + "faces/test.jsp");
+	assertTrue(-1 != page.asText().indexOf("Invoking the resolver chain: success."));
+	assertTrue(-1 != page.asText().indexOf("Invoking the resolver directly: success."));
+    }
 }

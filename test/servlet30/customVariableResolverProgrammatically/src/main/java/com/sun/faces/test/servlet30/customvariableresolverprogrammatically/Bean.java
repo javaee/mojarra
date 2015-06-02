@@ -47,7 +47,7 @@
  * and open the template in the editor.
  */
 
-package com.sun.faces.test.servlet.customvariableresolverprogrammatically;
+package com.sun.faces.test.servlet30.customvariableresolverprogrammatically;
 
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;

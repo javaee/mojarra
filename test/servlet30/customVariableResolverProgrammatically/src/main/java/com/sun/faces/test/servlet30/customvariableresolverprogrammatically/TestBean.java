@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.servlet.customvariableresolverprogrammatically;
+package com.sun.faces.test.servlet30.customvariableresolverprogrammatically;
 
 import java.beans.FeatureDescriptor;
 import java.util.ArrayList;

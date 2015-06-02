@@ -38,17 +38,26 @@
  * holder.
  */
 
-package com.sun.faces.test.servlet.customvariableresolverprogrammatically;
+package com.sun.faces.test.servlet30.customvariableresolverprogrammatically;
 
-/**
- *
- * @author edburns
- */
-public class TestBeanPostConstructEvent extends TestBeanEventClass {
+public class SpecialBean {
 
-    public TestBeanPostConstructEvent(TestBean source) {
-        super(source);
+        private final String special;
+
+        public SpecialBean(String specialValue) {
+            special = specialValue;
+        }
+
+        public String getString() {
+            return special;
+        }
+
+        public boolean equals(Object target) {
+           if (!(target instanceof SpecialBean)) {
+              return false;
+           } else {
+           return (special.equals(((SpecialBean) target).getString()));
+           }
+        }
     }
-    
 
-}

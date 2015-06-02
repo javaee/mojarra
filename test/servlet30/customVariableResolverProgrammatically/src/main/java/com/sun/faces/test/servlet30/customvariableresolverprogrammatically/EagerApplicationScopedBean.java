@@ -38,15 +38,27 @@
  * holder.
  */
 
-package com.sun.faces.test.servlet.customvariableresolverprogrammatically;
+package com.sun.faces.test.servlet30.customvariableresolverprogrammatically;
 
+import javax.annotation.PostConstruct;
+import javax.faces.application.Application;
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import javax.faces.el.VariableResolver;
 
-public class TestBeanPreDestroyEvent extends TestBeanEventClass {
-    private static final long serialVersionUID = -732534303887158542L;
+@ManagedBean(eager=true)
+@ApplicationScoped
+public class EagerApplicationScopedBean {
 
-    public TestBeanPreDestroyEvent(TestBean source) {
-        super(source);
+    @PostConstruct
+    public void installProgrammaticListener() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application app = context.getApplication();
+        VariableResolver oldVr = app.getVariableResolver();
+        VariableResolver newVr = new NewVariableResolver(oldVr, context);
+        app.setVariableResolver(newVr);
+
     }
-    
 
 }

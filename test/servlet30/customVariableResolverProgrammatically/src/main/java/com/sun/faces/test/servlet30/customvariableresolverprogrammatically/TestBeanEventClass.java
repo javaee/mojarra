@@ -38,25 +38,19 @@
  * holder.
  */
 
-package com.sun.faces.test.servlet.customvariableresolverprogrammatically;
-public class SpecialBean {
+package com.sun.faces.test.servlet30.customvariableresolverprogrammatically;
 
-        private final String special;
+import javax.faces.event.SystemEvent;
 
-        public SpecialBean(String specialValue) {
-            special = specialValue;
-        }
+/**
+ *
+ * @author edburns
+ */
+public class TestBeanEventClass extends SystemEvent {
+    private static final long serialVersionUID = 9094883372644090191L;
 
-        public String getString() {
-            return special;
-        }
-
-        public boolean equals(Object target) {
-           if (!(target instanceof SpecialBean)) {
-              return false;
-           } else {
-           return (special.equals(((SpecialBean) target).getString()));
-           }
-        }
+    public TestBeanEventClass(TestBean source) {
+        super(source);
     }
 
+}
