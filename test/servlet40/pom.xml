@@ -60,10 +60,10 @@
     </dependencies>
     <modules>
         <module>el</module>
-        <module>explicitRefreshPeriod</module>
         <module>faceletCacheFactory</module>
         <module>facelets</module>
-        <module>productionRefreshPeriod</module>
+        <module>refreshPeriodExplicit</module>
+        <module>refreshPeriodProduction</module>
         <module>systemEvent</module>
   </modules>
 </project>
