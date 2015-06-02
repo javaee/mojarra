@@ -395,9 +395,30 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
                            new DocumentOrderingWrapper(docD));
         DocumentOrderingWrapper[] wrappers =
               documents.toArray(new DocumentOrderingWrapper[documents.size()]);
+        
+        String[] originalOrder = (DocumentOrderingWrapper.getIds(wrappers)).toArray(new String[wrappers.length]);
+        
         DocumentOrderingWrapper.sort(wrappers);
-                String[] ids = { "A", "C", "D", "B" };
-        validate(ids, wrappers);
+       
+        String[] orderedNames = (DocumentOrderingWrapper.getIds(wrappers)).toArray(new String[wrappers.length]);
+        
+        List<String> original = Arrays.asList(originalOrder);
+		List<String> actually = Arrays.asList(orderedNames);
+        
+		List<String> possibility1 = Arrays.asList("A", "C", "D", "B");
+		List<String> possibility2 = Arrays.asList("C", "A", "D", "B");
+		List<String> possibility3 = Arrays.asList("C", "D", "A", "B");
+		
+		boolean assertion = (
+				actually.equals(possibility1) || 
+				actually.equals(possibility2) || 
+				actually.equals(possibility3)
+			);
+		String message = "\n original: " + original + "\n expected: " + possibility1 + 
+				"\n       or: " + possibility2 +
+				"\n       or: " + possibility3 +
+				"\n actually: " + actually + "\n";
+		assertTrue(message, assertion);
 
     }
 

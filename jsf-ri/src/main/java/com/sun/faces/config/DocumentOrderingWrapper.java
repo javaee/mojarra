@@ -42,9 +42,14 @@ package com.sun.faces.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
@@ -364,8 +369,86 @@ public class DocumentOrderingWrapper {
             throw new ConfigurationException(msg);
         }
 
-        boolean doMore = true;
-        int numberOfPasses = 0;
+        // Sort the documents such that specified ordering will be considered.
+        //
+        // It turns out that some of the specified ordering, if it was not discovered by the sort routine 
+        // until later in its processing, was not being considered correctly in the ordering algorithm.
+        //
+        // This preSort method puts all of the documents with specified ordering as early on in the
+        // list of documents as possible for Mojarra to consider it quickly, and be 
+        // able to use its ordering algorithm to the best of its ability.
+        preSort(documents);
+
+        // original inner sort algorithm
+        int numberOfPasses = innerSort(documents);
+        
+        // final sort
+        for (int i = 0; i < documents.length; i++) {
+        	LinkedList<String> ids = getIds(documents);
+        	if (done(documents, ids)) {
+        		break;
+        	}
+        }
+
+        if (t != null) {
+            t.stopTiming();
+            t.logResult("\"faces-config\" document sorting complete in " + numberOfPasses + '.');
+        }
+
+    }
+    
+    // Check to see if the sort is complete, and if not, finish it, if possible.
+    public static boolean done(DocumentOrderingWrapper[] documents, LinkedList<String> ids) {
+    	
+    	for (int i = 0; i < documents.length; i++) {
+    		int ii = 0;
+    		for(String documentId : ids) {
+    			if (documents[i].getDocumentId().equals(documentId)) {
+    				break;
+    			}
+    			if (documents[i].isBefore(documentId)) {
+    				if (LOGGER.isLoggable(Level.FINE)) {
+    	                LOGGER.log(Level.FINE, "done: " + documentId + " should be after " + documents[i].getDocumentId() + 
+    	                		" given that it should be before: " + Arrays.asList(documents[i].getBeforeIds()));
+    	            }
+    				
+    				// we have a document that is out of order, and his index is ii, he belongs at index i, and all the documents in between need to be shifted left.
+    				DocumentOrderingWrapper temp = null;
+    				for (int j = 0; j < documents.length; j++) {
+    					// This is one that is out of order and needs to be moved.
+    					if (j==ii) {
+    						temp = documents[j];
+    					}
+    					// this is one in between that needs to be shifted left.
+    					if (temp != null && j != i) {
+    						documents[j] = documents[j+1];
+    					}
+    					// this is where the one that is out of order needs to be moved to.
+    					if (j==i) {
+    						documents[j] = temp;
+    						return false;
+    					}
+    				}
+    			}
+    			ii = ii + 1;
+    		}
+    	}
+    	
+    	return true;
+    }
+    
+    public static LinkedList<String> getIds(DocumentOrderingWrapper[] documents) {
+    	LinkedList<String> ids = new LinkedList<String>();
+    	for (int i = 0; i < documents.length; i++) {
+    		ids.add(documents[i].getDocumentId());
+    	}
+    	return ids;
+    }
+    
+    public static int innerSort(DocumentOrderingWrapper[] documents) {
+    	
+    	int numberOfPasses = 0;
+    	boolean doMore = true;
 
         while (doMore) {
             numberOfPasses++;
@@ -422,12 +505,8 @@ public class DocumentOrderingWrapper {
                 doMore = true;
             }
         }
-
-        if (t != null) {
-            t.stopTiming();
-            t.logResult("\"faces-config\" document sorting complete in " + numberOfPasses + '.');
-        }
-
+        
+        return numberOfPasses;
     }
 
     // ----------------------------------------------------- Private Methods
@@ -692,6 +771,70 @@ public class DocumentOrderingWrapper {
 
     }
 
+    public static HashMap<String, DocumentOrderingWrapper> getDocumentHashMap(DocumentOrderingWrapper[] documents) {
+        HashMap<String, DocumentOrderingWrapper> configMap = new HashMap<String, DocumentOrderingWrapper>();
+    
+        for (DocumentOrderingWrapper document : documents) {
+            String name = document.id;
+            if (name != null && !"".equals(name)) {
+                configMap.put(name, document);
+            }
+        }
+    
+        return configMap;
+    }
+
+    public static void preSort(DocumentOrderingWrapper[] documents) {
+        List<DocumentOrderingWrapper> anonymousAndUnorderedList = new ArrayList<DocumentOrderingWrapper>();
+        Map<Integer, Integer> linkedMap = new LinkedHashMap<Integer, Integer>();
+        
+        DocumentOrderingWrapper[] copyOfDocuments = new DocumentOrderingWrapper[documents.length];
+        System.arraycopy( documents, 0, copyOfDocuments, 0, documents.length );
+
+        int i = 0;
+        for (DocumentOrderingWrapper w : documents) {
+        	
+            String[] bfs = w.getBeforeIds();
+            String[] afs = w.getAfterIds();
+            int knowledge = bfs.length + afs.length;
+
+            if ((w.id == null || "".equals(w.id)) && (!w.isOrdered())) {
+            	anonymousAndUnorderedList.add(w);
+            } else {
+                linkedMap.put(i, knowledge);
+            }
+            i++;
+        }
+        
+        linkedMap = descendingByValue(linkedMap);
+
+        i = 0;
+        for (Map.Entry<Integer, Integer> entry : linkedMap.entrySet()) {
+            Integer index = entry.getKey();
+            documents[i] = copyOfDocuments[index];
+            i++;
+        }
+        for (DocumentOrderingWrapper w : anonymousAndUnorderedList) {
+            documents[i] = w;
+            i++;
+        }
+
+    }
+    
+    public static <K, V extends Comparable<? super V>> Map<K, V> descendingByValue(Map<K, V> map) {
+        List<Map.Entry<K, V>> list = new LinkedList<Map.Entry<K, V>>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+            public int compare(Map.Entry<K, V> a, Map.Entry<K, V> b) {
+                return (b.getValue()).compareTo(a.getValue());
+            }
+        });
+
+        Map<K, V> result = new LinkedHashMap<K, V>();
+        for (Map.Entry<K, V> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
+    }
 
     // ---------------------------------------------------------- Nested Classes
 
