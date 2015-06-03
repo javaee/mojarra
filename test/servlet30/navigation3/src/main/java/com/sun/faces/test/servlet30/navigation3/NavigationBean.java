@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.application.navigationJSF2;
+package com.sun.faces.test.servlet30.navigation3;
 
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.NavigationHandlerImpl;

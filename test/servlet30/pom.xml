@@ -123,6 +123,7 @@
         <module>multiTenantUsesFactoryFinder</module>
         <module>navigation</module>
         <module>navigation2</module>
+        <module>navigation3</module>
         <module>nestedDataTables</module>
         <module>nestedLoadBundles</module>
         <module>neverUnwrapExceptions</module>

@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.application.navigationJSF2;
+package com.sun.faces.test.servlet30.navigation3;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
