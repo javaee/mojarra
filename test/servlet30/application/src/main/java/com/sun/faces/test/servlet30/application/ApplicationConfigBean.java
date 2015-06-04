@@ -234,7 +234,7 @@ public class ApplicationConfigBean {
         Application app = fc.getApplication();
 
         app.addComponent(testComponent.getComponentType(), 
-            "com.sun.faces.test.agnostic.application.basic.TestComponent");
+            "com.sun.faces.test.servlet30.application.TestComponent");
 
         newTestComponent = (TestComponent)app.createComponent(testComponent.getComponentType());
         assertTrue(null != newTestComponent && newTestComponent != testComponent);
@@ -289,7 +289,7 @@ public class ApplicationConfigBean {
         // runtime addition
 
         app.addConverter(testConverter.getConverterId(),
-            "com.sun.faces.test.agnostic.application.basic.TestConverter");
+            "com.sun.faces.test.servlet30.application.TestConverter");
         newTestConverter = (TestConverter)app.createConverter(testConverter.getConverterId());
         assertTrue(null != newTestConverter && newTestConverter != testConverter);
 
