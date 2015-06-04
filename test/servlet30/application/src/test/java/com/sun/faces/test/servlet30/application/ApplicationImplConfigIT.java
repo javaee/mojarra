@@ -38,33 +38,19 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.application;
+package com.sun.faces.test.servlet30.application;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import javax.faces.FacesException;
-import javax.faces.el.MethodNotFoundException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class ApplicationImplConfigIT {
     
-    /**
-     * Stores the web URL.
-     */
     private String webUrl;
-    /**
-     * Stores the web client.
-     */
     private WebClient webClient;
 
-    /**
-     * Setup before testing.
-     */
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
@@ -72,9 +58,6 @@ public class ApplicationImplConfigIT {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
-    /**
-     * Tear down after testing.
-     */
     @After
     public void tearDown() {
         webClient.closeAllWindows();
@@ -124,5 +107,4 @@ public class ApplicationImplConfigIT {
     public void testGetValidatorIds() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "/faces/appConfig.jsp");
     }
-
 }

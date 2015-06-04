@@ -38,13 +38,19 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.application.basic;
+package com.sun.faces.test.servlet30.application;
 
-import javax.faces.convert.NumberConverter;
+import javax.faces.component.UIComponentBase;
 
-public class TestConverter extends NumberConverter {
+public class TestComponent extends UIComponentBase {
 
-    public String getConverterId() {
-        return "TestConverter";
+    public String getFamily() {
+        return "TestFamily";
     }
+
+
+    public String getComponentType() {
+        return "TestComponent";
+    }
+
 }

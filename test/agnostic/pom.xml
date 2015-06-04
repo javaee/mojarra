@@ -61,7 +61,6 @@
         </dependency>
     </dependencies>
     <modules>
-        <module>application</module>
         <module>config</module>
         <module>context</module>
         <module>converter</module>

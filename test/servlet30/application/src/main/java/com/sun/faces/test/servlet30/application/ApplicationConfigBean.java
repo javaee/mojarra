@@ -38,25 +38,18 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.application.basic;
+package com.sun.faces.test.servlet30.application;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
-import javax.faces.application.NavigationHandler;
-import javax.faces.application.StateManager;
-import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.el.PropertyResolver;
-import javax.faces.el.VariableResolver;
-import javax.faces.event.ActionListener;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.Validator;
 import java.util.Iterator;
-import java.util.Locale;
 
 import static org.junit.Assert.*;
 
