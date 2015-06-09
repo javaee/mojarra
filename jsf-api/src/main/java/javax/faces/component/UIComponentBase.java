@@ -77,6 +77,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -2343,6 +2344,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         //private Map<String, Object> attributes;
         private transient Map<String, PropertyDescriptor> pdMap;
+        private transient ConcurrentMap<String, Method> readMap;
         private transient UIComponent component;
         private static final long serialVersionUID = -6773035086539772945L;
 
@@ -2352,7 +2354,6 @@ public abstract class UIComponentBase extends UIComponent {
 
             this.component = component;
             this.pdMap = ((UIComponentBase) component).getDescriptorMap();
-
         }
 
         public boolean containsKey(Object keyObj) {
@@ -2391,7 +2392,15 @@ public abstract class UIComponentBase extends UIComponent {
                         getPropertyDescriptor(key);
                 if (pd != null) {
                     try {
-                        Method readMethod = pd.getReadMethod();
+                        if (null == readMap){
+                            readMap = new ConcurrentHashMap<String, Method>();
+                        }
+                        Method readMethod = readMap.get(key);
+                        if (null == readMethod) {
+                            readMethod = pd.getReadMethod();
+                            readMap.putIfAbsent(key, readMethod);
+                        }
+                                
                         if (readMethod != null) {
                             result = (readMethod.invoke(component,
                                     EMPTY_OBJECT_ARRAY));
