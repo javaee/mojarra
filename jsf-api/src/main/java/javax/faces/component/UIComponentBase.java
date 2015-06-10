@@ -2393,12 +2393,12 @@ public abstract class UIComponentBase extends UIComponent {
                 if (pd != null) {
                     try {
                         if (null == readMap){
-                            readMap = new ConcurrentHashMap<String, Method>();
+                            readMap = new ConcurrentHashMap<>();
                         }
                         Method readMethod = readMap.get(key);
                         if (null == readMethod) {
                             readMethod = pd.getReadMethod();
-                            readMap.putIfAbsent(key, readMethod);
+                            readMap.put(key, readMethod);
                         }
                                 
                         if (readMethod != null) {
