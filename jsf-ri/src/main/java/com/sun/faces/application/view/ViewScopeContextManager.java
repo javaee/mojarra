@@ -42,6 +42,7 @@ package com.sun.faces.application.view;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -258,8 +259,8 @@ public class ViewScopeContextManager {
                 if (activeViewScopeContexts != null && create) {
                     synchronized (activeViewScopeContexts) {
                         if (!activeViewScopeContexts.containsKey(System.identityHashCode(viewMap)) && create) {
-                            activeViewScopeContexts.put(System.identityHashCode(viewMap),
-                                    new ConcurrentHashMap<>());
+                            // since viewMap identity may have changed, copy view scope contexts from the session
+                            copyViewScopeContextsFromSession(activeViewScopeContexts, viewMap);
                             // If we are distributable, this will result in a dirtying of the
                             // session data, forcing replication.  If we are not distributable,
                             // this is a no-op.
@@ -276,6 +277,40 @@ public class ViewScopeContextManager {
         }
 
         return result;
+    }
+    
+    /**
+     * Copies view-scope context from the session, in case the view map identity has changed,
+     * which is the case when cluster failover or a session-saving reload occurs
+     */
+    private void copyViewScopeContextsFromSession(Map<Object, Map<String, ViewScopeContextObject>> contexts,
+            Map<String, Object> viewMap) {
+        if(viewMap == null) {
+            return;
+        }
+        Set<Object> toReplace = new HashSet<>();
+        Map<String, ViewScopeContextObject> resultMap = new ConcurrentHashMap<>();
+        // try to copy a view map from the session, in case of a failover or a restart
+        for(Map.Entry<Object, Map<String, ViewScopeContextObject>> contextEntry : contexts.entrySet()) {
+            Set<String> beanNames = new HashSet<>();
+            // gather all bean names from the session's context
+            for(ViewScopeContextObject viewObject : contextEntry.getValue().values()) {
+                beanNames.add(viewObject.getName());
+            }
+            for(String name : beanNames) {
+                // mark all contexts that are in the view map for copying
+                if(viewMap.keySet().contains(name)) {                    
+                    toReplace.add(contextEntry.getKey());
+                    break;
+                }
+            }
+        }
+        for(Object key : toReplace) {  
+            Map<String, ViewScopeContextObject> contextObject = contexts.get(key);
+            contexts.remove(key);
+            resultMap.putAll(contextObject);
+        }
+        contexts.put(System.identityHashCode(viewMap), resultMap);
     }
 
     /**
