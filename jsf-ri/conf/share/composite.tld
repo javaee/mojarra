@@ -329,9 +329,7 @@ example.</p>
 </div>]]>
 
             </description>
-            <name>
-                name
-            </name>
+            <name>name</name>
             <required>
                 true
             </required>
@@ -353,9 +351,7 @@ used as the delimiter for compatibility with the IDREFS and NMTOKENS
 data types from the XML Schema.</p></div>]]>
 
             </description>
-            <name>
-                targets
-            </name>
+            <name>targets</name>
             <required>
                 false
             </required>
@@ -428,128 +424,12 @@ page</a> for a usage example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>The name of the attribute as it must appear on the <em>composite
-component tag</em> in the <em>using page</em>.  If the value of the
-<em>name</em> attribute is equal to (without the quotes)
-&#8220;action&#8221;, &#8220;actionListener&#8221;,
-&#8220;validator&#8221;, or &#8220;valueChangeListener&#8221;, the
-action described in <a target="_"
-href="../../../javadocs/javax/faces/application/ViewHandler.html#retargetMethodExpressions(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent)">ViewHandler.retargetMethodExpressions()</a>
-must be taken to handle the attribute.  In these cases, the
-<code>method-signature</code> attribute, if present, must be ignored as
-its value is derived as described in
-<code>retargetMethodExpressions()</code>.</div>]]>
-
-            </description>
-            <name>
-                name
-            </name>
-            <required>
-                true
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-
-<p>If this element has a <code>method-signature</code> attribute, the
-value of the <code>targets</code> attribute must be interpreted as a
-space (not tab) separated list of client ids (relative to the <em>top
-level component</em>) of components within the
-<code>&lt;composite:implementation&gt;</code> section.  Space is used as
-the delimiter for compatibility with the IDREFS and NMTOKENS data types
-from the XML Schema.  Each entry in the list must be interpreted as the
-id of an inner component to which the <code>MethodExpression</code> from
-the <em>composite component tag</em> in the <em>using page</em> must be
-applied.  If this element has a <code>method-signature</code> attribute,
-but no <code>targets</code> attribute, the value of the
-<code>name</code> attribute is used as the single entry in the list.  If
-the value of the <code>name</code> attribute is <strong>not</strong> one
-of the special values listed in the description of the <code>name
-attribute</code>, <code>targets</code> (or its derived value) need not
-correspond to the id of an inner component.</p>
-
-</div>]]>
-
-            </description>
-            <name>
-                targets
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_1">
-<p>This attribute allows the name of the attribute exposed to the using
-page to differ from the one actually used in the implementation.  For
-example, consider a composite component that contains two buttons, one
-that means "submit" and one that means "cancel".  It is natural to want
-to declare two composite component attributes to allow these buttons to
-be customized, for example, "submitAction" and "cancelAction".  For both
-of these buttons, the method expression should be retargeted to the
-inner button's "action" attribute.  This scenario would be expressed as
-follows.</p> 
-
-<code>
-&lt;cc:interface&gt;<br />
-&nbsp;&nbsp;&lt;cc:attribute name="submitAction" targetAttributeName="action"<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method-signature="java.lang.Object action()"/&gt;<br />
-&nbsp;&nbsp;&lt;cc:attribute name="cancelAction" targetAttributeName="action"<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method-signature="java.lang.Object action()"/&gt;<br />
-&nbsp;&nbsp;&lt;cc:actionSource name="submitAction"/&gt;<br />
-&nbsp;&nbsp;&lt;cc:actionSource name="cancelAction"/&gt;  <br />
-&lt;/cc:interface&gt;<br />
-&lt;cc:implementation&gt;<br />
-&nbsp;&nbsp;&lt;h:commandButton id="submitAction" value="submit" /&gt;<br />
-&nbsp;&nbsp;&lt;h:commandButton id="cancelAction" value="cancel" /&gt;<br />
-&lt;/cc:implementation&gt;<br />
-</code>
-
-</div>]]>
-
-            </description>
-            <name>
-                targetAttributeName
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
 <p>If this attribute is not required, and a
                 value is not supplied by the page author, use this as
                 the default value.</p></div>]]>
 
             </description>
-            <name>
-                default
-            </name>
+            <name>default</name>
             <required>
                 false
             </required>
@@ -570,58 +450,13 @@ follows.</p>
                 component bean descriptor</em>.</p></div>]]>
 
             </description>
-            <name>
-                displayName
-            </name>
+            <name>displayName</name>
             <required>
                 false
             </required>
             <deferred-value>
                 <type>
                     java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>True if the page author must supply a value
-                for this attribute.  The default value is false.</p></div>]]>
-
-            </description>
-            <name>
-                required
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    boolean
-                </type>
-            </deferred-value>
-        </attribute>        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>Is this a "preferred" component.  The value
-                of this attribute will be set as the value for this
-                property on the <em>composite component bean
-                descriptor</em>.</p></div>]]>
-
-            </description>
-            <name>
-                preferred
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    boolean
                 </type>
             </deferred-value>
         </attribute>
@@ -636,9 +471,7 @@ follows.</p>
                 descriptor</em>.</p></div>]]>
 
             </description>
-            <name>
-                expert
-            </name>
+            <name>expert</name>
             <required>
                 false
             </required>
@@ -648,33 +481,11 @@ follows.</p>
                 </type>
             </deferred-value>
         </attribute>    
-        <attribute>
-            <description>
 
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>A short description of the purpose of this
-                component.  The value of this attribute will be set as
-                the value for this property on the <em>composite
-                component bean descriptor</em>.</p></div>]]>
-
-            </description>
-            <name>
-                shortDescription
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>  
         <attribute>
             <description>
                 <![CDATA[
-                    <div class="changed_added_2_3">
+                    <div class="changed_modified_2_3 changed_added_2_0_rev_a">
                         <p>The "hidden" flag is used to identify features that are intended only
                         for tool use, and which should not be exposed to humans. The value of
                         this attribute will be set as the value for this property on the
@@ -746,9 +557,7 @@ manually.</p>
 </div>]]>
 
             </description>
-            <name>
-                method-signature
-            </name>
+            <name>method-signature</name>
             <required>
                 false
             </required>
@@ -758,7 +567,174 @@ manually.</p>
                 </type>
             </deferred-value>
         </attribute>
+        <attribute>
+            <description>
 
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>The name of the attribute as it must appear on the <em>composite
+component tag</em> in the <em>using page</em>.  If the value of the
+<em>name</em> attribute is equal to (without the quotes)
+&#8220;action&#8221;, &#8220;actionListener&#8221;,
+&#8220;validator&#8221;, or &#8220;valueChangeListener&#8221;, the
+action described in <a target="_"
+href="../../../javadocs/javax/faces/application/ViewHandler.html#retargetMethodExpressions(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent)">ViewHandler.retargetMethodExpressions()</a>
+must be taken to handle the attribute.  In these cases, the
+<code>method-signature</code> attribute, if present, must be ignored as
+its value is derived as described in
+<code>retargetMethodExpressions()</code>.</div>]]>
+
+            </description>
+            <name>name</name>
+            <required>
+                true
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>Is this a "preferred" component.  The value
+                of this attribute will be set as the value for this
+                property on the <em>composite component bean
+                descriptor</em>.</p></div>]]>
+
+            </description>
+            <name>preferred</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>True if the page author must supply a value
+                for this attribute.  The default value is false.</p></div>]]>
+
+            </description>
+            <name>required</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>A short description of the purpose of this
+                component.  The value of this attribute will be set as
+                the value for this property on the <em>composite
+                component bean descriptor</em>.</p></div>]]>
+
+            </description>
+            <name>shortDescription</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>  
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_1">
+<p>This attribute allows the name of the attribute exposed to the using
+page to differ from the one actually used in the implementation.  For
+example, consider a composite component that contains two buttons, one
+that means "submit" and one that means "cancel".  It is natural to want
+to declare two composite component attributes to allow these buttons to
+be customized, for example, "submitAction" and "cancelAction".  For both
+of these buttons, the method expression should be retargeted to the
+inner button's "action" attribute.  This scenario would be expressed as
+follows.</p> 
+
+<code>
+&lt;cc:interface&gt;<br />
+&nbsp;&nbsp;&lt;cc:attribute name="submitAction" targetAttributeName="action"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method-signature="java.lang.Object action()"/&gt;<br />
+&nbsp;&nbsp;&lt;cc:attribute name="cancelAction" targetAttributeName="action"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method-signature="java.lang.Object action()"/&gt;<br />
+&nbsp;&nbsp;&lt;cc:actionSource name="submitAction"/&gt;<br />
+&nbsp;&nbsp;&lt;cc:actionSource name="cancelAction"/&gt;  <br />
+&lt;/cc:interface&gt;<br />
+&lt;cc:implementation&gt;<br />
+&nbsp;&nbsp;&lt;h:commandButton id="submitAction" value="submit" /&gt;<br />
+&nbsp;&nbsp;&lt;h:commandButton id="cancelAction" value="cancel" /&gt;<br />
+&lt;/cc:implementation&gt;<br />
+</code>
+
+</div>]]>
+
+            </description>
+            <name>targetAttributeName</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+
+<p>If this element has a <code>method-signature</code> attribute, the
+value of the <code>targets</code> attribute must be interpreted as a
+space (not tab) separated list of client ids (relative to the <em>top
+level component</em>) of components within the
+<code>&lt;composite:implementation&gt;</code> section.  Space is used as
+the delimiter for compatibility with the IDREFS and NMTOKENS data types
+from the XML Schema.  Each entry in the list must be interpreted as the
+id of an inner component to which the <code>MethodExpression</code> from
+the <em>composite component tag</em> in the <em>using page</em> must be
+applied.  If this element has a <code>method-signature</code> attribute,
+but no <code>targets</code> attribute, the value of the
+<code>name</code> attribute is used as the single entry in the list.  If
+the value of the <code>name</code> attribute is <strong>not</strong> one
+of the special values listed in the description of the <code>name
+attribute</code>, <code>targets</code> (or its derived value) need not
+correspond to the id of an inner component.</p>
+
+</div>]]>
+
+            </description>
+            <name>targets</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
         <attribute>
             <description>
 
@@ -773,9 +749,7 @@ specified, and no "method-signature" attribute is present,
 "method-signature" attribute is ignored. </p> </div>]]>
 
             </description>
-            <name>
-                type
-            </name>
+            <name>type</name>
             <required>
                 false
             </required>
@@ -785,24 +759,7 @@ specified, and no "method-signature" attribute is present,
                 </type>
             </deferred-value>
         </attribute>  
-        <attribute>
-            <description>
-                <![CDATA[
-<div class="changed_added_2_0_rev_a">
-
-<p> The "hidden" flag is used to identify features that are intended only for tool use, and which should not be exposed to humans.</p>
-
-</div>]]>
-                
-            </description>
-            <name>hidden</name>
-            <required>false</required>
-            <deferred-value>
-                <type>boolean</type>
-            </deferred-value>
-        </attribute>
   </tag>
-
 
   <tag>
         <description>
@@ -827,28 +784,6 @@ component.</p>
 
                 <![CDATA[
 <div class="changed_added_2_1">
-<p>The evaluated value of this attribute will be passed as the first
-argument to the <code>addClientBehavior()</code> method on
-<code>ClientBehaviorHolder</code>.</p> ]]>
-
-            </description>
-            <name>
-                event
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_1">
 If the evaluated value of this attribute is <code>true</code>, the page
 author may omit the the "event" attribute when specifying the behavior
 in the using page.  This is analogous to "action" being the default
@@ -858,9 +793,7 @@ component.  If more than one is specified, only the first one is used in
 the case of a using page with no event attribute.  </div>]]>
 
             </description>
-            <name>
-                default
-            </name>
+            <name>default</name>
             <required>
                 false
             </required>
@@ -876,19 +809,37 @@ the case of a using page with no event attribute.  </div>]]>
 
                 <![CDATA[
 <div class="changed_added_2_1">
+<p>The evaluated value of this attribute will be passed as the first
+argument to the <code>addClientBehavior()</code> method on
+<code>ClientBehaviorHolder</code>.</p> ]]>
+
+            </description>
+            <name>event</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_1">
 <p>
   The value of this attribute maps back to the "for" attribute on an attachable object
   nested within a composite component.   If the "targets" attribute is not specified,
   this value also represents the component ID of the target component within the
   that the <code>&lt;composite:implementation&gt;</code>
-  ActionListener should be mapped to. 
+  to which the ActionListener should be mapped. 
 </p>
 </div>]]>
 
             </description>
-            <name>
-                name
-            </name>
+            <name>name</name>
             <required>
                 true
             </required>
@@ -911,9 +862,7 @@ used as the delimiter for compatibility with the IDREFS and NMTOKENS
 data types from the XML Schema.</p></div>]]>
 
             </description>
-            <name>
-                targets
-            </name>
+            <name>targets</name>
             <required>
                 false
             </required>
@@ -925,8 +874,6 @@ data types from the XML Schema.</p></div>]]>
         </attribute>
 
   </tag>
-
-
 
 
   <tag>
@@ -952,9 +899,7 @@ example.</p>
 
 </div>]]>
         </description>
-        <name>
-            editableValueHolder
-        </name>
+        <name>editableValueHolder</name>
         <body-content>
             JSP
         </body-content>
@@ -969,14 +914,12 @@ example.</p>
   nested within a composite component.   If the "targets" attribute is not specified,
   this value also represents the component ID of the target component within the
   that the <code>&lt;composite:implementation&gt;</code>
-  ActionListener should be mapped to.  
+  to which the ActionListener should be mapped.  
 </p>
 </div>]]>
             
             </description>
-            <name>
-                name
-            </name>
+            <name>name</name>
             <required>
                 true
             </required>
@@ -998,9 +941,7 @@ used as the delimiter for compatibility with the IDREFS and NMTOKENS
 data types from the XML Schema.</p></div>]]>
 
             </description>
-            <name>
-                targets
-            </name>
+            <name>targets</name>
             <required>
                 false
             </required>
@@ -1041,9 +982,7 @@ metadata into a composite component.</p>
 
 </div>]]>
         </description>
-        <name>
-            extension
-        </name>
+        <name>extension</name>
         <body-content>
             JSP
         </body-content>
@@ -1066,35 +1005,10 @@ example.</p>
 
 </div>]]>
         </description>
-        <name>
-            facet
-        </name>
+        <name>facet</name>
         <body-content>
             JSP
         </body-content>
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>The name of the attribute as it must appear
-                on the <em>composite component tag</em> in the
-                <em>using page</em>.</p></div>]]>
-
-            </description>
-            <name>
-                name
-            </name>
-            <required>
-                true
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-
         <attribute>
             <description>
 
@@ -1106,57 +1020,13 @@ example.</p>
                 component bean descriptor</em>.</p></div>]]>
 
             </description>
-            <name>
-                displayName
-            </name>
+            <name>displayName</name>
             <required>
                 false
             </required>
             <deferred-value>
                 <type>
                     java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>True if the page author must supply a facet with this name.</p></div>]]>
-
-            </description>
-            <name>
-                required
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    boolean
-                </type>
-            </deferred-value>
-        </attribute>        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>Is this a "preferred" facet.  The value
-                of this attribute will be set as the value for this
-                property on the <em>composite component bean
-                descriptor</em>.</p></div>]]>
-
-            </description>
-            <name>
-                preferred
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    boolean
                 </type>
             </deferred-value>
         </attribute>
@@ -1171,9 +1041,7 @@ example.</p>
                 descriptor</em>.</p></div>]]>
 
             </description>
-            <name>
-                expert
-            </name>
+            <name>expert</name>
             <required>
                 false
             </required>
@@ -1183,29 +1051,6 @@ example.</p>
                 </type>
             </deferred-value>
         </attribute>    
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>A short description of the purpose of this
-                facet.  The value of this attribute will be set as
-                the value for this property on the <em>composite
-                component bean descriptor</em>.</p></div>]]>
-
-            </description>
-            <name>
-                shortDescription
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>  
         <attribute>
             <description>
                 <![CDATA[
@@ -1222,7 +1067,89 @@ example.</p>
                 <type>boolean</type>
             </deferred-value>
         </attribute>  
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>The name of the attribute as it must appear
+                on the <em>composite component tag</em> in the
+                <em>using page</em>.</p></div>]]>
+
+            </description>
+            <name>name</name>
+            <required>
+                true
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>Is this a "preferred" facet.  The value
+                of this attribute will be set as the value for this
+                property on the <em>composite component bean
+                descriptor</em>.</p></div>]]>
+
+            </description>
+            <name>preferred</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>True if the page author must supply a facet with this name.</p></div>]]>
+
+            </description>
+            <name>required</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>A short description of the purpose of this
+                facet.  The value of this attribute will be set as
+                the value for this property on the <em>composite
+                component bean descriptor</em>.</p></div>]]>
+
+            </description>
+            <name>shortDescription</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>  
+
 </tag>
+
 
     <tag>
         <description>
@@ -1238,9 +1165,7 @@ example.</p>
             the <code>&lt;composite-implementation&gt;</code> element is
             optional.  </p> </div>]]>
         </description>
-        <name>
-            implementation
-        </name>
+        <name>implementation</name>
         <body-content>
             JSP
         </body-content>
@@ -1270,9 +1195,7 @@ using page, but there is no occurrence of this element in the
 
 </div>]]>
         </description>
-        <name>
-            insertChildren
-        </name>
+        <name>insertChildren</name>
         <body-content>
             JSP
         </body-content>
@@ -1296,9 +1219,7 @@ section.</span></p>
 </div>]]>
 
         </description>
-        <name>
-            insertFacet
-        </name>
+        <name>insertFacet</name>
         <tag-class></tag-class>
         <body-content>empty</body-content>
         <attribute>
@@ -1550,12 +1471,94 @@ clientId is required due to the semantics of
 </div>
 ]]>
         </description>
-        <name>
-            interface
-        </name>
+        <name>interface</name>
         <body-content>
             JSP
         </body-content>
+
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>The <code>component-type</code> of the <code>UIComponent</code> that
+will serve as the <em>composite component root</em> for this composite
+component.  The declared <code>component-family</code> for this
+component must be <code>javax.faces.NamingContainer</code>.</p></div>]]>
+
+            </description>
+            <name>componentType</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>The name to display in a tool palette
+                containing this component.  The value of this attribute will be set as
+                the value for this property on the <em>composite
+                component bean descriptor</em>.</p></div>]]>
+
+            </description>
+            <name>displayName</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>Is this component only for expert users?
+                The value of this attribute will be set as the value for
+                this property on the <em>composite component bean
+                descriptor</em>.</p></div>]]>
+
+            </description>
+            <name>expert</name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>    
+
+        <attribute>
+            <description>
+                <![CDATA[
+<div class="changed_added_2_0_rev_a">
+
+<p> The "hidden" flag is used to identify features that are intended only for tool use, and which should not be exposed to humans.</p>
+
+</div>]]>
+                
+            </description>
+            <name>hidden</name>
+            <required>false</required>
+            <deferred-value>
+                <type>boolean</type>
+            </deferred-value>
+        </attribute>  
+
         <attribute>
             <description>
 
@@ -1568,55 +1571,7 @@ clientId is required due to the semantics of
                 component bean descriptor</em>.</p></div>]]>
 
             </description>
-            <name>
-                name
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>The <code>component-type</code> of the <code>UIComponent</code> that
-will serve as the <em>composite component root</em> for this composite
-component.  The declared <code>component-family</code> for this
-component must be <code>javax.faces.NamingContainer</code>.</p></div>]]>
-
-            </description>
-            <name>
-                componentType
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>The name to display in a tool palette
-                containing this component.  The value of this attribute will be set as
-                the value for this property on the <em>composite
-                component bean descriptor</em>.</p></div>]]>
-
-            </description>
-            <name>
-                displayName
-            </name>
+            <name>name</name>
             <required>
                 false
             </required>
@@ -1637,9 +1592,7 @@ component must be <code>javax.faces.NamingContainer</code>.</p></div>]]>
                 descriptor</em>.</p></div>]]>
 
             </description>
-            <name>
-                preferred
-            </name>
+            <name>preferred</name>
             <required>
                 false
             </required>
@@ -1654,38 +1607,13 @@ component must be <code>javax.faces.NamingContainer</code>.</p></div>]]>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>Is this component only for expert users?
-                The value of this attribute will be set as the value for
-                this property on the <em>composite component bean
-                descriptor</em>.</p></div>]]>
-
-            </description>
-            <name>
-                expert
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    boolean
-                </type>
-            </deferred-value>
-        </attribute>    
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
 <p>A short description of the purpose of this
                 component.  The value of this attribute will be set as
                 the value for this property on the <em>composite
                 component bean descriptor</em>.</p></div>]]>
 
             </description>
-            <name>
-                shortDescription
-            </name>
+            <name>shortDescription</name>
             <required>
                 false
             </required>
@@ -1695,28 +1623,8 @@ component must be <code>javax.faces.NamingContainer</code>.</p></div>]]>
                 </type>
             </deferred-value>
         </attribute>  
-        <attribute>
-            <description>
-                <![CDATA[
-<div class="changed_added_2_0_rev_a">
 
-<p> The "hidden" flag is used to identify features that are intended only for tool use, and which should not be exposed to humans.</p>
-
-</div>]]>
-                
-            </description>
-            <name>hidden</name>
-            <required>false</required>
-            <deferred-value>
-                <type>boolean</type>
-            </deferred-value>
-        </attribute>  </tag>
-
-
-
-
-
-
+  </tag>
 
   <tag>
         <description>
@@ -1744,9 +1652,7 @@ for this key must be the evaluated value of the "name" attribute.</p>
 
 </div>]]>
         </description>
-        <name>
-            renderFacet
-        </name>
+        <name>renderFacet</name>
         <body-content>
             JSP
         </body-content>
@@ -1760,9 +1666,7 @@ for this key must be the evaluated value of the "name" attribute.</p>
 component tag</em> in the <em>using page</em>.</p></div>]]>
 
             </description>
-            <name>
-                name
-            </name>
+            <name>name</name>
             <required>
                 true
             </required>
@@ -1858,12 +1762,26 @@ example.</p>
 
 </div>]]>
         </description>
-        <name>
-            valueHolder
-        </name>
+        <name>valueHolder</name>
         <body-content>
             JSP
         </body-content>
+        <attribute>
+            <description>
+                <![CDATA[
+<div class="changed_added_2_0_rev_a">
+
+<p> The "hidden" flag is used to identify features that are intended only for tool use, and which should not be exposed to humans.</p>
+
+</div>]]>
+                
+            </description>
+            <name>hidden</name>
+            <required>false</required>
+            <deferred-value>
+                <type>boolean</type>
+            </deferred-value>
+        </attribute>  
         <attribute>
             <description>
 
@@ -1879,9 +1797,7 @@ example.</p>
 </div>]]>
 
             </description>
-            <name>
-                name
-            </name>
+            <name>name</name>
             <required>
                 true
             </required>
@@ -1903,9 +1819,7 @@ used as the delimiter for compatibility with the IDREFS and NMTOKENS
 data types from the XML Schema.  </p></div>]]>
 
             </description>
-            <name>
-                targets
-            </name>
+            <name>targets</name>
             <required>
                 false
             </required>
@@ -1915,22 +1829,6 @@ data types from the XML Schema.  </p></div>]]>
                 </type>
             </deferred-value>
         </attribute>
-        <attribute>
-            <description>
-                <![CDATA[
-<div class="changed_added_2_0_rev_a">
-
-<p> The "hidden" flag is used to identify features that are intended only for tool use, and which should not be exposed to humans.</p>
-
-</div>]]>
-                
-            </description>
-            <name>hidden</name>
-            <required>false</required>
-            <deferred-value>
-                <type>boolean</type>
-            </deferred-value>
-        </attribute>  
   </tag>
 
 
