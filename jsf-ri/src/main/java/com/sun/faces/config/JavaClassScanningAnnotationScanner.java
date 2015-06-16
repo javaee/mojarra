@@ -582,6 +582,8 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
         public static final int NAMEANDTYPE = 12;
         public static final int ASCIZ = 1;
         public static final int UNICODE = 2;
+        public static final int METHODTYPE = 16;
+        public static final int INVOKEDYNAMIC = 18 ;
 
         byte[] bytes = new byte[Short.MAX_VALUE];
 
@@ -659,6 +661,7 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
                         break;
                     case CLASS:
                     case STRING:
+                    case METHODTYPE:
                         if (!refill(buffer, in, 2)) {
                             return true;
                         }
@@ -684,6 +687,7 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
                         i++;
                         break;
                     case NAMEANDTYPE:
+                    case INVOKEDYNAMIC:
                         if (!refill(buffer, in, 4)) {
                             return true;
                         }
