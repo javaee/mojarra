@@ -2396,7 +2396,11 @@ public abstract class UIComponentBase extends UIComponent {
                         Method readMethod = readMap.get(key);
                         if (null == readMethod) {
                             readMethod = pd.getReadMethod();
-                            readMap.putIfAbsent(key, readMethod);
+                            Method putResult = readMap.putIfAbsent(key, 
+                                                                   readMethod);
+                            if (null != putResult) {
+                                readMethod = putResult;
+                            }
                         }
                                 
                         if (readMethod != null) {
