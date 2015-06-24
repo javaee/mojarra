@@ -898,7 +898,21 @@ public abstract class FacesContext {
 
         if (null == facesContext) {
             facesContext = (FacesContext)threadInitContext.get(Thread.currentThread());
-
+        }
+        // Bug 20458755: If not found in the threadInitContext, use
+        // a special FacesContextFactory implementation that knows how to
+        // use the initContextServletContext map to obtain current ServletContext
+        // out of thin air (actually, using the current ClassLoader), and use it 
+        // to obtain the init FacesContext corresponding to that ServletContext.  
+        if (null == facesContext) {
+            // In the non-init case, this will immediately return null.
+            // In the init case, this will return null if JSF hasn't been
+            // initialized in the ServletContext corresponding to this 
+            // Thread's context ClassLoader.
+            FacesContextFactory privateFacesContextFactory = (FacesContextFactory) FactoryFinder.getFactory("com.sun.faces.ServletContextFacesContextFactory");
+            if (null != privateFacesContextFactory) {
+                facesContext = privateFacesContextFactory.getFacesContext(null, null, null, null);
+            }
         }
         return facesContext;
     }

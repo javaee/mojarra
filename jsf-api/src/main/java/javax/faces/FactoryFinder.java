@@ -270,9 +270,19 @@ public final class FactoryFinder {
     public static Object getFactory(String factoryName)
          throws FacesException {
 
-        FactoryFinderInstance manager =
-              FACTORIES_CACHE.getApplicationFactoryManager();
-        return manager.getFactory(factoryName);
+        FactoryFinderInstance manager;
+        // Bug 20458755: If the factory being requested is the special 
+        // SERVLET_CONTEXT_FINDER, do not lazily create the FactoryFinderInstance.
+        if (null != factoryName && factoryName.equals(ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_NAME)) {
+            manager = FACTORIES_CACHE.getApplicationFactoryManager(false);
+        } else {
+            manager = FACTORIES_CACHE.getApplicationFactoryManager();
+        }
+        Object result = null;
+        if (null != manager) {
+         result = manager.getFactory(factoryName);
+        }
+        return result;
 
     }
 

@@ -69,6 +69,7 @@ final class FactoryFinderInstance {
     private final Map<String, Object> factories;
     private final Map<String, List<String>> savedFactoryNames;
     private final ReentrantReadWriteLock lock;
+    private ServletContextFacesContextFactory servletContextFinder;
     private static final String INJECTION_PROVIDER_KEY = FactoryFinder.class.getPackage().getName() + "INJECTION_PROVIDER_KEY";
 
     /**
@@ -154,6 +155,7 @@ final class FactoryFinderInstance {
             factories.put(name, new ArrayList(4));
         }
         copyInjectionProviderFromFacesContext();
+        servletContextFinder = new ServletContextFacesContextFactory();
     }
 
     FactoryFinderInstance(FactoryFinderInstance toCopy) {
@@ -162,6 +164,7 @@ final class FactoryFinderInstance {
         savedFactoryNames = new HashMap<String, List<String>>();
         factories.putAll(toCopy.savedFactoryNames);
         copyInjectionProviderFromFacesContext();
+        servletContextFinder = new ServletContextFacesContextFactory();
     }
 
     private void copyInjectionProviderFromFacesContext() {
@@ -502,6 +505,17 @@ final class FactoryFinderInstance {
 
     Object getFactory(String factoryName) {
         validateFactoryName(factoryName);
+        if (factoryName.equals(ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_NAME)) {
+            return servletContextFinder;
+        } else if (factoryName.equals(ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_REMOVAL_NAME)) {
+            try {
+                lock.writeLock().lock();
+                servletContextFinder = null;
+                return null;
+            } finally {
+                lock.writeLock().unlock();
+            }
+        }
         
         Object factoryOrList;
         lock.readLock().lock();
@@ -568,6 +582,11 @@ final class FactoryFinderInstance {
         if (factoryName == null) {
             throw new NullPointerException();
         }
+        if (factoryName.equals(ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_NAME) ||
+            factoryName.equals(ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_REMOVAL_NAME)) {
+            return;
+        }
+        
         if (Arrays.binarySearch(FACTORY_NAMES, factoryName) < 0) {
             throw new IllegalArgumentException(factoryName);
         }

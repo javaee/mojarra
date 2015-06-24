@@ -85,7 +85,6 @@ public class InitFacesContext extends FacesContext {
     
     private ServletContextAdapter ec;
     private UIViewRoot viewRoot;
-    private FacesContext orig;
     private Map<Object,Object> attributes;
     private ELContext elContext = new ELContext() {
         public ELResolver getELResolver() {
@@ -103,7 +102,6 @@ public class InitFacesContext extends FacesContext {
 
     public InitFacesContext(ServletContext sc) {
         ec = new ServletContextAdapter(sc);
-        orig = FacesContext.getCurrentInstance();
         sc.setAttribute(INIT_FACES_CONTEXT_ATTR_NAME, this);
         InitFacesContext.cleanupInitMaps(sc);
         getThreadInitContextMap().put(Thread.currentThread(), this);
@@ -227,7 +225,7 @@ public class InitFacesContext extends FacesContext {
     public void addMessage(String clientId, FacesMessage message) { }
 
     public void release() {
-        setCurrentInstance(orig);
+        setCurrentInstance(null);
         if (null != ec) {
             Map<String, Object> appMap = ec.getApplicationMap();
             if (null != appMap && appMap instanceof ApplicationMap) {
@@ -250,7 +248,6 @@ public class InitFacesContext extends FacesContext {
             }
         }
         viewRoot = null;
-        orig = null;
 
     }
 
@@ -299,6 +296,25 @@ public class InitFacesContext extends FacesContext {
                     }
                 }
             }
+        }
+    }
+
+    // Bug 20458755: I'm not sure why this wasn't done when this concept was added
+    // during the fix for JAVASERVERFACES-2436
+    void removeInitContextEntryForCurrentThread() {
+        Map <Thread, InitFacesContext>threadInitContext = InitFacesContext.getThreadInitContextMap();
+        Thread currentThread = Thread.currentThread();
+        if (threadInitContext.containsKey(currentThread)) {
+            threadInitContext.remove(currentThread);
+        }
+    }
+    
+    // Bug 20458755: I'm not sure why this wasn't done when this concept was added
+    // during the fix for JAVASERVERFACES-2436
+    public void removeServletContextEntryForInitContext() {
+        Map<InitFacesContext, ServletContext> servletContextMap = InitFacesContext.getInitContextServletContextMap();
+        if (null != servletContextMap && !servletContextMap.isEmpty()) {
+            servletContextMap.remove(this);
         }
     }
 
