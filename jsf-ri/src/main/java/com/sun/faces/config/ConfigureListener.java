@@ -146,7 +146,7 @@ public class ConfigureListener implements ServletRequestListener,
         if (timer != null) {
             timer.startTiming();
         }
-
+        
         ConfigManager configManager = ConfigManager.getInstance(context);
         if (null == configManager) {
             configManager = ConfigManager.createInstance(context);
@@ -292,6 +292,10 @@ public class ConfigureListener implements ServletRequestListener,
             if (null != caughtThrowable) {
                 throw new RuntimeException(caughtThrowable);
             }
+            // Bug 20458755: The InitFacesContext was not being cleaned up, resulting in
+            // a partially constructed FacesContext being made available
+            // to other code that re-uses this Thread at init time.
+            initContext.removeInitContextEntryForCurrentThread();
         }
     }
 

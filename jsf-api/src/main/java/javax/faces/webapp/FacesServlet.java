@@ -642,6 +642,10 @@ public final class FacesServlet implements Servlet {
             if (null != initFacesContext) {
                 initFacesContext.release();
             }
+            // Bug 20458755: ensure the special factory is removed, so as not
+            // to incur an additional performance penalty at request processing
+            // time.
+            FactoryFinder.getFactory("com.sun.faces.ServletContextFacesContextFactory_Removal");
             initFacesContextReleased = true;
         }
         

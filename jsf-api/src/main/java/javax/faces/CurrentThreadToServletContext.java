@@ -56,6 +56,10 @@ final class CurrentThreadToServletContext {
     ConcurrentMap<FactoryManagerCacheKey, FactoryFinderInstance> applicationMap = new ConcurrentHashMap<>();
     private AtomicBoolean logNullFacesContext = new AtomicBoolean(false);
     private AtomicBoolean logNonNullFacesContext = new AtomicBoolean(false);
+    // Bug 20458755: This instance provides a method to look up the current FacesContext
+    // that bypasses the additional check for the InitFacesContext introduced
+    // by the fix for 20458755
+    private final ServletContextFacesContextFactory servletContextFacesContextFactory;
     
     private static final Logger LOGGER;
     
@@ -63,6 +67,10 @@ final class CurrentThreadToServletContext {
         LOGGER = Logger.getLogger("javax.faces", "javax.faces.LogStrings");
     }
 
+    CurrentThreadToServletContext() {
+        servletContextFacesContextFactory = new ServletContextFacesContextFactory();
+    }
+    
     // ------------------------------------------------------ Public Methods
     Object getFallbackFactory(FactoryFinderInstance brokenFactoryManager, String factoryName) {
         Object result = null;
@@ -83,9 +91,15 @@ final class CurrentThreadToServletContext {
         FactoryFinderInstance result = getApplicationFactoryManager(cl, true);
         return result;
     }
-
+    
+    FactoryFinderInstance getApplicationFactoryManager(boolean create) {
+        ClassLoader cl = getClassLoader();
+        FactoryFinderInstance result = getApplicationFactoryManager(cl, create);
+        return result;
+    }
+    
     private FactoryFinderInstance getApplicationFactoryManager(ClassLoader cl, boolean create) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+        FacesContext facesContext = servletContextFacesContextFactory.getFacesContextWithoutServletContextLookup();
         boolean isSpecialInitializationCase = detectSpecialInitializationCase(facesContext);
         FactoryManagerCacheKey key = new FactoryManagerCacheKey(facesContext, cl, applicationMap);
         FactoryFinderInstance result = applicationMap.get(key);
@@ -141,6 +155,18 @@ final class CurrentThreadToServletContext {
         }
         return result;
     }
+    
+    /*
+     * Uses the FactoryManagerCacheKey system to find the ServletContext 
+     * associated with the current ClassLoader, if any.
+     */
+    Object getServletContextForCurrentClassLoader() {
+        Object result;
+        FactoryManagerCacheKey key = new FactoryManagerCacheKey(null, getClassLoader(), applicationMap);
+        result = key.getContext();
+        
+        return result;
+    }
 
     /**
      * This method is used to detect the following special initialization case.
@@ -168,7 +194,7 @@ final class CurrentThreadToServletContext {
         if (null != fm) {
             fm.clearInjectionProvider();
         }
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+        FacesContext facesContext = servletContextFacesContextFactory.getFacesContextWithoutServletContextLookup();
         boolean isSpecialInitializationCase = detectSpecialInitializationCase(facesContext);
         FactoryManagerCacheKey key = new FactoryManagerCacheKey(facesContext, cl, applicationMap);
         applicationMap.remove(key);

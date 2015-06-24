@@ -159,6 +159,9 @@ public class WebappLifecycleListener {
         if (facesContext instanceof InitFacesContext) {
             InitFacesContext initFacesContext = (InitFacesContext) facesContext;
             initFacesContext.releaseCurrentInstance();
+            // Bug 20458755 Clean up the entry for the InitContext corresponding
+            // to this ServletContext
+            initFacesContext.removeServletContextEntryForInitContext();
         }
         ApplicationAssociate.setCurrentInstance(getAssociate());
     }
