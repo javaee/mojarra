@@ -131,36 +131,44 @@ public class FacesInitializer implements ServletContainerInitializer {
             if (null == initFacesContext) {
                 throw new ServletException("Unable to initialize Mojarra");
             }
-
-            Map<String,? extends ServletRegistration> existing = servletContext.getServletRegistrations();
-            for (ServletRegistration registration : existing.values()) {
-                if (FACES_SERVLET_CLASS.equals(registration.getClassName())) {
-                    // FacesServlet has already been defined, so we're
-                    // not going to add additional mappings;
-                    return;
+            try {
+                
+                Map<String,? extends ServletRegistration> existing = servletContext.getServletRegistrations();
+                for (ServletRegistration registration : existing.values()) {
+                    if (FACES_SERVLET_CLASS.equals(registration.getClassName())) {
+                        // FacesServlet has already been defined, so we're
+                        // not going to add additional mappings;
+                        return;
+                    }
                 }
+                ServletRegistration reg =
+                        servletContext.addServlet("FacesServlet",
+                                "javax.faces.webapp.FacesServlet");
+                
+                if ("true".equalsIgnoreCase(servletContext.getInitParameter("javax.faces.DISABLE_FACESSERVLET_TO_XHTML")) ) {
+                    reg.addMapping("/faces/*", "*.jsf", "*.faces");
+                } else {
+                    reg.addMapping("/faces/*", "*.jsf", "*.faces", "*.xhtml");
+                }
+                
+                servletContext.setAttribute(RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED, Boolean.TRUE);
+                
+                // The following line is temporary until we can solve an ordering
+                // issue in V3.  Right now the JSP container looks for a mapping
+                // of the FacesServlet in the web.xml.  If it's not present, then
+                // it assumes that the application isn't a faces application.  In this
+                // case the JSP container will not register the ConfigureListener
+                // definition from our TLD nor will it parse cause or JSP TLDs to
+                // be parsed.
+                servletContext.addListener(com.sun.faces.config.ConfigureListener.class);
             }
-            ServletRegistration reg =
-                  servletContext.addServlet("FacesServlet",
-                                            "javax.faces.webapp.FacesServlet");
-            
-            if ("true".equalsIgnoreCase(servletContext.getInitParameter("javax.faces.DISABLE_FACESSERVLET_TO_XHTML")) ) {
-                reg.addMapping("/faces/*", "*.jsf", "*.faces");
-            } else {
-                reg.addMapping("/faces/*", "*.jsf", "*.faces", "*.xhtml");
+            finally {
+                // Bug 20458755: These were not being cleaned up, resulting in
+                // a partially constructed FacesContext being made available
+                // to other code that re-uses this Thread at init time.
+                initFacesContext.releaseCurrentInstance();
+                initFacesContext.release();
             }
-            
-            servletContext.setAttribute(RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED, Boolean.TRUE);
-
-            // The following line is temporary until we can solve an ordering
-            // issue in V3.  Right now the JSP container looks for a mapping
-            // of the FacesServlet in the web.xml.  If it's not present, then
-            // it assumes that the application isn't a faces application.  In this
-            // case the JSP container will not register the ConfigureListener
-            // definition from our TLD nor will it parse cause or JSP TLDs to
-            // be parsed.
-            servletContext.addListener(com.sun.faces.config.ConfigureListener.class);
-
         }
     }
 
