@@ -153,7 +153,7 @@ final class FactoryFinderInstance {
         factories = new HashMap<>();
         savedFactoryNames = new HashMap<>();
         for (String name : FACTORY_NAMES) {
-            factories.put(name, new ArrayList(4));
+            factories.put(name, new ArrayList(4));  // NOPMD
         }
         copyInjectionProviderFromFacesContext();
         servletContextFinder = new ServletContextFacesContextFactory();
