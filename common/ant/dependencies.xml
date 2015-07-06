@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -67,32 +67,12 @@
     <property name="taglibdoc.version" value="1.3"/>
     <property name="vdldoc.version" value="1.0"/>
     <property name="jsdoc.version" value="2.0.2"/>
-    <property name="servlet.api.version" value="2.5"/>
     <property name="javaee-api.version" value="7.0"/>
-    <property name="cdi-api.version" value="1.1"/>
-    <property name="newer.servlet.api.version" value="3.0"/>
-    <property name="jsp.api.version" value="2.1"/>
-    <property name="jstl.api.version" value="1.2"/>
-    <property name="annotation.api.version" value="1.0"/>
-    <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.6.9"/>
-    <property name="el.version" value="1.0"/>
-    <property name="validation.version" value="1.0.0.GA" />
-    <property name="bean-validator.version" value="3.0-JBoss-4.0.0.Beta3"/>
-    <property name="javax-inject.version" value="1"/>
-    <property name="javax-enterprise.version" value="1.1"/>
     <property name="maven.repository.importer.version" value="1.2"/>
     <property name="yuicompressor.version" value="2.4.2"/>
 
     <property name="central.maven2" value="http://repo1.maven.org/maven2" />
-    <property name="redhat.maven2" value="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases"/>
-    <!--<property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>-->
-    <property name="maven2.mirror" value="http://repo.exist.com/maven2/"/>
-    <property name="java.net.maven" value="http://download.java.net/maven/1"/>
-    <property name="java.net.maven2" value="http://download.java.net/maven/2"/>
-    <property name="codehaus.maven" value="http://repository.codehaus.org"/>
-    <property name="download.java.net" value="http://download.java.net/javaee5/external/shared"/>
-    <property name="jboss.maven2" value="http://repository.jboss.com/maven2"/>
 
     <property name="junit.home" value="${dependency.base.dir}/junit${junit.version}"/>
     <property name="htmlunit.home" value="${dependency.base.dir}/htmlunit-${htmlunit.version}"/>
@@ -106,11 +86,6 @@
     <property name="jsdoc.home" value="${dependency.base.dir}/jsdoc_toolkit-${jsdoc.version}"/>
     <property name="maven.repository.importer.home"
               value="${dependency.base.dir}/maven-repository-importer-${maven.repository.importer.version}"/>
-    <property name="servlet.home" value="${dependency.base.dir}/servlet-${servlet.api.version}"/>
-    <property name="newer.servlet.home" value="${dependency.base.dir}/servlet-${newer.servlet.api.version}"/>
-    <property name="jsp.home" value="${dependency.base.dir}/jsp-${jsp.api.version}"/>
-    <property name="jstl.home" value="${dependency.base.dir}/jstl-${jstl.api.version}"/>
-    <property name="annotation.home" value="${dependency.base.dir}/annotation-${annotation.api.version}"/>
     <property name="yuicompressor.home" value="${dependency.base.dir}/yuicompressor-${yuicompressor.version}"/>
     <property name="junit.jar" value="${dependency.jar.dir}/junit-${junit.version}.jar"/>
     <property name="htmlunit.jar" value="${dependency.jar.dir}/htmlunit-${htmlunit.version}.jar"/>
@@ -124,20 +99,8 @@
     <property name="jsdoc.jar" value="${dependency.jar.dir}/jsdoc-${jsdoc.version}.jar"/>
     <property name="maven.repository.importer.jar"
               value="${dependency.jar.dir}/maven-repository-importer-${maven.repository.importer.version}.jar"/>
-    <property name="servlet.jar" value="${dependency.jar.dir}/servlet-api-${servlet.api.version}.jar"/>
-    <property name="servlet3.jar" value="${dependency.jar.dir}/servlet-api-${newer.servlet.api.version}.jar"/>
     <property name="javaee-api.jar" value="${dependency.jar.dir}/javaee-api-${javaee-api.version}.jar"/>
-    <property name="cdi-api.jar" value="${dependency.jar.dir}/cdi-api-${cdi-api.version}.jar"/>
-    <property name="jsp.jar" value="${dependency.jar.dir}/jsp-api-${jsp.api.version}.jar"/>
-    <property name="el-api.jar" value="${dependency.jar.dir}/el-api-${el.version}.jar"/>
-    <property name="el-impl.jar" value="${dependency.jar.dir}/el-impl-${el.version}.jar"/>
-    <property name="jstl.jar" value="${dependency.jar.dir}/jstl-${jstl.api.version}.jar"/>
-    <property name="annotation.jar" value="${dependency.jar.dir}/jsr250-api-${annotation.api.version}.jar"/>
-    <property name="portlet.jar" value="${dependency.jar.dir}/portlet-api-${portlet.api.version}.jar"/>
     <property name="groovy.jar" value="${dependency.jar.dir}/groovy-all-${groovy.version}.jar"/>
-    <property name="validation-api.jar" value="${dependency.jar.dir}/validation-api-${validation.version}.jar"/>
-    <property name="javax-inject.jar" value="${dependency.jar.dir}/javax.inject-${javax-inject.version}.jar"/>
-    <property name="javax-enterprise.jar" value="${dependency.jar.dir}/cdi-api-${javax-enterprise.version}.jar"/>
     <property name="glassfish.download.url" value="http://download.java.net/javaee5/v2ur1/promoted/"/>
     <property name="glassfish.installer.jar" value="glassfish-installer-v2ur1-b09d-"/>
 
@@ -165,7 +128,7 @@
             <not>
                 <isset property="build.source"/>
             </not>
-            <then>
+                <then>
                 <mkdir dir="${dependency.base.dir}/downloads"/>
                 <mkdir dir="${dependency.jar.dir}"/>
             </then>
@@ -189,7 +152,7 @@
                 <available file="${gf-ant.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="http://download.java.net/maven/glassfish/org/glassfish/ant-tasks/${gf-ant.version}/ant-tasks-${gf-ant.version}.jar"
+                <get src="${central.maven2}/org/glassfish/ant-tasks/${gf-ant.version}/ant-tasks-${gf-ant.version}.jar"
                      dest="${gf-ant.jar}"
                      usetimestamp="true"/>
             </then>
@@ -206,17 +169,13 @@
                 </not>
             </and>
             <then>
-                <get src="${java.net.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
+                <get src="${central.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
                      dest="${junit.jar}"
                      usetimestamp="true"/>
             </then>
         </if>
 
         <!-- HTMLUNIT -->
-        <!--
-        This one needs a ton of extras, so we have to do this one like this or
-        add a bunch more deps.  Maybe another day... :)
-        -->
         <if>
             <and>
                 <not>
@@ -296,7 +255,6 @@
         </if>
 
         <!-- CACTUS -->
-        <!-- Is this not in a maven repo somewhere? -->
         <if>
             <and>
                 <not>
@@ -373,25 +331,6 @@
             </then>
         </if>
 
-
-        <!-- MAVEN REPOSITORY IMPORTER -->
-        <if>
-            <and>
-                <not>
-                    <available file="${maven.repository.importer.jar}" property="ignored"/>
-                </not>
-                <not>
-                    <isset property="build.source"/>
-                </not>
-            </and>
-            <then>
-                <get src="${java.net.maven}/com.sun.wts.tools.mri/jars/maven-repository-importer-${maven.repository.importer.version}.jar"
-                     dest="${maven.repository.importer.jar}"
-                     usetimestamp="true"/>
-
-            </then>
-        </if>
-
         <!-- JAVAEE API -->
         <if>
             <not>
@@ -404,124 +343,7 @@
 
             </then>
         </if>
-        <!-- CDI API -->
-        <if>
-            <not>
-                <available file="${cdi-api.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${central.maven2}/javax/enterprise/cdi-api/${cdi-api.version}/cdi-api-${cdi-api.version}.jar"
-                     dest="${cdi-api.jar}"
-                     usetimestamp="true"/>
-
-            </then>
-        </if>
-
-
-        <!-- SERVLET API -->
-        <if>
-            <not>
-                <available file="${servlet.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${java.net.maven}/javax.servlet/jars/servlet-api-${servlet.api.version}.jar"
-                     dest="${servlet.jar}"
-                     usetimestamp="true"/>
-
-            </then>
-        </if>
-
-        <if>
-            <not>
-                <available file="${servlet3.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${central.maven2}/org/mortbay/jetty/servlet-api/3.0.20100224/servlet-api-3.0.20100224.jar"
-                     dest="${servlet3.jar}"
-                     usetimestamp="true"/>
-
-            </then>
-        </if>
-
-
-        <!-- JSP API -->
-        <!--
-        <if>
-            <not>
-                <available file="${jsp.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${java.net.maven}/javax.servlet.jsp/jars/jsp-api-${jsp.api.version}.jar"
-                     dest="${jsp.jar}"
-                     usetimestamp="true"/>
-
-            </then>
-        </if>
-        -->
-        <!-- EL API and IMPL -->
-        <!--
-        <if>
-            <not>
-                <available file="${el-api.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${java.net.maven}/javax.el/jars/el-api-${el.version}.jar"
-                     dest="${el-api.jar}"
-                     usetimestamp="true"/>
-
-            </then>
-        </if>
-        <if>
-            <not>
-                <available file="${el-impl.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${java.net.maven}/el-impl/jars/el-impl-${el.version}.jar"
-                     dest="${el-impl.jar}"
-                     usetimestamp="true"/>
-
-            </then>
-        </if>
-        -->
-        <!-- JSTL API -->
-        <if>
-            <not>
-                <available file="${jstl.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${java.net.maven}/jstl/jars/jstl-${jstl.api.version}.jar"
-                     dest="${jstl.jar}"
-                     usetimestamp="true"/>
-
-            </then>
-        </if>
-        <!-- ANNOTATION API -->
-        <!--
-        <if>
-            <not>
-                <available file="${annotation.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${java.net.maven}/javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
-                     dest="${annotation.jar}"
-                     usetimestamp="true"/>
-
-            </then>
-        </if>
-        -->
-        <!-- Portlet -->
-        <!--
-        <if>
-            <not>
-                <available file="${portlet.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${maven2.mirror}/javax/portlet/portlet-api/${portlet.api.version}/portlet-api-${portlet.api.version}.jar"
-                     dest="${portlet.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-        -->
+        
         <!-- Groovy -->       
         <if>
             <not>
@@ -534,41 +356,6 @@
             </then>
         </if>        
 
-        <!-- JSR 330 -->
-        <if>
-            <not>
-                <available file="${javax-inject.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${central.maven2}/javax/inject/javax.inject/${javax-inject.version}/javax.inject-${javax-inject.version}.jar"
-                     dest="${javax-inject.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-        <!-- JSR 299 -->
-        <if>
-            <not>
-                <available file="${javax-enterprise.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${central.maven2}/javax/enterprise/cdi-api/${javax-enterprise.version}/cdi-api-${javax-enterprise.version}.jar"
-                     dest="${javax-enterprise.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-        <!-- JSR 303 -->
-        <!--
-        <if>
-            <not>
-                <available file="${validation-api.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${redhat.maven2}/javax/validation/validation-api/${validation.version}/validation-api-${validation.version}.jar"
-                     dest="${validation-api.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-        -->
         <!-- buid commons from source -->
 
         <!--  comment out source build download of sun commons
