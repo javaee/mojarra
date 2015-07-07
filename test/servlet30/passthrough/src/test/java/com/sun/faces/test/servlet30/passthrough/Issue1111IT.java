@@ -43,6 +43,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.StatusHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -130,8 +131,8 @@ public class Issue1111IT {
     }
 
     private void setValue(HtmlPage page, String id, String value) {
-        HtmlTextInput input = (HtmlTextInput) page.getElementById(id);
-        input.setValueAttribute(value);
+        DomElement input = page.getElementById(id);
+        input.setAttribute("value", value);
     }
 
     private void assertInput(HtmlPage page, String id, String... attrs) {
@@ -334,23 +335,21 @@ public class Issue1111IT {
         tel.focus();
 
         waiter.waitForSuccess();
+        waiter.clear();
 
         assertEquals("1", page.getElementById("progress").getAttribute("value"));
 
         tel.setText("4711");
         
-        waiter.clear();
-        
         HtmlTextInput email = (HtmlTextInput)page.getElementById("email");
         email.focus();
 
         waiter.waitForSuccess();
+        waiter.clear();
         
         System.out.println(page.asXml());
 
         assertEquals("2", page.getElementById("progress").getAttribute("value"));
-
-        waiter.clear();
 
         email.setText("horst@example.com");
         email.blur();

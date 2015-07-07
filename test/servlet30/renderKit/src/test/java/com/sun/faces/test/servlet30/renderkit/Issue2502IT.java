@@ -83,7 +83,7 @@ public class Issue2502IT {
          * We don't want this to be simulated as an IE browser since IE
          * does some automatic replacing.
          */
-        webClient = new WebClient(BrowserVersion.FIREFOX_17);
+        webClient = new WebClient(BrowserVersion.FIREFOX_31);
         HtmlPage page = webClient.getPage(webUrl+"faces/outputEscape.xhtml");
         assertTrue(page.asXml().contains(expected1));
         assertTrue(page.asXml().contains(expected2));
