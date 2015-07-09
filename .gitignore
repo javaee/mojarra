@@ -1,0 +1,17 @@
+*.class
+*.jar
+target/
+/bin/
+/dist/
+/test/quality/
+/test/unit/
+/dependencies/
+/jsf-demo/dist/
+/jsf-api/build/
+/jsf-ri/build/
+/jsf-tools/build/
+/jsf-tools/target/
+/build.properties
+.settings/
+test/**/.classpath
+test/**/.project
