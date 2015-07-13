@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.component;
 
+import com.sun.faces.cdi.CdiUtils;
 import com.sun.faces.facelets.tag.IterationStatus;
 
 import javax.el.ValueExpression;
@@ -99,6 +100,7 @@ import java.util.Map;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.sun.faces.cdi.CdiUtils.createDataModel;
 import static javax.faces.component.UINamingContainer.getSeparatorChar;
 
 
@@ -273,7 +275,14 @@ public class UIRepeat extends UINamingContainer {
             } else if (val instanceof Map) {
                 this.model = new IterableDataModel<>(((Map<?, ?>) val).entrySet());
             } else {
-                this.model = new ScalarDataModel<>(val);
+                DataModel<?> dataModel = createDataModel(val.getClass());
+                if (dataModel != null) {
+                    dataModel.setWrappedData(val);
+                    model = dataModel;
+                } else {
+                    model = new ScalarDataModel<>(val);
+                }
+                
             }
         }
         return this.model;

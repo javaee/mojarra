@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,14 +39,36 @@
  */
 package com.sun.faces.cdi;
 
+import static com.sun.faces.cdi.CdiUtils.getAnnotation;
+import static java.util.Collections.unmodifiableMap;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.AfterDeploymentValidation;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.inject.spi.ProcessBean;
+import javax.faces.model.DataModel;
+import javax.faces.model.FacesDataModel;
+
+
 
 /**
  * The CDI extension.
  */
 public class CdiExtension implements Extension {
+    
+    /**
+     * Map of classes that can be wrapped by a data model to data model implementation classes
+     */
+    private Map<Class<?>, Class<? extends DataModel<?>>> forClassToDataModelClass = new HashMap<>();
+
 
     /**
      * After bean discovery.
@@ -63,5 +85,95 @@ public class CdiExtension implements Extension {
         afterBeanDiscovery.addBean(new SessionMapProducer());
         afterBeanDiscovery.addBean(new ViewMapProducer());
         afterBeanDiscovery.addBean(new ViewProducer());
+        afterBeanDiscovery.addBean(new DataModelClassesMapProducer());
     }
+    
+    /**
+     * Processing of beans
+     * 
+     * @param event the process bean event
+     * @param beanManager the current bean manager
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends DataModel<?>> void processBean(@Observes ProcessBean<T> event, BeanManager beanManager) {
+        
+        // Collect all classes annotated by @FacesDataModel in a Map
+        // Key: (collection) class that a DataModel implementations wraps
+        // Value: the DataModel implementation class
+        
+        getAnnotation(beanManager, event.getAnnotated(), FacesDataModel.class)
+           .ifPresent(d -> 
+               forClassToDataModelClass.put(
+                   d.forClass(), 
+                   (Class<? extends DataModel<?>>) event.getBean().getBeanClass()
+               )
+           );
+    }
+    
+    /**
+     * After deployment validation
+     * 
+     * @param event the after deployment validation event
+     * @param beanManager the current bean manager
+     */
+    public void afterDeploymentValidation(@Observes AfterDeploymentValidation event, BeanManager beanManager) {
+        
+        // Sort the classes wrapped by a DataModel that we collected in processBean() such that
+        // for any 2 classes X and Y from this collection, if an object of X is an instanceof an object of Y,
+        // X appears in the collection before Y. The collection's sorting is otherwise arbitrary.
+        //
+        // E.g.
+        //
+        // Given class B, class A extends B and class Q, two possible orders are;
+        // 1. {A, B, Q}
+        // 2. {Q, A, B}
+        //
+        // The only requirement here is that A appears before B, since A is a subclass of B.
+        //
+        // This sorting is used so given an instance of type Z that's being bound to a UIData or UIRepeat
+        // component, we can find the most specific DataModel that can wrap Z by iterating through the sorted 
+        // collection from beginning to end and stopping this iteration at the first match.
+        
+        List<Class<?>> sortedForDataModelClasses = new ArrayList<>();
+        for (Class<?> clazz : forClassToDataModelClass.keySet()) {
+            int highestSuper = -1;
+            boolean added = false;
+            for (int i = 0; i < sortedForDataModelClasses.size(); i++) {
+                if (sortedForDataModelClasses.get(i).isAssignableFrom(clazz)) {
+                    sortedForDataModelClasses.add(i, clazz);
+                    added = true;
+                    break;
+                } else if (clazz.isAssignableFrom(sortedForDataModelClasses.get(i))) {
+                    highestSuper = i;
+                }
+            }
+            if (!added) {
+                if (highestSuper > -1) {
+                    sortedForDataModelClasses.add(highestSuper + 1, clazz);
+                } else {
+                    sortedForDataModelClasses.add(clazz);
+                }
+            }
+        }
+        
+        // Use the sorting computed above to order the Map on this. Note that a linked hash map is used
+        // to preserve this ordering.
+        
+        Map<Class<?>, Class<? extends DataModel<?>>> linkedForClassToDataModelClass = new LinkedHashMap<>();
+        for (Class<?> sortedClass : sortedForDataModelClasses) {
+            linkedForClassToDataModelClass.put(sortedClass, forClassToDataModelClass.get(sortedClass)); 
+        }
+        
+        forClassToDataModelClass = unmodifiableMap(linkedForClassToDataModelClass);
+    }
+    
+    /**
+     * Gets the map of classes that can be wrapped by a data model to data model implementation classes
+     * 
+     * @return Map of classes that can be wrapped by a data model to data model implementation classes
+     */
+    public Map<Class<?>, Class<? extends DataModel<?>>> getForClassToDataModelClass() {
+        return forClassToDataModelClass;
+    }
+
 }

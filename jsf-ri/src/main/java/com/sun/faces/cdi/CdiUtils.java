@@ -39,12 +39,24 @@
  */
 package com.sun.faces.cdi;
 
-import java.lang.annotation.Annotation;
+import static java.util.Optional.empty;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Queue;
+
+import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.convert.Converter;
+import javax.faces.model.DataModel;
 import javax.faces.validator.Validator;
 
 /**
@@ -150,25 +162,107 @@ public final class CdiUtils {
     
         return delegatingValidator;
     }
-    
+
     /**
      * 
-     * @param beanManager the bean manager
+     * @param beanManagert the bean manager
      * @param type the required bean type the reference must have
      * @param qualifier the required qualifiers the reference must have
      * @return a bean reference adhering to the required type and qualifiers
      */
     public static <T> T getBeanReference(BeanManager beanManager, Class<T> type, Annotation qualifier) {
-        
+        return type.cast(getBeanReferenceByType(beanManager, type, qualifier));
+    }
+
+    public static Object getBeanReferenceByType(BeanManager beanManager, Type type, Annotation qualifier) {
+
         Object beanReference = null;
-              
+
         Bean<?> bean = beanManager.resolve(beanManager.getBeans(type, qualifier));
         if (bean != null) {
-            beanReference = beanManager.getReference(
-                bean, type, beanManager.createCreationalContext(bean)
-            );
+            beanReference = beanManager.getReference(bean, type, beanManager.createCreationalContext(bean));
         }
-                
-        return type.cast(beanReference);
+
+        return beanReference;
     }
+
+    /**
+     * Finds an annotation in an Annotated, taking stereo types into account
+     * 
+     * @param beanManager the current bean manager
+     * @param annotated the Annotated in which to search
+     * @param annotationType the type of the annotation to search for
+     * @return An Optional that contains an instance of annotation type for which was searched if the annotated contained this. 
+     */
+    public static <A extends Annotation> Optional<A> getAnnotation(BeanManager beanManager, Annotated annotated, Class<A> annotationType) {
+
+        annotated.getAnnotation(annotationType);
+
+        if (annotated.getAnnotations().isEmpty()) {
+            return empty();
+        }
+
+        if (annotated.isAnnotationPresent(annotationType)) {
+            return Optional.of(annotated.getAnnotation(annotationType));
+        }
+
+        Queue<Annotation> annotations = new LinkedList<>(annotated.getAnnotations());
+
+        while (!annotations.isEmpty()) {
+            Annotation annotation = annotations.remove();
+
+            if (annotation.annotationType().equals(annotationType)) {
+                return Optional.of(annotationType.cast(annotation));
+            }
+
+            if (beanManager.isStereotype(annotation.annotationType())) {
+                annotations.addAll(
+                    beanManager.getStereotypeDefinition(
+                        annotation.annotationType()
+                    )
+                );
+            }
+        }
+
+        return empty();
+    }
+    
+    public static DataModel<?> createDataModel(final Class<?> forClass) {
+        
+        List<DataModel<?>> dataModel = new ArrayList<DataModel<?>>(1);
+        CDI<Object> cdi = CDI.current();
+        
+        // Scan the map in order, the first class that is a super class or equal to the class for which
+        // we're looking for a DataModel is the closest match, since the Map is sorted on inheritance relation
+        getDataModelClassesMap(cdi).entrySet().stream()
+            .filter(e -> e.getKey().isAssignableFrom(forClass))
+            .findFirst()
+            .ifPresent(
+                    
+                 // Get the bean from CDI which is of the class type that we found during annotation scanning
+                 // and has the @FacesDataModel annotation, with the "forClass" attribute set to the closest
+                 // super class of our target class.
+                    
+                e -> dataModel.add(
+                    cdi.select(
+                        e.getValue(),
+                        new FacesDataModelAnnotationLiteral(e.getKey())
+                    ).get())
+            );
+        
+        return dataModel.isEmpty()? null : dataModel.get(0);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static Map<Class<?>, Class<? extends DataModel<?>>> getDataModelClassesMap(CDI<Object> cdi) {
+        BeanManager beanManager = cdi.getBeanManager();
+
+        // Get the Map with classes for which a custom DataModel implementation is available from CDI
+        Bean<?> bean = beanManager.resolve(beanManager.getBeans("comSunFacesDataModelClassesMap"));
+        Object beanReference = beanManager.getReference(bean, Map.class, beanManager.createCreationalContext(bean));
+        
+        return (Map<Class<?>, Class<? extends DataModel<?>>>) beanReference;
+    }
+
+    
 }
