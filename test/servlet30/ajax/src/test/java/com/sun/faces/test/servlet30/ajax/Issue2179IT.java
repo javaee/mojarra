@@ -66,7 +66,7 @@ public class Issue2179IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.setJavaScriptEnabled(true);
+        webClient.getOptions().setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
     }
 
@@ -80,7 +80,7 @@ public class Issue2179IT {
 
     @Test
     public void testEncodeException() throws Exception {
-        webClient.setJavaScriptEnabled(true);
+        webClient.getOptions().setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         boolean exceptionThrown = false;
         try {
@@ -93,7 +93,7 @@ public class Issue2179IT {
 
     @Test
     public void testDecodeException() throws Exception {
-        webClient.setJavaScriptEnabled(true);
+        webClient.getOptions().setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2179-page2.xhtml");
         HtmlSubmitInput button = (HtmlSubmitInput)page.getElementById("form:submit");

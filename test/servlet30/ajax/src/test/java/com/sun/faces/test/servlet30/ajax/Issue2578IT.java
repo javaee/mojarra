@@ -68,7 +68,7 @@ public class Issue2578IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.setJavaScriptEnabled(true);
+        webClient.getOptions().setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
     }
 
@@ -82,7 +82,7 @@ public class Issue2578IT {
 
     @Test
     public void testAjaxClear() throws Exception {
-        webClient.setJavaScriptEnabled(true);
+        webClient.getOptions().setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue2578.xhtml");
 
