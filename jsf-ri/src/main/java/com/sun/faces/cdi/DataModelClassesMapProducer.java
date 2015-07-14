@@ -39,18 +39,11 @@
  */
 package com.sun.faces.cdi;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 
 import java.lang.annotation.Annotation;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Map;
@@ -61,9 +54,7 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.inject.spi.InjectionPoint;
-import javax.enterprise.util.AnnotationLiteral;
 import javax.faces.model.DataModel;
-import javax.inject.Qualifier;
 
 /**
  * <p class="changed_added_2_3">
@@ -89,22 +80,6 @@ public class DataModelClassesMapProducer extends CdiProducer implements Bean<Map
         Map.class,
         Object.class)
     );
-    
-    @Target({TYPE, METHOD, PARAMETER, FIELD})
-    @Qualifier
-    @Retention(value = RUNTIME)
-    @interface DataModelClasses {
-    }
-    
-    /**
-     * Implementation private classifier for obtaining the map that this producer produces
-     * 
-     *
-     */
-    @SuppressWarnings("all")
-    class DataModelClassesAnnotationLiteral extends AnnotationLiteral<DataModelClasses> implements DataModelClasses {
-        private static final long serialVersionUID = 1L;
-    }
     
     /**
      * The qualifiers uses by an injection point of bean manager client to denote a

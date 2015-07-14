@@ -37,45 +37,16 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.javaee8.facelets;
+package com.sun.faces.cdi;
 
-import javax.faces.model.DataModel;
-import javax.faces.model.FacesDataModel;
+import javax.enterprise.util.AnnotationLiteral;
 
-@FacesDataModel(forClass = Child2.class)
-public class Child2Model<E> extends DataModel<E> {
-
-	@Override
-	public int getRowCount() {
-		return 0;
-	}
-
-	@Override
-	public E getRowData() {
-		return null;
-	}
-
-	@Override
-	public int getRowIndex() {
-		return 0;
-	}
-
-	@Override
-	public Object getWrappedData() {
-		return null;
-	}
-
-	@Override
-	public boolean isRowAvailable() {
-		return false;
-	}
-
-	@Override
-	public void setRowIndex(int arg0) {
-	}
-
-	@Override
-	public void setWrappedData(Object arg0) {
-	}
-
+/**
+ * Package private annotation literal for classifier for obtaining the map 
+ * that {@link DataModelClassesMapProducer} producer produces
+ *
+ */
+@SuppressWarnings("all")
+class DataModelClassesAnnotationLiteral extends AnnotationLiteral<DataModelClasses> implements DataModelClasses {
+    private static final long serialVersionUID = 1L;
 }

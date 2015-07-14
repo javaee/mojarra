@@ -46,6 +46,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+// import org.junit.Ignore;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -69,6 +70,7 @@ public class DataTableCustomDataModelIT {
 
     @Test
     @JsfTest(value = JSF_2_3_0_M03)
+    // @Ignore // Strange failure to resolve named "comSunFacesDataModelClassesMap" bean on unreleased WLS 12.2.1
     public void testExactClassMatch() throws Exception {
     	
     	// In this test a backing bean will return an object of type Child11.
@@ -86,6 +88,7 @@ public class DataTableCustomDataModelIT {
     
     @Test
     @JsfTest(value = JSF_2_3_0_M03)
+    // @Ignore // Strange failure to resolve named "comSunFacesDataModelClassesMap" bean on unreleased WLS 12.2.1
     public void testClosestSuperClassMatch() throws Exception {
     	
     	// In this test a backing bean will return an object of type Child111.

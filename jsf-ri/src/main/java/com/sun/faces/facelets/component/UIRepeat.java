@@ -58,7 +58,6 @@
 
 package com.sun.faces.facelets.component;
 
-import com.sun.faces.cdi.CdiUtils;
 import com.sun.faces.facelets.tag.IterationStatus;
 
 import javax.el.ValueExpression;

@@ -37,45 +37,27 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.javaee8.facelets;
+package com.sun.faces.cdi;
 
-import javax.faces.model.DataModel;
-import javax.faces.model.FacesDataModel;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@FacesDataModel(forClass = Child2.class)
-public class Child2Model<E> extends DataModel<E> {
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-	@Override
-	public int getRowCount() {
-		return 0;
-	}
+import javax.inject.Qualifier;
 
-	@Override
-	public E getRowData() {
-		return null;
-	}
-
-	@Override
-	public int getRowIndex() {
-		return 0;
-	}
-
-	@Override
-	public Object getWrappedData() {
-		return null;
-	}
-
-	@Override
-	public boolean isRowAvailable() {
-		return false;
-	}
-
-	@Override
-	public void setRowIndex(int arg0) {
-	}
-
-	@Override
-	public void setWrappedData(Object arg0) {
-	}
+/**
+ * Package private classifier for obtaining the map 
+ * that {@link DataModelClassesMapProducer} producer produces
+ *
+ */
+@Target({TYPE, METHOD, PARAMETER, FIELD})
+@Qualifier
+@Retention(value = RUNTIME)
+@interface DataModelClasses {
 
 }
