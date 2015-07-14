@@ -68,7 +68,7 @@ public class Issue2606IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
     }
 
@@ -93,7 +93,7 @@ public class Issue2606IT {
         assertTrue(xml.contains("<article"));
         assertTrue(xml.contains("id=\"" + "article2" + "\""));
 
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         page = (HtmlPage)article2.mouseOver();
         webClient.waitForBackgroundJavaScript(60000);
@@ -115,7 +115,7 @@ public class Issue2606IT {
         assertTrue(xml.contains("<aside"));
         assertTrue(xml.contains("id=\"" + "aside2" + "\""));
 
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         page = (HtmlPage)aside2.click();
         webClient.waitForBackgroundJavaScript(60000);
@@ -137,7 +137,7 @@ public class Issue2606IT {
         assertTrue(xml.contains("<nav"));
         assertTrue(xml.contains("id=\"" + "nav2" + "\""));
 
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         page = (HtmlPage)nav2.click();
         webClient.waitForBackgroundJavaScript(60000);
@@ -159,7 +159,7 @@ public class Issue2606IT {
         assertTrue(xml.contains("<section"));
         assertTrue(xml.contains("id=\"" + "section2" + "\""));
 
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         page = (HtmlPage)section2.mouseOver();
         webClient.waitForBackgroundJavaScript(60000);
@@ -181,7 +181,7 @@ public class Issue2606IT {
         assertTrue(xml.contains("<h2"));
         assertTrue(xml.contains("id=\"" + "header2" + "\""));
 
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         page = (HtmlPage)h2.mouseOver();
         webClient.waitForBackgroundJavaScript(60000);

@@ -59,7 +59,7 @@ public class ConstructorIT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
+        webClient.setThrowExceptionOnFailingStatusCode(true);
     }
 
     @After

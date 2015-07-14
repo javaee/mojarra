@@ -68,7 +68,7 @@ public class Issue2629IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
     }
 
@@ -82,7 +82,7 @@ public class Issue2629IT {
 
     @Test
     public void testFieldSetAjaxBehavior() throws Exception {
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         HtmlPage page = webClient.getPage(webUrl + "/faces/fieldset.xhtml");
         HtmlFieldSet fieldset = (HtmlFieldSet)page.getHtmlElementById("fieldset4");
@@ -95,7 +95,7 @@ public class Issue2629IT {
 
     @Test
     public void testLabelAjaxBehavior() throws Exception {
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         HtmlPage page = webClient.getPage(webUrl + "/faces/label.xhtml");
         HtmlElement label = page.getHtmlElementById("label2");

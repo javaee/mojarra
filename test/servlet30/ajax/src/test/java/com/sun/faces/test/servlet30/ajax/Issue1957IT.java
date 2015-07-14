@@ -67,7 +67,7 @@ public class Issue1957IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
     }
 
@@ -81,7 +81,7 @@ public class Issue1957IT {
 
     @Test
     public void testPanelGroupAjaxBehavior() throws Exception {
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
         HtmlPage page = webClient.getPage(webUrl + "/faces/issue1957.xhtml");
         HtmlSpan span = (HtmlSpan)page.getElementById("form:group");

@@ -91,7 +91,7 @@ public class Issue2466IT {
          * is commented out.  But it is useful when running the test app
          * interactively.
          * 
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.setThrowExceptionOnFailingStatusCode(false);
         HtmlAnchor fail = (HtmlAnchor) page.getElementById("fail");
         page = fail.click();
         

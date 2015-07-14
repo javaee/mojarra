@@ -60,7 +60,7 @@ public class Issue1781IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
     }
 
@@ -77,8 +77,8 @@ public class Issue1781IT {
     @JsfTest(JsfVersion.JSF_2_2_1)
     @Test
     public void testAjaxToOnBody() throws Exception {
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.setThrowExceptionOnScriptError(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/body.xhtml");
         assertEquals(200, page.getWebResponse().getStatusCode());
     }

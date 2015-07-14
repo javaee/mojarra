@@ -81,7 +81,7 @@ public class Issue2326IT {
 
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
 
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.setThrowExceptionOnFailingStatusCode(false);
         page = button.click();
 
         String pageText = page.getBody().asText();

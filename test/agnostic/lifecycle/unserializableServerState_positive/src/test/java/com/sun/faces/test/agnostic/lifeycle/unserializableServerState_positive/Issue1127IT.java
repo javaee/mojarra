@@ -66,7 +66,7 @@ public class Issue1127IT {
     public void testConfigurationEffective() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
+        webClient.setThrowExceptionOnFailingStatusCode(true);
         button.click();
         
     }

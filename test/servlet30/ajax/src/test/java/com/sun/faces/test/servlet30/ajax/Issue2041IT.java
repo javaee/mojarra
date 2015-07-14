@@ -60,7 +60,7 @@ public class Issue2041IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
     }
 
