@@ -65,7 +65,7 @@ public class Issue2398IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.setJavaScriptEnabled(true);
+        webClient.getOptions().setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
     }
 
@@ -109,12 +109,12 @@ public class Issue2398IT {
             webClient.getPage(webRequest);
 
             try {
-                webClient.setPrintContentOnFailingStatusCode(false);
+                webClient.getOptions().setPrintContentOnFailingStatusCode(false);
                 webClient.getPage(webUrl.substring(0, webUrl.length() - 2) + "1/faces/index.xhtml");
                 fail("Undeploy #1 is active!");
             } catch (FailingHttpStatusCodeException exception) {
                 assertEquals(404, exception.getStatusCode());
-                webClient.setPrintContentOnFailingStatusCode(true);
+                webClient.getOptions().setPrintContentOnFailingStatusCode(true);
             }
 
             page = webClient.getPage(webUrl + "faces/count.xhtml");

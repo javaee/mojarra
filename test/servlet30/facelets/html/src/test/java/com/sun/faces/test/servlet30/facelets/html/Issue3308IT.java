@@ -69,7 +69,7 @@ public class Issue3308IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/findChildByTagIdFacets.xhtml");
         HtmlTable table = (HtmlTable) page.getElementById("table");
         String matchingRegex = 
-                "(?s).*<table.*>\\s+<caption>.*table:captionFacet.*My Caption.*</caption>.*table:colgroupsPanel.*<thead>.*My Header.*</thead>\\s+<tfoot>.*My Footer.*</tfoot>\\s+<tbody>.*";                
+                "(?s).*<table.*>\\s+<caption>.*table:captionFacet.*My Caption.*</caption>.*background-color:red.*background-color:yellow.*<thead>.*My Header.*</thead>\\s+<tfoot>.*My Footer.*</tfoot>\\s+<tbody>.*";
         String tableXml = table.asXml();
         assertTrue(tableXml.matches(matchingRegex));
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");

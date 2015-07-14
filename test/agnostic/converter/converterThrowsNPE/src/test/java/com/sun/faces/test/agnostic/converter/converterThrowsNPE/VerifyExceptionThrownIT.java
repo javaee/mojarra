@@ -62,7 +62,7 @@ public class VerifyExceptionThrownIT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
-        webClient.setJavaScriptEnabled(true);
+        webClient.getOptions().setJavaScriptEnabled(true);
         webClient.setJavaScriptTimeout(60000);
     }
 
@@ -85,7 +85,7 @@ public class VerifyExceptionThrownIT {
     @Test
     public void testConverterThrowsNPEViaNonAjax() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("button2");
         page = button.click();
         assertTrue(page.asText().contains("NullPointerException"));
