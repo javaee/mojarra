@@ -2494,6 +2494,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // check the execute ids to see if any include an input of type "file"
                 context.includesInputFile = false;
                 var ids = options.execute.split(" ");
+                if (ids == "@all") { ids = [ form.id ]; }
                 if (ids) {
                     for (i = 0; i < ids.length; i++) {
                         var elem = document.getElementById(ids[i]);
