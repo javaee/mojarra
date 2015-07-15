@@ -458,7 +458,7 @@
                 <available file="${groovy.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${codehaus.maven}/org/codehaus/groovy/groovy-all/${groovy.version}/groovy-all-${groovy.version}.jar"
+                <get src="${central.maven2}/org/codehaus/groovy/groovy-all/${groovy.version}/groovy-all-${groovy.version}.jar"
                      dest="${groovy.jar}"
                      usetimestamp="true"/>
             </then>
