@@ -168,22 +168,13 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          */
         var getTransport = function getTransport(context) {
             var returnVal;
-            var isElementInputFile = false;
-            var isIeVal = isIE();
-            if (typeof context !== 'undefined' && context !== null && 
-                ((isIeVal && isIE9Plus()) || (!isIeVal))) {
-                if (context.element.hasAttribute("type")) {
-                    isElementInputFile = context.element.type === "file";
-                }
-            }
-
             // Here we check for encoding type for file upload(s).
             // This is where we would also include a check for the existence of
             // input file control for the current form (see hasInputFileControl
             // function) but IE9 (at least) seems to render controls outside of
             // form.
             if (typeof context !== 'undefined' && context !== null &&
-                isElementInputFile &&
+                context.includesInputFile &&
                 context.form.enctype === "multipart/form-data") {
                 returnVal = new FrameTransport(context);
                 return returnVal;
@@ -2430,7 +2421,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var namingContainerId = options["com.sun.faces.namingContainerId"];
                 
                 if (typeof(namingContainerId) === 'undefined' || options === null) {
-                	namingContainerId = "";
+                    namingContainerId = "";
                 }                
 
                 args[namingContainerId + "javax.faces.source"] = element.id;
@@ -2496,6 +2487,34 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         throw new Error('invalid value for delay option: ' + options.delay);
                     }
                     delayValue = converted;
+                }
+
+                var checkForTypeFile
+
+                // check the execute ids to see if any include an input of type "file"
+                context.includesInputFile = false;
+                var ids = options.execute.split(" ");
+                if (ids) {
+                    for (i = 0; i < ids.length; i++) {
+                        var elem = document.getElementById(ids[i]);
+                        if (elem) {
+                            var nodeType = elem.nodeType;
+                            if (nodeType == Node.ELEMENT_NODE) {
+                                var elemAttributeDetector = detectAttributes(elem);
+                                if (elemAttributeDetector("type")) {
+                                    if (elem.getAttribute("type") === "file") {
+                                        context.includesInputFile = true;
+                                        break;
+                                    }
+                                } else {
+                                    if (hasInputFileControl(elem)) {
+                                        context.includesInputFile = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 // remove non-passthrough options
@@ -3039,7 +3058,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          * @ignore
          */
         var getWindowIdElement = function getWindowIdElement(form) {
-        	var windowIdElement = form['javax.faces.ClientWindow'];
+            var windowIdElement = form['javax.faces.ClientWindow'];
 
             if (windowIdElement) {
                 return windowIdElement;
