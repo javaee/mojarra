@@ -319,7 +319,7 @@
 
 
         <!-- MAVEN REPOSITORY IMPORTER -->
-        <if>
+<!--        <if>
             <and>
                 <not>
                     <available file="${maven.repository.importer.jar}" property="ignored"/>
@@ -334,7 +334,7 @@
                      usetimestamp="true"/>
 
             </then>
-        </if>
+        </if>-->
 
         <!-- JAVAEE API -->
         <if>
