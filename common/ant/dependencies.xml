@@ -342,7 +342,7 @@
                 <available file="${javaee-api.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven2}/javax/javaee-api/${javaee-api.version}/javaee-api-${javaee-api.version}.jar"
+                <get src="${central.maven2}/javax/javaee-api/${javaee-api.version}/javaee-api-${javaee-api.version}.jar"
                      dest="${javaee-api.jar}"
                      usetimestamp="true"/>
 
