@@ -160,12 +160,12 @@
 
     <artifact:localRepository id="local.repository" path="${maven.repo.local}"/>
     
-    <artifact:remoteRepository id="jboss.repo" url="https://repository.jboss.org/nexus/"/>
+<!--    <artifact:remoteRepository id="jboss.repo" url="https://repository.jboss.org/nexus/"/>
     <artifact:remoteRepository id="j.n.repo" url="http://download.java.net/maven/2/"/>
     <artifact:remoteRepository id="gf.repo" url="http://download.java.net/maven/glassfish/"/>
     <artifact:remoteRepository id="gf.nexus.repo" url="http://maven.glassfish.org/content/groups/glassfish/"/>
     <artifact:remoteRepository id="codehaus.repo" url="http://repository.codehaus.org/"/>
-    <artifact:remoteRepository id="ibiblio.repo" url="http://mirrors.ibiblio.org/pub/mirrors/maven2/"/>
+    <artifact:remoteRepository id="ibiblio.repo" url="http://mirrors.ibiblio.org/pub/mirrors/maven2/"/>-->
 
     <artifact:dependencies filesetId="compile.filepath" pathId="compile.path">
         <dependency groupId="javax.el" artifactId="el-api" version="1.0" scope="provided"/>
@@ -178,10 +178,10 @@
         <dependency groupId="jstl" artifactId="jstl" version="1.2" scope="provided" />
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
-        <remoteRepository refid="j.n.repo"/>
+<!--        <remoteRepository refid="j.n.repo"/>
         <remoteRepository refid="gf.repo"/>
         <remoteRepository refid="gf.nexus.repo"/>
-        <remoteRepository refid="jboss.repo"/>  <!-- needed for validation-api -->
+        <remoteRepository refid="jboss.repo"/>   needed for validation-api -->
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="commons.filepath" pathId="commons.path">
@@ -190,7 +190,7 @@
         <dependency groupId="commons-beanutils" artifactId="commons-beanutils" version="1.6.1"/>
         <dependency groupId="commons-logging" artifactId="commons-logging" version="1.0.4"/>
         <localRepository refid="local.repository"/>
-        <remoteRepository refid="gf.nexus.repo"/>
+        <!--<remoteRepository refid="gf.nexus.repo"/>-->
     </artifact:dependencies>
 
     <artifact:dependencies filesetId="servlet25test.filepath" pathId="servlet25test.path">
@@ -200,14 +200,14 @@
         <dependency groupId="javax.servlet.jsp.jstl" artifactId="jstl-api" version="1.2" scope="provided"/>
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
-        <remoteRepository refid="gf.nexus.repo"/>
+        <!--<remoteRepository refid="gf.nexus.repo"/>-->
     </artifact:dependencies>
 
 
     <!-- Intra-project dependency property names -->
 
     <property name="jsf-tools.jar" 
-              value="${maven.repo.local}/com/sun/faces/build/jsf-tools/2.1.7-04-SNAPSHOT/jsf-tools-2.1.7-04-SNAPSHOT.jar" />
+              value="${maven.repo.local}/com/sun/faces/build/jsf-tools/${snapshot.version}/jsf-tools-${snapshot.version}.jar" />
 
     <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">
