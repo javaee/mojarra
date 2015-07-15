@@ -40,19 +40,22 @@
 package com.sun.faces.test.javaee8.facelets;
 
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M03;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import static java.util.regex.Pattern.matches;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-// import org.junit.Ignore;
+import org.junit.runner.RunWith;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.test.junit.JsfTest;
-import org.junit.Ignore;
+import com.sun.faces.test.junit.JsfTestRunner;
 
+@RunWith(JsfTestRunner.class)
 public class UIRepeatCustomDataModelIT {
     private String webUrl;
 
@@ -70,8 +73,8 @@ public class UIRepeatCustomDataModelIT {
     }
 
     @Test
-    @JsfTest(value = JSF_2_3_0_M03)
-    @Ignore
+    @JsfTest(value = JSF_2_3_0_M03,
+            excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
     public void testExactClassMatch() throws Exception {
     	
     	// In this test a backing bean will return an object of type Child11.
@@ -88,8 +91,8 @@ public class UIRepeatCustomDataModelIT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M03)
-    @Ignore
+    @JsfTest(value = JSF_2_3_0_M03,
+            excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
     public void testClosestSuperClassMatch() throws Exception {
     	
     	// In this test a backing bean will return an object of type Child111.
