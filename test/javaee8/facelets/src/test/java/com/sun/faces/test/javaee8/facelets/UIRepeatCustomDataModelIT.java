@@ -51,6 +51,7 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.test.junit.JsfTest;
+import org.junit.Ignore;
 
 public class UIRepeatCustomDataModelIT {
     private String webUrl;
@@ -70,7 +71,7 @@ public class UIRepeatCustomDataModelIT {
 
     @Test
     @JsfTest(value = JSF_2_3_0_M03)
-//    @Ignore // Strange failure to resolve named "comSunFacesDataModelClassesMap" bean on unreleased WLS 12.2.1
+    @Ignore
     public void testExactClassMatch() throws Exception {
     	
     	// In this test a backing bean will return an object of type Child11.
@@ -88,7 +89,7 @@ public class UIRepeatCustomDataModelIT {
     
     @Test
     @JsfTest(value = JSF_2_3_0_M03)
-//    @Ignore // Strange failure to resolve named "comSunFacesDataModelClassesMap" bean on unreleased WLS 12.2.1
+    @Ignore
     public void testClosestSuperClassMatch() throws Exception {
     	
     	// In this test a backing bean will return an object of type Child111.
