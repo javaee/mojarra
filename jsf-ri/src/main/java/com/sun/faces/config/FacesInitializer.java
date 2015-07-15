@@ -140,7 +140,7 @@ public class FacesInitializer implements ServletContainerInitializer {
                         // not going to add additional mappings;
                         if ( isADFApplication() ) {
                             //For Bug 21114997 and 21322338
-                            registration.addMapping("*.xhtml", "/faces/*", "*.jsff");
+                            registration.addMapping("*.xhtml", "*.jsf");
                         }
                         return;
                     }
@@ -154,11 +154,6 @@ public class FacesInitializer implements ServletContainerInitializer {
                     reg.addMapping("/faces/*", "*.jsf", "*.faces");
                 } else {
                     reg.addMapping("/faces/*", "*.jsf", "*.faces", "*.xhtml");
-                }
-                
-                if ( isADFApplication() ) {
-                    //For Bug 21114997 and 21322338
-                    reg.addMapping("*.jsff");
                 }
                 
                 servletContext.setAttribute(RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED, Boolean.TRUE);
@@ -185,11 +180,20 @@ public class FacesInitializer implements ServletContainerInitializer {
 
     // --------------------------------------------------------- Private Methods
     private boolean isADFApplication() {
-        if (Thread.currentThread().getContextClassLoader().getResource("oracle/adf/view/rich/context/ADFFacesContext.class")  != null ) {
-             return true;
-        }
         
-        return false;
+        boolean hasResource = false;
+        try {
+            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+            if (null != contextClassLoader) {
+                hasResource = (contextClassLoader.getResource("oracle/adf/view/rich/context/AdfFacesContext.class")  != null );
+            }
+        } catch (Exception e) {
+            // Intentionally swallow exception.  This should be logged
+            // but for the comment at the top stating that Loggins should 
+            // not be used for this class.  I assume that means Logging, and
+            // not Kenny Loggins.
+        }
+        return hasResource;
     }
 
     private boolean shouldCheckMappings(Set<Class<?>> classes,
