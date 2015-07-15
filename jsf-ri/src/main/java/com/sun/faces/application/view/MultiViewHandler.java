@@ -60,6 +60,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.text.MessageFormat;
 import java.util.*;
 
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -436,7 +437,22 @@ public class MultiViewHandler extends ViewHandler {
                     get(RIConstants.FACELETS_ENCODING_KEY);
         }
         
-        String responseEncoding = (null != encodingFromContext) ? encodingFromContext : context.getExternalContext().getResponseCharacterEncoding();
+        String responseEncoding;
+        
+        if (null == encodingFromContext) {
+            try {
+                responseEncoding = context.getExternalContext().getResponseCharacterEncoding();
+            } catch (Exception e) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    String message = "Unable to obtain response character encoding from ExternalContext {0}.  Using UTF-8.";
+                    message = MessageFormat.format(message, context.getExternalContext());
+                    LOGGER.log(Level.FINE, message, e);
+                }
+                responseEncoding = "UTF-8";
+            }
+        } else {
+            responseEncoding = encodingFromContext;
+        }
 
         if (parameters != null) {
             Map<String, List<String>> decodedParameters = new HashMap<>();
