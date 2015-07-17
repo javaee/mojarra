@@ -71,18 +71,13 @@ public class Bug21114997IT {
     }
     
     @Test
-    public void testJsffPostfixMappingWorks() throws Exception {
+    public void testJsfExtensionMappingWorks() throws Exception {
         HtmlPage page = null;
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
     
-        try {
-            page = webClient.getPage(webUrl+ "adfPage01.jsff");
-        } catch ( Exception ex ) {
-            
-        }
+        page = webClient.getPage(webUrl+ "adfPage01.jsf");
+        assertTrue(page.getBody().asXml().indexOf("h:inputText") == -1);
         
-        page = webClient.getPage(webUrl+ "adfPage02.xhtml");
-        
-        assertTrue(page.getBody().asXml().indexOf("true") != -1);
     }
     
 }
