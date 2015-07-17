@@ -1074,12 +1074,18 @@ public abstract class ExternalContext {
 
     /**
      *
-     * <p>Returns the name of the character encoding (MIME charset) used for 
-     * the body sent in this response. </p>
+     * <p><span class="changed_modified_2_3">Returns</span> the name of
+     * the character encoding (MIME charset) used for the body sent in
+     * this response. </p>
      *
      * <p><em>Servlet:</em> This must return the value returned by the
      * <code>javax.servlet.ServletResponse</code> method
      * <code>getCharacterEncoding()</code>.</p>
+
+     * <p class="changed_added_2_3">Portlet: if this method is called
+     * during a lifecycle phase other than RENDER_RESPONSE, this must
+     * return <code>null</code>.  If called during RENDER_RESPONSE,
+     * return the response encoding of the portlet response.</p>
      *
      * <p>The default implementation throws 
      * <code>UnsupportedOperationException</code> and is provided
