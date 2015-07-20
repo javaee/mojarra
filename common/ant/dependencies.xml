@@ -489,7 +489,7 @@
                 <available file="${jstl.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${central.maven2}/jstl/jars/jstl-${jstl.api.version}.jar"
+                <get src="${central.maven2}/jstl/jstl/${jstl.api.version}/jstl-${jstl.api.version}.jar"
                      dest="${jstl.jar}"
                      usetimestamp="true"/>
 
