@@ -385,7 +385,7 @@
                 </not>
             </and>
             <then>
-                <get src="${java.net.maven}/com.sun.wts.tools.mri/jars/maven-repository-importer-${maven.repository.importer.version}.jar"
+                <get src="${central.maven2}/com/sun/wts/tools/mri/maven-repository-importer/${maven.repository.importer.version}/maven-repository-importer-${maven.repository.importer.version}.jar"
                      dest="${maven.repository.importer.jar}"
                      usetimestamp="true"/>
 
