@@ -206,7 +206,7 @@
                 </not>
             </and>
             <then>
-                <get src="${java.net.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
+                <get src="${central.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
                      dest="${junit.jar}"
                      usetimestamp="true"/>
             </then>
