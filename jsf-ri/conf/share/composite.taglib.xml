@@ -41,7 +41,7 @@
 
 -->
 
-<facelet-taglib xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+<facelet-taglib id="cc" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
               version="2.2">
@@ -1380,7 +1380,7 @@ for this key must be the evaluated value of the "name" attribute.</p>
 <div class="changed_added_2_0">
 <p>The value of the name attribute as it must appear on an
 <code>&lt;f:facet&gt;</code> tag nested within the <em>composite
-component tag</em> in the <em>using page</em>.</p></div>]]>
+component tag</em> in the <em>using page</em>.</p></div>
 
             ]]></description>
             <name>name</name>

@@ -360,6 +360,7 @@
         <attribute name="dir"/>
         <attribute name="skipTests" default="true"/>
         <attribute name="mvnargs" default=""/>
+        <attribute name="doctitle" default="JSF ${spec.version} VDL Documentation" />
         <sequential>
             <if>
                 <equals arg1="${mvn.home}" arg2="$${myenv.M2_HOME}"/>
@@ -457,19 +458,19 @@
     
             <exec os="SunOS" dir="@{dir}" failonerror="yes"
                   executable="${mvn.cmd}">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dproject.build.sourceEncoding=UTF-8 ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dproject.build.sourceEncoding=UTF-8 '-Ddoctitle=@{doctitle}' ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
             </exec>
             <exec os="Linux" dir="@{dir}" failonerror="yes"
                   executable="${mvn.cmd}">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dproject.build.sourceEncoding=UTF-8 ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dproject.build.sourceEncoding=UTF-8 '-Ddoctitle=@{doctitle}' ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
             </exec>
             <exec osfamily="windows" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dproject.build.sourceEncoding=UTF-8 ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dproject.build.sourceEncoding=UTF-8 '-Ddoctitle=@{doctitle}' ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
             </exec>
             <exec os="Mac OS X" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
-                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dproject.build.sourceEncoding=UTF-8 ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
+                <arg line="-f @{pomFile} @{mvnargs} ${mvn.m2.settings.prop} ${testSkipProperty} ${mvn.repo.local.prop} -DmvnSpecVersion=@{mvnSpecVersion} @{goals} -Dspec.snapshot.version=${spec.snapshot.version} -Dproject.build.sourceEncoding=UTF-8 '-Ddoctitle=@{doctitle}' ${gpgPassphraseProperty} ${httpProxyProperty} ${httpsProxyProperty}"/>
             </exec>
         </sequential>
     </macrodef>

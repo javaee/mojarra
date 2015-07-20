@@ -293,7 +293,7 @@
                     <ul>
                         <li class="first"><a href="javadocs/index.html" target="loc">JSF API Documentation</a></li>
                         <li><a href="managed-bean-javadocs/index.html" target="loc">JSF Managed Bean Documentation</a></li>
-                        <li><a href="vdldocs/facelets/index.html" target="loc">Facelets Tag Documentation</a></li>
+                        <li>Facelets Tag Documentation <a href="vdldocs/facelets/index.html" target="loc">TLDDoc</a> <a href="vdldoc/index.html" target="loc">VDLDoc</a></li>
                         <li><a href="vdldocs/jsp/index.html" target="loc">JSP Tag Documentation</a></li>
                         <li><a href="renderkitdocs/index.html" target="loc">Renderkit Documentation</a></li>
                         <li><a href="jsdocs/index.html" target="loc">Javascript Documentation</a></li>
@@ -409,8 +409,13 @@
         <copy todir="${dist.home}/vdldocs">
             <fileset dir="${impl.dir}/build/vdldocs"/>
         </copy>
+        <copy todir="${dist.home}/vdldoc">
+            <fileset dir="${impl.dir}/build/vdldoc"/>
+        </copy>
+
         <zip zipfile="${dist.home}/docs/vdldocs-${impl.version}.zip">
            <fileset dir="${dist.home}" includes="vdldocs/**"/>
+           <fileset dir="${dist.home}" includes="vdldoc/**"/>
         </zip>
 
     </target>

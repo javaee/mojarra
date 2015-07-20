@@ -477,6 +477,8 @@
 
       <antcall target="jsp.tlddocs" />
       <antcall target="facelets.tlddocs" />
+      <!-- use the omnifaces vdldoc tool -->
+      <antcall target="vdldoc" />
 
     </target>
 
@@ -494,6 +496,28 @@
              <include name="changed*.cur" />
            </fileset>
         </copy>
+
+    </target>
+
+    <target name="vdldoc">
+
+      <jsf.mvn pomFile="${jsf.build.home}/jsf-tools/pom.xml"
+               dir="${jsf.build.home}/jsf-tools"
+               doctitle="JavaServer Faces VDL Documentation (${spec.version} SNAPSHOT ${build.number})"
+               goals="package" />
+      <copy todir="${build.dir}" overwrite="true">
+        <fileset dir="${jsf.build.home}/jsf-tools/target/site">
+          <include name="vdldoc/**"/>
+        </fileset>
+      </copy>
+      <copy todir="${build.dir}/vdldoc">
+        <fileset dir="${basedir}/../jsf-api/doc/">
+          <include name="changed*.png" />
+          <include name="expert*.png" />
+          <include name="changed*.cur" />
+        </fileset>
+      </copy>
+
 
     </target>
 
@@ -524,7 +548,6 @@
             <arg line="-windowtitle 'JSF ${spec.version} View Declaration Language: Facelets Variant'"/>
             <arg line="-doctitle 'JSF ${spec.version} View Declaration Language: Facelets Variant.'"/>
             <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
-            <arg value="${conf.share.dir}/composite.tld"/>
             <arg value="${conf.share.dir}/facelets_jsf_core.tld"/>
             <arg value="${conf.share.dir}/facelets_passthrough_attributes.tld"/>
             <arg value="${conf.share.dir}/facelets_passthrough_elements.tld"/>
