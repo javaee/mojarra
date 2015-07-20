@@ -189,7 +189,7 @@
                 <available file="${gf-ant.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven2}/org/glassfish/ant-tasks/${gf-ant.version}/ant-tasks-${gf-ant.version}.jar"
+                <get src="${central.maven2}/org/glassfish/ant-tasks/${gf-ant.version}/ant-tasks-${gf-ant.version}.jar"
                      dest="${gf-ant.jar}"
                      usetimestamp="true"/>
             </then>
