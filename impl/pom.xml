@@ -44,7 +44,7 @@
                                 </copy>
                                 <!--
                                 
-                                   Generate sources from templates
+                                   Generate MessageFactory from template.
                                 
                                   -->
                                 <mkdir dir="src/main/java/com/sun/faces/util"/>
@@ -78,6 +78,16 @@
                                     <fileset dir="build/generate"/>
                                 </copy>
                                 <delete dir="build"/>
+                                <!--
+                                
+                                    Generate TypedCollections
+                                    
+                                    -->
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.util"/>
+                                <copy file="../jsf-tools/template-src/TypedCollections.java"
+                                    todir="src/main/java/com/sun/faces/util"
+                                    filtering="true"/>
                             </target>
                         </configuration>
                         <goals>
