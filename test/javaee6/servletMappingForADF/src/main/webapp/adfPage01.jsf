@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -41,29 +40,17 @@
     holder.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.1.29-04-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee6</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 6</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>    
-    <modules>
-        <module>disableFaceletToXhtmlMapping</module>
-        <module>resource</module>
-        <module>servletMappingForADF</module>
-        <module>xhtmlMappingToFaceletByDefault</module>
-    </modules>
-</project>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <head>
+        <title>test</title>
+    </head>
+    <body>
+        <h:form prependId="false">
+            <h:inputText value="#{userBean.firstName}" />
+            <h:commandButton value="submit" />
+        </h:form>
+    </body>
+</html>
+
