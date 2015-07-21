@@ -36,9 +36,19 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <target>
+                                <!--
+                                
+                                    Copy jsf-api sources
+                                    
+                                -->
                                 <copy todir="src/main/java">
                                     <fileset dir="../jsf-api/src/main/java" includes="**/*.java"/>
                                 </copy>
+                                <!--
+                                    
+                                    Copy jsf-ri sources
+                                    
+                                -->
                                 <copy todir="src/main/java">
                                     <fileset dir="../jsf-ri/src/main/java" includes="**/*.java"/>
                                 </copy>
