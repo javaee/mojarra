@@ -44,7 +44,7 @@
                                 </copy>
                                 <!--
                                 
-                                   Generate MessageFactory from template.
+                                   Generate MessageFactory.
                                 
                                   -->
                                 <mkdir dir="src/main/java/com/sun/faces/util"/>
@@ -70,8 +70,8 @@
                                     fork="true">
                                     <classpath>
                                         <pathelement location="../jsf-tools/target/jsf-tools-${project.version}.jar"/>
-                                        <path refid="maven.plugin.classpath"/>
                                         <pathelement location="../jsf-tools/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateAttrManager>
                                 <copy todir="src/main/java">
@@ -88,6 +88,103 @@
                                 <copy file="../jsf-tools/template-src/TypedCollections.java"
                                     todir="src/main/java/com/sun/faces/util"
                                     filtering="true"/>
+                                <!--
+                                
+                                    Generate SharedUtils #1
+                                    
+                                -->
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.application"/>
+                                <copy file="../jsf-tools/template-src/SharedUtils.java"
+                                    todir="src/main/java/com/sun/faces/application"
+                                    filtering="true"/>
+                                <!--
+                                
+                                    Generate SharedUtils #2
+                                    
+                                -->
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.el"/>
+                                <copy file="../jsf-tools/template-src/SharedUtils.java"
+                                    todir="src/main/java/com/sun/faces/el"
+                                    filtering="true"/>
+                                <!--
+                                    
+                                    Generate SharedUtils #3
+                                    
+                                -->
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.config.processor"/>
+                                <copy file="../jsf-tools/template-src/SharedUtils.java"
+                                    todir="src/main/java/com/sun/faces/config/processor"
+                                    filtering="true"/>
+                                <!--
+                                
+                                    Generate SharedUtils #4
+                                
+                                -->
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.mgbean"/>
+                                <copy file="../jsf-tools/template-src/SharedUtils.java"
+                                    todir="src/main/java/com/sun/faces/mgbean"
+                                    filtering="true"/>
+                                <!--
+                                
+                                    Generate StateHolderSaver #1
+                                    
+                                -->
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.application.view"/>
+                                <copy file="../jsf-tools/template-src/StateHolderSaver.java"
+                                      todir="src/main/java/com/sun/faces/application/view"
+                                      filtering="true"/>
+                                <replace
+                                    file="src/main/java/com/sun/faces/application/view/StateHolderSaver.java"
+                                    token="@serialVersionUID@"
+                                    value="4866548262845392093L"/>
+                                <!--
+                                
+                                    Generate StateHolderSaver #2
+                                    
+                                -->
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.context"/>
+                                <copy file="../jsf-tools/template-src/StateHolderSaver.java"
+                                      todir="src/main/java/com/sun/faces/context"
+                                      filtering="true"/>
+                                <replace
+                                    file="src/main/java/com/sun/faces/context/StateHolderSaver.java"
+                                    token="@serialVersionUID@"
+                                    value="146780782953074472L"/>
+                                <!--
+                                
+                                    Generate Adapters
+                                
+                                -->
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.application"/>
+                                <copy todir="src/main/java/com/sun/faces/application"
+                                      filtering="true">
+                                    <fileset dir="../jsf-api/template-src">
+                                        <include name="*Adapter.java"/>
+                                    </fileset>
+                                </copy>
+                                <replace
+                                    file="src/main/java/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="6351778415298720238L"/>
+                                <replace
+                                    file="src/main/java/com/sun/faces/application/MethodExpressionMethodBindingAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="5639227653537610567L"/>
+                                <replace
+                                    file="src/main/java/com/sun/faces/application/ValueExpressionValueBindingAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="2990621816592041196L"/>
+                                <replace
+                                    file="src/main/java/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="7410146713650507654L"/>
                             </target>
                         </configuration>
                         <goals>
