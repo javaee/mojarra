@@ -25,6 +25,7 @@
                         <configuration>
                             <target>
                                 <delete dir="src/main/java"/>
+                                <delete dir="src/main/resources"/>
                             </target>
                         </configuration>
                         <goals>
@@ -195,6 +196,75 @@
                                     file="src/main/java/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
                                     token="@serialVersionUID@"
                                     value="7410146713650507654L"/>
+                                <!--
+                                
+                                    Generate com.sun.faces.renderkit.html_basic sources
+                                    and META-INF/html_basic.tld
+                                    
+                                -->
+                                <copy todir="build">
+                                    <fileset dir="../jsf-tools/conf">
+                                        <include name="TAG-*"/>
+                                    </fileset>
+                                </copy>
+                                <taskdef name="generateTaglib"
+                                         classname="com.sun.faces.ant.TaglibGenTask">
+                                    <classpath>
+                                        <pathelement location="../jsf-tools/target/jsf-tools-${project.version}.jar"/>
+                                    </classpath>
+                                </taskdef>
+                                <generateTaglib
+                                    generatorConfig="../jsf-tools/conf/HtmlBasicTaglib21.properties"
+                                    facesConfig="../jsf-api/doc/standard-html-renderkit.xml"
+                                    fork="true">
+                                    <classpath>
+                                        <pathelement location="../jsf-tools/target/jsf-tools-${project.version}.jar"/>
+                                        <pathelement location="../jsf-tools/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                    </classpath>
+                                </generateTaglib>
+                                <copy todir="src/main/java/com">
+                                    <fileset dir="build/generate/com"/>
+                                </copy>
+                                <copy file="build/generate/conf/share/html_basic.tld"
+                                    toDir="src/main/resources/META-INF"/>
+                                <delete dir="build"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-resources</id>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <target>
+                                <!--
+                                
+                                    Copy LogStrings
+                                
+                                -->
+                                <mkdir dir="src/main/resources"/>
+                                <copy todir="src/main/resources">
+                                    <fileset dir="../jsf-ri/src/main/resources"
+                                             includes="**/LogStrings.properties"/>
+                                </copy>
+                                <replace dir="src/main/resources"
+                                    token="|version.string|"
+                                    value="${project.version}">
+                                    <include name="LogStrings*.properties"/>
+                                </replace>
+                                <!--
+                                
+                                    Copy DTD and XSD files
+                                
+                                -->
+                                <copy todir="src/main/resources/com/sun/faces"
+                                      flatten="true">
+                                    <fileset dir="../jsf-api/doc"
+                                             includes="*.dtd,*.xsd"/>
+                                </copy>
                             </target>
                         </configuration>
                         <goals>
