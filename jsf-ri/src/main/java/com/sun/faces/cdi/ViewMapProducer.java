@@ -68,6 +68,11 @@ import javax.faces.view.ViewMap;
 public class ViewMapProducer extends CdiProducer implements Bean<Map<String, Object>> {
 
     /**
+     * Serialization version
+     */
+    private static final long serialVersionUID = 1L;
+    
+    /**
      * The set of types that this producer is capable of producing, and hence
      * can be used as the type of an injection point.
      */

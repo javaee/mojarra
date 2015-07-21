@@ -73,6 +73,11 @@ import javax.faces.model.DataModel;
 public class DataModelClassesMapProducer extends CdiProducer implements Bean<Map<Class<?>, Class<? extends DataModel<?>>>> {
 
     /**
+     * Serialization version
+     */
+    private static final long serialVersionUID = 1L;
+    
+    /**
      * The set of types that this producer is capable of producing, and hence
      * can be used as the type of an injection point.
      */

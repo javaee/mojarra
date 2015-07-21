@@ -68,6 +68,11 @@ import javax.faces.context.FacesContext;
  */
 public class RequestCookieMapProducer extends CdiProducer
         implements Bean<Map<String, Object>>, PassivationCapable {
+    
+    /**
+     * Serialization version
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * The set of types that this producer is capable of producing, and hence

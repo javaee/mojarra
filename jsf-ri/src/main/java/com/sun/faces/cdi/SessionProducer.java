@@ -67,6 +67,11 @@ import javax.faces.context.FacesContext;
 public class SessionProducer extends CdiProducer implements Bean<Object>, PassivationCapable {
 
     /**
+     * Serialization version
+     */
+    private static final long serialVersionUID = 1L;
+    
+    /**
      * Get the id.
      *
      * @return the id.

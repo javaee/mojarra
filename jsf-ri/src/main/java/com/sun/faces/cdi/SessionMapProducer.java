@@ -39,19 +39,20 @@
  */
 package com.sun.faces.cdi;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionPoint;
-import javax.enterprise.inject.spi.PassivationCapable;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -67,8 +68,13 @@ import javax.faces.context.SessionMap;
  * @see ExternalContext#getSessionMap()
  */
 public class SessionMapProducer extends CdiProducer
-        implements Bean<Map<String, Object>>, PassivationCapable {
+        implements Bean<Map<String, Object>> {
 
+    /**
+     * Serialization version
+     */
+    private static final long serialVersionUID = 1L;
+    
     /**
      * The set of types that this producer is capable of producing, and hence
      * can be used as the type of an injection point.
@@ -77,11 +83,6 @@ public class SessionMapProducer extends CdiProducer
             new ParameterizedTypeImpl(Map.class, new Type[]{String.class, Object.class}),
             Map.class,
             Object.class));
-
-    /**
-     * Stores our id.
-     */
-    private String id = SessionMapProducer.class.getName();
 
     /**
      * Inner class defining an annotation literal for @SessionMap.
@@ -214,13 +215,4 @@ public class SessionMapProducer extends CdiProducer
         return false;
     }
 
-    /**
-     * Get the id.
-     *
-     * @return the id.
-     */
-    @Override
-    public String getId() {
-        return id;
-    }
 }

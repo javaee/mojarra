@@ -65,6 +65,11 @@ import javax.faces.context.FacesContext;
  * @see ExternalContext
  */
 public class ApplicationProducer extends CdiProducer implements Bean<Object> {
+    
+    /**
+     * Serialization version
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * Inner class defining an annotation literal for @Default.

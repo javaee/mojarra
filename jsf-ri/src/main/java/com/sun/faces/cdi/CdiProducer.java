@@ -39,18 +39,48 @@
  */
 package com.sun.faces.cdi;
 
-import com.sun.faces.config.WebConfiguration;
+import java.io.Serializable;
+
+import javax.enterprise.inject.spi.PassivationCapable;
 import javax.faces.context.FacesContext;
+
+import com.sun.faces.config.WebConfiguration;
 
 /**
  * An abstract base class used by the CDI producers for some common
  * functionality.
  */
-abstract class CdiProducer {
+abstract class CdiProducer implements PassivationCapable, Serializable {
+    
+    /**
+     * Serialization version
+     */
+    private static final long serialVersionUID = 1L;
+    
     /**
      * Stores the active flag.
      */
     protected Boolean active;
+    
+    /**
+     * Get the ID of this particular instantiation of the producer.
+     * <p>
+     * This is an implementation detail of CDI, where it wants to relocate
+     * a particular producer in order to re-inject a value. This is typically
+     * used in combination with passivation. Note that this is NOT about
+     * the value we're producing, but about the producer itself.
+     * 
+     * @return the ID of this particular instantiation of the producer
+     */
+    @Override
+    public String getId() {
+        // In general just the class name is enough to fully identify
+        // a particular producer. If functionally different instances of
+        // the same producer class exists (e.g. when using a constructor
+        // with arguments) a subclass needs a return a more specific
+        // value here.
+        return this.getClass().getName();
+    }
 
     /**
      * Check if we are active.

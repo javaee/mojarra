@@ -67,6 +67,11 @@ import javax.faces.context.FacesContext;
 public class ViewProducer extends CdiProducer implements Bean<UIViewRoot> {
 
     /**
+     * Serialization version
+     */
+    private static final long serialVersionUID = 1L;
+    
+    /**
      * Inner class defining an annotation literal for @Default.
      */
     public class DefaultAnnotationLiteral
