@@ -102,7 +102,7 @@ import javax.faces.view.facelets.FaceletsResourceResolver;
       Validator.class,
       Converter.class,
       Renderer.class,
-      FacesBehavior.class,
+      FacesBehavior.class, 
       PhaseListener.class,
       FaceletsResourceResolver.class,
       Resource.class,
@@ -138,9 +138,14 @@ public class FacesInitializer implements ServletContainerInitializer {
                     if (FACES_SERVLET_CLASS.equals(registration.getClassName())) {
                         // FacesServlet has already been defined, so we're
                         // not going to add additional mappings;
+                        if ( isADFApplication() ) {
+                            //For Bug 21114997 and 21322338
+                            registration.addMapping("*.xhtml", "*.jsf");
+                        }
                         return;
                     }
                 }
+                
                 ServletRegistration reg =
                         servletContext.addServlet("FacesServlet",
                                 "javax.faces.webapp.FacesServlet");
@@ -174,7 +179,22 @@ public class FacesInitializer implements ServletContainerInitializer {
 
 
     // --------------------------------------------------------- Private Methods
-
+    private boolean isADFApplication() {
+        
+        boolean hasResource = false;
+        try {
+            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+            if (null != contextClassLoader) {
+                hasResource = (contextClassLoader.getResource("oracle/adf/view/rich/context/AdfFacesContext.class")  != null );
+            }
+        } catch (Exception e) {
+            // Intentionally swallow exception.  This should be logged
+            // but for the comment at the top stating that Loggins should 
+            // not be used for this class.  I assume that means Logging, and
+            // not Kenny Loggins.
+        }
+        return hasResource;
+    }
 
     private boolean shouldCheckMappings(Set<Class<?>> classes,
                                         ServletContext context) {

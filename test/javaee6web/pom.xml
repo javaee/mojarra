@@ -92,6 +92,7 @@
         <module>multiPageFlowInJar</module>
         <module>multiPageFlowUsingJar</module>
         <module>nestedFlow</module>
+        <module>servletMappingForADF</module>
         <module>viewScope</module>
     </modules>
 </project>
