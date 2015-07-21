@@ -42,6 +42,18 @@
                                 <copy todir="src/main/java">
                                     <fileset dir="../jsf-ri/src/main/java" includes="**/*.java"/>
                                 </copy>
+                                <!--
+                                
+                                   Generate sources from templates
+                                
+                                  -->
+                                <mkdir dir="src/main/java/com/sun/faces/util"/>
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.util"/>
+                                <copy file="../jsf-tools/template-src/MessageFactory.java"
+                                    todir="src/main/java/com/sun/faces/util"
+                                    filtering="true"/>
+
                             </target>
                         </configuration>
                         <goals>
