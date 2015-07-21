@@ -53,7 +53,31 @@
                                 <copy file="../jsf-tools/template-src/MessageFactory.java"
                                     todir="src/main/java/com/sun/faces/util"
                                     filtering="true"/>
-
+                                <!--
+                                
+                                    Generate AttributeManager
+                                
+                                -->
+                                <taskdef name="generateAttrManager"
+                                         classname="com.sun.faces.ant.AttributeManagerGenTask">
+                                    <classpath>
+                                        <pathelement location="../jsf-tools/target/jsf-tools-${project.version}.jar"/>
+                                    </classpath>
+                                </taskdef>
+                                <generateAttrManager
+                                    generatorConfig="../jsf-tools/conf/HtmlBasicTaglib21.properties"
+                                    facesConfig="../jsf-api/doc/standard-html-renderkit.xml"
+                                    fork="true">
+                                    <classpath>
+                                        <pathelement location="../jsf-tools/target/jsf-tools-${project.version}.jar"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                        <pathelement location="../jsf-tools/build/classes"/>
+                                    </classpath>
+                                </generateAttrManager>
+                                <copy todir="src/main/java">
+                                    <fileset dir="build/generate"/>
+                                </copy>
+                                <delete dir="build"/>
                             </target>
                         </configuration>
                         <goals>
@@ -61,6 +85,13 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>commons-digester</groupId>
+                        <artifactId>commons-digester</artifactId>
+                        <version>2.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
