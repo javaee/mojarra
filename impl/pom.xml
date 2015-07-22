@@ -27,13 +27,13 @@
                                 <!--
                                 
                                     Once migration is completely done we should not have
-                                    to delete src/main/java and src/main/resource and
-                                    src/main/js anymore
+                                    to delete any src/main directory anymore
                                 
                                 -->
                                 <delete dir="src/main/java"/>
                                 <delete dir="src/main/resources"/>
                                 <delete dir="src/main/js"/>
+                                <delete dir="src/main/template"/>
                             </target>
                         </configuration>
                         <goals>
@@ -52,6 +52,7 @@
                                 -->
                                 <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
+                                <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 <!--
                                 
                                     Copy jsf-api sources
@@ -171,12 +172,20 @@
                                 </copy>
                                 <!--
                                 
-                                    Copy jsf.js and mojarra.js
+                                    Copy jsf.js and mojarra.js into src/main/js
                                 
                                 -->
                                 <copy todir="src/main/js">
                                     <fileset dir="${jsf-api-dir}/src/main/resources" includes="jsf.js"/>
                                     <fileset dir="${jsf-ri-dir}/resources" includes="mojarra.js"/>
+                                </copy>
+                                <!--
+                                
+                                    Copy template-src into src/main/template
+                                    
+                                -->
+                                <copy todir="src/main/template">
+                                    <fileset dir="${jsf-tools-dir}/template-src"/>
                                 </copy>
                             </target>
                         </configuration>
@@ -199,7 +208,7 @@
                                   -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.util"/>
-                                <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
+                                <copy file="src/main/template/MessageFactory.java"
                                     todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/util"
                                     filtering="true"/>
                                 <!--
@@ -244,7 +253,7 @@
                                     -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.util"/>
-                                <copy file="${jsf-tools-dir}/template-src/TypedCollections.java"
+                                <copy file="src/main/template/TypedCollections.java"
                                     todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/util"
                                     filtering="true"/>
                                 <!--
@@ -254,7 +263,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.application"/>
-                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
+                                <copy file="src/main/template/SharedUtils.java"
                                     todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/application"
                                     filtering="true"/>
                                 <!--
@@ -264,7 +273,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.el"/>
-                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
+                                <copy file="src/main/template/SharedUtils.java"
                                     todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/el"
                                     filtering="true"/>
                                 <!--
@@ -274,7 +283,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.config.processor"/>
-                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
+                                <copy file="src/main/template/SharedUtils.java"
                                     todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/config/processor"
                                     filtering="true"/>
                                 <!--
@@ -284,7 +293,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.mgbean"/>
-                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
+                                <copy file="src/main/template/SharedUtils.java"
                                     todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/mgbean"
                                     filtering="true"/>
                                 <!--
@@ -294,7 +303,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.application.view"/>
-                                <copy file="${jsf-tools-dir}/template-src/StateHolderSaver.java"
+                                <copy file="src/main/template/StateHolderSaver.java"
                                       todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/view"
                                       filtering="true"/>
                                 <replace
@@ -308,7 +317,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.context"/>
-                                <copy file="${jsf-tools-dir}/template-src/StateHolderSaver.java"
+                                <copy file="src/main/template/StateHolderSaver.java"
                                       todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/context"
                                       filtering="true"/>
                                 <replace
@@ -426,7 +435,7 @@
                                 -->
                                 <filter token="protection" value=""/>
                                 <filter token="package" value="javax.faces"/>
-                                <copy file="${jsf-tools-dir}/template-src/TypedCollections.java"
+                                <copy file="src/main/template/TypedCollections.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces"
                                     filtering="true"/>
                                 <!--
@@ -436,7 +445,7 @@
                                 -->
                                 <filter token="protection" value=""/>
                                 <filter token="package" value="javax.faces.webapp"/>
-                                <copy file="${jsf-tools-dir}/template-src/TypedCollections.java"
+                                <copy file="src/main/template/TypedCollections.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/webapp"
                                     filtering="true"/>
                                 <!--
@@ -446,7 +455,7 @@
                                 -->
                                 <filter token="protection" value=""/>
                                 <filter token="package" value="javax.faces.component"/>
-                                <copy file="${jsf-tools-dir}/template-src/TypedCollections.java"
+                                <copy file="src/main/template/TypedCollections.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
                                     filtering="true"/>
                                 <!--
@@ -456,7 +465,7 @@
                                 -->
                                 <filter token="protection" value=""/>
                                 <filter token="package" value="javax.faces.component"/>
-                                <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
+                                <copy file="src/main/template/MessageFactory.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
                                     filtering="true"/>
                                 <!--
@@ -466,7 +475,7 @@
                                 -->
                                 <filter token="protection" value=""/>
                                 <filter token="package" value="javax.faces.webapp"/>
-                                <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
+                                <copy file="src/main/template/MessageFactory.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/webapp"
                                     filtering="true"/>
                                 <!--
@@ -476,7 +485,7 @@
                                 -->
                                 <filter token="protection" value=""/>
                                 <filter token="package" value="javax.faces.validator"/>
-                                <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
+                                <copy file="src/main/template/MessageFactory.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/validator"
                                     filtering="true"/>
                                 <!--
@@ -486,7 +495,7 @@
                                 -->
                                 <filter token="protection" value=""/>
                                 <filter token="package" value="javax.faces.convert"/>
-                                <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
+                                <copy file="src/main/template/MessageFactory.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/convert"
                                     filtering="true"/>
                                 <!--
@@ -525,7 +534,7 @@
                                 -->
                                 <filter token="protection" value=""/>
                                 <filter token="package" value="javax.faces.component"/>
-                                <copy file="${jsf-tools-dir}/template-src/StateHolderSaver.java"
+                                <copy file="src/main/template/StateHolderSaver.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
                                     filtering="true"/>
                                 <replace
@@ -539,7 +548,7 @@
                                 -->
                                 <filter token="protection" value=""/>
                                 <filter token="package" value="javax.faces.component"/>
-                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
+                                <copy file="src/main/template/SharedUtils.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
                                     filtering="true"/>
                                 <!--
@@ -549,7 +558,7 @@
                                 -->
                                 <filter token="protection" value=""/>
                                 <filter token="package" value="javax.faces.application"/>
-                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
+                                <copy file="src/main/template/SharedUtils.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/application"
                                     filtering="true"/>
                             </target>
@@ -639,7 +648,7 @@
                                     args="-o ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf.js ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
                                 <!--
                                 
-                                    Unzip injectionproviders.jar
+                                    *** Unzip injectionproviders.jar ***
                                 
                                 -->
                                 <unzip src="${jsf-api-dir}/../lib/injectionproviders.jar"
