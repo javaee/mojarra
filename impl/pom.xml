@@ -24,6 +24,12 @@
                         <phase>clean</phase>
                         <configuration>
                             <target>
+                                <!--
+                                
+                                    Once migration is completely done we should not have
+                                    to delete src/main/java and src/main/resource anymore
+                                
+                                -->
                                 <delete dir="src/main/java"/>
                                 <delete dir="src/main/resources"/>
                             </target>
@@ -33,13 +39,17 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>generate-sources</id>
-                        <phase>generate-sources</phase>
+                        <id>initialize</id>
+                        <phase>initialize</phase>
                         <configuration>
                             <target>
+                                <!--
+                                
+                                    Once migration is completely done this should disappear
+                                
+                                -->
                                 <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
-                                <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 <!--
                                 
                                     Copy jsf-api sources
@@ -56,6 +66,20 @@
                                 <copy todir="src/main/java">
                                     <fileset dir="${jsf-ri-dir}/src/main/java" includes="**/*.java"/>
                                 </copy>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target>
+                                <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
+                                <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
+                                <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 <!--
                                 
                                    Generate MessageFactory.
@@ -65,7 +89,7 @@
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.util"/>
                                 <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
-                                    todir="src/main/java/com/sun/faces/util"
+                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/util"
                                     filtering="true"/>
                                 <!--
                                 
@@ -76,7 +100,6 @@
                                          classname="com.sun.faces.ant.AttributeManagerGenTask">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
-                                        <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </taskdef>
                                 <generateAttrManager
@@ -89,7 +112,7 @@
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateAttrManager>
-                                <copy todir="src/main/java">
+                                <copy todir="${project.build.directory}/generated-sources/antrun">
                                     <fileset dir="build/generate"/>
                                 </copy>
                                 <delete dir="build"/>
@@ -101,7 +124,7 @@
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.util"/>
                                 <copy file="${jsf-tools-dir}/template-src/TypedCollections.java"
-                                    todir="src/main/java/com/sun/faces/util"
+                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/util"
                                     filtering="true"/>
                                 <!--
                                 
@@ -111,7 +134,7 @@
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.application"/>
                                 <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
-                                    todir="src/main/java/com/sun/faces/application"
+                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/application"
                                     filtering="true"/>
                                 <!--
                                 
@@ -121,7 +144,7 @@
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.el"/>
                                 <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
-                                    todir="src/main/java/com/sun/faces/el"
+                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/el"
                                     filtering="true"/>
                                 <!--
                                     
@@ -131,7 +154,7 @@
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.config.processor"/>
                                 <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
-                                    todir="src/main/java/com/sun/faces/config/processor"
+                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/config/processor"
                                     filtering="true"/>
                                 <!--
                                 
@@ -141,7 +164,7 @@
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.mgbean"/>
                                 <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
-                                    todir="src/main/java/com/sun/faces/mgbean"
+                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/mgbean"
                                     filtering="true"/>
                                 <!--
                                 
@@ -151,10 +174,10 @@
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.application.view"/>
                                 <copy file="${jsf-tools-dir}/template-src/StateHolderSaver.java"
-                                      todir="src/main/java/com/sun/faces/application/view"
+                                      todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/view"
                                       filtering="true"/>
                                 <replace
-                                    file="src/main/java/com/sun/faces/application/view/StateHolderSaver.java"
+                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/view/StateHolderSaver.java"
                                     token="@serialVersionUID@"
                                     value="4866548262845392093L"/>
                                 <!--
@@ -165,10 +188,10 @@
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.context"/>
                                 <copy file="${jsf-tools-dir}/template-src/StateHolderSaver.java"
-                                      todir="src/main/java/com/sun/faces/context"
+                                      todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/context"
                                       filtering="true"/>
                                 <replace
-                                    file="src/main/java/com/sun/faces/context/StateHolderSaver.java"
+                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/context/StateHolderSaver.java"
                                     token="@serialVersionUID@"
                                     value="146780782953074472L"/>
                                 <!--
@@ -178,26 +201,26 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.application"/>
-                                <copy todir="src/main/java/com/sun/faces/application"
+                                <copy todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/application"
                                       filtering="true">
                                     <fileset dir="${jsf-api-dir}/template-src">
                                         <include name="*Adapter.java"/>
                                     </fileset>
                                 </copy>
                                 <replace
-                                    file="src/main/java/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
+                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
                                     token="@serialVersionUID@"
                                     value="6351778415298720238L"/>
                                 <replace
-                                    file="src/main/java/com/sun/faces/application/MethodExpressionMethodBindingAdapter.java"
+                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/MethodExpressionMethodBindingAdapter.java"
                                     token="@serialVersionUID@"
                                     value="5639227653537610567L"/>
                                 <replace
-                                    file="src/main/java/com/sun/faces/application/ValueExpressionValueBindingAdapter.java"
+                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/ValueExpressionValueBindingAdapter.java"
                                     token="@serialVersionUID@"
                                     value="2990621816592041196L"/>
                                 <replace
-                                    file="src/main/java/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
+                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
                                     token="@serialVersionUID@"
                                     value="7410146713650507654L"/>
                                 <!--
@@ -215,7 +238,6 @@
                                          classname="com.sun.faces.ant.TaglibGenTask">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
-                                        <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </taskdef>
                                 <generateTaglib
@@ -228,7 +250,7 @@
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateTaglib>
-                                <copy todir="src/main/java/com">
+                                <copy todir="${project.build.directory}/generated-sources/antrun/com">
                                     <fileset dir="build/generate/com"/>
                                 </copy>
                                 <copy file="build/generate/conf/share/html_basic.tld"
@@ -281,16 +303,30 @@
                 </executions>
                 <dependencies>
                     <dependency>
-                        <groupId>com.sun.faces.build</groupId>
-                        <artifactId>jsf-tools</artifactId>
-                        <version>${project.version}</version>
-                    </dependency>
-                    <dependency>
                         <groupId>commons-digester</groupId>
                         <artifactId>commons-digester</artifactId>
                         <version>2.1</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9.1</version>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/antrun</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
