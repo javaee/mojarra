@@ -13,6 +13,11 @@
         <maven>3.1.1</maven>
     </prerequisites>
     <build>
+        <resources>
+            <resource>
+                <directory>${project.build.directory}/generated-resources/antrun</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -151,7 +156,7 @@
                                       file="${jsf-api-dir}/src/main/resources/mojarra-jsf-api-probe-provider.xml"/>
                                 <!--
                                 
-                                    **** Copy LICENSE.txt from main project directory ****
+                                    Copy LICENSE.txt from main project directory
                                 
                                 -->
                                 <copy todir="src/main/resources/META-INF" 
@@ -611,10 +616,11 @@
                                 <delete dir="${jsf-tools-dir}/build"/>
                                 <!--
                                 
-                                    Generate jsf-uncompressed.js
+                                    Generate jsf(-uncompressed).js
                                 
                                 -->
-                                <concat destfile="src/main/resources/META-INF/resources/javax.faces/jsf-uncompressed.js" fixlastline="yes">
+                                <mkdir dir="${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces"/>
+                                <concat destfile="${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf-uncompressed.js" fixlastline="yes">
                                     <filelist dir="${jsf-api-dir}/src/main/resources">
                                         <file name="jsf.js"/>
                                     </filelist>
@@ -622,9 +628,12 @@
                                         <file name="mojarra.js"/>
                                     </filelist>
                                 </concat>
+                                <get src="https://github.com/yui/yuicompressor/releases/download/v2.4.8/yuicompressor-2.4.8.jar" dest="yuicompressor.jar"/>
+                                <java jar="yuicompressor.jar" fork="true" failonerror="true"
+                                    args="-o ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf.js ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
                                 <!--
                                 
-                                    **** Unzip injectionproviders.jar ****
+                                    Unzip injectionproviders.jar
                                 
                                 -->
                                 <unzip src="${jsf-api-dir}/../lib/injectionproviders.jar"
@@ -633,13 +642,6 @@
                                         <exclude name="META-INF/MANIFEST.MF" />
                                     </patternset>
                                 </unzip>
-                                <!--
-                                
-                                    **** Generate compressed jsf.js ****
-                                
-                                -->
-                                <java jar="${jsf-api-dir}/../dependencies/jars/yuicompressor.jar" fork="true" failonerror="true"
-                                    args="-o src/main/resources/META-INF/resources/javax.faces/jsf.js src/main/resources/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
                                 <!--
                                 
                                     Generate jsf-ri-runtime.xml
@@ -658,17 +660,17 @@
                                     <replacevalue><![CDATA[>]]></replacevalue>
                                 </replace>
                                 <xslt in="${basedir}/merged.xml"
-                                    out="src/main/resources/com/sun/faces/jsf-ri-runtime.xml"
+                                    out="${project.build.directory}/generated-resources/antrun/com/sun/faces/jsf-ri-runtime.xml"
                                     style="${jsf-ri-dir}/conf/xslt/prune-tool-data.xsl">
                                 </xslt>
-                                <replace file="src/main/resources/com/sun/faces/jsf-ri-runtime.xml">
+                                <replace file="${project.build.directory}/generated-resources/antrun/com/sun/faces/jsf-ri-runtime.xml">
                                     <replacetoken><![CDATA[xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"]]></replacetoken>
                                 </replace>
-                                <replace file="src/main/resources/com/sun/faces/jsf-ri-runtime.xml">
+                                <replace file="${project.build.directory}/generated-resources/antrun/com/sun/faces/jsf-ri-runtime.xml">
                                     <replacetoken><![CDATA[ >]]></replacetoken>
                                     <replacevalue><![CDATA[>]]></replacevalue>
                                 </replace>
-                                <replace file="src/main/resources/com/sun/faces/jsf-ri-runtime.xml">
+                                <replace file="${project.build.directory}/generated-resources/antrun/com/sun/faces/jsf-ri-runtime.xml">
                                     <replacetoken><![CDATA[<faces-config>]]></replacetoken>
                                     <replacevalue><![CDATA[
 <faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
