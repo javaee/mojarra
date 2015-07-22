@@ -319,7 +319,7 @@
                                     </classpath>
                                 </generateTaglib>
                                 <copy file="build/generate/conf/share/html_basic.tld"
-                                    toDir="src/main/resources/META-INF"/>
+                                      toDir="src/main/resources/META-INF"/>
                                 <delete dir="build"/>
                             </target>
                         </configuration>
@@ -335,6 +335,19 @@
                         <version>2.1</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
