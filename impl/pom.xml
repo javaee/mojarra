@@ -177,6 +177,16 @@
                                 <copy todir="src/main/template">
                                     <fileset dir="${jsf-tools-dir}/template-src"/>
                                 </copy>
+                                <!--
+                                
+                                    Copy API template-src into src/main/template 
+                                
+                                -->
+                                <copy todir="src/main/template">
+                                    <fileset dir="${jsf-api-dir}/template-src">
+                                        <include name="*Adapter.java"/>
+                                    </fileset>
+                                </copy>
                             </target>
                         </configuration>
                         <goals>
@@ -188,7 +198,6 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <target>
-                                <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 <!--
@@ -223,7 +232,7 @@
                                 </taskdef>
                                 <generateAttrManager
                                     generatorConfig="${jsf-tools-dir}/conf/HtmlBasicTaglib21.properties"
-                                    facesConfig="${jsf-api-dir}/doc/standard-html-renderkit.xml"
+                                    facesConfig="src/main/resources/com/sun/faces/standard-html-renderkit.xml"
                                     fork="true">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
@@ -323,7 +332,7 @@
                                 <filter token="package" value="com.sun.faces.application"/>
                                 <copy todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/application"
                                       filtering="true">
-                                    <fileset dir="${jsf-api-dir}/template-src">
+                                    <fileset dir="src/main/template">
                                         <include name="*Adapter.java"/>
                                     </fileset>
                                 </copy>
@@ -354,7 +363,7 @@
                                 </copy>
                                 <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
                                     flatten="true">
-                                    <fileset dir="${jsf-api-dir}/doc"
+                                    <fileset dir="src/main/resources/com/sun/faces"
                                         includes="*.dtd,*.xsd"/>
                                 </copy>
                                 <copy todir="build">
@@ -370,7 +379,7 @@
                                 </taskdef>
                                 <generateTaglib
                                     generatorConfig="${jsf-tools-dir}/conf/HtmlBasicTaglib21.properties"
-                                    facesConfig="${jsf-api-dir}/doc/standard-html-renderkit.xml"
+                                    facesConfig="src/main/resources/com/sun/faces/standard-html-renderkit.xml"
                                     fork="true">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
@@ -394,7 +403,7 @@
                                 </copy>
                                 <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
                                     flatten="true">
-                                    <fileset dir="${jsf-api-dir}/doc"
+                                    <fileset dir="src/main/resources/com/sun/faces"
                                         includes="*.dtd,*.xsd"/>
                                 </copy>
                                 <taskdef name="generateComponents"
@@ -405,7 +414,7 @@
                                 </taskdef>
                                 <generateComponents
                                     generatorConfig="${jsf-tools-dir}/conf/HtmlBasicTaglib21.properties"
-                                    facesConfig="${jsf-api-dir}/doc/standard-html-renderkit.xml"
+                                    facesConfig="src/main/resources/com/sun/faces/standard-html-renderkit.xml"
                                     fork="true">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
@@ -497,7 +506,7 @@
                                 <filter token="package" value="javax.faces.component"/>
                                 <copy todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
                                     filtering="true">
-                                    <fileset dir="${jsf-api-dir}/template-src">
+                                    <fileset dir="src/main/template">
                                         <include name="*Adapter.java"/>
                                     </fileset>
                                 </copy>
@@ -607,7 +616,7 @@
                                 </taskdef>
                                 <generateTaglib
                                     generatorConfig="${jsf-tools-dir}/conf/HtmlBasicTaglib21.properties"
-                                    facesConfig="${jsf-api-dir}/doc/standard-html-renderkit.xml"
+                                    facesConfig="src/main/resources/com/sun/faces/standard-html-renderkit.xml"
                                     fork="true">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
@@ -638,7 +647,7 @@
                                     args="-o ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf.js ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
                                 <!--
                                 
-                                    *** Unzip injectionproviders.jar ***
+                                    Unzip injectionproviders.jar
                                 
                                 -->
                                 <unzip src="${jsf-api-dir}/../lib/injectionproviders.jar"
@@ -652,7 +661,7 @@
                                     Generate jsf-ri-runtime.xml
                                 
                                 -->
-                                <xslt in="${jsf-api-dir}/doc/standard-html-renderkit.xml" 
+                                <xslt in="src/main/resources/com/sun/faces/standard-html-renderkit.xml" 
                                       out="merged.xml"
                                       style="${jsf-ri-dir}/conf/xslt/merge-config.xsl">
                                 </xslt>
