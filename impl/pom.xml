@@ -27,11 +27,13 @@
                                 <!--
                                 
                                     Once migration is completely done we should not have
-                                    to delete src/main/java and src/main/resource anymore
+                                    to delete src/main/java and src/main/resource and
+                                    src/main/js anymore
                                 
                                 -->
                                 <delete dir="src/main/java"/>
                                 <delete dir="src/main/resources"/>
+                                <delete dir="src/main/js"/>
                             </target>
                         </configuration>
                         <goals>
@@ -167,6 +169,15 @@
                                     <fileset dir="${jsf-api-dir}/doc"
                                              includes="*.dtd,*.xsd"/>
                                 </copy>
+                                <!--
+                                
+                                    Copy jsf.js and mojarra.js
+                                
+                                -->
+                                <copy todir="src/main/js">
+                                    <fileset dir="${jsf-api-dir}/src/main/resources" includes="jsf.js"/>
+                                    <fileset dir="${jsf-ri-dir}/resources" includes="mojarra.js"/>
+                                </copy>
                             </target>
                         </configuration>
                         <goals>
@@ -186,7 +197,6 @@
                                    Generate MessageFactory.
                                 
                                   -->
-                                <mkdir dir="src/main/java/com/sun/faces/util"/>
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.util"/>
                                 <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
@@ -617,10 +627,10 @@
                                 -->
                                 <mkdir dir="${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces"/>
                                 <concat destfile="${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf-uncompressed.js" fixlastline="yes">
-                                    <filelist dir="${jsf-api-dir}/src/main/resources">
+                                    <filelist dir="src/main/js">
                                         <file name="jsf.js"/>
                                     </filelist>
-                                    <filelist  dir="${jsf-ri-dir}/resources">
+                                    <filelist  dir="src/main/js">
                                         <file name="mojarra.js"/>
                                     </filelist>
                                 </concat>
