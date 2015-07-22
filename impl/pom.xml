@@ -151,7 +151,7 @@
                                       file="${jsf-api-dir}/src/main/resources/mojarra-jsf-api-probe-provider.xml"/>
                                 <!--
                                 
-                                    Copy LICENSE.txt from main project directory
+                                    **** Copy LICENSE.txt from main project directory ****
                                 
                                 -->
                                 <copy todir="src/main/resources/META-INF" 
@@ -624,7 +624,7 @@
                                 </concat>
                                 <!--
                                 
-                                    Unzip injectionproviders.jar
+                                    **** Unzip injectionproviders.jar ****
                                 
                                 -->
                                 <unzip src="${jsf-api-dir}/../lib/injectionproviders.jar"
@@ -633,6 +633,13 @@
                                         <exclude name="META-INF/MANIFEST.MF" />
                                     </patternset>
                                 </unzip>
+                                <!--
+                                
+                                    **** Generate compressed jsf.js ****
+                                
+                                -->
+                                <java jar="${jsf-api-dir}/../dependencies/jars/yuicompressor.jar" fork="true" failonerror="true"
+                                    args="-o src/main/resources/META-INF/resources/javax.faces/jsf.js src/main/resources/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
                             </target>
                         </configuration>
                         <goals>
