@@ -37,13 +37,16 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <target>
+                                <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
+                                <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
+                                <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 <!--
                                 
                                     Copy jsf-api sources
                                     
                                 -->
                                 <copy todir="src/main/java">
-                                    <fileset dir="../jsf-api/src/main/java" includes="**/*.java"/>
+                                    <fileset dir="${jsf-api-dir}/src/main/java" includes="**/*.java"/>
                                 </copy>
                                 <!--
                                     
@@ -51,7 +54,7 @@
                                     
                                 -->
                                 <copy todir="src/main/java">
-                                    <fileset dir="../jsf-ri/src/main/java" includes="**/*.java"/>
+                                    <fileset dir="${jsf-ri-dir}/src/main/java" includes="**/*.java"/>
                                 </copy>
                                 <!--
                                 
@@ -61,7 +64,7 @@
                                 <mkdir dir="src/main/java/com/sun/faces/util"/>
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.util"/>
-                                <copy file="../jsf-tools/template-src/MessageFactory.java"
+                                <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
                                     todir="src/main/java/com/sun/faces/util"
                                     filtering="true"/>
                                 <!--
@@ -72,16 +75,17 @@
                                 <taskdef name="generateAttrManager"
                                          classname="com.sun.faces.ant.AttributeManagerGenTask">
                                     <classpath>
-                                        <pathelement location="../jsf-tools/target/jsf-tools-${project.version}.jar"/>
+                                        <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
+                                        <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </taskdef>
                                 <generateAttrManager
-                                    generatorConfig="../jsf-tools/conf/HtmlBasicTaglib21.properties"
-                                    facesConfig="../jsf-api/doc/standard-html-renderkit.xml"
+                                    generatorConfig="${jsf-tools-dir}/conf/HtmlBasicTaglib21.properties"
+                                    facesConfig="${jsf-api-dir}/doc/standard-html-renderkit.xml"
                                     fork="true">
                                     <classpath>
-                                        <pathelement location="../jsf-tools/target/jsf-tools-${project.version}.jar"/>
-                                        <pathelement location="../jsf-tools/build/classes"/>
+                                        <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
+                                        <pathelement location="${jsf-tools-dir}/build/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateAttrManager>
@@ -96,7 +100,7 @@
                                     -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.util"/>
-                                <copy file="../jsf-tools/template-src/TypedCollections.java"
+                                <copy file="${jsf-tools-dir}/template-src/TypedCollections.java"
                                     todir="src/main/java/com/sun/faces/util"
                                     filtering="true"/>
                                 <!--
@@ -106,7 +110,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.application"/>
-                                <copy file="../jsf-tools/template-src/SharedUtils.java"
+                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
                                     todir="src/main/java/com/sun/faces/application"
                                     filtering="true"/>
                                 <!--
@@ -116,7 +120,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.el"/>
-                                <copy file="../jsf-tools/template-src/SharedUtils.java"
+                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
                                     todir="src/main/java/com/sun/faces/el"
                                     filtering="true"/>
                                 <!--
@@ -126,7 +130,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.config.processor"/>
-                                <copy file="../jsf-tools/template-src/SharedUtils.java"
+                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
                                     todir="src/main/java/com/sun/faces/config/processor"
                                     filtering="true"/>
                                 <!--
@@ -136,7 +140,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.mgbean"/>
-                                <copy file="../jsf-tools/template-src/SharedUtils.java"
+                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
                                     todir="src/main/java/com/sun/faces/mgbean"
                                     filtering="true"/>
                                 <!--
@@ -146,7 +150,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.application.view"/>
-                                <copy file="../jsf-tools/template-src/StateHolderSaver.java"
+                                <copy file="${jsf-tools-dir}/template-src/StateHolderSaver.java"
                                       todir="src/main/java/com/sun/faces/application/view"
                                       filtering="true"/>
                                 <replace
@@ -160,7 +164,7 @@
                                 -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.context"/>
-                                <copy file="../jsf-tools/template-src/StateHolderSaver.java"
+                                <copy file="${jsf-tools-dir}/template-src/StateHolderSaver.java"
                                       todir="src/main/java/com/sun/faces/context"
                                       filtering="true"/>
                                 <replace
@@ -176,7 +180,7 @@
                                 <filter token="package" value="com.sun.faces.application"/>
                                 <copy todir="src/main/java/com/sun/faces/application"
                                       filtering="true">
-                                    <fileset dir="../jsf-api/template-src">
+                                    <fileset dir="${jsf-api-dir}/template-src">
                                         <include name="*Adapter.java"/>
                                     </fileset>
                                 </copy>
@@ -203,23 +207,24 @@
                                     
                                 -->
                                 <copy todir="build">
-                                    <fileset dir="../jsf-tools/conf">
+                                    <fileset dir="${jsf-tools-dir}/conf">
                                         <include name="TAG-*"/>
                                     </fileset>
                                 </copy>
                                 <taskdef name="generateTaglib"
                                          classname="com.sun.faces.ant.TaglibGenTask">
                                     <classpath>
-                                        <pathelement location="../jsf-tools/target/jsf-tools-${project.version}.jar"/>
+                                        <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
+                                        <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </taskdef>
                                 <generateTaglib
-                                    generatorConfig="../jsf-tools/conf/HtmlBasicTaglib21.properties"
-                                    facesConfig="../jsf-api/doc/standard-html-renderkit.xml"
+                                    generatorConfig="${jsf-tools-dir}/conf/HtmlBasicTaglib21.properties"
+                                    facesConfig="${jsf-api-dir}/doc/standard-html-renderkit.xml"
                                     fork="true">
                                     <classpath>
-                                        <pathelement location="../jsf-tools/target/jsf-tools-${project.version}.jar"/>
-                                        <pathelement location="../jsf-tools/build/classes"/>
+                                        <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
+                                        <pathelement location="${jsf-tools-dir}/build/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateTaglib>
@@ -240,6 +245,8 @@
                         <phase>generate-resources</phase>
                         <configuration>
                             <target>
+                                <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
+                                <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <!--
                                 
                                     Copy LogStrings
@@ -247,7 +254,7 @@
                                 -->
                                 <mkdir dir="src/main/resources"/>
                                 <copy todir="src/main/resources">
-                                    <fileset dir="../jsf-ri/src/main/resources"
+                                    <fileset dir="${jsf-ri-dir}/src/main/resources"
                                              includes="**/LogStrings.properties"/>
                                 </copy>
                                 <replace dir="src/main/resources"
@@ -262,7 +269,7 @@
                                 -->
                                 <copy todir="src/main/resources/com/sun/faces"
                                       flatten="true">
-                                    <fileset dir="../jsf-api/doc"
+                                    <fileset dir="${jsf-api-dir}/doc"
                                              includes="*.dtd,*.xsd"/>
                                 </copy>
                             </target>
@@ -273,6 +280,11 @@
                     </execution>
                 </executions>
                 <dependencies>
+                    <dependency>
+                        <groupId>com.sun.faces.build</groupId>
+                        <artifactId>jsf-tools</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
                     <dependency>
                         <groupId>commons-digester</groupId>
                         <artifactId>commons-digester</artifactId>
