@@ -273,6 +273,41 @@
                                 </copy>
                                 <delete dir="build"/>
                                 <delete dir="${jsf-tools-dir}/build"/>
+                                <!--
+                                
+                                    Generate API components
+                                    
+                                -->
+                                <copy todir="${jsf-tools-dir}/build/classes">
+                                    <fileset dir="${jsf-ri-dir}/src/main/resources"
+                                        includes="**/LogStrings.properties"/>
+                                </copy>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
+                                    flatten="true">
+                                    <fileset dir="${jsf-api-dir}/doc"
+                                        includes="*.dtd,*.xsd"/>
+                                </copy>
+                                <taskdef name="generateComponents"
+                                    classname="com.sun.faces.ant.ComponentGenTask">
+                                    <classpath>
+                                        <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
+                                    </classpath>
+                                </taskdef>
+                                <generateComponents
+                                    generatorConfig="${jsf-tools-dir}/conf/HtmlBasicTaglib21.properties"
+                                    facesConfig="${jsf-api-dir}/doc/standard-html-renderkit.xml"
+                                    fork="true">
+                                    <classpath>
+                                        <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
+                                        <pathelement location="${jsf-tools-dir}/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                    </classpath>
+                                </generateComponents>
+                                <copy todir="${project.build.directory}/generated-sources/antrun/javax">
+                                    <fileset dir="build/generate/javax"/>
+                                </copy>
+                                <delete dir="build"/>
+                                <delete dir="${jsf-tools-dir}/build"/>
                             </target>
                         </configuration>
                         <goals>
