@@ -125,6 +125,7 @@
                                     <fileset dir="build/generate"/>
                                 </copy>
                                 <delete dir="build"/>
+                                <delete dir="${jsf-tools-dir}/build"/>
                                 <!--
                                 
                                     Generate TypedCollections
@@ -237,6 +238,15 @@
                                     Generate com.sun.faces.renderkit.html_basic sources
                                     
                                 -->
+                                <copy todir="${jsf-tools-dir}/build/classes">
+                                    <fileset dir="${jsf-ri-dir}/src/main/resources"
+                                        includes="**/LogStrings.properties"/>
+                                </copy>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
+                                    flatten="true">
+                                    <fileset dir="${jsf-api-dir}/doc"
+                                        includes="*.dtd,*.xsd"/>
+                                </copy>
                                 <copy todir="build">
                                     <fileset dir="${jsf-tools-dir}/conf">
                                         <include name="TAG-*"/>
@@ -262,6 +272,7 @@
                                     <fileset dir="build/generate/com"/>
                                 </copy>
                                 <delete dir="build"/>
+                                <delete dir="${jsf-tools-dir}/build"/>
                             </target>
                         </configuration>
                         <goals>
@@ -311,6 +322,15 @@
                                         <include name="TAG-*"/>
                                     </fileset>
                                 </copy>
+                                <copy todir="${jsf-tools-dir}/build/classes">
+                                    <fileset dir="${jsf-ri-dir}/src/main/resources"
+                                        includes="**/LogStrings.properties"/>
+                                </copy>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
+                                    flatten="true">
+                                    <fileset dir="${jsf-api-dir}/doc"
+                                        includes="*.dtd,*.xsd"/>
+                                </copy>
                                 <taskdef name="generateTaglib"
                                          classname="com.sun.faces.ant.TaglibGenTask">
                                     <classpath>
@@ -330,6 +350,7 @@
                                 <copy file="build/generate/conf/share/html_basic.tld"
                                       toDir="src/main/resources/META-INF"/>
                                 <delete dir="build"/>
+                                <delete dir="${jsf-tools-dir}/build"/>
                             </target>
                         </configuration>
                         <goals>
