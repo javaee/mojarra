@@ -324,12 +324,12 @@
                                 </copy>
                                 <copy todir="${jsf-tools-dir}/build/classes">
                                     <fileset dir="${jsf-ri-dir}/src/main/resources"
-                                        includes="**/LogStrings.properties"/>
+                                             includes="**/LogStrings.properties"/>
                                 </copy>
                                 <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
-                                    flatten="true">
+                                      flatten="true">
                                     <fileset dir="${jsf-api-dir}/doc"
-                                        includes="*.dtd,*.xsd"/>
+                                             includes="*.dtd,*.xsd"/>
                                 </copy>
                                 <taskdef name="generateTaglib"
                                          classname="com.sun.faces.ant.TaglibGenTask">
@@ -366,6 +366,24 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <configuration>
+                            <excludePackageNames>com</excludePackageNames>
+                        </configuration>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
