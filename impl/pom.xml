@@ -162,16 +162,6 @@
                                     file="${jsf-api-dir}/../legal/jsf-cddl/LICENSE.txt" />
                                 <!--
                                 
-                                    Copy DTD and XSD files
-                                
-                                -->
-                                <copy todir="src/main/resources/com/sun/faces"
-                                      flatten="true">
-                                    <fileset dir="${jsf-api-dir}/doc"
-                                             includes="*.dtd,*.xsd"/>
-                                </copy>
-                                <!--
-                                
                                     Copy jsf.js and mojarra.js into src/main/js
                                 
                                 -->
@@ -222,7 +212,7 @@
                                 </copy>
                                 <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
                                     flatten="true">
-                                    <fileset dir="${jsf-api-dir}/doc"
+                                    <fileset dir="src/main/resources/com/sun/faces"
                                         includes="*.dtd,*.xsd"/>
                                 </copy>
                                 <taskdef name="generateAttrManager"
