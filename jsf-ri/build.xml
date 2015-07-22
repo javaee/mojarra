@@ -504,7 +504,8 @@
       <jsf.mvn pomFile="${jsf.build.home}/jsf-tools/pom.xml"
                dir="${jsf.build.home}/jsf-tools"
                doctitle="JavaServer Faces VDL Documentation (${spec.version} SNAPSHOT ${build.number})"
-               goals="package" />
+               goals="package"
+               profiles="-Pvdldoc"/>
       <copy todir="${build.dir}" overwrite="true">
         <fileset dir="${jsf.build.home}/jsf-tools/target/site">
           <include name="vdldoc/**"/>
@@ -516,6 +517,10 @@
           <include name="expert*.png" />
           <include name="changed*.cur" />
         </fileset>
+        <fileset dir="${basedir}/../jsf-api/src/main/resources/">
+          <include name="jsf-api.css" />
+        </fileset>
+
       </copy>
 
 
@@ -700,8 +705,8 @@
             <replacevalue><![CDATA[
 <faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
-    version="2.2">]]>
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
+    version="2.3">]]>
             </replacevalue>
         </replace>
         <delete file="${basedir}/merged.xml"/>

@@ -74,42 +74,7 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-            <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>exec-maven-plugin</artifactId>
-              <version>1.3.2</version>
-              <executions>
-                <execution>
-                  <id>generate-vdldoc</id>
-                  <phase>prepare-package</phase>
-                  <goals>
-                    <goal>exec</goal>
-                  </goals>
-                </execution>
-              </executions>
-              <configuration>
-                <executable>java</executable>
-                <arguments>
-                  <argument>-jar</argument>
-                  <argument>${settings.localRepository}/org/omnifaces/vdldoc/${vdldoc.version}/vdldoc-${vdldoc.version}.jar</argument>
-                  <argument>-d</argument>
-                  <argument>${project.build.directory}/site/vdldoc</argument>
-                  <argument>-windowtitle</argument>
-                  <argument>${doctitle}</argument>
-                  <argument>-doctitle</argument>
-                  <argument>${doctitle}</argument>
-                  <argument>${project.basedir}/../jsf-ri/conf/share/composite.taglib.xml</argument>
-<!--                  <argument>additional taglibs here</argument> -->
-                </arguments>
-              </configuration>
-              <dependencies>
-                <dependency>
-                  <groupId>org.omnifaces</groupId>
-                  <artifactId>vdldoc</artifactId>
-                  <version>${vdldoc.version}</version>
-                </dependency>
-              </dependencies>
-            </plugin>
+
         </plugins>
     </build>
     <dependencies>
@@ -130,9 +95,6 @@
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vdldoc.version>2.0</vdldoc.version>
-        <spec.version>2.3</spec.version>
-        <doctitle>JSF ${spec.version} VDL Documentation</doctitle>
     </properties>
 
   <profiles>
@@ -169,6 +131,76 @@
         </dependency>
       </dependencies>
     </profile>
+    <profile>
+      <id>vdldoc</id>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>sonatypeSnapshots</id>
+          <name>Sonatype Snapshots</name>
+          <releases>
+            <enabled>false</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>fail</checksumPolicy>
+          </snapshots>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <layout>default</layout>
+        </pluginRepository>
+      </pluginRepositories>
+      <build>
+        <plugins>
+          <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>exec-maven-plugin</artifactId>
+              <version>1.3.2</version>
+              <executions>
+                <execution>
+                  <id>generate-vdldoc</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                    <goal>exec</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <configuration>
+                <executable>java</executable>
+                <arguments>
+                  <argument>-jar</argument>
+                  <argument>${settings.localRepository}/org/omnifaces/vdldoc/${vdldoc.version}/vdldoc-${vdldoc.version}.jar</argument>
+                  <argument>-f</argument>
+                  <argument>-css</argument>
+                  <argument>jsf-api.css</argument>
+                  <argument>-d</argument>
+                  <argument>${project.build.directory}/site/vdldoc</argument>
+                  <argument>-windowtitle</argument>
+                  <argument>${doctitle}</argument>
+                  <argument>-doctitle</argument>
+                  <argument>${doctitle}</argument>
+                  <argument>${project.basedir}/../jsf-ri/conf/share/composite.taglib.xml</argument>
+<!--                  <argument>additional taglibs here</argument> -->
+                </arguments>
+              </configuration>
+              <dependencies>
+                <dependency>
+                  <groupId>org.omnifaces</groupId>
+                  <artifactId>vdldoc</artifactId>
+                  <version>${vdldoc.version}</version>
+                </dependency>
+              </dependencies>
+            </plugin>
+        </plugins>
+      </build>
+      <properties>
+        <vdldoc.version>2.1-SNAPSHOT</vdldoc.version>
+        <spec.version>2.3</spec.version>
+        <doctitle>JSF ${spec.version} VDL Documentation</doctitle>
+      </properties>
+    </profile>
+
   </profiles>
 
 </project>
