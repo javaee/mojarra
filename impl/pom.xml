@@ -628,7 +628,7 @@
                                         <file name="mojarra.js"/>
                                     </filelist>
                                 </concat>
-                                <get src="https://github.com/yui/yuicompressor/releases/download/v2.4.8/yuicompressor-2.4.8.jar" dest="yuicompressor.jar"/>
+                                <get src="https://github.com/yui/yuicompressor/releases/download/v2.4.8/yuicompressor-2.4.8.jar" dest="yuicompressor.jar" usetimestamp="true"/>
                                 <java jar="yuicompressor.jar" fork="true" failonerror="true"
                                     args="-o ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf.js ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
                                 <!--
