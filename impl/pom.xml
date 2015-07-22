@@ -640,6 +640,44 @@
                                 -->
                                 <java jar="${jsf-api-dir}/../dependencies/jars/yuicompressor.jar" fork="true" failonerror="true"
                                     args="-o src/main/resources/META-INF/resources/javax.faces/jsf.js src/main/resources/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
+                                <!--
+                                
+                                    Generate jsf-ri-runtime.xml
+                                
+                                -->
+                                <xslt in="${jsf-api-dir}/doc/standard-html-renderkit.xml" 
+                                    out="merged.xml"
+                                    style="${jsf-ri-dir}/conf/xslt/merge-config.xsl">
+                                </xslt>
+                                <replace file="${basedir}/merged.xml">
+                                    <replacetoken><![CDATA[xmlns:jsf="http://xmlns.jcp.org/xml/ns/javaee"]]></replacetoken>
+                                    <replacevalue><![CDATA[]]></replacevalue>
+                                </replace>
+                                <replace file="${basedir}/merged.xml">
+                                    <replacetoken><![CDATA[ >]]></replacetoken>
+                                    <replacevalue><![CDATA[>]]></replacevalue>
+                                </replace>
+                                <xslt in="${basedir}/merged.xml"
+                                    out="src/main/resources/com/sun/faces/jsf-ri-runtime.xml"
+                                    style="${jsf-ri-dir}/conf/xslt/prune-tool-data.xsl">
+                                </xslt>
+                                <replace file="src/main/resources/com/sun/faces/jsf-ri-runtime.xml">
+                                    <replacetoken><![CDATA[xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"]]></replacetoken>
+                                </replace>
+                                <replace file="src/main/resources/com/sun/faces/jsf-ri-runtime.xml">
+                                    <replacetoken><![CDATA[ >]]></replacetoken>
+                                    <replacevalue><![CDATA[>]]></replacevalue>
+                                </replace>
+                                <replace file="src/main/resources/com/sun/faces/jsf-ri-runtime.xml">
+                                    <replacetoken><![CDATA[<faces-config>]]></replacetoken>
+                                    <replacevalue><![CDATA[
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
+    version="2.3">]]>
+                                    </replacevalue>
+                                </replace>
+                                <delete file="${basedir}/merged.xml"/>
                             </target>
                         </configuration>
                         <goals>
