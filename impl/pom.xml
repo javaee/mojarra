@@ -66,6 +66,63 @@
                                 <copy todir="src/main/java">
                                     <fileset dir="${jsf-ri-dir}/src/main/java" includes="**/*.java"/>
                                 </copy>
+                                <!--
+
+                                    Copy jsf-api resources into src/main/resources
+                                                                
+                                -->
+                                <copy todir="src/main/resources" includeEmptyDirs="false">
+                                    <fileset dir="${jsf-api-dir}/src/main/java">
+                                        <exclude name="**/*.java"/>
+                                        <exclude name="**/*.html"/>
+                                        <exclude name="**/*.jpg"/>
+                                    </fileset>
+                                </copy>
+                                <!--
+                                
+                                    Copy jsf-ri resource into src/main/resources
+                                    
+                                -->
+                                <copy todir="src/main/resources" overwrite="true">
+                                    <fileset dir="${jsf-ri-dir}/src/main/resources" 
+                                             includes="**/*.properties,**/*.js,**/*.xsd"/>
+                                </copy>
+                                <!--
+                                
+                                    Copy *.taglib.xml to src/main/resources
+                                
+                                -->
+                                <copy todir="src/main/resources/com/sun/faces/metadata/taglib">
+                                    <fileset dir="${jsf-ri-dir}/conf/share">
+                                        <include name="*.taglib.xml" /> 
+                                    </fileset>
+                                </copy>
+                                <!--
+                                
+                                    Copy META-INF/services files to src/main/resources
+                                
+                                -->
+                                <copy file="${jsf-ri-dir}/conf/share/javax.servlet.ServletContainerInitializer"
+                                    toDir="src/main/resources/META-INF/services" />
+                                <copy file="${jsf-ri-dir}/conf/share/javax.enterprise.inject.spi.Extension"
+                                    toDir="src/main/resources/META-INF/services" />
+                                <copy file="${jsf-ri-dir}/conf/share/com.sun.faces.util.cdi11.CDIUtil"
+                                    toDir="src/main/resources/META-INF/services" />
+                                <!--
+                                
+                                    Copy other static resources to src/main/resources
+                                    
+                                -->
+                                <copy todir="src/main/resources/META-INF">
+                                    <fileset dir="${jsf-ri-dir}/conf/share">
+                                        <include name="jsf_core.tld"/>
+                                        <include name="beans.xml"/>
+                                        <include name="mojarra_ext.tld"/>
+                                        <include name="mojarra_ext.taglib.xml"/>
+                                        <include name="facelet-dev*.xml"/>
+                                        <include name="error-include.xhtml"/>
+                                    </fileset>
+                                </copy>
                             </target>
                         </configuration>
                         <goals>
@@ -330,6 +387,16 @@
                                     filtering="true"/>
                                 <!--
                                 
+                                    Generate API TypedCollection #3
+                                
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces.component"/>
+                                <copy file="${jsf-tools-dir}/template-src/TypedCollections.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
+                                    filtering="true"/>
+                                <!--
+                                
                                     Generate API MessageFactory #1
                                     
                                 -->
@@ -397,6 +464,40 @@
                                     file="${project.build.directory}/generated-sources/antrun/javax/faces/component/ValueBindingValueExpressionAdapter.java"
                                     token="@serialVersionUID@"
                                     value="-8015491904782686906L"/>
+                                <!--
+                                
+                                    Generate API StateHolderSaver
+                                
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces.component"/>
+                                <copy file="${jsf-tools-dir}/template-src/StateHolderSaver.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
+                                    filtering="true"/>
+                                <replace
+                                    file="${project.build.directory}/generated-sources/antrun/javax/faces/component/StateHolderSaver.java"
+                                    token="@serialVersionUID@"
+                                    value="6470180891722042701L"/>
+                                <!--
+                                
+                                    Generate API SharedUtils #1
+                                    
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces.component"/>
+                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
+                                    filtering="true"/>
+                                <!--
+                                
+                                    Generate API SharedUtils #2
+                                    
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces.application"/>
+                                <copy file="${jsf-tools-dir}/template-src/SharedUtils.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/javax/faces/application"
+                                    filtering="true"/>
                             </target>
                         </configuration>
                         <goals>
@@ -417,7 +518,7 @@
                                 
                                 -->
                                 <mkdir dir="src/main/resources"/>
-                                <copy todir="src/main/resources">
+                                <copy todir="src/main/resources" overwrite="true">
                                     <fileset dir="${jsf-ri-dir}/src/main/resources"
                                              includes="**/LogStrings.properties"/>
                                 </copy>
