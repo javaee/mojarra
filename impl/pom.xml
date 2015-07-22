@@ -13,11 +13,6 @@
         <maven>3.1.1</maven>
     </prerequisites>
     <build>
-        <resources>
-            <resource>
-                <directory>${project.build.directory}/generated-resources/antrun</directory>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -90,7 +85,8 @@
                                 -->
                                 <copy todir="src/main/resources" overwrite="true">
                                     <fileset dir="${jsf-ri-dir}/src/main/resources" 
-                                             includes="**/*.properties,**/*.js,**/*.xsd"/>
+                                             includes="**/*.properties,**/*.js,**/*.xsd"
+                                             excludes="**/LogStrings*.properties"/>
                                 </copy>
                                 <!--
                                 
@@ -161,6 +157,16 @@
                                 -->
                                 <copy todir="src/main/resources/META-INF" 
                                     file="${jsf-api-dir}/../legal/jsf-cddl/LICENSE.txt" />
+                                <!--
+                                
+                                    Copy DTD and XSD files
+                                
+                                -->
+                                <copy todir="src/main/resources/com/sun/faces"
+                                      flatten="true">
+                                    <fileset dir="${jsf-api-dir}/doc"
+                                             includes="*.dtd,*.xsd"/>
+                                </copy>
                             </target>
                         </configuration>
                         <goals>
@@ -555,26 +561,16 @@
                                     Copy LogStrings
                                 
                                 -->
-                                <mkdir dir="src/main/resources"/>
-                                <copy todir="src/main/resources" overwrite="true">
+                                <mkdir dir="${project.build.directory}/generated-resources/antrun"/>
+                                <copy todir="${project.build.directory}/generated-resources/antrun" overwrite="true">
                                     <fileset dir="${jsf-ri-dir}/src/main/resources"
-                                             includes="**/LogStrings.properties"/>
+                                             includes="**/LogStrings*.properties"/>
                                 </copy>
-                                <replace dir="src/main/resources"
+                                <replace dir="${project.build.directory}/generated-resources/antrun"
                                     token="|version.string|"
                                     value="${project.version}">
-                                    <include name="LogStrings*.properties"/>
+                                    <include name="**/LogStrings*.properties"/>
                                 </replace>
-                                <!--
-                                
-                                    Copy DTD and XSD files
-                                
-                                -->
-                                <copy todir="src/main/resources/com/sun/faces"
-                                      flatten="true">
-                                    <fileset dir="${jsf-api-dir}/doc"
-                                             includes="*.dtd,*.xsd"/>
-                                </copy>
                                 <!--
                                 
                                     Generate META-INF/html_basic.tld
@@ -611,7 +607,7 @@
                                     </classpath>
                                 </generateTaglib>
                                 <copy file="build/generate/conf/share/html_basic.tld"
-                                      toDir="src/main/resources/META-INF"/>
+                                      toDir="${project.build.directory}/generated-resources/antrun/META-INF"/>
                                 <delete dir="build"/>
                                 <delete dir="${jsf-tools-dir}/build"/>
                                 <!--
@@ -637,7 +633,7 @@
                                 
                                 -->
                                 <unzip src="${jsf-api-dir}/../lib/injectionproviders.jar"
-                                    dest="src/main/resources">
+                                    dest="${project.build.directory}/generated-resources/antrun">
                                     <patternset>
                                         <exclude name="META-INF/MANIFEST.MF" />
                                     </patternset>
@@ -648,8 +644,8 @@
                                 
                                 -->
                                 <xslt in="${jsf-api-dir}/doc/standard-html-renderkit.xml" 
-                                    out="merged.xml"
-                                    style="${jsf-ri-dir}/conf/xslt/merge-config.xsl">
+                                      out="merged.xml"
+                                      style="${jsf-ri-dir}/conf/xslt/merge-config.xsl">
                                 </xslt>
                                 <replace file="${basedir}/merged.xml">
                                     <replacetoken><![CDATA[xmlns:jsf="http://xmlns.jcp.org/xml/ns/javaee"]]></replacetoken>
@@ -660,8 +656,8 @@
                                     <replacevalue><![CDATA[>]]></replacevalue>
                                 </replace>
                                 <xslt in="${basedir}/merged.xml"
-                                    out="${project.build.directory}/generated-resources/antrun/com/sun/faces/jsf-ri-runtime.xml"
-                                    style="${jsf-ri-dir}/conf/xslt/prune-tool-data.xsl">
+                                      out="${project.build.directory}/generated-resources/antrun/com/sun/faces/jsf-ri-runtime.xml"
+                                      style="${jsf-ri-dir}/conf/xslt/prune-tool-data.xsl">
                                 </xslt>
                                 <replace file="${project.build.directory}/generated-resources/antrun/com/sun/faces/jsf-ri-runtime.xml">
                                     <replacetoken><![CDATA[xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"]]></replacetoken>
@@ -741,6 +737,20 @@
                             <sources>
                                 <source>${project.build.directory}/generated-sources/antrun</source>
                             </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>add-resource</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/generated-resources/antrun</directory>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
