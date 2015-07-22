@@ -96,6 +96,15 @@
                                     Generate AttributeManager
                                 
                                 -->
+                                <copy todir="${jsf-tools-dir}/build/classes">
+                                    <fileset dir="${jsf-ri-dir}/src/main/resources"
+                                        includes="**/LogStrings.properties"/>
+                                </copy>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
+                                    flatten="true">
+                                    <fileset dir="${jsf-api-dir}/doc"
+                                        includes="*.dtd,*.xsd"/>
+                                </copy>
                                 <taskdef name="generateAttrManager"
                                          classname="com.sun.faces.ant.AttributeManagerGenTask">
                                     <classpath>
