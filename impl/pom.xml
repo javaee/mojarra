@@ -308,6 +308,95 @@
                                 </copy>
                                 <delete dir="build"/>
                                 <delete dir="${jsf-tools-dir}/build"/>
+                                <!--
+                                
+                                    Generate API TypedCollections #1
+                                
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces"/>
+                                <copy file="${jsf-tools-dir}/template-src/TypedCollections.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/javax/faces"
+                                    filtering="true"/>
+                                <!--
+                                
+                                    Generate API TypedCollections #2
+                                
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces.webapp"/>
+                                <copy file="${jsf-tools-dir}/template-src/TypedCollections.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/javax/faces/webapp"
+                                    filtering="true"/>
+                                <!--
+                                
+                                    Generate API MessageFactory #1
+                                    
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces.component"/>
+                                <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
+                                    filtering="true"/>
+                                <!--
+                                
+                                    Generate API MessageFactory #2
+                                
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces.webapp"/>
+                                <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/javax/faces/webapp"
+                                    filtering="true"/>
+                                <!--
+                                
+                                    Generate API MessageFactory #3
+                                
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces.validator"/>
+                                <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/javax/faces/validator"
+                                    filtering="true"/>
+                                <!--
+                                
+                                    Generate API MessageFactory #4
+                                
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces.convert"/>
+                                <copy file="${jsf-tools-dir}/template-src/MessageFactory.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/javax/faces/convert"
+                                    filtering="true"/>
+                                <!--
+                                
+                                    Generate API Adapters
+                                
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces.component"/>
+                                <copy todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
+                                    filtering="true">
+                                    <fileset dir="${jsf-api-dir}/template-src">
+                                        <include name="*Adapter.java"/>
+                                    </fileset>
+                                </copy>
+                                <replace
+                                    file="${project.build.directory}/generated-sources/antrun/javax/faces/component/MethodBindingMethodExpressionAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="7334926223014401689L"/>
+                                <replace
+                                    file="${project.build.directory}/generated-sources/antrun/javax/faces/component/MethodExpressionMethodBindingAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="-1822420567946048452L"/>
+                                <replace
+                                    file="${project.build.directory}/generated-sources/antrun/javax/faces/component/ValueExpressionValueBindingAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="2388977392466671243L"/>
+                                <replace
+                                    file="${project.build.directory}/generated-sources/antrun/javax/faces/component/ValueBindingValueExpressionAdapter.java"
+                                    token="@serialVersionUID@"
+                                    value="-8015491904782686906L"/>
                             </target>
                         </configuration>
                         <goals>
