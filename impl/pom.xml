@@ -123,6 +123,39 @@
                                         <include name="error-include.xhtml"/>
                                     </fileset>
                                 </copy>
+                                <copy file="${jsf-ri-dir}/conf/xslt/jsf1_0-1_1toSchema.xsl"
+                                    toDir="src/main/resources/com/sun/faces"/>
+                                <copy file="${jsf-ri-dir}/conf/xslt/facelets1_0-2_0toSchema.xsl"
+                                    toDir="src/main/resources/com/sun/faces"/>
+                                <copy todir="src/main/resources/com/sun/faces">
+                                    <fileset dir="${jsf-api-dir}/doc">
+                                        <include name="*.dtd"/>
+                                        <include name="standard-html-renderkit.xml"/>
+                                        <include name="*.xsd"/>
+                                    </fileset>
+                                </copy>
+                                <copy todir="src/main/resources/com/sun/faces/xhtml">
+                                    <fileset dir="${jsf-ri-dir}/conf/share/xhtml">
+                                        <include name="*.dtd"/>
+                                        <include name="*.ent"/>
+                                    </fileset>
+                                </copy>
+                                <copy file="${jsf-ri-dir}/resources/empty-faces-config.xml"
+                                    todir="src/main/resources/com/sun/faces" />
+                                <!--
+                                
+                                    Copy API probe provider to src/main/resources
+                                    
+                                -->
+                                <copy todir="src/main/resources/META-INF" 
+                                      file="${jsf-api-dir}/src/main/resources/mojarra-jsf-api-probe-provider.xml"/>
+                                <!--
+                                
+                                    Copy LICENSE.txt from main project directory
+                                
+                                -->
+                                <copy todir="src/main/resources/META-INF" 
+                                    file="${jsf-api-dir}/../legal/jsf-cddl/LICENSE.txt" />
                             </target>
                         </configuration>
                         <goals>
@@ -576,6 +609,30 @@
                                       toDir="src/main/resources/META-INF"/>
                                 <delete dir="build"/>
                                 <delete dir="${jsf-tools-dir}/build"/>
+                                <!--
+                                
+                                    Generate jsf-uncompressed.js
+                                
+                                -->
+                                <concat destfile="src/main/resources/META-INF/resources/javax.faces/jsf-uncompressed.js" fixlastline="yes">
+                                    <filelist dir="${jsf-api-dir}/src/main/resources">
+                                        <file name="jsf.js"/>
+                                    </filelist>
+                                    <filelist  dir="${jsf-ri-dir}/resources">
+                                        <file name="mojarra.js"/>
+                                    </filelist>
+                                </concat>
+                                <!--
+                                
+                                    Unzip injectionproviders.jar
+                                
+                                -->
+                                <unzip src="${jsf-api-dir}/../lib/injectionproviders.jar"
+                                    dest="src/main/resources">
+                                    <patternset>
+                                        <exclude name="META-INF/MANIFEST.MF" />
+                                    </patternset>
+                                </unzip>
                             </target>
                         </configuration>
                         <goals>
