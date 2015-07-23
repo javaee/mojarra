@@ -161,10 +161,10 @@
 
     <artifact:localRepository id="local.repository" path="${maven.repo.local}"/>
     
-    <artifact:remoteRepository id="j.n.repo" url="https://maven.java.net/content/repositories/releases/"/>
-    <artifact:remoteRepository id="j.n.repo.snapshot" url="https://maven.java.net/content/repositories/snapshots/"/>
-    <artifact:remoteRepository id="codehaus.repo" url="http://repository.codehaus.org/"/>
-    <artifact:remoteRepository id="ibiblio.repo" url="http://mirrors.ibiblio.org/pub/mirrors/maven2/"/>
+    <!--<artifact:remoteRepository id="j.n.repo" url="https://maven.java.net/content/repositories/releases/"/>-->
+    <!--<artifact:remoteRepository id="j.n.repo.snapshot" url="https://maven.java.net/content/repositories/snapshots/"/>-->
+    <!--<artifact:remoteRepository id="codehaus.repo" url="http://repository.codehaus.org/"/>-->
+    <!--<artifact:remoteRepository id="ibiblio.repo" url="http://mirrors.ibiblio.org/pub/mirrors/maven2/"/>-->
 
     <artifact:dependencies filesetId="compile.filepath" pathId="compile.path">
         <dependency groupId="javax" artifactId="javaee-api" version="7.0" scope="provided"/>
@@ -178,22 +178,22 @@
         <dependency groupId="javax.servlet.jsp.jstl" artifactId="jstl-api" version="1.2" scope="provided" />
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
-        <remoteRepository refid="j.n.repo"/>
-        <remoteRepository refid="codehaus.repo"/>
-        <remoteRepository refid="j.n.repo.snapshot"/>
+        <!--<remoteRepository refid="j.n.repo"/>-->
+        <!--<remoteRepository refid="codehaus.repo"/>-->
+        <!--<remoteRepository refid="j.n.repo.snapshot"/>-->
     </artifact:dependencies>
 
     <artifact:dependencies filesetId="cdi.filepath" pathId="cdi.path">
         <dependency groupId="javax.enterprise" artifactId="cdi-api" version="1.1" scope="provided"/>
         <localRepository refid="local.repository"/>
-        <remoteRepository refid="ibiblio.repo"/>
+        <!--<remoteRepository refid="ibiblio.repo"/>-->
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="jsf-spi.filepath" pathId="jsf-spi.path">
         <dependency groupId="com.sun.faces" artifactId="jsf-spi" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
-        <remoteRepository refid="j.n.repo"/>
-        <remoteRepository refid="j.n.repo.snapshot"/>
+        <!--<remoteRepository refid="j.n.repo"/>-->
+        <!--<remoteRepository refid="j.n.repo.snapshot"/>-->
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="commons.filepath" pathId="commons.path">
@@ -202,8 +202,8 @@
         <dependency groupId="commons-beanutils" artifactId="commons-beanutils" version="1.6.1"/>
         <dependency groupId="commons-logging" artifactId="commons-logging" version="1.0.4"/>
         <localRepository refid="local.repository"/>
-        <remoteRepository refid="j.n.repo"/>
-        <remoteRepository refid="j.n.repo.snapshot"/>
+        <!--<remoteRepository refid="j.n.repo"/>-->
+        <!--<remoteRepository refid="j.n.repo.snapshot"/>-->
     </artifact:dependencies>
 
     <artifact:dependencies filesetId="servlet25test.filepath" pathId="servlet25test.path">
@@ -213,8 +213,8 @@
         <dependency groupId="javax.servlet.jsp.jstl" artifactId="jstl-api" version="1.2" scope="provided"/>
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
-        <remoteRepository refid="j.n.repo"/>
-        <remoteRepository refid="j.n.repo.snapshot"/>
+        <!--<remoteRepository refid="j.n.repo"/>-->
+        <!--<remoteRepository refid="j.n.repo.snapshot"/>-->
     </artifact:dependencies>
 
 
