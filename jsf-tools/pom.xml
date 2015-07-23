@@ -140,12 +140,12 @@
           <releases>
             <enabled>false</enabled>
             <updatePolicy>always</updatePolicy>
-            <checksumPolicy>warn</checksumPolicy>
+            <checksumPolicy>ignore</checksumPolicy>
           </releases>
           <snapshots>
             <enabled>true</enabled>
             <updatePolicy>always</updatePolicy>
-            <checksumPolicy>fail</checksumPolicy>
+            <checksumPolicy>ignore</checksumPolicy>
           </snapshots>
           <url>https://oss.sonatype.org/content/repositories/snapshots</url>
           <layout>default</layout>
