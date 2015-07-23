@@ -242,6 +242,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     // -------------------------------------------------------------- Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -261,6 +262,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <code>validate()</code> method of this component, or
      * its corresponding {@link Renderer}.</p>
      */
+    @Override
     public Object getSubmittedValue() {
 
         return (this.submittedValue);
@@ -276,6 +278,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @param submittedValue The new submitted value
      */
+    @Override
     public void setSubmittedValue(Object submittedValue) {
 
         this.submittedValue = submittedValue;
@@ -335,6 +338,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * Calls to <code>setValue()</code> automatically reset
      * this property to <code>true</code>.
      */
+    @Override
     public boolean isLocalValueSet() {
         return (Boolean) getStateHelper().eval(PropertyKeys.localValueSet, false);
     }
@@ -342,6 +346,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     /**
      * Sets the "local value set" state for this component.
      */
+    @Override
     public void setLocalValueSet(boolean localValueSet) {
         getStateHelper().put(PropertyKeys.localValueSet, localValueSet);
     }
@@ -350,6 +355,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     /**
      * <p>Return the "required field" state for this component.</p>
      */
+    @Override
     public boolean isRequired() {
 
         return (Boolean) getStateHelper().eval(PropertyKeys.required, false);
@@ -363,6 +369,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * passing the key "requiredMessage", get the result of the expression, and return it.
      * Any {@link ELException}s thrown during the call to <code>getValue()</code>
      * must be wrapped in a {@link FacesException} and rethrown.
+     * 
+     * @return the required message.
      */
 
     public String getRequiredMessage() {
@@ -393,6 +401,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * passing the key "converterMessage", get the result of the expression, and return it.
      * Any {@link ELException}s thrown during the call to <code>getValue()</code>
      * must be wrapped in a {@link FacesException} and rethrown.
+     * 
+     * @return the converter message.
      */
 
     public String getConverterMessage() {
@@ -423,6 +433,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * passing the key "validatorMessage", get the result of the expression, and return it.
      * Any {@link ELException}s thrown during the call to <code>getValue()</code>
      * must be wrapped in a {@link FacesException} and rethrown.
+     * 
+     * @return the validator message.
      */
 
     public String getValidatorMessage() {
@@ -447,6 +459,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    @Override
     public boolean isValid() {
 
         return (Boolean) getStateHelper().eval(PropertyKeys.valid, true);
@@ -454,6 +467,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    @Override
     public void setValid(boolean valid) {
 
         getStateHelper().put(PropertyKeys.valid, valid);
@@ -466,6 +480,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @param required The new "required field" state
      */
+    @Override
     public void setRequired(boolean required) {
 
         getStateHelper().put(PropertyKeys.required, required);
@@ -473,6 +488,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    @Override
     public boolean isImmediate() {
 
         return (Boolean) getStateHelper().eval(PropertyKeys.immediate, false);
@@ -480,6 +496,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    @Override
     public void setImmediate(boolean immediate) {
 
         getStateHelper().put(PropertyKeys.immediate, immediate);
@@ -495,6 +512,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @deprecated {@link #getValidators} should be used instead.
      */
+    @Override
     public MethodBinding getValidator() {
         MethodBinding result = null;
 
@@ -533,6 +551,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *             argument {@link Validator} by creating an instance of {@link
      *             javax.faces.validator.MethodExpressionValidator}.
      */
+    @Override
     public void setValidator(MethodBinding validatorBinding) {
         Validator[] curValidators = getValidators();
         // see if we need to null-out, or replace an existing validator
@@ -561,6 +580,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     }
 
+    @Override
     public MethodBinding getValueChangeListener() {
         MethodBinding result = null;
 
@@ -586,10 +606,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     /**
      * {@inheritDoc}
      *
+     * @param valueChangeListener the value change listener.
      * @deprecated Use {@link #addValueChangeListener} instead, obtaining the
      *             argument {@link ValueChangeListener} by creating an instance of {@link
      *             javax.faces.event.MethodExpressionValueChangeListener}.
      */
+    @Override
     public void setValueChangeListener(MethodBinding valueChangeListener) {
 
         ValueChangeListener[] curListeners = getValueChangeListeners();
@@ -665,6 +687,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @throws NullPointerException {@inheritDoc}
      */
+    @Override
     public void processDecodes(FacesContext context) {
 
         if (context == null) {
@@ -696,6 +719,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @throws NullPointerException {@inheritDoc}
      */
+    @Override
     public void processValidators(FacesContext context) {
 
         if (context == null) {
@@ -735,6 +759,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @throws NullPointerException {@inheritDoc}
      */
+    @Override
     public void processUpdates(FacesContext context) {
 
         if (context == null) {
@@ -767,6 +792,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     /**
      * @throws NullPointerException {@inheritDoc}
      */
+    @Override
     public void decode(FacesContext context) {
 
         if (context == null) {
@@ -1030,9 +1056,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * </ul>
      * <p>This method can be overridden by subclasses for more specific
      * behavior.</p>
+     * 
+     * @param context the Faces context.
+     * @param newSubmittedValue the new submitted value.
+     * @return the converted value.
      */
-
-
     protected Object getConvertedValue(FacesContext context,
                                        Object newSubmittedValue) throws ConverterException {
         Renderer renderer = getRenderer(context);
@@ -1135,6 +1163,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <code>valid</code> property of this component to false.</li>
 
      * </ul>
+     * 
+     * @param context the Faces context.
+     * @param newValue the new value.
      */
 
     protected void validateValue(FacesContext context, Object newValue) {
@@ -1213,6 +1244,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @param previous old value of this component (if any)
      * @param value    new value of this component (if any)
+     * @return <code>true</code> if the new value is different from the 
+     *  previous value, <code>false</code> otherwise.
      */
     protected boolean compareValues(Object previous, Object value) {
         boolean result = true;
@@ -1298,6 +1331,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * @throws NullPointerException if <code>validator</code>
      *                              is null
      */
+    @Override
     public void addValidator(Validator validator) {
 
         if (validator == null) {
@@ -1317,6 +1351,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * {@link UIInput} instance.  If there are no registered validators,
      * a zero-length array is returned.</p>
      */
+    @Override
     public Validator[] getValidators() {
 
         return ((validators != null) ? validators.asArray(Validator.class) : EMPTY_VALIDATOR);
@@ -1331,6 +1366,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @param validator The {@link Validator} to remove
      */
+    @Override
     public void removeValidator(Validator validator) {
 
         if (validator == null) {
@@ -1354,6 +1390,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * @throws NullPointerException if <code>listener</code>
      *                              is <code>null</code>
      */
+    @Override
     public void addValueChangeListener(ValueChangeListener listener) {
 
         addFacesListener(listener);
@@ -1366,6 +1403,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * {@link UIInput} instance.  If there are no registered listeners,
      * a zero-length array is returned.</p>
      */
+    @Override
     public ValueChangeListener[] getValueChangeListeners() {
 
         return (ValueChangeListener[]) getFacesListeners(ValueChangeListener.class);
@@ -1381,6 +1419,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * @throws NullPointerException if <code>listener</code>
      *                              is <code>null</code>
      */
+    @Override
     public void removeValueChangeListener(ValueChangeListener listener) {
 
         removeFacesListener(listener);

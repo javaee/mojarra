@@ -107,6 +107,7 @@ public class UIGraphic extends UIComponentBase {
     // -------------------------------------------------------------- Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -117,6 +118,8 @@ public class UIGraphic extends UIComponentBase {
     /**
      * <p>Return the image URL for this {@link UIGraphic}.  This method is a
      * typesafe alias for <code>getValue()</code>.</p>
+     * 
+     * @return the url.
      */
     public String getUrl() {
 
@@ -143,6 +146,8 @@ public class UIGraphic extends UIComponentBase {
     /**
      * <p>Returns the <code>value</code> property of the
      * <code>UIGraphic</code>. This will typically be rendered as an URL.</p>
+     * 
+     * @return the value.
      */
     public Object getValue() {
 
@@ -174,12 +179,13 @@ public class UIGraphic extends UIComponentBase {
      *
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueBinding}
-     *
+     * @return the value binding, or <code>null</code>.
      * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      * @deprecated This has been replaced by {@link #getValueExpression(java.lang.String)}.
      */
+    @Override
     public ValueBinding getValueBinding(String name) {
 
         if ("url".equals(name)) {
@@ -208,6 +214,7 @@ public class UIGraphic extends UIComponentBase {
      *
      * @deprecated This has been replaced by {@link #setValueExpression}.
      */
+    @Override
     public void setValueBinding(String name, ValueBinding binding) {
 
         if ("url".equals(name)) {
@@ -225,11 +232,12 @@ public class UIGraphic extends UIComponentBase {
      *
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueExpression}
-     *
+     * @return the value expression, or <code>null</code>.
      * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      * @since 1.2
      */
+    @Override
     public ValueExpression getValueExpression(String name) {
 
         if ("url".equals(name)) {
@@ -254,6 +262,7 @@ public class UIGraphic extends UIComponentBase {
      *  is <code>null</code>
      * @since 1.2
      */
+    @Override
     public void setValueExpression(String name, ValueExpression binding) {
 
         if ("url".equals(name)) {

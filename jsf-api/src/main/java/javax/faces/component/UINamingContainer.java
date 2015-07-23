@@ -109,6 +109,7 @@ public class UINamingContainer extends UIComponentBase
     // -------------------------------------------------------------- Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -125,6 +126,7 @@ public class UINamingContainer extends UIComponentBase
      * NamingContainer#SEPARATOR_CHAR} must be returned.</p>
      *
      * @param context the {@link FacesContext} for the current request
+     * @return the separator char.
      * @since 2.0
      */
     public static char getSeparatorChar(FacesContext context) {
@@ -155,6 +157,7 @@ public class UINamingContainer extends UIComponentBase
     }
 
     /**
+     * @return <code>true</code> if tree should be visited, <code>false</code> otherwise.
      * @see UIComponent#visitTree
      */
     @Override
@@ -194,6 +197,7 @@ public class UINamingContainer extends UIComponentBase
         return false;
     }
 
+    @Override
      public String createUniqueId(FacesContext context, String seed) {
         Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
         int lastId = ((i != null) ? i : 0);

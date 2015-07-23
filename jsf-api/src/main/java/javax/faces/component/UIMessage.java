@@ -92,6 +92,7 @@ public class UIMessage extends UIComponentBase {
         PropertyKeys() {
         }
 
+        @Override
         public String toString() {
             return ((this.toString != null) ? this.toString : super.toString());
         }
@@ -117,6 +118,7 @@ public class UIMessage extends UIComponentBase {
     // -------------------------------------------------------------- Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -132,6 +134,8 @@ public class UIMessage extends UIComponentBase {
      * must be an absolute component identifier (starting with ":"). See
      * the {@link UIComponent#findComponent} for more
      * information.</span></p>
+     * 
+     * @return the for client identifier.
      */
     public String getFor() {
 
@@ -159,6 +163,8 @@ public class UIMessage extends UIComponentBase {
      * <p>Return the flag indicating whether the <code>detail</code>
      * property of the associated message(s) should be displayed.
      * Defaults to <code>true</code>.</p>
+     * 
+     * @return <code>true</code> if detail is to be shown, <code>false</code> otherwise.
      */
     public boolean isShowDetail() {
 
@@ -184,6 +190,8 @@ public class UIMessage extends UIComponentBase {
      * <p>Return the flag indicating whether the <code>summary</code>
      * property of the associated message(s) should be displayed.
      * Defaults to <code>false</code>.</p>
+     * 
+     * @return <code>true</code> if the summary is to be shown, <code>false</code> otherwise.
      */
     public boolean isShowSummary() {
 

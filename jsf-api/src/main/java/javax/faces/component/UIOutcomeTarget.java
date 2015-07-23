@@ -102,6 +102,7 @@ public class UIOutcomeTarget extends UIOutput {
      * <p class="changed_added_2_0">Return whether or not the view
      * parameters should be encoded into the target url.</p>
      *
+     * @return <code>true</code> if the view parameters should be encoded in the url, <code>false</code> otherwise.
      * @since 2.0
      */
     public boolean isIncludeViewParams() {
@@ -129,6 +130,7 @@ public class UIOutcomeTarget extends UIOutput {
      * <p class="changed_added_2_2">Return whether or not the client window
      * should be encoded into the target url.</p>
      *
+     * @return <code>true</code> if the client window should NOT be encoded in the url, <code>false</code> otherwise.
      * @since 2.0
      */
     public boolean isDisableClientWindow() {
@@ -157,6 +159,7 @@ public class UIOutcomeTarget extends UIOutput {
      * passed to the {@link javax.faces.application.NavigationHandler}
      * when resolving the target url of this component.</p>
      *
+     * @return the outcome.
      * @since 2.0
      */
     public String getOutcome() {
