@@ -61,15 +61,6 @@
         <handler-class>com.sun.faces.facelets.tag.jsf.core.ActionListenerHandler</handler-class>
         <attribute>
             <description><![CDATA[
-                Fully qualified Java class name of an ActionListener to be
-                created and registered.
-            ]]></description>
-            <name>type</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
                 Value binding expression that evaluates to an object that
                 implements javax.faces.event.ActionListener.
             ]]></description>
@@ -90,29 +81,73 @@
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description><![CDATA[
+                Fully qualified Java class name of an ActionListener to be
+                created and registered.
+            ]]></description>
+            <name>type</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
 
     <tag>
         <description><![CDATA[
 
-        <p class="changed_added_2_0">Register an AjaxBehavior instance
-        on one or more UIComponents implementing the
-        ClientBehaviorHolder interface.  This tag may be nested witin a
-        single component (enabling Ajax for a single component), or it
-        may be "wrapped" around multiple components (enabling Ajax for
-        many components).</p>
+        <p class="changed_added_2_0"><span
+        class="changed_modified_2_0_rev_a changed_modified_2_2">Register</span> an
+        AjaxBehavior instance on one or more UIComponents implementing
+        the ClientBehaviorHolder interface.  This tag may be nested
+        witin a single component (enabling Ajax for a single component),
+        or it may be "wrapped" around multiple components (enabling Ajax
+        for many components).</p>
 
         <p class="changed_added_2_0">The String value for ids
         specified for execute and render may be specified as a search
         expression as outlined in the JavaDocs for
         <code>UIComponent.findComponent()</code>. The implementation
         must resolve these ids as specified for
-        <code>UIComponent.findComponent()</code>.  
-        </p>
+        <code>UIComponent.findComponent()</code>.  For example, consider
+        the following Facelets code.</p>
+
+<div class="xml" style="font-family:monospace;"><ol><li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #000000;"><span style="color: #000000; font-weight: bold;">&lt;h:form</span> <span style="color: #000000;">id</span>=<span style="color: #000000;">&quot;form_1&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #000000;"><span style="color: #000000; font-weight: bold;">&lt;h:panelGrid</span> <span style="color: #000000;">id</span>=<span style="color: #000000;">&quot;panel_1&quot;</span> <span style="color: #000000;">rows</span>=<span style="color: #000000;">&quot;2&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">&lt;!-- content irrelevant --&gt;</span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #000000;"><span style="color: #000000; font-weight: bold;">&lt;/h:panelGrid<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #000000;"><span style="color: #000000; font-weight: bold;">&lt;/h:form<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #000000;"><span style="color: #000000; font-weight: bold;">&lt;h:form</span> <span style="color: #000000;">id</span>=<span style="color: #000000;">&quot;form_2&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #000000;"><span style="color: #000000; font-weight: bold;">&lt;h:commandButton</span> <span style="color: #000000;">id</span>=<span style="color: #000000;">&quot;button&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #000000;"><span style="color: #000000; font-weight: bold;">&lt;f:ajax</span> <span style="color: #000000;">render</span>=<span style="color: #000000;">&quot;:form1:panel_1 panel_2&quot;</span> <span style="color: #000000; font-weight: bold;">/&gt;</span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #000000;"><span style="color: #000000; font-weight: bold;">&lt;/h:commandButton<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #000000;"><span style="color: #000000; font-weight: bold;">&lt;h:panelGrid</span> <span style="color: #000000;">id</span>=<span style="color: #000000;">&quot;panel_2&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">&lt;!-- content irrelevant --&gt;</span></div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #000000;"><span style="color: #000000; font-weight: bold;">&lt;/h:panelGrid<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #000000;"><span style="color: #000000; font-weight: bold;">&lt;/h:form<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li> 
+</ol></div>
+
+        <p class="changed_added_2_0">When the button is pressed,
+        panel_1, in form_1 will be re-rendered, along with panel_2 in
+        form_2.</p>
 
         ]]></description>
         <tag-name>ajax</tag-name>
         <handler-class>com.sun.faces.facelets.tag.jsf.core.AjaxHandler</handler-class>
+        <attribute>
+          <description><![CDATA[ <p class="changed_added_2_2">If less than
+      <em>delay</em> milliseconds elapses between calls to
+      <em>request()</em> only the most recent one is sent and all other
+      requests are discarded. If this option is not specified, or if the
+      value of <em>delay</em> is the literal string <code>'none'</code>
+      without the quotes, no delay is used. </p>
+          
+          ]]></description>
+          <name>delay</name>
+          <required>false</required>
+          <type>java.lang.String</type>
+        </attribute>
+
         <attribute>
             <description><![CDATA[
                 <p class="changed_added_2_0">A value of "true" indicates
@@ -127,51 +162,18 @@
             <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
-          <description><![CDATA[ <p class="changed_added_2_2">If less than
-          <em>delay</em> milliseconds elapses between calls to
-          <em>request()</em> only the most recent one is sent and all other
-          requests are discarded. If this option is not specified, or if the
-          value of <em>delay</em> is the literal string <code>'none'</code>
-          without the quotes, no delay is used. </p>
-          
-          ]]></description>
-          <name>delay</name>
-          <required>false</required>
-          <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-          <description><![CDATA[ <p class="changed_added_2_2">If
-          <code>true</code>, indicate that this particular Ajax transaction
-          is a value reset transaction.  This will cause
-          <code>resetValue()</code> to be called on any
-          <code>EditableValueHolder</code> instances encountered as a result
-          of this ajax transaction.  If not specified, or the value is
-          <code>false</code>, no such indication is made.</p>
-          
-          ]]></description>
-          <name>resetValues</name>
-          <required>false</required>
-          <type>java.lang.Boolean</type>
-        </attribute>
-        
-        <attribute>
             <description><![CDATA[
-                <p class="changed_added_2_0">A String identifying the type
-                of event
-                the Ajax action will apply to. If specified, it must be one of
-                the
-                events supported by the component the Ajax behavior is being
-                applied to.
-                For HTML components this would be the set of supported DOM
-                events for the
-                component, plus "action" for Faces ActionSource components and
-                "valueChange"
-                for Faces EditableValueHolder components. If not specified, the
-                default
-                event is determined for the component. The DOM event name is the
-                actual DOM
-                event name (for example: "click") as opposed to (for example:
-                "onclick").</p>
+
+             <p class="changed_added_2_0">A String <span class="changed_modified_2_2">or
+             ValueExpression (that evalulates to a String)</span> identifying the type of event 
+             the Ajax action will apply to. If specified, it must be one of the 
+             events supported by the component the Ajax behavior is being applied to. 
+             For HTML components this would be the set of supported DOM events for the
+             component, plus "action" for Faces ActionSource components and "valueChange"
+             for Faces EditableValueHolder components.  If not specified, the default 
+             event is determined for the component.  The DOM event name is the actual DOM
+             event name (for example: "click") as opposed to (for example: "onclick").</p>
+
 
             ]]></description>
             <name>event</name>
@@ -180,19 +182,16 @@
         </attribute>
         <attribute>
             <description><![CDATA[
-                <p class="changed_added_2_0">Evaluates to
-                Collection<String>.  This is a space separated
-                list of client ids of components that will participate
-                in the "execute" portion of the Request Processing
-                Lifecycle. If a literal is specified the identifiers
-                must be space delimited. Any of the keywords "@this",
-                "@form", "@all", "@none" may be specified in the
-                identifier list.  If not specified, the default value of
-                "@this" is assumed.  <span
-                class="changed_modified_2_0_rev_a">For example,
-                <code>@this clientIdOne
-                clientIdTwo</code>.</span></p>
-            ]]></description>
+         <p class="changed_added_2_0"><span
+         class="changed_modified_2_0_rev_a">Evaluates</span> to
+         Collection&lt;String&gt;. This is a space separated list of
+         client ids of components that will participate in the "execute"
+         portion of the Request Processing Lifecycle.  If a literal is
+         specified the ids must be space delimited.  Any of the keywords
+         "@this", "@form", "@all", "@none" may be specified in the id
+         list. <span class="changed_modified_2_0_rev_a">If not
+         specified, the default value of "@this" is assumed.  For
+         example, <code>@this clientIdOne clientIdTwo</code>.</span></p>            ]]></description>
             <name>execute</name>
             <required>false</required>
             <type>java.util.Collection</type>
@@ -223,15 +222,7 @@
                 throws javax.faces.event.AbortProcessingException
             </method-signature>
         </attribute>
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_0">The name of the JavaScript
-                function that will handle UI events.</p>
-           ]]></description>
-            <name>onevent</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
+
         <attribute>
             <description><![CDATA[
                 <p class="changed_added_2_0">The name of the JavaScript
@@ -244,42 +235,68 @@
         </attribute>
         <attribute>
             <description><![CDATA[
-                <p class="changed_added_2_0">Evaluates to
-                Collection<String>.  This is a space separated
-                list of client ids of components that will participate
-                in the "render" portion of the Request Processing
-                Lifecycle. If a literal is specified the identifiers
-                must be space delimited. Any of the keywords "@this",
-                "@form", "@all", "@none" may be specified in the
-                identifier list. If not specified, the default value of
-                "@none" is assumed.  <span
-                class="changed_modified_2_0_rev_a">For example,
-                <code>@this clientIdOne
-                clientIdTwo</code>.</span></p>
+                <p class="changed_added_2_0">The name of the JavaScript
+                function that will handle UI events.</p>
+           ]]></description>
+            <name>onevent</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+         <p class="changed_added_2_0"><span
+         class="changed_modified_2_0_rev_a">Evaluates</span> to
+         Collection&lt;String&gt;. The clientIds of components that will
+         participate in the "render" portion of the Request Processing
+         Lifecycle.  If a literal is specified the identifiers must be
+         space delimited.  Any of the keywords "@this", "@form", "@all",
+         "@none" may be specified in the identifier list. <span
+         class="changed_modified_2_0_rev_a">If not specified, the
+         default value of "@none" is assumed.  For example, <code>@this
+         clientIdOne clientIdTwo</code>.</span></p>
             ]]></description>
             <name>render</name>
             <required>false</required>
             <type>java.util.Collection</type>
         </attribute>
+        <attribute>
+          <description><![CDATA[ 
+
+            <p class="changed_added_2_2">Reset specific input values.
+            Interpret the value of the <code>render</code> attribute as
+            a space separated list of client identifiers suitable for
+            passing directly to <code>UIViewRoot.resetValues()</code>.
+            The implementation must cause an <code>ActionListener</code>
+            to be attached to the <code>ActionSource</code> component
+            in which this tag is nested that calls
+            <code>UIViewRoot.resetValues()</code> passing the value of
+            the <code>render</code> attribute as the argument.</p>
+          
+          ]]></description>
+          <name>resetValues</name>
+          <required>false</required>
+          <type>java.lang.Boolean</type>
+        </attribute>
+        
     </tag>
 
     <tag>
         <description><![CDATA[
-            Add an attribute to the UIComponent associated with the closest
-            parent UIComponent custom action.
+            <p>Add an attribute to the UIComponent associated with the closest
+            parent UIComponent custom action.</p>
         ]]></description>
         <tag-name>attribute</tag-name>
         <handler-class>com.sun.faces.facelets.tag.jsf.core.AttributeHandler</handler-class>
         <attribute>
             <description><![CDATA[
-                The name of the component attribute to be set.
+                <p>The name of the component attribute to be set.</p>
             ]]></description>
             <name>name</name>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description><![CDATA[
-                The value of the component attribute to be set.
+                <p>The value of the component attribute to be set.</p>
             ]]></description>
             <name>value</name>
             <type>java.lang.Object</type>
@@ -312,8 +329,8 @@
     </tag>
     <tag>
         <description><![CDATA[
-            Register a DateTimeConverter instance on the UIComponent associated
-            with the closest parent UIComponent custom action.
+            <p>Register a DateTimeConverter instance on the UIComponent associated
+            with the closest parent UIComponent custom action.</p>
         ]]></description>
         <tag-name>convertDateTime</tag-name>
         <converter>
@@ -322,77 +339,23 @@
         </converter>
         <attribute>
             <description><![CDATA[
-                Predefined formatting style which determines how the date
-                component of a date string is to be formatted and parsed.
-                Applied only if type is "date" or "both". Valid values
-                are "default", "short", "medium", "long", and "full".
-                Default value is "default".
-            ]]></description>
-            <name>dateStyle</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Locale whose predefined styles for dates and times are used
-                during formatting or parsing. If not specified, the Locale
-                returned by FacesContext.getViewRoot().getLocale() will be used.
-                Value must be either a VB expression that evaluates to a
-                java.util.Locale instance, or a String that is valid to pass as
-                the first argument to the constructor java.util.Locale(String
-                language, String country). The empty string is passed as the
-                second argument.
-            ]]></description>
-            <name>locale</name>
-            <required>false</required>
-            <type>java.lang.Object</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Custom formatting pattern which determines how the
-                date/time string should be formatted and parsed.
-            ]]></description>
-            <name>pattern</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Predefined formatting style which determines how the
-                time component of a date string is to be formatted and
-                parsed. Applied only if type is "time" or "both".
-                Valid values are "default", "short", "medium", "long",
-                and "full". Default value is "default".
-            ]]></description>
-            <name>timeStyle</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Time zone in which to interpret any time information in the date
-                String. Value must be either a VB expression that evaluates to
-                a java.util.TimeZone instance, or a String that is a timezone ID
-                as described in the javadocs for
-                java.util.TimeZone.getTimeZone().
-            ]]></description>
-            <name>timeZone</name>
-            <type>java.lang.Object</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Specifies what contents the string value will be
-                formatted to include, or parsed expecting. Valid
-                values are "date", "time", and "both". Default
-                value is "date".
-            ]]></description>
-            <name>type</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                A ValueExpression that evaluates to an instance of
-                javax.faces.convert.DateTimeConverter.
+                <p>A ValueExpression that evaluates to an instance of
+                javax.faces.convert.DateTimeConverter.</p>
             ]]></description>
             <name>binding</name>
             <type>javax.faces.convert.DateTimeConverter</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p>Predefined formatting style which determines how the date
+                component of a date string is to be formatted and parsed.
+                Applied only if type is "date" or "both". Valid values
+                are "default", "short", "medium", "long", and "full".
+                Default value is "default".</p>
+            ]]></description>
+            <name>dateStyle</name>
+            <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description><![CDATA[
@@ -407,7 +370,64 @@
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p>Locale whose predefined styles for dates and times are used
+                during formatting or parsing. If not specified, the Locale
+                returned by FacesContext.getViewRoot().getLocale() will be used.
+                Value must be either a VB expression that evaluates to a
+                java.util.Locale instance, or a String that is valid to pass as
+                the first argument to the constructor java.util.Locale(String
+                language, String country). The empty string is passed as the
+                second argument.</p>
+            ]]></description>
+            <name>locale</name>
+            <required>false</required>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Custom formatting pattern which determines how the
+                date/time string should be formatted and parsed.</p>
+            ]]></description>
+            <name>pattern</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Predefined formatting style which determines how the
+                time component of a date string is to be formatted and
+                parsed. Applied only if type is "time" or "both".
+                Valid values are "default", "short", "medium", "long",
+                and "full". Default value is "default".</p>
+            ]]></description>
+            <name>timeStyle</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Time zone in which to interpret any time information in the date
+                String. Value must be either a ValueExpression that evaluates to
+                a java.util.TimeZone instance, or a String that is a timezone ID
+                as described in the javadocs for
+                java.util.TimeZone.getTimeZone().</p>
+            ]]></description>
+            <name>timeZone</name>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Specifies what contents the string value will be
+                formatted to include, or parsed expecting. Valid
+                values are "date", "time", and "both". Default
+                value is "date".</p>
+            ]]></description>
+            <name>type</name>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[
             Register a NumberConverter instance on the UIComponent associated
@@ -420,118 +440,28 @@
         </converter>
         <attribute>
             <description><![CDATA[
-                ISO 4217 currency code, applied only when
-                formatting currencies.
+                <p>A ValueExpression that evaluates to an instance of
+                javax.faces.convert.NumberConverter.</p>
+            ]]></description>
+            <name>binding</name>
+            <type>javax.faces.convert.NumberConverter</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p>ISO 4217 currency code, applied only when
+                formatting currencies.</p>
             ]]></description>
             <name>currencyCode</name>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description><![CDATA[
-                Currency symbol, applied only when formatting
-                currencies.
+                <p>Currency symbol, applied only when formatting
+                currencies.</p>
             ]]></description>
             <name>currencySymbol</name>
             <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Flag specifying whether formatted output will
-                contain grouping separators. Expressions must
-                evaluate to a boolean. Default value
-                is true.
-            ]]></description>
-            <name>groupingUsed</name>
-            <type>java.lang.Boolean</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Flag specifying whether only the integer part
-                of the value will be formatted and parsed.
-                Expressions must evaluate to a boolean.
-                Default value is false.
-            ]]></description>
-            <name>integerOnly</name>
-            <type>java.lang.Boolean</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[<p>
-
-                <span class="changed_modified_2_0">Locale</span>
-                whose
-                predefined styles for numbers are used during formatting
-                and parsing. If not specified, the Locale returned by
-                FacesContext.getViewRoot().getLocale() will be used.
-                Expressions must evaluate to a java.util.Locale <span
-                class="changed_modified_2_0">or a String that is valid to
-                pass as the first argument to the constructor
-                java.util.Locale(String language, String country). The
-                empty string is passed as the second argument.</span>
-
-                </p>]]></description>
-            <name>locale</name>
-            <type>java.lang.Object</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Maximum number of digits that will be formatted
-                in the fractional portion of the output. Expressions
-                must evaluate to an int.
-            ]]></description>
-            <name>maxFractionDigits</name>
-            <type>java.lang.Integer</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Maximum number of digits that will be formatted
-                in the integer portion of the output. Expressions
-                must evaluate to an int.
-            ]]></description>
-            <name>maxIntegerDigits</name>
-            <type>java.lang.Integer</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Minimum number of digits that will be formatted
-                in the fractional portion of the output. Expressions
-                must evaluate to an int.
-            ]]></description>
-            <name>minFractionDigits</name>
-            <type>java.lang.Integer</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Minimum number of digits that will be formatted
-                in the integer portion of the output. Expressions
-                must evaluate to an int.
-            ]]></description>
-            <name>minIntegerDigits</name>
-            <type>java.lang.Integer</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Custom formatting pattern which determins how the
-                number string should be formatted and parsed.
-            ]]></description>
-            <name>pattern</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Specifies how the number string will be formatted
-                and parsed. Valid values are "number", "currency",
-                and "percent". Default value is "number".
-            ]]></description>
-            <name>type</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                A ValueExpression that evaluates to an instance of
-                javax.faces.convert.NumberConverter.
-            ]]></description>
-            <name>binding</name>
-            <type>javax.faces.convert.NumberConverter</type>
         </attribute>
         <attribute>
             <description><![CDATA[
@@ -546,29 +476,122 @@
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p>Flag specifying whether formatted output will
+                contain grouping separators. Expressions must
+                evaluate to a boolean. Default value
+                is true.</p>
+            ]]></description>
+            <name>groupingUsed</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Flag specifying whether only the integer part
+                of the value will be formatted and parsed.
+                Expressions must evaluate to a boolean.
+                Default value is false.</p>
+            ]]></description>
+            <name>integerOnly</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[<p>
+
+                <p><span class="changed_modified_2_0">Locale</span>
+                whose
+                predefined styles for numbers are used during formatting
+                and parsing. If not specified, the Locale returned by
+                FacesContext.getViewRoot().getLocale() will be used.
+                Expressions must evaluate to a java.util.Locale <span
+                class="changed_modified_2_0">or a String that is valid to
+                pass as the first argument to the constructor
+                java.util.Locale(String language, String country). The
+                empty string is passed as the second argument.</span></p>
+
+                </p>]]></description>
+            <name>locale</name>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Maximum number of digits that will be formatted
+                in the fractional portion of the output. Expressions
+                must evaluate to an int.</p>
+            ]]></description>
+            <name>maxFractionDigits</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Maximum number of digits that will be formatted
+                in the integer portion of the output. Expressions
+                must evaluate to an int.</p>
+            ]]></description>
+            <name>maxIntegerDigits</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Minimum number of digits that will be formatted
+                in the fractional portion of the output. Expressions
+                must evaluate to an int.</p>
+            ]]></description>
+            <name>minFractionDigits</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Minimum number of digits that will be formatted
+                in the integer portion of the output. Expressions
+                must evaluate to an int.</p>
+            ]]></description>
+            <name>minIntegerDigits</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Custom formatting pattern which determins how the
+                number string should be formatted and parsed.</p>
+            ]]></description>
+            <name>pattern</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Specifies how the number string will be formatted
+                and parsed. Valid values are "number", "currency",
+                and "percent". Default value is "number".</p>
+            ]]></description>
+            <name>type</name>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[
-            Register a named Converter instance on the UIComponent
-            associated with the closest parent UIComponent custom action.
+            <p>Register a named Converter instance on the UIComponent
+            associated with the closest parent UIComponent custom action.</p>
         ]]></description>
         <tag-name>converter</tag-name>
         <handler-class>com.sun.faces.facelets.tag.jsf.core.ConvertDelegateHandler</handler-class>
         <attribute>
             <description><![CDATA[
-                Converter identifier of the Converter instance to be
+                <p>A ValueExpression that evaluates to an object that
+                implements javax.faces.convert.Converter.</p>
+            ]]></description>
+            <name>binding</name>
+            <type>javax.faces.convert.Converter</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Converter identifier of the Converter instance to be
                 created and registered.
             ]]></description>
             <name>converterId</name>
             <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                A ValueExpression that evaluates to an object that
-                implements javax.faces.convert.Converter.
-            ]]></description>
-            <name>binding</name>
-            <type>javax.faces.convert.Converter</type>
         </attribute>
         <attribute>
             <description><![CDATA[
@@ -604,94 +627,6 @@
         <attribute>
             <description><![CDATA[
 
-                <p class="changed_added_2_0">Name of the event for which
-                to install a listener. The following table lists the
-                valid values for this attribute, and the corresponding
-                event type for which the listener action is
-                registered.</p>
-
-                <table border="1">
-                <tr>
-
-                <th>value for "<code>type</code>" tag
-                attribute</th>
-
-                <th>Type of event sent to listener method
-                </th>
-
-                </tr>
-
-                <tr>
-
-                <td>preRenderComponent
-                </td>
-
-                <td>javax.faces.event.PreRenderComponentEvent
-                </td>
-
-                </tr>
-
-                <tr>
-
-                <td>postAddToView
-                </td>
-
-                <td>javax.faces.event.PostAddToViewEvent
-                </td>
-
-                </tr>
-
-                <tr>
-
-                <td>preValidate
-                </td>
-
-                <td>javax.faces.event.PreValidateEvent
-                </td>
-
-                </tr>
-
-                <tr>
-
-                <td>postValidate
-                </td>
-
-                <td>javax.faces.event.PostValidateEvent
-                </td>
-
-                </tr>
-
-                </table>
-
-                <div class="changed_added_2_0">
-
-                <p>In addition to these values, the fully qualified class
-                name of any
-                java class that extends
-                <code>javax.faces.event.ComponentSystemEvent</code>
-                may be used as the
-                value of the "type" attribute.</p>
-
-                <p>Also, the <code>@javax.faces.event.NamedEvent</code>
-                annotation may
-                be attached to any java class that extends
-                <code>javax.faces.event.ComponentSystemEvent</code>.
-                This enables that
-                event to be referenced from this attribute, as descibed in the
-                javadocs
-                for <code>@NamedEvent</code>.</p>
-
-                </div>
-
-
-            ]]></description>
-            <name>type</name>
-            <required>true</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-
               <p class="changed_modified_2_0_rev_a">The expression must
               evaluate to a public method that takes a
               <code>ComponentSystemEvent</code> parameter, with a return
@@ -708,7 +643,103 @@
                 javax.faces.event.AbortProcessingException
             </method-signature>
         </attribute>
+
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_0">Name of the event for which
+                to install a listener.  The following table lists the
+                valid values for this attribute, and the corresponding
+                event type for which the listener action is
+                registered.</p>
+
+<table border="1">
+<tr>
+
+<th>value for "<code><span
+class="changed_modified_2_0_rev_a">type</span></code>" tag
+attribute</th>
+
+<th>Type of event sent to listener method
+</th>
+
+</tr>
+
+<tr>
+
+<td>preRenderComponent
+</td>
+
+<td>javax.faces.event.PreRenderComponentEvent
+</td>
+
+</tr>
+
+<tr>
+
+<td>preRenderView
+</td>
+
+<td>javax.faces.event.PreRenderViewEvent
+</td>
+
+</tr>
+
+<tr>
+
+<td><span class="changed_modified_2_0_rev_a">postAddToView</span>
+</td>
+
+<td>javax.faces.event.PostAddToViewEvent
+</td>
+
+</tr>
+
+<tr>
+
+<td>preValidate
+</td>
+
+<td>javax.faces.event.PreValidateEvent
+</td>
+
+</tr>
+
+<tr>
+
+<td>postValidate
+</td>
+
+<td>javax.faces.event.PostValidateEvent
+</td>
+
+</tr>
+
+</table>
+
+<div class="changed_added_2_0">
+
+<p>In addition to these values, the fully qualified class name of any
+java class that extends
+<code>javax.faces.event.ComponentSystemEvent</code> may be used as the
+value of the "type" attribute.</p>
+
+<p>Also, the <code>@javax.faces.event.NamedEvent</code> annotation may
+be attached to any java class that extends
+<code>javax.faces.event.ComponentSystemEvent</code>.  This enables that
+event to be referenced from this attribute, as descibed in the javadocs
+for <code>@NamedEvent</code>.</p>
+
+</div>
+
+
+            ]]></description>
+            <name>type</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[
 
@@ -721,7 +752,7 @@
         <handler-class>com.sun.faces.facelets.tag.jsf.core.FacetHandler</handler-class>
         <attribute>
             <description><![CDATA[
-                Name of the facet to be created.
+                <p>Name of the facet to be created.</p>
             ]]></description>
             <name>name</name>
             <required>true</required>
@@ -730,7 +761,7 @@
     </tag>
     <tag>
         <description><![CDATA[
-            Load a resource bundle localized for the Locale of the current
+            <p>Load a resource bundle localized for the Locale of the current
             view, and expose it as a java.util.Map in the request attributes
             of the current request under the key specified by the value of the
             "var" attribute of this tag. The Map must behave such that if a
@@ -738,22 +769,22 @@
             literal string ???KEY??? is returned from the Map, where KEY is
             the key being looked up in the Map, instead of a
             MissingResourceException being thrown. If the ResourceBundle does
-            not exist, a JspException must be thrown.
+            not exist, a JspException must be thrown.</p>
         ]]></description>
         <tag-name>loadBundle</tag-name>
         <handler-class>com.sun.faces.facelets.tag.jsf.core.LoadBundleHandler</handler-class>
         <attribute>
             <description><![CDATA[
-                Base name of the resource bundle
-                to be loaded.
+                <p>Base name of the resource bundle
+                to be loaded.</p>
             ]]></description>
             <name>basename</name>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description><![CDATA[
-                Name of a request scope attribute under which
-                the resource bundle will be exposed as a Map.
+                <p>Name of a request scope attribute under which
+                the resource bundle will be exposed as a Map.</p>
             ]]></description>
             <name>var</name>
             <required>true</required>
@@ -885,11 +916,13 @@
         <tag-name>metadata</tag-name>
         <handler-class>com.sun.faces.facelets.tag.jsf.core.MetadataHandler</handler-class>
     </tag>
+
     <tag>
         <description><![CDATA[
-            Add a child UIParameter component to the UIComponent
-            associated with the closest parent UIComponent custom
-            action.
+        <p><span
+        class="changed_modified_2_0_rev_a">Add</span> a child UIParameter
+        component to the UIComponent associated with the closest parent
+        UIComponent custom action.</p>
         ]]></description>
         <tag-name>param</tag-name>
         <component>
@@ -898,35 +931,12 @@
         </component>
         <attribute>
             <description><![CDATA[
-                ValueExpression to a backing bean
+                <p>ValueExpression to a backing bean
                 property bound to the component instance for
-                the UIComponent created by this custom action.
+                the UIComponent created by this custom action.</p>
             ]]></description>
             <name>binding</name>
             <type>javax.faces.component.UIComponent</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Component identifier of the UIParameter component
-                to be created.
-            ]]></description>
-            <name>id</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Name of the parameter to be created.
-            ]]></description>
-            <name>name</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Value of the parameter to be set.
-            ]]></description>
-            <name>value</name>
-            <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description><![CDATA[
@@ -946,6 +956,30 @@
             ]]></description>
             <name>disable</name>
             <type>boolean</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p>Component identifier of the UIParameter component
+                to be created.</p>
+            ]]></description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Name of the parameter to be created.</p>
+            ]]></description>
+            <name>name</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Value of the parameter to be set.</p>
+            ]]></description>
+            <name>value</name>
+            <type>java.lang.String</type>
         </attribute>
     </tag>
 
@@ -1005,35 +1039,36 @@
 
     <tag>
         <description><![CDATA[
-            Register a PhaseListener instance on the UIViewRoot in which
-            this tag is nested.
+            <p>Register a PhaseListener instance on the UIViewRoot in which
+            this tag is nested.</p>
         ]]></description>
         <tag-name>phaseListener</tag-name>
         <handler-class>com.sun.faces.facelets.tag.jsf.core.PhaseListenerHandler</handler-class>
         <attribute>
             <description><![CDATA[
-                Fully qualified Java class name of an PhaseListener to be
-                created and registered.
-            ]]></description>
-            <name>type</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Value binding expression that evaluates to an object that
-                implements javax.faces.event.PhaseListener.
+                <p>Value binding expression that evaluates to an object that
+                implements javax.faces.event.PhaseListener.</p>
             ]]></description>
             <name>binding</name>
             <required>false</required>
             <type>javax.faces.event.PhaseListener</type>
         </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p>Fully qualified Java class name of a PhaseListener to be
+                created and registered.</p>
+            ]]></description>
+            <name>type</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
     <tag>
         <description><![CDATA[
-            Add a child UISelectItem component to the UIComponent
+            <p>Add a child UISelectItem component to the UIComponent
             associated with the closest parent UIComponent custom
-            action.
+            action.</p>
         ]]></description>
         <tag-name>selectItem</tag-name>
         <component>
@@ -1042,17 +1077,17 @@
         </component>
         <attribute>
             <description><![CDATA[
-                Value binding expression to a backing bean
+                <p>Value binding expression to a backing bean
                 property bound to the component instance for
-                the UIComponent created by this custom action.
+                the UIComponent created by this custom action.</p>
             ]]></description>
             <name>binding</name>
             <type>javax.faces.component.UIComponent</type>
         </attribute>
         <attribute>
             <description><![CDATA[
-                Component identifier of the UISelectItem
-                component to be created.
+                <p>Component identifier of the UISelectItem
+                component to be created.</p>
             ]]></description>
             <name>id</name>
             <required>false</required>
@@ -1060,68 +1095,69 @@
         </attribute>
         <attribute>
             <description><![CDATA[
-                Description of this option, for use in
-                development tools.
+                <p>Description of this option, for use in
+                development tools.</p>
             ]]></description>
             <name>itemDescription</name>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description><![CDATA[
-                Flag indicating whether the option created
+                <p>Flag indicating whether the option created
                 by this component is disabled. Expressions
                 must evaluate to a boolean. Default value
-                is false.
+                is false.</p>
             ]]></description>
             <name>itemDisabled</name>
             <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description><![CDATA[
-                Label to be displayed to the user
-                for this option.
-            ]]></description>
-            <name>itemLabel</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Flag indicating that characters that are sensitive in
+                <p>Flag indicating that characters that are sensitive in
                 the value of the <code>itemLabel</code>
                 attribute must be escaped. This flag is set to "true" by
-                default.
+                default.</p>
             ]]></description>
             <name>itemEscaped</name>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description><![CDATA[
-                Value to be returned to the server if this
-                option is selected by the user.
+                <p>Label to be displayed to the user
+                for this option.</p>
+            ]]></description>
+            <name>itemLabel</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Value to be returned to the server if this
+                option is selected by the user.</p>
             ]]></description>
             <name>itemValue</name>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description><![CDATA[
-                Value binding expression pointing at a
-                SelectItem instance containing the
-                information for this option.
-            ]]></description>
-            <name>value</name>
-            <type>javax.faces.model.SelectItem</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Flag indicating whether the option created by this
+                <p>Flag indicating whether the option created by this
                 component represents the special "no selection"
                 option. Expressions must evaluate to a boolean.
-                Default value is false.
+                Default value is false.</p>
             ]]></description>
             <name>noSelectionOption</name>
             <type>java.lang.Boolean</type>
         </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Value binding expression pointing at a
+                SelectItem instance containing the
+                information for this option.</p>
+            ]]></description>
+            <name>value</name>
+            <type>javax.faces.model.SelectItem</type>
+        </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[
             <p><span class="changed_modified_2_0">Add</span> a
