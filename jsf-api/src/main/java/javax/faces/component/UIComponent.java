@@ -309,6 +309,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      *     </ul></li>
      * </ul>
      * 
+     * @return the component attribute map.
      */
     public abstract Map<String, Object> getAttributes();
     
@@ -317,6 +318,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * simply calls {@link #getPassThroughAttributes(boolean)}, passing {@code true}
      * as the argument.  This method must never return {@code null}.</p>
      * 
+     * @return the pass-through attribute map.
      * @since 2.2
      */
 
@@ -378,7 +380,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      *
      * @param name Name of the attribute or property for which to retrieve a
      *  {@link ValueBinding}
-     *
+     * @return the value binding.
      * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
@@ -420,11 +422,10 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * <p>This method must be overridden and implemented for components that
      * comply with JSF 1.2 and later.</p>
      *
-     * @since 1.2
-     *
      * @param name Name of the attribute or property for which to retrieve a
      *  {@link ValueExpression}
-     *
+     * @return the value expression, or <code>null</code>.
+     * @since 1.2
      * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
@@ -544,6 +545,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * changes to its state.</p>
      * @since 2.0
      */
+    @Override
     public void markInitialState() {
         initialState = true;
     }
@@ -556,6 +558,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * PartialStateHolder#markInitialState} method was called.</p>
      * @since 2.0
      */
+    @Override
     public boolean initialStateMarked() {
         return initialState;
     }
@@ -568,6 +571,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * changes.</p>
      * @since 2.0
      */
+    @Override
     public void clearInitialState() {
         initialState = false;
     }
@@ -577,6 +581,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * <p class="changed_added_2_0">Return the {@link StateHelper}
      * instance used to help this component implement {@link
      * PartialStateHolder}.</p>
+     * 
+     * @return the state helper.
      * @since 2.0
      */
     protected StateHelper getStateHelper() {
@@ -593,6 +599,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * <code>false</code>, and there is no existing
      * <code>StateHelper</code> instance, one will not be created and
      * <code>null</code> will be returned.
+     * 
+     * @return the state helper.
      * @since 2.0
      */
     protected StateHelper getStateHelper(boolean create) {
@@ -611,6 +619,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * {@link #getTransientStateHelper(boolean)} passing <code>true</code>
      * as the argument.</p>
      *
+     * @return the transient state helper.
      * @since 2.1
      */
     
@@ -628,7 +637,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * internal data structures.  If <code>false</code>, do not create
      * any instances.  In this case, it is possible for this method to
      * return <code>null</code>.
-     *
+     * @return the transient state helper.
      * @since 2.1
      */
     
@@ -649,6 +658,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @since 2.1
      */
     
+    @Override
     public void restoreTransientState(FacesContext context, Object state)
     {
         boolean forceCreate = (state != null);
@@ -667,6 +677,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @since 2.1
      */
     
+    @Override
     public Object saveTransientState(FacesContext context)
     {
         TransientStateHelper helper = getTransientStateHelper(false);
@@ -682,6 +693,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * component is within the view hierarchy otherwise
      * <code>false</code>
      *
+     * @return <code>true</code> if within a view hierarchy, <code>false</code> otherwise.
      * @since 2.0
      */
     public boolean isInView() {
@@ -714,6 +726,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * {@link FacesContext#getCurrentInstance} and then calls through to
      * {@link #getClientId(FacesContext)}.</p>
      * 
+     * @return the client id.
      * @since 2.0
      */
     
@@ -753,6 +766,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * return the result.</p>
      *
      * @param context The {@link FacesContext} for the current request
+     * @return the client id. 
      *
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
@@ -763,11 +777,13 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * <p>Allow components that implement {@link NamingContainer} to
      * selectively disable prepending their clientId to their
      * descendent's clientIds by breaking the prepending logic into a
-     * seperately callable method.  See {@link #getClientId} for usage.</p>
+     * separately callable method.  See {@link #getClientId} for usage.</p>
      *
      * <p>By default, this method will call through to {@link
      * #getClientId} and return the result.
      *
+     * @param context the Faces context.
+     * @return the container client id.
      * @since 1.2
      *
      *  @throws NullPointerException if <code>context</code> is
@@ -794,6 +810,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
 
     /**
      * <p>Return the component identifier of this {@link UIComponent}.</p>
+     * 
+     * @return the component identifier.
      */
     public abstract String getId();
 
@@ -835,6 +853,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * components to be added to and removed from the list of children
      * of this component, even though the child component returns null
      * from <code>getParent( )</code>.</p>
+     * 
+     * @return the parent component.
      */
     public abstract UIComponent getParent();
 
@@ -890,6 +910,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * <p>Return <code>true</code> if this component (and its children)
      * should be rendered during the <em>Render Response</em> phase
      * of the request processing lifecycle.</p>
+     * 
+     * @return <code>true</code> if the component should be rendered, <code>false</code> otherwise.
      */
     public abstract boolean isRendered();
 
@@ -907,6 +929,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
     /**
      * <p>Return the {@link Renderer} type for this {@link UIComponent}
      * (if any).</p>
+     * 
+     * @return the renderer type.
      */
     public abstract String getRendererType();
 
@@ -932,6 +956,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * Faces Specification, component authors are encouraged to return
      * <code>true</code> from this method and rely on {@link
      * UIComponentBase#encodeChildren}.</p>
+     * 
+     * @return <code>true</code> if the component renders its children, <code>false</code> otherwise.
      */
     public abstract boolean getRendersChildren();
     
@@ -971,6 +997,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * <code>Map&lt;String,String&gt;</code> and returned.  Otherwise
      * <code>Collections.EMPTY_MAP</code> is returned.</p>
      *
+     * @return the resource bundle map.
      * @since 2.0
      */
     public Map<String,String> getResourceBundleMap() {
@@ -1029,6 +1056,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                         new Map() {
                             // this is an immutable Map
 
+                            @Override
                             public String toString() {
                                 StringBuffer sb = new StringBuffer();
                                 Iterator<Map.Entry<String, Object>> entries =
@@ -1043,11 +1071,13 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                             }
 
                             // Do not need to implement for immutable Map
+                            @Override
                             public void clear() {
                                 throw new UnsupportedOperationException();
                             }
 
 
+                            @Override
                             public boolean containsKey(Object key) {
                                 boolean result = false;
                                 if (null != key) {
@@ -1057,6 +1087,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                             }
 
 
+                            @Override
                             public boolean containsValue(Object value) {
                                 Enumeration<String> keys = bundle.getKeys();
                                 boolean result = false;
@@ -1072,6 +1103,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                             }
 
 
+                            @Override
                             public Set<Map.Entry<String, Object>> entrySet() {
                                 HashMap<String, Object> mappings = new HashMap<>();
                                 Enumeration<String> keys = bundle.getKeys();
@@ -1092,6 +1124,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                             }
 
 
+                            @Override
                             public Object get(Object key) {
                                 if (null == key) {
                                     return null;
@@ -1104,17 +1137,20 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                             }
 
 
+                            @Override
                             public int hashCode() {
                                 return bundle.hashCode();
                             }
 
 
+                            @Override
                             public boolean isEmpty() {
                                 Enumeration<String> keys = bundle.getKeys();
                                 return !keys.hasMoreElements();
                             }
 
 
+                            @Override
                             public Set keySet() {
                                 Set<String> keySet = new HashSet<>();
                                 Enumeration<String> keys = bundle.getKeys();
@@ -1126,23 +1162,27 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
 
 
                             // Do not need to implement for immutable Map
+                            @Override
                             public Object put(Object k, Object v) {
                                 throw new UnsupportedOperationException();
                             }
 
 
                             // Do not need to implement for immutable Map
+                            @Override
                             public void putAll(Map t) {
                                 throw new UnsupportedOperationException();
                             }
 
 
                             // Do not need to implement for immutable Map
+                            @Override
                             public Object remove(Object k) {
                                 throw new UnsupportedOperationException();
                             }
 
 
+                            @Override
                             public int size() {
                                 int result = 0;
                                 Enumeration<String> keys = bundle.getKeys();
@@ -1154,6 +1194,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                             }
 
 
+                            @Override
                             public java.util.Collection values() {
                                 ArrayList<Object> result = new ArrayList<>();
                                 Enumeration<String> keys = bundle.getKeys();
@@ -1280,6 +1321,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * </li>
 
      * </ul>
+     * 
+     * @return the list of children.
      */
     public abstract List<UIComponent> getChildren();
 
@@ -1289,6 +1332,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * associated with this {@link UIComponent}.  If there are no
      * children, this method must return 0.  The method must not cause
      * the creation of a child component list.</p>
+     * 
+     * @return the number of child components.
      */
     public abstract int getChildCount();
 
@@ -1532,6 +1577,8 @@ private void doFind(FacesContext context, String clientId) {
      *         set to <code>null</code>.</li>
      *     </ul></li>
      * </ul>
+     * 
+     * @return the map of facets.
      */
     public abstract Map<String, UIComponent> getFacets();
 
@@ -1547,6 +1594,7 @@ private void doFind(FacesContext context, String clientId) {
      * returned <code>Map</code>.  A more optimized version of this method is
      * provided in {@link UIComponentBase#getFacetCount}.
      *
+     * @return the number of facets.
      * @since 1.2
      */
     public int getFacetCount() {
@@ -1561,6 +1609,7 @@ private void doFind(FacesContext context, String clientId) {
      * exist, the facets Map must not be created.</p>
      *
      * @param name Name of the desired facet
+     * @return the component, or <code>null</code>.
      */
     public abstract UIComponent getFacet(String name);
 
@@ -1575,6 +1624,8 @@ private void doFind(FacesContext context, String clientId) {
      *
      * <p>The returned <code>Iterator</code> must not support the
      * <code>remove()</code> operation.</p>
+     * 
+     * @return the facets and children iterator.
      */
     public abstract Iterator<UIComponent> getFacetsAndChildren();
 
@@ -1723,6 +1774,8 @@ private void doFind(FacesContext context, String clientId) {
      *
      * </div>
      *
+     * @param context the Visit context.
+     * @return <code>true</code> if visitable, <code>false</code> otherwise.
      * @since 2.0
      */
     protected boolean isVisitable(VisitContext context) {
@@ -1824,9 +1877,9 @@ private void doFind(FacesContext context, String clientId) {
      * <p>Render this component and all its children that return
      * <code>true</code> from <code>isRendered()</code>, regardless of
      * the value of the {@link #getRendersChildren} flag.</p>
-
+     * 
+     * @param context the Faces context.
      * @since 1.2
-     *
      * @throws IOException if an input/output error occurs while rendering
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
@@ -2067,7 +2120,7 @@ private void doFind(FacesContext context, String clientId) {
      * <code>false</code>.</p>
      *
      * @param component the {@link UIComponent} to test
-     *
+     * @return <code>true</code> if this is a composite component, <code>false</code> otherwise.
      * @throws NullPointerException if <code>component</code> is <code>null</code>
      * @since 2.0
      */
@@ -2139,7 +2192,7 @@ private void doFind(FacesContext context, String clientId) {
      * <code>UIComponent</code></p>
      *
      * @param context {@link FacesContext} for the request we are processing
-     *
+     * @return the current component, or <code>null</code>.
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      *
@@ -2161,7 +2214,7 @@ private void doFind(FacesContext context, String clientId) {
      * <code>null</code> if no such component exists.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
-     * 
+     * @return the current composite component, or <code>null</code>.
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      *
@@ -2221,7 +2274,7 @@ private void doFind(FacesContext context, String clientId) {
      *
      * @param clazz Class that must be implemented by a {@link FacesListener}
      *  for it to be returned
-     *
+     * @return the Faces listeners, or a zero-length array.
      * @throws IllegalArgumentException if <code>class</code> is not,
      *  and does not implement, {@link FacesListener}
      * @throws NullPointerException if <code>clazz</code>
@@ -2265,6 +2318,8 @@ private void doFind(FacesContext context, String clientId) {
      * this class.  {@link UIComponentBase} provides the implementation of
      * this method.</p>
      *
+     * @param eventClass the event class.
+     * @param componentListener the listener.
      * @since 2.1
      */
     public void subscribeToEvent(Class<? extends SystemEvent> eventClass,
@@ -2279,6 +2334,8 @@ private void doFind(FacesContext context, String clientId) {
      * this class.  {@link UIComponentBase} provides the implementation of
      * this method.</p>
      *
+     * @param eventClass the event class.
+     * @param componentListener the component listener.
      * @since 2.1
      */
     public void unsubscribeFromEvent(Class<? extends SystemEvent> eventClass,
@@ -2293,8 +2350,11 @@ private void doFind(FacesContext context, String clientId) {
      * this class.  {@link UIComponentBase} provides the implementation of
      * this method.</p>
      *
+     * @param eventClass the event class.
+     * @return the list of listeners.
      * @since 2.1
      */
+    @Override
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
         throw new UnsupportedOperationException();
     }
@@ -2306,6 +2366,7 @@ private void doFind(FacesContext context, String clientId) {
      * component in the ancestry that is a <code>NamingContainer</code>
      * or <code>null</code> if none can be found.</p>
      *
+     * @return the naming container, or <code>null</code>.
      * @since 2.0
      */
     public UIComponent getNamingContainer() {
@@ -2347,7 +2408,7 @@ private void doFind(FacesContext context, String clientId) {
      * set to server.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
-     *
+     * @param state the state.
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
@@ -2399,6 +2460,7 @@ private void doFind(FacesContext context, String clientId) {
      * of the <code>ValueExpression</code> to be <code>this</code>.</p>
      */ 
 
+    @Override
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
         if (event instanceof PostRestoreStateEvent) {
 	    assert(this == event.getComponent());
@@ -2512,7 +2574,7 @@ private void doFind(FacesContext context, String clientId) {
      * set to server.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
-     *
+     * @return the saved state.
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
@@ -2525,6 +2587,8 @@ private void doFind(FacesContext context, String clientId) {
     /**
      * <p>Convenience method to return the {@link FacesContext} instance
      * for the current request.</p>
+     * 
+     * @return the Faces context.
      */
     protected abstract FacesContext getFacesContext();
 
@@ -2535,6 +2599,7 @@ private void doFind(FacesContext context, String clientId) {
      * <code>null</code>.</p>
      *
      * @param context {@link FacesContext} for the current request
+     * @return the renderer, or <code>null</code>.
      */
     protected abstract Renderer getRenderer(FacesContext context);
 
@@ -2571,6 +2636,13 @@ private void doFind(FacesContext context, String clientId) {
         // ------------------------------------ Methods from SystemEventListener
 
 
+        /**
+         * Process the event.
+         * 
+         * @param event the event.
+         * @throws AbortProcessingException if the event processing should be aborted.
+         */
+        @Override
         public void processEvent(SystemEvent event) throws AbortProcessingException {
 
             wrapped.processEvent((ComponentSystemEvent) event);
@@ -2580,11 +2652,26 @@ private void doFind(FacesContext context, String clientId) {
         // ------------------------------------ Methods from SystemEventListener
 
 
+        /**
+         * Process the event.
+         * 
+         * @param event the event.
+         * @throws AbortProcessingException if the event processing should be aborted.
+         */
+        @Override
         public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
 
             wrapped.processEvent(event);
 
         }
+        
+        /**
+         * Is this a listener for the given component.
+         * 
+         * @param component the component.
+         * @return <code>true</code> if it is a listener, <code>false</code> otherwise.
+         */
+        @Override
         public boolean isListenerForSource(Object component) {
 
             if (wrapped instanceof SystemEventListener) {
@@ -2598,6 +2685,13 @@ private void doFind(FacesContext context, String clientId) {
 
         // -------------------------------------------- Methods from StateHolder
 
+        /**
+         * Save the state.
+         * 
+         * @param context the Faces context.
+         * @return the saved state.
+         */
+        @Override
         public Object saveState(FacesContext context) {
 
             if (context == null) {
@@ -2610,7 +2704,13 @@ private void doFind(FacesContext context, String clientId) {
 
         }
 
-
+        /**
+         * Restore the state.
+         * 
+         * @param context the Faces context.
+         * @param state the state.
+         */
+        @Override
         public void restoreState(FacesContext context, Object state) {
 
             if (context == null) {
@@ -2628,7 +2728,12 @@ private void doFind(FacesContext context, String clientId) {
             
         }
 
-
+        /**
+         * Get the transient flag.
+         * 
+         * @return <code>true</code> if transient, <code>false</code> otherwise.
+         */
+        @Override
         public boolean isTransient() {
 
             if (wrapped instanceof StateHolder) {
@@ -2638,7 +2743,16 @@ private void doFind(FacesContext context, String clientId) {
 
         }
 
-
+        /**
+         * Set the transient flag.
+         * 
+         * <p>
+         *  This is a no-op in this case.
+         * </p>
+         * 
+         * @param newTransientValue the new transient flag value.
+         */
+        @Override
         public void setTransient(boolean newTransientValue) {
 
             // no-op
@@ -2649,6 +2763,12 @@ private void doFind(FacesContext context, String clientId) {
         // ------------------------------------------- Methods from FacesWrapper
 
 
+        /**
+         * Get the wrapped ComponentSystemEventListener.
+         * 
+         * @return the wrapped ComponentSystemEventListener.
+         */
+        @Override
         public ComponentSystemEventListener getWrapped() {
 
             return wrapped;
