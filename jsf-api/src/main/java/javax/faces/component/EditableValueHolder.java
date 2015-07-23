@@ -67,6 +67,8 @@ public interface EditableValueHolder extends ValueHolder {
      * whether the value is <code>null</code>, empty, or
      * non-<code>null</code> is determined based on the value of the
      * <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code>context-param.</span></p>
+     * 
+     * @return the submitted value.
      */
     public Object getSubmittedValue();
 
@@ -98,19 +100,23 @@ public interface EditableValueHolder extends ValueHolder {
      * Return the "local value set" state for this component.
      * Calls to <code>setValue()</code> automatically reset
      * this property to <code>true</code>.
+     * 
+     * @return <code>true</code> if the local value is set, <code>false</code> otherwise.
      */
     public boolean isLocalValueSet();
 
     /**
      * Sets the "local value set" state for this component.
+     * 
+     * @param localValueSet the "local value set" boolean.
      */
     public void setLocalValueSet(boolean localValueSet);
-
-
 
     /**
      * <p>Return a flag indicating whether the local value of this component
      * is valid (no conversion error has occurred).</p>
+     * 
+     * @return <code>true</code> if valid, <code>false</code> otherwise.
      */
     public boolean isValid();
 
@@ -126,6 +132,8 @@ public interface EditableValueHolder extends ValueHolder {
 
     /**
      * <p>Return the "required field" state for this component.</p>
+     * 
+     * @return <code>true</code> if required, <code>false</code> otherwise.
      */
     public boolean isRequired();
 
@@ -138,6 +146,8 @@ public interface EditableValueHolder extends ValueHolder {
 
     /**
      * <p>Return the "immediate" state for this component.</p>
+     * 
+     * @return <code>true</code> if is immediate, <code>false</code> otherwise.
      */
     public boolean isImmediate();
 
@@ -165,6 +175,7 @@ public interface EditableValueHolder extends ValueHolder {
      * (depending on the value of the <code>immediate</code>
      * property). </p>
      *
+     * @return the validator as a method binding.
      * @deprecated {@link #getValidators} should be used instead.
      */
     public MethodBinding getValidator();
@@ -202,6 +213,7 @@ public interface EditableValueHolder extends ValueHolder {
      * <code>MethodBinding</code> instance that was passed to {@link
      * #setValueChangeListener}.</p>
      *
+     * @return the value change listener.
      * @deprecated Use {@link #getValueChangeListeners} instead.
      */
     public MethodBinding getValueChangeListener();
@@ -247,6 +259,8 @@ public interface EditableValueHolder extends ValueHolder {
      * <p>Return the set of registered {@link Validator}s for this
      * component instance.  If there are no registered validators,
      * a zero-length array is returned.</p>
+     * 
+     * @return the validators, or a zero-length array.
      */
     public Validator[] getValidators();
 
@@ -274,6 +288,8 @@ public interface EditableValueHolder extends ValueHolder {
      * <p>Return the set of registered {@link ValueChangeListener}s for this
      * component instance.  If there are no registered listeners,
      * a zero-length array is returned.</p>
+     * 
+     * @return the value change listeners, or a zero-length array.
      */
     public ValueChangeListener[] getValueChangeListeners();
 

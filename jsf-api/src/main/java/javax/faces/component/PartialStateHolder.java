@@ -70,6 +70,8 @@ public interface PartialStateHolder extends StateHolder {
     /**
      * <p class="changed_added_2_0">Return <code>true</code> if delta
      * state changes are being tracked, otherwise <code>false</code></p>
+     * 
+     * @return <code>true</code> if the initial state is marked, <code>false</code> otherwise.
      * @since 2.0
      */
     boolean initialStateMarked();

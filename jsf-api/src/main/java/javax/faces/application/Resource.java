@@ -318,6 +318,7 @@ public abstract class Resource extends ViewResource {
      * @return Call through to {@link #getRequestPath} and return the
      * result.
      */
+    @Override
     public String toString() {
         return getRequestPath();
     }
@@ -333,6 +334,7 @@ public abstract class Resource extends ViewResource {
      * determine the result.</span> Returns <code>false</code> if the
      * user-agent does not need an update for this resource.</p>
      *
+     * @param context the Faces context.
      * @return <code>true</code> or <code>false</code> depending on
      * whether or not the user-agent needs an update of this resource.
      */

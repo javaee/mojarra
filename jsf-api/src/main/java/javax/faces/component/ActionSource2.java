@@ -76,6 +76,8 @@ public interface ActionSource2 extends ActionSource {
      * {@link ActionSource#setAction}.  This makes it possible for the
      * default {@link ActionListener} to continue to work properly with
      * older components.</p>
+     * 
+     * @return the action expression.
      */
     public MethodExpression getActionExpression();
 

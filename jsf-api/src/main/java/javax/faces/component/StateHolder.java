@@ -63,7 +63,7 @@ public interface StateHolder {
 
     /**
      * <p> Gets the state of the instance as a
-     * <code>Serializable</code> Object.<p>
+     * <code>Serializable</code> Object.</p>
      *
      * <p>If the class that implements this interface has references to
      * instances that implement StateHolder (such as a

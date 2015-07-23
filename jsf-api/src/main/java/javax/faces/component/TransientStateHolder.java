@@ -67,7 +67,7 @@ public interface TransientStateHolder
      * <p class="changed_added_2_1">Return the object containing related "transient states".
      * that could be used later to restore the "transient state".<p>
      * 
-     * @param context
+     * @param context the Faces context.
      * @return object containing transient values
      * @since 2.1
      */
@@ -81,7 +81,7 @@ public interface TransientStateHolder
      * argument is <code>null</code> clear any previous transient
      * state if any and return.</p>
      * 
-     * @param context
+     * @param context the Faces context
      * @param state the object containing transient values
      * @since 2.1
      */

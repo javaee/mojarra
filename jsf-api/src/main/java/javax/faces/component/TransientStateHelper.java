@@ -65,6 +65,7 @@ public interface TransientStateHelper extends TransientStateHolder
      * <p class="changed_added_2_1">Return the value currently
      * associated with the specified <code>key</code> if any.</p>
      * @param key the key for which the value should be returned.
+     * @return the stored value.
      * @since 2.1
      */
     public Object getTransient(Object key);
@@ -77,6 +78,7 @@ public interface TransientStateHelper extends TransientStateHolder
      * @param key the key for which the value should be returned.
      * @param defaultValue the value to return if no value is found in
      * the call to <code>get()</code>.
+     * @return the stored value.
      * @since 2.1
      */
     public Object getTransient(Object key, Object defaultValue);
@@ -89,6 +91,7 @@ public interface TransientStateHelper extends TransientStateHolder
      * 
      * @param key the key for the value
      * @param value the value
+     * @return the previously stored value
      * @since 2.1
      */
     public Object putTransient(Object key, Object value);

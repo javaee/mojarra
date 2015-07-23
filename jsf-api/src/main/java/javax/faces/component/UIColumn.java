@@ -82,6 +82,11 @@ public class UIColumn extends UIComponentBase {
     // -------------------------------------------------------------- Properties
 
 
+    /**
+     * Get the component family.
+     * 
+     * @return the component family.
+     */
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -92,6 +97,8 @@ public class UIColumn extends UIComponentBase {
     /**
      * <p>Return the footer facet of the column (if any).  A convenience
      * method for <code>getFacet("footer")</code>.</p>
+     * 
+     * @return the footer component.
      */
     public UIComponent getFooter() {
 
@@ -119,6 +126,8 @@ public class UIColumn extends UIComponentBase {
     /**
      * <p>Return the header facet of the column (if any).  A convenience
      * method for <code>getFacet("header")</code>.</p>
+     * 
+     * @return the header component.
      */
     public UIComponent getHeader() {
 
