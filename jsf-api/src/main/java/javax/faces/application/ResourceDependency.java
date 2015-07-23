@@ -129,6 +129,8 @@ public @interface ResourceDependency {
      * is valid to have EL Expressions in the value of this attribute,
      * as long as the expression resolves to an instance of the expected
      * type.</p>
+     * 
+     * @return the name.
      */
     public String name();
 
@@ -139,6 +141,8 @@ public @interface ResourceDependency {
      * valid to have EL Expressions in the value of this attribute, as
      * long as the expression resolves to an instance of the expected
      * type.</p>
+     * 
+     * @return the library.
      */
     public String library() default "";
 
@@ -152,6 +156,8 @@ public @interface ResourceDependency {
      * must be called instead, as described above.  It is valid to have
      * EL Expressions in the value of this attribute, as long as the
      * expression resolves to an instance of the expected type.</p>
+     * 
+     * @return the target.
      */
     public String target() default "";
 

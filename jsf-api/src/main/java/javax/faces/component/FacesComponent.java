@@ -99,6 +99,8 @@ public @interface FacesComponent {
      * <code>getSimpleName</code> on the class to which this annotation
      * is attached and lowercasing the first character.  If more than one
      * component with this derived name is found, the results are undefined.</span></p>
+     * 
+     * @return the component type.
      */ 
 
     String value() default "";
@@ -109,6 +111,8 @@ public @interface FacesComponent {
      * that extends from {@link javax.faces.view.facelets.ComponentHandler},
      * suitable for use in pages under the tag library with namespace given
      * by the value of the {@link #namespace} attribute.</p>
+     * 
+     * @return <code>true</code> to create the Facelet tag handler, <code>false</code> otherwise.
      */
     
     boolean createTag() default false;
@@ -121,6 +125,8 @@ public @interface FacesComponent {
      * specified on a usage of this annotation, the simple name of the 
      * class on which this annotation is declared, with the first character 
      * lowercased, is taken to be the value.</p>
+     * 
+     * @return the tag name.
      */
     String tagName() default "";
     
@@ -129,6 +135,7 @@ public @interface FacesComponent {
      * attribute is <code>true</code>, the value of this attribute is taken
      * to be the tag library namespace into which this component is placed.</p>
      * 
+     * @return the namespace.
      */
     
     String namespace() default NAMESPACE;

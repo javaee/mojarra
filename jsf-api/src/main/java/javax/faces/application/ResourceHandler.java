@@ -490,6 +490,8 @@ public abstract class ResourceHandler {
      * library, along with other spec changes in section 2.6.1.4, this
      * scenario is enabled.</span></p>
      *
+     * @param libraryName the library name.
+     * @return <code>true</code> if the library exists, <code>false</code> otherwise.
      * @since 2.0
      * 
      */
@@ -585,6 +587,7 @@ public abstract class ResourceHandler {
      *
      * @param context the {@link javax.faces.context.FacesContext} for this
      * request
+     * @throws IOException when an I/O error occurs.
      */
     public abstract void handleResourceRequest(FacesContext context)
     throws IOException;
@@ -610,7 +613,7 @@ public abstract class ResourceHandler {
      * {@link ResourceHandler#RESOURCE_IDENTIFIER}, false otherwise.</p>
      * 
      * @param url the url to inspect for the presence of {@link ResourceHandler#RESOURCE_IDENTIFIER}.
-
+     * @return <code>true</code> if this is a resource URL, <code>false</code> otherwise.
      * @throws NullPointerException if the argument url is {@code null}.
      */
     
@@ -660,6 +663,9 @@ public abstract class ResourceHandler {
      * </tr>
      * 
      * </table>
+     * 
+     * @param resourceName the resource name.
+     * @return the renderer type.
      */
     
     public abstract String getRendererTypeForResourceName(String resourceName);

@@ -282,7 +282,7 @@ public abstract class ViewHandler {
      * subsequent requests for the current client.</p>
      *
      * @param context {@link FacesContext} for the current request
-     * 
+     * @return the locale.
      * @throws NullPointerException if <code>context</code> is 
      *  <code>null</code>
      */
@@ -312,6 +312,8 @@ public abstract class ViewHandler {
       *
       * </ul>
       *
+      * @param context the Faces context.
+      * @return the character encoding, or <code>null</code>
       * @since 1.2
       */ 
      
@@ -355,7 +357,7 @@ public abstract class ViewHandler {
      * javax.faces.render.RenderKitFactory#HTML_BASIC_RENDER_KIT}.</p>
      *
      * @param context {@link FacesContext} for the current request
-     * 
+     * @return the render kit id.
      * @throws NullPointerException if <code>context</code> is 
      *  <code>null</code>
      */
@@ -374,9 +376,13 @@ public abstract class ViewHandler {
      * <code>ViewDeclarationLanguage</code> {@link
      * ViewDeclarationLanguage#createView}, which must be called by
      * this method.</span>
-
+     * 
+     * @param context the Faces context.
+     * @param viewId the view id.
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
+     * 
+     * @return the viewroot.
      */
     public abstract UIViewRoot createView(FacesContext context, String viewId);
 
@@ -391,7 +397,7 @@ public abstract class ViewHandler {
      * @param context the <code>FacesContext</code> for this request
      *
      * @param rawViewId the <code>viewId</code> to derive,
-     *
+     * @return the derived view id.
      * @since 2.0
      */
     public String deriveViewId(FacesContext context, String rawViewId) {
@@ -413,7 +419,7 @@ public abstract class ViewHandler {
      * @param context the <code>FacesContext</code> for this request
      *
      * @param rawViewId the <code>viewId</code> to derive,
-     *
+     * @return the derived logical view id.
      * @since 2.1
      */
     public String deriveLogicalViewId(FacesContext context, String rawViewId) {
@@ -445,6 +451,8 @@ public abstract class ViewHandler {
      * "/".
      * @throws NullPointerException if <code>context</code> or
      *  <code>viewId</code> is <code>null</code>.
+     * 
+     * @return the action url.
      */
     public abstract String getActionURL(FacesContext context, String viewId);
 
@@ -467,6 +475,8 @@ public abstract class ViewHandler {
      *  valid for this <code>ViewHandler</code>.
      * @throws NullPointerException if <code>context</code> or
      *  <code>path</code> is <code>null</code>.
+     * 
+     * @return the resource URL.
      */
     public abstract String getResourceURL(FacesContext context, String path);
     
@@ -482,6 +492,7 @@ public abstract class ViewHandler {
      * application startup.  The default implementation returns an
      * unmodifiable empty <code>Set</code>.</p>
      * 
+     * @return the unmodifiable set of protected views.
      * @since 2.2 
      */
     public Set<String> getProtectedViewsUnmodifiable() {
@@ -521,7 +532,7 @@ public abstract class ViewHandler {
      * <code>false</code>.</p>
      * 
      * @param urlPattern the url-pattern to remove.
-     * 
+     * @return <code>true</code> if in the <code>Set</code>, <code>false</code> otherwise.
      * @since 2.2 
      */
     public boolean removeProtectedView(String urlPattern) {
@@ -542,6 +553,7 @@ public abstract class ViewHandler {
      * @param viewId            The view identifier of the target page
      * @param parameters        A mapping of parameter names to one or more values
      * @param includeViewParams A flag indicating whether view parameters should be encoded into this URL
+     * @return the redirect URL.
      * @since 2.0
      */
     public String getRedirectURL(FacesContext context,
@@ -568,7 +580,7 @@ public abstract class ViewHandler {
      * @param viewId            The view identifier of the target page
      * @param parameters        A mapping of parameter names to one or more values
      * @param includeViewParams A flag indicating whether view parameters should be encoded into this URL
-     *
+     * @return the bookmarkable URL.
      * @since 2.0
      */
     public String getBookmarkableURL(FacesContext context,
@@ -604,7 +616,7 @@ public abstract class ViewHandler {
      * @param viewId <span class="changed_modified_2_1">the logical view
      * id, as returned from {@link #deriveLogicalViewId} for which the
      * <code>ViewDeclarationLanguage</code> should be returned.</span>
-
+     * @return the ViewDeclarationLanguage, or <b>null</b>.
      * @since 2.0
      */
     public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context,
@@ -633,7 +645,8 @@ public abstract class ViewHandler {
      * ExternalContext#setRequestCharacterEncoding} method.  If {@link
      * ExternalContext#getRequestCharacterEncoding} returns
      * non-<code>null</code> take no action.</p>
-
+     * 
+     * @param context the Faces context.
      * @throws FacesException if a problem occurs setting the encoding,
      * such as the <code>UnsupportedEncodingException</code> thrown 
      * by the underlying Servlet or Portlet technology when the encoding is not
@@ -705,7 +718,7 @@ public abstract class ViewHandler {
 
      * @param context {@link FacesContext} for the current request
      * @param viewId the view identifier for the current request
-     *
+     * @return the restored view root, or <b>null</b>.
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      * @throws FacesException if a servlet error occurs

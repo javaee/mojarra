@@ -138,6 +138,8 @@ public class ViewExpiredException extends FacesException {
     /**
      * <p>Return the view identifier of this exception, or <code>null</code> if the
      * view identifier is nonexistent or unknown.</p>
+     * 
+     * @return the view id, or <code>null</code>.
      */
     public String getViewId() {
 
@@ -149,7 +151,10 @@ public class ViewExpiredException extends FacesException {
      * <p>Return the message for this exception prepended with the view identifier
      * if the view identifier is not <code>null</code>, otherwise, return the 
      * message.</p>
+     * 
+     * @return the message.
      */
+    @Override
     public String getMessage() {
 
         if (viewId != null) {

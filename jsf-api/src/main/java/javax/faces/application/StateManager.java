@@ -214,7 +214,7 @@ public abstract class StateManager {
      * same nearest {@link NamingContainer} must have unique identifiers.</p>
      *
      * @param context {@link FacesContext} for the current request
-      *
+     * @return the serialized view, or <b>null</b>.
      * @throws IllegalStateException if more than one component or
      *                               facet within the same {@link NamingContainer} in this view has
      *                               the same non-<code>null</code> component id
@@ -224,6 +224,7 @@ public abstract class StateManager {
      * result to an <code>Object []</code> wrapping the first and second
      * elements in an instance of {@link SerializedView}, which it then
      * returns.  Otherwise, it returns <code>null</code>
+     * 
      */
     public SerializedView saveSerializedView(FacesContext context) {
 
@@ -276,7 +277,7 @@ public abstract class StateManager {
      * <code>SerializedView</code>.</p>
      *
      * @param context {@link FacesContext} for the current request
-     *
+     * @return the saved view.
      * @throws IllegalStateException if more than one component or
      *                               facet within the same {@link NamingContainer} in this view has
      *                               the same non-<code>null</code> component id
@@ -311,7 +312,7 @@ public abstract class StateManager {
      * information.</p>
      *
      * @param context {@link FacesContext} for the current request
-     *
+     * @return the tree structure, or <b>null</b>.
      * @deprecated the distinction between tree structure and component
      *             state is now an implementation detail.  The default
      *             implementation returns <code>null</code>.
@@ -336,7 +337,7 @@ public abstract class StateManager {
      * information.</p>
      *
      * @param context {@link FacesContext} for the current request
-     *
+     * @return the component state, or <b>null</b>.
      * @deprecated the distinction between tree structure and component
      *             state is now an implementation detail.  The default
      *             implementation returns <code>null</code>.
@@ -372,7 +373,7 @@ public abstract class StateManager {
      * @param context {@link FacesContext} for the current request
      * @param state   the Serializable state to be written,
      *                as returned by {@link #saveSerializedView}
-     *
+     * @throws IOException when an I/O error occurs.
      * @since 1.2
      */
     public void writeState(FacesContext context, Object state)
@@ -410,7 +411,7 @@ public abstract class StateManager {
      *
      * @param context {@link FacesContext} for the current request
      * @param state   the serialized state to be written
-     *
+     * @throws IOException when an I/O error occurs.
      * @deprecated This method has been replaced by {@link
      *             #writeState(javax.faces.context.FacesContext,java.lang.Object)}.
      *             The default implementation calls the non-deprecated variant
@@ -418,7 +419,7 @@ public abstract class StateManager {
      * argument, where the first element of the array is the return from
      * <code>getStructure()</code> and the second is the return from
      * <code>getState()</code> on the argument <code>state</code>.
-     * 
+     *
      */
     public void writeState(FacesContext context,
                            SerializedView state) throws IOException {
@@ -460,6 +461,7 @@ public abstract class StateManager {
      * @param renderKitId the renderKitId used to render this response.
      *                    Must not be <code>null</code>.
      *
+     * @return the view root, or <code>null</code>.
      * @throws IllegalArgumentException if <code>renderKitId</code>
      *                                  is <code>null</code>.
      */
@@ -479,7 +481,7 @@ public abstract class StateManager {
      * @param viewId      View identifier of the view to be restored
      * @param renderKitId the renderKitId used to render this response.
      *                    Must not be <code>null</code>.
-     *
+     * @return the view root, or <code>null</code>.
      * @throws IllegalArgumentException if <code>renderKitId</code>
      *                                  is <code>null</code>.
      * @deprecated the distinction between tree structure and component
@@ -592,7 +594,7 @@ public abstract class StateManager {
      * </p>
      *
      * @param context {@link FacesContext} for the current request
-     *
+     * @return the view state.
      * @since 2.0
      */
     public String getViewState(FacesContext context) {

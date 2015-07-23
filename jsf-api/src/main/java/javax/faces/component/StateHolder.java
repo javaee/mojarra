@@ -85,6 +85,8 @@ public interface StateHolder {
      *
      * <p>The return from this method must be <code>Serializable</code></p>
      * 
+     * @param context the Faces context.
+     * @return the saved state.
      * @throws NullPointerException if <code>context</code> is null
      */
 
@@ -105,6 +107,8 @@ public interface StateHolder {
      * <p class="changed_modified_2_0_rev_a">If the <code>state</code>
      * argument is <code>null</code>, take no action and return.</p>
      * 
+     * @param context the Faces context.
+     * @param state the state.
      * @throws NullPointerException if <code>context</code> is null.
      */
 
@@ -114,6 +118,8 @@ public interface StateHolder {
      *
      * <p>If true, the Object implementing this interface must not
      * participate in state saving or restoring.</p>
+     * 
+     * @return <code>true</code> if transient, <code>false</code> otherwise.
      */
 
     public boolean isTransient();

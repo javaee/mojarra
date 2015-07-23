@@ -101,6 +101,7 @@ public abstract class MetaRuleset {
      * 
      * @param attribute the attribute to remove.
      * @param property the property to add.
+     * @return the aliased MetaRuleSet.
      * @since 2.0
      */
     public abstract MetaRuleset alias(String attribute, String property);
@@ -128,7 +129,7 @@ public abstract class MetaRuleset {
     /**
      * <p class="changed_added_2_0">Take actions to apply the rule.</p>
      * 
-     * @return the {@link Metadata} with the {@link MetaRuleSet} applied.
+     * @return the Metadata with the MetaRuleSet applied.
      */
     public abstract Metadata finish();
 }

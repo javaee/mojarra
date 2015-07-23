@@ -145,10 +145,10 @@ public final class Tag {
     }
 
     /**
-     * <p class="changed_added_2_0">Return the {@link Location} of this
+     * <p class="changed_added_2_0">Return the Location of this
      * <code>Tag</code> instance in the Facelet view.</p>
      *
-     * @return the {@Link Location}.
+     * @return the Location.
      */
     public Location getLocation() {
         return location;
