@@ -39,19 +39,7 @@
  */
 package com.sun.faces.cdi;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptySet;
-import static java.util.Collections.singleton;
-import java.util.HashSet;
-import java.util.Set;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.Default;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.enterprise.util.AnnotationLiteral;
 import javax.faces.context.FacesContext;
 
 /**
@@ -63,136 +51,19 @@ import javax.faces.context.FacesContext;
  * @since 2.3
  * @see FacesContext
  */
-public class FacesContextProducer extends CdiProducer implements Bean<FacesContext> {
+public class FacesContextProducer extends CdiProducer<FacesContext> {
 
     /**
      * Serialization version
      */
     private static final long serialVersionUID = 1L;
+
+    public FacesContextProducer() {
+        super.name("facesContext")
+             .scope(RequestScoped.class)
+             .types(FacesContext.class)
+             .beanClass(FacesContext.class)
+             .create(e -> FacesContext.getCurrentInstance());
+    }
     
-    /**
-     * Inner class defining an annotation literal for @Default.
-     */
-    public class DefaultAnnotationLiteral
-            extends AnnotationLiteral<Default> {
-
-        private static final long serialVersionUID = 1L;
-    }
-
-    /**
-     * Create the actual instance.
-     *
-     * @param creationalContext the creational context.
-     * @return the Faces context.
-     */
-    @Override
-    public FacesContext create(CreationalContext<FacesContext> creationalContext) {
-        checkActive();
-        return FacesContext.getCurrentInstance();
-    }
-
-    /**
-     * Destroy the instance.
-     *
-     * <p>
-     * Since the FacesContext is a JSF artifact that the JSF runtime really is
-     * managing the destroy method here does not need to do anything.
-     * </p>
-     *
-     * @param instance the instance.
-     * @param creationalContext the creational context.
-     */
-    @Override
-    public void destroy(FacesContext instance, CreationalContext<FacesContext> creationalContext) {
-    }
-
-    /**
-     * Get the bean class.
-     *
-     * @return the bean class.
-     */
-    @Override
-    public Class<?> getBeanClass() {
-        return FacesContext.class;
-    }
-
-    /**
-     * Get the injection points.
-     *
-     * @return the injection points.
-     */
-    @Override
-    public Set<InjectionPoint> getInjectionPoints() {
-        return emptySet();
-    }
-
-    /**
-     * Get the name.
-     *
-     * @return the name.
-     */
-    @Override
-    public String getName() {
-        return "facesContext";
-    }
-
-    /**
-     * Get the qualifiers.
-     *
-     * @return the qualifiers.
-     */
-    @Override
-    public Set<Annotation> getQualifiers() {
-        return singleton((Annotation) new DefaultAnnotationLiteral());
-    }
-
-    /**
-     * Get the scope.
-     *
-     * @return the scope.
-     */
-    @Override
-    public Class<? extends Annotation> getScope() {
-        return RequestScoped.class;
-    }
-
-    /**
-     * Get the stereotypes.
-     *
-     * @return the stereotypes.
-     */
-    @Override
-    public Set<Class<? extends Annotation>> getStereotypes() {
-        return emptySet();
-    }
-
-    /**
-     * Get the types.
-     *
-     * @return the types.
-     */
-    @Override
-    public Set<Type> getTypes() {
-        return new HashSet<>(asList(FacesContext.class));
-    }
-
-    /**
-     * Is this an alternative.
-     *
-     * @return false.
-     */
-    @Override
-    public boolean isAlternative() {
-        return false;
-    }
-
-    /**
-     * Is this nullable.
-     *
-     * @return false.
-     */
-    @Override
-    public boolean isNullable() {
-        return false;
-    }
 }

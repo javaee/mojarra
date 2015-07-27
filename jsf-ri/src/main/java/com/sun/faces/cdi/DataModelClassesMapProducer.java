@@ -39,21 +39,10 @@
  */
 package com.sun.faces.cdi;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptySet;
-import static java.util.Collections.singleton;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.CDI;
-import javax.enterprise.inject.spi.InjectionPoint;
 import javax.faces.model.DataModel;
 
 /**
@@ -70,144 +59,27 @@ import javax.faces.model.DataModel;
  * @since 2.3
  *
  */
-public class DataModelClassesMapProducer extends CdiProducer implements Bean<Map<Class<?>, Class<? extends DataModel<?>>>> {
+public class DataModelClassesMapProducer extends CdiProducer<Map<Class<?>, Class<? extends DataModel<?>>>> {
 
     /**
      * Serialization version
      */
     private static final long serialVersionUID = 1L;
     
-    /**
-     * The set of types that this producer is capable of producing, and hence
-     * can be used as the type of an injection point.
-     */
-    private final Set<Type> types = new HashSet<>(asList(
-        Map.class,
-        Object.class)
-    );
-    
-    /**
-     * The qualifiers uses by an injection point of bean manager client to denote a
-     * specific produced type beyond its class type.
-     */
-    private final Set<Annotation> qualifiers = singleton(
-        new DataModelClassesAnnotationLiteral()
-    );
-    
-
-    /**
-     * Create the actual instance.
-     *
-     * @param creationalContext the creational context.
-     * @return the Faces context.
-     */
-    @Override
-    public Map<Class<?>, Class<? extends DataModel<?>>> create(CreationalContext<Map<Class<?>, Class<? extends DataModel<?>>>> creationalContext) {
-        return CDI
-            .current()
-            .select(CdiExtension.class)
-            .get()
-            .getForClassToDataModelClass();
+    public DataModelClassesMapProducer() {
+        super.name("comSunFacesDataModelClassesMap")
+             .scope(ApplicationScoped.class)
+             .qualifiers(new DataModelClassesAnnotationLiteral())
+             .types(
+                 Map.class, 
+                 Object.class)
+             .beanClass(Map.class)
+             .active(true) // internal producer, not affected by resolver chain setting
+             .create(e -> CDI
+                 .current()
+                 .select(CdiExtension.class)
+                 .get()
+                 .getForClassToDataModelClass());
     }
 
-    /**
-     * Destroy the instance.
-     * </p>
-     *
-     * @param instance the instance.
-     * @param creationalContext the creational context.
-     */
-    @Override
-    public void destroy(Map<Class<?>, Class<? extends DataModel<?>>> instance, CreationalContext<Map<Class<?>, Class<? extends DataModel<?>>>> creationalContext) {
-    }
-
-    /**
-     * Get the bean class.
-     *
-     * @return the bean class.
-     */
-    @Override
-    public Class<?> getBeanClass() {
-        return Map.class;
-    }
-
-    /**
-     * Get the injection points.
-     *
-     * @return the injection points.
-     */
-    @Override
-    public Set<InjectionPoint> getInjectionPoints() {
-        return emptySet();
-    }
-
-    /**
-     * Get the name.
-     *
-     * @return the name.
-     */
-    @Override
-    public String getName() {
-        return "comSunFacesDataModelClassesMap";
-    }
-
-    /**
-     * Get the qualifiers.
-     *
-     * @return the qualifiers.
-     */
-    @Override
-    public Set<Annotation> getQualifiers() {
-        return qualifiers;
-    }
-
-    /**
-     * Get the scope.
-     *
-     * @return the scope.
-     */
-    @Override
-    public Class<? extends Annotation> getScope() {
-        return ApplicationScoped.class;
-    }
-
-    /**
-     * Get the stereotypes.
-     *
-     * @return the stereotypes.
-     */
-    @Override
-    public Set<Class<? extends Annotation>> getStereotypes() {
-        return emptySet();
-    }
-
-    /**
-     * Get the types.
-     *
-     * @return the types.
-     */
-    @Override
-    public Set<Type> getTypes() {
-        return types;
-    }
-
-    /**
-     * Is this an alternative.
-     *
-     * @return false.
-     */
-    @Override
-    public boolean isAlternative() {
-        return false;
-    }
-
-    /**
-     * Is this nullable.
-     *
-     * @return false.
-     */
-    @Override
-    public boolean isNullable() {
-        return false;
-    }
 }

@@ -39,8 +39,20 @@
  */
 package com.sun.faces.cdi;
 
-import java.io.Serializable;
+import static com.sun.faces.util.CollectionsUtils.asSet;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.singleton;
 
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.Set;
+import java.util.function.Function;
+
+import javax.enterprise.context.Dependent;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.PassivationCapable;
 import javax.faces.context.FacesContext;
 
@@ -49,8 +61,10 @@ import com.sun.faces.config.WebConfiguration;
 /**
  * An abstract base class used by the CDI producers for some common
  * functionality.
+ * 
+ * @since 2.3
  */
-abstract class CdiProducer implements PassivationCapable, Serializable {
+abstract class CdiProducer<T> implements Bean<T>, PassivationCapable, Serializable {
     
     /**
      * Serialization version
@@ -60,7 +74,14 @@ abstract class CdiProducer implements PassivationCapable, Serializable {
     /**
      * Stores the active flag.
      */
-    protected Boolean active;
+    private Boolean active;
+    
+    private String name;
+    private Class<?> beanClass = Object.class;
+    private Set<Type> types = singleton(Object.class);
+    private Set<Annotation> qualifiers = singleton(new DefaultAnnotationLiteral());
+    private Class<? extends Annotation> scope = Dependent.class;
+    private Function<CreationalContext<T>, T> create;
     
     /**
      * Get the ID of this particular instantiation of the producer.
@@ -81,6 +102,98 @@ abstract class CdiProducer implements PassivationCapable, Serializable {
         // value here.
         return this.getClass().getName();
     }
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public Class<?> getBeanClass() {
+       return beanClass;
+    }
+    
+    @Override
+    public Set<Type> getTypes() {
+        return types;
+    }
+    
+    /**
+     * Get the default qualifier.
+     *
+     * @return the qualifiers, which in the default case only contains the Default
+     */
+    @Override
+    public Set<Annotation> getQualifiers() {
+        return qualifiers;
+    }
+    
+    @Override
+    public Class<? extends Annotation> getScope() {
+        return scope;
+    }
+    
+    @Override
+    public T create(CreationalContext<T> creationalContext) {
+        checkActive();
+        return create.apply(creationalContext);
+    }
+    
+    /**
+     * Destroy the instance.
+     *
+     * <p>
+     * Since most artifact that the sub classes are producing 
+     * are artifacts that the JSF runtime really is
+     * managing the destroy method here does not need to do anything.
+     * </p>
+     *
+     * @param instance the instance.
+     * @param creationalContext the creational context.
+     */
+    @Override
+    public void destroy(T instance, CreationalContext<T> creationalContext) {
+    }
+    
+    /**
+     * Get the injection points.
+     *
+     * @return the injection points.
+     */
+    @Override
+    public Set<InjectionPoint> getInjectionPoints() {
+        return emptySet();
+    }
+    
+    /**
+     * Get the stereotypes.
+     *
+     * @return the stereotypes.
+     */
+    @Override
+    public Set<Class<? extends Annotation>> getStereotypes() {
+        return emptySet();
+    }
+    
+    /**
+     * Is this an alternative.
+     *
+     * @return false.
+     */
+    @Override
+    public boolean isAlternative() {
+        return false;
+    }
+
+    /**
+     * Is this nullable.
+     *
+     * @return false.
+     */
+    @Override
+    public boolean isNullable() {
+        return false;
+    }
 
     /**
      * Check if we are active.
@@ -96,4 +209,41 @@ abstract class CdiProducer implements PassivationCapable, Serializable {
             throw new IllegalStateException("Cannot use @Inject without setting context-param \"javax.faces.ENABLE_CDI_RESOLVER_CHAIN\" to \"true\"");
         }
     }
+    
+    protected CdiProducer<T> active(boolean active) {
+        this.active = active;
+        return this;
+    }
+    
+    protected CdiProducer<T> name(String name) {
+        this.name = name;
+        return this;
+    }
+    
+    protected CdiProducer<T> create(Function<CreationalContext<T>, T> create) {
+        this.create = create;
+        return this;
+    }
+    
+    protected CdiProducer<T> beanClass(Class<?> beanClass) {
+        this.beanClass = beanClass;
+        return this;
+    }
+    
+    protected CdiProducer<T> types(Type... types) {
+        this.types = asSet(types);
+        return this;
+    }
+    
+    protected CdiProducer<T> qualifiers(Annotation... qualifiers) {
+        this.qualifiers = asSet(qualifiers);
+        return this;
+    }
+    
+    
+    protected CdiProducer<T> scope(Class<? extends Annotation> scope) {
+        this.scope = scope;
+        return this;
+    }
+    
 }

@@ -39,21 +39,10 @@
  */
 package com.sun.faces.cdi;
 
-import javax.faces.context.RequestCookieMap;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptySet;
-import static java.util.Collections.singleton;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.enterprise.inject.spi.PassivationCapable;
-import javax.enterprise.util.AnnotationLiteral;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -66,161 +55,23 @@ import javax.faces.context.FacesContext;
  * @since 2.3
  * @see ExternalContext#getRequestCookieMap()
  */
-public class RequestCookieMapProducer extends CdiProducer
-        implements Bean<Map<String, Object>>, PassivationCapable {
+public class RequestCookieMapProducer extends CdiProducer<Map<String, Object>> {
     
     /**
      * Serialization version
      */
     private static final long serialVersionUID = 1L;
-
-    /**
-     * The set of types that this producer is capable of producing, and hence
-     * can be used as the type of an injection point.
-     */
-    private final Set<Type> types = new HashSet<>(asList(
-            new ParameterizedTypeImpl(Map.class, new Type[]{String.class, Object.class}),
-            Map.class,
-            Object.class));
-
-    /**
-     * Inner class defining an annotation literal for @RequestCookieMap.
-     */
-    public class RequestCookieMapAnnotationLiteral
-            extends AnnotationLiteral<RequestCookieMap> {
-
-        @Override
-        public Class<? extends Annotation> annotationType() {
-            return RequestCookieMap.class;
-        }
-
-        private static final long serialVersionUID = 1L;
+    
+    public RequestCookieMapProducer() {
+        super.name("cookie")
+             .scope(RequestScoped.class)
+             .qualifiers(new RequestCookieMapAnnotationLiteral())
+             .types(
+                 new ParameterizedTypeImpl(Map.class, new Type[]{String.class, Object.class}),
+                 Map.class,
+                 Object.class)
+             .beanClass(Map.class)
+             .create(e -> FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap());
     }
-
-    /**
-     * Create the actual instance.
-     *
-     * @param creationalContext the creational context.
-     * @return the Faces context.
-     */
-    @Override
-    public Map<String, Object> create(CreationalContext<Map<String, Object>> creationalContext) {
-        checkActive();
-        return FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
-    }
-
-    /**
-     * Destroy the instance.
-     *
-     * <p>
-     * Since the FacesContext is a JSF artifact that the JSF runtime really is
-     * managing the destroy method here does not need to do anything.
-     * </p>
-     *
-     * @param instance the instance.
-     * @param creationalContext the creational context.
-     */
-    @Override
-    public void destroy(Map<String, Object> instance, CreationalContext<Map<String, Object>> creationalContext) {
-    }
-
-    /**
-     * Get the bean class.
-     *
-     * @return the bean class.
-     */
-    @Override
-    public Class<?> getBeanClass() {
-        return Map.class;
-    }
-
-    /**
-     * Get the id (for the producer).
-     *
-     * @return the id.
-     */
-    @Override
-    public String getId() {
-        return RequestCookieMapProducer.class.getName();
-    }
-
-    /**
-     * Get the injection points.
-     *
-     * @return the injection points.
-     */
-    @Override
-    public Set<InjectionPoint> getInjectionPoints() {
-        return emptySet();
-    }
-
-    /**
-     * Get the name.
-     *
-     * @return the name.
-     */
-    @Override
-    public String getName() {
-        return "cookie";
-    }
-
-    /**
-     * Get the qualifiers.
-     *
-     * @return the qualifiers.
-     */
-    @Override
-    public Set<Annotation> getQualifiers() {
-        return singleton((Annotation) new RequestCookieMapAnnotationLiteral());
-    }
-
-    /**
-     * Get the scope.
-     *
-     * @return the scope.
-     */
-    @Override
-    public Class<? extends Annotation> getScope() {
-        return RequestScoped.class;
-    }
-
-    /**
-     * Get the stereotypes.
-     *
-     * @return the stereotypes.
-     */
-    @Override
-    public Set<Class<? extends Annotation>> getStereotypes() {
-        return emptySet();
-    }
-
-    /**
-     * Get the types.
-     *
-     * @return the types.
-     */
-    @Override
-    public Set<Type> getTypes() {
-        return types;
-    }
-
-    /**
-     * Is this an alternative.
-     *
-     * @return false.
-     */
-    @Override
-    public boolean isAlternative() {
-        return false;
-    }
-
-    /**
-     * Is this nullable.
-     *
-     * @return false.
-     */
-    @Override
-    public boolean isNullable() {
-        return false;
-    }
+    
 }

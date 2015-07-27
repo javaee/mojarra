@@ -40,55 +40,15 @@
 package com.sun.faces.cdi;
 
 import javax.enterprise.util.AnnotationLiteral;
-import javax.faces.component.behavior.FacesBehavior;
+import javax.faces.application.ApplicationMap;
 
 /**
- * A helper class.
- *
- * <p>
- * Used in CdiUtils to define a CDI qualifier so we can get a match out using
- * the BeanManager API.
- * </p>
+ * An annotation literal for <code>@ApplicationMap.</code>
+ * 
+ * @since 2.3
+ * @see ApplicationMap
  */
 @SuppressWarnings("all")
-class FacesBehaviorAnnotationLiteral extends AnnotationLiteral<FacesBehavior> implements FacesBehavior {
-
-    /**
-     * Stores the serial version UID.
-     */
-    private static final long serialVersionUID = -258069073667018312L;
-    
-    /**
-     * Stores the value.
-     */
-    private String value;
-
-    /**
-     * Constructor.
-     *
-     * @param value the value.
-     */
-    public FacesBehaviorAnnotationLiteral(String value) {
-        this.value = value;
-    }
-
-    /**
-     * Get the value.
-     *
-     * @return the value.
-     */
-    @Override
-    public String value() {
-        return value;
-    }
-
-    /**
-     * Is managed.
-     *
-     * @return true.
-     */
-    @Override
-    public boolean managed() {
-        return true;
-    }
+public class ApplicationMapAnnotationLiteral extends AnnotationLiteral<ApplicationMap> implements ApplicationMap {
+    private static final long serialVersionUID = 1L;
 }

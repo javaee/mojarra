@@ -40,9 +40,13 @@
 
 package com.sun.faces.util;
 
+import static java.util.Arrays.asList;
+
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <p class="changed_added_2_0"></p>
@@ -54,6 +58,11 @@ public class CollectionsUtils {
 	private CollectionsUtils() {
 		// this class contains static methods only.
 	}
+	
+    @SafeVarargs
+    public static <T> Set<T> asSet(T... a) {
+        return new HashSet<T>(asList(a));
+    }
 	
 	public static <T> T[] ar(T...ts){
 		return ts;

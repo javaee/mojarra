@@ -50,9 +50,8 @@ import javax.faces.validator.FacesValidator;
  * the BeanManager API.
  * </p>
  */
-class FacesValidatorAnnotationLiteral
-        extends AnnotationLiteral<FacesValidator>
-        implements FacesValidator {
+@SuppressWarnings("all")
+class FacesValidatorAnnotationLiteral extends AnnotationLiteral<FacesValidator> implements FacesValidator {
 
     /**
      * Stores the serial version UID.

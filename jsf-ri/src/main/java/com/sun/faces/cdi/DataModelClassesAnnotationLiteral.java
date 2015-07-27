@@ -42,8 +42,10 @@ package com.sun.faces.cdi;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * Package private annotation literal for classifier for obtaining the map 
- * that {@link DataModelClassesMapProducer} producer produces
+ * An annotation literal for classifier for obtaining the map 
+ * that the {@link DataModelClassesMapProducer} producer produces.
+ * 
+ * @since 2.3
  *
  */
 @SuppressWarnings("all")

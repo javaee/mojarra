@@ -51,8 +51,10 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
- * Package private classifier for obtaining the map 
+ * Classifier for obtaining the map 
  * that {@link DataModelClassesMapProducer} producer produces
+ * 
+ * @since 2.3
  *
  */
 @Target({TYPE, METHOD, PARAMETER, FIELD})

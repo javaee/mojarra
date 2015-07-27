@@ -50,9 +50,8 @@ import javax.faces.convert.FacesConverter;
  * the BeanManager API.
  * </p>
  */
-class FacesConverterAnnotationLiteral
-        extends AnnotationLiteral<FacesConverter>
-        implements FacesConverter {
+@SuppressWarnings("all")
+class FacesConverterAnnotationLiteral extends AnnotationLiteral<FacesConverter> implements FacesConverter {
 
     /**
      * Stores the serial version UID.
