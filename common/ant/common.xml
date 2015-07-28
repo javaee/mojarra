@@ -181,10 +181,10 @@
         <dependency groupId="jstl" artifactId="jstl" version="1.2" scope="provided" />
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
-        <remoteRepository refid="j.n.repo"/>
+<!--        <remoteRepository refid="j.n.repo"/>
         <remoteRepository refid="gf.repo"/>
         <remoteRepository refid="gf.nexus.repo"/>
-        <remoteRepository refid="jboss.repo"/>  <!-- needed for validation-api -->
+        <remoteRepository refid="jboss.repo"/>   needed for validation-api -->
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="commons.filepath" pathId="commons.path">
@@ -193,7 +193,7 @@
         <dependency groupId="commons-beanutils" artifactId="commons-beanutils" version="1.6.1"/>
         <dependency groupId="commons-logging" artifactId="commons-logging" version="1.0.4"/>
         <localRepository refid="local.repository"/>
-        <remoteRepository refid="gf.nexus.repo"/>
+        <!--<remoteRepository refid="gf.nexus.repo"/>-->
     </artifact:dependencies>
 
     <artifact:dependencies filesetId="servlet25test.filepath" pathId="servlet25test.path">
@@ -203,7 +203,7 @@
         <dependency groupId="javax.servlet.jsp.jstl" artifactId="jstl-api" version="1.2" scope="provided"/>
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
-        <remoteRepository refid="gf.nexus.repo"/>
+        <!--<remoteRepository refid="gf.nexus.repo"/>-->
     </artifact:dependencies>
 
 
