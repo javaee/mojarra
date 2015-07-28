@@ -176,7 +176,7 @@
                 </not>
             </and>
             <then>
-                <get src="${java.net.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
+                <get src="${central.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
                      dest="${junit.jar}"
                      usetimestamp="true"/>
             </then>
@@ -312,7 +312,7 @@
                 <available file="${servlet.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.servlet/jars/servlet-api-${servlet.api.version}.jar"
+                <get src="${central.maven2}/javax/servlet/servlet-api/${servlet.api.version}/servlet-api-${servlet.api.version}.jar"
                      dest="${servlet.jar}"
                      usetimestamp="true"/>
 
@@ -324,7 +324,7 @@
                 <available file="${servlet3.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="http://repo1.maven.org/maven2/org/mortbay/jetty/servlet-api/3.0.20100224/servlet-api-3.0.20100224.jar"
+                <get src="${central.maven2}/org/mortbay/jetty/servlet-api/3.0.20100224/servlet-api-3.0.20100224.jar"
                      dest="${servlet3.jar}"
                      usetimestamp="true"/>
 
@@ -418,18 +418,19 @@
                 <available file="${groovy.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${codehaus.maven}/org/codehaus/groovy/groovy-all/${groovy.version}/groovy-all-${groovy.version}.jar"
+                <get src="${central.maven2}/org/codehaus/groovy/groovy-all/${groovy.version}/groovy-all-${groovy.version}.jar"
                      dest="${groovy.jar}"
                      usetimestamp="true"/>
             </then>
         </if>
+
         <!-- JSR 330 -->
         <if>
             <not>
                 <available file="${javax-inject.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${maven2.mirror}/javax/inject/javax.inject/${javax-inject.version}/javax.inject-${javax-inject.version}.jar"
+                <get src="${central.maven2}/javax/inject/javax.inject/${javax-inject.version}/javax.inject-${javax-inject.version}.jar"
                      dest="${javax-inject.jar}"
                      usetimestamp="true"/>
             </then>
