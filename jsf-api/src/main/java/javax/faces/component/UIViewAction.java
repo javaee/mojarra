@@ -218,6 +218,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * @since 2.2
      */
     @Deprecated
+    @Override
     public MethodBinding getAction() {
         MethodBinding result = null;
         MethodExpression me;
@@ -235,6 +236,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      */
     @Deprecated
     @SuppressWarnings("deprecation")
+    @Override
     public void setAction(final MethodBinding action) {
     }
 
@@ -245,6 +247,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      */
     @Deprecated
     @SuppressWarnings("deprecation")
+    @Override
     public MethodBinding getActionListener() {
         throw new UnsupportedOperationException("Not supported.");
     }
@@ -256,6 +259,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      */
     @Deprecated
     @SuppressWarnings("deprecation")
+    @Override
     public void setActionListener(final MethodBinding actionListener) {
         throw new UnsupportedOperationException("Not supported.");
     }
@@ -272,6 +276,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
 
      * @since 2.2
      */
+    @Override
     public boolean isImmediate() {
         return (Boolean) getStateHelper().eval(PropertyKeys.immediate, false);
     }
@@ -281,6 +286,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      *
      * @since 2.2
      */
+    @Override
     public void setImmediate(final boolean immediate) {
         getStateHelper().put(PropertyKeys.immediate, immediate);
     }
@@ -289,6 +295,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * <p class="changed_added_2_2">Returns the name of the lifecycle
      * phase in which the action is to be queued.</p>
      *
+     * @return the phase (as string).
      * @since 2.2
      */
     public String getPhase() {
@@ -317,7 +324,8 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * </ul>
 
      * <p>If set, this value takes precedence over the immediate flag.</p>
-
+     * 
+     * @param phase the phase id (as string value).
      * @since 2.2
      */
 
@@ -349,8 +357,9 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * responsible for ensuring that calls to this method accurately
      * reflect this fact.</p>
      *
-     * @since 2.2
      * @param context {@link FacesContext} for the current request
+     * @return <code>true</code> is currently processing broadcast, <code>false</code> otherwise.
+     * @since 2.2
      * 
      */
     
@@ -413,6 +422,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
     /**
      * {@inheritDoc}
      *
+     * @param actionExpression the action expression.
      * @since 2.2
      */
     @Override
@@ -423,7 +433,8 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
     /**
      * <p class="changed_added_2_2">If <code>true</code> this
      * component will operate on postback.</p>
-
+     * 
+     * @return <code>true</code> if operating upon postback, <code>false</code> otherwise.
      * @since 2.2
      */
     public boolean isOnPostback() {
@@ -433,7 +444,8 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
     /**
      * <p class="changed_added_2_2">Controls whether or not this
      * component operates on postback.</p>
-
+     * 
+     * @param onPostback the onPostback flag.
      * @since 2.2
      */
     public void setOnPostback(final boolean onPostback) {
@@ -445,9 +457,11 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      * component should take the actions specified in the {@link
      * #decode} method.</p>
      * 
+     * @return <code>true</code> if it should be rendered, <code>false</code> otherwise.
      * @since 2.2
      */
 
+    @Override
     public boolean isRendered() {
         return (Boolean) getStateHelper().eval(PropertyKeys.renderedAttr, true);
     }
@@ -460,6 +474,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      *
      * @since 2.2
      */
+    @Override
     public void setRendered(final boolean condition) {
         getStateHelper().put(PropertyKeys.renderedAttr, condition);
     }

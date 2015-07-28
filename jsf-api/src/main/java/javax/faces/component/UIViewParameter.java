@@ -145,6 +145,8 @@ public class UIViewParameter extends UIInput {
     /**
      * <p class="changed_added_2_0">Return the request parameter name
      * from which the value is retrieved.</p>
+     * 
+     * @return the name.
      * @since 2.0
      */
     public String getName() {
@@ -171,6 +173,8 @@ public class UIViewParameter extends UIInput {
      * <p class="changed_added_2_0">Return <code>false</code>.  The
      * immediate setting is not relevant for view parameters and must be
      * assumed to be <code>false</code>.</p>
+     * 
+     * @return <code>true</code> if immediate, <code>false</code> otherwise.
      * @since 2.0
      */
     @Override
@@ -183,6 +187,8 @@ public class UIViewParameter extends UIInput {
      * that the submitted value is
      * always a string, <span class="changed_added_2_2">but the return type
      * from this method is <code>Object</code>.</span>.</p>
+     * 
+     * @return the submitted value.
      * @since 2.0
      */
     @Override
@@ -240,7 +246,8 @@ public class UIViewParameter extends UIInput {
      * <code>null</code> differently.  In this class, a <code>null</code> value
      * along with the "required" flag being set to <code>true</code> will
      * cause a validation failure. </p>
-     * @param context
+     * 
+     * @param context the Faces context.
      * @since 2.0
      */
 
@@ -342,6 +349,8 @@ public class UIViewParameter extends UIInput {
      * <p class="changed_added_2_0">Called specially by {@link
      * UIViewRoot#encodeEnd}, this method simply sets the submitted
      * value to be the return from {@link #getStringValue}.</p>
+     * 
+     * @throws IOException when an I/O error occurs.
      * @since 2.0
      */
     @Override
@@ -361,6 +370,8 @@ public class UIViewParameter extends UIInput {
      * from a <code>ValueExpression</code> return the value of the
      * expression, otherwise, return the local value.</p>
      *
+     * @param context the Faces context.
+     * @return the string value.
      * @since 2.0
      */
 
@@ -378,6 +389,8 @@ public class UIViewParameter extends UIInput {
      * <p class="changed_added_2_0">Manually perform standard conversion
      * steps to get a string value from the value expression.</p>
      *
+     * @param context the Faces context.
+     * @return the string value from the model.
      * @since 2.0
      */
 
@@ -428,6 +441,8 @@ public class UIViewParameter extends UIInput {
      * and <code>renderer-type: javax.faces.Text</code> and call its
      * {@link Renderer#getConvertedValue} method.</p>
      *
+     * @param submittedValue the submitted value.
+     * @return the converted value.
      * @since 2.0
      */ 
     @Override
@@ -480,6 +495,7 @@ public class UIViewParameter extends UIInput {
 	 * argument <code>UIViewParameter</code>.</p>
 	 *
 	 * @param context the <code>FacesContext</code>for this request
+         * @param param the UIViewParameter.
 	 * @param indexInParent the index of the
 	 * <code>UIViewParameter</code> in its parent
 	 * <code>UIPanel</code>.
@@ -509,7 +525,7 @@ public class UIViewParameter extends UIInput {
 	 * saved state and return the result.</p>
 	 *
 	 * @param context the <code>FacesContext</code>for this request
-	 *
+         * @return the UIViewParameter.
 	 * @since 2.0
 	 */
         

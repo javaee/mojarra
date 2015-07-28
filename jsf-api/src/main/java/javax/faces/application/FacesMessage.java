@@ -202,6 +202,8 @@ public class FacesMessage implements Serializable {
      * <p>Construct a new {@link javax.faces.application.FacesMessage} with just a summary.  The
      * detail is <code>null</code>, the severity is set to
      * <code>Severity.INFO</code>.</p>
+     * 
+     * @param summary the summary.
      */
     public FacesMessage(String summary) {
 
@@ -269,6 +271,8 @@ public class FacesMessage implements Serializable {
      * <p>Return the localized detail text.  If no localized detail text has
      * been defined for this message, return the localized summary text
      * instead.</p>
+     * 
+     * @return 
      */
     public String getDetail() {
 
@@ -295,6 +299,8 @@ public class FacesMessage implements Serializable {
 
     /**
      * <p>Return the severity level.</p>
+     * 
+     * @return the severity level.
      */
     public Severity getSeverity() {
 
@@ -324,6 +330,8 @@ public class FacesMessage implements Serializable {
 
     /**
      * <p>Return the localized summary text.</p>
+     * 
+     * @return the localized summary text.
      */
     public String getSummary() {
 
@@ -450,6 +458,7 @@ public class FacesMessage implements Serializable {
 	 *
 	 * @param other The other object to be compared to
 	 */
+        @Override
 	public int compareTo(Object other) {
 	    return this.ordinal - ((Severity) other).ordinal;
 	}
@@ -458,6 +467,7 @@ public class FacesMessage implements Serializable {
 	/**
 	 * <p>Return the ordinal value of this {@link
 	 * FacesMessage.Severity} instance.</p>
+         * @return 
 	 */
 	public int getOrdinal() {
 	    return (this.ordinal);
@@ -468,6 +478,7 @@ public class FacesMessage implements Serializable {
 	 * <p>Return a String representation of this {@link
 	 * FacesMessage.Severity} instance.</p>
 	 */
+        @Override
 	public String toString() {
 	    if (null == severityName) {
 		return (String.valueOf(this.ordinal));

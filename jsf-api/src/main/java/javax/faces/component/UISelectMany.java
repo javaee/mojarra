@@ -285,6 +285,8 @@ public class UISelectMany extends UIInput {
      * <p>Return the currently selected values, or <code>null</code> if there
      * are no currently selected values.  This is a typesafe alias for
      * <code>getValue()</code>.</p>
+     * 
+     * @return the selected values, or <code>null</code>.
      */
     public Object[] getSelectedValues() {
 
@@ -322,12 +324,13 @@ public class UISelectMany extends UIInput {
      *
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueBinding}
-     *
+     * @return the value binding, or <code>null</code>
      * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      * @deprecated this has been replaced by {@link #getValueExpression(java.lang.String)}.
      */
+    @Override
     public ValueBinding getValueBinding(String name) {
 
         if ("selectedValues".equals(name)) {
@@ -358,6 +361,7 @@ public class UISelectMany extends UIInput {
      *
      * @deprecated This has been replaced by {@link #setValueExpression(java.lang.String, javax.el.ValueExpression)}.
      */
+    @Override
     public void setValueBinding(String name, ValueBinding binding) {
 
         if ("selectedValues".equals(name)) {
@@ -375,11 +379,12 @@ public class UISelectMany extends UIInput {
      *
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueExpression}
-     *
+     * @return the value expression, or <code>null</code>.
      * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      * @since 1.2
      */
+    @Override
     public ValueExpression getValueExpression(String name) {
 
         if ("selectedValues".equals(name)) {
@@ -404,6 +409,7 @@ public class UISelectMany extends UIInput {
      *  is <code>null</code>
      * @since 1.2
      */
+    @Override
     public void setValueExpression(String name, ValueExpression binding) {
 
         if ("selectedValues".equals(name)) {
@@ -424,7 +430,10 @@ public class UISelectMany extends UIInput {
      *
      * @param previous old value of this component
      * @param value new value of this component
+     * @return <code>true</code> if the new value is different from the 
+     * previous value, <code>false</code> otherwise.
      */
+    @Override
     protected boolean compareValues(Object previous, Object value) {
 
         if ((previous == null) && (value != null)) {
@@ -575,6 +584,7 @@ public class UISelectMany extends UIInput {
      *  is <code>null</code>
      */
 
+    @Override
     protected void validateValue(FacesContext context, Object value) {
         super.validateValue(context, value);
 
@@ -673,11 +683,13 @@ public class UISelectMany extends UIInput {
         // ------------------------------------------------------------ Iterator
 
 
+        @Override
         public boolean hasNext() {
             return (idx < length);
         }
 
 
+        @Override
         public Object next() {
 
             if (idx >= length) {
@@ -689,6 +701,7 @@ public class UISelectMany extends UIInput {
         }
 
 
+        @Override
         public void remove() {
 
             throw new UnsupportedOperationException();
