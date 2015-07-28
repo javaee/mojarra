@@ -36,12 +36,29 @@
                         <phase>prepare-package</phase>
                         <configuration>
                             <target>
+                                <!--
+                                
+                                    Generate VDLDoc
+                                
+                                    -->
                                 <property name="taglibdir" value="src/main/resources/com/sun/faces/metadata/taglib"/>
-                                <property name="vdlclasspath" refid="maven.plugin.classpath"/>
+                                <property name="pluginclasspath" refid="maven.plugin.classpath"/>
                                 <java className="org.omnifaces.vdldoc.Main">
                                     <arg line="-d ${project.build.directory}/vdldocs ${taglibdir}/composite.taglib.xml ${taglibdir}/facelets_jsf_core.taglib.xml ${taglibdir}/html_basic.taglib.xml ${taglibdir}/jstl-core.taglib.xml ${taglibdir}/jstl-fn.taglib.xml ${taglibdir}/ui.taglib.xml"/>
                                     <classpath>
-                                        <pathelement path="${vdlclasspath}"/>
+                                        <pathelement path="${pluginclasspath}"/>
+                                    </classpath>
+                                </java>
+                                <!--
+                                
+                                    Generate TLDDoc
+                                    
+                                    -->
+                                <property name="tlddir" value="src/main/resources/META-INF"/>
+                                <java className="com.sun.tlddoc.TLDDoc">
+                                    <arg line="-d ${project.build.directory}/tlddocs ${tlddir}/html_basic.tld ${tlddir}/jsf_core.tld"/>
+                                    <classpath>
+                                        <pathelement path="${pluginclasspath}"/>
                                     </classpath>
                                 </java>
                             </target>
@@ -56,6 +73,11 @@
                         <groupId>org.omnifaces</groupId>
                         <artifactId>vdldoc</artifactId>
                         <version>2.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>taglibrarydoc</groupId>
+                        <artifactId>tlddoc</artifactId>
+                        <version>1.3</version>
                     </dependency>
                 </dependencies>
             </plugin>
