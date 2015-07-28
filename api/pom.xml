@@ -32,7 +32,32 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <target>
+                                <property name="taglibdir" value="src/main/resources/com/sun/faces/metadata/taglib"/>
+                                <property name="vdlclasspath" refid="maven.plugin.classpath"/>
+                                <java className="org.omnifaces.vdldoc.Main">
+                                    <arg line="-d ${project.build.directory}/vdldocs ${taglibdir}/composite.taglib.xml ${taglibdir}/facelets_jsf_core.taglib.xml ${taglibdir}/html_basic.taglib.xml ${taglibdir}/jstl-core.taglib.xml ${taglibdir}/jstl-fn.taglib.xml ${taglibdir}/ui.taglib.xml"/>
+                                    <classpath>
+                                        <pathelement path="${vdlclasspath}"/>
+                                    </classpath>
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.omnifaces</groupId>
+                        <artifactId>vdldoc</artifactId>
+                        <version>2.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -61,9 +86,8 @@
                     <execution>
                         <id>attach-managedbeandocs</id>
                         <configuration>
-                            <nooverview>true</nooverview>
                             <classifier>managed-bean-javadoc</classifier>
-                            <outputDirectory>managed-bean-javadocs</outputDirectory>
+                            <outputDirectory>${project.build.directory}/managed-bean-javadocs</outputDirectory>
                             <reportOutputDirectory>${project.build.directory}/site/managed-bean-javadocs</reportOutputDirectory>
                             <subpackages>javax.faces.bean</subpackages>
                         </configuration>
