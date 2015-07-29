@@ -36,11 +36,13 @@
                         <phase>prepare-package</phase>
                         <configuration>
                             <target>
+                                <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
+                                <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 <!--
                                 
                                     Generate VDLDoc
                                 
-                                    -->
+                                -->
                                 <property name="taglibdir" value="src/main/resources/com/sun/faces/metadata/taglib"/>
                                 <property name="pluginclasspath" refid="maven.plugin.classpath"/>
                                 <java className="org.omnifaces.vdldoc.Main">
@@ -53,7 +55,7 @@
                                 
                                     Generate TLDDoc
                                     
-                                    -->
+                                -->
                                 <property name="tlddir" value="src/main/resources/META-INF"/>
                                 <java className="com.sun.tlddoc.TLDDoc">
                                     <arg line="-d ${project.build.directory}/tlddocs ${tlddir}/html_basic.tld ${tlddir}/jsf_core.tld"/>
@@ -61,6 +63,41 @@
                                         <pathelement path="${pluginclasspath}"/>
                                     </classpath>
                                 </java>
+                                <!--
+                                
+                                    Generate RenderkitDocs
+                                
+                                -->
+                                <copy todir="${jsf-tools-dir}/build/classes">
+                                    <fileset dir="${jsf-ri-dir}/src/main/resources"
+                                             includes="**/LogStrings.properties"/>
+                                </copy>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
+                                      flatten="true">
+                                    <fileset dir="src/main/resources/com/sun/faces"
+                                             includes="*.dtd,*.xsd"/>
+                                </copy>
+                                <taskdef name="generateRenderkitDocs"
+                                         classname="com.sun.faces.ant.RenderkitDocGenTask">
+                                    <classpath>
+                                        <pathelement location="${jsf-tools-dir}/target/jsf-tools-${mojarra.version}.jar"/>
+                                    </classpath>
+                                </taskdef>        
+                                <generateRenderkitDocs
+                                    generatorConfig="${jsf-tools-dir}/conf/HtmlBasicTaglib21.properties"
+                                    facesConfig="src/main/resources/com/sun/faces/standard-html-renderkit.xml"
+                                    fork="true">
+                                    <classpath>
+                                        <pathelement location="${jsf-tools-dir}/target/jsf-tools-${mojarra.version}.jar"/>
+                                        <pathelement location="${jsf-tools-dir}/build/classes"/>
+                                        <path refid="maven.plugin.classpath"/>
+                                    </classpath>
+                                </generateRenderkitDocs>                                
+                                <copy todir="${project.build.directory}/renderkitdocs">
+                                    <fileset dir="build/generate/facesdoc"/>
+                                </copy>
+                                <delete dir="build"/>
+                                <delete dir="${jsf-tools-dir}/build"/>
                             </target>
                         </configuration>
                         <goals>
@@ -69,6 +106,11 @@
                     </execution>
                 </executions>
                 <dependencies>
+                    <dependency>
+                        <groupId>commons-digester</groupId>
+                        <artifactId>commons-digester</artifactId>
+                        <version>2.1</version>
+                    </dependency>
                     <dependency>
                         <groupId>org.omnifaces</groupId>
                         <artifactId>vdldoc</artifactId>
@@ -155,7 +197,7 @@
                         <artifactItem>
                             <groupId>com.sun.faces</groupId>
                             <artifactId>impl</artifactId>
-                            <version>2.3.0-m04-SNAPSHOT</version>
+                            <version>${mojarra.version}</version>
                             <type>jar</type>
                             <classifier>sources</classifier>
                             <outputDirectory>src/main/java</outputDirectory>
@@ -164,7 +206,7 @@
                         <artifactItem>
                             <groupId>com.sun.faces</groupId>
                             <artifactId>impl</artifactId>
-                            <version>2.3.0-m04-SNAPSHOT</version>
+                            <version>${mojarra.version}</version>
                             <type>jar</type>
                             <classifier>sources</classifier>
                             <outputDirectory>src/main/resources</outputDirectory>
@@ -192,7 +234,7 @@
         <dependency>
             <groupId>com.sun.faces</groupId>
             <artifactId>impl</artifactId>
-            <version>2.3.0-m04-SNAPSHOT</version>
+            <version>${mojarra.version}</version>
             <scope>provided</scope>
             <classifier>sources</classifier>
         </dependency>
@@ -200,6 +242,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <mojarra.version>2.3.0-m04-SNAPSHOT</mojarra.version>
     </properties>
     <reporting>
         <plugins>
