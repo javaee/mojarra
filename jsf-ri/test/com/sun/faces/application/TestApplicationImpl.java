@@ -776,15 +776,15 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
     // ----------------------------------------------------------- Inner Classes
 
-    public static class CustomIntConverter implements Converter {
+    public static class CustomIntConverter implements Converter<Integer> {
 
         private IntegerConverter delegate = new IntegerConverter();
 
-        public Object getAsObject(FacesContext context, UIComponent component, String value) {
+        public Integer getAsObject(FacesContext context, UIComponent component, String value) {
             return delegate.getAsObject(context, component, value);
         }
 
-        public String getAsString(FacesContext context, UIComponent component, Object value) {
+        public String getAsString(FacesContext context, UIComponent component, Integer value) {
             return delegate.getAsString(context, component, value);
         }
     }

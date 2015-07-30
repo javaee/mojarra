@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,61 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package javax.faces.validator;
 
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIInput;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
- * <p class="changed_added_2_0">A Validator that checks for an empty
- * value in the same way that UIInput checks for a value. In fact, this validator
- * is equivalent to setting the required attribute on the input component to true.</p>
- *
- * @since 2.0
+ * <p>
+ * Unit tests for JLS casting rules</p>
  */
-public class RequiredValidator implements Validator<Object> {
+public class CastingValidatorTestCase extends ValidatorTestCase {
 
+    // ------------------------------------------------------------ Constructors
     /**
-     * <p>The standard converter id for this converter.</p>
+     * Construct a new instance of this test case.
+     *
+     * @param name Name of the test case
      */
-    public static final String VALIDATOR_ID = "javax.faces.Required";
-
-    /**
-
-     * <p>Verify that the converted object value is not null.</p>
-
-     * @param context {@inheritDoc}
-     * @param component {@inheritDoc}
-     * @param value {@inheritDoc}
-
-     * @throws ValidatorException   {@inheritDoc}
-
-     */
-    public void validate(FacesContext context,
-                         UIComponent component,
-                         Object value) {
-
-        if (UIInput.isEmpty(value)) {
-            FacesMessage msg;
-            String requiredMessageStr = null;
-            if (component instanceof UIInput) {
-                requiredMessageStr = ((UIInput) component).getRequiredMessage();
-            }
-
-            // respect the message string override on the component to emulate required="true" behavior
-            if (requiredMessageStr != null) {
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, requiredMessageStr, requiredMessageStr);
-            }
-            else {
-                msg = MessageFactory.getMessage(context, UIInput.REQUIRED_MESSAGE_ID,
-                    MessageFactory.getLabel(context, component));
-            }
-
-            throw new ValidatorException(msg);
-        }
+    public CastingValidatorTestCase(String name) {
+        super(name);
     }
 
+    // ---------------------------------------------------- Overall Test Methods
+    // Return the tests included in this test case.
+    public static Test suite() {
+        return (new TestSuite(CastingValidatorTestCase.class));
+    }
+
+    // ------------------------------------------------- Individual Test Methods
+    public void testWithGenericCanCastToRaw() {
+    	
+    	Validator<?> validatorWithGeneric = (context, component, value) -> {};
+    	
+    	Validator validatorRaw = validatorWithGeneric;
+    }
+    
 }

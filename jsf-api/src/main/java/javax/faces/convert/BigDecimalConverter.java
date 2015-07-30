@@ -51,7 +51,7 @@ import java.math.BigDecimal;
  * <code>java.math.BigDecimal</code> values.</p>
  */
 
-public class BigDecimalConverter implements Converter {
+public class BigDecimalConverter implements Converter<BigDecimal> {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -96,8 +96,7 @@ public class BigDecimalConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public Object getAsObject(FacesContext context, UIComponent component,
-                              String value) {
+    public BigDecimal getAsObject(FacesContext context, UIComponent component, String value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -133,8 +132,7 @@ public class BigDecimalConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public String getAsString(FacesContext context, UIComponent component,
-                              Object value) {
+    public String getAsString(FacesContext context, UIComponent component, BigDecimal value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -147,8 +145,10 @@ public class BigDecimalConverter implements Converter {
 
         // If the incoming value is still a string, play nice
         // and return the value unmodified
-        if (value instanceof String) {
-            return (String) value;
+        if (((Object) value) instanceof String) {
+            // This consequence of spec #1355 would not be bad as a daily WTF submission,
+            // but keeping it in for backwards compatibility concerns.
+            return (String) ((Object) value);
         }
 
         try {

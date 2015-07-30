@@ -54,15 +54,15 @@ import javax.faces.context.FacesContext;
  * @since 1.2
  */
 
-public class EnumConverter implements Converter, PartialStateHolder {
+public class EnumConverter <E extends Enum<E>> implements Converter<E>, PartialStateHolder {
 
     // for StateHolder
     public EnumConverter() {
 
     }
 
-    public EnumConverter(Class targetClass) {
-        this.targetClass = (Class<? extends Enum>) targetClass;
+    public EnumConverter(Class<E> targetClass) {
+        this.targetClass = targetClass;
     }
 
     // ------------------------------------------------------ Manifest Constants
@@ -106,7 +106,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
 
     // ----------------------------------------------------- Converter Methods
 
-    private Class<? extends Enum> targetClass;
+    private Class<E> targetClass;
 
 
     /**
@@ -131,7 +131,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public Object getAsObject(FacesContext context, UIComponent component,
+    public E getAsObject(FacesContext context, UIComponent component,
                               String value) {
 
         if (context == null || component == null) {
@@ -188,8 +188,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public String getAsString(FacesContext context, UIComponent component,
-                              Object value) {
+    public String getAsString(FacesContext context, UIComponent component, E value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -213,7 +212,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
         }
 
         if (targetClass.isInstance(value)) {
-            return ((Enum)value).name();
+            return ((E) value).name();
         }
 
         throw new ConverterException(
@@ -232,7 +231,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
             throw new NullPointerException();
         }
         if (object != null) {
-            this.targetClass = (Class<? extends Enum>) object;
+            this.targetClass = (Class<E>) object;
         }
     }
 

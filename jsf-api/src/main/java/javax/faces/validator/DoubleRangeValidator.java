@@ -85,7 +85,7 @@ import javax.faces.convert.Converter;
  * <code>Locale</code>.</p>
  */
 
-public class DoubleRangeValidator implements Validator, PartialStateHolder {
+public class DoubleRangeValidator implements Validator<Object>, PartialStateHolder {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -377,7 +377,7 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
                                       Double toConvert,
                                       FacesContext context) {
 
-        Converter converter = context.getApplication().createConverter("javax.faces.Number");
+        Converter<Number> converter = context.getApplication().createConverter("javax.faces.Number");
         return converter.getAsString(context, component, toConvert);
 
     }
