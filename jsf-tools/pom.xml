@@ -181,6 +181,7 @@
                   <argument>-doctitle</argument>
                   <argument>${doctitle}</argument>
                   <argument>${project.basedir}/../jsf-ri/conf/share/composite.taglib.xml</argument>
+                  <argument>${project.basedir}/../jsf-ri/conf/share/facelets_jsf_core.taglib.xml</argument>
 <!--                  <argument>additional taglibs here</argument> -->
                 </arguments>
               </configuration>
