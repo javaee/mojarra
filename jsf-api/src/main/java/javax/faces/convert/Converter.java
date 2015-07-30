@@ -83,11 +83,9 @@ import javax.faces.context.FacesContext;
  * javax.faces.application.ResourceDependencies} annotation, the
  * action described in <code>ResourceDependencies</code> must be taken 
  * when {@link javax.faces.component.ValueHolder#setConverter} is called.</p>
- * 
- * @param <T> The generic type of object value to convert.
  */
 
-public interface Converter<T> {
+public interface Converter {
 
 
     /**
@@ -107,7 +105,7 @@ public interface Converter<T> {
      * @throws NullPointerException if <code>context</code> or
      *                              <code>component</code> is <code>null</code>
      */
-    public T getAsObject(FacesContext context, UIComponent component,
+    public Object getAsObject(FacesContext context, UIComponent component,
                               String value);
 
 
@@ -131,7 +129,7 @@ public interface Converter<T> {
      *                              <code>component</code> is <code>null</code>
      */
     public String getAsString(FacesContext context, UIComponent component,
-                              T value);
+                              Object value);
 
 
     /**

@@ -63,7 +63,7 @@ import javax.validation.groups.Default;
  * validation of the bean property to the Bean Validation API.</p>
  * @since 2.0
  */
-public class BeanValidator implements Validator<Object>, PartialStateHolder {
+public class BeanValidator implements Validator, PartialStateHolder {
     
     private static final Logger LOGGER =
          Logger.getLogger("javax.faces.validator", "javax.faces.LogStrings");

@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and short primitive) values.</p>
  */
 
-public class ShortConverter implements Converter<Short> {
+public class ShortConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -95,7 +95,8 @@ public class ShortConverter implements Converter<Short> {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public Short getAsObject(FacesContext context, UIComponent component, String value) {
+    public Object getAsObject(FacesContext context, UIComponent component,
+                              String value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -125,7 +126,8 @@ public class ShortConverter implements Converter<Short> {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public String getAsString(FacesContext context, UIComponent component, Short value) {
+    public String getAsString(FacesContext context, UIComponent component,
+                              Object value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -139,10 +141,8 @@ public class ShortConverter implements Converter<Short> {
 
         // If the incoming value is still a string, play nice
         // and return the value unmodified
-        if (((Object) value) instanceof String) {
-            // This consequence of spec #1355 would not be bad as a daily WTF submission,
-            // but keeping it in for backwards compatibility concerns.
-            return (String) ((Object) value);
+        if (value instanceof String) {
+            return (String) value;
         }
 
         try {

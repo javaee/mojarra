@@ -80,11 +80,9 @@ import java.util.EventListener;
  * action described in <code>ResourceDependencies</code> must be taken
  * when {@link javax.faces.component.EditableValueHolder#addValidator} 
  * is called.</p>
- * 
- * @param <T> The generic type of object value to validate.
  */
 
-public interface Validator<T> extends EventListener {
+public interface Validator extends EventListener {
 
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
@@ -132,7 +130,7 @@ public interface Validator<T> extends EventListener {
      */
     public void validate(FacesContext context,
                          UIComponent component,
-                         T value) throws ValidatorException;
+                         Object value) throws ValidatorException;
 
 
 }

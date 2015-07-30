@@ -77,7 +77,7 @@ import javax.faces.convert.Converter;
  * <code>Locale</code>.</p>
  */
 
-public class LengthValidator implements Validator<Object>, PartialStateHolder {
+public class LengthValidator implements Validator, PartialStateHolder {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -299,7 +299,7 @@ public class LengthValidator implements Validator<Object>, PartialStateHolder {
                                           Integer toConvert,
                                           FacesContext context) {
 
-        Converter<Number> converter =
+        Converter converter =
              context.getApplication().createConverter("javax.faces.Number");
         return converter.getAsString(context, component, toConvert);
 

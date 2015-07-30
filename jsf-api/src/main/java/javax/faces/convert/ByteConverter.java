@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and byte primitive) values.</p>
  */
 
-public class ByteConverter implements Converter<Byte> {
+public class ByteConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -95,7 +95,8 @@ public class ByteConverter implements Converter<Byte> {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public Byte getAsObject(FacesContext context, UIComponent component, String value) {
+    public Object getAsObject(FacesContext context, UIComponent component,
+                              String value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -129,7 +130,8 @@ public class ByteConverter implements Converter<Byte> {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public String getAsString(FacesContext context, UIComponent component, Byte value) {
+    public String getAsString(FacesContext context, UIComponent component,
+                              Object value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -142,10 +144,8 @@ public class ByteConverter implements Converter<Byte> {
 
         // If the incoming value is still a string, play nice
         // and return the value unmodified
-        if (((Object) value) instanceof String) {
-            // This consequence of spec #1355 would not be bad as a daily WTF submission,
-            // but keeping it in for backwards compatibility concerns.
-            return (String) ((Object) value);
+        if (value instanceof String) {
+            return (String) value;
         }
 
         try {
