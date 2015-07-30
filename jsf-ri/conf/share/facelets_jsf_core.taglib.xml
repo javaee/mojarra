@@ -1183,47 +1183,13 @@ for <code>@NamedEvent</code>.</p>
         </component>
         <attribute>
             <description><![CDATA[
-                Value binding expression to a backing bean
+                <p>Value binding expression to a backing bean
                 property bound to the component instance for
-                the UIComponent created by this custom action.
+                the UIComponent created by this custom action.</p>
             ]]></description>
             <name>binding</name>
             <type>javax.faces.component.UIComponent</type>
         </attribute>
-        <attribute>
-            <description><![CDATA[
-                Flag indicating whether this component (and its
-                children) should be rendered.  Expressions must
-                evaluate to a boolean.
-            ]]></description>
-            <name>rendered</name>
-            <required>false</required>
-            <type>java.lang.Boolean</type>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[<p>
-                
-                MethodExpression representing an action listener method that
-                will be notified when this component is activated by the user.
-                The expression must evaluate to a public method that takes an
-                ActionEvent parameter, with a return type of void, <span
-                class="changed_added_2_0">or to a public method that takes no
-                arguments with a return type of void.  In the latter case, the
-                method has no way of easily knowing where the event came from,
-                but this can be useful in cases where a notification is needed
-                that "some action happened".</span>
-                
-                </p>]]>
-            </description>
-            <name>actionListener</name>
-            <required>false</required>
-            <method-signature>public void
-                actionListener(javax.faces.event.ActionEvent event)
-            </method-signature>
-
-        </attribute>
-
         <attribute>
             <description><![CDATA[
                 Component identifier of the UISelectItems
@@ -1232,124 +1198,8 @@ for <code>@NamedEvent</code>.</p>
             <name>id</name>
             <required>false</required>
             <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-
-
-                <p>Value expression pointing at <span
-                class="changed_modified_2_0">any <code>Collection</code>
-                or array.</span> The member elements may be instances of
-                <code>SelectItem</code> <span
-                class="changed_added_2_0">or any Java Object. In the
-                case where the member elements are plain Java Objects,
-                several additional attributes must be used by the page
-                author to correctly identify the data to the enclosing
-                <code>UISelectOne</code> or <code>UISelectMany</code>
-                component, as shown in the following example.</span>
-
-                <div class="syntax"><div class="html4strict"
-                style="font-family: monospace;"><ol><li class="li1"><div
-                class="de1"><span class="sc2">&amp;lt;h:selectOneListbox
-                <span class="kw3">size</span>=<span class="st0">&amp;quot;1&amp;quot;</span>
-                <span class="kw3">id</span>=<span class="st0">&amp;quot;escape02&amp;quot;</span>
-                <span class="kw3">value</span>=<span class="st0">&amp;quot;#{select05NoSelection.initialCollectionValues}&amp;quot;</span><span
-                class="kw2">&amp;gt;</span></span></div></li>
-                <li class="li2"><div class="de2">&amp;nbsp; <span
-                class="sc2">&amp;lt;f:selectItems <span class="kw3">value</span>=<span
-                class="st0">&amp;quot;#{select05NoSelection.hobbitList}&amp;quot;</span></div></li>
-                <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-                &amp;nbsp;var=<span class="st0">&amp;quot;n&amp;quot;</span></div></li>
-                <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
-                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-                &amp;nbsp;itemValue=<span class="st0">&amp;quot;#{n}&amp;quot;</span></div></li>
-                <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-                &amp;nbsp;itemLabel=<span class="st0">&amp;quot;#{n.bio}&amp;quot;</span></div></li>
-                <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
-                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-                &amp;nbsp;itemDescription=<span class="st0">&amp;quot;#{n.description}&amp;quot;</span></div></li>
-                <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-                &amp;nbsp;itemDisabled=<span class="st0">&amp;quot;#{n.disabled}&amp;quot;</span></div></li>
-                <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
-                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-                &amp;nbsp;itemLabelEscaped=<span class="st0">&amp;quot;true&amp;quot;</span></div></li>
-                <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
-                &amp;nbsp;noSelectionValue=<span class="st0">&amp;quot;#{select05NoSelection.hobbitList[0]}&amp;quot;</span>/<span
-                class="kw2">&amp;gt;</span></span></div></li>
-                <li class="li2"><div class="de2"><span
-                class="sc2"><span class="kw2">&amp;lt;</span>/h:selectOneListbox&amp;gt;</span>
-                </div></li></ol></div></div>
-
-                <p class="changed_added_2_0">In the preceding example, the
-                <code>value</code> attribute on line 1 points to a
-                <code>Collection&amp;lt;HobbitBean&amp;gt;</code>.
-                <code>HobbitBean</code> is
-                just a regular Java Object (POJO) that conforms to JavaBeans
-                naming
-                conventions for its properties. The <code>value</code>
-                attribute on
-                line 2 points to a <code>List&amp;lt;HobbitBean&amp;gt;</code>,
-                though it could
-                just as well point to a <code>Collection</code>,
-                array, or
-                <code>javax.faces.model.DataModel</code>. The
-                attributes on lines 3
-                through 9, inclusive, leverage the fact that the value is a
-                collection
-                of POJOs.
-                </p>
-
-
-                </p>
-
-
-            ]]></description>
-            <name>value</name>
-            <type>java.lang.Object</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-
-
-                <p class="changed_added_2_0">Expose the value from the
-                <code>value</code> attribute under this request
-                scoped key so that it
-                may be referred to in EL for the value of other attributes.</p>
-
-
-            ]]></description>
-            <name>var</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-
-                <p class="changed_added_2_0">evaluates to a
-                <code>Collection</code>, array, or <code>Map</code>
-                from which the items
-                to be shown will be rendered.</p>
-
-            ]]></description>
-            <name>itemValue</name>
-            <type>java.lang.Object</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-
-                <p class="changed_added_2_0">evaluates to a String that
-                will
-                serve as the label to be shown for the item.</p>
-
-            ]]></description>
-            <name>itemLabel</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
+        </attribute> 
+         <attribute>
             <description><![CDATA[
 
 
@@ -1375,10 +1225,21 @@ for <code>@NamedEvent</code>.</p>
         <attribute>
             <description><![CDATA[
 
-                <p class="changed_added_2_0">evaluates to a boolean that
+                <p class="changed_added_2_0">evaluates to a String that
                 will
-                determine if the rendered markup for the item receives normal
-                JSF HTML escaping or not.</p>
+                serve as the label to be shown for the item.</p>
+
+            ]]></description>
+            <name>itemLabel</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+<p class="changed_added_2_0">evaluates to a boolean that will
+determine if the rendered markup for the item receives normal JSF HTML
+escaping or not.  <span class="changed_added_2_2">If not specified, the
+runtime must behave as if the value were <code>true</code>.</span></p>
 
             ]]></description>
             <name>itemLabelEscaped</name>
@@ -1387,24 +1248,99 @@ for <code>@NamedEvent</code>.</p>
         <attribute>
             <description><![CDATA[
 
-                <p class="changed_added_2_0">Is either an EL expression
-                pointing to the element in the value collection whose value
-                should be
-                marked as a &amp;#8220;no selection&amp;#8221; item, or a
-                literal string that
-                exactly matches the value of the item in the collection that
-                must be
-                marked as the &amp;#8220;no selection&amp;#8221; item. If the
-                user selects such
-                an item <strong>and</strong> the field is marked as
-                required, then it
-                will not pass validation.</p>
+            <p class="changed_added_2_0"><span
+            class="changed_modified_2_2">This attribute lets you refer
+            to a property of the current member of the collection
+            referenced by the "value" attribute, using the value of the
+            "var" attribute as the base.  For example,
+            #{n.id}.</span></p>
+
+            ]]></description>
+            <name>itemValue</name>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+            <p class="changed_added_2_0"><span
+            class="changed_modified_2_0_rev_a">Is</span> either an EL
+            expression pointing to the element in the value collection
+            whose value should be marked as a &#8220;no selection&#8221;
+            item, or a literal string that exactly matches the value of
+            the item in the collection that must be marked as the
+            &#8220;no selection&#8221; item.  If the user selects such
+            an item <strong>and</strong> the field is marked as
+            required, then it will not pass validation.</p>
+
 
             ]]></description>
             <name>noSelectionValue</name>
             <type>java.lang.Boolean</type>
         </attribute>
+
+        <attribute>
+            <description><![CDATA[
+
+                <p>Value expression pointing at <span
+                class="changed_modified_2_0">any <code>Collection</code>
+                or array.</span> The member elements may be instances of
+                <code>SelectItem</code> <span
+                class="changed_added_2_0">or any Java Object.  In the
+                case where the member elements are plain Java Objects,
+                several additional attributes must be used by the page
+                author to correctly identify the data to the enclosing
+                <code>UISelectOne</code> or <code>UISelectMany</code>
+                component, as shown in the following example.</span>
+
+<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;h:selectOneListbox <span class="kw3">size</span>=<span class="st0">&quot;1&quot;</span> <span class="kw3">id</span>=<span class="st0">&quot;escape02&quot;</span> <span class="kw3">value</span>=<span class="st0">&quot;#{select05NoSelection.initialCollectionValues}&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;f:selectItems <span class="kw3">value</span>=<span class="st0">&quot;#{select05NoSelection.hobbitList}&quot;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;var=<span class="st0">&quot;n&quot;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemValue=<span class="st0">&quot;#{n.id}&quot;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemLabel=<span class="st0">&quot;#{n.bio}&quot;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemDescription=<span class="st0">&quot;#{n.description}&quot;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemDisabled=<span class="st0">&quot;#{n.disabled}&quot;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemLabelEscaped=<span class="st0">&quot;true&quot;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;noSelectionValue=<span class="st0">&quot;#{select05NoSelection.hobbitList[0]}&quot;</span>/<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;</span>/h:selectOneListbox&gt;</span> </div></li></ol></div></div>
+
+<p class="changed_added_2_0">In the preceding example, the
+<code>value</code> attribute on line 1 points to a
+<code>Collection&lt;HobbitBean&gt;</code>.  <code>HobbitBean</code> is
+just a regular Java Object (POJO) that conforms to JavaBeans naming
+conventions for its properties.  The <code>value</code> attribute on
+line 2 points to a <code>List&lt;HobbitBean&gt;</code>, though it could
+just as well point to a <code>Collection</code>, array, or
+<code>javax.faces.model.DataModel</code>.  The attributes on lines 3
+through 9, inclusive, leverage the fact that the value is a collection
+of POJOs.
+</p>
+
+
+</p>
+
+
+
+            ]]></description>
+            <name>value</name>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+
+                <p class="changed_added_2_0">Expose the value from the
+                <code>value</code> attribute under this request
+                scoped key so that it
+                may be referred to in EL for the value of other attributes.</p>
+
+
+            ]]></description>
+            <name>var</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[
             <p>Register an ActionListener instance on the UIComponent
@@ -1469,24 +1405,6 @@ for <code>@NamedEvent</code>.</p>
         <handler-class>com.sun.faces.facelets.tag.jsf.core.SetPropertyActionListenerHandler</handler-class>
         <attribute>
             <description><![CDATA[
-                ValueExpression to be stored as the value of the target
-                attribute.
-            ]]></description>
-            <name>value</name>
-            <required>true</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                ValueExpression that is the destination of the value
-                attribute.
-            ]]></description>
-            <name>target</name>
-            <required>true</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
 
                 <p class="changed_added_2_0">If present, this attribute
                 refers
@@ -1498,14 +1416,33 @@ for <code>@NamedEvent</code>.</p>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>ValueExpression that is the destination of the value
+                attribute.</p>
+            ]]></description>
+            <name>target</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>ValueExpression to be stored as the value of the target
+                attribute.</p>
+            ]]></description>
+            <name>value</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[
-            Container action for all JavaServer Faces core and
-            custom component actions used on a nested page via
-            "jsp:include" or any custom action that dynamically
-            includes another page from the same web application,
-            such as JSTL's "c:import".
+            <p class="changed_deleted_2_0_rev_a">Container
+            action for all JavaServer Faces core and custom component
+            actions used on a nested page via "jsp:include" or any
+            custom action that dynamically includes another page from
+            the same web application, such as JSTL's "c:import".</p>        
         ]]></description>
         <tag-name>subview</tag-name>
         <component>
@@ -1514,17 +1451,17 @@ for <code>@NamedEvent</code>.</p>
         </component>
         <attribute>
             <description><![CDATA[
-                Value binding expression to a backing bean
+                <p>Value binding expression to a backing bean
                 property bound to the component instance for
-                the UIComponent created by this custom action.
+                the UIComponent created by this custom action.</p>
             ]]></description>
             <name>binding</name>
             <type>javax.faces.component.UIComponent</type>
         </attribute>
         <attribute>
             <description><![CDATA[
-                Component identifier of the UINamingContainer
-                component to be created.
+                <p>Component identifier of the UINamingContainer
+                component to be created.</p>
             ]]></description>
             <name>id</name>
             <required>true</required>
@@ -1532,14 +1469,15 @@ for <code>@NamedEvent</code>.</p>
         </attribute>
         <attribute>
             <description><![CDATA[
-                Flag indicating whether this component (and its
+                <p>Flag indicating whether this component (and its
                 children) should be rendered. Expressions must
-                evaluate to a boolean.
+                evaluate to a boolean.</p>
             ]]></description>
             <name>rendered</name>
             <type>java.lang.Boolean</type>
         </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[<p>
 
@@ -1559,12 +1497,11 @@ for <code>@NamedEvent</code>.</p>
         </validator>
         <attribute>
             <description><![CDATA[
-                A comma-separated list of validation groups. A validation group
-                is a fully-qualified class name.
+                <p>A ValueExpression that evaluates to an instance of
+                BeanValidator.</p>
             ]]></description>
-            <name>validationGroups</name>
-            <required>false</required>
-            <type>java.lang.String</type>
+            <name>binding</name>
+            <type>javax.faces.validator.BeanValidator</type>
         </attribute>
         <attribute>
             <description><![CDATA[
@@ -1579,14 +1516,6 @@ for <code>@NamedEvent</code>.</p>
         </attribute>
         <attribute>
             <description><![CDATA[
-                A ValueExpression that evaluates to an instance of
-                BeanValidator.
-            ]]></description>
-            <name>binding</name>
-            <type>javax.faces.validator.BeanValidator</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
 
                 <p class="changed_added_2_0">If present, this attribute
                 refers
@@ -1598,12 +1527,22 @@ for <code>@NamedEvent</code>.</p>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>A comma-separated list of validation groups. A validation group
+                is a fully-qualified class name.</p>
+            ]]></description>
+            <name>validationGroups</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[
-            Register a DoubleRangeValidator instance on the
+            <p>Register a DoubleRangeValidator instance on the
             UIComponent associated with the closest parent
-            UIComponent custom action.
+            UIComponent custom action.</p>
         ]]></description>
         <tag-name>validateDoubleRange</tag-name>
         <validator>
@@ -1612,36 +1551,21 @@ for <code>@NamedEvent</code>.</p>
         </validator>
         <attribute>
             <description><![CDATA[
+                <p>A ValueExpression that evaluates to an instance of
+                DoubleRangeValidator.</p>
+            ]]></description>
+            <name>binding</name>
+            <type>javax.faces.validator.DoubleRangeValidator</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
                 <p class="changed_added_2_0">A boolean value
                 enabling page level determination of whether or not this
                 validator is enabled on the enclosing component.</p>
 
-
             ]]></description>
             <name>disabled</name>
             <type>java.lang.Boolean</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Maximum value allowed for this component.
-            ]]></description>
-            <name>maximum</name>
-            <type>java.lang.Double</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Minimum value allowed for this component.
-            ]]></description>
-            <name>minimum</name>
-            <type>java.lang.Double</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                A ValueExpression that evaluates to an instance of
-                DoubleRangeValidator.
-            ]]></description>
-            <name>binding</name>
-            <type>javax.faces.validator.DoubleRangeValidator</type>
         </attribute>
         <attribute>
             <description><![CDATA[
@@ -1656,12 +1580,27 @@ for <code>@NamedEvent</code>.</p>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Maximum value allowed for this component.</p>
+            ]]></description>
+            <name>maximum</name>
+            <type>java.lang.Double</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Minimum value allowed for this component.</p>
+            ]]></description>
+            <name>minimum</name>
+            <type>java.lang.Double</type>
+        </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[
-            Register a LengthValidator instance on the
+            <p>Register a LengthValidator instance on the
             UIComponent associated with the closest parent
-            UIComponent custom action.
+            UIComponent custom action.</p>
         ]]></description>
         <tag-name>validateLength</tag-name>
         <validator>
@@ -1670,6 +1609,14 @@ for <code>@NamedEvent</code>.</p>
         </validator>
         <attribute>
             <description><![CDATA[
+                <p>A ValueExpression that evaluates to an instance of
+                LengthValidator.</p>
+            ]]></description>
+            <name>binding</name>
+            <type>javax.faces.validator.LengthValidator</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
                 <p class="changed_added_2_0">A boolean value
                 enabling page level determination of whether or not this
                 validator is enabled on the enclosing component.</p>
@@ -1678,28 +1625,6 @@ for <code>@NamedEvent</code>.</p>
             ]]></description>
             <name>disabled</name>
             <type>java.lang.Boolean</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Maximum length allowed for this component.
-            ]]></description>
-            <name>maximum</name>
-            <type>java.lang.Integer</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Minimum length allowed for this component.
-            ]]></description>
-            <name>minimum</name>
-            <type>java.lang.Integer</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                A ValueExpression that evaluates to an instance of
-                LenghtValidator.
-            ]]></description>
-            <name>binding</name>
-            <type>javax.faces.validator.LengthValidator</type>
         </attribute>
         <attribute>
             <description><![CDATA[
@@ -1714,43 +1639,32 @@ for <code>@NamedEvent</code>.</p>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Maximum length allowed for this component.</p>
+            ]]></description>
+            <name>maximum</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Minimum length allowed for this component.</p>
+            ]]></description>
+            <name>minimum</name>
+            <type>java.lang.Integer</type>
+        </attribute>
     </tag>
     <tag>
         <description><![CDATA[
-            Register a LongRangeValidator instance on the
+            <p>Register a LongRangeValidator instance on the
             UIComponent associated with the closest parent
-            UIComponent custom action.
+            UIComponent custom action.</p>
         ]]></description>
         <tag-name>validateLongRange</tag-name>
         <validator>
             <validator-id>javax.faces.LongRange</validator-id>
             <handler-class>com.sun.faces.facelets.tag.jsf.core.ValidateDelegateHandler</handler-class>
         </validator>
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_0">A boolean value
-                enabling page level determination of whether or not this
-                validator is enabled on the enclosing component.</p>
-
-
-            ]]></description>
-            <name>disabled</name>
-            <type>java.lang.Boolean</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Maximum value allowed for this component.
-            ]]></description>
-            <name>maximum</name>
-            <type>java.lang.Long</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Minimum value allowed for this component.
-            ]]></description>
-            <name>minimum</name>
-            <type>java.lang.Long</type>
-        </attribute>
         <attribute>
             <description><![CDATA[
                 A ValueExpression that evaluates to an instance of
@@ -1761,36 +1675,6 @@ for <code>@NamedEvent</code>.</p>
         </attribute>
         <attribute>
             <description><![CDATA[
-
-                <p class="changed_added_2_0">If present, this attribute
-                refers
-                to the value of one of the exposed attached objects within the
-                composite component inside of which this tag is nested.</p>
-
-            ]]></description>
-            <name>for</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-    </tag>
-    <tag>
-        <description><![CDATA[<p>
-
-            <span class="changed_added_2_0">
-            A validator that uses the pattern attribute to validate the
-            wrapping component. The entire pattern is matched against
-            the String value of the component. If it matches, it's
-            valid.
-
-            </p>
-        ]]></description>
-        <tag-name>validateRegex</tag-name>
-        <validator>
-            <validator-id>javax.faces.RegularExpression</validator-id>
-            <handler-class>com.sun.faces.facelets.tag.jsf.core.ValidateDelegateHandler</handler-class>
-        </validator>
-        <attribute>
-            <description><![CDATA[
                 <p class="changed_added_2_0">A boolean value
                 enabling page level determination of whether or not this
                 validator is enabled on the enclosing component.</p>
@@ -1802,18 +1686,53 @@ for <code>@NamedEvent</code>.</p>
         </attribute>
         <attribute>
             <description><![CDATA[
-                A regular expression pattern. Remember that, like in
-                all Java strings, backslash must be escaped with another
-                backslash.
+
+                <p class="changed_added_2_0">If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.</p>
+
             ]]></description>
-            <name>pattern</name>
-            <required>true</required>
+            <name>for</name>
+            <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description><![CDATA[
-                A ValueExpression that evaluates to an instance of
-                RegexValidator.
+                <p>Maximum value allowed for this component.</p>
+            ]]></description>
+            <name>maximum</name>
+            <type>java.lang.Long</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Minimum value allowed for this component.</p>
+            ]]></description>
+            <name>minimum</name>
+            <type>java.lang.Long</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description><![CDATA[<p>
+
+            <span class="changed_added_2_0">
+            A validator that uses the pattern attribute to validate the
+            wrapping component. The entire pattern is matched against
+            the String value of the component. If it matches, it's
+            valid.</span>
+
+            </p>
+        ]]></description>
+        <tag-name>validateRegex</tag-name>
+        <validator>
+            <validator-id>javax.faces.RegularExpression</validator-id>
+            <handler-class>com.sun.faces.facelets.tag.jsf.core.ValidateDelegateHandler</handler-class>
+        </validator>
+        <attribute>
+            <description><![CDATA[
+                <p>A ValueExpression that evaluates to an instance of
+                RegexValidator.</p>
             ]]></description>
             <name>binding</name>
             <type>javax.faces.validator.RegexValidator</type>
@@ -1831,7 +1750,29 @@ for <code>@NamedEvent</code>.</p>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_0">A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.</p>
+
+
+            ]]></description>
+            <name>disabled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>A regular expression pattern. Remember that, like in
+                all Java strings, backslash must be escaped with another
+                backslash.</p>
+            ]]></description>
+            <name>pattern</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[
 
@@ -1847,6 +1788,14 @@ for <code>@NamedEvent</code>.</p>
         </validator>
         <attribute>
             <description><![CDATA[
+                A ValueExpression that evaluates to an instance of
+                RequiredValidator.
+            ]]></description>
+            <name>binding</name>
+            <type>javax.faces.validator.RequiredValidator</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
                 <p class="changed_added_2_0">A boolean value
                 enabling page level determination of whether or not this
                 validator is enabled on the enclosing component.</p>
@@ -1855,14 +1804,6 @@ for <code>@NamedEvent</code>.</p>
             ]]></description>
             <name>disabled</name>
             <type>java.lang.Boolean</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                A ValueExpression that evaluates to an instance of
-                RequiredValidator.
-            ]]></description>
-            <name>binding</name>
-            <type>javax.faces.validator.RequiredValidator</type>
         </attribute>
         <attribute>
             <description><![CDATA[
@@ -1906,6 +1847,14 @@ for <code>@NamedEvent</code>.</p>
         <handler-class>com.sun.faces.facelets.tag.jsf.core.ValidateDelegateHandler</handler-class>
         <attribute>
             <description><![CDATA[
+                <p>A ValueExpression that evaluates to an object that implements
+                the javax.faces.validator.Validator interface.</p>
+            ]]></description>
+            <name>binding</name>
+            <type>javax.faces.validator.Validator</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
                 <p class="changed_added_2_0">A boolean value
                 enabling page level determination of whether or not this
                 validator is enabled on the enclosing component.</p>
@@ -1914,22 +1863,6 @@ for <code>@NamedEvent</code>.</p>
             ]]></description>
             <name>disabled</name>
             <type>java.lang.Boolean</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Validator identifier of the Validator
-                to be created and registered.
-            ]]></description>
-            <name>validatorId</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                A ValueExpression that evaluates to an object that implements
-                the javax.faces.validator.Validator interface.
-            ]]></description>
-            <name>binding</name>
-            <type>javax.faces.validator.Validator</type>
         </attribute>
         <attribute>
             <description><![CDATA[
@@ -1944,27 +1877,28 @@ for <code>@NamedEvent</code>.</p>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Validator identifier of the Validator
+                to be created and registered.</p>
+            ]]></description>
+            <name>validatorId</name>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[
-            Register a ValueChangeListener instance on the UIComponent
+            <p>Register a ValueChangeListener instance on the UIComponent
             associated with the closest parent UIComponent custom
-            action.
+            action.</p>
         ]]></description>
         <tag-name>valueChangeListener</tag-name>
         <handler-class>com.sun.faces.facelets.tag.jsf.core.ValueChangeListenerHandler</handler-class>
         <attribute>
             <description><![CDATA[
-                Fully qualified Java class name of a
-                ValueChangeListener to be created and registered.
-            ]]></description>
-            <name>type</name>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Value binding expression that evaluates to an object that
-                implements javax.faces.event.ValueChangeListener.
+                <p>Value binding expression that evaluates to an object that
+                implements javax.faces.event.ValueChangeListener.</p>
             ]]></description>
             <name>binding</name>
             <required>false</required>
@@ -1983,12 +1917,23 @@ for <code>@NamedEvent</code>.</p>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Fully qualified Java class name of a
+                ValueChangeListener to be created and registered.</p>
+            ]]></description>
+            <name>type</name>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
+
     <tag>
         <description><![CDATA[
-            Create and register a child UIOutput component
-            associated with the closest parent UIComponent
-            custom action, which renders nested body content.
+            <p class="changed_deleted_2_0_rev_a">The use of
+            this element has been deprecated in Facelets for JSF 2.0 and
+            beyond. Create and register a child UIOutput component
+            associated with the closest parent UIComponent custom
+            action, which renders nested body content.</p>
         ]]></description>
         <tag-name>verbatim</tag-name>
         <component>
@@ -1997,20 +1942,20 @@ for <code>@NamedEvent</code>.</p>
         </component>
         <attribute>
             <description><![CDATA[
-                Flag indicating that generated markup must
+                <p>Flag indicating that generated markup must
                 be escaped in a manner that is appropriate
                 for the markup language to be rendered.
                 Expressions must evaluate to a boolean.
-                Default value is false.
+                Default value is false.</p>
             ]]></description>
             <name>escape</name>
             <type>java.lang.Boolean</type>
         </attribute>
         <attribute>
             <description><![CDATA[
-                Flag indicating whether or not this component should be rendered
+                <p>Flag indicating whether or not this component should be rendered
                 (during Render Response Phase), or processed on any subsequent
-                form submit. The default value for this property is true.
+                form submit. The default value for this property is true.</p>
             ]]></description>
             <name>rendered</name>
             <required>false</required>
@@ -2019,9 +1964,10 @@ for <code>@NamedEvent</code>.</p>
     </tag>
     <tag>
         <description><![CDATA[
-            Container for all JavaServer Faces core and custom
-            component actions used on a page.
-        ]]></description>
+            <p><span class="changed_modified_2_0_rev_a
+            changed_modified_2_2">Container</span> for all JavaServer
+            Faces core and custom component actions used on a
+            page.</p>        ]]></description>
         <tag-name>view</tag-name>
         <component>
             <component-type>javax.faces.ViewRoot</component-type>
@@ -2029,27 +1975,39 @@ for <code>@NamedEvent</code>.</p>
         </component>
         <attribute>
             <description><![CDATA[
-                Locale to use for localizing this page. Expressions
-                must evaluate to a java.util.Locale or to a String
-                that is converted to a Locale.
+
+                <p>MethodBinding pointing to a method that takes a
+                javax.faces.event.PhaseEvent and returns void. This
+                method will be called after every phase except for
+                restore view on an initial request.</p>
+
             ]]></description>
-            <name>locale</name>
-            <type>java.lang.Object</type>
+            <name>afterPhase</name>
+            <required>false</required>
+            <method-signature>void afterPhase(javax.faces.event.PhaseEvent)
+            </method-signature>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[<p class="changed_added_2_2">If
-                <code>true</code>, this view must not participate in
-                state saving or restoring.  Note that transient views
-                may not be used with <code>@ViewScoped</code> managed
-                beans.  The implementation must call
-                <code>setTransient()</code> on the
-                <code>UIViewRoot</code>, passing the value of the
-                attribute as specified in the markup.</p>]]>
-            </description>
-            <name>transient</name>
+            <description><![CDATA[
+
+                <p>MethodBinding pointing to a method that takes a
+                javax.faces.event.PhaseEvent and returns void. This method
+                will be called before every phase except for restore view.</p>
+
+            ]]></description>
+            <name>beforePhase</name>
             <required>false</required>
-            <type>java.lang.Boolean</type>
+            <method-signature>void beforePhase(javax.faces.event.PhaseEvent)
+            </method-signature>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_modified_2_0_rev_a">Specifies the
+                content-type of the response.</p>
+            ]]></description>
+            <name>contentType</name>
+            <required>false</required>
+            <type>java.lang.String</type>
         </attribute>
         <attribute>
           <description><![CDATA[
@@ -2074,7 +2032,25 @@ for <code>@NamedEvent</code>.</p>
           <required>false</required>
           <type>java.lang.String</type>
         </attribute>
-
+        <attribute>
+            <description><![CDATA[
+             <p class="changed_modified_2_0_rev_a">Specifies the
+            character encoding that should be used for the
+            response.</p>
+            ]]></description>
+            <name>encoding</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Locale to use for localizing this page. Expressions
+                must evaluate to a java.util.Locale or to a String
+                that is converted to a Locale.</p>
+            ]]></description>
+            <name>locale</name>
+            <type>java.lang.Object</type>
+        </attribute>
         <attribute>
             <description><![CDATA[
                 Identifier for the RenderKit to use for
@@ -2085,53 +2061,31 @@ for <code>@NamedEvent</code>.</p>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description><![CDATA[
-                Specifies the content-type of the response.
-            ]]></description>
-            <name>contentType</name>
+            <description>
+                <![CDATA[<p class="changed_added_2_2">If
+                <code>true</code>, this view must not participate in
+                state saving or restoring.  Note that transient views
+                may not be used with <code>@ViewScoped</code> managed
+                beans.  The implementation must call
+                <code>setTransient()</code> on the
+                <code>UIViewRoot</code>, passing the value of the
+                attribute as specified in the markup.</p>]]>
+            </description>
+            <name>transient</name>
             <required>false</required>
-            <type>java.lang.String</type>
+            <type>java.lang.Boolean</type>
         </attribute>
 
-        <attribute>
-            <description><![CDATA[
-                Specifies the character encoding that should be used for the
-                response.
-            ]]></description>
-            <name>encoding</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
 
-                MethodBinding pointing to a method that takes a
-                javax.faces.event.PhaseEvent and returns void. This method
-                will be called before every phase except for restore view.
-            ]]></description>
-            <name>beforePhase</name>
-            <required>false</required>
-            <method-signature>void beforePhase(javax.faces.event.PhaseEvent)
-            </method-signature>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-
-                MethodBinding pointing to a method that takes a javax.faces.event.PhaseEvent 
-                and returns void. This method will be called after every phase except for 
-                restore view on an initial request.
-            ]]></description>
-            <name>afterPhase</name>
-            <required>false</required>
-            <method-signature>void afterPhase(javax.faces.event.PhaseEvent)
-            </method-signature>
-        </attribute>
     </tag>
+
     <tag>
         <description>
-            This action component specifies an application-specific command (or action), 
-            using an EL method expression, to be invoked during one of the JSF lifecycle
-            phases proceeding Render Response (i.e., view rendering).
+            <p class="changed_added_2_2">This action component specifies
+            an application-specific command (or action), using an EL
+            method expression, to be invoked during one of the JSF
+            lifecycle phases, by default <em>Invoke Application</em>.</p>
+
         </description>
         <tag-name>viewAction</tag-name>
         <component>
@@ -2139,39 +2093,51 @@ for <code>@NamedEvent</code>.</p>
         </component>
         <attribute>
             <description>
-                Method expression referencing the action method to be invoked by the
-                component. View actions support declarative navigation just like 
-                UICommand components.
+
+                <p>MethodExpression representing the application action
+            to invoke when this component is activated by the user. The
+            expression must evaluate to a public method that takes no
+            parameters, and returns an Object (the toString() of which
+            is called to derive the logical outcome) which is passed to
+            the NavigationHandler for this application.</p>
+
             </description>
             <name>action</name>
             <required>true</required>
-            <type>javax.el.MethodExpression</type>
+            <method-signature>public 
+                java.lang.Object action()
+            </method-signature>
+
         </attribute>
         <attribute>
-            <description>
-                By default, a view action is not executed on postback. If your application 
-                is decidedly stateless, you may need the view action to execute on any type 
-                of request. The default value is false.
-            </description>
-            <name>onPostback</name>
+            <description><![CDATA[
+            <p>
+                
+                MethodExpression representing an action listener method that
+                will be notified when this component is activated by the user.
+                The expression must evaluate to a public method that takes an
+                ActionEvent parameter, with a return type of void, <span
+                class="changed_added_2_0">or to a public method that takes no
+                arguments with a return type of void.  In the latter case, the
+                method has no way of easily knowing where the event came from,
+                but this can be useful in cases where a notification is needed
+                that "some action happened".</span>
+                
+                </p>
+            ]]></description>
+            <name>actionListener</name>
             <required>false</required>
-            <type>java.lang.Boolean</type>
+            <method-signature>public void
+                actionListener(javax.faces.event.ActionEvent)
+            </method-signature>
         </attribute>
         <attribute>
             <description>
-                You may only want the view action to be invoked under certain conditions. 
-                For that, you can use this attribute, which accepts an EL value expression
-                that must evaluate to a boolean value.
-            </description>
-            <name>if</name>
-            <required>false</required>
-            <type>java.lang.Boolean</type>
-        </attribute>
-        <attribute>
-            <description>
-                Setting the immediate attribute to true moves the invocation to the 
-                Apply Request Values phase instead of the default, the Invoke Application 
-                phase. The default value is false.
+                <p>Flag indicating that, if this component is activated
+                by the user, notifications should be delivered to
+                interested listeners and actions immediately (that is,
+                during Apply Request Values phase) rather than waiting
+                until Invoke Application phase.</p>
             </description>
             <name>immediate</name>
             <required>false</required>
@@ -2179,23 +2145,52 @@ for <code>@NamedEvent</code>.</p>
         </attribute>
         <attribute>
             <description>
-                Specifies the phase in which the action invocation should occur 
-                using the name of the phase constant in the PhaseId class (the case does 
-                not matter). The default is INVOKE_APPLICATION.
+                <p>View actions are most commonly used on the initial
+            view request.  Therefore, view actions do not operate on
+            postback, by default.  This attribute enables a view action
+            to operate on postback.</p>
+            </description>
+            <name>onPostback</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                <p>Specifies the phase in which the action invocation
+                should occur using the name of the phase constant in the
+                PhaseId class (the case does not matter). The value must
+                be one of APPLY_REQUEST_VALUES, PROCESS_VALIDATIONS,
+                UPDATE_MODEL_VALUES, or INVOKE_APPLICATION. The default
+                is INVOKE_APPLICATION.</p>
             </description>
             <name>phase</name>
             <required>false</required>
             <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                <p>Like all children of <code>&lt;f:metadata&gt;</code>,
+            a view action has no visual representation in the view.
+            This attribute has exactly the same effect on a view action
+            as the <code>rendered</code> attribute has on a visual
+            component.  Specifically, if the value of this attribute
+            evaluates to <code>false</code> the component has no
+            effect.</p>
+            </description>
+            <name>rendered</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
         </attribute>
     </tag>
 
     <tag>
         <description><![CDATA[
 
-            <p class="changed_added_2_0">Used inside of the metada facet
-            of a view, this tag causes a <a target="_"
+            <p class="changed_added_2_0"><span
+            class="changed_modified_2_0_rev_a changed_modified_2_2">Used</span> inside of the
+            metadata facet of a view, this tag causes a <a target="_"
             href="../../../javadocs/javax/faces/component/UIViewParameter.html">UIViewParameter</a>
-            to be attached as metadata for the current view. Because
+            to be attached as metadata for the current view.  Because
             <code>UIViewParameter</code> extends <code>UIInput</code>
             all of the attributes and nested child content for any
             <code>UIInput</code> tags are valid on this tag as well.</p>
@@ -2208,9 +2203,61 @@ for <code>@NamedEvent</code>.</p>
         </component>
         <attribute>
             <description><![CDATA[
-                The name of the request parameter from which the value for this component
-                is retrieved on an initial request or to override the stored value on a
-                postback.
+                <p>The ValueExpression linking this component to a property in a
+                backing bean.</p>
+            ]]></description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>Converter instance registered with this component.</p>
+            ]]></description>
+            <name>converter</name>
+            <required>false</required>
+            <type>javax.faces.convert.Converter</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>A ValueExpression enabled attribute that, if present, will be
+                used as the text of the converter message, replacing any message
+                that comes from the converter.</p>
+            ]]></description>
+            <name>converterMessage</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_0"><span
+                class="changed_deleted_2_0_rev_a">If present, this
+                attribute refers to the value of one of the exposed
+                attached objects within the composite component inside
+                of which this tag is nested.</span></p>
+
+            ]]></description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>The component identifier for this component. This value must be
+                unique within the closest parent component that is a naming
+                container.</p>
+            ]]></description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_modified_2_0_rev_a">The name
+                of the request parameter from which the value for this
+                component is retrieved on an initial request or to
+                override the stored value on a postback.</p>
             ]]></description>
             <name>name</name>
             <required>true</required>
@@ -2219,36 +2266,8 @@ for <code>@NamedEvent</code>.</p>
 
         <attribute>
             <description><![CDATA[
-                Converter instance registered with this component.
-            ]]></description>
-            <name>converter</name>
-            <required>false</required>
-            <type>javax.faces.convert.Converter</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                A ValueExpression enabled attribute that, if present, will be
-                used as the text of the converter message, replacing any message
-                that comes from the converter.
-            ]]></description>
-            <name>converterMessage</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                The component identifier for this component. This value must be
-                unique within the closest parent component that is a naming
-                container.
-            ]]></description>
-            <name>id</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-                Flag indicating that the user is required to provide a submitted
-                value for this input component.
+                <p>Flag indicating that the user is required to provide a submitted
+                value for this input component.</p>
             ]]></description>
             <name>required</name>
             <required>false</required>
@@ -2256,9 +2275,9 @@ for <code>@NamedEvent</code>.</p>
         </attribute>
         <attribute>
             <description><![CDATA[
-                A ValueExpression enabled attribute that, if present, will be
+                <p>A ValueExpression enabled attribute that, if present, will be
                 used as the text of the validation message for the "required"
-                facility, if the "required" facility is used.
+                facility, if the "required" facility is used.</p>
             ]]></description>
             <name>requiredMessage</name>
             <required>false</required>
@@ -2266,14 +2285,14 @@ for <code>@NamedEvent</code>.</p>
         </attribute>
         <attribute>
             <description><![CDATA[
-                MethodExpression representing a validator method that will be
+                <p>MethodExpression representing a validator method that will be
                 called
                 during Process Validations to perform correctness checks on the
                 value of this component. The expression must evaluate to a
                 public
                 method that takes FacesContext, UIComponent, and Object
                 parameters,
-                with a return type of void.
+                with a return type of void.</p>
             ]]></description>
             <name>validator</name>
             <required>false</required>
@@ -2283,9 +2302,9 @@ for <code>@NamedEvent</code>.</p>
         </attribute>
         <attribute>
             <description><![CDATA[
-                A ValueExpression enabled attribute that, if present, will be
+                <p>A ValueExpression enabled attribute that, if present, will be
                 used as the text of the validator message, replacing any
-                message that comes from the validator.
+                message that comes from the validator.</p>
             ]]></description>
             <name>validatorMessage</name>
             <required>false</required>
@@ -2293,12 +2312,12 @@ for <code>@NamedEvent</code>.</p>
         </attribute>
         <attribute>
             <description><![CDATA[
-                A ValueExpression to which the value of the request parameter, as
+                <p>A ValueExpression to which the value of the request parameter, as
                 determined by the name attribute, is bound. The resolved value of this
                 expression is used when encoding the view parameter into a bookmarkable link or
                 redirect URL with view parameter encoding enabled. If this attribute is omitted,
                 the value of the request parameter will instead be the local value of the
-                UIViewParameter.
+                UIViewParameter.</p>
             ]]></description>
             <name>value</name>
             <required>false</required>
@@ -2337,30 +2356,8 @@ for <code>@NamedEvent</code>.</p>
             <required>false</required>
             <type>int</type>
         </attribute>
-        <attribute>
-            <description><![CDATA[
-                The ValueExpression linking this component to a property in a
-                backing bean
-            ]]></description>
-            <name>binding</name>
-            <required>false</required>
-            <type>javax.faces.component.UIComponent</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-
-                <p class="changed_added_2_0"><span
-                class="changed_deleted_2_0_rev_a">If present, this
-                attribute refers to the value of one of the exposed
-                attached objects within the composite component inside
-                of which this tag is nested.</span></p>
-
-            ]]></description>
-            <name>for</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
     </tag>
+
 
 
 </facelet-taglib>
