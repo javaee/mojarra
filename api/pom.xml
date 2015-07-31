@@ -9,9 +9,12 @@
     <version>2.3-edr1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>JSF ${project.version}</name>
-    <prerequisites>
-        <maven>3.1.1</maven>
-    </prerequisites>
+    <inceptionYear>1997</inceptionYear>
+    <organization>
+        <name>Oracle America, Inc</name>
+        <url>http://www.oracle.com/</url>
+    </organization>
+    <url>https://www.jcp.org/en/jsr/detail?id=372</url>
     <build>
         <plugins>
             <plugin>
@@ -217,6 +220,44 @@
             </plugin>
         </plugins>
     </build>
+    <contributors>
+        <contributor>
+            <name>Jennifer Ball</name>
+        </contributor>
+        <contributor>
+            <name>Deepak Gothe</name>
+        </contributor>
+        <contributor>
+            <name>Jacob Hookom</name>
+        </contributor>
+        <contributor>
+            <name>Justyna Horwat</name>
+        </contributor>
+        <contributor>
+            <name>Roger Kitain</name>
+        </contributor>
+        <contributor>
+            <name>Jason Lee</name>
+        </contributor>
+        <contributor>
+            <name>Craig McClanahan</name>
+        </contributor>
+        <contributor>
+            <name>Gregory Murray</name>
+        </contributor>
+        <contributor>
+            <name>Raj Premkumar</name>
+        </contributor>
+        <contributor>
+            <name>Stan Silvert</name>
+        </contributor>
+        <contributor>
+            <name>Jayashri Visvanathan</name>
+        </contributor>
+        <contributor>
+            <name>Mike Youngstrom</name>
+        </contributor>
+    </contributors>    
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
@@ -239,7 +280,68 @@
             <classifier>sources</classifier>
         </dependency>
     </dependencies>
+    <developers>
+        <developer>
+            <id>edburns</id>
+            <name>Ed Burns</name>
+            <email>edward.burns@oracle.com</email>
+            <organization>Oracle America, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <id>mriem</id>
+            <name>Manfred Riem</name>
+            <email>manfred.riem@oracle.com</email>
+            <organization>Oracle America, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <id>ren.zhijun.oracle</id>
+            <name>Zhijun Ren</name>
+            <email>ren.zhijun@oracle.com></email>
+            <organization>Oracle America, Inc.</organization>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
+    <issueManagement>
+        <system>JIRA</system>
+        <url>http://java.net/jira/browse/JAVASERVERFACES_SPEC_PUBLIC</url>
+    </issueManagement>
+    <licenses>
+        <license>
+            <name>
+                COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.1 
+                plus "CLASSPATH" EXCEPTION TO THE GPL VERSION 2
+            </name>
+            <url>https://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
+        </license>
+    </licenses>
+    <mailingLists>
+        <mailingList>
+            <name>JSF Specification Mailing List (public mirror)</name>
+            <post>users@javaserverfaces-spec-public.java.net</post>
+            <archive>https://java.net/projects/javaserverfaces-spec-public/lists/users/archive</archive>
+        </mailingList>
+        <mailingList>
+            <name>JSR 372 Specification Mailing List</name>
+            <post>jsr372-experts@javaserverfaces-spec-public.java.net</post>
+            <archive>https://java.net/projects/javaserverfaces-spec-public/lists/jsr372-experts/archive</archive>
+        </mailingList>
+    </mailingLists>
+    <prerequisites>
+        <maven>3.1.1</maven>
+    </prerequisites>
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <mojarra.version>2.3.0-m04-SNAPSHOT</mojarra.version>
@@ -261,4 +363,8 @@
             </plugin>
         </plugins>
     </reporting>
+    <scm>
+        <url>http://java.net/projects/mojarra/sources</url>
+        <connection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</connection>
+    </scm>
 </project>
