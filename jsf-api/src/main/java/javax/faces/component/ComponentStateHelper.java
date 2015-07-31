@@ -261,7 +261,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     }
 
 
-
+    
     /**
      * One and only implementation of
      * restore state. Makes all other implementations
@@ -321,10 +321,36 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
                });
             } else {
                 put(serializable, value);
+                handleAttribute(serializable.toString(), value);
             }
         }
     }
 
+    /*
+     * Because our renderers optimize we need to make sure that upon restore
+     * we mimic the handleAttribute of our standard generated HTML components
+     * setter methods.
+     */
+    private void handleAttribute(String name, Object value) {
+        List<String> setAttributes = (List<String>) component.getAttributes().get("javax.faces.component.UIComponentBase.attributesThatAreSet");
+        if (setAttributes == null) {
+            String cname = this.getClass().getName();
+            if (cname != null && cname.startsWith("javax.faces.component.")) {
+                setAttributes = new ArrayList<>(6);
+                component.getAttributes().put("javax.faces.component.UIComponentBase.attributesThatAreSet", setAttributes);
+            }
+        }
+        if (setAttributes != null) {
+            if (value == null) {
+                ValueExpression ve = component.getValueExpression(name);
+                if (ve == null) {
+                    setAttributes.remove(name);
+                }
+            } else if (!setAttributes.contains(name)) {
+                setAttributes.add(name);
+            }
+        }
+    }    
 
     /**
      * @see javax.faces.component.StateHolder#isTransient()

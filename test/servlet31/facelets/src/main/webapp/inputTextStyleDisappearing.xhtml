@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>h:inputText style disappearing</title>
+    </h:head>
+    <h:body>
+        <p>
+            To reproduce the issue, please click Step 1 ... then click Step 2.
+        </p>
+        <h:form id="form">
+            <h:panelGrid columns="1">
+                <h:inputText id="input" binding="#{inputTextStyleDisappearingBean.input}" value="Some text ..."/>
+                <h:commandButton id="changeColor" value="Step 1 (Change BackColor)" action="#{inputTextStyleDisappearingBean.changeColor}"/>           
+                <h:commandButton id="dummy" value="Step 2 (Action)" action="#{inputTextStyleDisappearingBean.dummy}" />
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
