@@ -1,0 +1,29 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:test="http://java.sun.com/jsf/composite/test">
+
+	<composite:interface>
+		<composite:attribute name="parameter" type="java.lang.String" />
+	</composite:interface>
+
+	<composite:implementation>
+		clientID1:#{cc.clientId}
+		Parameter1:#{cc.attrs.parameter}
+		<br/>
+		
+		<!-- Nest a composite component to test that "cc" changes correctly 
+			 within the inner component
+		 -->
+		<test:composite2 id="componentA" parameter="testA"/>
+		<br/>
+		
+		<!-- Print ID and parameter again to test it changes correctly back when scope changes
+		     back to outer component
+		 -->
+		clientID1:#{cc.clientId}
+		Parameter1:#{cc.attrs.parameter}
+	</composite:implementation>
+</f:view>

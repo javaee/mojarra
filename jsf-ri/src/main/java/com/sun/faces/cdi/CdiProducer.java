@@ -235,6 +235,12 @@ abstract class CdiProducer<T> implements Bean<T>, PassivationCapable, Serializab
         return this;
     }
     
+    protected CdiProducer<T> beanClassAndType(Class<?> beanClass) {
+        beanClass(beanClass);
+        types(beanClass);
+        return this;
+    }
+    
     protected CdiProducer<T> qualifiers(Annotation... qualifiers) {
         this.qualifiers = asSet(qualifiers);
         return this;
