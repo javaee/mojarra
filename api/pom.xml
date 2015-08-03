@@ -144,7 +144,11 @@
                     <execution>
                         <id>attach-javadocs</id>
                         <configuration>
+                            <doctitle>JavaServer Faces 2.3 EDR 1 API</doctitle>
                             <excludePackageNames>com</excludePackageNames>
+                            <footer>DRAFT DRAFT DRAFT DRAFT</footer>
+                            <header>DRAFT DRAFT DRAFT DRAFT</header>
+                            <windowtitle>JavaServer Faces 2.3 EDR 1 API</windowtitle>
                         </configuration>
                         <goals>
                             <goal>jar</goal>
