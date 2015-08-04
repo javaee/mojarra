@@ -78,7 +78,8 @@ public class CdiExtension implements Extension {
     public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery) {
         afterBeanDiscovery.addBean(new ApplicationProducer());
         afterBeanDiscovery.addBean(new ApplicationMapProducer());
-        afterBeanDiscovery.addBean(new CompositeComponentProducer()); 
+        afterBeanDiscovery.addBean(new CompositeComponentProducer());
+        afterBeanDiscovery.addBean(new ComponentProducer());
         afterBeanDiscovery.addBean(new ExternalContextProducer());
         afterBeanDiscovery.addBean(new FacesContextProducer());
         afterBeanDiscovery.addBean(new RequestCookieMapProducer());
