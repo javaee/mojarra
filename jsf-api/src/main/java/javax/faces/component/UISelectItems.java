@@ -123,6 +123,8 @@ public class UISelectItems extends UIComponentBase {
     /**
      * <p>Returns the <code>value</code> property of the
      * <code>UISelectItems</code>.</p>
+     * 
+     * @return the value.
      */
     public Object getValue() {
 

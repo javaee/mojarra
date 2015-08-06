@@ -112,6 +112,8 @@ public class UIParameter extends UIComponentBase {
 
     /**
      * <p>Return the optional parameter name for this parameter.</p>
+     * 
+     * @return the name.
      */
     public String getName() {
 
@@ -137,6 +139,8 @@ public class UIParameter extends UIComponentBase {
     /**
      * <p>Returns the <code>value</code> property of the
      * <code>UIParameter</code>.</p>
+     * 
+     * @return the value.
      */
     public Object getValue() {
 
@@ -162,6 +166,8 @@ public class UIParameter extends UIComponentBase {
      * directive for this component. This directive determines whether the
      * parameter value should be disabled by assigning it a null value.
      * If true, the <code>value</code> set on this component is ignored.</p>
+     * 
+     * @return <code>true</code> if disabled, <code>false</code> otherwise.
      * @since 2.0
      */
     public boolean isDisable() {
@@ -172,7 +178,8 @@ public class UIParameter extends UIComponentBase {
 
     /**
      * <p>Sets the <code>disable</code> property of the <code>UIParameter</code>.</p>
-     * @param disable
+     * 
+     * @param disable the value for the disable flag.
      * @since 2.0
      */
     public void setDisable(boolean disable) {

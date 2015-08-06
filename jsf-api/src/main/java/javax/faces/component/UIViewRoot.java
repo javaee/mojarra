@@ -259,7 +259,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * <p class="changed_added_2_0">Overridden to take no action.</p>
      *
      * @since 2.0
-     * @param isInView
+     * @param isInView ignore the value.
      */
     @Override
     public void setInView(boolean isInView) {
@@ -282,6 +282,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * explicitly set, as in {@link
      * javax.faces.application.ViewHandler#createView}, the returned
      * value will be <code>null.</code></p>
+     * 
+     * @return the render kit id, or <code>null</code>.
      */
     public String getRenderKitId() {
 
@@ -308,7 +310,10 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
 
-    /** <p>Return the view identifier for this view.</p> */
+    /** <p>Return the view identifier for this view.</p>
+     * 
+     * @return the view id.
+     */
     public String getViewId() {
 
         return (String) getStateHelper().get(PropertyKeys.viewId);
@@ -431,6 +436,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * <code>PhaseListener</code> instances attached to this 
      * <code>UIViewRoot</code> instance.</p>
      *
+     * @return the list of phase listeners.
      * @since 2.0
      */
     public List<PhaseListener> getPhaseListeners() {
@@ -573,8 +579,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
      * </div>
      *
+     * @param context the Faces context.
      * @param target The name of the facet for which the components will be returned. 
-     *
+     * 
      * @return A <code>List</code> of {@link UIComponent} children of
      * the facet with the name <code>target</code>.  If no children are
      * found for the facet, return <code>Collections.emptyList()</code>.
@@ -1310,6 +1317,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * UNIQUE_ID_PREFIX, and will be unique within <span
      * class="changed_added_2_2">the non-{@link NamingContainer} child
      * sub-trees of</span> this UIViewRoot.</p>
+     * 
+     * @return the identifier.
      */
     public String createUniqueId() {
         return createUniqueId(getFacesContext(), null);
@@ -1494,6 +1503,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * returns the result.</p>
      * <div class="changed_added_2_0"></div>
      *
+     * @return the view map, or <code>null</code>.
      * @since 2.0
      */
     public Map<String, Object> getViewMap() {
@@ -1549,7 +1559,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @param create <code>true</code> to create a new <code>Map</code> for this
      *               instance if necessary; <code>false</code> to return
      *               <code>null</code> if there's no current <code>Map</code>.
-     *
+     * @return the view map, or <code>null</code>.
      * @since 2.0
      */
     public Map<String, Object> getViewMap(boolean create) {

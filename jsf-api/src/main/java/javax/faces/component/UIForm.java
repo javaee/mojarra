@@ -142,6 +142,8 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      * <p class="changed_modified_2_1">This property must be kept as a
      * transient property using the {@link
      * UIComponent#getTransientStateHelper}.</p>
+     * 
+     * @return <code>true</code> if the form was submitted, <code>false</code> otherwise.
      */
     public boolean isSubmitted() {
 
@@ -169,6 +171,8 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      * <p class="changed_modified_2_1">This property must be kept as a
      * transient property using the {@link
      * UIComponent#getTransientStateHelper}.</p>
+     * 
+     * @param submitted the new value of the submitted flag. 
      */
     public void setSubmitted(boolean submitted) {
 
@@ -182,6 +186,11 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
     //private Boolean prependId;
 
 
+    /**
+     * Is the id prepended.
+     * 
+     * @return <code>true</code> if it is, <code>false</code> otherwise. 
+     */
     public boolean isPrependId() {
 
         return (Boolean) getStateHelper().eval(PropertyKeys.prependId, true);

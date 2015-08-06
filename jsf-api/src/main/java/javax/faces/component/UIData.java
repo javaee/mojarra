@@ -1826,6 +1826,8 @@ public class UIData extends UIComponentBase
      * result is null, create an empty {@link ListDataModel} and return it.  If
      * the result is an instance of {@link DataModel}, return it.  Otherwise,
      * adapt the result as described in {@link #getValue} and return it.</p>
+     * 
+     * @return the data model.
      */
     protected DataModel getDataModel() {
 
