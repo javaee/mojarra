@@ -171,7 +171,7 @@ public final class ByteArrayGuardAESCTR {
             String encodedKeyArray = (String) context.lookup("java:comp/env/jsf/FlashSecretKey");
             if (null != encodedKeyArray) {
                 byte[] keyArray = DatatypeConverter.parseBase64Binary(encodedKeyArray);
-                if (keyArray.length < 17) {
+                if (keyArray.length < 16) {
                     throw new FacesException("key must be at least 16 bytes long.");
                 }
                 sk = new SecretKeySpec(keyArray, KEY_ALGORITHM);
