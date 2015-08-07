@@ -63,17 +63,19 @@ exit $?
 fi
 
 mvn -Pglassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:redeploy
+exit_code=$?
 
-if [ "$?" -ne "0" ]; then
+if [ "$exit_code" -ne "0" ]; then
     mvn -N -Pglassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:stop;
-    exit $?
+    exit $exit_code
 fi
 
 mvn -Pintegration -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 verify
+exit_code=$?
 
-if [ "$?" -ne "0" ]; then
+if [ "$exit_code" -ne "0" ]; then
     mvn -N -Pglassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:stop;
-    exit $?
+    exit $exit_code
 fi
 
 mvn -N -Pglassfish-cargo -Dwebapp.projectStage=$1 -Dwebapp.partialStateSaving=$2 -Dwebapp.stateSavingMethod=$3 cargo:stop

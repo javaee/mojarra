@@ -41,7 +41,8 @@
 
 scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 $scriptdir/test-glassfish-specific.sh Production true server
-echo $?
-if [ "$?" -ne "0" ]; then
-exit $? 
+exit_code=$?
+echo $exit_code
+if [ "$exit_code" -ne "0" ]; then
+    exit $exit_code 
 fi
