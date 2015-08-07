@@ -4,7 +4,11 @@ target/
 /bin/
 /dist/
 /test/quality/
-/test/unit/
+/test/unit/src/main/java/com/
+/test/unit/src/main/java/javax/
+/test/unit/src/main/resources/com/
+/test/unit/src/main/resources/javax/
+/test/unit/src/main/resources/META-INF/
 /dependencies/
 /jsf-demo/dist/
 /jsf-api/build/
