@@ -1051,60 +1051,53 @@ collection is null, this tag does nothing.</p>
 
         <attribute>
             <description>
-
-                <![CDATA[ <div class="changed_added_2_0"><p>Name of the
-                exported scoped variable for the current item of the
-                iteration. This scoped variable has nested
-                visibility. Its type depends on the object of the
-                underlying collection</p></div>]]>
-
+                <![CDATA[
+                <div class="changed_added_2_0 changed_modified_2_3">
+                 <p>
+                  Name of the exported scoped variable for the current item of 
+                  the iteration. This scoped variable has nested visibility.
+                 </p>
+                </div>
+                ]]>
             </description>
             <name>var</name>
             <required>
-				true
+		true
             </required>
             <deferred-value>
                 <type>
-                    java.lang.Object
+                    java.lang.String
                 </type>
             </deferred-value>
         </attribute>
-
         <attribute>
             <description>
-
-                <![CDATA[ <div class="changed_added_2_0"><p>Name of the
-                exported request scoped variable for the status of the
-                iteration. Object is a POJO with the following read-only
-                JavaBeans properties. This scoped variable has nested
-                visibility.</p>
-
-                <p><code>begin</code> of type Integer</p>
-
-                <p><code>end</code> of type Integer</p>
-
-                <p><code>index</code> of type int</p>
-
-                <p><code>step</code> of type Integer</p>
-
-                <p><code>even</code> of type boolean</p>
-
-                <p><code>odd</code> of type boolean</p>
-
-                <p><code>first</code> of type boolean</p>
-
-                <p><code>last</code> of type boolean</p>
-
-                </div>]]>
-
+                <![CDATA[ 
+                 <div class="changed_added_2_0">
+                  <p>
+                   Name of the exported request scoped variable for the status 
+                   of the iteration. The object the name points to is a POJO 
+                   with the following read-only JavaBeans properties. This 
+                   scoped variable has nested visibility.
+                  </p>
+                  <p><code>begin</code> of type Integer</p>
+                  <p><code>end</code> of type Integer</p>
+                  <p><code>index</code> of type int</p>
+                  <p><code>step</code> of type Integer</p>
+                  <p><code>even</code> of type boolean</p>
+                  <p><code>odd</code> of type boolean</p>
+                  <p><code>first</code> of type boolean</p>
+                  <p><code>last</code> of type boolean</p>
+                 </div>
+                ]]>
             </description>
             <name>varStatus</name>
             <required>
-				false
+		false
             </required>
             <deferred-value>
                 <type>
-                    java.lang.Object
+                    java.lang.String
                 </type>
             </deferred-value>
         </attribute>
