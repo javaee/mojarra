@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,81 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package javax.faces.validator;
 
-package com.sun.faces.systest.model;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
-import java.util.List;
-import java.util.ArrayList;
+/**
+ * <p>
+ * Unit tests for JLS casting rules</p>
+ */
+public class CastingValidatorTestCase extends ValidatorTestCase {
 
-public class EnumBean {
+    // ------------------------------------------------------------ Constructors
+    /**
+     * Construct a new instance of this test case.
+     *
+     * @param name Name of the test case
+     */
+    public CastingValidatorTestCase(String name) {
+        super(name);
+    }
 
-    public enum Simple {
-        Value1,
-        Value2,
-        Value3,
-        Value4
+    // ---------------------------------------------------- Overall Test Methods
+    // Return the tests included in this test case.
+    public static Test suite() {
+        return (new TestSuite(CastingValidatorTestCase.class));
+    }
+
+    // ------------------------------------------------- Individual Test Methods
+    public void testWithGenericCanCastToRaw() {
+    	
+    	Validator<?> validatorWithGeneric = (context, component, value) -> {};
+    	
+    	Validator validatorRaw = validatorWithGeneric;
     }
     
-    public enum Simple2 {
-        Value
-    }
-
-    private Simple selected;
-    private Simple selected2;
-    private Simple selected3;
-    private Simple[] mSelected;
-    public List<Simple> lSelected;
-
-    public EnumBean() {
-        selected = Simple.Value2;
-        selected2 = Simple.Value3;
-        selected3 = Simple.Value4;
-        mSelected = new Simple[] { Simple.Value1, Simple.Value3 };
-        lSelected = new ArrayList<Simple>(4);
-        lSelected.add(Simple.Value2);
-        lSelected.add(Simple.Value4);
-    }   
-
-    public Simple getSelected() {
-        return selected;
-    }
-
-    public void setSelected(Simple selected) {
-        this.selected = selected;
-    }
-    
-     public Simple getSelected2() {
-        return selected2;
-    }
-
-    public void setSelected2(Simple selected2) {
-        this.selected2 = selected2;
-    }
-
-
-    public Simple getSelected3() {
-        return selected3;
-    }
-
-    public void setSelected3(Simple selected3) {
-        this.selected3 = selected3;
-    }
-
-    public Simple[] getSelectedArray() {
-        return mSelected;
-    }
-    
-    public void setSelectedArray(Simple[] mSelected) {
-        this.mSelected = mSelected;
-    }
-    
-    public List getSelectedList() {
-        return lSelected;
-    }
-    
-    public void setSelectedList(List<Simple> lSelected) {
-        this.lSelected = lSelected;
-    }
-
-
-} // END EnumBean
+}

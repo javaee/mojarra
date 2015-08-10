@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and boolean primitive) values.</p>
  */
 
-public class BooleanConverter implements Converter {
+public class BooleanConverter implements Converter<Boolean> {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -94,8 +94,7 @@ public class BooleanConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public Object getAsObject(FacesContext context, UIComponent component,
-                              String value) {
+    public Boolean getAsObject(FacesContext context, UIComponent component, String value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -129,8 +128,7 @@ public class BooleanConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public String getAsString(FacesContext context, UIComponent component,
-                              Object value) {
+    public String getAsString(FacesContext context, UIComponent component, Boolean value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();

@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and float primitive) values.</p>
  */
 
-public class FloatConverter implements Converter {
+public class FloatConverter implements Converter<Float> {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -96,8 +96,7 @@ public class FloatConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public Object getAsObject(FacesContext context, UIComponent component,
-                              String value) {
+    public Float getAsObject(FacesContext context, UIComponent component, String value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -127,8 +126,7 @@ public class FloatConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public String getAsString(FacesContext context, UIComponent component,
-                              Object value) {
+    public String getAsString(FacesContext context, UIComponent component, Float value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -141,8 +139,10 @@ public class FloatConverter implements Converter {
 
         // If the incoming value is still a string, play nice
         // and return the value unmodified
-        if (value instanceof String) {
-            return (String) value;
+        if (((Object) value) instanceof String) {
+            // This consequence of spec #1355 would not be bad as a daily WTF submission,
+            // but keeping it in for backwards compatibility concerns.
+            return (String) ((Object) value);
         }
 
         try {

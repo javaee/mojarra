@@ -51,7 +51,7 @@ import java.math.BigInteger;
  * <code>java.math.BigInteger</code> values.</p>
  */
 
-public class BigIntegerConverter implements Converter {
+public class BigIntegerConverter implements Converter<BigInteger> {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -96,8 +96,7 @@ public class BigIntegerConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public Object getAsObject(FacesContext context, UIComponent component,
-                              String value) {
+    public BigInteger getAsObject(FacesContext context, UIComponent component, String value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -131,8 +130,7 @@ public class BigIntegerConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public String getAsString(FacesContext context, UIComponent component,
-                              Object value) {
+    public String getAsString(FacesContext context, UIComponent component, BigInteger value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -145,8 +143,10 @@ public class BigIntegerConverter implements Converter {
 
         // If the incoming value is still a string, play nice
         // and return the value unmodified
-        if (value instanceof String) {
-            return (String) value;
+        if (((Object) value) instanceof String) {
+            // This consequence of spec #1355 would not be bad as a daily WTF submission,
+            // but keeping it in for backwards compatibility concerns.
+            return (String) ((Object) value);
         }
 
         try {

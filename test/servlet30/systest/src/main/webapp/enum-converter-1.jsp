@@ -65,7 +65,7 @@
   }
       
   try {
-      String str = enumConverter.getAsString(FacesContext.getCurrentInstance(), input, "bar");
+      String str = enumConverter.getAsString(FacesContext.getCurrentInstance(), input, EnumBean.Simple.Value1);
   } catch (ConverterException ce) {
       msg = ce.getMessage();
   }
@@ -86,8 +86,8 @@
 
   // Test Invalid Enum member
   try {
-      enumConverter = new EnumConverter(EnumBean.Simple.class);
-      String str = enumConverter.getAsString(FacesContext.getCurrentInstance(), input, "FOO");  
+      enumConverter = new EnumConverter();
+      String str = enumConverter.getAsString(FacesContext.getCurrentInstance(), input, EnumBean.Simple2.Value);  
       out.println("/enum-converter-1.jsp FAILED");
   } catch (ConverterException ce) {
       out.println("/enum-converter-1.jsp PASSED");

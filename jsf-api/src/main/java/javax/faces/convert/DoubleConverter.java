@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and double primitive) values.</p>
  */
 
-public class DoubleConverter implements Converter {
+public class DoubleConverter implements Converter<Double> {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -96,8 +96,7 @@ public class DoubleConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public Object getAsObject(FacesContext context, UIComponent component,
-                              String value) {
+    public Double getAsObject(FacesContext context, UIComponent component, String value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -127,8 +126,7 @@ public class DoubleConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public String getAsString(FacesContext context, UIComponent component,
-                              Object value) {
+    public String getAsString(FacesContext context, UIComponent component, Double value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -141,8 +139,10 @@ public class DoubleConverter implements Converter {
 
         // If the incoming value is still a string, play nice
         // and return the value unmodified
-        if (value instanceof String) {
-            return (String) value;
+        if (((Object) value) instanceof String) {
+            // This consequence of spec #1355 would not be bad as a daily WTF submission,
+            // but keeping it in for backwards compatibility concerns.
+            return (String) ((Object) value);
         }
 
         try {

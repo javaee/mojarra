@@ -52,7 +52,7 @@ import javax.faces.component.UIInput;
  *
  * @since 2.0
  */
-public class RequiredValidator implements Validator {
+public class RequiredValidator implements Validator<Object> {
 
     /**
      * <p>The standard converter id for this converter.</p>

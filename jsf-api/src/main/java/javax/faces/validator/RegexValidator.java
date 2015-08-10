@@ -57,7 +57,7 @@ import javax.faces.component.PartialStateHolder;
  * standards.</p>
  * @since 2.0
  */
-public class RegexValidator implements Validator, PartialStateHolder {
+public class RegexValidator implements Validator<String>, PartialStateHolder {
 
     private String regex;
 
@@ -131,7 +131,7 @@ public class RegexValidator implements Validator, PartialStateHolder {
      */
     public void validate(FacesContext context,
                          UIComponent component,
-                         Object value) {
+                         String value) {
 
         if (context == null) {
             throw new NullPointerException();
@@ -157,7 +157,7 @@ public class RegexValidator implements Validator, PartialStateHolder {
 
         try {
             Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher((String) value);
+            Matcher matcher = pattern.matcher(value);
             if (!matcher.matches()) {
                 Object[] params = { regex };
                 fmsg = MessageFactory.getMessage(locale,
