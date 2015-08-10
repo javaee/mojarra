@@ -37,70 +37,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.configFile;
 
-package com.sun.faces.test.agnostic.config.configFile;
+public class NonManagedBean {
 
-public class SimpleBean {
-
-    private String simpleProperty;
-
-
-    public SimpleBean() {
+    public NonManagedBean() {
     }
 
-
-    public String getSimpleProperty() {
-        return simpleProperty;
-    }
-
-
-    public void setSimpleProperty(String simpleProperty) {
-        this.simpleProperty = simpleProperty;
-    }
-
-
-    Integer intProp = null;
-
-
-    public void setIntProperty(Integer newVal) {
-        intProp = newVal;
-    }
-
-
-    public Integer getIntProperty() {
-        return intProp;
-    }
-
-
-    public boolean getTrueValue() {
-        return true;
-    }
-
-
-    public boolean getFalseValue() {
-        return false;
-    }
-
-    private NonManagedBean nonManagedBean = null;
-    public NonManagedBean getNonManagedBean() {
-        return nonManagedBean;
-    }
-    public void setNonManagedBean(NonManagedBean nmb) {
-        nonManagedBean = nmb;
-    }
-
-    private String headerClass = "column-header";
-    public String getHeaderClass() {
-        return headerClass;
-    }
-    public void setHeaderClass(String headerClass) {
-        this.headerClass = headerClass;
-    }
-    private String footerClass = "column-footer";
-    public String getFooterClass() {
-        return footerClass;
-    }
-    public void setFooterClass(String footerClass) {
-        this.footerClass = footerClass;
-    }
 }

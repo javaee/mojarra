@@ -37,10 +37,8 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.configFile;
 
-package com.sun.faces.test.agnostic.config.configFile;
-
-import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -59,8 +57,9 @@ import static org.junit.Assert.*;
 public class ConfigFileBean {
 
     private String title = "Test Config File";
+
     public String getTitle() {
-        return title; 
+        return title;
     }
 
     public ConfigFileBean() {
@@ -78,11 +77,11 @@ public class ConfigFileBean {
 
         assertEquals("simpleList size not as expected", 4, list.size());
         assertEquals("simpleList.get(0) not as expected",
-                     new Integer(10), list.get(0));
+                new Integer(10), list.get(0));
         assertEquals("simpleList.get(1) not as expected",
-                     new Integer(20), list.get(1));
+                new Integer(20), list.get(1));
         assertEquals("simpleList.get(2) not as expected",
-                     new Integer(60), list.get(2));
+                new Integer(60), list.get(2));
         assertNull("simpleList.get(3) not as expected", list.get(3));
 
         valueBinding = app.createValueBinding("#{objectList}");
@@ -93,31 +92,27 @@ public class ConfigFileBean {
 
         assertEquals("simpleList size not as expected", 4, list.size());
         assertTrue("simpleList.get(0) not as expected",
-                   list.get(0) instanceof SimpleBean);
+                list.get(0) instanceof SimpleBean);
         assertTrue("simpleList.get(1) not as expected",
-                   list.get(1) instanceof SimpleBean);
+                list.get(1) instanceof SimpleBean);
         assertTrue("simpleList.get(2) not as expected",
-                   list.get(2) instanceof SimpleBean);
+                list.get(2) instanceof SimpleBean);
         assertNull("simpleList.get(3) not as expected", list.get(3));
-
 
         valueBinding = app.createValueBinding("#{floatMap}");
         assertNotNull(valueBinding);
 
-        Map
-            nestedMap = null,
-            map = (Map) valueBinding.getValue(fc);
+        Map nestedMap = null,
+                map = (Map) valueBinding.getValue(fc);
         assertNotNull(map);
 
         Iterator keys = map.keySet().iterator();
-        Float
-            key1 = new Float(3.1415),
-            key2 = new Float(3.14),
-            key3 = new Float(6.02),
-            key4 = new Float(0.00001);
-        Object
-            curKey = null,
-            value = null;
+        Float key1 = new Float(3.1415),
+                key2 = new Float(3.14),
+                key3 = new Float(6.02),
+                key4 = new Float(0.00001);
+        Object curKey = null,
+                value = null;
 
         while (keys.hasNext()) {
             assertTrue((curKey = keys.next()) instanceof Float);
@@ -127,11 +122,11 @@ public class ConfigFileBean {
         }
 
         assertTrue("map.get(key1) not a SimpleBean",
-                   map.get(key1) instanceof SimpleBean);
+                map.get(key1) instanceof SimpleBean);
         assertTrue("map.get(key2) not a SimpleBean",
-                   map.get(key2) instanceof SimpleBean);
+                map.get(key2) instanceof SimpleBean);
         assertTrue("map.get(key3) not a SimpleBean",
-                   map.get(key3) instanceof SimpleBean);
+                map.get(key3) instanceof SimpleBean);
         assertNull("map.get(key4) not null", map.get(key4));
 
         valueBinding = app.createValueBinding("#{crazyMap}");
@@ -147,19 +142,19 @@ public class ConfigFileBean {
                 assertTrue(value instanceof Map);
                 nestedMap = (Map) value;
                 assertTrue("nestedMap.get(key1) not a SimpleBean",
-                           nestedMap.get(key1) instanceof SimpleBean);
+                        nestedMap.get(key1) instanceof SimpleBean);
                 assertTrue("nestedMap.get(key2) not a SimpleBean",
-                           nestedMap.get(key2) instanceof SimpleBean);
+                        nestedMap.get(key2) instanceof SimpleBean);
                 assertTrue("nestedMap.get(key3) not a SimpleBean",
-                           nestedMap.get(key3) instanceof SimpleBean);
+                        nestedMap.get(key3) instanceof SimpleBean);
                 assertNull("nestedMap.get(key4) not null",
-                           nestedMap.get(key4));
+                        nestedMap.get(key4));
             }
         }
         assertTrue("map.get(one) not a Map",
-                   map.get("one") instanceof Map);
+                map.get("one") instanceof Map);
         assertTrue("map.get(two) not a Map",
-                   map.get("two") instanceof Map);
+                map.get("two") instanceof Map);
         assertNull("map.get(three) not null", map.get("three"));
 
         return "SUCCESS";
@@ -184,10 +179,9 @@ public class ConfigFileBean {
         return "SUCCESS";
     }
 
-    private String status="";
+    private String status = "";
 
     public String getStatus() {
         return status;
     }
 }
-
