@@ -110,7 +110,7 @@
         ]]>
       </xsd:documentation>
     </xsd:annotation>
-    <xsd:choice>
+    <xsd:choice minOccurs="0" maxOccurs="unbounded">
       <xsd:element name="changes"
                    type="javaee:partial-response-changesType"
                    minOccurs="0"
