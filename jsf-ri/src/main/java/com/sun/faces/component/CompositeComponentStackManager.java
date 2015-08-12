@@ -297,6 +297,7 @@ public class CompositeComponentStackManager {
         // ------------------------------------------- Methods from StackHandler
 
 
+        @Override
         public void delete() {
 
             stack = null;
@@ -304,6 +305,7 @@ public class CompositeComponentStackManager {
         }
 
 
+        @Override
         public Stack<UIComponent> getStack(boolean create) {
 
             if (stack == null && create) {
@@ -314,6 +316,7 @@ public class CompositeComponentStackManager {
         }
 
 
+        @Override
         public UIComponent peek() {
 
             if (stack != null && !stack.isEmpty()) {
@@ -332,6 +335,7 @@ public class CompositeComponentStackManager {
         // ------------------------------------------- Methods from StackHandler
 
 
+        @Override
         public void delete() {
 
             Stack s = getStack(false);
@@ -342,6 +346,7 @@ public class CompositeComponentStackManager {
         }
 
 
+        @Override
         public void pop() {
 
             Stack s = getStack(false);
@@ -352,6 +357,7 @@ public class CompositeComponentStackManager {
         }
 
 
+        @Override
         public boolean push() {
 
             return push(null);
@@ -359,6 +365,7 @@ public class CompositeComponentStackManager {
         }
 
 
+        @Override
         public boolean push(UIComponent compositeComponent) {
 
             Stack<UIComponent> tstack =
@@ -403,6 +410,7 @@ public class CompositeComponentStackManager {
 
         }
 
+        @Override
         public UIComponent getParentCompositeComponent(FacesContext ctx,
                                                        UIComponent forComponent) {
 
@@ -429,6 +437,7 @@ public class CompositeComponentStackManager {
         // ------------------------------------------- Methods from StackHandler
 
 
+        @Override
         public void pop() {
 
             Stack s = getStack(false);
@@ -442,6 +451,7 @@ public class CompositeComponentStackManager {
         }
 
 
+        @Override
         public boolean push() {
 
             return false;
@@ -449,6 +459,7 @@ public class CompositeComponentStackManager {
         }
 
 
+        @Override
         public boolean push(UIComponent compositeComponent) {
 
             if (compositeComponent != null) {
@@ -462,6 +473,7 @@ public class CompositeComponentStackManager {
         }
 
 
+        @Override
         public UIComponent getParentCompositeComponent(FacesContext ctx, UIComponent forComponent) {
 
             Stack<UIComponent> s = getStack(false);

@@ -92,6 +92,7 @@ public class PassthroughElement extends javax.faces.component.UIPanel
         String toString;
         PropertyKeys(String toString) { this.toString = toString; }
         PropertyKeys() { }
+        @Override
         public String toString() {
             return ((toString != null) ? toString : super.toString());
         }
@@ -323,11 +324,13 @@ public class PassthroughElement extends javax.faces.component.UIPanel
         Arrays.asList("click","dblclick","keydown","keypress","keyup","mousedown","mousemove",
         "mouseout","mouseover","mouseup"));
 
+    @Override
     public Collection<String> getEventNames() {
         return EVENT_NAMES;    
     }
 
 
+    @Override
     public String getDefaultEventName() {
         return "click";    
     }
