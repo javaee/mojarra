@@ -79,14 +79,17 @@ public class WebPrintWriter extends PrintWriter {
 
         public NoOpWriter() {}
 
+        @Override
         public void write(char cbuf[], int off, int len) throws IOException {
             // no-op
         }
 
+        @Override
         public void flush() throws IOException {
             // no-op
         }
 
+        @Override
         public void close() throws IOException {
             // no-op
         }

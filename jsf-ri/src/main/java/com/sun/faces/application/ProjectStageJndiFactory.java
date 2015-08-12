@@ -70,6 +70,7 @@ public class ProjectStageJndiFactory implements ObjectFactory {
      *
      * @see ObjectFactory#getObjectInstance(Object, javax.naming.Name, javax.naming.Context, java.util.Hashtable)
      */
+    @Override
     public Object getObjectInstance(Object obj,
                                     Name name,
                                     Context nameCtx,

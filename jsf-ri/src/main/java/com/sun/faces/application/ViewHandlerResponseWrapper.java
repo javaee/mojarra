@@ -96,6 +96,7 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
     }
 
 
+    @Override
     public int getStatus() {
         return status;
     }

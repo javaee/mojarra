@@ -101,6 +101,7 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
      * <p>Create (if needed) and return an {@link Application} instance
      * for this web application.</p>
      */
+    @Override
     public Application getApplication() {
 
         if (application == null) {
@@ -121,6 +122,7 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
      *
      * @param application The replacement {@link Application} instance
      */
+    @Override
     public synchronized void setApplication(Application application) {
         if (application == null) {
             String message = MessageUtils.getExceptionMessageString

@@ -167,6 +167,7 @@ public class ApplicationAssociate {
 
     private static ThreadLocal<ApplicationAssociate> instance =
         new ThreadLocal<ApplicationAssociate>() {
+            @Override
             protected ApplicationAssociate initialValue() {
                 return (null);
             }

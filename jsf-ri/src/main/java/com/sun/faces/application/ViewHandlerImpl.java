@@ -126,6 +126,7 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
 
+    @Override
     public void renderView(FacesContext context,
             UIViewRoot viewToRender) throws IOException,
             FacesException {
@@ -277,6 +278,7 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
 
+    @Override
     public UIViewRoot restoreView(FacesContext context, String viewId) {
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
@@ -327,6 +329,7 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
 
+    @Override
     public UIViewRoot createView(FacesContext context, String viewId) {
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
@@ -506,6 +509,7 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
 
+    @Override
     public Locale calculateLocale(FacesContext context) {
 
         if (context == null) {
@@ -538,6 +542,7 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
 
+    @Override
     public String calculateRenderKitId(FacesContext context) {
 
         if (context == null) {
@@ -617,6 +622,7 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
 
+    @Override
     public void writeState(FacesContext context) throws IOException {
         if (context == null) {
            String message = MessageUtils.getExceptionMessageString
@@ -642,6 +648,7 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
 
+    @Override
     public String getActionURL(FacesContext context, String viewId) {
 
         if (context == null) {
@@ -698,6 +705,7 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
 
+    @Override
     public String getResourceURL(FacesContext context, String path) {
         ExternalContext extContext = context.getExternalContext();
         if (path.charAt(0) == '/' && !path.startsWith(extContext.getRequestContextPath())) {
@@ -858,36 +866,43 @@ public class ViewHandlerImpl extends ViewHandler {
 
 
 
+        @Override
         public void write(int c) throws IOException {
             out.write(c);
         }
 
 
+        @Override
         public void write(char cbuf[]) throws IOException {
             out.write(cbuf);
         }
 
 
+        @Override
         public void write(String str) throws IOException {
             out.write(str);
         }
 
 
+        @Override
         public void write(String str, int off, int len) throws IOException {
             out.write(str, off, len);
         }
 
 
+        @Override
         public void write(char cbuf[], int off, int len) throws IOException {
             out.write(cbuf, off, len);
         }
 
 
+        @Override
         public void flush() throws IOException {
             // no-op
         }
 
 
+        @Override
         public void close() throws IOException {
            // no-op
         }

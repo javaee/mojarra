@@ -87,6 +87,7 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     // ----------------------------------------- Methods from ApplicationFactory
 
 
+    @Override
     public Application getApplication() {
 
         if (application == null) {
@@ -105,6 +106,7 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     }
 
     
+    @Override
     public synchronized void setApplication(Application application) {
 
         this.application = application;

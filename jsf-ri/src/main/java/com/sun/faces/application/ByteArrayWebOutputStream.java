@@ -76,6 +76,7 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
         baos = new DirectByteArrayOutputStream(1024);
     }
 
+    @Override
     public void write(int n) {
         baos.write(n);
     }
@@ -184,6 +185,7 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
 
     private static class NoOpOutputStream extends ServletOutputStream {
 
+        @Override
         public void write(int b) throws IOException {
             // no-op
         }

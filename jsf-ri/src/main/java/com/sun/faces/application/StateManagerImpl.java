@@ -122,6 +122,7 @@ public class StateManagerImpl extends StateManager {
      * @return the view root.
      * @see StateManager#restoreView(javax.faces.context.FacesContext, java.lang.String, java.lang.String) 
      */
+    @Override
     public UIViewRoot restoreView(FacesContext context, String viewId, String renderKitId) {
         UIViewRoot result;
         StateManagementStrategy strategy = null;

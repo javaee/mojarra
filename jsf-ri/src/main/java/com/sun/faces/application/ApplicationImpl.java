@@ -580,6 +580,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getActionListener()
      */
+    @Override
     public ActionListener getActionListener() {
         return actionListener;
     }
@@ -588,6 +589,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getViewHandler()
      */
+    @Override
     public ViewHandler getViewHandler() {
         return viewHandler;
     }
@@ -596,6 +598,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#setViewHandler(javax.faces.application.ViewHandler)
      */
+    @Override
     public synchronized void setViewHandler(ViewHandler viewHandler) {
 
         Util.notNull("viewHandler", viewHandler);
@@ -651,6 +654,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getStateManager()
      */
+    @Override
     public StateManager getStateManager() {
         return stateManager;
     }
@@ -659,6 +663,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#setStateManager(javax.faces.application.StateManager)
      */
+    @Override
     public synchronized void setStateManager(StateManager stateManager) {
 
         Util.notNull("stateManager", stateManager);
@@ -681,6 +686,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see Application#setActionListener(javax.faces.event.ActionListener)
      */
+    @Override
     public synchronized void setActionListener(ActionListener actionListener) {
 
         Util.notNull("actionListener", actionListener);
@@ -697,6 +703,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getNavigationHandler()
      */
+    @Override
     public NavigationHandler getNavigationHandler() {
         return navigationHandler;
     }
@@ -705,6 +712,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#setNavigationHandler(javax.faces.application.NavigationHandler)
      */
+    @Override
     public synchronized void setNavigationHandler(NavigationHandler navigationHandler) {
 
         Util.notNull("navigationHandler", navigationHandler);
@@ -721,6 +729,7 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)
      */
     @SuppressWarnings("deprecation")
+    @Override
     public PropertyResolver getPropertyResolver() {
         if (compositeELResolver == null) {
             performOneTimeELInitialization();
@@ -746,6 +755,7 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)
      */
     @SuppressWarnings("deprecation")
+    @Override
     public void setPropertyResolver(PropertyResolver resolver) {
         // Throw Illegal State Exception if  a PropertyResolver is set after 
         // a request has been processed.
@@ -775,6 +785,7 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#createMethodBinding(String, Class[])
      */
     @SuppressWarnings("deprecation")
+    @Override
     public MethodBinding createMethodBinding(String ref, Class<?> params[]) {
 
         Util.notNull("ref", ref);
@@ -808,6 +819,7 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#createValueBinding(String)
      */
     @SuppressWarnings("deprecation")
+    @Override
     public ValueBinding createValueBinding(String ref)
     throws ReferenceSyntaxException {
 
@@ -831,6 +843,7 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#getVariableResolver()
      */
     @SuppressWarnings("deprecation")
+    @Override
     public VariableResolver getVariableResolver() {       
         if (compositeELResolver == null) {
             performOneTimeELInitialization();
@@ -844,6 +857,7 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#setVariableResolver(javax.faces.el.VariableResolver)
      */
     @SuppressWarnings("deprecation")
+    @Override
     public void setVariableResolver(VariableResolver resolver) {
         Util.notNull("variableResolver", resolver);
 
@@ -865,6 +879,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#addBehavior(String, String)
      */
+    @Override
     public void addBehavior(String behaviorId, String behaviorClass) {
 
         Util.notNull("behaviorId", behaviorId);
@@ -888,6 +903,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#createBehavior(String)
      */
+    @Override
     public Behavior createBehavior(String behaviorId) throws FacesException {
 
         Util.notNull("behaviorId", behaviorId);
@@ -923,6 +939,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getBehaviorIds()
      */
+    @Override
     public Iterator<String> getBehaviorIds() {
 
         return behaviorMap.keySet().iterator();
@@ -932,6 +949,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#addComponent(java.lang.String, java.lang.String)
      */
+    @Override
     public void addComponent(String componentType, String componentClass) {
 
         Util.notNull("componentType", componentType);
@@ -953,6 +971,7 @@ public class ApplicationImpl extends Application {
     }
 
 
+    @Override
     public UIComponent createComponent(String componentType) throws FacesException {
 
         Util.notNull("componentType", componentType);
@@ -1127,6 +1146,7 @@ public class ApplicationImpl extends Application {
         
 
     @SuppressWarnings("deprecation")
+    @Override
     public UIComponent createComponent(ValueBinding componentBinding,
                                        FacesContext context,
                                        String componentType)
@@ -1197,6 +1217,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getComponentTypes()
      */
+    @Override
     public Iterator<String> getComponentTypes() {
 
         return componentMap.keySet().iterator();
@@ -1207,6 +1228,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#addConverter(String, String)
      */
+    @Override
     public void addConverter(String converterId, String converterClass) {
 
         Util.notNull("converterId", converterId);
@@ -1240,6 +1262,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#addConverter(Class, String)
      */
+    @Override
     public void addConverter(Class<?> targetClass, String converterClass) {
 
         Util.notNull("targetClass", targetClass);
@@ -1350,6 +1373,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#createConverter(String)
      */
+    @Override
     public Converter createConverter(String converterId) {
 
         Util.notNull("converterId", converterId);
@@ -1387,6 +1411,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#createConverter(Class)
      */
+    @Override
     public Converter createConverter(Class<?> targetClass) {
 
         Util.notNull("targetClass", targetClass);
@@ -1506,6 +1531,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getConverterIds()
      */
+    @Override
     public Iterator<String> getConverterIds() {
        
         return converterIdMap.keySet().iterator();
@@ -1516,6 +1542,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getConverterTypes()
      */
+    @Override
     public Iterator<Class<?>> getConverterTypes() {
                 
         return converterTypeMap.keySet().iterator();
@@ -1526,6 +1553,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getSupportedLocales()
      */
+    @Override
     public Iterator<Locale> getSupportedLocales() {
 
             if (null != supportedLocales) {
@@ -1540,6 +1568,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#setSupportedLocales(java.util.Collection)
      */
+    @Override
     public synchronized void setSupportedLocales(Collection<Locale> newLocales) {
 
         Util.notNull("newLocales", newLocales);
@@ -1557,6 +1586,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getDefaultLocale()
      */
+    @Override
     public Locale getDefaultLocale() {
         return defaultLocale;
     }
@@ -1565,6 +1595,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#setDefaultLocale(java.util.Locale)
      */
+    @Override
     public synchronized void setDefaultLocale(Locale locale) {
 
         Util.notNull("locale", locale);
@@ -1584,6 +1615,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getDefaultRenderKitId()
      */
+    @Override
     public String getDefaultRenderKitId() {
         return defaultRenderKitId;
     }
@@ -1592,6 +1624,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#setDefaultRenderKitId(String)
      */
+    @Override
     public void setDefaultRenderKitId(String renderKitId) {
         defaultRenderKitId = renderKitId;
     }
@@ -1600,6 +1633,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#addValidator(String, String)
      */
+    @Override
     public void addValidator(String validatorId, String validatorClass) {
 
         Util.notNull("validatorId", validatorId);
@@ -1625,6 +1659,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#createValidator(String)
      */
+    @Override
     public Validator createValidator(String validatorId) throws FacesException {
 
         Util.notNull("validatorId", validatorId);
@@ -1661,6 +1696,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getValidatorIds()
      */
+    @Override
     public Iterator<String> getValidatorIds() {        
         
         return validatorMap.keySet().iterator();
@@ -1670,6 +1706,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#addDefaultValidatorId(String)
      */
+    @Override
     public synchronized void addDefaultValidatorId(String validatorId) {
 
         Util.notNull("validatorId", validatorId);
@@ -1681,6 +1718,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getDefaultValidatorInfo() 
      */
+    @Override
     public Map<String,String> getDefaultValidatorInfo() {
 
         if (defaultValidatorInfo == null) {
@@ -1715,6 +1753,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#setMessageBundle(String)
      */
+    @Override
     public synchronized void setMessageBundle(String messageBundle) {
         Util.notNull("messageBundle", messageBundle);
 
@@ -1730,6 +1769,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getMessageBundle()
      */
+    @Override
     public String getMessageBundle() {
         return messageBundle;
     }
@@ -2339,6 +2379,7 @@ public class ApplicationImpl extends Application {
             systemEventInfoCache =
                   new Cache<>(
                         new Factory<Class<? extends SystemEvent>, SystemEventInfo>() {
+                            @Override
                             public SystemEventInfo newInstance(final Class<? extends SystemEvent> arg)
                                   throws InterruptedException {
                                 return new SystemEventInfo(arg);
@@ -2443,6 +2484,7 @@ public class ApplicationImpl extends Application {
 
         private Cache<Class<?>,EventInfo> cache = new Cache<>(
               new Factory<Class<?>, EventInfo>() {
+                  @Override
                   public EventInfo newInstance(Class<?> arg)
                         throws InterruptedException {
                       return new EventInfo(systemEvent, arg);

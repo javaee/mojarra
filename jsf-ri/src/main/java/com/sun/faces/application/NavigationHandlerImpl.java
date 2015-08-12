@@ -1429,6 +1429,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
               new HashMap<>();
         private TreeSet<String> wildcardMatchList =
               new TreeSet<>(new Comparator<String>() {
+                  @Override
                   public int compare(String fromViewId1, String fromViewId2) {
                       return -(fromViewId1.compareTo(fromViewId2));
                   }

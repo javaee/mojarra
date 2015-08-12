@@ -142,6 +142,7 @@ public class ConverterPropertyEditorFactory {
             /**
              * Order by the index position of the source UTF8Info reference.
              */
+            @Override
             public int compareTo(Utf8InfoReplacement rhs) {
                 return ref.index - rhs.ref.index;
             }
@@ -596,6 +597,7 @@ public class ConverterPropertyEditorFactory {
             if (loaderRef == null || (loader = loaderRef.get()) == null) {
                 loader = (DisposableClassLoader) AccessController.doPrivileged(
                       new PrivilegedAction() {
+                          @Override
                           public Object run() {
                             return new DisposableClassLoader(targetClass.getClassLoader());    
                           }
