@@ -15417,9 +15417,18 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </component-extension>
   </component>
   <component>
-    <description><![CDATA[<p>Renders the component value as text, optionally wrapping in a
-      <code>span</code> element if I18N attributes, CSS styles or style
-      classes are specified.</p>]]></description>
+    <description><![CDATA[
+              <p>
+               Renders the component value as text, optionally wrapping in a
+               <code>span</code> element if I18N attributes, CSS styles or style
+               classes are specified.
+              </p>
+              <p class="changed_modified_2_3">
+               If you are using h:outputText (or an equivalent inline EL 
+               expression) within a script or style block the value is NOT
+               escaped by default.
+              </p>
+            ]]></description>
     <display-name>Output Text</display-name>
     <component-type>javax.faces.HtmlOutputText</component-type>
     <component-class>javax.faces.component.html.HtmlOutputText</component-class>

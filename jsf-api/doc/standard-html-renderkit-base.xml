@@ -788,11 +788,19 @@
     </component>
 
     <component>
-
         <description>
-            <![CDATA[<p>Renders the component value as text, optionally wrapping in a
-      <code>span</code> element if I18N attributes, CSS styles or style
-      classes are specified.</p>]]>
+            <![CDATA[
+              <p>
+               Renders the component value as text, optionally wrapping in a
+               <code>span</code> element if I18N attributes, CSS styles or style
+               classes are specified.
+              </p>
+              <p class="changed_modified_2_3">
+               If you are using h:outputText (or an equivalent inline EL 
+               expression) within a script or style block the value is NOT
+               escaped by default.
+              </p>
+            ]]>
         </description>
         <display-name>Output Text</display-name>
         <component-type>javax.faces.HtmlOutputText</component-type>
