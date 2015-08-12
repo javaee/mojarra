@@ -78,6 +78,7 @@
         <module>composite</module>
         <module>compositeComponentForAttribute</module>
         <module>configEmbed</module>
+        <module>configExtra</module>
         <module>configFile</module>
         <module>contractUsingHostHeader</module>
         <module>contractUsingViewRoot</module>
