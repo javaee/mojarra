@@ -358,7 +358,7 @@ public class LongRangeValidator implements Validator<Object>, PartialStateHolder
                                       Long toConvert,
                                       FacesContext context) {
 
-        Converter<Number> converter =
+        Converter converter =
              context.getApplication().createConverter("javax.faces.Number");
         return converter.getAsString(context, component, toConvert);
 

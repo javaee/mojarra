@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and char primitive) values.</p>
  */
 
-public class CharacterConverter implements Converter<Character> {
+public class CharacterConverter implements Converter<Object> {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -94,7 +94,8 @@ public class CharacterConverter implements Converter<Character> {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public Character getAsObject(FacesContext context, UIComponent component, String value) {
+    public Object getAsObject(FacesContext context, UIComponent component,
+                              String value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -126,7 +127,8 @@ public class CharacterConverter implements Converter<Character> {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public String getAsString(FacesContext context, UIComponent component, Character value) {
+    public String getAsString(FacesContext context, UIComponent component,
+                              Object value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();

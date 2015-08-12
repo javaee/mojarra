@@ -109,7 +109,7 @@ import java.util.TimeZone;
  * </ul>
  */
 
-public class DateTimeConverter implements Converter<Date>, PartialStateHolder {
+public class DateTimeConverter implements Converter<Object>, PartialStateHolder {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -370,13 +370,14 @@ public class DateTimeConverter implements Converter<Date>, PartialStateHolder {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public Date getAsObject(FacesContext context, UIComponent component, String value) {
+    public Object getAsObject(FacesContext context, UIComponent component,
+                              String value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
         }
 
-        Date returnValue = null;
+        Object returnValue = null;
         DateFormat parser = null;
 
         try {
@@ -431,7 +432,8 @@ public class DateTimeConverter implements Converter<Date>, PartialStateHolder {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public String getAsString(FacesContext context, UIComponent component, Date value) {
+    public String getAsString(FacesContext context, UIComponent component,
+                              Object value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -446,10 +448,8 @@ public class DateTimeConverter implements Converter<Date>, PartialStateHolder {
 
             // If the incoming value is still a string, play nice
             // and return the value unmodified
-            if (((Object) value) instanceof String) {
-                // This consequence of spec #1355 would not be bad as a daily WTF submission,
-                // but keeping it in for backwards compatibility concerns.
-                return (String) ((Object) value);
+            if (value instanceof String) {
+                return (String) value;
             }
 
             // Identify the Locale to use for formatting

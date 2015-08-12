@@ -377,7 +377,7 @@ public class DoubleRangeValidator implements Validator<Object>, PartialStateHold
                                       Double toConvert,
                                       FacesContext context) {
 
-        Converter<Number> converter = context.getApplication().createConverter("javax.faces.Number");
+        Converter converter = context.getApplication().createConverter("javax.faces.Number");
         return converter.getAsString(context, component, toConvert);
 
     }
