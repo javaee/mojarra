@@ -1291,6 +1291,23 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
     }
 
+    /**
+     * <p class="changed_modified_2_3">
+     *  Is the value denoting an empty value.
+     * </p>
+     * 
+     * <p class="changed_modified_2_3">
+     *  If the value is null, return true. If the value is a String and it is
+     *  the empty string, return true. If the value is an array and the array
+     *  length is 0, return true. If the value is a List and the List is empty,
+     *  return true. If the value is a Collection and the Collection is empty,
+     *  return true. If the value is a Map and the Map is empty, return true.
+     *  In all other cases, return false.
+     * </p>
+     * 
+     * @param value the value to check.
+     * @return true if it is, false otherwise.
+     */
     public static boolean isEmpty(Object value) {
 
         if (value == null) {
