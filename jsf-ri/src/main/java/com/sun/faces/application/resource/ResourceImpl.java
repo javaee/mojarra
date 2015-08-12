@@ -173,6 +173,7 @@ public class ResourceImpl extends Resource implements Externalizable {
     /**
      * @see javax.faces.application.Resource#getInputStream()
      */
+    @Override
     public InputStream getInputStream() throws IOException {
 		initResourceInfo();
         return resourceInfo.getHelper().getInputStream(resourceInfo,
@@ -185,6 +186,7 @@ public class ResourceImpl extends Resource implements Externalizable {
     /**
      * @see javax.faces.application.Resource#getURL()
      */
+    @Override
     public URL getURL() {
         FacesContext ctx = FacesContext.getCurrentInstance();
         return resourceInfo.getHelper().getURL(resourceInfo, ctx);
@@ -203,6 +205,7 @@ public class ResourceImpl extends Resource implements Externalizable {
      * 
      * @see javax.faces.application.Resource#getResponseHeaders()
      */
+    @Override
     public Map<String, String> getResponseHeaders() {
 
         if (isResourceRequest()) {
@@ -268,6 +271,7 @@ public class ResourceImpl extends Resource implements Externalizable {
     /**
      * @see javax.faces.application.Resource#getRequestPath()
      */
+    @Override
     public String getRequestPath() {
 
         String uri;
@@ -339,6 +343,7 @@ public class ResourceImpl extends Resource implements Externalizable {
     /**
      * @see javax.faces.application.Resource#userAgentNeedsUpdate(javax.faces.context.FacesContext)
      */
+    @Override
     public boolean userAgentNeedsUpdate(FacesContext context) {
         
         // PENDING(edburns): this is a sub-optimal implementation choice
@@ -427,6 +432,7 @@ public class ResourceImpl extends Resource implements Externalizable {
     // --------------------------------------------- Methods from Externalizable
 
 
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
 
         out.writeObject(getResourceName());
@@ -437,6 +443,7 @@ public class ResourceImpl extends Resource implements Externalizable {
 
     }
 
+    @Override
     public void readExternal(ObjectInput in)
     throws IOException, ClassNotFoundException {
 

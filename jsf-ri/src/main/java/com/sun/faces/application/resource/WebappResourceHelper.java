@@ -132,6 +132,7 @@ public class WebappResourceHelper extends ResourceHelper {
     /**
      * @see com.sun.faces.application.resource.ResourceHelper#getBaseResourcePath()
      */
+    @Override
     public String getBaseResourcePath() {
 
         return BASE_RESOURCE_PATH;
@@ -146,6 +147,7 @@ public class WebappResourceHelper extends ResourceHelper {
     /**
      * @see ResourceHelper#getNonCompressedInputStream(com.sun.faces.application.resource.ResourceInfo, javax.faces.context.FacesContext) 
      */
+    @Override
     protected InputStream getNonCompressedInputStream(ResourceInfo resource, FacesContext ctx)
     throws IOException {
 
@@ -157,6 +159,7 @@ public class WebappResourceHelper extends ResourceHelper {
     /**
      * @see ResourceHelper#getURL(com.sun.faces.application.resource.ResourceInfo, javax.faces.context.FacesContext) 
      */
+    @Override
     public URL getURL(ResourceInfo resource, FacesContext ctx) {
         ResourceResolver nonDefaultResourceResolver = (ResourceResolver) ctx.getAttributes().get(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME);
         String path = resource.getPath();
@@ -178,6 +181,7 @@ public class WebappResourceHelper extends ResourceHelper {
     /**
      * @see ResourceHelper#findLibrary(String, String, String, javax.faces.context.FacesContext)
      */
+    @Override
     public LibraryInfo findLibrary(String libraryName,
                                    String localePrefix,
                                    String contract, FacesContext ctx) {
@@ -210,6 +214,7 @@ public class WebappResourceHelper extends ResourceHelper {
     /**
      * @see ResourceHelper#findResource(LibraryInfo, String, String, boolean, javax.faces.context.FacesContext)
      */
+    @Override
     public ResourceInfo findResource(LibraryInfo library,
                                      String resourceName,
                                      String localePrefix,

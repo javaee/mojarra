@@ -104,6 +104,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     /**
      * @see ResourceHandler#createResource(String)
      */
+    @Override
     public Resource createResource(String resourceName) {
 
         Util.notNull("resourceName", resourceName);
@@ -173,6 +174,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     /**
      * @see ResourceHandler#createResource(String, String)
      */
+    @Override
     public Resource createResource(String resourceName, String libraryName) {
 
         Util.notNull("resourceName", resourceName);
@@ -185,6 +187,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     /**
      * @see ResourceHandler#createResource(String, String, String)
      */
+    @Override
     public Resource createResource(String resourceName,
                                    String libraryName,
                                    String contentType) {
@@ -235,6 +238,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     /**
      * @see ResourceHandler#isResourceRequest(javax.faces.context.FacesContext)
      */
+    @Override
     public boolean isResourceRequest(FacesContext context) {
 
         Boolean isResourceRequest = (Boolean)

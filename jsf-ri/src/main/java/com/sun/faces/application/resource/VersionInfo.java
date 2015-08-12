@@ -128,6 +128,7 @@ public class VersionInfo implements Comparable {
     // ------------------------------------------------- Methods from Comparable
 
 
+    @Override
     public int compareTo(Object o) {
         assert(o instanceof VersionInfo);
         VersionInfo c = (VersionInfo) o;

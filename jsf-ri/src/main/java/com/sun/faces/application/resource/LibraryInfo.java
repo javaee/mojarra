@@ -184,6 +184,7 @@ public class LibraryInfo {
 		return contract;
 	}
 
+    @Override
     public String toString() {
         return "LibraryInfo{" +
                "name='" + (name != null ? name : "NONE") + '\'' +

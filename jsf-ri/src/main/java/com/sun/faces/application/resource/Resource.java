@@ -153,12 +153,15 @@ public final class Resource {
             final ExternalContext externalContext, String path)
             throws MalformedURLException {
         URLStreamHandler handler = new URLStreamHandler() {
+            @Override
             protected URLConnection openConnection(URL u) throws IOException {
                 final String file = u.getFile();
                 return new URLConnection(u) {
+                    @Override
                     public void connect() throws IOException {
                     }
 
+                    @Override
                     public InputStream getInputStream() throws IOException {
                         if (LOGGER.isLoggable(Level.FINE)) {
                             LOGGER.fine("Opening internal url to " + file);
