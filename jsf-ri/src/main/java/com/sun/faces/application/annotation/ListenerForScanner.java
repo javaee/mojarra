@@ -56,6 +56,7 @@ class ListenerForScanner implements Scanner {
     // ---------------------------------------------------- Methods from Scanner
 
 
+    @Override
     public Class<? extends Annotation> getAnnotation() {
 
         return ListenerFor.class;
@@ -63,6 +64,7 @@ class ListenerForScanner implements Scanner {
     }
 
 
+    @Override
     public RuntimeAnnotationHandler scan(Class<?> clazz) {
 
         Util.notNull("clazz", clazz);

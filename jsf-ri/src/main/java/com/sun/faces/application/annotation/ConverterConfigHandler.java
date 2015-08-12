@@ -82,6 +82,7 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
     /**
      * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#getHandledAnnotations()
      */
+    @Override
     public Collection<Class<? extends Annotation>> getHandledAnnotations() {
 
         return HANDLES;
@@ -122,6 +123,7 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
     /**
      * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#push(javax.faces.context.FacesContext)
      */
+    @Override
     public void push(FacesContext ctx) {
 
         if (converters != null) {

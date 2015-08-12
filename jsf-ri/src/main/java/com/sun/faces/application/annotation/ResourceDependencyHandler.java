@@ -100,6 +100,7 @@ class ResourceDependencyHandler implements RuntimeAnnotationHandler {
     
 
     @SuppressWarnings({"UnusedDeclaration"})
+    @Override
     public void apply(FacesContext ctx, Object... params) {
 
         for (ResourceDependency dep : dependencies) {

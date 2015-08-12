@@ -78,6 +78,7 @@ public class ComponentConfigHandler implements ConfigAnnotationHandler {
     /**
      * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#getHandledAnnotations() 
      */
+    @Override
     public Collection<Class<? extends Annotation>> getHandledAnnotations() {
 
         return HANDLES;
@@ -88,6 +89,7 @@ public class ComponentConfigHandler implements ConfigAnnotationHandler {
     /**
      * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#collect(Class, java.lang.annotation.Annotation)
      */
+    @Override
     public void collect(Class<?> target, Annotation annotation) {
 
         if (components == null) {
@@ -106,6 +108,7 @@ public class ComponentConfigHandler implements ConfigAnnotationHandler {
     /**
      * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#push(javax.faces.context.FacesContext)
      */
+    @Override
     public void push(FacesContext ctx) {
 
         if (components != null) {

@@ -77,10 +77,12 @@ public class NamedEventConfigHandler implements ConfigAnnotationHandler {
         HANDLES = Collections.unmodifiableCollection(handles);
     }
 
+    @Override
     public Collection<Class<? extends Annotation>> getHandledAnnotations() {
         return HANDLES;
     }
 
+    @Override
     public void collect(Class<?> target, Annotation annotation) {
         if (namedEvents == null) {
             namedEvents = new HashMap<>();
@@ -88,6 +90,7 @@ public class NamedEventConfigHandler implements ConfigAnnotationHandler {
         namedEvents.put(target, annotation);
     }
 
+    @Override
     public void push(FacesContext ctx) {
         if (namedEvents != null) {
             ApplicationAssociate associate =

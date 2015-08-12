@@ -80,6 +80,7 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
     /**
      * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#getHandledAnnotations()
      */
+    @Override
     public Collection<Class<? extends Annotation>> getHandledAnnotations() {
 
         return HANDLES;
@@ -90,6 +91,7 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
     /**
      * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#collect(Class, java.lang.annotation.Annotation)
      */
+    @Override
     public void collect(Class<?> target, Annotation annotation) {
 
         if (annotatedRenderers == null) {
@@ -103,6 +105,7 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
     /**
      * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#push(javax.faces.context.FacesContext)
      */
+    @Override
     public void push(FacesContext ctx) {
 
 

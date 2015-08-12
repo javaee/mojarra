@@ -455,6 +455,7 @@ public class AnnotationManager {
         // ------------------------------------------------------ Public Methods
 
 
+        @Override
         public Map<Class<? extends Annotation>, RuntimeAnnotationHandler> call() throws Exception {
 
             Map<Class<? extends Annotation>, RuntimeAnnotationHandler> map = null;
