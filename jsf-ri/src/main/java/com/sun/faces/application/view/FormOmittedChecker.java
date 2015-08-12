@@ -90,6 +90,7 @@ class FormOmittedChecker {
                 VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
                 child.visitTree(visitContext, new VisitCallback() {
 
+                    @Override
                     public VisitResult visit(VisitContext visitContext, UIComponent component) {
                         VisitResult result = VisitResult.ACCEPT;
 

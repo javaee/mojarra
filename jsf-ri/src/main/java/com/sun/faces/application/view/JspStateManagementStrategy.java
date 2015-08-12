@@ -429,6 +429,7 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
          * @throws IOException when an I/O error occurs.
          * @throws ClassNotFoundException when the class could not be found.
          */
+        @Override
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
             this.parent = in.readInt();
@@ -445,6 +446,7 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
          * @param out the object output.
          * @throws IOException when an I/O error occurs.
          */
+        @Override
         public void writeExternal(ObjectOutput out) throws IOException {
 
             out.writeInt(this.parent);

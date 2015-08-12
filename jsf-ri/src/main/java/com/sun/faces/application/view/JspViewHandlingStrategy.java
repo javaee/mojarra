@@ -143,6 +143,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * @param view
      * @throws IOException
      */
+    @Override
     public void buildView(FacesContext context, UIViewRoot view)
     throws IOException {
 
@@ -177,6 +178,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
     /**
      * @see javax.faces.view.ViewDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      */
+    @Override
     public void renderView(FacesContext context,
                            UIViewRoot view)
     throws IOException {

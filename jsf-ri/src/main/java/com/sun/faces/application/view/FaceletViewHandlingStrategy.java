@@ -43,7 +43,6 @@ package com.sun.faces.application.view;
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.context.StateContext;
 import javax.faces.view.facelets.Facelet;
 import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
@@ -350,6 +349,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     /**
      * @see javax.faces.view.ViewDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */
+    @Override
     public Resource getScriptComponentResource(FacesContext context,
             Resource componentResource) {
         Util.notNull("context", context);
@@ -376,6 +376,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     /**
      * @see javax.faces.view.ViewDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      */
+    @Override
     public void renderView(FacesContext ctx,
                            UIViewRoot viewToRender)
     throws IOException {
@@ -1074,6 +1075,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         metadataCache = new Cache<>(new Factory<Resource, BeanInfo>() {
 
+            @Override
             public BeanInfo newInstance(Resource ccResource) throws InterruptedException {
                 FacesContext context = FacesContext.getCurrentInstance();
                 return FaceletViewHandlingStrategy.this.createComponentMetadata(context, ccResource);
@@ -1461,6 +1463,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         // ----------------------------------------------- Methods from Iterable
 
 
+        @Override
         public Iterator<CompCompInterfaceMethodMetadata> iterator() {
             return this;
         }
@@ -1469,6 +1472,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         // ----------------------------------------------- Methods from Iterator
 
 
+        @Override
         public boolean hasNext() {
 
             if (curIndex != -1 && curIndex < descriptors.length) {
@@ -1495,6 +1499,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         }
 
+        @Override
         public CompCompInterfaceMethodMetadata next() {
 
 
@@ -1502,6 +1507,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         }
 
+        @Override
         public void remove() {
 
             throw new UnsupportedOperationException();
@@ -1719,6 +1725,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // ------------------------------ Methods from MethodRetargetHandler
 
 
+            @Override
             public void retarget(FacesContext ctx,
                                  CompCompInterfaceMethodMetadata metadata,
                                  Object sourceValue,
@@ -1742,6 +1749,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
 
 
+            @Override
             public String getAttribute() {
 
                 return ACTION;
@@ -1764,6 +1772,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // ------------------------------ Methods from MethodRetargetHandler
 
 
+            @Override
             public void retarget(FacesContext ctx,
                                  CompCompInterfaceMethodMetadata metadata,
                                  Object sourceValue,
@@ -1790,6 +1799,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
 
 
+            @Override
             public String getAttribute() {
 
                 return ACTION_LISTENER;
@@ -1816,6 +1826,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // ------------------------------ Methods from MethodRetargetHandler
 
 
+            @Override
             public void retarget(FacesContext ctx,
                                  CompCompInterfaceMethodMetadata metadata,
                                  Object sourceValue,
@@ -1836,6 +1847,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
 
 
+            @Override
             public String getAttribute() {
 
                 return VALIDATOR;
@@ -1860,6 +1872,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // ------------------------------ Methods from MethodRetargetHandler
 
 
+            @Override
             public void retarget(FacesContext ctx,
                                  CompCompInterfaceMethodMetadata metadata,
                                  Object sourceValue,
@@ -1886,6 +1899,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
 
 
+            @Override
             public String getAttribute() {
                 return VALUE_CHANGE_LISTENER;
             }
@@ -1903,6 +1917,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // ------------------------------ Methods from MethodRetargetHandler
 
 
+            @Override
             public void retarget(FacesContext ctx, CompCompInterfaceMethodMetadata metadata, Object sourceValue, UIComponent target) {
 
                 ValueExpression ve = (ValueExpression) sourceValue;
@@ -1996,6 +2011,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
 
 
+            @Override
             public String getAttribute() {
                 return null;
             }
@@ -2043,24 +2059,31 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         static final NullWriter INSTANCE = new NullWriter();
 
+        @Override
         public void write(char[] buffer) {
         }
 
+        @Override
         public void write(char[] buffer, int off, int len) {
         }
 
+        @Override
         public void write(String str) {
         }
 
+        @Override
         public void write(int c) {
         }
 
+        @Override
         public void write(String str, int off, int len) {
         }
 
+        @Override
         public void close() {
         }
 
+        @Override
         public void flush() {
         }
 
@@ -2077,6 +2100,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         parent.invokeOnComponent(context, clientId, new ContextCallback() {
 
+            @Override
             public void invokeContextCallback(FacesContext context, UIComponent target) {
                 found.add(target);
             }
@@ -2091,6 +2115,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             VisitContext visitContext = VisitContext.createVisitContext(context);
             parent.visitTree(visitContext, new VisitCallback() {
 
+                @Override
                 public VisitResult visit(VisitContext visitContext, UIComponent component) {
                     VisitResult result = VisitResult.ACCEPT;
                     if (component.getClientId(visitContext.getFacesContext()).equals(clientId)) {

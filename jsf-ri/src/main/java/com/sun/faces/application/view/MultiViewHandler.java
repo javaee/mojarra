@@ -125,6 +125,7 @@ public class MultiViewHandler extends ViewHandler {
      *
      * @see ViewHandler#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      */
+    @Override
     public void renderView(FacesContext context, UIViewRoot viewToRender)
     throws IOException, FacesException {
 
@@ -144,6 +145,7 @@ public class MultiViewHandler extends ViewHandler {
      *
      * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)   
      */
+    @Override
     public UIViewRoot restoreView(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
@@ -162,6 +164,7 @@ public class MultiViewHandler extends ViewHandler {
      *
      * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)
      */
+    @Override
     public UIViewRoot createView(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
@@ -179,6 +182,7 @@ public class MultiViewHandler extends ViewHandler {
      *
      * @see ViewHandler#calculateLocale(javax.faces.context.FacesContext)
      */
+    @Override
     public Locale calculateLocale(FacesContext context) {
 
         Util.notNull("context", context);
@@ -214,6 +218,7 @@ public class MultiViewHandler extends ViewHandler {
      *
      * @see ViewHandler#calculateRenderKitId(javax.faces.context.FacesContext)
      */
+    @Override
     public String calculateRenderKitId(FacesContext context) {
 
         Util.notNull("context", context);
@@ -240,6 +245,7 @@ public class MultiViewHandler extends ViewHandler {
      *
      * @see ViewHandler#writeState(javax.faces.context.FacesContext)
      */
+    @Override
     public void writeState(FacesContext context) throws IOException {
 
         Util.notNull("context", context);
@@ -271,6 +277,7 @@ public class MultiViewHandler extends ViewHandler {
      *
      * @see ViewHandler#getActionURL(javax.faces.context.FacesContext, String)
      */
+    @Override
     public String getActionURL(FacesContext context, String viewId) {
         String result = getActionURLWithoutViewProtection(context, viewId);
         // http://java.net/jira/browse/JAVASERVERFACES-2204
@@ -380,6 +387,7 @@ public class MultiViewHandler extends ViewHandler {
      *
      * @see ViewHandler#getResourceURL(javax.faces.context.FacesContext, String)
      */
+    @Override
     public String getResourceURL(FacesContext context, String path) {
 
         ExternalContext extContext = context.getExternalContext();

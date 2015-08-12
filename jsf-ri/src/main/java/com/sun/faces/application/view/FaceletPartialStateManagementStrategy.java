@@ -122,6 +122,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
             VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
             subTree.visitTree(visitContext, new VisitCallback() {
 
+                @Override
                 public VisitResult visit(VisitContext visitContext, UIComponent component) {
                     VisitResult result = VisitResult.ACCEPT;
                     if (component.getClientId(visitContext.getFacesContext()).equals(clientId)) {
@@ -365,6 +366,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                 VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
                 viewRoot.visitTree(visitContext, new VisitCallback() {
 
+                    @Override
                     public VisitResult visit(VisitContext context, UIComponent target) {
                         VisitResult result = VisitResult.ACCEPT;
                         String cid = target.getClientId(context.getFacesContext());
@@ -470,6 +472,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
         try {
             viewRoot.visitTree(visitContext, new VisitCallback() {
 
+                @Override
                 public VisitResult visit(VisitContext context, UIComponent target) {
                     VisitResult result = VisitResult.ACCEPT;
                     Object stateObj;
