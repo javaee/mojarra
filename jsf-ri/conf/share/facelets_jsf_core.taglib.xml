@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 2009-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 2009-2015 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -1434,6 +1434,91 @@ of POJOs.
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
+    </tag>
+
+    <tag>
+        <description><![CDATA[
+
+            <p class="changed_added_2_3">Open a WebSocket or Server Sent
+            Event (SSE) connection between the client and the server.</p>
+
+        ]]></description>
+        <tag-name>socket</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.SocketHandler</handler-class>
+
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_3">If true, the client should
+                connect to the channel automatically when the page
+                loads.</p>
+
+            ]]></description>
+            <name>autoconnect</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_3">The channel name to be
+                passed to the underlying transport for this
+                connection.</p>
+
+            ]]></description>
+            <name>channel</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_3">The name of the JavaScript
+                function that will handle errors.</p>
+
+            ]]></description>
+            <name>onerror</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_3">The name of the JavaScript
+                function that will handle be called when the server sends data.</p>
+
+            ]]></description>
+            <name>onmessage</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+
+                <div class="changed_added_2_3">
+
+                <p>The desired protocol for this connection.  Valid
+                values are 'websocket' and 'sse', without the quotes.
+                If not specified, websocket is assumed.</p>
+
+                <p>A simple fallback mechanism must be provided.  If
+                'websocket' is the value of the transport, but the
+                browser does not support WebSocket, fall back to using
+                SSE.  If SSE is not supported, this tag is effectively a
+                no-op.</p>
+
+                </div>
+
+            ]]></description>
+            <name>transport</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+
     </tag>
 
     <tag>
