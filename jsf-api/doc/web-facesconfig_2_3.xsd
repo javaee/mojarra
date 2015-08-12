@@ -1987,16 +1987,14 @@ href="javax/faces/flow/FlowHandler.html">FlowHandler</a></code>.</p>
     </xsd:annotation>
     <xsd:sequence>
       <xsd:element name="vdl-document"
-                   type="javaee:java-identifierType">
+                   type="javaee:pathType">
         <xsd:annotation>
           <xsd:documentation>
-
         <![CDATA[
-
-         <p class="changed_added_2_2">Define the vdl-document for the enclosing view.<p>
-
+             <p class="changed_added_2_2 changed_modified_2_3">
+              Define the path to the vdl-document for the enclosing view.
+             <p>
 ]]>
-
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
