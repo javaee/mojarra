@@ -122,6 +122,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
      * @see javax.el.ELResolver#getValue(javax.el.ELContext, Object, Object)
      * @see com.sun.faces.el.CompositeComponentAttributesELResolver.ExpressionEvalMap
      */
+    @Override
     public Object getValue(ELContext context, Object base, Object property) {
 
         Util.notNull("context", context);
@@ -171,6 +172,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
      *
      * @see ELResolver#getType(javax.el.ELContext, Object, Object)
      */
+    @Override
     public Class<?> getType(ELContext context, Object base, Object property) {
         Util.notNull("context", context);
         if (!(base instanceof ExpressionEvalMap && property instanceof String)) {
@@ -221,6 +223,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
      *
      * @see ELResolver#setValue(javax.el.ELContext, Object, Object, Object)
      */
+    @Override
     public void setValue(ELContext context,
                          Object base,
                          Object property,
@@ -255,6 +258,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
      *
      * @see javax.el.ELResolver#getFeatureDescriptors(javax.el.ELContext, Object)
      */
+    @Override
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context,
                                                              Object base) {
 
@@ -271,6 +275,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
      *
      * @see javax.el.ELResolver#getCommonPropertyType(javax.el.ELContext, Object)
      */
+    @Override
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
 
         Util.notNull("context", context);
@@ -358,6 +363,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
         // --------------------- Methods from CompositeComponentExpressionHolder
 
 
+        @Override
         public ValueExpression getExpression(String name) {
             Object ve = cc.getValueExpression(name);
             return ((ve instanceof ValueExpression) ? (ValueExpression) ve : null);
@@ -367,14 +373,17 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
         // ---------------------------------------------------- Methods from Map
 
 
+        @Override
         public int size() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public boolean isEmpty() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public boolean containsKey(Object key) {
             boolean result = attributesMap.containsKey(key);
             if (!result) {
@@ -383,12 +392,14 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
             return result;
         }
 
+        @Override
         public boolean containsValue(Object value) {
             throw new UnsupportedOperationException();
         }
 
 
 
+        @Override
         public Object get(Object key) {
             Object v = attributesMap.get(key);
             if (v == null) {
@@ -403,6 +414,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
             return v;
         }
 
+        @Override
         public Object put(String key, Object value) {
             // Unlinke AttributesMap.get() which will obtain a value from
             // a ValueExpression, AttributesMap.put(), when passed a value,
@@ -417,26 +429,32 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
             return null;
         }
 
+        @Override
         public Object remove(Object key) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public void putAll(Map<? extends String,?> t) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public void clear() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Set<String> keySet() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Collection<Object> values() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Set<Map.Entry<String,Object>> entrySet() {
             throw new UnsupportedOperationException();
         }

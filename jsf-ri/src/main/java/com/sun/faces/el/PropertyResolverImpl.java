@@ -67,6 +67,7 @@ public class PropertyResolverImpl extends PropertyResolver {
 
 
     // Specified by javax.faces.el.PropertyResolver.getType(Object,int)
+    @Override
     public Class getType(Object base, int index)
         throws EvaluationException, PropertyNotFoundException{
 
@@ -106,6 +107,7 @@ public class PropertyResolverImpl extends PropertyResolver {
     }
 
     // Specified by javax.faces.el.PropertyResolver.getType(Object,String)
+    @Override
     public Class getType(Object base, Object property) {
 
         assertInput(base, property);
@@ -125,6 +127,7 @@ public class PropertyResolverImpl extends PropertyResolver {
     }
 
     // Specified by javax.faces.el.PropertyResolver.getValue(Object,int)
+    @Override
     public Object getValue(Object base, int index) {
 
         // validates base and index
@@ -157,6 +160,7 @@ public class PropertyResolverImpl extends PropertyResolver {
     }
 
     // Specified by javax.faces.el.PropertyResolver.getValue(Object,String)
+    @Override
     public Object getValue(Object base, Object property) {
 
         if (delegate != null) {
@@ -174,6 +178,7 @@ public class PropertyResolverImpl extends PropertyResolver {
     }
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,int)
+    @Override
     public boolean isReadOnly(Object base, int index) {
 
         // validate input
@@ -193,6 +198,7 @@ public class PropertyResolverImpl extends PropertyResolver {
     }
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,String)
+    @Override
     public boolean isReadOnly(Object base, Object property) {
 
         if (delegate != null) {
@@ -208,6 +214,7 @@ public class PropertyResolverImpl extends PropertyResolver {
     }
 
     // Specified by javax.faces.el.PropertyResolver.setValue(Object,int,Object)
+    @Override
     public void setValue(Object base, int index, Object value) {
 
         // validate input
@@ -254,6 +261,7 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // Specified by
     // javax.faces.el.PropertyResolver.setValue(Object,String,Object)
+    @Override
     public void setValue(Object base, Object property, Object value) {
 
         if (delegate != null) {

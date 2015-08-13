@@ -74,6 +74,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
     _chainType = chainType;
   }
   
+  @Override
   public ELResolverChainType getChainType()
   {
     return _chainType;
@@ -133,6 +134,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
     _propertyELResolverCount++;
   }
 
+  @Override
   public void addRootELResolver(ELResolver elResolver)
   {
     // pass ELResolver to CompositeELResolver so that J2EE6 invoke() method works.  Once we can
@@ -143,6 +145,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
     _addAllELResolver(elResolver);
   }
 
+  @Override
   public void addPropertyELResolver(ELResolver elResolver)
   {
     // pass ELResolver to CompositeELResolver so that J2EE6 invoke() method works.  Once we can
@@ -153,6 +156,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
     _addAllELResolver(elResolver);
   }
   
+  @Override
   public void add(ELResolver elResolver)
   {
     // pass ELResolver to CompositeELResolver so that J2EE6 invoke() method works.  Once we can
@@ -182,6 +186,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
     return null;
   }
   
+  @Override
   public Object getValue(ELContext context, Object base, Object property) throws ELException
   {
     context.setPropertyResolved(false);
@@ -221,6 +226,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
     return null;
   }
 
+  @Override
   public Class<?> getType(ELContext context, Object base, Object property) throws ELException
   {
     context.setPropertyResolved(false);
@@ -259,6 +265,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
     }
   }
 
+  @Override
   public void setValue(ELContext context, Object base, Object property, Object val)
     throws ELException
   {
@@ -322,6 +329,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
     return _isReadOnly(resolverCount, resolvers, context, base, property);      
   }
   
+  @Override
   public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base)
   {
     return new DescriptorIterator(context, base, _allELResolvers, _allELResolverCount);
@@ -343,6 +351,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
       _resolverCount = resolverCount;
     }
    
+    @Override
     public boolean hasNext()
     {
       do
@@ -385,6 +394,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
       return currIterator;
     }
 
+    @Override
     public FeatureDescriptor next()
     {
       if (hasNext())
@@ -393,6 +403,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
         throw new NoSuchElementException();    
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -406,6 +417,7 @@ public class DemuxCompositeELResolver extends FacesCompositeELResolver
     private Iterator<FeatureDescriptor> _currIterator;
   }
     
+  @Override
   public Class<?> getCommonPropertyType(ELContext context, Object base)
   {
     return null;

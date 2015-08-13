@@ -192,6 +192,7 @@ public class FlashELResolver extends ELResolver {
      *                                   <code>null</code>.
      */
 
+    @Override
   public Object getValue(ELContext elContext, Object base, Object property)
   {
     if (null == property)
@@ -256,6 +257,7 @@ public class FlashELResolver extends ELResolver {
      * @throws PropertyNotFoundException if property is <code>null</code>.
      */
 
+    @Override
     public Class<?> getType(ELContext elContext,
                             Object base,
                             Object property) {
@@ -293,6 +295,7 @@ public class FlashELResolver extends ELResolver {
      *                                      "flash".
      */
 
+    @Override
     public void setValue(ELContext elContext,
                          Object base,
                          Object property,
@@ -320,6 +323,7 @@ public class FlashELResolver extends ELResolver {
      *                                   <code>null</code> and <code>property</code> is <code>null</code>.
      */
 
+    @Override
     public boolean isReadOnly(ELContext elContext,
                               Object base,
                               Object property) {
@@ -344,6 +348,7 @@ public class FlashELResolver extends ELResolver {
      * current contents of the flash.</p>
      */
 
+    @Override
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext elContext,
                                                              Object base) {
         if (null != base) {
@@ -381,6 +386,7 @@ public class FlashELResolver extends ELResolver {
      * literal string "flash", return <code>Object.class</code>.</p>
      */
 
+    @Override
     public Class<?> getCommonPropertyType(ELContext context,
                                           Object base) {
         Class<?> result = null;

@@ -55,6 +55,7 @@ import javax.faces.context.FacesContext;
 @SuppressWarnings("deprecation")
 public class DummyPropertyResolverImpl extends PropertyResolver {
     
+    @Override
     public Object getValue(Object base, Object property)
         throws EvaluationException, PropertyNotFoundException {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -63,6 +64,7 @@ public class DummyPropertyResolverImpl extends PropertyResolver {
     }
 
 
+    @Override
     public Object getValue(Object base, int index)
         throws EvaluationException, PropertyNotFoundException {
        FacesContext context = FacesContext.getCurrentInstance();
@@ -71,18 +73,21 @@ public class DummyPropertyResolverImpl extends PropertyResolver {
     }
 
 
+    @Override
     public void setValue(Object base, Object property, Object value)
         throws EvaluationException, PropertyNotFoundException {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getELContext().setPropertyResolved(false);
     }
 
+    @Override
     public void setValue(Object base, int index, Object value)
         throws EvaluationException, PropertyNotFoundException {
        FacesContext context = FacesContext.getCurrentInstance();
        context.getELContext().setPropertyResolved(false);
     }
 
+    @Override
     public boolean isReadOnly(Object base, Object property)
         throws EvaluationException, PropertyNotFoundException {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -90,6 +95,7 @@ public class DummyPropertyResolverImpl extends PropertyResolver {
         return false;
     }
 
+    @Override
     public boolean isReadOnly(Object base, int index)
         throws EvaluationException, PropertyNotFoundException {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -98,6 +104,7 @@ public class DummyPropertyResolverImpl extends PropertyResolver {
     }
 
 
+    @Override
     public Class getType(Object base, Object property)
         throws EvaluationException, PropertyNotFoundException {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -105,6 +112,7 @@ public class DummyPropertyResolverImpl extends PropertyResolver {
         return null;         
     }
 
+    @Override
     public Class getType(Object base, int index)
         throws EvaluationException, PropertyNotFoundException {
         FacesContext context = FacesContext.getCurrentInstance();

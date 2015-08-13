@@ -88,6 +88,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
     public ImplicitObjectELResolver() {
     }
 
+    @Override
     public Object getValue(ELContext context,Object base, Object property)
             throws ELException {
         // variable resolution is a special case of property resolution
@@ -200,6 +201,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
     }
 
+    @Override
     public void  setValue(ELContext context, Object base, Object property,
                           Object val) throws ELException {
         if (base != null) {
@@ -217,6 +219,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
     }
 
+    @Override
     public boolean isReadOnly(ELContext context, Object base, Object property)
         throws ELException{
         if (base != null) {
@@ -237,6 +240,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         return false;
     }
 
+    @Override
     public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
@@ -307,6 +311,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
 
     }
 
+    @Override
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;

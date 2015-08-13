@@ -60,6 +60,7 @@ public class VariableResolverImpl extends VariableResolver {
     // ------------------------------------------- Methods from VariableResolver
 
     // Specified by javax.faces.el.VariableResolver.resolveVariable()
+    @Override
     public Object resolveVariable(FacesContext context, String name)
             throws EvaluationException {
 

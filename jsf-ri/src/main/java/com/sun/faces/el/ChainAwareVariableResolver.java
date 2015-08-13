@@ -87,6 +87,7 @@ public class ChainAwareVariableResolver extends VariableResolver {
     /**
      * See the class javadocs.
      */
+    @Override
     public Object resolveVariable(FacesContext context, String name)
             throws EvaluationException {
         Object result = null;

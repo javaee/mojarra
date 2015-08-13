@@ -103,6 +103,7 @@ public class ManagedBeanELResolver extends ELResolver {
     public ManagedBeanELResolver() {
     }
 
+    @Override
     public Object getValue(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
@@ -119,6 +120,7 @@ public class ManagedBeanELResolver extends ELResolver {
     }
 
 
+    @Override
     public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
 
@@ -132,6 +134,7 @@ public class ManagedBeanELResolver extends ELResolver {
 
     }
 
+    @Override
     public void setValue(ELContext context,
                          Object base,
                          Object property,
@@ -155,6 +158,7 @@ public class ManagedBeanELResolver extends ELResolver {
 
     }
 
+    @Override
     public boolean isReadOnly(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
@@ -169,6 +173,7 @@ public class ManagedBeanELResolver extends ELResolver {
         return false;
     }
 
+    @Override
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
 
         if (base != null) {
@@ -213,6 +218,7 @@ public class ManagedBeanELResolver extends ELResolver {
         return list.iterator();
     }
 
+    @Override
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;

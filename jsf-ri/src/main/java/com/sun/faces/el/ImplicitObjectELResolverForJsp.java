@@ -59,6 +59,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
     public ImplicitObjectELResolverForJsp() {
     }
 
+    @Override
     public Object getValue(ELContext context,Object base, Object property)
             throws ELException {
         // variable resolution is a special case of property resolution
@@ -104,6 +105,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
 
     }
 
+    @Override
     public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
@@ -130,6 +132,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         }
     }
 
+    @Override
     public void  setValue(ELContext context, Object base, Object property,
                           Object val) throws ELException {
         if (base != null) {
@@ -156,6 +159,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         }
     }
 
+    @Override
     public boolean isReadOnly(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
@@ -184,6 +188,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         }
     }
 
+    @Override
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         if (base != null) {
             return null;
@@ -198,6 +203,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
 
     }
 
+    @Override
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;

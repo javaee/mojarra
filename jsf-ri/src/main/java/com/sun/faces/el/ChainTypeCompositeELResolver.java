@@ -61,11 +61,13 @@ public final class ChainTypeCompositeELResolver extends FacesCompositeELResolver
     _wrapped.addRootELResolver(elResolver);
   }
 
+  @Override
   public void addPropertyELResolver(ELResolver elResolver)
   {
     _wrapped.addPropertyELResolver(elResolver);
   }
 
+  @Override
   public void add(ELResolver elResolver)
   {
     _wrapped.add(elResolver);    

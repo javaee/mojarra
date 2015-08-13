@@ -79,10 +79,12 @@ public class ELContextImpl extends ELContext {
     // -------------------------------------------------- Methods from ELContext
 
 
+    @Override
     public FunctionMapper getFunctionMapper() {        
         return functionMapper;
     }
 
+    @Override
     public VariableMapper getVariableMapper() {
         if (variableMapper == null) {
             variableMapper = new VariableMapperImpl();
@@ -90,6 +92,7 @@ public class ELContextImpl extends ELContext {
         return variableMapper;
     }
 
+    @Override
     public ELResolver getELResolver() {
         return resolver;
     }
@@ -119,10 +122,12 @@ public class ELContextImpl extends ELContext {
 
         }
 
+        @Override
         public ValueExpression resolveVariable(String s) {
             return variables.get(s);
         }
 
+        @Override
         public ValueExpression setVariable(String s, ValueExpression valueExpression) {
             return (variables.put(s, valueExpression));
         }
@@ -131,6 +136,7 @@ public class ELContextImpl extends ELContext {
 
     private static class NoopFunctionMapper extends FunctionMapper {
 
+        @Override
         public Method resolveFunction(String s, String s1) {
             return null;
         }

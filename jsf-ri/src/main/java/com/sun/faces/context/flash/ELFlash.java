@@ -334,6 +334,7 @@ public class ELFlash extends Flash {
     // <editor-fold defaultstate="collapsed" desc="Abstract class overrides">
 
     
+    @Override
     public boolean isKeepMessages() {
         boolean result = false;
         Map<String, Object> phaseMap;
@@ -347,6 +348,7 @@ public class ELFlash extends Flash {
     }
     
     
+    @Override
     public void setKeepMessages(boolean newValue) {
 
         loggingGetPhaseMapForWriting(false).put(CONSTANTS.KeepAllMessagesAttributeName.toString(),
@@ -355,6 +357,7 @@ public class ELFlash extends Flash {
     }
     
     
+    @Override
     public boolean isRedirect() {
         boolean result = false;
 
@@ -372,6 +375,7 @@ public class ELFlash extends Flash {
     // PENDING(edburns): I'm going to make an entry to the errata.  This
     // method can't be implemented because the decision of whether or
     // not to redirect is made by the navigationHandler.
+    @Override
     public void setRedirect(boolean newValue) {
     }
 
@@ -381,6 +385,7 @@ public class ELFlash extends Flash {
 
     
     @SuppressWarnings(ELEMENT_TYPE_MISMATCH)
+    @Override
     public Object get(Object key) {
         Object result = null;
 
@@ -420,6 +425,7 @@ public class ELFlash extends Flash {
     }
 
 
+    @Override
     public Object put(String key, Object value) {
         Boolean b = null;
         Object result = null;
@@ -455,6 +461,7 @@ public class ELFlash extends Flash {
     }
 
     @SuppressWarnings(ELEMENT_TYPE_MISMATCH)
+    @Override
     public Object remove(Object key) {
         Object result = null;
 
@@ -467,6 +474,7 @@ public class ELFlash extends Flash {
 
     
     @SuppressWarnings(ELEMENT_TYPE_MISMATCH)
+    @Override
     public boolean containsKey(Object key) {
         boolean result = false;
 
@@ -476,6 +484,7 @@ public class ELFlash extends Flash {
     }
 
     
+    @Override
     public boolean containsValue(Object value) {
         boolean result = false;
 
@@ -485,6 +494,7 @@ public class ELFlash extends Flash {
     }
 
     
+    @Override
     public void putAll(Map<? extends String, ?> t) {
 
         getPhaseMapForWriting().putAll(t);
@@ -492,6 +502,7 @@ public class ELFlash extends Flash {
     }
 
     
+    @Override
     public Collection<Object> values() {
         Collection<Object> result = null;
 
@@ -501,6 +512,7 @@ public class ELFlash extends Flash {
     }
 
     
+    @Override
     public int size() {
         int result = 0;
 
@@ -510,6 +522,7 @@ public class ELFlash extends Flash {
     }
 
     
+    @Override
     public void clear() {
 
         getPhaseMapForWriting().clear();
@@ -524,6 +537,7 @@ public class ELFlash extends Flash {
     }
 
     
+    @Override
     public Set<Map.Entry<String, Object>> entrySet() {
         Set<Map.Entry<String, Object>> 
                 readingMapEntrySet = getPhaseMapForReading().entrySet(),
@@ -538,6 +552,7 @@ public class ELFlash extends Flash {
     }
 
     
+    @Override
     public boolean isEmpty() {
         boolean 
                 readingMapIsEmpty = getPhaseMapForReading().isEmpty(),
@@ -550,6 +565,7 @@ public class ELFlash extends Flash {
     }
 
     
+    @Override
     public Set<String> keySet() {
         Set<String>
                 readingMapKeySet = getPhaseMapForReading().keySet(),
@@ -568,6 +584,7 @@ public class ELFlash extends Flash {
     // <editor-fold defaultstate="collapsed" desc="Flash overrides">
 
     
+    @Override
     public void keep(String key) {
         FacesContext context = FacesContext.getCurrentInstance();
         Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
@@ -594,6 +611,7 @@ public class ELFlash extends Flash {
     }
 
     
+    @Override
     public void putNow(String key, Object value) {
         FacesContext context = FacesContext.getCurrentInstance();
         Map<Object, Object> contextMap = context.getAttributes();
@@ -606,6 +624,7 @@ public class ELFlash extends Flash {
         }
     }
     
+    @Override
     public void doPrePhaseActions(FacesContext context) {
         PhaseId currentPhase = context.getCurrentPhaseId();
         Map<Object, Object> contextMap = context.getAttributes();
@@ -639,6 +658,7 @@ public class ELFlash extends Flash {
 
     }
 
+    @Override
     public void doPostPhaseActions(FacesContext context) {
         if (context.getAttributes().containsKey(ACT_AS_DO_LAST_PHASE_ACTIONS)) {
             Boolean outgoingResponseIsRedirect = 
@@ -735,6 +755,7 @@ public class ELFlash extends Flash {
         return flashInnerMap;
     }
     
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[\n");

@@ -95,6 +95,7 @@ public class ResourceELResolver extends ELResolver {
      * </ul>
      * @see ELResolver#getValue(javax.el.ELContext, Object, Object)
      */
+    @Override
     public Object getValue(ELContext context, Object base, Object property) {
         if (base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
@@ -151,6 +152,7 @@ public class ResourceELResolver extends ELResolver {
      * @return <code>null</code> as this resolver only performs lookups
      * @throws PropertyNotFoundException if base and property are null
      */
+    @Override
     public Class<?> getType(ELContext context, Object base, Object property) {
         if (base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
@@ -165,6 +167,7 @@ public class ResourceELResolver extends ELResolver {
      * This is basically a no-op.
      * @throws PropertyNotFoundException if base and property are null
      */
+    @Override
     public void setValue(ELContext context,
                          Object base,
                          Object property,
@@ -181,6 +184,7 @@ public class ResourceELResolver extends ELResolver {
      * @return <code>false</code> (basically ignored by the EL system)
      * @throws PropertyNotFoundException if base and property are null
      */
+    @Override
     public boolean isReadOnly(ELContext context, Object base, Object property) {
         if (base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
@@ -196,6 +200,7 @@ public class ResourceELResolver extends ELResolver {
      * @return <code>null</code> - there is no way to query the
      *  <code>ResourceManager</code> for all known resources
      */
+    @Override
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context,
                                                              Object base) {
 
@@ -207,6 +212,7 @@ public class ResourceELResolver extends ELResolver {
     /**
      * @return <code>String.class</code> - getType() expects String properties
      */
+    @Override
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
 
         return String.class;

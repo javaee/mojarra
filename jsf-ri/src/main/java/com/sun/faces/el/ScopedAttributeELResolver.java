@@ -66,6 +66,7 @@ public class ScopedAttributeELResolver extends ELResolver {
     public ScopedAttributeELResolver() {
     }
 
+    @Override
     public Object getValue(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
@@ -129,6 +130,7 @@ public class ScopedAttributeELResolver extends ELResolver {
     }
 
 
+    @Override
     public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
@@ -144,6 +146,7 @@ public class ScopedAttributeELResolver extends ELResolver {
         return Object.class;
     }
 
+    @Override
     public void  setValue(ELContext context, Object base, Object property,
                           Object val) throws ELException {
         if (base != null) {
@@ -177,6 +180,7 @@ public class ScopedAttributeELResolver extends ELResolver {
 
     }
 
+    @Override
     public boolean isReadOnly(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
@@ -191,6 +195,7 @@ public class ScopedAttributeELResolver extends ELResolver {
         return false;
     }
 
+    @Override
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
 
        ArrayList<FeatureDescriptor> list = new ArrayList<>();
@@ -249,6 +254,7 @@ public class ScopedAttributeELResolver extends ELResolver {
        return list.iterator();
     }
 
+    @Override
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;
