@@ -95,11 +95,13 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
         this.exceptionHandler = handler;
     }
 
+    @Override
     public ExceptionHandler getWrapped() {
         return this.exceptionHandler;
     }
 
     /**
+     * @return 
      * @see ExceptionHandler#getHandledExceptionQueuedEvent() 
      */
     @Override
@@ -112,6 +114,7 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
     /**
      * @see javax.faces.context.ExceptionHandlerWrapper#handle()
      */
+    @Override
     public void handle() throws FacesException {
 
         for (Iterator<ExceptionQueuedEvent> i = getUnhandledExceptionQueuedEvents().iterator(); i.hasNext(); ) {
@@ -150,6 +153,7 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
     /**
      * @see javax.faces.context.ExceptionHandlerWrapper#processEvent(javax.faces.event.SystemEvent)
      */
+    @Override
     public void processEvent(SystemEvent event) throws AbortProcessingException {
 
         if (event != null) {
@@ -164,6 +168,7 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
     /**
      * @see javax.faces.context.ExceptionHandlerWrapper#getUnhandledExceptionQueuedEvents()
      */
+    @Override
     public Iterable<ExceptionQueuedEvent> getUnhandledExceptionQueuedEvents() {
 
         return ((unhandledExceptions != null)
@@ -176,6 +181,7 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
     /**
      * @see javax.faces.context.ExceptionHandlerWrapper#getHandledExceptionQueuedEvents()
      */
+    @Override
     public Iterable<ExceptionQueuedEvent> getHandledExceptionQueuedEvents() {
 
         return ((handledExceptions != null)

@@ -134,18 +134,21 @@ public class RequestCookieMap extends BaseContextMap<Object> {
     // --------------------------------------------- Methods from BaseContextMap
 
 
+    @Override
     protected Iterator<Map.Entry<String,Object>> getEntryIterator() {
         return new EntryIterator(
                 new CookieArrayEnumerator(request.getCookies()));
     }
 
 
+    @Override
     protected Iterator<String> getKeyIterator() {
         return new KeyIterator(
                 new CookieArrayEnumerator(request.getCookies()));
     }
 
 
+    @Override
     protected Iterator<Object> getValueIterator() {
         return new ValueIterator(
             new CookieArrayEnumerator(request.getCookies()));
@@ -166,10 +169,12 @@ public class RequestCookieMap extends BaseContextMap<Object> {
             upperBound = ((this.cookies != null) ? this.cookies.length : -1);
         }
 
+        @Override
         public boolean hasMoreElements() {
             return (curIndex + 2 <= upperBound);
         }
 
+        @Override
         public Object nextElement() {
             curIndex++;
             if (curIndex < upperBound) {

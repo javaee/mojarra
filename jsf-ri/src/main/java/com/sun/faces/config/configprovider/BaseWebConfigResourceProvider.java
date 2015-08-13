@@ -74,6 +74,7 @@ public abstract class BaseWebConfigResourceProvider implements
     // ------------------------------ Methods from ConfigurationResourceProvider
 
 
+    @Override
     public Collection<URI> getResources(ServletContext context) {
 
         WebConfiguration webConfig = WebConfiguration.getInstance(context);

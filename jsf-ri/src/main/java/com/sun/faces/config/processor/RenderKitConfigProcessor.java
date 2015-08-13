@@ -133,6 +133,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
+    @Override
     public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 

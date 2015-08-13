@@ -87,6 +87,7 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
     // -------------------------------------------- Methods from ConfigProcessor
 
 
+    @Override
     public Collection<URI> getResources(ServletContext context) {
 
         try {

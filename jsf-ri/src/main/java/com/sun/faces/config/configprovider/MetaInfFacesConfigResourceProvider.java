@@ -94,6 +94,7 @@ public class MetaInfFacesConfigResourceProvider implements
     /**
      * @see com.sun.faces.spi.ConfigurationResourceProvider#getResources(javax.servlet.ServletContext)
      */
+    @Override
     public Collection<URI> getResources(ServletContext context) {
 
         WebConfiguration webConfig = WebConfiguration.getInstance(context);

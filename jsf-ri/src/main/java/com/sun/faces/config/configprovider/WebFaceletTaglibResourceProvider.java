@@ -55,6 +55,7 @@ public class WebFaceletTaglibResourceProvider extends BaseWebConfigResourceProvi
     // ------------------------------ Methods from BaseWebConfigResourceProvider
 
 
+    @Override
     protected WebContextInitParameter getParameter() {
 
         return FaceletsLibraries;
@@ -62,12 +63,14 @@ public class WebFaceletTaglibResourceProvider extends BaseWebConfigResourceProvi
     }
 
 
+    @Override
     protected String[] getExcludedResources() {
 
         return EXCLUDES;
 
     }
 
+    @Override
     protected String getSeparatorRegex() {
 
         return SEPARATOR;

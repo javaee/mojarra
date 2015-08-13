@@ -350,6 +350,7 @@ import javax.faces.render.RenderKitFactory;
     /**
      * @see javax.faces.context.PartialViewContext#release()
      */
+    @Override
     public void release() {
         
         released = true;
@@ -561,6 +562,7 @@ import javax.faces.render.RenderKitFactory;
         }  
 
 
+        @Override
         public VisitResult visit(VisitContext context, UIComponent comp) {
             try {
 

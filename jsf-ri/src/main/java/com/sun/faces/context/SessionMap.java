@@ -195,6 +195,7 @@ public class SessionMap extends BaseContextMap<Object> {
 
 
     @SuppressWarnings("unchecked")
+    @Override
     protected Iterator<Map.Entry<String,Object>> getEntryIterator() {
         HttpSession session = getSession(false);
         if (session != null) {
@@ -207,6 +208,7 @@ public class SessionMap extends BaseContextMap<Object> {
 
 
     @SuppressWarnings("unchecked")
+    @Override
     protected Iterator<String> getKeyIterator() {
         HttpSession session = getSession(false);
         if (session != null) {
@@ -219,6 +221,7 @@ public class SessionMap extends BaseContextMap<Object> {
 
 
     @SuppressWarnings("unchecked")
+    @Override
     protected Iterator<Object> getValueIterator() {
         HttpSession session = getSession(false);
          if (session != null) {

@@ -334,6 +334,7 @@ public class StateContext {
          * @param event the add/remove event.
          * @throws AbortProcessingException when processing should be aborted.
          */
+        @Override
         public void processEvent(SystemEvent event)
               throws AbortProcessingException {
             FacesContext ctx = FacesContext.getCurrentInstance();
@@ -361,6 +362,7 @@ public class StateContext {
          * @param source the source object we might be listening for.
          * @return true if the source is OK, false otherwise.
          */
+        @Override
         public boolean isListenerForSource(Object source) {
             return (source instanceof UIComponent && !(source instanceof UIViewRoot));
         }

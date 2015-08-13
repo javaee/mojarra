@@ -62,6 +62,7 @@ public class ExceptionHandlerFactoryImpl extends ExceptionHandlerFactory {
     /**
      * @see javax.faces.context.ExceptionHandlerFactory#getExceptionHandler()
      */
+    @Override
     public ExceptionHandler getExceptionHandler() {
         FacesContext fc = FacesContext.getCurrentInstance();
         ApplicationAssociate myAssociate = getAssociate(fc);

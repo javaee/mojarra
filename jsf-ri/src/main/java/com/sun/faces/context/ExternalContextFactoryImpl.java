@@ -61,6 +61,7 @@ public class ExternalContextFactoryImpl extends ExternalContextFactory {
     // ---------------------------------------- Methods from ExternalContextFactory
 
 
+    @Override
     public ExternalContext getExternalContext(Object servletContext,
                                         Object request,
                                         Object response)

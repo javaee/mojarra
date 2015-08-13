@@ -60,6 +60,7 @@ public class PartialViewContextFactoryImpl extends PartialViewContextFactory {
     /**
      * @see PartialViewContextFactory#getPartialViewContext(javax.faces.context.FacesContext)
      */
+    @Override
     public PartialViewContext getPartialViewContext(FacesContext context) {
 
         return new PartialViewContextImpl(context);

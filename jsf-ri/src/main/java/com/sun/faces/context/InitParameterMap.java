@@ -123,16 +123,19 @@ public class InitParameterMap extends BaseContextMap<String> {
     // --------------------------------------------- Methods from BaseContextMap
 
 
+    @Override
     protected Iterator<Map.Entry<String,String>> getEntryIterator() {
         return new EntryIterator(servletContext.getInitParameterNames());
     }
 
 
+    @Override
     protected Iterator<String> getKeyIterator() {
         return new KeyIterator(servletContext.getInitParameterNames());
     }
 
 
+    @Override
     protected Iterator<String> getValueIterator() {
         return new ValueIterator(servletContext.getInitParameterNames());
     }

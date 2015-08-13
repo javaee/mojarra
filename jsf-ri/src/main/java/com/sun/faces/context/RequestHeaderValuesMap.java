@@ -127,16 +127,19 @@ public class RequestHeaderValuesMap extends StringArrayValuesMap {
 
     // --------------------------------------------- Methods from BaseContextMap
 
+    @Override
     protected Iterator<Map.Entry<String,String[]>> getEntryIterator() {
         return new EntryIterator(request.getHeaderNames());
     }
 
 
+    @Override
     protected Iterator<String> getKeyIterator() {
         return new KeyIterator(request.getHeaderNames());
     }
 
 
+    @Override
     protected Iterator<String[]> getValueIterator() {
         return new ValueIterator(request.getHeaderNames());
     }

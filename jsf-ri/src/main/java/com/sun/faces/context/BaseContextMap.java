@@ -78,6 +78,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
     }
 
 
+    @Override
     public Set<Map.Entry<String, V>> entrySet() {
         if (entrySet == null) {
             entrySet = new EntrySet();
@@ -149,6 +150,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
 
     abstract class BaseSet<E> extends AbstractSet<E> {
 
+        @Override
         public int size() {
             int size = 0;
             for (Iterator<E> i = iterator(); i.hasNext(); size++) {
@@ -162,6 +164,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
 
     class EntrySet extends BaseSet<Map.Entry<String, V>> {
 
+        @Override
         public Iterator<Map.Entry<String, V>> iterator() {
             return getEntryIterator();
         }
@@ -177,6 +180,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
 
     class KeySet extends BaseSet<String> {
 
+        @Override
         public Iterator<String> iterator() {
             return getKeyIterator();
         }
@@ -196,6 +200,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
 
     class ValueCollection extends AbstractCollection<V> {
 
+        @Override
         public int size() {
             int size = 0;
             for (Iterator i = iterator(); i.hasNext(); size++) {
@@ -204,6 +209,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             return size;
         }
         
+        @Override
         public Iterator<V> iterator() {
             return getValueIterator();
         }
@@ -225,6 +231,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             this.e = e;
         }
 
+        @Override
         public boolean hasNext() {
             return e.hasMoreElements();
         }
@@ -243,6 +250,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             super(e);
         }
 
+        @Override
         public void remove() {
             if (currentKey != null && !removeCalled) {
                 removeCalled = true;
@@ -252,6 +260,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             }
         }
 
+        @Override
         public Map.Entry<String,V> next() {
             nextKey();
             return new Entry<V>(currentKey, get(currentKey));
@@ -265,6 +274,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             super(e);
         }
 
+        @Override
         public void remove() {
             if (currentKey != null && !removeCalled) {
                 removeCalled = true;
@@ -274,6 +284,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             }
         }
 
+        @Override
         public String next() {
             return nextKey();
         }
@@ -286,6 +297,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             super(e);
         }
 
+        @Override
         public void remove() {
             if (currentKey != null && !removeCalled) {
                 removeCalled = true;
@@ -295,6 +307,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             }
         }
 
+        @Override
         public V next() {
             nextKey();
             return get(currentKey);
@@ -315,17 +328,20 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
         }
 
 
+        @Override
         public String getKey() {
             return key;
         }
 
 
+        @Override
         public V getValue() {
             return value;
         }
 
 
         // No support of setting the value
+        @Override
         public V setValue(V value) {
             throw new UnsupportedOperationException();
         }

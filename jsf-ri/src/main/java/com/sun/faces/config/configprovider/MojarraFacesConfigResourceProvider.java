@@ -68,6 +68,7 @@ public class MojarraFacesConfigResourceProvider implements
     /**
      * @see ConfigurationResourceProvider#getResources(javax.servlet.ServletContext)
      */
+    @Override
     public Collection<URI> getResources(ServletContext context) {
 
         List<URI> list = new ArrayList<>(1);

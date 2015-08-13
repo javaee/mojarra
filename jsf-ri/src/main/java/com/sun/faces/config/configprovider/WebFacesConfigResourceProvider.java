@@ -71,6 +71,7 @@ public class WebFacesConfigResourceProvider extends BaseWebConfigResourceProvide
     /**
      * @see com.sun.faces.spi.ConfigurationResourceProvider#getResources(javax.servlet.ServletContext)
      */
+    @Override
     public Collection<URI> getResources(ServletContext context) {
 
         Collection<URI> urls = super.getResources(context);
@@ -93,6 +94,7 @@ public class WebFacesConfigResourceProvider extends BaseWebConfigResourceProvide
     // ------------------------------ Methods from BaseWebConfigResourceProvider
 
 
+    @Override
     protected WebContextInitParameter getParameter() {
 
         return JavaxFacesConfigFiles;
@@ -100,12 +102,14 @@ public class WebFacesConfigResourceProvider extends BaseWebConfigResourceProvide
     }
 
     
+    @Override
     protected String[] getExcludedResources() {
 
         return EXCLUDES;
 
     }
 
+    @Override
     protected String getSeparatorRegex() {
         return SEPARATORS;
     }

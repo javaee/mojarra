@@ -131,6 +131,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
     /**
      * @see ConfigProcessor#setNext(ConfigProcessor)
      */
+    @Override
     public void setNext(ConfigProcessor nextProcessor) {
 
         this.nextProcessor = nextProcessor;
@@ -146,6 +147,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
     /**
      * @see ConfigProcessor#invokeNext(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
+    @Override
     public void invokeNext(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 

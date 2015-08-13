@@ -116,6 +116,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
     // ------------------------------------------- Methods from ExceptionHandler
 
 
+    @Override
     public ExceptionQueuedEvent getHandledExceptionQueuedEvent() {
 
         return handled;
@@ -127,6 +128,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      * @see javax.faces.context.ExceptionHandler#handle()
      */
     @SuppressWarnings({"ThrowableInstanceNeverThrown"})
+    @Override
     public void handle() throws FacesException {
 
         for (Iterator<ExceptionQueuedEvent> i = getUnhandledExceptionQueuedEvents().iterator(); i.hasNext(); ) {
@@ -171,6 +173,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
     /**
      * @see javax.faces.context.ExceptionHandler#isListenerForSource(Object)
      */
+    @Override
     public boolean isListenerForSource(Object source) {
 
         return (source instanceof ExceptionQueuedEventContext);
@@ -181,6 +184,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
     /**
      * @see javax.faces.context.ExceptionHandler#processEvent(javax.faces.event.SystemEvent)
      */
+    @Override
     public void processEvent(SystemEvent event) throws AbortProcessingException {
 
         if (event != null) {
@@ -196,6 +200,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
     /**
      * @see ExceptionHandler#getRootCause(Throwable)
      */
+    @Override
     public Throwable getRootCause(Throwable t) {
 
         if (t == null) {
@@ -222,6 +227,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
     /**
      * @see javax.faces.context.ExceptionHandler#getUnhandledExceptionQueuedEvents()
      */
+    @Override
     public Iterable<ExceptionQueuedEvent> getUnhandledExceptionQueuedEvents() {
 
         return ((unhandledExceptions != null)
@@ -234,6 +240,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
     /**
      * @see javax.faces.context.ExceptionHandler#getHandledExceptionQueuedEvents()
      */
+    @Override
     public Iterable<ExceptionQueuedEvent> getHandledExceptionQueuedEvents() {
 
         return ((handledExceptions != null)

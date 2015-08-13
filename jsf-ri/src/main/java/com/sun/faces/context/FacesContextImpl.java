@@ -741,6 +741,7 @@ public class FacesContextImpl extends FacesContext {
         // ---------------------------------------------- Methods from Iterator
 
 
+        @Override
         public boolean hasNext() {
 
             if (outerIndex == -1) {
@@ -761,6 +762,7 @@ public class FacesContextImpl extends FacesContext {
 
         }
 
+        @Override
         public FacesMessage next() {
 
             if (outerIndex >= messagesSize) {
@@ -779,6 +781,7 @@ public class FacesContextImpl extends FacesContext {
 
         }
 
+        @Override
         public void remove() {
 
             if (outerIndex == -1) {

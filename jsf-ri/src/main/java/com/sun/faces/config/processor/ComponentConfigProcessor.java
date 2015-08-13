@@ -91,6 +91,7 @@ public class ComponentConfigProcessor extends AbstractConfigProcessor {
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])  @param sc
      * @param documentInfos
      */
+    @Override
     public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 

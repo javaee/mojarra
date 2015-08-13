@@ -114,6 +114,7 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
     // ---------------------------------------- Methods from FacesContextFactory
 
 
+    @Override
     public FacesContext getFacesContext(Object context,
                                         Object request,
                                         Object response,
