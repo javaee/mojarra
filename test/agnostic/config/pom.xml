@@ -55,6 +55,5 @@
     <name>Mojarra ${project.version} - Test - Agnostic - Config</name>
     <modules>
         <module>basic</module>
-        <module>lowerCase</module>
     </modules>
 </project>
