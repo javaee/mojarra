@@ -117,6 +117,7 @@ public class FacesInitializer implements ServletContainerInitializer {
     // -------------------------------- Methods from ServletContainerInitializer
 
 
+    @Override
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
         throws ServletException {
 

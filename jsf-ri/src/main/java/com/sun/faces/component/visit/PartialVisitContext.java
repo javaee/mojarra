@@ -411,16 +411,19 @@ public class PartialVisitContext extends VisitContext {
             this.wrapped = wrapped;
         }
 
+        @Override
         public boolean hasNext() {
             return wrapped.hasNext();
         }
 
+        @Override
         public E next() {
             current = wrapped.next();
 
             return current;
         }
 
+        @Override
         public void remove() {
 
             if (current != null) {

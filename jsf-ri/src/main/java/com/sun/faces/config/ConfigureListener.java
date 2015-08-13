@@ -139,6 +139,7 @@ public class ConfigureListener implements ServletRequestListener,
     // ------------------------------------------ ServletContextListener Methods
 
 
+    @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
 
@@ -300,6 +301,7 @@ public class ConfigureListener implements ServletRequestListener,
     }
 
 
+    @Override
     public void contextDestroyed(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
         
@@ -379,6 +381,7 @@ public class ConfigureListener implements ServletRequestListener,
     // ------------------------------------- Methods from ServletRequestListener
 
 
+    @Override
     public void requestDestroyed(ServletRequestEvent event) {
         if (webAppListener != null) {
             webAppListener.requestDestroyed(event);
@@ -386,6 +389,7 @@ public class ConfigureListener implements ServletRequestListener,
     }
 
 
+    @Override
     public void requestInitialized(ServletRequestEvent event) {
         if (webAppListener != null) {
             webAppListener.requestInitialized(event);
@@ -396,6 +400,7 @@ public class ConfigureListener implements ServletRequestListener,
     // ----------------------------------------- Methods from HttpSessionListener
 
 
+    @Override
     public void sessionCreated(HttpSessionEvent event) {
         if (webAppListener != null) {
             webAppListener.sessionCreated(event);
@@ -403,6 +408,7 @@ public class ConfigureListener implements ServletRequestListener,
     }
 
 
+    @Override
     public void sessionDestroyed(HttpSessionEvent event) {
         if (webAppListener != null) {
             webAppListener.sessionDestroyed(event);
@@ -413,11 +419,13 @@ public class ConfigureListener implements ServletRequestListener,
     // ---------------------------- Methods from ServletRequestAttributeListener
 
 
+    @Override
     public void attributeAdded(ServletRequestAttributeEvent event) {
         // ignored
     }
 
 
+    @Override
     public void attributeRemoved(ServletRequestAttributeEvent event) {
         if (webAppListener != null) {
             webAppListener.attributeRemoved(event);
@@ -425,6 +433,7 @@ public class ConfigureListener implements ServletRequestListener,
     }
 
 
+    @Override
     public void attributeReplaced(ServletRequestAttributeEvent event) {
         if (webAppListener != null) {
             webAppListener.attributeReplaced(event);
@@ -435,11 +444,13 @@ public class ConfigureListener implements ServletRequestListener,
     // ------------------------------- Methods from HttpSessionAttributeListener
 
 
+    @Override
     public void attributeAdded(HttpSessionBindingEvent event) {
         // ignored
     }
 
 
+    @Override
     public void attributeRemoved(HttpSessionBindingEvent event) {
         if (webAppListener != null) {
             webAppListener.attributeRemoved(event);
@@ -447,6 +458,7 @@ public class ConfigureListener implements ServletRequestListener,
     }
 
 
+    @Override
     public void attributeReplaced(HttpSessionBindingEvent event) {
         if (webAppListener != null) {
             webAppListener.attributeReplaced(event);
@@ -457,16 +469,19 @@ public class ConfigureListener implements ServletRequestListener,
     // ---------------------------- Methods from ServletContextAttributeListener
 
 
+    @Override
     public void attributeAdded(ServletContextAttributeEvent event) {
         // ignored
     }
 
+    @Override
     public void attributeRemoved(ServletContextAttributeEvent event) {
         if (webAppListener != null) {
             webAppListener.attributeRemoved(event);
         }
     }
 
+    @Override
     public void attributeReplaced(ServletContextAttributeEvent event) {
         if (webAppListener != null) {
             webAppListener.attributeReplaced(event);
@@ -977,6 +992,7 @@ public class ConfigureListener implements ServletRequestListener,
             @SuppressWarnings({"StringBufferField"})
             private StringBuffer content;
 
+            @Override
             public InputSource resolveEntity(String publicId, String systemId)
                     throws SAXException {
 
@@ -985,6 +1001,7 @@ public class ConfigureListener implements ServletRequestListener,
             } // END resolveEntity
 
 
+            @Override
             public void startElement(String uri, String localName,
                                      String qName, Attributes attributes)
                     throws SAXException {
@@ -1010,6 +1027,7 @@ public class ConfigureListener implements ServletRequestListener,
             } // END startElement
 
 
+            @Override
             public void characters(char[] ch, int start, int length)
                     throws SAXException {
 
@@ -1020,6 +1038,7 @@ public class ConfigureListener implements ServletRequestListener,
             } // END characters
 
 
+            @Override
             public void endElement(String uri, String localName, String qName)
                     throws SAXException {
 
@@ -1076,6 +1095,7 @@ public class ConfigureListener implements ServletRequestListener,
         /**
          * PENDING javadocs
          */
+        @Override
         public void run() {
 
             assert (monitors != null);

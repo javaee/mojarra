@@ -2443,11 +2443,13 @@ public class ApplicationImpl extends Application {
             // ~generics++
             Factory<Class<?>, Cache<Class<? extends SystemEvent>, EventInfo>> eventCacheFactory =
                   new Factory<Class<?>, Cache<Class<? extends SystemEvent>, EventInfo>>() {
+                      @Override
                       public Cache<Class<? extends SystemEvent>, EventInfo> newInstance(
                             final Class<?> sourceClass)
                             throws InterruptedException {
                           Factory<Class<? extends SystemEvent>, EventInfo> eventInfoFactory =
                                 new Factory<Class<? extends SystemEvent>, EventInfo>() {
+                                    @Override
                                     public EventInfo newInstance(final Class<? extends SystemEvent> systemEventClass)
                                           throws InterruptedException {
                                         return new EventInfo(systemEventClass, sourceClass);

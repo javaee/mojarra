@@ -416,6 +416,7 @@ public class DbfFactory {
          * cannot be found for the segment, then defer to the
          * <code>DefaultHandler</code> for resolution.</p>
          */
+        @Override
         public InputSource resolveEntity(String publicId, String systemId)
         throws SAXException {
 
@@ -482,6 +483,7 @@ public class DbfFactory {
 
         } // END resolveEntity
 
+        @Override
        public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
            try {
                InputSource source = resolveEntity(publicId, systemId);
@@ -499,14 +501,17 @@ public class DbfFactory {
 
 
     private static class FacesErrorHandler implements ErrorHandler {
+        @Override
         public void warning(SAXParseException exception) throws SAXException {
             // do nothing
         }
 
+        @Override
         public void error(SAXParseException exception) throws SAXException {
             throw exception;
         }
 
+        @Override
         public void fatalError(SAXParseException exception) throws SAXException {
             throw exception;
         }
@@ -518,52 +523,68 @@ public class DbfFactory {
         public Input(InputStream in) {
            this.in = in;
         }
+        @Override
         public Reader getCharacterStream() {
             return null;
         }
 
+        @Override
         public void setCharacterStream(Reader characterStream) { }
 
+        @Override
         public InputStream getByteStream() {
             return in;
         }
 
+        @Override
         public void setByteStream(InputStream byteStream) { }
 
+        @Override
         public String getStringData() {
             return null;
         }
 
+        @Override
         public void setStringData(String stringData) { }
 
+        @Override
         public String getSystemId() {
             return null;
         }
 
+        @Override
         public void setSystemId(String systemId) { }
 
+        @Override
         public String getPublicId() {
             return null;
         }
 
+        @Override
         public void setPublicId(String publicId) { }
 
+        @Override
         public String getBaseURI() {
             return null;
         }
 
+        @Override
         public void setBaseURI(String baseURI) { }
 
+        @Override
         public String getEncoding() {
             return null;
         }
 
+        @Override
         public void setEncoding(String encoding) { }
 
+        @Override
         public boolean getCertifiedText() {
             return false;
         }
 
+        @Override
         public void setCertifiedText(boolean certifiedText) { }
     }
 

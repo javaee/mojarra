@@ -1591,6 +1591,7 @@ public class WebConfiguration {
 
     private static class FaceletsConfigParamLoggingStrategy implements DeprecationLoggingStrategy {
 
+        @Override
         public boolean shouldBeLogged(WebConfiguration configuration) {
             return !configuration.isOptionEnabled(BooleanWebContextInitParameter.DisableFaceletJSFViewHandler) &&
                     !configuration.isOptionEnabled(BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated);
@@ -1626,6 +1627,7 @@ public class WebConfiguration {
 
         }
 
+        @Override
         public void log() {
 
             if (WebConfiguration.LOGGER.isLoggable(loggingLevel)) {
@@ -1657,6 +1659,7 @@ public class WebConfiguration {
             this.params = params;
         }
 
+        @Override
         public void log() {
 
             if (WebConfiguration.LOGGER.isLoggable(loggingLevel)) {

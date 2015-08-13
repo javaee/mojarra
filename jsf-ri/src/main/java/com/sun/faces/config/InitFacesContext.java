@@ -87,14 +87,17 @@ public class InitFacesContext extends FacesContext {
     private UIViewRoot viewRoot;
     private Map<Object,Object> attributes;
     private ELContext elContext = new ELContext() {
+        @Override
         public ELResolver getELResolver() {
             return null;
         }
 
+        @Override
         public FunctionMapper getFunctionMapper() {
             return null;
         }
 
+        @Override
         public VariableMapper getVariableMapper() {
             return null;
         }
@@ -136,39 +139,47 @@ public class InitFacesContext extends FacesContext {
         return attributes;
     }
 
+    @Override
     public Application getApplication() {
         ApplicationFactory factory = (ApplicationFactory)
                 FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         return factory.getApplication();
     }
 
+    @Override
     public Iterator<String> getClientIdsWithMessages() {
         List<String> list = Collections.emptyList();
         return list.iterator();
     }
 
+    @Override
     public ExternalContext getExternalContext() {
         return ec;
     }
 
+    @Override
     public FacesMessage.Severity getMaximumSeverity() {
         return FacesMessage.SEVERITY_INFO;
     }
 
+    @Override
     public Iterator<FacesMessage> getMessages() {
         List<FacesMessage> list = Collections.emptyList();
         return list.iterator();
     }
 
+    @Override
     public Iterator<FacesMessage> getMessages(String clientId) {
         return getMessages();
     }
 
+    @Override
     public List<FacesMessage> getMessageList() {
 	return Collections.EMPTY_LIST;
     }
 
 
+    @Override
     public List<FacesMessage> getMessageList(String clientId) {
 	return Collections.EMPTY_LIST;
     }
@@ -182,14 +193,17 @@ public class InitFacesContext extends FacesContext {
         return stage.equals(getApplication().getProjectStage());
     }
 
+    @Override
     public RenderKit getRenderKit() {
         return null;
     }
 
+    @Override
     public boolean getRenderResponse() {
         return true;
     }
 
+    @Override
     public boolean getResponseComplete() {
         return true;
     }
@@ -199,18 +213,23 @@ public class InitFacesContext extends FacesContext {
         return false;
     }
 
+    @Override
     public ResponseStream getResponseStream() {
         return null;
     }
 
+    @Override
     public void setResponseStream(ResponseStream responseStream) { }
 
+    @Override
     public ResponseWriter getResponseWriter() {
         return null;
     }
 
+    @Override
     public void setResponseWriter(ResponseWriter responseWriter) { }
 
+    @Override
     public UIViewRoot getViewRoot() {
         if (viewRoot == null) {
             viewRoot = new UIViewRoot();
@@ -220,10 +239,13 @@ public class InitFacesContext extends FacesContext {
         return viewRoot;
     }
 
+    @Override
     public void setViewRoot(UIViewRoot root) { }
 
+    @Override
     public void addMessage(String clientId, FacesMessage message) { }
 
+    @Override
     public void release() {
         setCurrentInstance(null);
         if (null != ec) {
@@ -251,8 +273,10 @@ public class InitFacesContext extends FacesContext {
 
     }
 
+    @Override
     public void renderResponse() { }
 
+    @Override
     public void responseComplete() { }
 
     @Override
@@ -272,6 +296,7 @@ public class InitFacesContext extends FacesContext {
      * using a ServletContext.  First remove entry(s) with matching ServletContext from
      * initContextSerlvetContext map.  Then remove entries from threadInitContext map
      * where the entry value(s) match the initFacesContext (associated with the ServletContext).
+     * @param context
      */
     public static void cleanupInitMaps(ServletContext context) {
         Map <Thread, InitFacesContext>threadInitContext = InitFacesContext.getThreadInitContextMap();
@@ -341,6 +366,7 @@ public class InitFacesContext extends FacesContext {
             
         }
 
+        @Override
         public void dispatch(String path) throws IOException {
         }
         
@@ -350,19 +376,23 @@ public class InitFacesContext extends FacesContext {
             initMap = null;
         }
 
+        @Override
         public String encodeActionURL(String url) {
             return null;
         }
 
+        @Override
         public String encodeNamespace(String name) {
             return null;
         }
 
 
+        @Override
         public String encodeResourceURL(String url) {
             return null;
         }
 
+        @Override
         public Map<String, Object> getApplicationMap() {
             if (applicationMap == null) {
                 applicationMap =
@@ -491,6 +521,7 @@ public class InitFacesContext extends FacesContext {
             return servletContext.getContextPath();
         }
         
+        @Override
         public String getAuthType() {
             return null;
         }
@@ -500,20 +531,24 @@ public class InitFacesContext extends FacesContext {
             return servletContext.getMimeType(file);
         }
 
+        @Override
         public Object getContext() {
             return servletContext;
         }
 
+        @Override
 	public String getContextName() { 
 	    return servletContext.getServletContextName();
 	}
 
 	
 
+        @Override
         public String getInitParameter(String name) {
             return servletContext.getInitParameter(name);
         }
 
+        @Override
         public Map<String,String> getInitParameterMap() {
             if (initMap == null) {
                 initMap = new InitParameterMap(servletContext);
@@ -521,11 +556,13 @@ public class InitFacesContext extends FacesContext {
             return initMap;
         }
 
+        @Override
         public String getRemoteUser() {
             return null;
         }
 
 
+        @Override
         public Object getRequest() {
             return null;
         }
@@ -534,58 +571,70 @@ public class InitFacesContext extends FacesContext {
         public void setRequest(Object request) {
         }
 
+        @Override
         public String getRequestContextPath() {
             return null;
         }
 
+        @Override
         public Map<String,Object> getRequestCookieMap() {
             return Collections.unmodifiableMap(Collections.<String,Object>emptyMap());
         }
 
+        @Override
         public Map<String,String> getRequestHeaderMap() {
             return Collections.unmodifiableMap(Collections.<String,String>emptyMap());
         }
 
 
+        @Override
         public Map<String,String[]> getRequestHeaderValuesMap() {
             return Collections.unmodifiableMap(Collections.<String,String[]>emptyMap());
         }
 
 
+        @Override
         public Locale getRequestLocale() {
             return null;
         }
 
+        @Override
         public Iterator<Locale> getRequestLocales() {
             return null;
         }
 
 
+        @Override
         public Map<String,Object> getRequestMap() {
             return Collections.emptyMap();
         }
 
 
+        @Override
         public Map<String,String> getRequestParameterMap() {
             return Collections.unmodifiableMap(Collections.<String,String>emptyMap());
         }
 
 
+        @Override
         public Iterator<String> getRequestParameterNames() {
             return Collections.<String>emptyList().iterator();
         }
 
 
+        @Override
         public Map<String,String[]> getRequestParameterValuesMap() {
             return Collections.unmodifiableMap(Collections.<String,String[]>emptyMap());
         }
 
 
+        @Override
         public String getRequestPathInfo() {
             return null;
         }
 
 
+        @Override
         public String getRequestServletPath() {
             return null;
         }
@@ -600,24 +649,29 @@ public class InitFacesContext extends FacesContext {
             return null;
         }
 
+        @Override
 	public int getRequestContentLength() {
 	    return -1;
 	}
 
+        @Override
         public URL getResource(String path) throws MalformedURLException {
             return servletContext.getResource(path);
         }
 
 
+        @Override
         public InputStream getResourceAsStream(String path) {
             return servletContext.getResourceAsStream(path);
         }
 
+        @Override
         public Set<String> getResourcePaths(String path) {
             //noinspection unchecked
             return servletContext.getResourcePaths(path);
         }
 
+        @Override
         public Object getResponse() {
             return null;
         }
@@ -626,30 +680,37 @@ public class InitFacesContext extends FacesContext {
         public void setResponse(Object response) {
         }
 
+        @Override
         public Object getSession(boolean create) {
             return null;
         }
 
+        @Override
         public Map<String,Object> getSessionMap() {
             return Collections.emptyMap();
         }
 
+        @Override
         public java.security.Principal getUserPrincipal() {
             return null;
         }
 
+        @Override
         public boolean isUserInRole(String role) {
             return false;
         }
 
+        @Override
         public void log(String message) {
             servletContext.log(message);
         }
 
+        @Override
         public void log(String message, Throwable exception) {
             servletContext.log(message, exception);
         }
 
+        @Override
         public void redirect(String url) throws IOException {
         }
 

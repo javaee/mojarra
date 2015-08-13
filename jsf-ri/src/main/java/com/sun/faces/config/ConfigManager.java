@@ -942,6 +942,7 @@ public class ConfigManager {
         // ----------------------------------------------- Methods from Callable
 
 
+        @Override
         public Map<Class<? extends Annotation>,Set<Class<?>>> call() throws Exception {
 
             Timer t = Timer.getInstance();
@@ -1034,6 +1035,7 @@ public class ConfigManager {
          * @return the result of the parse operation (a DOM)
          * @throws Exception if an error occurs during the parsing process
          */
+        @Override
         public DocumentInfo call() throws Exception {
 
             try {
@@ -1383,6 +1385,7 @@ public class ConfigManager {
          * @throws Exception if an Exception is thrown by the underlying
          *  <code>ConfigurationResourceProvider</code> 
          */
+        @Override
         public Collection<URI> call() throws Exception {
             Collection untypedCollection = provider.getResources(sc);
             Iterator untypedCollectionIterator = untypedCollection.iterator();
