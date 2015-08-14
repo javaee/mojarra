@@ -34,6 +34,13 @@
                                 <delete dir="src/main/resources"/>
                                 <delete dir="src/main/js"/>
                                 <delete dir="src/main/template"/>
+                                <!--
+                                
+                                    Once migration is completely we should not need to
+                                    delete the bnd.bnd file anymore.
+                                
+                                -->
+                                <delete file="bnd.bnd"/>
                             </target>
                         </configuration>
                         <goals>
@@ -187,6 +194,30 @@
                                         <include name="*Adapter.java"/>
                                     </fileset>
                                 </copy>
+                                <!--
+                                
+                                -->
+                                <copy file="${jsf-ri-dir}/mojarra-jsf-impl.bnd" tofile="${build.directory}/tmp.bnd"/>
+                                <replace file="${build.directory}/tmp.bnd"
+                                    token="@spec.version@"
+                                    value="2.3"/>
+                                <replace file="${build.directory}/tmp.bnd"
+                                    token="@impl.name@"
+                                    value="Mojarra"/>
+                                <replace file="${build.directory}/tmp.bnd"
+                                    token="@impl.version@"
+                                    value="${project.version}"/>
+                                <replace file="${build.directory}/tmp.bnd"
+                                    token="@full.impl.version@"
+                                    value="${project.version}"/>
+                                <replace file="${build.directory}/tmp.bnd"
+                                    token="@osgi.version@"
+                                    value="${project.version}"/>
+                                <replace file="${build.directory}/tmp.bnd"
+                                    token="@extension.name@"
+                                    value="javax.faces"/>
+                                <copy tofile="${project.build.directory}/../bnd.bnd" 
+                                      file="${build.directory}/tmp.bnd"/>
                             </target>
                         </configuration>
                         <goals>
@@ -770,6 +801,28 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>biz.aQute.bnd</groupId>
+                <artifactId>bnd-maven-plugin</artifactId>
+                <version>2.4.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>bnd-process</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>
