@@ -272,7 +272,7 @@ public class FacesMessage implements Serializable {
      * been defined for this message, return the localized summary text
      * instead.</p>
      * 
-     * @return 
+     * @return the localized detail text.
      */
     public String getDetail() {
 
@@ -467,7 +467,8 @@ public class FacesMessage implements Serializable {
 	/**
 	 * <p>Return the ordinal value of this {@link
 	 * FacesMessage.Severity} instance.</p>
-         * @return 
+         * 
+         * @return the ordinal.
 	 */
 	public int getOrdinal() {
 	    return (this.ordinal);

@@ -72,13 +72,11 @@ public abstract class ConfigurableNavigationHandler extends NavigationHandler {
      *  outcome was acquired by some other means
      * @param outcome The logical outcome returned by a previous invoked
      *  application action (which may be <code>null</code>)
-     *
+     * @return the navigation case, or <code>null</code>.
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
-     *
      * @since 2.0
      */ 
-
     public abstract NavigationCase getNavigationCase(FacesContext context,
             String fromAction, 
             String outcome);
@@ -104,13 +102,11 @@ public abstract class ConfigurableNavigationHandler extends NavigationHandler {
      *  application action (which may be <code>null</code>)
      * @param toFlowDocumentId The value of the <code>toFlowDocumentId</code> property
      * for the navigation case (which may be <code>null</code>)
-     *
+     * @return the navigation case, or <code>null</code>.
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
-     * 
      * @since 2.2
      */
-    
     public NavigationCase getNavigationCase(FacesContext context,
             String fromAction, 
             String outcome,
@@ -128,6 +124,7 @@ public abstract class ConfigurableNavigationHandler extends NavigationHandler {
      * <code>&lt;from-view-id&gt;</code>.  The implementation must
      * support live modifications to this <code>Map</code>.</p>
      *
+     * @return a map with navigation cases.
      * @since 2.0
      */
     public abstract Map<String, Set<NavigationCase>> getNavigationCases();
@@ -139,6 +136,7 @@ public abstract class ConfigurableNavigationHandler extends NavigationHandler {
      * the current viewId is treated as the "from viewId" and the "from action"
      * is null.</p>
      * 
+     * @param outcome the provided outcome.
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
@@ -152,11 +150,10 @@ public abstract class ConfigurableNavigationHandler extends NavigationHandler {
      * compatibility with earlier implementations, an empty method
      * is provided.</p>
      * 
-     * 
+     * @param context the Faces context.
+     * @param flow the flow.
      * @since 2.2
      */
     public void inspectFlow(FacesContext context, Flow flow) {
-        
     }
-
 }

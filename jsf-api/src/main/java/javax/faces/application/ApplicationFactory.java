@@ -81,6 +81,8 @@ public abstract class ApplicationFactory implements FacesWrapper<ApplicationFact
     /**
      * <p>Create (if needed) and return an {@link Application} instance
      * for this web application.</p>
+     * 
+     * @return the application.
      */
     public abstract Application getApplication();
 

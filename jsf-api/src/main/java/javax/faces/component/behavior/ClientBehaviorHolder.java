@@ -74,6 +74,7 @@ public interface ClientBehaviorHolder {
      * <code>Collection</code> containing the names of the logical 
      * events supported by the component implementing this interface.</p>
      *
+     * @return an unmodifiable collection of event names.
      * @since 2.0
      */
     public Collection<String> getEventNames();
@@ -85,6 +86,7 @@ public interface ClientBehaviorHolder {
      * The keys in this <code>Map</code> are event names defined by
      * {@link #getEventNames}.</p>
      *
+     * @return an unmodifiable map of client behaviors.
      * @since 2.0
      */
     public Map<String, List<ClientBehavior>> getClientBehaviors();
@@ -96,6 +98,7 @@ public interface ClientBehaviorHolder {
      * {@link #getEventNames} or null if the component does not have
      * a default event.
      *
+     * @return the default event name.
      * @since 2.0
      */
     public String getDefaultEventName();

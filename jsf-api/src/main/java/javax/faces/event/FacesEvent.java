@@ -92,6 +92,8 @@ public abstract class FacesEvent extends EventObject {
 
     /**
      * <p>Return the source {@link UIComponent} that sent this event.
+     * 
+     * @return the source UI component.
      */
     public UIComponent getComponent() {
 
@@ -133,6 +135,8 @@ public abstract class FacesEvent extends EventObject {
      * singleton instances defined by the {@link PhaseId} class,
      * including <code>PhaseId.ANY_PHASE</code>, which is the default
      * value.</p>
+     * 
+     * @return the phase id.
      */
     public PhaseId getPhaseId() {
 	return phaseId;
@@ -141,11 +145,10 @@ public abstract class FacesEvent extends EventObject {
     /**
      * <p>Set the {@link PhaseId} during which this event will be
      * delivered.</p>
-     *
+     * 
+     * @param phaseId the phase id.
      * @throws IllegalArgumentException phaseId is null.
-     *
      */ 
-
     public void setPhaseId(PhaseId phaseId) {
 	if (null == phaseId) {
 	    throw new IllegalArgumentException();
@@ -177,6 +180,7 @@ public abstract class FacesEvent extends EventObject {
      * accomplished by an "instanceof" check on the listener class.</p>
      *
      * @param listener {@link FacesListener} to evaluate
+     * @return true if it is the appropriate instance, false otherwise.
      */
     public abstract boolean isAppropriateListener(FacesListener listener);
 
