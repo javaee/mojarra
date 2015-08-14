@@ -117,22 +117,27 @@ class TagUnit extends CompilationUnit implements TagConfig {
         }
     }
 
+    @Override
     public FaceletHandler createFaceletHandler() {
         return this.library.createTagHandler(this.namespace, this.name, this);
     }
 
+    @Override
     public FaceletHandler getNextHandler() {
         return this.getNextFaceletHandler();
     }
 
+    @Override
     public Tag getTag() {
         return this.tag;
     }
 
+    @Override
     public String getTagId() {
         return this.id;
     }
 
+    @Override
     public String toString() {
         return this.tag.toString();
     }

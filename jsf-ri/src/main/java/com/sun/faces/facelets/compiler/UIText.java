@@ -80,10 +80,12 @@ public final class UIText extends UILeaf {
         this.alias = alias;
     }
 
+    @Override
     public String getFamily() {
         return null;
     }
 
+    @Override
     public void encodeBegin(FacesContext context) throws IOException {
         if (this.isRendered()) {
             ResponseWriter out = context.getResponseWriter();
@@ -98,14 +100,17 @@ public final class UIText extends UILeaf {
         }
     }
 
+    @Override
     public String getRendererType() {
         return null;
     }
 
+    @Override
     public boolean getRendersChildren() {
         return true;
     }
 
+    @Override
     public String toString() {
         return this.txt.toString();
     }

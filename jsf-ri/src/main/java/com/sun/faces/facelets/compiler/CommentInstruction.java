@@ -72,16 +72,19 @@ final class CommentInstruction implements Instruction {
         this.text = text;
     }
 
+    @Override
     public void write(FacesContext context) throws IOException {
         ELContext elContext = context.getELContext();
         context.getResponseWriter().writeComment(this.text.toString(elContext));
     }
 
+    @Override
     public Instruction apply(ExpressionFactory factory, ELContext ctx) {
         ELText t = this.text.apply(factory, ctx);
         return new CommentInstruction(t);
     }
 
+    @Override
     public boolean isLiteral() {
         return false;
     }

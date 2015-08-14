@@ -70,14 +70,17 @@ final class LiteralCommentInstruction implements Instruction {
         this.text = text;
     }
 
+    @Override
     public void write(FacesContext context) throws IOException {
         context.getResponseWriter().writeComment(this.text);
     }
 
+    @Override
     public Instruction apply(ExpressionFactory factory, ELContext ctx) {
         return this;
     }
 
+    @Override
     public boolean isLiteral() {
         return true;
     }

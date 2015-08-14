@@ -82,6 +82,7 @@ public class PrivateApiFaceletCacheAdapter<V> extends FaceletCache<V> {
             final MemberFactory<V> viewMetadataFaceletFactory) {
         InstanceFactory<V> instanceFactory = new InstanceFactory<V>() {
 
+            @Override
             public V newInstance(URL key) throws IOException {
                 return faceletFactory.newInstance(key);
             }
@@ -89,6 +90,7 @@ public class PrivateApiFaceletCacheAdapter<V> extends FaceletCache<V> {
         };
         InstanceFactory<V> metadataInstanceFactory = new InstanceFactory<V>() {
 
+            @Override
             public V newInstance(URL key) throws IOException {
                 return viewMetadataFaceletFactory.newInstance(key);
             }

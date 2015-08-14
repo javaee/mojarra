@@ -70,12 +70,14 @@ public final class UILiteralText extends UILeaf {
         this.text = text;
     }
 
+    @Override
     public void encodeBegin(FacesContext faces) throws IOException {
         if (this.isRendered()) {
             ResponseWriter writer = faces.getResponseWriter();
             writer.write(this.text);
         }
     }
+    @Override
     public String toString() {
         return this.text;
     }

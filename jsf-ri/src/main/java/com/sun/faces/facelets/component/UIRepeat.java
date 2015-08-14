@@ -136,6 +136,7 @@ public class UIRepeat extends UINamingContainer {
         this.setRendererType("facelets.ui.Repeat");
     }
 
+    @Override
     public String getFamily() {
         return COMPONENT_FAMILY;
     }
@@ -311,6 +312,7 @@ public class UIRepeat extends UINamingContainer {
         return this.buffer;
     }
 
+    @Override
     public String getClientId(FacesContext faces) {
         String id = super.getClientId(faces);
         if (this.index >= 0) {
@@ -681,6 +683,7 @@ public class UIRepeat extends UINamingContainer {
         }
     }
 
+    @Override
      public boolean invokeOnComponent(FacesContext faces, String clientId,
             ContextCallback callback) throws FacesException {
         String id = super.getClientId(faces);
@@ -886,6 +889,7 @@ public class UIRepeat extends UINamingContainer {
     }
 
 
+    @Override
     public void processDecodes(FacesContext faces) {
         if (!this.isRendered())
             return;
@@ -895,12 +899,14 @@ public class UIRepeat extends UINamingContainer {
         this.decode(faces);
     }
 
+    @Override
     public void processUpdates(FacesContext faces) {
         if (!this.isRendered()) return;
         this.resetDataModel();
         this.process(faces, PhaseId.UPDATE_MODEL_VALUES);
     }
 
+    @Override
     public void processValidators(FacesContext faces) {
         if (!this.isRendered()) return;
         this.resetDataModel();
@@ -957,6 +963,7 @@ public class UIRepeat extends UINamingContainer {
             this.localValueSet = localValueSet;
         }
 
+        @Override
         public String toString() {
             return ("submittedValue: " + submittedValue + " value: " + value
                     + " localValueSet: " + localValueSet);
@@ -992,18 +999,22 @@ public class UIRepeat extends UINamingContainer {
             this.index = index;
         }
 
+        @Override
         public PhaseId getPhaseId() {
             return (this.target.getPhaseId());
         }
 
+        @Override
         public void setPhaseId(PhaseId phaseId) {
             this.target.setPhaseId(phaseId);
         }
 
+        @Override
         public boolean isAppropriateListener(FacesListener listener) {
             return this.target.isAppropriateListener(listener);
         }
 
+        @Override
         public void processListener(FacesListener listener) {
             UIRepeat owner = (UIRepeat) this.getComponent();
             int prevIndex = owner.index;
@@ -1028,6 +1039,7 @@ public class UIRepeat extends UINamingContainer {
 
     }
 
+    @Override
     public void broadcast(FacesEvent event) throws AbortProcessingException {
         if (event instanceof IndexedEvent) {
             IndexedEvent idxEvent = (IndexedEvent) event;
@@ -1079,10 +1091,12 @@ public class UIRepeat extends UINamingContainer {
         }
     }
 
+    @Override
     public void queueEvent(FacesEvent event) {
         super.queueEvent(new IndexedEvent(this, event, this.index));
     }
 
+    @Override
     public void restoreState(FacesContext faces, Object object) {
         if (faces == null) {
             throw new NullPointerException();
@@ -1102,6 +1116,7 @@ public class UIRepeat extends UINamingContainer {
         this.value = state[7];
     }
 
+    @Override
     public Object saveState(FacesContext faces) {
         resetClientIds(this);
         
@@ -1120,6 +1135,7 @@ public class UIRepeat extends UINamingContainer {
         return state;
     }
 
+    @Override
     public void encodeChildren(FacesContext faces) throws IOException {
         if (!isRendered()) {
             return;
@@ -1131,6 +1147,7 @@ public class UIRepeat extends UINamingContainer {
         this.process(faces, PhaseId.RENDER_RESPONSE);
     }
 
+    @Override
     public boolean getRendersChildren() {
         if (getRendererType() != null) {
             Renderer renderer = getRenderer(getFacesContext());

@@ -73,6 +73,7 @@ final class UILiteralTextHandler extends AbstractUIHandler {
         this.txtString = txtString;
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         if (parent != null) {
@@ -90,10 +91,12 @@ final class UILiteralTextHandler extends AbstractUIHandler {
         }
     }
 
+    @Override
     public String getText() {
         return this.txtString;
     }
 
+    @Override
     public String getText(FaceletContext ctx) {
         return this.txtString;
     }

@@ -78,6 +78,7 @@ final class NamespaceUnit extends CompilationUnit {
         this.library = library;
     }
 
+    @Override
     public FaceletHandler createFaceletHandler() {
         FaceletHandler next = this.getNextFaceletHandler();
         return new NamespaceHandler(next, this.library, this.ns);
@@ -87,6 +88,7 @@ final class NamespaceUnit extends CompilationUnit {
         this.ns.put(prefix, uri);
     }
     
+    @Override
     public void addChild(CompilationUnit unit) {
         super.addChild(unit);
     }

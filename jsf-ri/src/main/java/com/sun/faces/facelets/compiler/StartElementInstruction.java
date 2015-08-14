@@ -71,14 +71,17 @@ final class StartElementInstruction implements Instruction {
         this.element = element;
     }
 
+    @Override
     public void write(FacesContext context) throws IOException {
         context.getResponseWriter().startElement(this.element, null);
     }
 
+    @Override
     public Instruction apply(ExpressionFactory factory, ELContext ctx) {
         return this;
     }
 
+    @Override
     public boolean isLiteral() {
         return true;
     }

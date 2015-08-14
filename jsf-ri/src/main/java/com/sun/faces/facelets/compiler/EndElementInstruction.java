@@ -82,6 +82,7 @@ final class EndElementInstruction implements Instruction {
         this.element = element;
     }
 
+    @Override
     public void write(FacesContext context) throws IOException {
         if (HEAD_ELEMENT.equalsIgnoreCase(this.element)) {
             warnUnhandledResources(context, HEAD_ELEMENT);
@@ -93,10 +94,12 @@ final class EndElementInstruction implements Instruction {
         context.getResponseWriter().endElement(this.element);
     }
 
+    @Override
     public Instruction apply(ExpressionFactory factory, ELContext ctx) {
         return this;
     }
 
+    @Override
     public boolean isLiteral() {
         return true;
     }

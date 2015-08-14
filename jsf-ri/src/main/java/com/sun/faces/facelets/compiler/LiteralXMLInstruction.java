@@ -76,16 +76,19 @@ final class LiteralXMLInstruction implements Instruction {
         this.len = this.instruction.length;
     }
 
+    @Override
     public void write(FacesContext context) throws IOException {
         ResponseWriter rw = context.getResponseWriter();
         rw.writeText(STOP, 0, 0); // hack to get closing elements
         rw.write(this.instruction, 0, this.len);
     }
 
+    @Override
     public Instruction apply(ExpressionFactory factory, ELContext ctx) {
         return this;
     }
 
+    @Override
     public boolean isLiteral() {
         return true;
     }

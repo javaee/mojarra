@@ -100,6 +100,7 @@ final class TextUnit extends CompilationUnit {
         this.startTagOpen = false;
     }
 
+    @Override
     public FaceletHandler createFaceletHandler() {
         this.flushBufferToConfig(true);
 
@@ -241,6 +242,7 @@ final class TextUnit extends CompilationUnit {
         }
     }
 
+    @Override
     public void addChild(CompilationUnit unit) {
         // if we are adding some other kind of unit
         // then we need to capture our buffer into a UITextHandler
@@ -336,6 +338,7 @@ final class TextUnit extends CompilationUnit {
         return "";
     }
 
+    @Override
     public String toString() {
         return "TextUnit[" + this.children.size() + "]";
     }

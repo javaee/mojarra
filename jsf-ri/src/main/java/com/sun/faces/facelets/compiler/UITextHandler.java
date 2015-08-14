@@ -87,6 +87,7 @@ final class UITextHandler extends AbstractUIHandler {
         this.length = txt.toString().length();
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
     throws IOException {
         if (parent != null) {
@@ -110,14 +111,17 @@ final class UITextHandler extends AbstractUIHandler {
         }
     }
 
+    @Override
     public String toString() {
         return this.txt.toString();
     }
 
+    @Override
     public String getText() {
         return this.txt.toString();
     }
 
+    @Override
     public String getText(FaceletContext ctx) {
         Writer writer = new FastWriter(this.length);
         try {

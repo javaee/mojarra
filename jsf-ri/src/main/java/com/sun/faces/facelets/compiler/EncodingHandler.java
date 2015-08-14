@@ -79,6 +79,7 @@ public class EncodingHandler implements FaceletHandler {
         this.messageHolder = messageHolder;
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         FacesContext context = ctx.getFacesContext();

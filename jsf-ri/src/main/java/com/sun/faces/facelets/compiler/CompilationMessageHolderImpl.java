@@ -61,6 +61,7 @@ public class CompilationMessageHolderImpl implements CompilerPackageCompilationM
         return messageListMap;
     }
     
+    @Override
     public List<FacesMessage> getNamespacePrefixMessages(FacesContext context,
             String prefix) {
         List<FacesMessage> result = null;
@@ -73,6 +74,7 @@ public class CompilationMessageHolderImpl implements CompilerPackageCompilationM
         return result;
     }
 
+    @Override
     public void processCompilationMessages(FacesContext context) {
         Map<String, List<FacesMessage>> map = getMessageListMap();
         Collection<List<FacesMessage>> values = map.values();
@@ -83,15 +85,18 @@ public class CompilationMessageHolderImpl implements CompilerPackageCompilationM
         }
     }
 
+    @Override
     public void removeNamespacePrefixMessages(String prefix) {
         Map<String, List<FacesMessage>> map = getMessageListMap();
         map.remove(prefix);
     }
 
+    @Override
     public CompilationManager getCurrentCompositeComponentCompilationManager() {
         return compilationManager;
     }
 
+    @Override
     public void setCurrentCompositeComponentCompilationManager(CompilationManager manager) {
         this.compilationManager = manager;
     }

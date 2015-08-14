@@ -73,10 +73,12 @@ public class RepeatRenderer extends Renderer {
         super();
     }
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
         
     }
 
+    @Override
     public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
         if (component.getChildCount() > 0) {
             Map a = component.getAttributes();
@@ -110,10 +112,12 @@ public class RepeatRenderer extends Renderer {
         }
     }
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
       
     }
     
+    @Override
     public boolean getRendersChildren() {
         return true;
     }

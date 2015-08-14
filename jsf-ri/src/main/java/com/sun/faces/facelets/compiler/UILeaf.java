@@ -81,10 +81,12 @@ public class UILeaf extends UIComponentBase {
     
         private static final long serialVersionUID = 6132215325480325558L;
 
+        @Override
         public void putAll(Map map) {
             // do nothing
         }
     
+        @Override
         public UIComponent put(String name, UIComponent value) {
             return null;
         }
@@ -93,139 +95,173 @@ public class UILeaf extends UIComponentBase {
     private UIComponent parent;
     private boolean returnLocalTransient = true;
 
+    @Override
     public ValueBinding getValueBinding(String binding) {
         return null;
     }
 
+    @Override
     public void setValueBinding(String name, ValueBinding binding) {
         // do nothing
     }
 
+    @Override
     public ValueExpression getValueExpression(String name) {
         return null;
     }
 
+    @Override
     public void setValueExpression(String name, ValueExpression arg1) {
         // do nothing
     }
 
+    @Override
     public String getFamily() {
         return "facelets.LiteralText";
     }
 
+    @Override
     public UIComponent getParent() {
         return this.parent;
     }
 
+    @Override
     public void setParent(UIComponent parent) {
         this.parent = parent;
                 }
 
+    @Override
     public String getRendererType() {
         return null;
     }
 
+    @Override
     public void setRendererType(String rendererType) {
         // do nothing
     }
 
+    @Override
     public boolean getRendersChildren() {
         return true;
     }
 
+    @Override
     public List<UIComponent> getChildren() {
         return Collections.emptyList();
     }
 
+    @Override
     public int getChildCount() {
         return 0;
     }
 
+    @Override
     public UIComponent findComponent(String id) {
         return null;
     }
 
+    @Override
     public Map<String,UIComponent> getFacets() {
         return facets;
     }
 
+    @Override
     public int getFacetCount() {
         return 0;
     }
 
+    @Override
     public UIComponent getFacet(String name) {
         return null;
     }
 
+    @Override
     public Iterator<UIComponent> getFacetsAndChildren() {
         return Collections.<UIComponent>emptyList().iterator();
     }
 
+    @Override
     public void broadcast(FacesEvent event) throws AbortProcessingException {
         // do nothing
     }
 
+    @Override
     public void decode(FacesContext faces) {
         // do nothing
     }
 
+    @Override
     public void encodeBegin(FacesContext faces) throws IOException {
         // do nothing
     }
 
+    @Override
     public void encodeChildren(FacesContext faces) throws IOException {
         // do nothing
     }
 
+    @Override
     public void encodeEnd(FacesContext faces) throws IOException {
         // do nothing
     }
 
+    @Override
     public void encodeAll(FacesContext faces) throws IOException {
         this.encodeBegin(faces);
     }
 
+    @Override
     protected void addFacesListener(FacesListener faces) {
         // do nothing
     }
 
+    @Override
     protected FacesListener[] getFacesListeners(Class faces) {
         return null;
     }
 
+    @Override
     protected void removeFacesListener(FacesListener faces) {
         // do nothing
     }
 
+    @Override
     public void queueEvent(FacesEvent event) {
         // do nothing
     }
 
+    @Override
     public void processDecodes(FacesContext faces) {
         // do nothing
     }
 
+    @Override
     public void processValidators(FacesContext faces) {
         // do nothing
     }
 
+    @Override
     public void processUpdates(FacesContext faces) {
         // do nothing
     }
 
+    @Override
     protected FacesContext getFacesContext() {
         return FacesContext.getCurrentInstance();
     }
 
+    @Override
     protected Renderer getRenderer(FacesContext faces) {
         return null;
     }
 
 
+    @Override
     public boolean isTransient() {
         return ((returnLocalTransient) || super.isTransient());
     }
 
+    @Override
     public void setTransient(boolean tranzient) {
         returnLocalTransient = false;
         super.setTransient(tranzient);

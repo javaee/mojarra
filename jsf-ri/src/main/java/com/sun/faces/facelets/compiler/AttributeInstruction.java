@@ -82,6 +82,7 @@ final class AttributeInstruction implements Instruction {
         this.txt   = txt;
     }
 
+    @Override
     public void write(FacesContext context) throws IOException {
         ResponseWriter out = context.getResponseWriter();
         try {
@@ -97,6 +98,7 @@ final class AttributeInstruction implements Instruction {
         }
     }
 
+    @Override
     public Instruction apply(ExpressionFactory factory, ELContext ctx) {
         ELText nt = this.txt.apply(factory, ctx);
         if (nt == this.txt) {
@@ -106,6 +108,7 @@ final class AttributeInstruction implements Instruction {
         return new AttributeInstruction(alias, attr, nt);
     }
 
+    @Override
     public boolean isLiteral() {
         return txt.isLiteral();
     }

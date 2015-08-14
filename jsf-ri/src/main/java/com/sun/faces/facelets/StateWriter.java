@@ -131,30 +131,37 @@ final class StateWriter extends Writer {
         return this.writtenState;
     }
 
+    @Override
     public void close() throws IOException {
         // do nothing
     }
 
+    @Override
     public void flush() throws IOException {
         // do nothing
     }
     
+    @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
         this.out.write(cbuf, off, len);
     }
 
+    @Override
     public void write(char[] cbuf) throws IOException {
         this.out.write(cbuf);
     }
 
+    @Override
     public void write(int c) throws IOException {
         this.out.write(c);
     }
 
+    @Override
     public void write(String str, int off, int len) throws IOException {
         this.out.write(str, off, len);
     }
 
+    @Override
     public void write(String str) throws IOException {
         this.out.write(str);
     }

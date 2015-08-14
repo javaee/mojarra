@@ -76,16 +76,19 @@ public class XMLInstruction implements Instruction {
         this.text = text;
     }
 
+    @Override
     public void write(FacesContext context) throws IOException {
         ResponseWriter rw = context.getResponseWriter();
         rw.writeText(STOP, 0, 0); // hack to get closing elements
         this.text.write(rw, context.getELContext());
     }
 
+    @Override
     public Instruction apply(ExpressionFactory factory, ELContext ctx) {
         return new XMLInstruction(text.apply(factory, ctx));
     }
 
+    @Override
     public boolean isLiteral() {
         return false;
     }
