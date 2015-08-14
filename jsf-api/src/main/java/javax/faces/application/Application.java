@@ -119,6 +119,8 @@ public abstract class Application {
      * continue to work with components that do not implement {@link
      * javax.faces.component.ActionSource2}, and only implement {@link
      * javax.faces.component.ActionSource}.</p>
+     * 
+     * @return the action listener.
      */
     public abstract ActionListener getActionListener();
 
@@ -137,6 +139,8 @@ public abstract class Application {
     /**
      * <p>Return the default <code>Locale</code> for this application.  If
      * not explicitly set, <code>null</code> is returned.</p>
+     * 
+     * @return the default Locale, or <code>null</code>.
      */ 
     public abstract Locale getDefaultLocale();
 
@@ -156,6 +160,8 @@ public abstract class Application {
      * <p>Return the <code>renderKitId</code> to be used for rendering
      * this application.  If not explicitly set, <code>null</code> is
      * returned.</p>
+     * 
+     * @return the default render kit id, or <code>null</code>.
      */
     public abstract String getDefaultRenderKitId();
 
@@ -168,6 +174,8 @@ public abstract class Application {
      * application startup, before any Faces requests have been processed.
      * This is a limitation of the current Specification, and may be lifted in
      * a future release.</p>
+     * 
+     * @param renderKitId the render kit id to set.
      */
     public abstract void setDefaultRenderKitId(String renderKitId);
 
@@ -178,6 +186,8 @@ public abstract class Application {
      * <code>ResourceBundle</code> to be used for JavaServer Faces messages
      * for this application.  If not explicitly set, <code>null</code>
      * is returned.</p>
+     * 
+     * @return the message bundle class name, or <code>null</code>.
      */
     public abstract String getMessageBundle();
 
@@ -202,6 +212,8 @@ public abstract class Application {
      * web application.  If not explicitly set, a default implementation
      * must be provided that performs the functions described in the
      * {@link NavigationHandler} class description.</p>
+     * 
+     * @return the navigation handler.
      */
     public abstract NavigationHandler getNavigationHandler();
 
@@ -242,6 +254,8 @@ public abstract class Application {
 
 
      * </div>
+     * 
+     * @return the resource handler.
      * @since 2.0
      */
     public ResourceHandler getResourceHandler() {
@@ -292,6 +306,7 @@ public abstract class Application {
      * that aids in allowing custom <code>PropertyResolver</code>s to
      * affect the EL resolution process.</p>
      *
+     * @return the property resolver.
      * @deprecated This has been replaced by {@link #getELResolver}.  
      */
     public abstract PropertyResolver getPropertyResolver();
@@ -343,13 +358,13 @@ public abstract class Application {
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
+     * @param ctx the Faces context.
+     * @param name the name of the resource bundle.
+     * @return the resource bundle.
      * @throws FacesException if a bundle was defined, but not resolvable
-     *
      * @throws NullPointerException if ctx == null || name == null
-     *
      * @since 1.2
      */
-    
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
 
         if (defaultApplication != null) {
@@ -405,6 +420,7 @@ public abstract class Application {
 
      * </div>
      *
+     * @return the project stage.
      * @since 2.0
      */
     public ProjectStage getProjectStage() {
@@ -431,6 +447,7 @@ public abstract class Application {
      * that aids in allowing custom <code>VariableResolver</code>s to
      * affect the EL resolution process.</p>
      *
+     * @return the variable resolver.
      * @deprecated This has been replaced by {@link #getELResolver}.  
      */
     public abstract VariableResolver getVariableResolver();
@@ -500,10 +517,10 @@ public abstract class Application {
      * class="changed_modified_2_0_rev_a">if called after the first
      * request to the {@link javax.faces.webapp.FacesServlet} has been
      * serviced.</span>
-
+     * 
+     * @param resolver the EL resolver to add.
      * @since 1.2
      */
-
     public void addELResolver(ELResolver resolver) {
 
         if (defaultApplication != null) {
@@ -545,9 +562,9 @@ public abstract class Application {
      * and is provided for the sole purpose of not breaking existing applications 
      * that extend {@link Application}.</p>
      *
+     * @return the EL resolver.
      * @since 1.2
      */
-
     public ELResolver getELResolver() {
 
         if (defaultApplication != null) {
@@ -573,13 +590,11 @@ public abstract class Application {
      * provided that returns {@code null}.  Due to the decoratable nature
      * of {@code Application}, code calling this method should always check
      * for a {@code null} return.</p>
-
      * </div>
-
+     * 
+     * @return the flow handler.
      * @since 2.2
-     *
      */ 
-
     public FlowHandler getFlowHandler() {
 
         if (defaultApplication != null) {
@@ -593,16 +608,13 @@ public abstract class Application {
      * <p class="changed_added_2_2">Set the {@link FlowHandler} instance used by
      * the {@link NavigationHandler} to satisfy the requirements of the faces
      * flows feature.</p>
-
-     * @since 2.2
      * 
+     * @param newHandler the flow handler to set.
      * @throws NullPointerException if newHandler is <code>null</code>
-     * 
      * @throws IllegalStateException if this method is called after at least one 
      * request has been processed by the {@code Lifecycle} instance for this application. 
-     *
+     * @since 2.2
      */ 
-
     public void setFlowHandler(FlowHandler newHandler) {
 
         if (defaultApplication != null) {
@@ -619,6 +631,8 @@ public abstract class Application {
      * a default implementation must be provided that performs the functions
      * described in the {@link ViewHandler} description in the
      * JavaServer Faces Specification.</p>
+     * 
+     * @return the view handler.
      */
     public abstract ViewHandler getViewHandler();
 
@@ -647,6 +661,8 @@ public abstract class Application {
      * a default implementation must be provided that performs the functions
      * described in the {@link StateManager} description
      * in the JavaServer Faces Specification.</p>
+     * 
+     * @return the state manager.
      */
     public abstract StateManager getStateManager();
 
@@ -702,7 +718,7 @@ public abstract class Application {
      *
      * @param behaviorId The behavior id for which to create and
      *  return a new {@link Behavior} instance
-     * 
+     * @return the behavior.
      * @throws FacesException if the {@link Behavior} cannot be
      *  created
      * @throws NullPointerException if <code>behaviorId</code>
@@ -721,6 +737,8 @@ public abstract class Application {
     /**
      * <p>Return an <code>Iterator</code> over the set of currently registered
      * behavior ids for this <code>Application</code>.</p>
+     * 
+     * @return an iterator with behavior ids.
      */
     public Iterator<String> getBehaviorIds() {
 
@@ -772,7 +790,7 @@ public abstract class Application {
 
      * @param componentType The component type for which to create and
      * return a new {@link UIComponent} instance
-     *
+     * @return the UI component.
      * @throws FacesException if a {@link UIComponent} of the
      *  specified type cannot be created
      * @throws NullPointerException if <code>componentType</code>
@@ -797,11 +815,9 @@ public abstract class Application {
      * @param context {@link FacesContext} for the current request
      * @param componentType Component type to create if the {@link ValueBinding}
      *  does not return a component instance
-     *
+     * @return the UI component.
      * @throws FacesException if a {@link UIComponent} cannot be created
      * @throws NullPointerException if any parameter is <code>null</code>
-     *
-     *
      * @deprecated This has been replaced by {@link
      * #createComponent(javax.el.ValueExpression,javax.faces.context.FacesContext,java.lang.String)}.
      */
@@ -835,6 +851,10 @@ public abstract class Application {
      * province of {@link #createComponent(ValueExpression,
      * FacesContext, String, String)} or {@link
      * #createComponent(FacesContext, String, String)}.</p>
+     * 
+     * <p>A default implementation is provided that throws 
+     * <code>UnsupportedOperationException</code> so that users
+     * that decorate <code>Application</code> can continue to function.</p>
      *
      * @param componentExpression {@link ValueExpression} representing a
      * component value expression (typically specified by the
@@ -842,14 +862,9 @@ public abstract class Application {
      * @param context {@link FacesContext} for the current request
      * @param componentType Component type to create if the {@link
      * ValueExpression} does not return a component instance
-     * 
+     * @return the UI component.
      * @throws FacesException if a {@link UIComponent} cannot be created
      * @throws NullPointerException if any parameter is <code>null</code>
-     *
-     * <p>A default implementation is provided that throws 
-     * <code>UnsupportedOperationException</code> so that users
-     * that decorate <code>Application</code> can continue to function.</p>
-     * 
      * @since 1.2
      */
     public UIComponent createComponent(ValueExpression componentExpression,
@@ -896,21 +911,17 @@ public abstract class Application {
      * @param componentExpression {@link ValueExpression} representing a
      * component value expression (typically specified by the
      * <code>component</code> attribute of a custom tag)
-     *
      * @param context {@link FacesContext} for the current request
-     *
      * @param componentType Component type to create if the {@link
      * ValueExpression} does not return a component instance
-     *
      * @param rendererType The renderer-type of the
      * <code>Renderer</code> that will render this component.  A
      * <code>null</code> value must be accepted for this parameter.
-     *
+     * @return the UI component.
      * @throws FacesException if a {@link UIComponent} cannot be created
      * @throws NullPointerException if any of the parameters
      * <code>componentExpression</code>, <code>context</code>, or
      * <code>componentType</code> are <code>null</code>
-     *
      * @since 2.0
      */
     public UIComponent createComponent(ValueExpression componentExpression,
@@ -955,19 +966,15 @@ public abstract class Application {
 
      *
      * @param context {@link FacesContext} for the current request
-     *
      * @param componentType Component type to create
-     *
      * @param rendererType The renderer-type of the
      * <code>Renderer</code> that will render this component.  A
      * <code>null</code> value must be accepted for this parameter.
-     *
+     * @return the UI component.
      * @throws FacesException if a {@link UIComponent} cannot be created
-     *
      * @throws NullPointerException if any of the parameters
      * <code>context</code>, or <code>componentType</code> are
      * <code>null</code>
-     *
      * @since 2.0
      */
     public UIComponent createComponent(FacesContext context,
@@ -1098,15 +1105,12 @@ public abstract class Application {
      * @param context {@link FacesContext} for the current request
      * @param componentResource A {@link Resource} that points to a
      * source file that provides an implementation of a component.
-     *
+     * @return the UI component.
      * @throws FacesException if a {@link UIComponent} from the {@link
      * Resource} cannot be created
-
      * @throws NullPointerException if any parameter is <code>null</code>
-     * 
      * @throws NullPointerException if unable, for any reason, to obtain a 
      * <code>ViewDeclarationLanguage</code> instance as described above.
-     *
      * @since 2.0
      */
     public UIComponent createComponent(FacesContext context,
@@ -1124,6 +1128,8 @@ public abstract class Application {
     /**
      * <p>Return an <code>Iterator</code> over the set of currently defined
      * component types for this <code>Application</code>.</p>
+     * 
+     * @return an iterator with component types.
      */
     public abstract Iterator<String> getComponentTypes();
 
@@ -1191,7 +1197,7 @@ public abstract class Application {
      *
      * @param converterId The converter id for which to create and
      *  return a new {@link Converter} instance
-     *
+     * @return the converter.
      * @throws FacesException if the {@link Converter} cannot be
      *  created
      * @throws NullPointerException if <code>converterId</code>
@@ -1238,7 +1244,7 @@ public abstract class Application {
      * <code>TimeZone.getDefault()</code>.</p>
      *
      * @param targetClass Target class for which to return a {@link Converter}
-     *
+     * @return the converter.
      * @throws FacesException if the {@link Converter} cannot be
      *  created
      * @throws NullPointerException if <code>targetClass</code>
@@ -1250,6 +1256,8 @@ public abstract class Application {
     /**
      * <p>Return an <code>Iterator</code> over the set of currently registered
      * converter ids for this <code>Application</code>.</p>
+     * 
+     * @return an iterator with converter ids.
      */
     public abstract Iterator<String> getConverterIds();
 
@@ -1258,6 +1266,8 @@ public abstract class Application {
      * <p>Return an <code>Iterator</code> over the set of <code>Class</code>
      * instances for which {@link Converter} classes have been explicitly
      * registered.</p>
+     * 
+     * @return an iterator with converter types.
      */
     public abstract Iterator<Class<?>> getConverterTypes();
 
@@ -1274,6 +1284,7 @@ public abstract class Application {
      * so that users that decorate
      * the <code>Application</code> continue to work.
      *
+     * @param validatorId the validator id.
      * @since 2.0
      */
     public void addDefaultValidatorId(String validatorId) {
@@ -1294,6 +1305,7 @@ public abstract class Application {
      * so that users that decorate
      * the <code>Application</code> continue to work.
      *
+     * @return a map of default validator information.
      * @since 2.0
      */
     public Map<String,String> getDefaultValidatorInfo() {
@@ -1319,6 +1331,7 @@ public abstract class Application {
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
+     * @return the expression factory.
      * @since 1.2
      */
 
@@ -1345,8 +1358,12 @@ public abstract class Application {
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
+     * @param <T> the return type.
+     * @param context the Faces context.
+     * @param expression the expression.
+     * @param expectedType the expected type.
+     * @return the result of the evaluation.
      */
-
     public <T> T evaluateExpressionGet(FacesContext context,
                                        String expression,
                                        Class<? extends T> expectedType) throws ELException {
@@ -1371,12 +1388,11 @@ public abstract class Application {
      * @param params Parameter signatures that must be compatible with those
      *  of the method to be invoked, or a zero-length array or <code>null</code>
      *  for a method that takes no parameters
-     *
+     * @return the method binding.
      * @throws NullPointerException if <code>ref</code>
      *  is <code>null</code>
      * @throws ReferenceSyntaxException if the specified <code>ref</code>
      *  has invalid syntax
-     *
      * @deprecated This has been replaced by calling {@link
      * #getExpressionFactory} then {@link
      * ExpressionFactory#createMethodExpression}.
@@ -1389,6 +1405,8 @@ public abstract class Application {
     /**
      * <p>Return an <code>Iterator</code> over the supported
      * <code>Locale</code>s for this appication.</p>
+     * 
+     * @return an iterator of the supported locales.
      */ 
     public abstract Iterator<Locale> getSupportedLocales();
 
@@ -1416,6 +1434,7 @@ public abstract class Application {
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
+     * @param listener the EL context listener to add.
      * @since 1.2
      */
 
@@ -1440,6 +1459,7 @@ public abstract class Application {
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      * 
+     * @param listener the EL context listener to remove.
      * @since 1.2
      */
 
@@ -1464,6 +1484,7 @@ public abstract class Application {
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
+     * @return an array of EL context listeners.
      * @since 1.2
      */
 
@@ -1515,7 +1536,7 @@ public abstract class Application {
 
      * @param validatorId The validator id for which to create and
      *  return a new {@link Validator} instance
-     *
+     * @return the validator.
      * @throws FacesException if a {@link Validator} of the
      *  specified id cannot be created
      * @throws NullPointerException if <code>validatorId</code>
@@ -1528,6 +1549,8 @@ public abstract class Application {
     /**
      * <p>Return an <code>Iterator</code> over the set of currently registered
      * validator ids for this <code>Application</code>.</p>
+     * 
+     * @return an iterator of validator ids.
      */
     public abstract Iterator<String> getValidatorIds();
 
@@ -1541,12 +1564,11 @@ public abstract class Application {
      *
      * @param ref Value binding expression for which to return a
      *  {@link ValueBinding} instance
-     *
+     * @return the value binding.
      * @throws NullPointerException if <code>ref</code>
      *  is <code>null</code>
      * @throws ReferenceSyntaxException if the specified <code>ref</code>
      *  has invalid syntax
-     *
      * @deprecated This has been replaced by calling {@link
      * #getExpressionFactory} then {@link
      * ExpressionFactory#createValueExpression}.
