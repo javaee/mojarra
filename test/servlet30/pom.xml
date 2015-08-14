@@ -77,6 +77,7 @@
         <module>component</module>
         <module>composite</module>
         <module>compositeComponentForAttribute</module>
+        <module>configBasic</module>
         <module>configEmbed</module>
         <module>configExtra</module>
         <module>configFile</module>
