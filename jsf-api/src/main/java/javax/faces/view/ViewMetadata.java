@@ -82,6 +82,21 @@ public abstract class ViewMetadata {
      * the method, and pass <code>true</code> to the same method at the
      * end.  The implementation must ensure that this happens regardless
      * of ant exceptions that may be thrown.</p>
+     * 
+     * <p class="changed_modified_2_3">
+     *  Take note a compliant implementation has to ensure that:
+     *  <ul>
+     *   <li>
+     *    the new UIViewRoot must be set as the FacesContext's viewRoot 
+     *    before applying the tag handlers, restoring the old FacesContext 
+     *    in a finally block.
+     *   </li>
+     *   <li>
+     *    The contents of the current UIViewRoot's ViewMap must be copied 
+     *    to the ViewMap of the new UIViewRoot before applying the tag handlers.
+     *   </li>
+     *  </ul>
+     * </p>
      *
      * @param context the {@link FacesContext} for the current request
      * @return a <code>UIViewRoot</code> containing only view parameter metadata
