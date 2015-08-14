@@ -55,6 +55,13 @@ import javax.faces.component.UIComponent;
  * language custom tag handler can inherit.  The JSF runtime provides
  * the implementation of {@link #getTagHandlerDelegate} for the
  * appropriate subclass.</p>
+ * 
+ * <p class="changed_added_2_3">
+ *  Code that extends from DelagatingMetaTagHandler (directly or indirectly, as
+ *  through extending ComponentHandler) must take care to decorate, not replace,
+ *  the TagHandlerDelegate instance returned by this method. Failure to do so 
+ *  may produce unexpected results.
+ * </p>
  */
 
 public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
