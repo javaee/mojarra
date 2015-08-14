@@ -85,6 +85,7 @@ public final class CompositeVariableMapper extends VariableMapper {
     /**
      * @see javax.el.VariableMapper#resolveVariable(java.lang.String)
      */
+    @Override
     public ValueExpression resolveVariable(String name) {
         ValueExpression ve = this.var0.resolveVariable(name);
         if (ve == null) {
@@ -96,6 +97,7 @@ public final class CompositeVariableMapper extends VariableMapper {
     /**
      * @see javax.el.VariableMapper#setVariable(java.lang.String, javax.el.ValueExpression)
      */
+    @Override
     public ValueExpression setVariable(String name, ValueExpression expression) {
         return this.var0.setVariable(name, expression);
     }

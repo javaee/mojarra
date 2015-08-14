@@ -150,6 +150,7 @@ public final class ContextualCompositeValueExpression extends ValueExpression {
     // ------------------------------------ Methods from ValueExpression
 
 
+    @Override
     public Object getValue(ELContext elContext) {
 
         FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
@@ -164,6 +165,7 @@ public final class ContextualCompositeValueExpression extends ValueExpression {
 
     }
 
+    @Override
     public void setValue(ELContext elContext, Object o) {
 
         FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
@@ -178,6 +180,7 @@ public final class ContextualCompositeValueExpression extends ValueExpression {
 
     }
 
+    @Override
     public boolean isReadOnly(ELContext elContext) {
 
         FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
@@ -192,6 +195,7 @@ public final class ContextualCompositeValueExpression extends ValueExpression {
 
     }
 
+    @Override
     public Class<?> getType(ELContext elContext) {
 
         FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
@@ -206,6 +210,7 @@ public final class ContextualCompositeValueExpression extends ValueExpression {
 
     }
 
+    @Override
     public Class<?> getExpectedType() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
@@ -224,19 +229,23 @@ public final class ContextualCompositeValueExpression extends ValueExpression {
     // --------------------------------------------- Methods from Expression
 
 
+    @Override
     public String getExpressionString() {
         return originalVE.getExpressionString();
     }
 
     @SuppressWarnings({"EqualsWhichDoesntCheckParameterClass"})
+    @Override
     public boolean equals(Object o) {
         return originalVE.equals(o);
     }
 
+    @Override
     public int hashCode() {
         return originalVE.hashCode();
     }
 
+    @Override
     public boolean isLiteralText() {
         return originalVE.isLiteralText();
     }

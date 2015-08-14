@@ -84,6 +84,7 @@ public final class DefaultVariableMapper extends VariableMapper {
     /**
      * @see javax.el.VariableMapper#resolveVariable(java.lang.String)
      */
+    @Override
     public ValueExpression resolveVariable(String name) {
         if (this.vars != null) {
             return (ValueExpression) this.vars.get(name);
@@ -94,6 +95,7 @@ public final class DefaultVariableMapper extends VariableMapper {
     /**
      * @see javax.el.VariableMapper#setVariable(java.lang.String, javax.el.ValueExpression)
      */
+    @Override
     public ValueExpression setVariable(String name, ValueExpression expression) {
         if (this.vars == null) {
             this.vars = new HashMap();

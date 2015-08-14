@@ -179,12 +179,14 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
     // ------------------------------------------- Methods from MethodExpression
 
 
+    @Override
     public MethodInfo getMethodInfo(ELContext elContext) {
 
         return delegate.getMethodInfo(elContext);
 
     }
 
+    @Override
     public Object invoke(ELContext elContext, Object[] objects) {
 
         FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
@@ -251,6 +253,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
     // ------------------------------------------------- Methods from Expression
 
 
+    @Override
     public String getExpressionString() {
 
         return delegate.getExpressionString();
@@ -259,6 +262,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
 
 
     @SuppressWarnings({"EqualsWhichDoesntCheckParameterClass"})
+    @Override
     public boolean equals(Object o) {
 
         return delegate.equals(o);
@@ -266,6 +270,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
     }
 
 
+    @Override
     public int hashCode() {
 
         return delegate.hashCode();
@@ -273,6 +278,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
     }
 
 
+    @Override
     public boolean isLiteralText() {
 
         return delegate.isLiteralText();

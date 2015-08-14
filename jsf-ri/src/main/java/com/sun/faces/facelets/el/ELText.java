@@ -96,37 +96,46 @@ public class ELText {
             this.text = text;
         }
 
+        @Override
         public boolean isLiteralText() {
             return false;
         }
 
+        @Override
         public int hashCode() {
             return 0;
         }
 
+        @Override
         public String getExpressionString() {
             return this.text;
         }
 
+        @Override
         public boolean equals(Object obj) {
             return false;
         }
 
+        @Override
         public void setValue(ELContext context, Object value) {
         }
 
+        @Override
         public boolean isReadOnly(ELContext context) {
             return false;
         }
 
+        @Override
         public Object getValue(ELContext context) {
             return null;
         }
 
+        @Override
         public Class getType(ELContext context) {
             return null;
         }
 
+        @Override
         public Class getExpectedType() {
             return null;
         }
@@ -141,6 +150,7 @@ public class ELText {
             this.txt = txt;
         }
 
+        @Override
         public void write(Writer out, ELContext ctx) throws ELException,
                 IOException {
             for (int i = 0; i < this.txt.length; i++) {
@@ -148,6 +158,7 @@ public class ELText {
             }
         }
 
+        @Override
         public void writeText(ResponseWriter out, ELContext ctx)
                 throws ELException, IOException {
             for (int i = 0; i < this.txt.length; i++) {
@@ -155,6 +166,7 @@ public class ELText {
             }
         }
 
+        @Override
         public String toString(ELContext ctx) {
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < this.txt.length; i++) {
@@ -169,6 +181,7 @@ public class ELText {
          * sb.append(this.txt[i].toString(ctx)); } return sb.toString(); }
          */
 
+        @Override
         public String toString() {
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < this.txt.length; i++) {
@@ -177,10 +190,12 @@ public class ELText {
             return sb.toString();
         }
 
+        @Override
         public boolean isLiteral() {
             return false;
         }
 
+        @Override
         public ELText apply(ExpressionFactory factory, ELContext ctx) {
             int len = this.txt.length;
             ELText[] nt = new ELText[len];
@@ -199,10 +214,12 @@ public class ELText {
             this.ve = ve;
         }
 
+        @Override
         public boolean isLiteral() {
             return false;
         }
 
+        @Override
         public ELText apply(ExpressionFactory factory, ELContext ctx) {
             ELText result = null;
             if (this.ve instanceof ContextualCompositeValueExpression) {
@@ -215,6 +232,7 @@ public class ELText {
             return result;
         }
 
+        @Override
         public void write(Writer out, ELContext ctx) throws ELException,
                 IOException {
             Object v = this.ve.getValue(ctx);
@@ -224,6 +242,7 @@ public class ELText {
             }
         }
 
+        @Override
         public String toString(ELContext ctx) throws ELException {
             Object v = this.ve.getValue(ctx);
             if (v != null) {
@@ -233,6 +252,7 @@ public class ELText {
             return null;
         }
 
+        @Override
         public void writeText(ResponseWriter out, ELContext ctx)
                 throws ELException, IOException {
             Object v = this.ve.getValue(ctx);
@@ -305,6 +325,7 @@ public class ELText {
         return this.literal;
     }
 
+    @Override
     public String toString() {
         return this.literal;
     }

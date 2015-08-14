@@ -93,6 +93,7 @@ public class VariableMapperWrapper extends VariableMapper {
      *
      * @see javax.el.VariableMapper#resolveVariable(java.lang.String)
      */
+    @Override
     public ValueExpression resolveVariable(String variable) {
         ValueExpression ve = null;
         try {
@@ -115,6 +116,7 @@ public class VariableMapperWrapper extends VariableMapper {
      * @see javax.el.VariableMapper#setVariable(java.lang.String,
      *      javax.el.ValueExpression)
      */
+    @Override
     public ValueExpression setVariable(String variable,
                                        ValueExpression expression) {
         if (this.vars == null) {

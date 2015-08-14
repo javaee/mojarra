@@ -96,14 +96,17 @@ public final class LegacyELContext extends ELContext {
         this.variables = new DefaultVariableMapper();
     }
 
+    @Override
     public ELResolver getELResolver() {
         return this.resolver;
     }
 
+    @Override
     public FunctionMapper getFunctionMapper() {
         return FUNCTIONS;
     }
 
+    @Override
     public VariableMapper getVariableMapper() {
         return this.variables;
     }
@@ -114,10 +117,12 @@ public final class LegacyELContext extends ELContext {
 
     private final class LegacyELResolver extends ELResolver {
 
+        @Override
         public Class getCommonPropertyType(ELContext context, Object base) {
             return Object.class;
         }
 
+        @Override
         public Iterator getFeatureDescriptors(ELContext context, Object base) {
             return Collections.EMPTY_LIST.iterator();
         }
@@ -130,6 +135,7 @@ public final class LegacyELContext extends ELContext {
             return faces.getApplication().getPropertyResolver();
         }
 
+        @Override
         public Class getType(ELContext context, Object base, Object property) {
             if (property == null) {
                 return null;
@@ -157,6 +163,7 @@ public final class LegacyELContext extends ELContext {
             }
         }
 
+        @Override
         public Object getValue(ELContext context, Object base, Object property) {
             if (property == null) {
                 return null;
@@ -183,6 +190,7 @@ public final class LegacyELContext extends ELContext {
             }
         }
 
+        @Override
         public boolean isReadOnly(ELContext context, Object base,
                 Object property) {
             if (property == null) {
@@ -209,6 +217,7 @@ public final class LegacyELContext extends ELContext {
             }
         }
 
+        @Override
         public void setValue(ELContext context, Object base, Object property,
                 Object value) {
             if (property == null) {
@@ -265,6 +274,7 @@ public final class LegacyELContext extends ELContext {
 
     private final static class EmptyFunctionMapper extends FunctionMapper {
 
+        @Override
         public Method resolveFunction(String prefix, String localName) {
             return null;
         }

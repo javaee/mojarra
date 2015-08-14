@@ -91,6 +91,7 @@ public final class DefaultFunctionMapper extends FunctionMapper implements
       * @see javax.el.FunctionMapper#resolveFunction(java.lang.String,
       *      java.lang.String)
       */
+    @Override
     public Method resolveFunction(String prefix, String localName) {
         if (this.functions != null) {
             Function f = (Function) this.functions
@@ -115,6 +116,7 @@ public final class DefaultFunctionMapper extends FunctionMapper implements
       *
       * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
       */
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(this.functions);
     }
@@ -124,11 +126,13 @@ public final class DefaultFunctionMapper extends FunctionMapper implements
       *
       * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
       */
+    @Override
     public void readExternal(ObjectInput in) throws IOException,
                                                     ClassNotFoundException {
         this.functions = (Map) in.readObject();
     }
 
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer(128);
         sb.append("FunctionMapper[\n");
@@ -180,6 +184,7 @@ public final class DefaultFunctionMapper extends FunctionMapper implements
            *
            * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
            */
+        @Override
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeUTF((this.prefix != null) ? this.prefix : "");
             out.writeUTF(this.localName);
@@ -194,6 +199,7 @@ public final class DefaultFunctionMapper extends FunctionMapper implements
            *
            * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
            */
+        @Override
         public void readExternal(ObjectInput in) throws IOException,
                                                         ClassNotFoundException {
 
@@ -237,6 +243,7 @@ public final class DefaultFunctionMapper extends FunctionMapper implements
            *
            * @see java.lang.Object#equals(java.lang.Object)
            */
+        @Override
         public boolean equals(Object obj) {
             if (obj instanceof Function) {
                 return this.hashCode() == obj.hashCode();
@@ -249,10 +256,12 @@ public final class DefaultFunctionMapper extends FunctionMapper implements
            *
            * @see java.lang.Object#hashCode()
            */
+        @Override
         public int hashCode() {
             return (this.prefix + this.localName).hashCode();
         }
 
+        @Override
         public String toString() {
             StringBuffer sb = new StringBuffer(32);
             sb.append("Function[");

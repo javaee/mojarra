@@ -155,6 +155,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * 
      * @see javax.faces.view.facelets.FaceletContext#getFacesContext()
      */
+    @Override
     public FacesContext getFacesContext() {
         return this.faces;
     }
@@ -164,6 +165,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * 
      * @see javax.faces.view.facelets.FaceletContext#getExpressionFactory()
      */
+    @Override
     public ExpressionFactory getExpressionFactory() {
         return this.facelet.getExpressionFactory();
     }
@@ -173,6 +175,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * 
      * @see javax.faces.view.facelets.FaceletContext#setVariableMapper(javax.el.VariableMapper)
      */
+    @Override
     public void setVariableMapper(VariableMapper varMapper) {
         // Assert.param("varMapper", varMapper);
         this.varMapper = varMapper;
@@ -183,6 +186,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * 
      * @see javax.faces.view.facelets.FaceletContext#setFunctionMapper(javax.el.FunctionMapper)
      */
+    @Override
     public void setFunctionMapper(FunctionMapper fnMapper) {
         // Assert.param("fnMapper", fnMapper);
         this.fnMapper = fnMapper;
@@ -194,6 +198,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * @see javax.faces.view.facelets.FaceletContext#includeFacelet(javax.faces.component.UIComponent,
      *      java.lang.String)
      */
+    @Override
     public void includeFacelet(UIComponent parent, String relativePath)
             throws IOException, FacesException, ELException {
         this.facelet.include(this, parent, relativePath);
@@ -204,6 +209,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * 
      * @see javax.el.ELContext#getFunctionMapper()
      */
+    @Override
     public FunctionMapper getFunctionMapper() {
         return this.fnMapper;
     }
@@ -213,6 +219,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * 
      * @see javax.el.ELContext#getVariableMapper()
      */
+    @Override
     public VariableMapper getVariableMapper() {
         return this.varMapper;
     }
@@ -222,6 +229,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * 
      * @see javax.el.ELContext#getContext(java.lang.Class)
      */
+    @Override
     public Object getContext(Class key) {
         return this.ctx.getContext(key);
     }
@@ -231,6 +239,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * 
      * @see javax.el.ELContext#putContext(java.lang.Class, java.lang.Object)
      */
+    @Override
     public void putContext(Class key, Object contextObject) {
         this.ctx.putContext(key, contextObject);
     }
@@ -240,6 +249,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * 
      * @see javax.faces.view.facelets.FaceletContext#generateUniqueId(java.lang.String)
      */
+    @Override
     public String generateUniqueId(String base) {
 
         if(prefix==null) {
@@ -287,6 +297,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * 
      * @see javax.faces.view.facelets.FaceletContext#getAttribute(java.lang.String)
      */
+    @Override
     public Object getAttribute(String name) {
         if (this.varMapper != null) {
             ValueExpression ve = this.varMapper.resolveVariable(name);
@@ -303,6 +314,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * @see javax.faces.view.facelets.FaceletContext#setAttribute(java.lang.String,
      *      java.lang.Object)
      */
+    @Override
     public void setAttribute(String name, Object value) {
         if (this.varMapper != null) {
             if (value == null) {
@@ -321,17 +333,20 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
      * @see javax.faces.view.facelets.FaceletContext#includeFacelet(javax.faces.component.UIComponent,
      *      java.net.URL)
      */
+    @Override
     public void includeFacelet(UIComponent parent, URL absolutePath)
             throws IOException, FacesException, ELException {
         this.facelet.include(this, parent, absolutePath);
     }
 
+    @Override
     public ELResolver getELResolver() {
         return this.ctx.getELResolver();
     }
 
     private final List<TemplateManager> clients;
 
+    @Override
     public void popClient(TemplateClient client) {
         if (!this.clients.isEmpty()) {
             Iterator itr = this.clients.iterator();
@@ -345,14 +360,17 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
         throw new IllegalStateException(client + " not found");
     }
 
+    @Override
     public void pushClient(final TemplateClient client) {
         this.clients.add(0, new TemplateManager(this.facelet, client, true));
     }
 
+    @Override
     public void extendClient(final TemplateClient client) {
         this.clients.add(new TemplateManager(this.facelet, client, false));
     }
 
+    @Override
     public boolean includeDefinition(UIComponent parent, String name)
     throws IOException {
         boolean found = false;
@@ -384,6 +402,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
             this.root = root;
         }
 
+        @Override
         public boolean apply(FaceletContext ctx, UIComponent parent, String name)
         throws IOException {
 
@@ -413,10 +432,12 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     }
 
 
+    @Override
     public boolean isPropertyResolved() {
         return this.ctx.isPropertyResolved();
     }
 
+    @Override
     public void setPropertyResolved(boolean resolved) {
         this.ctx.setPropertyResolved(resolved);
     }

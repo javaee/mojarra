@@ -76,6 +76,7 @@ public class DefaultResourceResolver extends ResourceResolver {
         this.resourceHandler = resourceHandler;
     }
 
+    @Override
     public URL resolveUrl(String path) {
         ViewResource faceletResource = resourceHandler.createViewResource(FacesContext.getCurrentInstance(), path);
         URL result = null;

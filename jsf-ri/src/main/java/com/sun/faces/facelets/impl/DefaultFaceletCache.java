@@ -79,6 +79,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
 
         ConcurrentCache.Factory<URL, Record> faceletFactory =
             new ConcurrentCache.Factory<URL, Record>() {
+            @Override
             public Record newInstance(final URL key) throws IOException {
                 // Make sure that the expensive timestamp retrieval is not done
                 // if no expiry check is going to be performed
@@ -90,6 +91,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
 
         ConcurrentCache.Factory<URL, Record> metadataFaceletFactory =
             new ConcurrentCache.Factory<URL, Record>() {
+            @Override
             public Record newInstance(final URL key) throws IOException {
                 // Make sure that the expensive timestamp retrieval is not done
                 // if no expiry check is going to be performed
@@ -211,6 +213,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
 
     private static class ExpiryChecker implements ExpiringConcurrentCache.ExpiryChecker<URL, Record> {
 
+        @Override
         public boolean isExpired(URL url, Record record) {
             // getNextRefreshTime() incremenets the next refresh time atomically
             long ttl = record.getNextRefreshTime();
@@ -225,6 +228,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
     }
     
     private static class NeverExpired implements ExpiringConcurrentCache.ExpiryChecker<URL, Record> {
+        @Override
         public boolean isExpired(URL key, Record value) {
             return false;
         }
@@ -238,6 +242,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
             super(f);
         }
 
+        @Override
         public Record get(final URL key) throws ExecutionException {
             try {
                 return this.getFactory().newInstance(key);
@@ -246,6 +251,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
             }
         }
 
+        @Override
         public boolean containsKey(final URL key) {
             return false;
         }

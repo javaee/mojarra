@@ -89,6 +89,7 @@ public final class LegacyMethodBinding extends
      * 
      * @see javax.faces.el.MethodBinding#getType(javax.faces.context.FacesContext)
      */
+    @Override
     public Class getType(FacesContext context)
             throws MethodNotFoundException {
         try {
@@ -106,6 +107,7 @@ public final class LegacyMethodBinding extends
      * @see javax.faces.el.MethodBinding#invoke(javax.faces.context.FacesContext,
      *      java.lang.Object[])
      */
+    @Override
     public Object invoke(FacesContext context, Object[] params)
             throws EvaluationException, MethodNotFoundException {
         try {
@@ -117,6 +119,7 @@ public final class LegacyMethodBinding extends
         }
     }
 
+    @Override
     public String getExpressionString() {
         return m.getExpressionString();
     }

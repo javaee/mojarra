@@ -85,6 +85,7 @@ public final class CompositeFunctionMapper extends FunctionMapper {
     /**
      * @see javax.el.FunctionMapper#resolveFunction(java.lang.String, java.lang.String)
      */
+    @Override
     public Method resolveFunction(String prefix, String name) {
         Method m = this.fn0.resolveFunction(prefix, name);
         if (m == null) {

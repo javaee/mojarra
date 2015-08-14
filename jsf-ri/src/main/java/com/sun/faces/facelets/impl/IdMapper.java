@@ -121,6 +121,7 @@ public class IdMapper {
         // ------------------------------------------ Methods from Cache.Factory
 
 
+        @Override
         public String newInstance(String arg) throws InterruptedException {
 
             return 't' + Integer.toString(counter.incrementAndGet());

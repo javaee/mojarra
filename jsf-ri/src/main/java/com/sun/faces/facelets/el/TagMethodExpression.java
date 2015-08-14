@@ -88,6 +88,7 @@ public final class TagMethodExpression extends MethodExpression implements
         this.orig = orig;
     }
 
+    @Override
     public MethodInfo getMethodInfo(ELContext context) {
         try {
             return this.orig.getMethodInfo(context);
@@ -100,6 +101,7 @@ public final class TagMethodExpression extends MethodExpression implements
         }
     }
 
+    @Override
     public Object invoke(ELContext context, Object[] params) {
         try {
             return this.orig.invoke(context, params);
@@ -112,6 +114,7 @@ public final class TagMethodExpression extends MethodExpression implements
         }
     }
 
+    @Override
     public String getExpressionString() {
         return this.orig.getExpressionString();
     }
@@ -144,21 +147,25 @@ public final class TagMethodExpression extends MethodExpression implements
         return result;
     }
 
+    @Override
     public boolean isLiteralText() {
         return this.orig.isLiteralText();
     }
 
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(this.orig);
         out.writeUTF(this.attr);
     }
 
+    @Override
     public void readExternal(ObjectInput in) throws IOException,
             ClassNotFoundException {
         this.orig = (MethodExpression) in.readObject();
         this.attr = in.readUTF();
     }
 
+    @Override
     public String toString() {
         return this.attr + ": " + this.orig;
     }

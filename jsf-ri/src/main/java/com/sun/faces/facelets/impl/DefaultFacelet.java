@@ -145,6 +145,7 @@ final class DefaultFacelet extends Facelet implements XMLFrontMatterSaver {
     /**
      * @see com.sun.faces.facelets.Facelet#apply(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
      */
+    @Override
     public void apply(FacesContext facesContext, UIComponent parent)
         throws IOException {
 
@@ -384,18 +385,21 @@ final class DefaultFacelet extends Facelet implements XMLFrontMatterSaver {
             this.time = time;
         }
 
+        @Override
         public void readExternal(ObjectInput in) throws IOException,
                 ClassNotFoundException {
             this.alias = in.readUTF();
             this.time = in.readLong();
         }
 
+        @Override
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeUTF(this.alias);
             out.writeLong(this.time);
         }
     }
 
+    @Override
     public String toString() {
         return this.alias;
     }

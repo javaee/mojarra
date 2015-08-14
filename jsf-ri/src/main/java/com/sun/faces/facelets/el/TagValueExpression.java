@@ -89,10 +89,12 @@ public final class TagValueExpression extends ValueExpression implements
         this.orig = orig;
     }
 
+    @Override
     public Class getExpectedType() {
         return this.orig.getExpectedType();
     }
 
+    @Override
     public Class getType(ELContext context) {
         try {
             return this.orig.getType(context);
@@ -104,6 +106,7 @@ public final class TagValueExpression extends ValueExpression implements
         }
     }
 
+    @Override
     public Object getValue(ELContext context) {
         try {
             return this.orig.getValue(context);
@@ -115,6 +118,7 @@ public final class TagValueExpression extends ValueExpression implements
         }
     }
 
+    @Override
     public boolean isReadOnly(ELContext context) {
         try {
             return this.orig.isReadOnly(context);
@@ -126,6 +130,7 @@ public final class TagValueExpression extends ValueExpression implements
         }
     }
 
+    @Override
     public void setValue(ELContext context, Object value) {
         try {
             this.orig.setValue(context, value);
@@ -168,20 +173,24 @@ public final class TagValueExpression extends ValueExpression implements
         return result;
     }
 
+    @Override
     public String getExpressionString() {
         return this.orig.getExpressionString();
     }
 
+    @Override
     public boolean isLiteralText() {
         return this.orig.isLiteralText();
     }
 
+    @Override
     public void readExternal(ObjectInput in) throws IOException,
             ClassNotFoundException {
         this.orig = (ValueExpression) in.readObject();
         this.attr = in.readUTF();
     }
 
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(this.orig);
         out.writeUTF(this.attr);
@@ -191,6 +200,7 @@ public final class TagValueExpression extends ValueExpression implements
         return orig;
     }
 
+    @Override
     public String toString() {
         return this.attr;
     }

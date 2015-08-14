@@ -92,6 +92,7 @@ public final class LegacyValueBinding extends ValueBinding implements Externaliz
         this.delegate = ve;
     }
 
+    @Override
     public Object getValue(FacesContext context) throws EvaluationException,
             PropertyNotFoundException {
         ELContext ctx = context.getELContext();
@@ -104,6 +105,7 @@ public final class LegacyValueBinding extends ValueBinding implements Externaliz
         }
     }
 
+    @Override
     public void setValue(FacesContext context, Object value)
             throws EvaluationException, PropertyNotFoundException {
         ELContext ctx = context.getELContext();
@@ -116,6 +118,7 @@ public final class LegacyValueBinding extends ValueBinding implements Externaliz
         }
     }
 
+    @Override
     public boolean isReadOnly(FacesContext context) throws EvaluationException,
             PropertyNotFoundException {
         ELContext ctx = context.getELContext();
@@ -128,6 +131,7 @@ public final class LegacyValueBinding extends ValueBinding implements Externaliz
         }
     }
 
+    @Override
     public Class getType(FacesContext context) throws EvaluationException,
             PropertyNotFoundException {
         ELContext ctx = context.getELContext();
@@ -140,14 +144,17 @@ public final class LegacyValueBinding extends ValueBinding implements Externaliz
         }
     }
 
+    @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         this.delegate = (ValueExpression) in.readObject();
     }
 
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(this.delegate);
     }
 
+    @Override
     public String getExpressionString() {
         return this.delegate.getExpressionString();
     }
