@@ -3746,15 +3746,19 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
             <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
             <attribute>
                 <description><![CDATA[<div class="changed_added_2_0"><p>The
-                <em>resourceName</em> for this resource.</p></div><div class="changed_modified_2_0_rev_a">
-                <p>This attribute is required</p></div>]]>
+                <em>resourceName</em> for this resource.</p></div>
+                <div class="changed_modified_2_0_rev_a">
+                 <p>
+                  This attribute is required if the script is NOT inline.
+                 </p>
+                </div>]]>
                 </description>
                 <display-name>Resource Name</display-name>
                 <icon/>
                 <attribute-name>name</attribute-name>
                 <attribute-class>java.lang.String</attribute-class>
                 <attribute-extension>
-                    <required>true</required>
+                    <required>false</required>
                     <tag-attribute>true</tag-attribute>
                 </attribute-extension>
             </attribute>
@@ -3859,15 +3863,20 @@ the literal string "<code>head</code>" as the last argument.</p>
             <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
             <attribute>
                 <description><![CDATA[<div class="changed_added_2_0"><p>The
-                <em>resourceName</em> for this resource.</p></div><div class="changed_modified_2_1">
-                <p>This attribute is required</p></div>]]>
+                <em>resourceName</em> for this resource.</p></div>
+                <div class="changed_modified_2_1">
+                 <p>
+                  This attribute is required if the stylesheet is NOT inline.
+                 </p>
+                </div>
+                ]]>
                 </description>
                 <display-name>Resource Name</display-name>
                 <icon/>
                 <attribute-name>name</attribute-name>
                 <attribute-class>java.lang.String</attribute-class>
                 <attribute-extension>
-                    <required>true</required>
+                    <required>false</required>
                     <tag-attribute>true</tag-attribute>
                 </attribute-extension>
             </attribute>

@@ -6655,7 +6655,11 @@
         <attribute>
             <description>
                 <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>
-                <div class="changed_modified_2_0_rev_a"><p>This attribute is required.</p></div>]]>
+                <div class="changed_modified_2_0_rev_a changed_modified_2_3">
+                 <p>
+                  This attribute is required if the stylesheet is NOT inline.
+                 </p>
+                </div>]]>
             </description>
             <name>
                 name
@@ -7071,7 +7075,11 @@
         <attribute>
             <description>
                 <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>
-                <div class="changed_modified_2_0_rev_a"><p>This attribute is required.</p></div>]]>
+                <div class="changed_modified_2_0_rev_a changed_modified_2_3">
+                 <p>
+                  This attribute is required if the script is NOT inline.
+                 </p>
+                </div>]]>
             </description>
             <name>
                 name
