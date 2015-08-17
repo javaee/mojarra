@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.servlet30.ConfigExtra;
+package com.sun.faces.test.servlet30.ConfigExtra2;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
