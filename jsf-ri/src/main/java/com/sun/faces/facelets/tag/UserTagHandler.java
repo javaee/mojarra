@@ -121,6 +121,7 @@ final class UserTagHandler extends TagHandlerImpl implements TemplateClient {
      * @see VariableMapper
      * @see javax.faces.view.facelets.FaceletHandler#apply(javax.faces.view.facelets.FaceletContext, javax.faces.component.UIComponent)
      */
+    @Override
     public void apply(FaceletContext ctxObj, UIComponent parent)
     throws IOException {
         FaceletContextImplBase ctx = (FaceletContextImplBase) ctxObj;
@@ -150,6 +151,7 @@ final class UserTagHandler extends TagHandlerImpl implements TemplateClient {
         }
     }
 
+    @Override
     public boolean apply(FaceletContext ctx, UIComponent parent, String name)
     throws IOException {
         if (name != null) {

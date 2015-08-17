@@ -116,6 +116,7 @@ public class MetaRulesetImpl extends MetaRuleset {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public MetaRuleset ignore(String attribute) {
 
         Util.notNull("attribute", attribute);
@@ -125,6 +126,7 @@ public class MetaRulesetImpl extends MetaRuleset {
     }
 
 
+    @Override
     public MetaRuleset alias(String attribute, String property) {
 
         Util.notNull("attribute", attribute);
@@ -137,6 +139,7 @@ public class MetaRulesetImpl extends MetaRuleset {
 
     }
 
+    @Override
     public MetaRuleset add(Metadata mapper) {
 
         Util.notNull("mapper", mapper);
@@ -147,6 +150,7 @@ public class MetaRulesetImpl extends MetaRuleset {
 
     }
 
+    @Override
     public MetaRuleset addRule(MetaRule rule) {
 
         Util.notNull("rule", rule);
@@ -156,6 +160,7 @@ public class MetaRulesetImpl extends MetaRuleset {
     }
 
 
+    @Override
      public Metadata finish() {
 
         if (!this.attributes.isEmpty()) {
@@ -196,6 +201,7 @@ public class MetaRulesetImpl extends MetaRuleset {
 
     }
 
+    @Override
     public MetaRuleset ignoreAll() {
 
         this.attributes.clear();
@@ -230,6 +236,7 @@ public class MetaRulesetImpl extends MetaRuleset {
     
     private final static Metadata NONE = new Metadata() {
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             // do nothing
         }

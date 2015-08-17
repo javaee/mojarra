@@ -76,6 +76,7 @@ final class MetadataImpl extends Metadata {
         this.size = mappers.length;
     }
 
+    @Override
     public void applyMetadata(FaceletContext ctx, Object instance) {
         for (int i = 0; i < size; i++) {
             this.mappers[i].applyMetadata(ctx, instance);

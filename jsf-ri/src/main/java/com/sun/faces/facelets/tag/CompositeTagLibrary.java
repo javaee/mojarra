@@ -102,6 +102,7 @@ public final class CompositeTagLibrary implements TagLibrary {
      * 
      * @see com.sun.facelets.tag.TagLibrary#containsNamespace(java.lang.String)
      */
+    @Override
     public boolean containsNamespace(String ns, Tag t) {
         boolean result = true;
         for (int i = 0; i < this.libraries.length; i++) {
@@ -172,6 +173,7 @@ public final class CompositeTagLibrary implements TagLibrary {
      * @see com.sun.facelets.tag.TagLibrary#containsTagHandler(java.lang.String,
      *      java.lang.String)
      */
+    @Override
     public boolean containsTagHandler(String ns, String localName) {
         for (int i = 0; i < this.libraries.length; i++) {
             if (this.libraries[i].containsTagHandler(ns, localName)) {
@@ -187,6 +189,7 @@ public final class CompositeTagLibrary implements TagLibrary {
      * @see com.sun.facelets.tag.TagLibrary#createTagHandler(java.lang.String,
      *      java.lang.String, com.sun.facelets.tag.TagConfig)
      */
+    @Override
     public TagHandler createTagHandler(String ns, String localName,
             TagConfig tag) throws FacesException {
         for (int i = 0; i < this.libraries.length; i++) {
@@ -203,6 +206,7 @@ public final class CompositeTagLibrary implements TagLibrary {
      * @see com.sun.facelets.tag.TagLibrary#containsFunction(java.lang.String,
      *      java.lang.String)
      */
+    @Override
     public boolean containsFunction(String ns, String name) {
         for (int i = 0; i < this.libraries.length; i++) {
             if (this.libraries[i].containsFunction(ns, name)) {
@@ -218,6 +222,7 @@ public final class CompositeTagLibrary implements TagLibrary {
      * @see com.sun.facelets.tag.TagLibrary#createFunction(java.lang.String,
      *      java.lang.String)
      */
+    @Override
     public Method createFunction(String ns, String name) {
         for (int i = 0; i < this.libraries.length; i++) {
             if (this.libraries[i].containsFunction(ns, name)) {

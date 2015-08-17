@@ -82,6 +82,7 @@ final class BeanPropertyTagRule extends MetaRule {
             this.attribute = attribute;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             if (value == null) {
                 String str = this.attribute.getValue();
@@ -113,6 +114,7 @@ final class BeanPropertyTagRule extends MetaRule {
             this.attribute = attribute;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             try {
                 this.method.invoke(instance, new Object[] { this.attribute
@@ -127,6 +129,7 @@ final class BeanPropertyTagRule extends MetaRule {
     
     public final static BeanPropertyTagRule Instance = new BeanPropertyTagRule();
 
+    @Override
     public Metadata applyRule(String name, TagAttribute attribute,
             MetadataTarget meta) {
         Method m = meta.getWriteMethod(name);

@@ -292,6 +292,7 @@ public class TagAttributeImpl extends TagAttribute {
         return this.tag;
     }
     
+    @Override
     public void setTag(Tag tag) {
         this.tag = tag;
     }

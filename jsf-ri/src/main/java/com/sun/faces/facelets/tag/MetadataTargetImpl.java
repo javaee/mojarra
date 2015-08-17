@@ -88,18 +88,22 @@ public class MetadataTargetImpl extends MetadataTarget {
         }
     }
 
+    @Override
     public PropertyDescriptor getProperty(String name) {
         return (PropertyDescriptor) this.pd.get(name);
     }
 
+    @Override
     public boolean isTargetInstanceOf(Class type) {
         return type.isAssignableFrom(this.type);
     }
 
+    @Override
     public Class getTargetClass() {
         return this.type;
     }
 
+    @Override
     public Class getPropertyType(String name) {
         PropertyDescriptor pd = this.getProperty(name);
         if (pd != null) {
@@ -108,6 +112,7 @@ public class MetadataTargetImpl extends MetadataTarget {
         return null;
     }
 
+    @Override
     public Method getWriteMethod(String name) {
         PropertyDescriptor pd = this.getProperty(name);
         if (pd != null) {
@@ -116,6 +121,7 @@ public class MetadataTargetImpl extends MetadataTarget {
         return null;
     }
 
+    @Override
     public Method getReadMethod(String name) {
         PropertyDescriptor pd = this.getProperty(name);
         if (pd != null) {

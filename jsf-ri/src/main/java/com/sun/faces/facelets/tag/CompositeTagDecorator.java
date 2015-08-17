@@ -87,6 +87,7 @@ public final class CompositeTagDecorator implements TagDecorator {
      * Uses the chain of responsibility pattern to stop processing if any of
      * the TagDecorators return a value other than null.
      */
+    @Override
     public Tag decorate(Tag tag) {
         // eliminate the jsf: attributes
         Tag noJsfAttributes = defaultTagDecorator.decorate(tag);

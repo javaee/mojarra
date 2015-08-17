@@ -196,6 +196,7 @@ public final class TagAttributesImpl extends TagAttributes {
         return this.tag;
     }
     
+    @Override
     public void setTag(Tag tag) {
         this.tag = tag;
         for (TagAttribute cur : attrs) {

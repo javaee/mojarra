@@ -90,14 +90,17 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             this.validatorId = validatorId;
         }
         
+        @Override
         public String getValidatorId() {
             return this.validatorId;
         }
 
+        @Override
         public FaceletHandler getNextHandler() {
             return this.parent.getNextHandler();
         }
 
+        @Override
         public Tag getTag() {
             return this.parent.getTag();
         }
@@ -116,15 +119,19 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             this.converterId = converterId;
         }
         
+        @Override
         public String getConverterId() {
             return this.converterId;
         }
+        @Override
         public FaceletHandler getNextHandler() {
             return this.parent.getNextHandler();
         }
+        @Override
         public Tag getTag() {
             return this.parent.getTag();
         }
+        @Override
         public String getTagId() {
             return this.parent.getTagId();
         }
@@ -146,6 +153,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 		 * <p class="changed_added_2_0"></p>
 		 * @return the behaviorId
 		 */
+        @Override
 		public String getBehaviorId() {
 			return behaviorId;
 		}
@@ -154,6 +162,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 		 * @return
 		 * @see javax.faces.view.facelets.TagConfig#getNextHandler()
 		 */
+        @Override
 		public FaceletHandler getNextHandler() {
 			return parent.getNextHandler();
 		}
@@ -162,6 +171,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 		 * @return
 		 * @see javax.faces.view.facelets.TagConfig#getTag()
 		 */
+        @Override
 		public Tag getTag() {
 			return parent.getTag();
 		}
@@ -170,6 +180,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 		 * @return
 		 * @see javax.faces.view.facelets.TagConfig#getTagId()
 		 */
+        @Override
 		public String getTagId() {
 			return parent.getTagId();
 		}
@@ -186,6 +197,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             this.handlerType = handlerType;
         }
 
+        @Override
         public TagHandler createHandler(TagConfig cfg) throws FacesException,
                 ELException {
             try {
@@ -223,22 +235,27 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             this.rendererType = rendererType;
         }
 
+        @Override
         public String getComponentType() {
             return this.componentType;
         }
 
+        @Override
         public String getRendererType() {
             return this.rendererType;
         }
 
+        @Override
         public FaceletHandler getNextHandler() {
             return this.parent.getNextHandler();
         }
 
+        @Override
         public Tag getTag() {
             return this.parent.getTag();
         }
 
+        @Override
         public String getTagId() {
             return this.parent.getTagId();
         }
@@ -251,6 +268,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             this.location = location;
         }
 
+        @Override
         public TagHandler createHandler(TagConfig cfg) throws FacesException,
                 ELException {
             return new UserTagHandler(cfg, this.location);
@@ -264,6 +282,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             this.resourceId = resourceId;
         }
 
+        @Override
         public TagHandler createHandler(TagConfig cfg) throws FacesException,
                 ELException {
             ComponentConfig componentConfig = 
@@ -298,6 +317,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             this.renderType = renderType;
         }
 
+        @Override
         public TagHandler createHandler(TagConfig cfg) throws FacesException,
                 ELException {
             ComponentConfig ccfg = new ComponentConfigWrapper(cfg,
@@ -333,6 +353,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             }
         }
 
+        @Override
         public TagHandler createHandler(TagConfig cfg) throws FacesException,
                 ELException {
             try {
@@ -356,6 +377,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             this.validatorId = validatorId;
         }
 
+        @Override
         public TagHandler createHandler(TagConfig cfg) throws FacesException,
                 ELException {
             return new ValidatorHandler(new ValidatorConfigWrapper(cfg, this.validatorId));
@@ -370,6 +392,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             this.converterId = converterId;
         }
 
+        @Override
         public TagHandler createHandler(TagConfig cfg) throws FacesException,
                 ELException {
             return new ConverterHandler(new ConverterConfigWrapper(cfg, this.converterId));
@@ -387,6 +410,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 			this.behaviorId = behaviorId;
 		}
     	
+            @Override
 		public TagHandler createHandler(TagConfig cfg) throws FacesException,
 				ELException {
 			return new BehaviorHandler(new BehaviorConfigWrapper(cfg,behaviorId));
@@ -414,6 +438,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             }
         }
         
+        @Override
         public TagHandler createHandler(TagConfig cfg) throws FacesException,
         ELException {
             try {
@@ -451,6 +476,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 			}
 		}
 
+                @Override
 		public TagHandler createHandler(TagConfig cfg) throws FacesException,
 				ELException {
 			try {
@@ -491,6 +517,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 			}
 		}
 
+                @Override
 		public TagHandler createHandler(TagConfig cfg) throws FacesException,
 				ELException {
 			try {
@@ -689,6 +716,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * 
      * @see com.sun.facelets.TagLibrary#containsNamespace(java.lang.String)
      */
+    @Override
     public boolean containsNamespace(String ns, Tag t) {
         return this.namespace.equals(ns);
     }
@@ -699,6 +727,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * @see com.sun.facelets.TagLibrary#containsTagHandler(java.lang.String,
      *      java.lang.String)
      */
+    @Override
     public boolean containsTagHandler(String ns, String localName) {
         if (this.namespace.equals(ns)) {
             if (this.factories.containsKey(localName)) {
@@ -714,6 +743,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * @see com.sun.facelets.TagLibrary#createTagHandler(java.lang.String,
      *      java.lang.String, com.sun.facelets.TagConfig)
      */
+    @Override
     public TagHandler createTagHandler(String ns, String localName,
             TagConfig tag) throws FacesException {
         if (this.namespace.equals(ns)) {
@@ -732,6 +762,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * @see com.sun.facelets.TagLibrary#containsFunction(java.lang.String,
      *      java.lang.String)
      */
+    @Override
     public boolean containsFunction(String ns, String name) {
         if (this.namespace.equals(ns)) {
             return this.functions.containsKey(name);
@@ -745,6 +776,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * @see com.sun.facelets.TagLibrary#createFunction(java.lang.String,
      *      java.lang.String)
      */
+    @Override
     public Method createFunction(String ns, String name) {
         if (this.namespace.equals(ns)) {
             return (Method) this.functions.get(name);
@@ -757,6 +789,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object obj) {
         return (obj instanceof TagLibrary && obj.hashCode() == this.hashCode());
     }
@@ -766,6 +799,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return this.namespace.hashCode();
     }

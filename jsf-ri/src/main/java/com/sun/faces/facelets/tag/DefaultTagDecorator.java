@@ -139,6 +139,7 @@ class DefaultTagDecorator implements TagDecorator {
 
     private ElementConverter defaultElementConverter = new ElementConverter("jsf:element");
 
+    @Override
     public Tag decorate(Tag tag) {
         String ns = tag.getNamespace();
         if (!hasJsfAttribute(tag)) {
@@ -211,6 +212,7 @@ class DefaultTagDecorator implements TagDecorator {
             return this;
         }
 
+        @Override
         public Tag decorate(Tag tag) {
             if (arbiterAttributeName == null) {
                 // no arbiter

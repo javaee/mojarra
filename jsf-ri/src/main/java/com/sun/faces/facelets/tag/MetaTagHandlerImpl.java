@@ -82,6 +82,7 @@ public abstract class MetaTagHandlerImpl extends MetaTagHandler {
      * 
      * @param type
      */
+    @Override
     protected MetaRuleset createMetaRuleset(Class type) {
         Util.notNull("type", type);
         return new MetaRulesetImpl(this.tag, type);

@@ -86,6 +86,7 @@ public final class MethodRule extends MetaRule {
         this.params = params;
     }
 
+    @Override
     public Metadata applyRule(String name, TagAttribute attribute,
             MetadataTarget meta) {
         if (!name.equals(this.methodName))
@@ -125,6 +126,7 @@ public final class MethodRule extends MetaRule {
             _returnType = returnType;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             MethodExpression expr = _attribute.getMethodExpression(ctx,
                     _returnType, _paramList);
@@ -156,6 +158,7 @@ public final class MethodRule extends MetaRule {
             _returnType = returnType;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             MethodExpression expr = _attribute.getMethodExpression(ctx,
                     _returnType, _paramList);
