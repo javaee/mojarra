@@ -850,4 +850,9 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    <scm>
+        <connection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</connection>
+        <developerConnection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</developerConnection>
+        <url>https://svn.java.net/svn/mojarra~svn</url>
+    </scm>
 </project>
