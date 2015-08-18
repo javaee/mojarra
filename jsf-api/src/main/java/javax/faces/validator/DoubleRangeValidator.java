@@ -85,7 +85,7 @@ import javax.faces.convert.Converter;
  * <code>Locale</code>.</p>
  */
 
-public class DoubleRangeValidator implements Validator<Object>, PartialStateHolder {
+public class DoubleRangeValidator implements Validator, PartialStateHolder {
 
     // ------------------------------------------------------ Manifest Constants
 

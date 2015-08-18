@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and long primitive) values.</p>
  */
 
-public class LongConverter implements Converter<Object> {
+public class LongConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 

@@ -131,7 +131,7 @@ import java.util.Locale;
  * </ul>
  */
 
-public class NumberConverter implements Converter<Object>, PartialStateHolder {
+public class NumberConverter implements Converter, PartialStateHolder {
 
     // ------------------------------------------------------ Manifest Constants
 

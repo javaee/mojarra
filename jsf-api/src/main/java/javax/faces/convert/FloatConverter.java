@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and float primitive) values.</p>
  */
 
-public class FloatConverter implements Converter<Object> {
+public class FloatConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 

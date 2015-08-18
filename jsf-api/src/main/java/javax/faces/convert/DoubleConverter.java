@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and double primitive) values.</p>
  */
 
-public class DoubleConverter implements Converter<Object> {
+public class DoubleConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 

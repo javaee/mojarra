@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and short primitive) values.</p>
  */
 
-public class ShortConverter implements Converter<Object> {
+public class ShortConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 

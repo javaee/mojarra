@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and char primitive) values.</p>
  */
 
-public class CharacterConverter implements Converter<Object> {
+public class CharacterConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 

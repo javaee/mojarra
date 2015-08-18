@@ -109,7 +109,7 @@ import java.util.TimeZone;
  * </ul>
  */
 
-public class DateTimeConverter implements Converter<Object>, PartialStateHolder {
+public class DateTimeConverter implements Converter, PartialStateHolder {
 
     // ------------------------------------------------------ Manifest Constants
 

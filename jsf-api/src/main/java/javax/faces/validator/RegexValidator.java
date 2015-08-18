@@ -57,7 +57,7 @@ import javax.faces.component.PartialStateHolder;
  * standards.</p>
  * @since 2.0
  */
-public class RegexValidator implements Validator<Object>, PartialStateHolder {
+public class RegexValidator implements Validator, PartialStateHolder {
 
     private String regex;
 

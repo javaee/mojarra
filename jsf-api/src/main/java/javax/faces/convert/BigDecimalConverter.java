@@ -51,7 +51,7 @@ import java.math.BigDecimal;
  * <code>java.math.BigDecimal</code> values.</p>
  */
 
-public class BigDecimalConverter implements Converter<Object> {
+public class BigDecimalConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 

@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and boolean primitive) values.</p>
  */
 
-public class BooleanConverter implements Converter<Object> {
+public class BooleanConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 

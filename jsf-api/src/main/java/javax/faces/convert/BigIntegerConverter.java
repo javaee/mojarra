@@ -51,7 +51,7 @@ import java.math.BigInteger;
  * <code>java.math.BigInteger</code> values.</p>
  */
 
-public class BigIntegerConverter implements Converter<Object> {
+public class BigIntegerConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 

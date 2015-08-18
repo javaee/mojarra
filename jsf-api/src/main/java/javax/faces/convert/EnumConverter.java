@@ -54,15 +54,15 @@ import javax.faces.context.FacesContext;
  * @since 1.2
  */
 
-public class EnumConverter <E extends Enum<E>> implements Converter<E>, PartialStateHolder {
+public class EnumConverter implements Converter, PartialStateHolder {
 
     // for StateHolder
     public EnumConverter() {
 
     }
 
-    public EnumConverter(Class<E> targetClass) {
-        this.targetClass = targetClass;
+    public EnumConverter(Class targetClass) {
+        this.targetClass = (Class<? extends Enum>) targetClass;
     }
 
     // ------------------------------------------------------ Manifest Constants
@@ -106,7 +106,7 @@ public class EnumConverter <E extends Enum<E>> implements Converter<E>, PartialS
 
     // ----------------------------------------------------- Converter Methods
 
-    private Class<E> targetClass;
+    private Class<? extends Enum> targetClass;
 
 
     /**
@@ -131,7 +131,7 @@ public class EnumConverter <E extends Enum<E>> implements Converter<E>, PartialS
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public E getAsObject(FacesContext context, UIComponent component,
+    public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
 
         if (context == null || component == null) {
@@ -188,7 +188,8 @@ public class EnumConverter <E extends Enum<E>> implements Converter<E>, PartialS
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
-    public String getAsString(FacesContext context, UIComponent component, E value) {
+    public String getAsString(FacesContext context, UIComponent component,
+                              Object value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -212,7 +213,7 @@ public class EnumConverter <E extends Enum<E>> implements Converter<E>, PartialS
         }
 
         if (targetClass.isInstance(value)) {
-            return ((E) value).name();
+            return ((Enum)value).name();
         }
 
         throw new ConverterException(
@@ -231,7 +232,7 @@ public class EnumConverter <E extends Enum<E>> implements Converter<E>, PartialS
             throw new NullPointerException();
         }
         if (object != null) {
-            this.targetClass = (Class<E>) object;
+            this.targetClass = (Class<? extends Enum>) object;
         }
     }
 

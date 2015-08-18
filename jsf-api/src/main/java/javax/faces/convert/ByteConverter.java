@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and byte primitive) values.</p>
  */
 
-public class ByteConverter implements Converter<Object> {
+public class ByteConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 

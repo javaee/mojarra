@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * (and int primitive) values.</p>
  */
 
-public class IntegerConverter implements Converter<Object> {
+public class IntegerConverter implements Converter {
 
     // ------------------------------------------------------ Manifest Constants
 

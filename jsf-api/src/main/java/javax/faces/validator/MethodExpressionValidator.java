@@ -57,7 +57,7 @@ import javax.faces.context.FacesContext;
  * the {@link MethodExpression}.</p>
  */
 
-public class MethodExpressionValidator implements Validator<Object>, StateHolder {
+public class MethodExpressionValidator implements Validator, StateHolder {
 
     private static final String BEANS_VALIDATION_AVAILABLE =
             "javax.faces.private.BEANS_VALIDATION_AVAILABLE";
