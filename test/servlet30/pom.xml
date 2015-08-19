@@ -111,6 +111,8 @@
         <module>facelets</module>
         <module>faceletsEmptyAsNull</module>
         <module>facesComponentTag</module>
+        <module>facesContext</module>
+        <module>facesContextInit</module>
         <module>factory</module>
         <module>findResourcesInJar</module>
         <module>flash</module>
