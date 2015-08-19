@@ -48,11 +48,12 @@ import javax.faces.event.SystemEventListener;
 
 
 /**
- * <p class="changed_added_2_0"><strong>ExceptionHandler</strong> is the
- * central point for handling <em>unexpected</em>
- * <code>Exception</code>s that are thrown during the Faces
- * lifecycle. The <code>ExceptionHandler</code> must not be notified of
- * any <code>Exception</code>s that occur during application startup or
+ * <p class="changed_added_2_0"><strong
+ * class="changed_modified_2_3">ExceptionHandler</strong> is the central
+ * point for handling <em>unexpected</em> <code>Exception</code>s that
+ * are thrown during the Faces lifecycle. The
+ * <code>ExceptionHandler</code> must not be notified of any
+ * <code>Exception</code>s that occur during application startup or
  * shutdown.</p>
 
  * <div class="changed_added_2_0">
@@ -104,6 +105,13 @@ import javax.faces.event.SystemEventListener;
  * that are published in this way are accessible to the {@link #handle}
  * method, which is called at the end of each lifecycle phase, as
  * specified in section JSF.6.2.</p>
+
+ * <p class="changed_added_2_3">Note that if {@link #handle} happens to
+ * be invoked during {@link javax.faces.event.PhaseId#RENDER_RESPONSE},
+ * the recovery options are more limited than when it is invoked during
+ * other phases.  Specifically, it is not valid to call {@link
+ * javax.faces.application.NavigationHandler#handleNavigation} during
+ * {@code RENDER_RESPONSE}.</p>
 
  * <p>Instances of this class are request scoped and are created by
  * virtue of {@link FacesContextFactory#getFacesContext} calling {@link
