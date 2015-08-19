@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -60,7 +60,6 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
 
 
 /**
@@ -116,9 +115,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         boolean componentDisabled =
               Boolean.TRUE.equals(component.getAttributes().get("disabled"));
 
-        String formClientId = RenderKitUtils.getFormClientId(component, context);
-
-        if (componentDisabled || formClientId == null) {
+        if (componentDisabled) {
             renderAsDisabled(context, component);
         } else {
             RenderKitUtils.renderJsfJs(context);
@@ -159,20 +156,12 @@ public class CommandLinkRenderer extends LinkRenderer {
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
-        String formClientId = RenderKitUtils.getFormClientId(component, context);
-        if (formClientId == null) {
-            writer.write(MessageUtils.getExceptionMessageString(
-                  MessageUtils.COMMAND_LINK_NO_FORM_MESSAGE_ID));
-            writer.endElement("span");
-            return;
-        }
 
         if (Boolean.TRUE.equals(component.getAttributes().get("disabled"))) {
             writer.endElement("span");
         } else {
             writer.endElement("a");
         }
-
     }
 
 
@@ -203,10 +192,6 @@ public class CommandLinkRenderer extends LinkRenderer {
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
-        String formClientId = RenderKitUtils.getFormClientId(command, context);
-        if (formClientId == null) {
-            return;
-        }
 
         //make link act as if it's a button using javascript        
         writer.startElement("a", command);
