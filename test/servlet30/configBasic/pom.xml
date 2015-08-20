@@ -51,7 +51,7 @@
     </parent>
     <artifactId>configBasic</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Servlet - Config Basic</name>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Config Basic</name>
     <build>
         <finalName>test-servlet30-configBasic</finalName>
     </build>
