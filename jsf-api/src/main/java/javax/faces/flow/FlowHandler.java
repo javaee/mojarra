@@ -146,10 +146,11 @@ import javax.faces.context.FacesContext;
 
  * <blockquote>
 
- * <p>Managed beans annotated with the CDI annotation
- * {@link FlowScoped} must be instantiated upon a user agent's entry
- * into the named scope, and must be made available for garbage
- * collection when the user agent leaves the flow.</p>
+ * <p>Managed beans annotated with the CDI annotation {@link FlowScoped}
+ * <span class="changed_added_2_3">are created lazily, when referenced,
+ * after</span> a user agent's entry into the named scope, and must be
+ * made available for garbage collection when the user agent leaves the
+ * flow.</p>
 
  * <p>The <code>flowScope</code> EL implicit object is also
  * available to store values in the "current" slope.  Values stored in

@@ -58,10 +58,10 @@ import javax.enterprise.context.NormalScope;
  * implements the semantics such that beans with this annotation are
  * created <span class="changed_added_2_3">lazily, when referenced,
  * after</span> the user enters into the specified {@code Flow}, and
- * de-allocated <span class="changed_added_2_3">eagerly</span> when the
- * user exits the specified {@code Flow}.  See {@link
- * FlowHandler#transition} for the specification of flow entry and
- * exit.</p>
+ * <span class="changed_added_2_3">made available for garbage
+ * collection</span> when the user exits the specified {@code Flow}.
+ * See {@link FlowHandler#transition} for the specification of flow
+ * entry and exit.</p>
  * 
  * <p class="changed_added_2_3">When replacing (rather than decorating) the flow 
  * implementation with a custom {@link FlowHandler} implementation, it is necessary
