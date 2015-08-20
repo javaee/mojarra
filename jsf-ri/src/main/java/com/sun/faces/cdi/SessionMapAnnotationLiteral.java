@@ -40,12 +40,13 @@
 package com.sun.faces.cdi;
 
 import javax.enterprise.util.AnnotationLiteral;
-import javax.faces.context.SessionMap;
+import javax.faces.annotation.SessionMap;
 
 /**
- * An annotation literal for @SessionMap.
+ * An annotation literal for <code>@SessionMap<code>.
  * 
  * @since 2.3
+ * @see SessionMap
  */
 @SuppressWarnings("all")
 class SessionMapAnnotationLiteral extends AnnotationLiteral<SessionMap> implements SessionMap {

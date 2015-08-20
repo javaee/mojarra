@@ -41,7 +41,7 @@ package com.sun.faces.test.javaee8.cdi;
 
 import java.io.Serializable;
 import java.util.Map;
-import javax.faces.context.SessionMap;
+import javax.faces.annotation.SessionMap;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;

@@ -42,7 +42,7 @@ package com.sun.faces.test.javaee8.cdi;
 import java.io.Serializable;
 import java.util.Map;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.RequestCookieMap;
+import javax.faces.annotation.RequestCookieMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 

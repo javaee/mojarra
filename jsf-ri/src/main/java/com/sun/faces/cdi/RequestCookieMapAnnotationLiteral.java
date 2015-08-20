@@ -40,7 +40,7 @@
 package com.sun.faces.cdi;
 
 import javax.enterprise.util.AnnotationLiteral;
-import javax.faces.context.RequestCookieMap;
+import javax.faces.annotation.RequestCookieMap;
 
 /**
  * An annotation literal for @RequestCookieMap.

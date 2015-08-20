@@ -41,7 +41,7 @@ package com.sun.faces.test.javaee8.cdi;
 
 import java.util.Map;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.ApplicationMap;
+import javax.faces.annotation.ApplicationMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 

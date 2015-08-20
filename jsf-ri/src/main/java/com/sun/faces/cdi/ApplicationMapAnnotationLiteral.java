@@ -40,7 +40,7 @@
 package com.sun.faces.cdi;
 
 import javax.enterprise.util.AnnotationLiteral;
-import javax.faces.application.ApplicationMap;
+import javax.faces.annotation.ApplicationMap;
 
 /**
  * An annotation literal for <code>@ApplicationMap.</code>

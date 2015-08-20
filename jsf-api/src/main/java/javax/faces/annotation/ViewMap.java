@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,17 +37,21 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.cdi;
+package javax.faces.annotation;
 
-import javax.enterprise.util.AnnotationLiteral;
-import javax.faces.annotation.ViewMap;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-/**
- * An annotation literal for @ViewMap.
- * 
- * @since 2.3
- */
-@SuppressWarnings("all")
-class ViewMapAnnotationLiteral extends AnnotationLiteral<ViewMap> implements ViewMap {
-    private static final long serialVersionUID = 1L;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import javax.inject.Qualifier;
+
+@Target({TYPE, METHOD, PARAMETER, FIELD})
+@Qualifier
+@Retention(value = RUNTIME)
+public @interface ViewMap {
 }
