@@ -51,15 +51,17 @@ import javax.enterprise.context.NormalScope;
 
 /**
  * <p class="changed_added_2_2"><strong class="changed_modified_2_3">
- * FlowScoped</strong> is a CDI
- * scope that causes the runtime to consider classes with this
- * annotation to be in the scope of the specified {@link Flow}.  The
- * implementation must provide an implementation of {@code
- * javax.enterprise.inject.spi.Extension} that implements the semantics
- * such that beans with this annotation are created when the user enters
- * into the specified {@code Flow}, and de-allocated when the user exits
- * the specified {@code Flow}.  See {@link FlowHandler#transition} for
- * the specification of flow entry and exit.</p>
+ * FlowScoped</strong> is a CDI scope that causes the runtime to
+ * consider classes with this annotation to be in the scope of the
+ * specified {@link Flow}.  The implementation must provide an
+ * implementation of {@code javax.enterprise.inject.spi.Extension} that
+ * implements the semantics such that beans with this annotation are
+ * created <span class="changed_added_2_3">lazily, when referenced,
+ * after</span> the user enters into the specified {@code Flow}, and
+ * de-allocated <span class="changed_added_2_3">eagerly</span> when the
+ * user exits the specified {@code Flow}.  See {@link
+ * FlowHandler#transition} for the specification of flow entry and
+ * exit.</p>
  * 
  * <p class="changed_added_2_3">When replacing (rather than decorating) the flow 
  * implementation with a custom {@link FlowHandler} implementation, it is necessary
