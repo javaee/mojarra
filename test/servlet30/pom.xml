@@ -84,6 +84,7 @@
         <module>configLowercase</module>
         <module>contractUsingHostHeader</module>
         <module>contractUsingViewRoot</module>
+        <module>converter</module>
         <module>customFaceletsResolver</module>
         <module>customLifecycle</module>
         <module>customPropertyResolverJsp</module>

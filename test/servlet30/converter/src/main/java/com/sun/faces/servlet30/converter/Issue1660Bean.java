@@ -37,10 +37,51 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.converter.basic;
+package com.sun.faces.servlet30.converter;
 
-public enum Issue1660SimpleEnum {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.model.SelectItem;
 
-    VALUE1,
-    VALUE2;
+@ManagedBean
+@RequestScoped
+public class Issue1660Bean implements Serializable {
+
+    private Issue1660SimpleEnum simpleValue = Issue1660SimpleEnum.VALUE1;
+    private Issue1660ComplexEnum complexValue = Issue1660ComplexEnum.VALUE2;
+
+    public Issue1660SimpleEnum getSimpleValue() {
+        return simpleValue;
+    }
+
+    public void setSimpleValue(Issue1660SimpleEnum simpleValue) {
+        this.simpleValue = simpleValue;
+    }
+
+    public Issue1660ComplexEnum getComplexValue() {
+        return complexValue;
+    }
+
+    public void setComplexValue(Issue1660ComplexEnum complexValue) {
+        this.complexValue = complexValue;
+    }
+
+    public List<SelectItem> getSimpleValues() {
+        List<SelectItem> ret = new ArrayList<SelectItem>();
+        for (Issue1660SimpleEnum val : Issue1660SimpleEnum.values()) {
+            ret.add(new SelectItem(val, val.toString()));
+        }
+        return ret;
+    }
+
+    public List<SelectItem> getComplexValues() {
+        List<SelectItem> ret = new ArrayList<SelectItem>();
+        for (Issue1660ComplexEnum val : Issue1660ComplexEnum.values()) {
+            ret.add(new SelectItem(val, val.toString()));
+        }
+        return ret;
+    }
 }

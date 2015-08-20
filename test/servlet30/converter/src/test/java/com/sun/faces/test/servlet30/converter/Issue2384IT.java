@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.converter.basic;
+package com.sun.faces.test.servlet30.converter;
 
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import java.util.List;

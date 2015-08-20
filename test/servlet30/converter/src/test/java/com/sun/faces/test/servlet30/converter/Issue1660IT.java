@@ -37,51 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.converter.basic;
+package com.sun.faces.test.servlet30.converter;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.model.SelectItem;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-@ManagedBean
-@RequestScoped
-public class Issue1660Bean implements Serializable {
+public class Issue1660IT {
 
-    private Issue1660SimpleEnum simpleValue = Issue1660SimpleEnum.VALUE1;
-    private Issue1660ComplexEnum complexValue = Issue1660ComplexEnum.VALUE2;
+    private String webUrl;
+    private WebClient webClient;
 
-    public Issue1660SimpleEnum getSimpleValue() {
-        return simpleValue;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public void setSimpleValue(Issue1660SimpleEnum simpleValue) {
-        this.simpleValue = simpleValue;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    public Issue1660ComplexEnum getComplexValue() {
-        return complexValue;
-    }
-
-    public void setComplexValue(Issue1660ComplexEnum complexValue) {
-        this.complexValue = complexValue;
-    }
-
-    public List<SelectItem> getSimpleValues() {
-        List<SelectItem> ret = new ArrayList<SelectItem>();
-        for (Issue1660SimpleEnum val : Issue1660SimpleEnum.values()) {
-            ret.add(new SelectItem(val, val.toString()));
-        }
-        return ret;
-    }
-
-    public List<SelectItem> getComplexValues() {
-        List<SelectItem> ret = new ArrayList<SelectItem>();
-        for (Issue1660ComplexEnum val : Issue1660ComplexEnum.values()) {
-            ret.add(new SelectItem(val, val.toString()));
-        }
-        return ret;
+    @Test
+    public void testConverterInstallation() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/issue1660.xhtml");
+        assertTrue(page.asXml().matches("(?s).*Simple\\s+value\\s+is\\s+VALUE1.*"));
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();       
+        assertTrue(page.asXml().matches("(?s).*Simple\\s+value\\s+is\\s+VALUE1.*"));       
     }
 }

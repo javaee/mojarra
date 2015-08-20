@@ -37,12 +37,10 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.converter.basic;
+package com.sun.faces.servlet30.converter;
 
-public enum Issue1660ComplexEnum {
+public enum Issue1660SimpleEnum {
 
-    VALUE1 {
-    },
-    VALUE2 {
-    };
+    VALUE1,
+    VALUE2;
 }

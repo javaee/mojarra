@@ -37,39 +37,12 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.converter.basic;
+package com.sun.faces.servlet30.converter;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+public enum Issue1660ComplexEnum {
 
-public class Issue1660IT {
-
-    private String webUrl;
-    private WebClient webClient;
-
-    @Before
-    public void setUp() {
-        webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
-    }
-
-    @After
-    public void tearDown() {
-        webClient.closeAllWindows();
-    }
-
-    @Test
-    public void testConverterInstallation() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/issue1660.xhtml");
-        assertTrue(page.asXml().matches("(?s).*Simple\\s+value\\s+is\\s+VALUE1.*"));
-        
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
-        page = button.click();       
-        assertTrue(page.asXml().matches("(?s).*Simple\\s+value\\s+is\\s+VALUE1.*"));       
-    }
+    VALUE1 {
+    },
+    VALUE2 {
+    };
 }
