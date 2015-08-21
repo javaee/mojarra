@@ -463,7 +463,7 @@ public class FlowCDIContext implements Context, Serializable {
                     }
                     
                     FlowBeanInfo fbi = flowIds.get(contextual);
-                    if (!flowHandler.isActive(facesContext, fbi.definingDocumentId, fbi.id)) {
+                    if (fbi != null && !flowHandler.isActive(facesContext, fbi.definingDocumentId, fbi.id)) {
                         throw new ContextNotActiveException("Request to activate bean in flow '" + fbi + "', but that flow is not active.");
                     }
 
