@@ -22,7 +22,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
+                <version>1.7</version>
                 <executions>
                     <execution>
                         <id>clean</id>
@@ -39,6 +39,7 @@
                                 <delete dir="src/main/resources"/>
                                 <delete dir="src/main/js"/>
                                 <delete dir="src/main/template"/>
+                                <delete dir="src/main/doc"/>
                                 <!--
                                 
                                     Once migration is completely we should not need to
@@ -201,28 +202,46 @@
                                 </copy>
                                 <!--
                                 
+                                    Copy and generate BND configuration
+                                    
                                 -->
-                                <copy file="${jsf-ri-dir}/mojarra-jsf-impl.bnd" tofile="${build.directory}/tmp.bnd"/>
-                                <replace file="${build.directory}/tmp.bnd"
+                                <copy file="${jsf-ri-dir}/mojarra-jsf-impl.bnd" 
+                                      tofile="${project.build.directory}/tmp.bnd"/>
+                                <replace file="${project.build.directory}/tmp.bnd"
                                     token="@spec.version@"
                                     value="2.3"/>
-                                <replace file="${build.directory}/tmp.bnd"
+                                <replace file="${project.build.directory}/tmp.bnd"
                                     token="@impl.name@"
                                     value="Mojarra"/>
-                                <replace file="${build.directory}/tmp.bnd"
+                                <replace file="${project.build.directory}/tmp.bnd"
                                     token="@impl.version@"
                                     value="${project.version}"/>
-                                <replace file="${build.directory}/tmp.bnd"
+                                <replace file="${project.build.directory}/tmp.bnd"
                                     token="@full.impl.version@"
                                     value="${project.version}"/>
-                                <replace file="${build.directory}/tmp.bnd"
+                                <replace file="${project.build.directory}/tmp.bnd"
                                     token="@osgi.version@"
                                     value="${project.version}"/>
-                                <replace file="${build.directory}/tmp.bnd"
+                                <replace file="${project.build.directory}/tmp.bnd"
                                     token="@extension.name@"
                                     value="javax.faces"/>
-                                <copy tofile="${project.build.directory}/../bnd.bnd" 
-                                      file="${build.directory}/tmp.bnd"/>
+                                <copy tofile="${project.project.build.directory}/../bnd.bnd" 
+                                      file="${project.build.directory}/tmp.bnd"/>
+                                <!--
+                                
+                                    Copy the API doc directory.
+                                    
+                                -->
+                                <copy todir="src/main/doc">
+                                    <fileset dir="${jsf-api-dir}/doc"/>
+                                </copy>
+                                <!--
+                                
+                                    Copy standard-html-renderkit-impl.xml
+                                    
+                                -->
+                                <copy todir="src/main/doc" 
+                                      file="${jsf-ri-dir}/src/main/resources/com/sun/faces/standard-html-renderkit-impl.xml"/>
                             </target>
                         </configuration>
                         <goals>
@@ -236,6 +255,76 @@
                             <target>
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
+                                <!--
+                                
+                                    Generate standard-html-renderkit.xml
+                                
+                                -->
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+                                <condition property="osfamily" value="unix">
+                                    <or>
+                                        <os family="mac"/>
+                                        <os family="unix"/>
+                                    </or>
+                                </condition>
+                                <if>
+                                    <equals arg1="${osfamily}" arg2="unix"/>
+                                    <then>
+                                        <copy todir="src/main/doc" overwrite="true">
+                                            <mapper type="glob"
+                                                from="*-props.xml"
+                                                to="*-attrs.xml"/>
+                                            <fileset dir="src/main/doc">
+                                                <include name="*-props.xml"/>
+                                                <exclude name="actionsource-props.xml"/>
+                                                <exclude name="actionsource2-props.xml"/>
+                                                <exclude name="editable-props.xml"/>
+                                                <exclude name="valueholder-props.xml"/>
+                                                <exclude name="ui*-props.xml"/>
+                                                <include name="outcometargetbutton-props.xml"/>
+                                            </fileset>
+                                        </copy>
+                                        <replace dir="src/main/doc" summary="true">
+                                            <include name="*-attrs.xml"/>
+                                            <replacefilter token="&lt;property"
+                                                value="&lt;attribute"/>
+                                            <replacefilter token="&lt;/property"
+                                                value="&lt;/attribute"/>
+                                            <replacefilter token="Properties"
+                                                value="Attributes"/>
+                                        </replace>
+                                        <exec executable="xmllint" dir="src/main/doc" failonerror="true">
+                                            <arg line="--xinclude --format --output standard-html-renderkit.xml standard-html-renderkit-base.xml"/>
+                                        </exec>
+                                        <replace file="src/main/doc/standard-html-renderkit.xml">
+                                            <replacetoken><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></replacetoken>
+                                            <replacevalue><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- DO NOT EDIT     DO NOT EDIT    DO NOT EDIT    DO NOT EDIT    DO NOT EDIT -->]]>
+                                            </replacevalue>
+                                        </replace>
+                                        <delete>
+                                            <fileset dir="src/main/doc" includes="*-attrs.xml"/>
+                                        </delete>
+                                        <move file="src/main/doc/standard-html-renderkit.xml"
+                                            tofile="src/main/resources/com/sun/faces/standard-html-renderkit.xml"/>
+                                    </then>
+                                </if>
+                                <!--
+                                
+                                    Validation is taken care of by the xml-maven-plugin
+                                        
+                                    <taskdef name="validate" classname="com.sun.faces.ant.ValidateTask">
+                                        <classpath>
+                                            <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
+                                            <pathelement location="${jsf-tools-dir}/build/classes"/>
+                                            <pathelement location="src/main/doc"/>
+                                            <path refid="maven.plugin.classpath"/>
+                                        </classpath>
+                                    </taskdef>
+                                    <validate schemaDir="src/main/doc"/>
+                                
+                                -->
                                 <!--
                                 
                                    Generate MessageFactory.
@@ -739,6 +828,22 @@
                 </executions>
                 <dependencies>
                     <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>1.0b3</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant</artifactId>
+                        <version>1.9.6</version>
+                    </dependency>
+                    <dependency>
                         <groupId>commons-digester</groupId>
                         <artifactId>commons-digester</artifactId>
                         <version>2.1</version>
@@ -827,6 +932,30 @@
                     <archive>
                         <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>xml-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <basedir>src/main/resources/com/sun/faces</basedir>
+                    <validationSets>
+                        <validationSet>
+                            <dir>src/main/resources/com/sun/faces</dir>
+                            <includes>
+                                <include>*.xsd</include>
+                                <include>standard-html-renderkit.xml</include>
+                            </includes>
+                        </validationSet>
+                    </validationSets>
                 </configuration>
             </plugin>
         </plugins>
