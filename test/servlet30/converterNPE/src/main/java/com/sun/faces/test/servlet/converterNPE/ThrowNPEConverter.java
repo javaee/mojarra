@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.agnostic.converter.converterThrowsNPE;
+package com.sun.faces.test.servlet.converterNPE;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

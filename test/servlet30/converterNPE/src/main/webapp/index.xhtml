@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,22 +40,47 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>pom</artifactId>
-        <groupId>com.sun.faces.test.agnostic.converter</groupId>
-        <version>2.3.0-m04-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.agnostic.converter</groupId>
-    <artifactId>converterThrowsNPE</artifactId>
-    <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - Converter - Converter Throws NullPointerException</name>  
-    <build>
-        <finalName>test-agnostic-converter-converterThrowsNPE</finalName>
-    </build>
-    <properties>
-        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-</project>
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title></title>
+        
+    </h:head>
+    <body>
+        
+        <script type="text/javascript">
+            
+            var handleError = function handleError(data) {
+                var span = document.getElementById("ajaxResponseOutput");
+                span.innerHTML = data.errorName;
+            }
+            
+            jsf.ajax.addOnError(handleError);
+            
+        </script>
+        
+        <h:form id="ajaxForm" prependId="false">
+            <h:inputText id="text1" value="#{sessionScope.name}">
+                <f:converter converterId="throwNPE" />
+            </h:inputText>
+            <h:commandButton id="button1" value="submit ajax">
+                <f:ajax execute="@form" render="@form" />
+            </h:commandButton>
+
+        </h:form>
+    
+        <h:form id="nonAjaxForm" prependId="false">
+            <h:inputText id="text2" value="#{sessionScope.name}">
+                <f:converter converterId="throwNPE" />
+            </h:inputText>
+            <h:commandButton id="button2" value="submit" />
+        </h:form>
+    
+    
+    <p><span id="ajaxResponseOutput" /> </p>
+
+    </body>
+</html>
+

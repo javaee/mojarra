@@ -62,7 +62,6 @@
         </dependency>
     </dependencies>
     <modules>
-        <module>converter</module>
         <module>externalContext</module>
         <module>facelets</module>
         <module>flash</module>

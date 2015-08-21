@@ -85,6 +85,7 @@
         <module>contractUsingHostHeader</module>
         <module>contractUsingViewRoot</module>
         <module>converter</module>
+        <module>converterNPE</module>
         <module>customFaceletsResolver</module>
         <module>customLifecycle</module>
         <module>customPropertyResolverJsp</module>
