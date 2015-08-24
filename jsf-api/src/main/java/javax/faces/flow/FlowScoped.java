@@ -72,7 +72,7 @@ import javax.enterprise.context.NormalScope;
  */
 
 
-@NormalScope
+@NormalScope(passivating = true)
 @Inherited
 @Documented
 @Target(ElementType.TYPE)
