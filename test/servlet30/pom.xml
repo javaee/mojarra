@@ -108,6 +108,7 @@
         <module>el</module>
         <module>elDecoratedFacesContext</module>
         <module>exactMapping</module>
+        <module>externalContext</module>
         <module>faceletResourceResolver</module>
         <module>faceletResourceResolver2</module>
         <module>facelets</module>

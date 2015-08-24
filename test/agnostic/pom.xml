@@ -62,7 +62,6 @@
         </dependency>
     </dependencies>
     <modules>
-        <module>externalContext</module>
         <module>facelets</module>
         <module>flash</module>
         <module>lifecycle</module>
