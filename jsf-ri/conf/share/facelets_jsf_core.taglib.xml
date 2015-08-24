@@ -746,6 +746,10 @@ for <code>@NamedEvent</code>.</p>
             <p>Register a named facet on the UIComponent associated with
             the closest parent UIComponent custom action.</p>
 
+            <p class="changed_added_2_3">
+              When the facet contains more than one child the children will be
+              automatically put in a container UIPanel.
+            </p>
 
         ]]></description>
         <tag-name>facet</tag-name>
