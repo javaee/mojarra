@@ -749,6 +749,28 @@
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description>
+            <![CDATA[
+                <div class="changed_added_2_3">
+                    <p>
+                        Controls whether the fragment component is rendered. 
+                        Valid values for this attribute are either the strings 
+                        "true" or "false" or an EL expression that evaluates to
+                         either "true" or "false".
+                    </p>
+                    <p>
+                        If this attribute's value is "false" or the value is an
+                        EL expression that evaluates to "false", the fragment 
+                        is not rendered in the page.
+                    </p>
+                </div>
+            ]]>
+            </description>
+            <name>rendered</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
     <tag>
         <description><![CDATA[
@@ -1032,6 +1054,28 @@
                 ]]>
             </description>
             <name>varStatus</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+            <![CDATA[
+                <div class="changed_added_2_3">
+                    <p>
+                        Controls whether the repeat component is rendered. 
+                        Valid values for this attribute are either the strings 
+                        "true" or "false" or an EL expression that evaluates to
+                         either "true" or "false".
+                    </p>
+                    <p>
+                        If this attribute's value is "false" or the value is an
+                        EL expression that evaluates to "false", the repeat 
+                        is not rendered in the page.
+                    </p>
+                </div>
+            ]]>
+            </description>
+            <name>rendered</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
