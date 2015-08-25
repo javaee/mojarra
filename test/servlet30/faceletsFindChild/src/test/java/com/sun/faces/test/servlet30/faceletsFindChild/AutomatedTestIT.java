@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.facelets;
+package com.sun.faces.test.servlet30.faceletsFindChild;
 
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.After;

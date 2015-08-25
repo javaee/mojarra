@@ -36,9 +36,8 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
-
  */
-package test;
+package com.sun.faces.test.servlet30.faceletsFindChild;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -46,18 +45,18 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
 public class TimerPhaseListener implements PhaseListener {
-    
+
     public static final String REQUEST_START = "REQUEST_START";
 
     @Override
     public void afterPhase(PhaseEvent event) {
-        
+
     }
 
     @Override
     public void beforePhase(PhaseEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
-        
+
         Long curTime = new Long(System.currentTimeMillis());
         context.getAttributes().put(REQUEST_START, curTime);
     }
@@ -66,7 +65,4 @@ public class TimerPhaseListener implements PhaseListener {
     public PhaseId getPhaseId() {
         return PhaseId.RESTORE_VIEW;
     }
-    
-    
-    
 }
