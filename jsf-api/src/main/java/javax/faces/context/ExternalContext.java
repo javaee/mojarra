@@ -592,7 +592,7 @@ public abstract class ExternalContext {
      * each configured parameter name/value pair into the result.</p>
      *
      */
-    public abstract Map getInitParameterMap();
+    public abstract Map<String, String> getInitParameterMap();
     
 
     /**
