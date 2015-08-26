@@ -10,7 +10,7 @@
     and Distribution License("CDDL") (collectively, the "License").  You
     may not use this file except in compliance with the License.  You can
     obtain a copy of the License at
-    https://glassfish.java.net/public/CDDL+GPL_1_1.html
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
     or packager/legal/LICENSE.txt.  See the License for the specific
     language governing permissions and limitations under the License.
 
@@ -39,32 +39,26 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.3.0-m04-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee6</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 6</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>    
-    <modules>
-        <module>correctScanningEar</module>
-        <module>correctScanningJar</module>
-        <module>correctScanningTest</module>
-        <module>correctScanningWar1</module>
-        <module>correctScanningWar2</module>
-        <module>resource</module>
-        <module>viewParamBeanValidatorNotNull</module>
-  </modules>
-</project>
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html" 
+    
+>
+	<f:metadata>
+		<f:viewParam name="param" value="#{userBean.param}" />
+	</f:metadata>
+
+    <body>
+    	
+    	<h:messages />
+    	
+    	<div>
+    		Value provided in GET request: #{userBean.param} 
+    	</div>
+        
+    
+    </body>
+
+</html>
