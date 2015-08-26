@@ -100,6 +100,7 @@ public final class ValueChangeListenerHandler extends TagHandlerImpl implements 
             this.binding = binding;
         }
 
+        @Override
         public void processValueChange(ValueChangeEvent event)
               throws AbortProcessingException {
             ValueChangeListener instance = null;
@@ -159,6 +160,7 @@ public final class ValueChangeListenerHandler extends TagHandlerImpl implements 
     /**
      * See taglib documentation.
      */
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         // only process if it's been created
@@ -178,6 +180,7 @@ public final class ValueChangeListenerHandler extends TagHandlerImpl implements 
         }
     }
         
+    @Override
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
         EditableValueHolder evh = (EditableValueHolder) parent;
@@ -190,6 +193,7 @@ public final class ValueChangeListenerHandler extends TagHandlerImpl implements 
         evh.addValueChangeListener(listener);
     }
         
+    @Override
     public String getFor() {
         String result = null;
         TagAttribute attr = this.getAttribute("for");

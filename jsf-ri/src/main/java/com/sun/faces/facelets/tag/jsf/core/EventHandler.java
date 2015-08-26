@@ -76,6 +76,7 @@ public class EventHandler extends TagHandler {
         this.listener = this.getRequiredAttribute("listener");
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         if (ComponentHandler.isNew(parent)) {
             Class<? extends SystemEvent> eventClass = getEventClass(ctx);
@@ -123,6 +124,7 @@ class DeclarativeSystemEventListener implements ComponentSystemEventListener, Se
         this.noArgListener = noArg;
     }
 
+    @Override
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
         final ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         try{

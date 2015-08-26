@@ -94,6 +94,7 @@ public final class ConvertDelegateHandler extends ConverterHandler {
                 this.converterId.getValue(ctx));
     }
 
+    @Override
     protected MetaRuleset createMetaRuleset(Class type) {
         return super.createMetaRuleset(type).ignoreAll();
     }

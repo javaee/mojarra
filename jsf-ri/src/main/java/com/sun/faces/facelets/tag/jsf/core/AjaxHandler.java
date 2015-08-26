@@ -171,6 +171,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException {
 
@@ -183,6 +184,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
         }
     }
     
+    @Override
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
         applyAttachedObject(ctx, parent, getEventName());
@@ -191,6 +193,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
     /* (non-Javadoc)
      * @see javax.faces.view.AttachedObjectHandler#getFor()
      */
+    @Override
     public String getFor() {
         return null;
     }
@@ -198,6 +201,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
     /* (non-Javadoc)
      * @see javax.faces.view.BehaviorHolderAttachedObjectHandler#getEventName()
      */
+    @Override
     public String getEventName() {
         FacesContext context = FacesContext.getCurrentInstance();
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
@@ -453,6 +457,7 @@ class AjaxBehaviorListenerImpl implements AjaxBehaviorListener, Serializable {
         this.noArgListener = noArg;
     }
 
+    @Override
     public void processAjaxBehavior(AjaxBehaviorEvent event) throws AbortProcessingException {
         final ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         try{

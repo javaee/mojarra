@@ -83,6 +83,7 @@ final class ComponentRule extends MetaRule {
             this.name = name;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((UIComponent) instance).getAttributes().put(this.name, this.value);
         }
@@ -103,6 +104,7 @@ final class ComponentRule extends MetaRule {
             this.type = type;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((UIComponent) instance).setValueExpression(this.name, this.attr
                     .getValueExpression(ctx, this.type));
@@ -124,6 +126,7 @@ final class ComponentRule extends MetaRule {
             this.type = type;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((UIComponent) instance).setValueBinding(this.name,
                     new LegacyValueBinding(this.attr.getValueExpression(ctx,
@@ -140,6 +143,7 @@ final class ComponentRule extends MetaRule {
         super();
     }
 
+    @Override
     public Metadata applyRule(String name, TagAttribute attribute,
             MetadataTarget meta) {
         if (meta.isTargetInstanceOf(UIComponent.class)) {

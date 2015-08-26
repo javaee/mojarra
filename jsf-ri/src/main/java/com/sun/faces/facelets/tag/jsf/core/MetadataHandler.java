@@ -76,6 +76,7 @@ public class MetadataHandler extends TagHandlerImpl {
 
     // ------------------------------------------------- Methods from TagHandler
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException {
 

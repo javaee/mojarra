@@ -95,22 +95,27 @@ public final class LoadBundleHandler extends TagHandlerImpl {
                 this.value = value;
             }
 
+            @Override
             public Object getKey() {
                 return this.key;
             }
 
+            @Override
             public Object getValue() {
                 return this.value;
             }
 
+            @Override
             public Object setValue(Object value) {
                 throw new UnsupportedOperationException();
             }
 
+            @Override
             public int hashCode() {
                 return this.key.hashCode();
             }
 
+            @Override
             public boolean equals(Object obj) {
                 return (obj instanceof ResourceEntry && this.hashCode() == obj
                         .hashCode());
@@ -123,10 +128,12 @@ public final class LoadBundleHandler extends TagHandlerImpl {
             this.bundle = bundle;
         }
 
+        @Override
         public void clear() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public boolean containsKey(Object key) {
             try {
                 bundle.getString(key.toString());
@@ -136,10 +143,12 @@ public final class LoadBundleHandler extends TagHandlerImpl {
             }
         }
 
+        @Override
         public boolean containsValue(Object value) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Set entrySet() {
             Enumeration e = this.bundle.getKeys();
             Set s = new HashSet();
@@ -151,6 +160,7 @@ public final class LoadBundleHandler extends TagHandlerImpl {
             return s;
         }
 
+        @Override
         public Object get(Object key) {
         	try {
         		return this.bundle.getObject((String) key);
@@ -159,10 +169,12 @@ public final class LoadBundleHandler extends TagHandlerImpl {
         	}
         }
 
+        @Override
         public boolean isEmpty() {
             return false;
         }
 
+        @Override
         public Set keySet() {
             Enumeration e = this.bundle.getKeys();
             Set s = new HashSet();
@@ -172,22 +184,27 @@ public final class LoadBundleHandler extends TagHandlerImpl {
             return s;
         }
 
+        @Override
         public Object put(Object key, Object value) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public void putAll(Map t) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Object remove(Object key) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int size() {
             return this.keySet().size();
         }
 
+        @Override
         public Collection values() {
             Enumeration e = this.bundle.getKeys();
             Set s = new HashSet();
@@ -214,6 +231,7 @@ public final class LoadBundleHandler extends TagHandlerImpl {
     /**
      * See taglib documentation.
      */
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);

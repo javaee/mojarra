@@ -135,6 +135,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     
 
 
+    @Override
     public UIComponent createComponent(FaceletContext ctx) {
         
         FacesContext context = ctx.getFacesContext();
@@ -222,6 +223,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         }
     }
 
+    @Override
     public UIComponent getCompositeComponent(FacesContext context) {
         Map contextMap = context.getAttributes();
         String key = ccInstanceVariableStandinKey + this.tagId;
@@ -258,6 +260,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
      *
      * @param type the <code>Class</code> for which the
      * <code>MetaRuleset</code> must be created.
+     * @return 
      *
      */
     @Override
@@ -530,6 +533,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         // ------------------------------------------ Methods from ComponentRule
 
 
+        @Override
         public Metadata applyRule(String name, TagAttribute attribute, MetadataTarget meta) {
 
             if (meta.isTargetInstanceOf(UIComponent.class)) {
@@ -581,6 +585,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             // ------------------------------------------- Methods from Metadata
 
 
+            @Override
             public void applyMetadata(FaceletContext ctx, Object instance) {
 
                 UIComponent c = (UIComponent) instance;
@@ -626,6 +631,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             // ------------------------------------------- Methods from Metadata
 
 
+            @Override
             public void applyMetadata(FaceletContext ctx, Object instance) {
 
                 ValueExpression ve = attr.getValueExpression(ctx, type);

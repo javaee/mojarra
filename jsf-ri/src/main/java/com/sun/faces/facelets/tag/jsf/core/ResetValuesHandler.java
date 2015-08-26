@@ -97,6 +97,7 @@ public final class ResetValuesHandler extends ActionListenerHandlerBase
             this.render = new ArrayList<>(render);
         }
 
+        @Override
         public void processAction(ActionEvent event)
               throws AbortProcessingException {
             FacesContext context = FacesContext.getCurrentInstance();

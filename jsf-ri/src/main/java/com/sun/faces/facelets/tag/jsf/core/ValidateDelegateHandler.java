@@ -88,6 +88,7 @@ public final class ValidateDelegateHandler extends ValidatorHandler {
         return ((validatorId != null) ? this.validatorId.getValue(ctx) : null);
     }
 
+    @Override
     protected MetaRuleset createMetaRuleset(Class type) {
         return super.createMetaRuleset(type).ignoreAll();
     }

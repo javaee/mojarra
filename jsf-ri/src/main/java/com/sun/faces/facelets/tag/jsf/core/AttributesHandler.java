@@ -85,6 +85,7 @@ public final class AttributesHandler extends TagHandlerImpl
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         if (parent == null) {
@@ -116,6 +117,7 @@ public final class AttributesHandler extends TagHandlerImpl
 
     // javax.faces.view.facelets.tag.AttributeHandler.getAttributeName()
     // implementation.
+    @Override
     public String getAttributeName(FaceletContext ctxt) {
         return "value";
     }

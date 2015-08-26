@@ -116,6 +116,7 @@ public class PhaseListenerHandler extends TagHandlerImpl {
             return instance;
         }
 
+        @Override
         public void afterPhase(PhaseEvent event) {
             PhaseListener pl = this.getInstance();
             if (pl != null) {
@@ -123,6 +124,7 @@ public class PhaseListenerHandler extends TagHandlerImpl {
             }
         }
 
+        @Override
         public void beforePhase(PhaseEvent event) {
             PhaseListener pl = this.getInstance();
             if (pl != null) {
@@ -130,6 +132,7 @@ public class PhaseListenerHandler extends TagHandlerImpl {
             }
         }
 
+        @Override
         public PhaseId getPhaseId() {
             PhaseListener pl = this.getInstance();
             return (pl != null) ? pl.getPhaseId() : PhaseId.ANY_PHASE;
@@ -197,6 +200,7 @@ public class PhaseListenerHandler extends TagHandlerImpl {
         }
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException {
         if (ComponentHandler.isNew(parent)) {

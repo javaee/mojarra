@@ -69,10 +69,12 @@ public final class SocketHandler extends TagHandlerImpl implements AttachedObjec
 
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException {
     }
     
+    @Override
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
 
@@ -81,6 +83,7 @@ public final class SocketHandler extends TagHandlerImpl implements AttachedObjec
     /* (non-Javadoc)
      * @see javax.faces.view.AttachedObjectHandler#getFor()
      */
+    @Override
     public String getFor() {
         return null;
     }

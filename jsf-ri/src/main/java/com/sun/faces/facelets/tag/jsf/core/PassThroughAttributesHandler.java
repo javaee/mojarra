@@ -78,6 +78,7 @@ public final class PassThroughAttributesHandler extends TagHandlerImpl
         this.value = this.getRequiredAttribute("value");
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         if (parent == null) {
@@ -97,6 +98,7 @@ public final class PassThroughAttributesHandler extends TagHandlerImpl
 
     // javax.faces.view.facelets.tag.AttributeHandler.getAttributeName()
     // implementation.
+    @Override
     public String getAttributeName(FaceletContext ctxt) {
         return "value";
     }

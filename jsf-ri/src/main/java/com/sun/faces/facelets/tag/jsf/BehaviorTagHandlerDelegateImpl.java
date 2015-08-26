@@ -133,6 +133,7 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
 
     }
     
+    @Override
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
         // cast to the ClientBehaviorHolder.
@@ -166,6 +167,7 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
 
     
 	
+    @Override
     public MetaRuleset createMetaRuleset(Class type) {
         Util.notNull("type", type);
         MetaRuleset m = new MetaRulesetImpl(owner.getTag(), type);
@@ -173,6 +175,7 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
         return m.ignore("binding").ignore("for");
     }
     
+    @Override
     public String getFor() {
         String result = null;
         TagAttribute attr = owner.getTagAttribute("for");

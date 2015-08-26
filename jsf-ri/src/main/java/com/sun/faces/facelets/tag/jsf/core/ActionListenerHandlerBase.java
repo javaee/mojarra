@@ -95,6 +95,7 @@ public abstract class ActionListenerHandlerBase extends TagHandlerImpl
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException {
         if (null == parent || !(ComponentHandler.isNew(parent))) {
@@ -122,9 +123,11 @@ public abstract class ActionListenerHandlerBase extends TagHandlerImpl
         }
     }
 
+    @Override
     public abstract void applyAttachedObject(FacesContext context, UIComponent parent);
 
 
+    @Override
     public String getFor() {
         String result = null;
         TagAttribute attr = this.getAttribute("for");

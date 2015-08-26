@@ -81,6 +81,7 @@ final class ValueHolderRule extends MetaRule {
             this.converterId = converterId;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((ValueHolder) instance).setConverter(ctx.getFacesContext()
                     .getApplication().createConverter(this.converterId));
@@ -95,6 +96,7 @@ final class ValueHolderRule extends MetaRule {
             this.attr = attr;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((UIComponent) instance).setValueBinding("converter",
                     new LegacyValueBinding(attr.getValueExpression(ctx,
@@ -110,6 +112,7 @@ final class ValueHolderRule extends MetaRule {
             this.attr = attr;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((UIComponent) instance).setValueExpression("converter", attr
                     .getValueExpression(ctx, Converter.class));
@@ -124,6 +127,7 @@ final class ValueHolderRule extends MetaRule {
             this.attr = attr;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             UIComponent c = (UIComponent) instance;
             c.setValueExpression("value", attr.getValueExpression(ctx, ((c instanceof UISelectBoolean)
@@ -140,6 +144,7 @@ final class ValueHolderRule extends MetaRule {
             this.attr = attr;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((UIComponent) instance).setValueBinding("value",
                     new LegacyValueBinding(attr.getValueExpression(ctx,
@@ -149,6 +154,7 @@ final class ValueHolderRule extends MetaRule {
 
     public final static ValueHolderRule Instance = new ValueHolderRule();
 
+    @Override
     public Metadata applyRule(String name, TagAttribute attribute,
             MetadataTarget meta) {
         if (meta.isTargetInstanceOf(ValueHolder.class)) {

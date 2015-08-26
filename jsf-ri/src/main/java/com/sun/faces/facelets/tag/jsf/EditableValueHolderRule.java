@@ -82,6 +82,7 @@ public final class EditableValueHolderRule extends MetaRule {
             this.validatorId = validatorId;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((EditableValueHolder) instance).addValidator(ctx.getFacesContext()
                     .getApplication().createValidator(this.validatorId));
@@ -95,6 +96,7 @@ public final class EditableValueHolderRule extends MetaRule {
             this.attr = attr;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((EditableValueHolder) instance)
                     .addValueChangeListener(new MethodExpressionValueChangeListener(
@@ -110,6 +112,7 @@ public final class EditableValueHolderRule extends MetaRule {
             this.attr = attr;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((EditableValueHolder) instance)
                     .setValueChangeListener(new LegacyMethodBinding(this.attr
@@ -124,6 +127,7 @@ public final class EditableValueHolderRule extends MetaRule {
             this.attr = attr;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((EditableValueHolder) instance)
                     .addValidator(new MethodExpressionValidator(this.attr
@@ -138,6 +142,7 @@ public final class EditableValueHolderRule extends MetaRule {
             this.attr = attr;
         }
 
+        @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
             ((EditableValueHolder) instance)
                     .setValidator(new LegacyMethodBinding(this.attr
@@ -152,6 +157,7 @@ public final class EditableValueHolderRule extends MetaRule {
 
     public final static EditableValueHolderRule Instance = new EditableValueHolderRule();
 
+    @Override
     public Metadata applyRule(String name, TagAttribute attribute,
             MetadataTarget meta) {
 

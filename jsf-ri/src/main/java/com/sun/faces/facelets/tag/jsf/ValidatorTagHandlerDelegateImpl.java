@@ -106,6 +106,7 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
 
 
     @SuppressWarnings({"unchecked"})
+    @Override
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
 
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
@@ -156,6 +157,7 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
     }
 
 
+    @Override
     public String getFor() {
 
         String result = null;

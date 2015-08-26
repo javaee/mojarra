@@ -97,6 +97,7 @@ public final class ActionListenerHandler extends ActionListenerHandlerBase
             this.binding = binding;
         }
 
+        @Override
         public void processAction(ActionEvent event)
               throws AbortProcessingException {
             ActionListener instance = null;

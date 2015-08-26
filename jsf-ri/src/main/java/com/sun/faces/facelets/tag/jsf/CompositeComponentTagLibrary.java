@@ -113,6 +113,7 @@ public class CompositeComponentTagLibrary extends LazyTagLibrary {
     private String compositeLibraryName;
     private boolean enableMissingResourceLibraryDetection;
 
+    @Override
     public boolean containsTagHandler(String ns, String localName) {
         boolean result = false;
 
@@ -149,6 +150,7 @@ public class CompositeComponentTagLibrary extends LazyTagLibrary {
     }
 
 
+    @Override
     public TagHandler createTagHandler(String ns, String localName, TagConfig tag) throws FacesException {
 
         TagHandler result = super.createTagHandler(ns, localName, tag);

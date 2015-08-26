@@ -103,6 +103,7 @@ public final class PassThroughAttributeHandler extends TagHandlerImpl
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         if (parent == null) {
