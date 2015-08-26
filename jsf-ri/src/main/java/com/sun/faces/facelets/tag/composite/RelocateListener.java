@@ -57,6 +57,7 @@ abstract class RelocateListener implements ComponentSystemEventListener, StateHo
     // ------------------------------------------------ Methods from StateHolder
 
 
+    @Override
     public Object saveState(FacesContext context) {
         if (context == null) {
             throw new NullPointerException();
@@ -64,16 +65,19 @@ abstract class RelocateListener implements ComponentSystemEventListener, StateHo
         return null;
     }
 
+    @Override
     public void restoreState(FacesContext context, Object state) {
         if (context == null) {
             throw new NullPointerException();
         }
     }
 
+    @Override
     public boolean isTransient() {
         return true;
     }
 
+    @Override
     public void setTransient(boolean newTransientValue) {
         // no-op
     }

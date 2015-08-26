@@ -73,6 +73,8 @@ import java.util.Map;
 public class AttachedObjectTargetImpl implements AttachedObjectTarget {
 
     private String name = null;
+    
+    @Override
     public String getName() {
         return name;
     }
@@ -81,6 +83,7 @@ public class AttachedObjectTargetImpl implements AttachedObjectTarget {
         this.name = name;
     }
 
+    @Override
     public List<UIComponent> getTargets(UIComponent topLevelComponent) {
         assert(null != name);
 

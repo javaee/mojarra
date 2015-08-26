@@ -241,6 +241,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
      *
      * @see javax.el.ELResolver#isReadOnly(javax.el.ELContext, Object, Object)
      */
+    @Override
     public boolean isReadOnly(ELContext context, Object base, Object property) {
 
         Util.notNull("context", context);

@@ -56,6 +56,7 @@ public class ExtensionHandler extends TagHandler {
         super(tagConfig);
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         // extract a prefix from the child content
         if (null != nextHandler) {

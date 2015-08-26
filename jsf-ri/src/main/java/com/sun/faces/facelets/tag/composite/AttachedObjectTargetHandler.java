@@ -84,6 +84,7 @@ public abstract class AttachedObjectTargetHandler extends TagHandlerImpl {
     
     abstract AttachedObjectTargetImpl newAttachedObjectTargetImpl();
     
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
     throws IOException {
 

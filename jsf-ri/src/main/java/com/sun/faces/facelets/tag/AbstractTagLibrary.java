@@ -105,6 +105,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
             return this.parent.getTag();
         }
 
+        @Override
         public String getTagId() {
             return this.parent.getTagId();
         }  

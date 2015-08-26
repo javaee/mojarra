@@ -154,6 +154,7 @@ class PropertyHandlerManager {
     private abstract static class BooleanFeatureDescriptorPropertyHandler
           implements TypedPropertyHandler {
 
+        @Override
         public Class<?> getEvalType() {
             return Boolean.class;
         }
@@ -164,6 +165,7 @@ class PropertyHandlerManager {
     private abstract static class StringFeatureDescriptorPropertyHandler
           implements TypedPropertyHandler {
 
+        @Override
         public Class<?> getEvalType() {
             return String.class;
         }
@@ -174,6 +176,7 @@ class PropertyHandlerManager {
     private abstract static class TypedValueExpressionPropertyHandler
           implements TypedPropertyHandler {
 
+        @Override
         public void apply(FaceletContext ctx,
                           String propName,
                           FeatureDescriptor target,
@@ -184,6 +187,7 @@ class PropertyHandlerManager {
 
         }
 
+        @Override
         public abstract Class<?> getEvalType();
 
     } // END TypeValueExpressionPropertyHandler
@@ -192,6 +196,7 @@ class PropertyHandlerManager {
     private static final class NamePropertyHandler 
           extends StringFeatureDescriptorPropertyHandler {
 
+        @Override
         public void apply(FaceletContext ctx, 
                           String propName, 
                           FeatureDescriptor target, 
@@ -210,6 +215,7 @@ class PropertyHandlerManager {
     private static final class ShortDescriptionPropertyHandler
           extends StringFeatureDescriptorPropertyHandler {
 
+        @Override
         public void apply(FaceletContext ctx, 
                           String propName, 
                           FeatureDescriptor target, 
@@ -229,6 +235,7 @@ class PropertyHandlerManager {
     private static class StringValueExpressionPropertyHandler
           extends TypedValueExpressionPropertyHandler {
 
+        @Override
         public Class<?> getEvalType() {
             return String.class;
         }
@@ -253,6 +260,7 @@ class PropertyHandlerManager {
     private static class DefaultPropertyHandler
             implements PropertyHandler {
 
+        @Override
         public void apply(FaceletContext ctx,
                 String propName,
                 FeatureDescriptor target,
@@ -306,6 +314,7 @@ class PropertyHandlerManager {
     private static final class PreferredPropertyHandler
           extends BooleanFeatureDescriptorPropertyHandler {
 
+        @Override
         public void apply(FaceletContext ctx, String propName, FeatureDescriptor target, TagAttribute attribute) {
 
             ValueExpression ve = attribute
@@ -320,6 +329,7 @@ class PropertyHandlerManager {
     private static final class HiddenPropertyHandler
           extends BooleanFeatureDescriptorPropertyHandler {
 
+        @Override
         public void apply(FaceletContext ctx, String propName, FeatureDescriptor target, TagAttribute attribute) {
 
             ValueExpression ve = attribute
@@ -334,6 +344,7 @@ class PropertyHandlerManager {
     private static final class ExpertPropertyHandler
           extends BooleanFeatureDescriptorPropertyHandler {
 
+        @Override
         public void apply(FaceletContext ctx, String propName, FeatureDescriptor target, TagAttribute attribute) {
 
             ValueExpression ve = attribute
@@ -348,6 +359,7 @@ class PropertyHandlerManager {
     private static final class DisplayNamePropertyHandler
           extends StringFeatureDescriptorPropertyHandler {
 
+        @Override
         public void apply(FaceletContext ctx, String propName, FeatureDescriptor target, TagAttribute attribute) {
 
             ValueExpression ve = attribute
@@ -361,6 +373,7 @@ class PropertyHandlerManager {
     private static class BooleanValueExpressionPropertyHandler
           extends TypedValueExpressionPropertyHandler {
 
+        @Override
         public Class<?> getEvalType() {
             return Boolean.class;
         }

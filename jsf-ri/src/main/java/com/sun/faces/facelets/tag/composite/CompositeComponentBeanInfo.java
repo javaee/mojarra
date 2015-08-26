@@ -106,6 +106,7 @@ public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanIn
     // ----------------------------------------------Methods From Externalizable
 
 
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
 
         out.writeObject(descriptor.getBeanClass());
@@ -121,6 +122,7 @@ public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanIn
     }
 
 
+    @Override
     public void readExternal(ObjectInput in)
             throws IOException, ClassNotFoundException {
 

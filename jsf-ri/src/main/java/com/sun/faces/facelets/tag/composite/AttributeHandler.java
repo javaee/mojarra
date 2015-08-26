@@ -108,6 +108,7 @@ public class AttributeHandler extends TagHandlerImpl {
         this.name = this.getRequiredAttribute("name");
     }
     
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         // only process if it's been created
         if (null == parent || 

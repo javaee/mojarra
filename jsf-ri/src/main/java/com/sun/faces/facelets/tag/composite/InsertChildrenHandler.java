@@ -88,6 +88,7 @@ public class InsertChildrenHandler extends TagHandlerImpl {
     // ------------------------------------------------- Methods from TagHandler
 
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException {
 
@@ -139,6 +140,7 @@ public class InsertChildrenHandler extends TagHandlerImpl {
         // --------------------------- Methods from ComponentSystemEventListener
 
 
+        @Override
         public void processEvent(ComponentSystemEvent event)
         throws AbortProcessingException {
 

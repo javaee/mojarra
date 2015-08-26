@@ -113,6 +113,7 @@ public class InterfaceHandler extends TagHandlerImpl {
         super(config);
     }
     
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         FacesContext context = ctx.getFacesContext();
         // only process if it's been created

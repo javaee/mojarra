@@ -83,6 +83,7 @@ public class BehaviorHolderAttachedObjectTargetImpl extends
      *
      * @return the defaultEvent
      */
+    @Override
     public boolean isDefaultEvent() {
         return defaultEvent;
     }
