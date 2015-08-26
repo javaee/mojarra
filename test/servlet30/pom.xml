@@ -76,6 +76,7 @@
         <module>clientsideStateSaving</module>
         <module>component</module>
         <module>composite</module>
+        <module>composite2</module>
         <module>compositeComponentForAttribute</module>
         <module>configBasic</module>
         <module>configEmbed</module>
