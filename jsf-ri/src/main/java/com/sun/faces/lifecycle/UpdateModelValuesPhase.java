@@ -65,6 +65,7 @@ public class UpdateModelValuesPhase extends Phase {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void execute(FacesContext facesContext) {
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -92,6 +93,7 @@ public class UpdateModelValuesPhase extends Phase {
     }
 
 
+    @Override
     public PhaseId getId() {
 
         return PhaseId.UPDATE_MODEL_VALUES;

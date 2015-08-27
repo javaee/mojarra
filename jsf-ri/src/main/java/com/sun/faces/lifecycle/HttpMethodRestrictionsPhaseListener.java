@@ -54,9 +54,11 @@ public class HttpMethodRestrictionsPhaseListener implements PhaseListener {
     public HttpMethodRestrictionsPhaseListener() {
     }
     
+    @Override
     public void afterPhase(PhaseEvent event) {
     }
 
+    @Override
     public void beforePhase(PhaseEvent event) {
         FacesContext context = event.getFacesContext();
         ExternalContext extContext = context.getExternalContext();
@@ -71,6 +73,7 @@ public class HttpMethodRestrictionsPhaseListener implements PhaseListener {
 
     }
 
+    @Override
     public PhaseId getPhaseId() {
         return PhaseId.RESTORE_VIEW;
     }

@@ -130,6 +130,7 @@ public class RenderKitImpl extends RenderKit {
 
     }
     
+    @Override
     public void addRenderer(String family,
                             String rendererType,
                             Renderer renderer) {
@@ -154,6 +155,7 @@ public class RenderKitImpl extends RenderKit {
     }
 
 
+    @Override
     public Renderer getRenderer(String family, String rendererType) {
 
         Util.notNull("family", family);
@@ -166,6 +168,7 @@ public class RenderKitImpl extends RenderKit {
 
     }
 
+    @Override
     public void addClientBehaviorRenderer(String behaviorRendererType,
                                           ClientBehaviorRenderer behaviorRenderer) {
 
@@ -181,6 +184,7 @@ public class RenderKitImpl extends RenderKit {
     
     }
 
+    @Override
     public ClientBehaviorRenderer getClientBehaviorRenderer(String behaviorRendererType) {
 
         Util.notNull("behaviorRendererType", behaviorRendererType);
@@ -189,6 +193,7 @@ public class RenderKitImpl extends RenderKit {
             
     }   
 
+    @Override
     public Iterator<String> getClientBehaviorRendererTypes() {
         if (null == behaviorRenderers) {
             Set<String> empty = Collections.emptySet();
@@ -198,6 +203,7 @@ public class RenderKitImpl extends RenderKit {
     }
 
 
+    @Override
     public synchronized ResponseStateManager getResponseStateManager() {
         if (responseStateManager == null) {
             responseStateManager = new ResponseStateManagerImpl();
@@ -206,6 +212,7 @@ public class RenderKitImpl extends RenderKit {
     }
 
 
+    @Override
     public ResponseWriter createResponseWriter(Writer writer,
                                                String desiredContentTypeList,
                                                String characterEncoding) {
@@ -374,29 +381,35 @@ public class RenderKitImpl extends RenderKit {
     }
 
 
+    @Override
     public ResponseStream createResponseStream(OutputStream out) {
         final OutputStream output = out;
         return new ResponseStream() {
+            @Override
             public void write(int b) throws IOException {
                 output.write(b);
             }
 
 
+            @Override
             public void write(byte b[]) throws IOException {
                 output.write(b);
             }
 
 
+            @Override
             public void write(byte b[], int off, int len) throws IOException {
                 output.write(b, off, len);
             }
 
 
+            @Override
             public void flush() throws IOException {
                 output.flush();
             }
 
 
+            @Override
             public void close() throws IOException {
                 output.close();
             }

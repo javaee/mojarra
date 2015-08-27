@@ -81,6 +81,7 @@ public class ApplicationObjectInputStream extends ObjectInputStream {
         super(in);
     } 
 
+    @Override
     protected Class<?> resolveClass(ObjectStreamClass desc)
     throws IOException, ClassNotFoundException {
         

@@ -79,6 +79,7 @@ public class ManagedMapBeanBuilder extends BeanBuilder {
     }
 
 
+    @Override
     protected void buildBean(Object bean, FacesContext context) {
 
         initMap(mapEntries, (Map) bean, context);

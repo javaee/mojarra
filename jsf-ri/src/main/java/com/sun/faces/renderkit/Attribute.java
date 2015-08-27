@@ -85,6 +85,7 @@ public class Attribute implements Comparable<Attribute> {
 		return events;
 	}
 
+        @Override
 	public int compareTo(Attribute o) {
 		// Compare attributes by name for a fast search in the RenderKitUtils methods.
 		return this.getName().compareTo(o.getName());

@@ -90,6 +90,7 @@ public class ELResolverInitPhaseListener implements PhaseListener {
      * as a registered <code>PhaseListener</code> with all
      * <code>Lifecycle</code> instances.
      */
+    @Override
     public synchronized void afterPhase(PhaseEvent event) {
 
         if (!postInitCompleted && PhaseId.RENDER_RESPONSE.equals(event.getPhaseId())) {
@@ -119,6 +120,7 @@ public class ELResolverInitPhaseListener implements PhaseListener {
      * {@link #populateFacesELResolverForJsp(javax.faces.context.FacesContext)}.<p/>
      */
 
+    @Override
     public synchronized void beforePhase(PhaseEvent event) {
 
         if (!preInitCompleted) {
@@ -144,6 +146,7 @@ public class ELResolverInitPhaseListener implements PhaseListener {
      *
      * <p>We return <code>PhaseId.ANY_PHASE</code>.
      */
+    @Override
     public PhaseId getPhaseId() {
 
         return PhaseId.ANY_PHASE;

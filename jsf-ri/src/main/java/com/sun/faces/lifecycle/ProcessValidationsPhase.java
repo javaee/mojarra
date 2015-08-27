@@ -64,6 +64,7 @@ public class ProcessValidationsPhase extends Phase {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void execute(FacesContext facesContext) throws FacesException {
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -90,6 +91,7 @@ public class ProcessValidationsPhase extends Phase {
     }
 
 
+    @Override
     public PhaseId getId() {
 
         return PhaseId.PROCESS_VALIDATIONS;

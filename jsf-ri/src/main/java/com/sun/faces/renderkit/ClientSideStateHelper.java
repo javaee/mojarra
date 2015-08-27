@@ -179,6 +179,7 @@ public class ClientSideStateHelper extends StateHelper {
      *
      * @see StateHelper#writeState(javax.faces.context.FacesContext, java.lang.Object, java.lang.StringBuilder)
      */
+    @Override
     public void writeState(FacesContext ctx,
                            Object state,
                            StringBuilder stateCapture) throws IOException {
@@ -230,6 +231,7 @@ public class ClientSideStateHelper extends StateHelper {
      *
      * @see StateHelper#getState(javax.faces.context.FacesContext, java.lang.String)
      */
+    @Override
     public Object getState(FacesContext ctx, String viewId) throws IOException {
 
         String stateString = getStateParamValue(ctx);
@@ -664,18 +666,21 @@ public class ClientSideStateHelper extends StateHelper {
 
         }
 
+        @Override
         public void write(char cbuf[], int off, int len) throws IOException {
 
             sb.append(cbuf, off, len);
 
         }
 
+        @Override
         public void flush() throws IOException {
 
             //no-op
 
         }
 
+        @Override
         public void close() throws IOException {
 
             //no-op

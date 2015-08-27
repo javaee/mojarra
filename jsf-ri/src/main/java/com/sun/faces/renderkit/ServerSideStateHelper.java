@@ -174,6 +174,7 @@ public class ServerSideStateHelper extends StateHelper {
      * key will be appended to the <code>StringBuilder<code> without any markup
      * included or any content written to the client.
      */
+    @Override
     public void writeState(FacesContext ctx,
                            Object state,
                            StringBuilder stateCapture)
@@ -294,6 +295,7 @@ public class ServerSideStateHelper extends StateHelper {
      * <p>The composite key will be used to find the appropriate view within the
      * session obtained from the provided <code>FacesContext</code>
      */
+    @Override
     public Object getState(FacesContext ctx, String viewId) {
 
         String compoundId = getStateParamValue(ctx);

@@ -79,6 +79,7 @@ public class ErrorBean extends BeanBuilder {
     }
 
 
+    @Override
     protected void buildBean(Object bean, FacesContext context) {
         // no-op
     }

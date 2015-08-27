@@ -90,6 +90,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
     // -------------------------------------------------- Methods from Lifecycle
 
 
+    @Override
     public void addLifecycle(String lifecycleId, Lifecycle lifecycle) {
         if (lifecycleId == null) {
             throw new NullPointerException(
@@ -117,6 +118,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
     }
 
 
+    @Override
     public Lifecycle getLifecycle(String lifecycleId) throws FacesException {
 
         if (null == lifecycleId) {
@@ -142,6 +144,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
     }
 
 
+    @Override
     public Iterator<String> getLifecycleIds() {
         return lifecycleMap.keySet().iterator();
     }

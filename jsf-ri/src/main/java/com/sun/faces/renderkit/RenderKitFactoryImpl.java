@@ -80,6 +80,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
     }
 
 
+    @Override
     public void addRenderKit(String renderKitId, RenderKit renderKit) {
 
         if (renderKitId == null) {
@@ -98,6 +99,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
     }
 
 
+    @Override
     public RenderKit getRenderKit(FacesContext context, String renderKitId) {
 
         if (renderKitId == null) {
@@ -114,6 +116,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
     }
 
 
+    @Override
     public Iterator<String> getRenderKitIds() {
         return (renderKits.keySet().iterator());
     }

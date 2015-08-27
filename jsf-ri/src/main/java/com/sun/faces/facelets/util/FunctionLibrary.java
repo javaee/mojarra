@@ -93,23 +93,28 @@ public class FunctionLibrary implements TagLibrary {
 
     // ------------------------------------------------- Methods from TagLibrary
 
+    @Override
     public boolean containsNamespace(String ns, Tag t) {
         return _namespace.equals(ns);
     }
 
+    @Override
     public boolean containsTagHandler(String ns, String localName) {
         return false;
     }
 
+    @Override
     public TagHandler createTagHandler(String ns, String localName,
             TagConfig tag) throws FacesException {
         return null;
     }
 
+    @Override
     public boolean containsFunction(String ns, String name) {
         return _namespace.equals(ns) && this.functions.containsKey(name);
     }
 
+    @Override
     public Method createFunction(String ns, String name) {
         if (_namespace.equals(ns)) {
             return this.functions.get(name);

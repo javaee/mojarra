@@ -113,6 +113,7 @@ public class BeanManager implements SystemEventListener {
      *
      * @throws AbortProcessingException
      */
+    @Override
     public void processEvent(SystemEvent event)
     throws AbortProcessingException {
 
@@ -133,6 +134,7 @@ public class BeanManager implements SystemEventListener {
     /**
      * @see SystemEventListener#isListenerForSource(Object)
      */
+    @Override
     public boolean isListenerForSource(Object source) {
 
         return (source instanceof ScopeContext);
@@ -507,14 +509,17 @@ public class BeanManager implements SystemEventListener {
 
         private static class NoneScopeHandler implements ScopeHandler {
 
+            @Override
             public void handle(String name, Object bean, FacesContext context) {
                 // no-op
             }
 
+            @Override
             public boolean isInScope(String name, FacesContext context) {
                 return false;
             }
 
+            @Override
             public Object getFromScope(String name, FacesContext context) {
                 return null;
             }
@@ -522,18 +527,21 @@ public class BeanManager implements SystemEventListener {
 
         private static class RequestScopeHandler implements ScopeHandler {
 
+            @Override
             public void handle(String name, Object bean, FacesContext context) {
 
                 context.getExternalContext().getRequestMap().put(name, bean);
 
             }
 
+            @Override
             public boolean isInScope(String name, FacesContext context) {
 
                 return context.getExternalContext().getRequestMap().containsKey(name);
 
             }
 
+            @Override
             public Object getFromScope(String name, FacesContext context) {
 
                 return context.getExternalContext().getRequestMap().get(name);
@@ -545,6 +553,7 @@ public class BeanManager implements SystemEventListener {
 
         private static class ViewScopeHandler implements ScopeHandler {
 
+            @Override
             public void handle(String name, Object bean, FacesContext context) {
 
                 Map<String, Object> viewMap = context.getViewRoot().getViewMap();
@@ -554,6 +563,7 @@ public class BeanManager implements SystemEventListener {
                 }
             }
 
+            @Override
             public boolean isInScope(String name, FacesContext context) {
 
                 Map<String,Object> viewMap = context.getViewRoot().getViewMap(false);
@@ -561,6 +571,7 @@ public class BeanManager implements SystemEventListener {
 
             }
 
+            @Override
             public Object getFromScope(String name, FacesContext context) {
 
                 Map<String,Object> viewMap = context.getViewRoot().getViewMap(false);
@@ -573,6 +584,7 @@ public class BeanManager implements SystemEventListener {
 
         private static class SessionScopeHandler implements ScopeHandler  {
 
+            @Override
             public void handle(String name, Object bean, FacesContext context) {
 
                 synchronized (context.getExternalContext().getSession(true)) {
@@ -581,12 +593,14 @@ public class BeanManager implements SystemEventListener {
 
             }
 
+            @Override
             public boolean isInScope(String name, FacesContext context) {
 
                 return context.getExternalContext().getSessionMap().containsKey(name);
 
             }
 
+            @Override
             public Object getFromScope(String name, FacesContext context) {
 
                 return context.getExternalContext().getSessionMap().get(name);
@@ -598,6 +612,7 @@ public class BeanManager implements SystemEventListener {
 
         private static class ApplicationScopeHandler implements ScopeHandler {
 
+            @Override
             public void handle(String name, Object bean, FacesContext context) {
 
                 synchronized (context.getExternalContext().getContext()) {
@@ -606,6 +621,7 @@ public class BeanManager implements SystemEventListener {
 
             }
 
+            @Override
             public boolean isInScope(String name, FacesContext context) {
 
                 return context.getExternalContext().getApplicationMap().containsKey(name);
@@ -613,6 +629,7 @@ public class BeanManager implements SystemEventListener {
             }
 
 
+            @Override
             public Object getFromScope(String name, FacesContext context) {
 
                 return context.getExternalContext().getApplicationMap().get(name);
@@ -630,6 +647,7 @@ public class BeanManager implements SystemEventListener {
                 this.scope = scope;
             }
 
+            @Override
             public void handle(String name, Object bean, FacesContext context) {
 
                 Map scopeMap = (Map) scope.getValue(getELContext(context));
@@ -666,6 +684,7 @@ public class BeanManager implements SystemEventListener {
                 }
             }
 
+            @Override
             public boolean isInScope(String name, FacesContext context) {
 
                 Map scopeMap = (Map) scope.getValue(getELContext(context));
@@ -683,6 +702,7 @@ public class BeanManager implements SystemEventListener {
                 }
             }
 
+            @Override
             public Object getFromScope(String name, FacesContext context) {
 
                 Map scopeMap = (Map) scope.getValue(getELContext(context));

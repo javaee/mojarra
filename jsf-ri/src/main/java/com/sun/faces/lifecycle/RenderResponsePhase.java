@@ -77,6 +77,7 @@ public class RenderResponsePhase extends Phase {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void execute(FacesContext facesContext) throws FacesException {
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -142,6 +143,7 @@ public class RenderResponsePhase extends Phase {
     }
 
 
+    @Override
     public PhaseId getId() {
 
         return PhaseId.RENDER_RESPONSE;

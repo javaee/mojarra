@@ -121,6 +121,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
     /**
      * <p>Return <code>true</code> if the iteration has more elements.</p>
      */
+    @Override
     public boolean hasNext() {
 
         if (items != null) {
@@ -150,6 +151,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
      * @throws NoSuchElementException if there are no more elements
      */
     @SuppressWarnings({"unchecked"})
+    @Override
     public SelectItem next() {
 
         if (!hasNext()) {
@@ -172,6 +174,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
     /**
      * <p>Throw UnsupportedOperationException.</p>
      */
+    @Override
     public void remove() {
 
         throw new UnsupportedOperationException();
@@ -279,6 +282,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
 
         // ----------------------------------------------- Methods from ComponentAwareSelectItemIterator
 
+        @Override
         public UIComponent currentSelectComponent() {
             return selectComponent;
         }
@@ -286,6 +290,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
         // ----------------------------------------------- Methods from Iterator
 
 
+        @Override
         public boolean hasNext() {
 
             return !nextCalled;
@@ -293,6 +298,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
         }
 
 
+        @Override
         public SelectItem next() {
 
             if (nextCalled) {
@@ -304,6 +310,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
         }
 
 
+        @Override
         public void remove() {
 
             throw new UnsupportedOperationException();
@@ -349,6 +356,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
 
         // ----------------------------------------------- Methods from ComponentAwareSelectItemIterator
 
+        @Override
         public UIComponent currentSelectComponent() {
             return parent;
         }
@@ -356,6 +364,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
         // ----------------------------------------------- Methods from Iterator
 
 
+        @Override
         public boolean hasNext() {
 
             return iterator.hasNext();
@@ -363,6 +372,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
         }
 
 
+        @Override
         public SelectItem next() {
 
             Map.Entry entry = (Map.Entry) iterator.next();
@@ -375,6 +385,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
         }
 
 
+        @Override
         public void remove() {
 
             throw new UnsupportedOperationException();
@@ -415,6 +426,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
 
         // -------------------------------------------------------- Constructors
 
+        @Override
         public UIComponent currentSelectComponent() {
             return sourceComponent;
         }
@@ -589,12 +601,14 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
         // ----------------------------------------------- Methods from Iterator
 
 
+        @Override
         public boolean hasNext() {
 
             return (index < count);
 
         }
 
+        @Override
         public SelectItem next() {
 
             if (index >= count) {
@@ -610,6 +624,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
 
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -649,6 +664,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
         // ----------------------------------------------- Methods from Iterator
 
 
+        @Override
         public boolean hasNext() {
 
             return iterator.hasNext();
@@ -656,6 +672,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
         }
 
 
+        @Override
         public SelectItem next() {
 
             Object item = iterator.next();
@@ -668,6 +685,7 @@ public final class SelectItemsIterator<T extends SelectItem> implements Iterator
         }
 
 
+        @Override
         public void remove() {
 
             throw new UnsupportedOperationException();

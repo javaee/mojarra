@@ -89,6 +89,7 @@ public class FastStringWriter extends Writer {
      *
      * @throws IOException
      */
+    @Override
     public void write(char cbuf[], int off, int len) throws IOException {
         if ((off < 0) || (off > cbuf.length) || (len < 0) ||
             ((off + len) > cbuf.length) || ((off + len) < 0)) {
@@ -104,6 +105,7 @@ public class FastStringWriter extends Writer {
      *
      * @throws IOException
      */
+    @Override
     public void flush() throws IOException {
     }
 
@@ -122,6 +124,7 @@ public class FastStringWriter extends Writer {
      *
      * @param str String to be written
      */
+    @Override
     public void write(String str) {
         builder.append(str);
     }
@@ -133,6 +136,7 @@ public class FastStringWriter extends Writer {
      * @param off Offset from which to start writing characters
      * @param len Number of characters to write
      */
+    @Override
     public void write(String str, int off, int len) {
         builder.append(str.substring(off, off + len));
     }
@@ -147,6 +151,7 @@ public class FastStringWriter extends Writer {
     }
 
     /** @return the buffer's current value as a string. */
+    @Override
     public String toString() {
         return builder.toString();
     }

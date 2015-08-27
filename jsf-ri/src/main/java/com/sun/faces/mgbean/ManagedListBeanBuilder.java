@@ -78,6 +78,7 @@ public class ManagedListBeanBuilder extends BeanBuilder {
     }
 
 
+    @Override
     protected void buildBean(Object bean, FacesContext context) {
 
         initList(values, (List) bean, context);

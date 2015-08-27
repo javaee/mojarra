@@ -120,6 +120,7 @@ public class Base64OutputStreamWriter extends OutputStream {
      *
      * @param b the byte to be written.
      */
+    @Override
     public void write(int b) throws IOException {
         throw new UnsupportedOperationException();
     }

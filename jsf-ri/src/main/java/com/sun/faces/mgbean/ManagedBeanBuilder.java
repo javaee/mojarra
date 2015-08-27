@@ -127,6 +127,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
     }
 
 
+    @Override
     protected void buildBean(Object bean, FacesContext context) {
 
         if (properties != null) {
@@ -425,6 +426,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
 
         }
 
+        @Override
         public void set(Object bean, FacesContext context) {
 
             Method readMethod = pd.getReadMethod();
@@ -479,6 +481,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
         }
 
 
+        @Override
         public void set(Object bean, FacesContext context) {
 
             // check to see if there is a value returned by
@@ -599,6 +602,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
         }
 
 
+        @Override
         public void set(Object bean, FacesContext context) {
 
             if (pd != null) {

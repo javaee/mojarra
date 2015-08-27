@@ -141,6 +141,7 @@ public class Base64InputStream extends InputStream {
      * @return the next byte of data, or <code>-1</code> if the end of the
      *         stream has been reached.
      */
+    @Override
     public int read() {
         return (pos < count) ? (buf[pos++] & 0xff) : -1;
     }
