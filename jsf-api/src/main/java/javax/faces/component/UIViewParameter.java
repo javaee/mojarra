@@ -55,7 +55,7 @@ import javax.faces.validator.RequiredValidator;
 import javax.faces.validator.Validator;
 
 /**
- * <p class="changed_added_2_0"><strong class="changed_modified_2_2 changed_modified_2_3">UIViewParameter</strong> represents a
+ * <p class="changed_added_2_0"><strong class="changed_modified_2_2">UIViewParameter</strong> represents a
  * binding between a request parameter and a model property or {@link UIViewRoot}
  * property. This is a bi-directional binding.</p>
  *
@@ -104,8 +104,6 @@ public class UIViewParameter extends UIInput {
 
     private Renderer inputTextRenderer = null;
     
-    private transient Boolean emptyStringIsNull;
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -244,16 +242,10 @@ public class UIViewParameter extends UIInput {
     }
     
     /**
-     * <p class="changed_added_2_0"><span class="changed_modified_2_3">Specialize</span>
-     * superclass behavior to treat
+     * <p class="changed_added_2_0">Specialize superclass behavior to treat
      * <code>null</code> differently.  In this class, a <code>null</code> value
      * along with the "required" flag being set to <code>true</code> will
-     * cause a validation failure. <span class="changed_added_2_3">Otherwise, 
-     * If the {@link UIInput#EMPTY_STRING_AS_NULL_PARAM_NAME}
-     * context parameter is true and the value is {@code null}, call
-     * {@link UIInput#setSubmittedValue} passing the empty string
-     * as the argument.  This will cause the normal validation processing
-     * to happen, including bean validation.</span></p>
+     * cause a validation failure. </p>
      * 
      * @param context the Faces context.
      * @since 2.0
@@ -269,11 +261,9 @@ public class UIViewParameter extends UIInput {
         if (!isRendered()) {
             return;
         }
-        
-        Object submittedValue = getSubmittedValue();
 
         // we have to override since UIInput assumes that a null value means don't check
-        if (submittedValue == null && myIsRequired()) {
+        if (getSubmittedValue() == null && myIsRequired()) {
             String requiredMessageStr = getRequiredMessage();
             FacesMessage message;
             if (null != requiredMessageStr) {
@@ -292,29 +282,9 @@ public class UIViewParameter extends UIInput {
             context.renderResponse();
         }
         else {
-            if (myConsiderEmptyStringNull(context)) {
-                // JAVASERVERFACES_SPEC_PUBLIC-1329: If the EMPTY_STRING_SUBMITTED_VALUES_AS_NULL
-                // config is set, ensure that logic gets a chance to be executed
-                // in UIInput.processValidators().
-                if (null == submittedValue) {
-                    setSubmittedValue("");
-                }
-            }
             super.processValidators(context);
         }
     }
-    
-    private boolean myConsiderEmptyStringNull(FacesContext ctx) {
-
-        if (emptyStringIsNull == null) {
-            String val = ctx.getExternalContext().getInitParameter(EMPTY_STRING_AS_NULL_PARAM_NAME);
-            emptyStringIsNull = Boolean.valueOf(val);
-        }
-
-        return emptyStringIsNull;
-        
-    }
-    
     
     private boolean myIsRequired() {
         return super.isRequired() || isRequiredViaNestedRequiredValidator();
