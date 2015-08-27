@@ -85,6 +85,7 @@ public final class IteratedValueExpression extends ValueExpression {
      *
      * @see javax.el.ValueExpression#getValue(javax.el.ELContext)
      */
+    @Override
     public Object getValue(ELContext context) {
         Collection collection = (Collection) orig.getValue(context);
         Iterator iterator = collection.iterator();
@@ -117,6 +118,7 @@ public final class IteratedValueExpression extends ValueExpression {
      * @see javax.el.ValueExpression#setValue(javax.el.ELContext,
      *      java.lang.Object)
      */
+    @Override
     public void setValue(ELContext context, Object value) {
         context.setPropertyResolved(false);
         throw new PropertyNotWritableException();
@@ -127,6 +129,7 @@ public final class IteratedValueExpression extends ValueExpression {
      *
      * @see javax.el.ValueExpression#isReadOnly(javax.el.ELContext)
      */
+    @Override
     public boolean isReadOnly(ELContext context) {
         context.setPropertyResolved(false);
         return true;
@@ -137,6 +140,7 @@ public final class IteratedValueExpression extends ValueExpression {
      *
      * @see javax.el.ValueExpression#getType(javax.el.ELContext)
      */
+    @Override
     public Class getType(ELContext context) {
         context.setPropertyResolved(false);
         return Object.class;
@@ -147,6 +151,7 @@ public final class IteratedValueExpression extends ValueExpression {
      *
      * @see javax.el.ValueExpression#getExpectedType()
      */
+    @Override
     public Class getExpectedType() {
         return Object.class;
     }
@@ -156,6 +161,7 @@ public final class IteratedValueExpression extends ValueExpression {
      *
      * @see javax.el.Expression#getExpressionString()
      */
+    @Override
     public String getExpressionString() {
         return this.orig.getExpressionString();
     }
@@ -165,6 +171,7 @@ public final class IteratedValueExpression extends ValueExpression {
      *
      * @see javax.el.Expression#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object obj) {
         return this.orig.equals(obj);
     }
@@ -174,6 +181,7 @@ public final class IteratedValueExpression extends ValueExpression {
      *
      * @see javax.el.Expression#hashCode()
      */
+    @Override
     public int hashCode() {
         return this.orig.hashCode();
     }
@@ -183,6 +191,7 @@ public final class IteratedValueExpression extends ValueExpression {
      *
      * @see javax.el.Expression#isLiteralText()
      */
+    @Override
     public boolean isLiteralText() {
         return false;
     }

@@ -124,6 +124,7 @@ public final class PassThroughAttributeHandler extends TagHandlerImpl
 
     // javax.faces.view.facelets.tag.AttributeHandler.getAttributeName()
     // implementation.
+    @Override
     public String getAttributeName(FaceletContext ctxt) {
         return this.name.getValue(ctxt);
     }

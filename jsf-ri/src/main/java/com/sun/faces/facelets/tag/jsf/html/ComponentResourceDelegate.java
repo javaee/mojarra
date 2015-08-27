@@ -133,6 +133,7 @@ public abstract class ComponentResourceDelegate extends ComponentTagHandlerDeleg
 
 
 
+    @Override
     protected void doOrphanedChildCleanup(FaceletContext ctx,
                                           UIComponent parent,
                                           UIComponent c) {

@@ -87,6 +87,7 @@ public final class HtmlDecorator implements TagDecorator {
      * 
      * @see com.sun.facelets.tag.TagDecorator#decorate(com.sun.facelets.tag.Tag)
      */
+    @Override
     public Tag decorate(Tag tag) {
         if (XhtmlNamespace.equals(tag.getNamespace())) {
             String n = tag.getLocalName();

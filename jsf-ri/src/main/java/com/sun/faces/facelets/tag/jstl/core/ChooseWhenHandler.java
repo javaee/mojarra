@@ -78,6 +78,7 @@ public final class ChooseWhenHandler extends TagHandlerImpl {
         this.test = this.getRequiredAttribute("test");
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         this.nextHandler.apply(ctx, parent);

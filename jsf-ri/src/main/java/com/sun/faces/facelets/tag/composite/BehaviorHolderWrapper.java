@@ -474,6 +474,7 @@ public class BehaviorHolderWrapper extends UIComponent implements
 
     }
 
+    @Override
     public Map<String, List<ClientBehavior>> getClientBehaviors() {
         if (parent instanceof ClientBehaviorHolder) {
             ClientBehaviorHolder parentHolder = (ClientBehaviorHolder) parent;

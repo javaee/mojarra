@@ -75,6 +75,7 @@ public class HtmlComponentHandler extends ComponentHandler {
         super(config);
     }
 
+    @Override
     protected MetaRuleset createMetaRuleset(Class type) {
         return super.createMetaRuleset(type).alias("class", "styleClass");
     }

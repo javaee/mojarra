@@ -91,6 +91,7 @@ public class ParamHandler extends TagHandlerImpl {
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         String nameStr = this.name.getValue(ctx);

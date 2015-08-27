@@ -96,6 +96,7 @@ public class SetHandler extends TagHandlerImpl {
         
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
 

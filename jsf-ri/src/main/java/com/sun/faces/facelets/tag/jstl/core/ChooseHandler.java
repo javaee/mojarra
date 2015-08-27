@@ -98,6 +98,7 @@ public final class ChooseHandler extends TagHandlerImpl {
         }
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         for (int i = 0; i < this.when.length; i++) {

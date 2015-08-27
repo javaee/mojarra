@@ -88,25 +88,30 @@ public final class UIDebug extends UIComponentBase {
         this.setRendererType(null);
     }
 
+    @Override
     public String getFamily() {
         return COMPONENT_FAMILY;
     }
 
+    @Override
     public List getChildren() {
         return new ArrayList() {
 
             private static final long serialVersionUID = 2156130539926052013L;
 
+            @Override
             public boolean add(Object o) {
                 throw new IllegalStateException("<ui:debug> does not support children");
             }
 
+            @Override
             public void add(int index, Object o) {
                 throw new IllegalStateException("<ui:debug> does not support children");
             }
         };
     }
 
+    @Override
     public void encodeBegin(FacesContext facesContext) throws IOException {
         
         if (isRendered()) {
@@ -154,6 +159,7 @@ public final class UIDebug extends UIComponentBase {
 
                 private static final long serialVersionUID = 2541609242499547693L;
 
+                @Override
                 protected boolean removeEldestEntry(Map.Entry eldest) {
                     return (this.size() > 5);
                 }

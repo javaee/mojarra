@@ -81,6 +81,7 @@ public final class CatchHandler extends TagHandlerImpl {
         this.var = this.getAttribute("var");
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         try {

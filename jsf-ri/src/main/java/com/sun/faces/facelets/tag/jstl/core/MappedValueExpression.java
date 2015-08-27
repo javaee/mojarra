@@ -80,14 +80,17 @@ public final class MappedValueExpression extends ValueExpression {
             this.key = key;
         }
 
+        @Override
         public Object getKey() {
             return key;
         }
 
+        @Override
         public Object getValue() {
             return src.get(key);
         }
 
+        @Override
         public Object setValue(Object value) {
             return src.put(key, value);
         }
@@ -116,6 +119,7 @@ public final class MappedValueExpression extends ValueExpression {
      * 
      * @see javax.el.ValueExpression#getValue(javax.el.ELContext)
      */
+    @Override
     public Object getValue(ELContext context) {
         Object base = this.orig.getValue(context);
         if (base != null) {
@@ -132,6 +136,7 @@ public final class MappedValueExpression extends ValueExpression {
      * @see javax.el.ValueExpression#setValue(javax.el.ELContext,
      *      java.lang.Object)
      */
+    @Override
     public void setValue(ELContext context, Object value) {
         Object base = this.orig.getValue(context);
         if (base != null) {
@@ -145,6 +150,7 @@ public final class MappedValueExpression extends ValueExpression {
      * 
      * @see javax.el.ValueExpression#isReadOnly(javax.el.ELContext)
      */
+    @Override
     public boolean isReadOnly(ELContext context) {
         Object base = this.orig.getValue(context);
         if (base != null) {
@@ -159,6 +165,7 @@ public final class MappedValueExpression extends ValueExpression {
      * 
      * @see javax.el.ValueExpression#getType(javax.el.ELContext)
      */
+    @Override
     public Class getType(ELContext context) {
         Object base = this.orig.getValue(context);
         if (base != null) {
@@ -173,6 +180,7 @@ public final class MappedValueExpression extends ValueExpression {
      * 
      * @see javax.el.ValueExpression#getExpectedType()
      */
+    @Override
     public Class getExpectedType() {
         return Object.class;
     }
@@ -182,6 +190,7 @@ public final class MappedValueExpression extends ValueExpression {
      * 
      * @see javax.el.Expression#getExpressionString()
      */
+    @Override
     public String getExpressionString() {
         return this.orig.getExpressionString();
     }
@@ -191,6 +200,7 @@ public final class MappedValueExpression extends ValueExpression {
      * 
      * @see javax.el.Expression#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object obj) {
         return this.orig.equals(obj);
     }
@@ -200,6 +210,7 @@ public final class MappedValueExpression extends ValueExpression {
      * 
      * @see javax.el.Expression#hashCode()
      */
+    @Override
     public int hashCode() {
         return 0;
     }
@@ -209,6 +220,7 @@ public final class MappedValueExpression extends ValueExpression {
      * 
      * @see javax.el.Expression#isLiteralText()
      */
+    @Override
     public boolean isLiteralText() {
         return false;
     }

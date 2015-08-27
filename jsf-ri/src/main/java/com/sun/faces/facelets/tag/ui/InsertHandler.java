@@ -101,6 +101,7 @@ public final class InsertHandler extends TagHandlerImpl implements TemplateClien
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
+    @Override
     public void apply(FaceletContext ctxObj, UIComponent parent)
             throws IOException {
         FaceletContextImplBase ctx = (FaceletContextImplBase) ctxObj;
@@ -117,6 +118,7 @@ public final class InsertHandler extends TagHandlerImpl implements TemplateClien
         }
     }
 
+    @Override
     public boolean apply(FaceletContext ctx, UIComponent parent, String name) throws IOException {
         if (this.name != null && this.name.equals(name)) {
             this.nextHandler.apply(ctx, parent);

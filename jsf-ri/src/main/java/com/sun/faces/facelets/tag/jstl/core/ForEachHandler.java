@@ -93,10 +93,12 @@ public final class ForEachHandler extends TagHandlerImpl {
             this.len = Array.getLength(src);
         }
 
+        @Override
         public boolean hasNext() {
             return this.i < this.len;
         }
 
+        @Override
         public Object next() {
             try {
                 return Array.get(this.array, this.i++);
@@ -105,6 +107,7 @@ public final class ForEachHandler extends TagHandlerImpl {
             }
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -145,6 +148,7 @@ public final class ForEachHandler extends TagHandlerImpl {
         }
     }
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         

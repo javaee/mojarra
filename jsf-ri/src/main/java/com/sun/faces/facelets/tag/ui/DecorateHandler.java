@@ -127,6 +127,7 @@ public final class DecorateHandler extends TagHandlerImpl implements TemplateCli
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
+    @Override
     public void apply(FaceletContext ctxObj, UIComponent parent)
             throws IOException {
         FaceletContextImplBase ctx = (FaceletContextImplBase) ctxObj;
@@ -162,6 +163,7 @@ public final class DecorateHandler extends TagHandlerImpl implements TemplateCli
         }
     }
 
+    @Override
     public boolean apply(FaceletContext ctx, UIComponent parent, String name) throws IOException {
         if (name != null) {
             DefineHandler handler = (DefineHandler) this.handlers.get(name);
