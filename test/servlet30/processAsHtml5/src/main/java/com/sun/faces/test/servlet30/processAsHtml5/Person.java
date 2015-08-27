@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.facelets.processing;
+package com.sun.faces.test.servlet30.processAsHtml5;
 
 import java.io.Serializable;
 import java.util.Date;

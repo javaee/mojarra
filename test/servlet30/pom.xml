@@ -142,6 +142,7 @@
         <module>neverUnwrapExceptions</module>
         <module>noWebXml</module>
         <module>passthrough</module>
+        <module>processAsHtml5</module>
         <module>processAsJspx</module>
         <module>renderKit</module>
         <module>requestCharEncodingNoSession</module>
