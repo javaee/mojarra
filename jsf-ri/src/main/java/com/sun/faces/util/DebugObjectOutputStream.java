@@ -123,6 +123,7 @@ public class DebugObjectOutputStream
    * Abuse {@code replaceObject()} as a hook to
    * maintain our stack.
    */
+  @Override
   protected Object replaceObject(Object o) {
     // ObjectOutputStream writes serialization
     // exceptions to the stream. Ignore

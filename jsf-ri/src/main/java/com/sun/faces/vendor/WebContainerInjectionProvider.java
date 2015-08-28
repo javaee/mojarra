@@ -71,12 +71,14 @@ public class WebContainerInjectionProvider implements InjectionProvider {
     // ------------------------------------------ Methods from InjectionProvider
 
 
+    @Override
     public void inject(Object managedBean) throws InjectionProviderException {
 
         // no-op
 
     }
 
+    @Override
     public void invokePreDestroy(Object managedBean)
     throws InjectionProviderException {
 
@@ -88,6 +90,7 @@ public class WebContainerInjectionProvider implements InjectionProvider {
 
     }
 
+    @Override
     public void invokePostConstruct(Object managedBean)
     throws InjectionProviderException {
 

@@ -62,6 +62,7 @@ public class LRUMap<K,V> extends LinkedHashMap<K,V> {
 
     // ---------------------------------------------- Methods from LinkedHashMap
 
+    @Override
     protected boolean removeEldestEntry(Map.Entry eldest) {
         return (size() > maxCapacity);   
     }

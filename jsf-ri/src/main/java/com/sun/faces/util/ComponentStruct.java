@@ -63,10 +63,12 @@ public class ComponentStruct implements StateHolder {
     public String clientId;
     public String facetName;
 
+    @Override
     public boolean isTransient() {
         return false;
     }
 
+    @Override
     public void restoreState(FacesContext ctx, Object state) {
         if (ctx == null) {
             throw new NullPointerException();
@@ -82,6 +84,7 @@ public class ComponentStruct implements StateHolder {
         this.facetName = (String) s[4];
     }
 
+    @Override
     public Object saveState(FacesContext ctx) {
         if (ctx == null) {
             throw new NullPointerException();
@@ -95,6 +98,7 @@ public class ComponentStruct implements StateHolder {
         return state;
     }
 
+    @Override
     public void setTransient(boolean trans) {
     }
 

@@ -55,38 +55,46 @@ public abstract class MetadataWrapperMap<K, V> implements Map<K, V> {
     private Map<K, V> wrapped;
     private Map<K, Map<Object, Object>> metadata;
 
+    @Override
     public void clear() {
 	this.wrapped.clear();
     }
 
     @SuppressWarnings(value="")
+    @Override
     public boolean containsKey(Object key) {
 	return this.wrapped.containsKey(key);
     }
 
     @SuppressWarnings(value="")
+    @Override
     public boolean containsValue(Object value) {
 	return this.wrapped.containsValue(value);
     }
 
+    @Override
     public Set<Map.Entry<K,V>> entrySet() {
 	return this.wrapped.entrySet();
     }
 
     @SuppressWarnings(value="")
+    @Override
     public V get(Object key) {
 	return this.wrapped.get(key);
     }
 
 
+    @Override
     public boolean isEmpty() {
 	return this.wrapped.isEmpty();
     }
 
+    @Override
     public Set<K> keySet() {
 	return this.wrapped.keySet();
     }
 
+    @Override
     public V put(K key, V value) {
         this.onPut(key, value);
         return this.wrapped.put(key, value);
@@ -94,19 +102,23 @@ public abstract class MetadataWrapperMap<K, V> implements Map<K, V> {
 
     protected abstract V onPut(K key, V value);
 
+    @Override
     public void putAll(Map m) {
 	this.wrapped.putAll(m);
     }
 
     @SuppressWarnings(value="")
+    @Override
     public V remove(Object key) {
 	return this.wrapped.remove(key);
     }
 
+    @Override
     public int size() {
 	return this.wrapped.size();
     }
 
+    @Override
     public Collection<V> values() {
 	return this.wrapped.values();
     }

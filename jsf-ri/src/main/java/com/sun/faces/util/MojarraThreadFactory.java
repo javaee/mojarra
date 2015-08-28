@@ -69,6 +69,7 @@ public class MojarraThreadFactory implements ThreadFactory {
     // ------------------------------------------ Methods from ThreadFactory
 
     
+    @Override
     public Thread newThread(Runnable r) {
 
         Thread t = new Thread(group,
