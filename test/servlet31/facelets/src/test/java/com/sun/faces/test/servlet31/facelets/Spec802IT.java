@@ -53,7 +53,6 @@ import org.junit.After;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.Test;
 
@@ -77,7 +76,6 @@ public class Spec802IT {
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
     @Test
     public void testFileUpload() throws Exception {
-        webClient = new WebClient();
         HtmlPage page = webClient.getPage(webUrl + "faces/inputFile.xhtml");
         HtmlTextInput text;
 
@@ -122,7 +120,6 @@ public class Spec802IT {
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
     @Test
     public void testFileUploadMultipleTimes() throws Exception {
-        webClient = new WebClient();
         HtmlPage page = webClient.getPage(webUrl + "faces/uploadMultipleTimes.xhtml");
 
         String basedir = System.getProperty("basedir");
@@ -133,8 +130,8 @@ public class Spec802IT {
 
         page = button.click();
 
-        String pageText = page.getBody().asXml();
-        assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+83.*"));
+        String pageText = page.asXml();
+        assertTrue(pageText.contains("83"));
         
         fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess2.txt");
