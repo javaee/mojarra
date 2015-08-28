@@ -165,7 +165,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
 
     /**
-     * <p class="changed_added_2_0">The name of an application parameter
+     * <p class="changed_added_2_0">The name of an context parameter
      * that indicates how empty values should be handled with respect to
      * validation.  See {@link #validateValue} for the allowable values
      * and specification of how they should be interpreted.</p>
@@ -175,7 +175,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	"javax.faces.VALIDATE_EMPTY_FIELDS";
 
     /**
-     * <p class="changed_modified_2_3">The name of an application parameter
+     * <p class="changed_modified_2_3">The name of a context parameter
      * that indicates how empty strings need to be interpreted.</p>
      */
     public static final String EMPTY_STRING_AS_NULL_PARAM_NAME =
