@@ -144,6 +144,7 @@
         <module>passthrough</module>
         <module>processAsHtml5</module>
         <module>processAsJspx</module>
+        <module>processAsXhtml5</module>
         <module>renderKit</module>
         <module>requestCharEncodingNoSession</module>
         <module>resource</module>

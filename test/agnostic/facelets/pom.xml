@@ -56,6 +56,5 @@
     <modules>
         <module>ccInJar</module>
         <module>viewAction</module>
-        <module>processing</module>
     </modules>
 </project>
