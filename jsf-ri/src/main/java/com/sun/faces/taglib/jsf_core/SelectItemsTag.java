@@ -103,6 +103,7 @@ public class SelectItemsTag extends UIComponentELTag {
     /**
      * @see javax.faces.webapp.UIComponentELTag#getRendererType()
      */
+    @Override
     public String getRendererType() {
         return null;
     }
@@ -112,6 +113,7 @@ public class SelectItemsTag extends UIComponentELTag {
      * @see javax.faces.webapp.UIComponentELTag#getComponentType()
      * @see javax.faces.component.UISelectItems#COMPONENT_TYPE
      */
+    @Override
     public String getComponentType() {
         return UISelectItems.COMPONENT_TYPE;
     }

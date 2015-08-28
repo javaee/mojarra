@@ -112,6 +112,7 @@ public class ValidateDoubleRangeTag extends MaxMinValidatorTag {
         minimumExpression = newMinimum;
     }
 
+    @Override
     public int doStartTag() throws JspException {
         super.setValidatorId(VALIDATOR_ID_EXPR);
         return super.doStartTag();
@@ -123,6 +124,7 @@ public class ValidateDoubleRangeTag extends MaxMinValidatorTag {
 // Methods from ValidatorTag
 //
 
+    @Override
     protected Validator createValidator() throws JspException {
 
         DoubleRangeValidator result = (DoubleRangeValidator)

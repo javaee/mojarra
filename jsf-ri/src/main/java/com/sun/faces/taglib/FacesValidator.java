@@ -224,6 +224,7 @@ public abstract class FacesValidator extends TagLibraryValidator {
     }
 
 
+    @Override
     public void release() {
         super.release();
         init();
@@ -253,6 +254,7 @@ public abstract class FacesValidator extends TagLibraryValidator {
      * @param page   JspData page object.
      * @return ValidationMessage[] An array of Validation messages.
      */
+    @Override
     public synchronized ValidationMessage[] validate(String prefix, String uri, PageData page) {
         ValidationMessage[] result = null;
         try {

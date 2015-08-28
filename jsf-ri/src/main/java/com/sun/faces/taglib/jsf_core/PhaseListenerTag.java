@@ -125,6 +125,7 @@ public class PhaseListenerTag extends TagSupport {
      *
      * @throws JspException if a JSP error occurs
      */
+    @Override
     public int doStartTag() throws JspException {
 
         // find the viewTag
@@ -178,6 +179,7 @@ public class PhaseListenerTag extends TagSupport {
     /**
      * <p>Release references to any acquired resources.
      */
+    @Override
     public void release() {
 
         this.type = null;
@@ -213,6 +215,7 @@ public class PhaseListenerTag extends TagSupport {
          * <p>Handle a notification that the processing for a particular
          * phase has just been completed.</p>
          */
+        @Override
         public void afterPhase(PhaseEvent event) {
 
             PhaseListener listener = getPhaseListener();
@@ -226,6 +229,7 @@ public class PhaseListenerTag extends TagSupport {
          * <p>Handle a notification that the processing for a particular
          * phase of the request processing lifecycle is about to begin.</p>
          */
+        @Override
         public void beforePhase(PhaseEvent event) {
 
             PhaseListener listener = getPhaseListener();
@@ -242,6 +246,7 @@ public class PhaseListenerTag extends TagSupport {
          * {@link javax.faces.event.PhaseId} class, including <code>PhaseId.ANY_PHASE</code>
          * to indicate an interest in being notified for all standard phases.</p>
          */
+        @Override
         public PhaseId getPhaseId() {
 
             PhaseListener listener = getPhaseListener();

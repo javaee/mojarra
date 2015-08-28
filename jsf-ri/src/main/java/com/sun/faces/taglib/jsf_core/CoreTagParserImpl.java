@@ -81,6 +81,7 @@ public class CoreTagParserImpl implements TagParser {
      *
      * @param validatorInfo object with current tag info
      */
+    @Override
     public void setValidatorInfo(ValidatorInfo validatorInfo) {
         this.validatorInfo = validatorInfo;
     }
@@ -91,6 +92,7 @@ public class CoreTagParserImpl implements TagParser {
      *
      * @return String Failure message
      */
+    @Override
     public String getMessage() {
         return failureMessages.toString();
     }
@@ -101,6 +103,7 @@ public class CoreTagParserImpl implements TagParser {
      *
      * @return boolean false if validation conditions have not been met
      */
+    @Override
     public boolean hasFailed() {
         return failed;
     }
@@ -110,6 +113,7 @@ public class CoreTagParserImpl implements TagParser {
      * <p>Parse the starting element.  Parcel out to appropriate
      * handler method.</p>
      */
+    @Override
     public void parseStartElement() {
        
         String ns = validatorInfo.getNameSpace();
@@ -137,6 +141,7 @@ public class CoreTagParserImpl implements TagParser {
     /**
      * <p>Parse the end element</p>
      */
+    @Override
     public void parseEndElement() {
         //no parsing required
     }

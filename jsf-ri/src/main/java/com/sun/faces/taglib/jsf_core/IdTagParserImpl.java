@@ -91,6 +91,7 @@ public class IdTagParserImpl implements TagParser {
      *
      * @param validatorInfo object with current tag info
      */
+    @Override
     public void setValidatorInfo(ValidatorInfo validatorInfo) {
         this.validatorInfo = validatorInfo;
     }
@@ -101,6 +102,7 @@ public class IdTagParserImpl implements TagParser {
      *
      * @return String Failure message
      */
+    @Override
     public String getMessage() {
         Object[] obj = new Object[1];
         obj[0] = requiresIdList;
@@ -115,6 +117,7 @@ public class IdTagParserImpl implements TagParser {
      *
      * @return boolean false if validation conditions have not been met
      */
+    @Override
     public boolean hasFailed() {
         return failed;
     }
@@ -124,6 +127,7 @@ public class IdTagParserImpl implements TagParser {
      * <p>Parse the starting element. If it is a specific JSTL tag
      * make sure that the nested JSF tags have IDs. </p>
      */
+    @Override
     public void parseStartElement() {
         String ns = validatorInfo.getNameSpace();
         String ln = validatorInfo.getLocalName();
@@ -167,6 +171,7 @@ public class IdTagParserImpl implements TagParser {
      * <p>Parse the ending element. If it is a specific JSTL tag
      * make sure that the appropriate flags are set.</p>
      */
+    @Override
     public void parseEndElement() {
         String ns = validatorInfo.getNameSpace();
         String ln = validatorInfo.getLocalName();

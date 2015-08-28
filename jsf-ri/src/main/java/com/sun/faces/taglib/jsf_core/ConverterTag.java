@@ -102,6 +102,7 @@ public class ConverterTag extends AbstractConverterTag {
         // ---------------------------------------------- Methods From Converter
 
 
+        @Override
         public Object getAsObject(FacesContext context, UIComponent component, String value) {
             Converter delegate = getDelegate(context);
             if (delegate != null) {
@@ -115,6 +116,7 @@ public class ConverterTag extends AbstractConverterTag {
             }
         }
 
+        @Override
         public String getAsString(FacesContext context, UIComponent component, Object value) {
             Converter delegate = getDelegate(context);
             if (delegate != null) {
@@ -132,6 +134,7 @@ public class ConverterTag extends AbstractConverterTag {
 
 
         private Object[] state;
+        @Override
         public Object saveState(FacesContext context) {
 
             if (context == null) {
@@ -147,6 +150,7 @@ public class ConverterTag extends AbstractConverterTag {
 
         }
 
+        @Override
         public void restoreState(FacesContext context, Object state) {
 
             if (context == null) {
@@ -161,12 +165,14 @@ public class ConverterTag extends AbstractConverterTag {
 
         }
 
+        @Override
         public boolean isTransient() {
 
             return false;
 
         }
 
+        @Override
         public void setTransient(boolean newTransientValue) {
             //no-op
         }

@@ -80,6 +80,7 @@ public class CoreValidator extends FacesValidator {
     /**
      * <p>Initialize state</p>
      */
+    @Override
     protected void init() {
         super.init();
         failed = false;
@@ -97,6 +98,7 @@ public class CoreValidator extends FacesValidator {
     /**
      * <p>Release and re-initialize state</p>
      */
+    @Override
     public void release() {
         super.release();
         init();
@@ -109,6 +111,7 @@ public class CoreValidator extends FacesValidator {
     /**
      * <p>Get the validator handler</p>
      */
+    @Override
     protected DefaultHandler getSAXHandler() {
         if (java.beans.Beans.isDesignTime()) {
 	    return null;
@@ -123,6 +126,7 @@ public class CoreValidator extends FacesValidator {
      * @param prefix Tag library prefix
      * @param uri    Tag library uri
      */
+    @Override
     protected String getFailureMessage(String prefix, String uri) {
         // we should only get called if this Validator failed        
         StringBuffer result = new StringBuffer();
@@ -155,6 +159,7 @@ public class CoreValidator extends FacesValidator {
          * @param qn Element QName.
          * @param attrs  Element's Attribute list.
          */
+        @Override
         public void startElement(String ns,
                                  String ln,
                                  String qn,
@@ -189,6 +194,7 @@ public class CoreValidator extends FacesValidator {
          * @param ln Element local name.
          * @param qn Element QName.
          */
+        @Override
         public void endElement(String ns, String ln, String qn) {
             validatorInfo.setNameSpace(ns);
             validatorInfo.setLocalName(ln);

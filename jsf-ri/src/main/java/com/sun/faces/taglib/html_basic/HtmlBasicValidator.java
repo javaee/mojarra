@@ -70,6 +70,7 @@ public class HtmlBasicValidator extends FacesValidator {
     }
 
 
+    @Override
     protected void init() {
         super.init();
         failed = false;
@@ -80,12 +81,14 @@ public class HtmlBasicValidator extends FacesValidator {
     }
 
 
+    @Override
     public void release() {
         super.release();
         init();
     }
 
 
+    @Override
     protected DefaultHandler getSAXHandler() {
 	// don't run the TLV if we're in designTime
 	if (java.beans.Beans.isDesignTime()) {
@@ -96,6 +99,7 @@ public class HtmlBasicValidator extends FacesValidator {
     }
 
 
+    @Override
     protected String getFailureMessage(String prefix, String uri) {
         // we should only get called if this Validator failed        
 
@@ -124,6 +128,7 @@ public class HtmlBasicValidator extends FacesValidator {
          * @param qn Element QName.
          * @param attrs  Element's Attribute list.
          */
+        @Override
         public void startElement(String ns,
                                  String ln,
                                  String qn,
@@ -149,6 +154,7 @@ public class HtmlBasicValidator extends FacesValidator {
          * @param ln Element local name.
          * @param qn Element QName.
          */
+        @Override
         public void endElement(String ns, String ln, String qn) {
         }
     }

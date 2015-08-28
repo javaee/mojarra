@@ -137,6 +137,7 @@ public class ActionListenerTag extends TagSupport {
      *
      * @throws JspException if a JSP error occurs
      */
+    @Override
     public int doStartTag() throws JspException {
 
         // Locate our parent UIComponentTag
@@ -192,6 +193,7 @@ public class ActionListenerTag extends TagSupport {
     /**
      * <p>Release references to any acquired resources.
      */
+    @Override
     public void release() {
 
         this.type = null;
@@ -232,6 +234,7 @@ public class ActionListenerTag extends TagSupport {
          *          implementation that no further processing on the current event
          *          should be performed
          */
+        @Override
         public void processAction(ActionEvent event) throws AbortProcessingException {           
 
             ActionListener instance = (ActionListener)

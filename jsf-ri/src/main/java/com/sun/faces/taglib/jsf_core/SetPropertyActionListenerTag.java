@@ -134,6 +134,7 @@ public class SetPropertyActionListenerTag extends TagSupport {
      *
      * @throws JspException if a JSP error occurs
      */
+    @Override
     public int doStartTag() throws JspException {
 
         // Locate our parent UIComponentTag
@@ -174,6 +175,7 @@ public class SetPropertyActionListenerTag extends TagSupport {
     /**
      * <p>Release references to any acquired resources.
      */
+    @Override
     public void release() {
 
         this.value = null;

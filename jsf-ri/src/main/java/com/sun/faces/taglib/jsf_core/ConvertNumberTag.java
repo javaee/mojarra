@@ -120,6 +120,7 @@ public class ConvertNumberTag extends AbstractConverterTag {
     }
 
 
+    @Override
     public void release() {
         super.release();
         init();
@@ -229,6 +230,7 @@ public class ConvertNumberTag extends AbstractConverterTag {
         this.typeExpression = type;
     }
 
+    @Override
     public int doStartTag() throws JspException {
         super.setConverterId(CONVERTER_ID_EXPR);
         return super.doStartTag();
@@ -238,6 +240,7 @@ public class ConvertNumberTag extends AbstractConverterTag {
     // Methods from ConverterTag
     // 
 
+    @Override
     protected Converter createConverter() throws JspException {
 
         NumberConverter result = (NumberConverter) super.createConverter();

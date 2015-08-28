@@ -96,16 +96,19 @@ public class ParameterTag extends UIComponentELTag {
 // General Methods
 //
 
+    @Override
     public String getRendererType() {
         return null;
     }
 
 
+    @Override
     public String getComponentType() {
         return "javax.faces.Parameter";
     }
 
 
+    @Override
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
         UIParameter parameter = (UIParameter) component;

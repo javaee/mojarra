@@ -147,6 +147,7 @@ public class ViewTag extends UIComponentELTag {
     // General Methods
     //
 
+    @Override
     protected int getDoStartValue() throws JspException {
         return BodyTag.EVAL_BODY_BUFFERED;
     }
@@ -165,6 +166,7 @@ public class ViewTag extends UIComponentELTag {
      *
      */
 
+    @Override
     public int doStartTag() throws JspException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (facesContext == null) {
@@ -237,6 +239,7 @@ public class ViewTag extends UIComponentELTag {
      * <code>UIViewRoot</code>.</p>
      */
 
+    @Override
     public int doAfterBody() throws JspException {
         int result = EVAL_PAGE;
         BodyContent bodyContent;
@@ -272,6 +275,7 @@ public class ViewTag extends UIComponentELTag {
      * session.</p>
      */
 
+    @Override
     public int doEndTag() throws JspException {
         int rc = super.doEndTag();
         // store the response character encoding
@@ -285,15 +289,18 @@ public class ViewTag extends UIComponentELTag {
     }
 
 
+    @Override
     public String getComponentType() {
         return UIViewRoot.COMPONENT_TYPE;
     }
 
+    @Override
     public String getRendererType() {
         return null;
     }
 
 
+    @Override
     protected int getDoEndValue() throws JspException {
         return (EVAL_PAGE);
     }
@@ -302,6 +309,7 @@ public class ViewTag extends UIComponentELTag {
     //
     // Methods from Superclass
     // 
+    @Override
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
         Locale viewLocale = null;

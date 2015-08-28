@@ -138,6 +138,7 @@ public class ValueChangeListenerTag extends TagSupport {
      *
      * @throws JspException if a JSP error occurs
      */
+    @Override
     public int doStartTag() throws JspException {
 
         // Locate our parent UIComponentTag
@@ -193,6 +194,7 @@ public class ValueChangeListenerTag extends TagSupport {
     /**
      * <p>Release references to any acquired resources.
      */
+    @Override
     public void release() {
 
         this.type = null;
@@ -234,6 +236,7 @@ public class ValueChangeListenerTag extends TagSupport {
          *          implementation that no further processing on the current event
          *          should be performed
          */
+        @Override
         public void processValueChange(ValueChangeEvent event) throws AbortProcessingException {
 
             ValueChangeListener instance = (ValueChangeListener)

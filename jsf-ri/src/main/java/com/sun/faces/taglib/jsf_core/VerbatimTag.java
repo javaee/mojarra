@@ -74,6 +74,7 @@ public class VerbatimTag extends UIComponentELTag {
      * Setter for property rendered.
      * @param rendered New value of property rendered.
      */
+    @Override
     public void setRendered(ValueExpression rendered) {
 
         this.rendered = rendered;
@@ -83,16 +84,19 @@ public class VerbatimTag extends UIComponentELTag {
     // --------------------------------------------------------- Public Methods
 
 
+    @Override
     public String getRendererType() {
         return "javax.faces.Text";
     }
 
 
+    @Override
     public String getComponentType() {
         return "javax.faces.Output";
     }
 
 
+    @Override
     protected void setProperties(UIComponent component) {
 
         super.setProperties(component);
@@ -113,6 +117,7 @@ public class VerbatimTag extends UIComponentELTag {
      * <p>Set the local value of this component to reflect the nested
      * body content of this JSP tag.</p>
      */
+    @Override
     public int doAfterBody() throws JspException {
 
         if (getBodyContent() != null) {

@@ -103,6 +103,7 @@ public class ValidatorTag extends AbstractValidatorTag {
         // -------------------------------------------- Methods from StateHolder
 
         private Object[] state;
+        @Override
         public Object saveState(FacesContext context) {
 
             if (context == null) {
@@ -118,6 +119,7 @@ public class ValidatorTag extends AbstractValidatorTag {
             
         }
 
+        @Override
         public void restoreState(FacesContext context, Object state) {
 
             if (context == null) {
@@ -131,12 +133,14 @@ public class ValidatorTag extends AbstractValidatorTag {
 
         }
 
+        @Override
         public boolean isTransient() {
 
             return false;
 
         }
 
+        @Override
         public void setTransient(boolean newTransientValue) {
             //no-op
         }
@@ -160,6 +164,7 @@ public class ValidatorTag extends AbstractValidatorTag {
          * @throws NullPointerException if <code>context</code>
          *                              or <code>component</code> is <code>null</code>
          */
+        @Override
         public void validate(FacesContext context,
                              UIComponent component,
                              Object value)

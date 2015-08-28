@@ -124,11 +124,13 @@ public class SelectItemTag extends UIComponentELTag {
     //
     // General Methods
     //
+    @Override
     public String getRendererType() {
         return null;
     }
 
 
+    @Override
     public String getComponentType() {
         return "javax.faces.SelectItem";
     }
@@ -137,6 +139,7 @@ public class SelectItemTag extends UIComponentELTag {
     // Methods from BaseComponentTag
     //
 
+    @Override
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
         UISelectItem selectItem = (UISelectItem) component;

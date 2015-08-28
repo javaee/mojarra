@@ -80,6 +80,7 @@ public class SubviewTag extends UIComponentELTag {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public String getComponentType() {
 
         return "javax.faces.NamingContainer";
@@ -87,6 +88,7 @@ public class SubviewTag extends UIComponentELTag {
     }
 
    
+    @Override
     public String getRendererType() {
 
         return null;
@@ -97,6 +99,7 @@ public class SubviewTag extends UIComponentELTag {
     // ------------------------------------------------------- Protected Methods
 
 
+    @Override
     protected UIComponent createVerbatimComponentFromBodyContent() {
 
         UIOutput verbatim = (UIOutput)
@@ -187,6 +190,7 @@ public class SubviewTag extends UIComponentELTag {
 
     }
 
+    @Override
     public int doEndTag() throws JspException {
         int retValue;
 
@@ -195,6 +199,7 @@ public class SubviewTag extends UIComponentELTag {
         return retValue;
     }
 
+    @Override
     public int doStartTag() throws JspException {
         int retValue;
         

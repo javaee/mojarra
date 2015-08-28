@@ -435,8 +435,10 @@ public class InjectionProviderFactory {
          * <p>This is a no-op.</p>
          * @param managedBean target ManagedBean
          */
+        @Override
         public void inject(Object managedBean) { }
 
+        @Override
         public Map<String, List<AnnotationScanner.ScannedAnnotation>> getAnnotatedClassesInCurrentModule(ServletContext extContext) throws InjectionProviderException {
             return Collections.emptyMap();
         }
@@ -448,12 +450,14 @@ public class InjectionProviderFactory {
          * <p>This is a no-op.</p>
          * @param managedBean target ManagedBean
          */
+        @Override
         public void invokePreDestroy(Object managedBean) { }
 
         /**
          * <p>This is a no-op.</p>
          * @param managedBean target ManagedBean
          */
+        @Override
         public void invokePostConstruct(Object managedBean)
         throws InjectionProviderException { }
 
