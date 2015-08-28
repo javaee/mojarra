@@ -88,6 +88,7 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
      * to a facet in the view only if a "target" component attribute is set.
      * 
      */
+    @Override
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
         UIComponent component = event.getComponent();
         FacesContext context = FacesContext.getCurrentInstance();

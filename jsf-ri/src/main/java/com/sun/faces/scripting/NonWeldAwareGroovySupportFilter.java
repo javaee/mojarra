@@ -57,10 +57,12 @@ class NonWeldAwareGroovySupportFilter implements Filter {
     private GroovyHelper helper;
     private ServletContext sc;
 
+    @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         sc = filterConfig.getServletContext();
     }
 
+    @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain filterChain)
@@ -80,6 +82,7 @@ class NonWeldAwareGroovySupportFilter implements Filter {
         
     }
 
+    @Override
     public void destroy() {
         // no-op
     }

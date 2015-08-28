@@ -71,6 +71,7 @@ public class ActionListenerProxy implements ActionListener {
     // --------------------------------------------- Methods from ActionListener
 
 
+    @Override
     public void processAction(ActionEvent event)
     throws AbortProcessingException {
 

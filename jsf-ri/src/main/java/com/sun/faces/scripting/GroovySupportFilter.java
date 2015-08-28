@@ -57,6 +57,7 @@ public class GroovySupportFilter implements Filter {
     
     private Filter delegate;
 
+    @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         sc = filterConfig.getServletContext();
         if (Util.isCdiAvailable(sc)) {
@@ -67,6 +68,7 @@ public class GroovySupportFilter implements Filter {
         delegate.init(filterConfig);
     }
 
+    @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain filterChain)
@@ -74,6 +76,7 @@ public class GroovySupportFilter implements Filter {
         delegate.doFilter(servletRequest, servletResponse, filterChain);        
     }
 
+    @Override
     public void destroy() {
         delegate.destroy();
     }

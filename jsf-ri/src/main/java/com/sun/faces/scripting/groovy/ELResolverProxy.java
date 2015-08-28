@@ -68,27 +68,33 @@ public class ELResolverProxy extends ELResolver {
     // ------------------------------------------------- Methods from ELResolver
 
 
+    @Override
     public Object getValue(ELContext elContext, Object o, Object o1) {
         return getGroovyDelegate().getValue(elContext, o, o1);
     }
 
+    @Override
     public Class<?> getType(ELContext elContext, Object o, Object o1) {
         return getGroovyDelegate().getType(elContext, o, o1);
     }
 
+    @Override
     public void setValue(ELContext elContext, Object o, Object o1, Object o2) {
         getGroovyDelegate().setValue(elContext, o, o1, o2);
     }
 
+    @Override
     public boolean isReadOnly(ELContext elContext, Object o, Object o1) {
         return getGroovyDelegate().isReadOnly(elContext, o, o1);
     }
 
+    @Override
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext elContext,
                                                              Object o) {
         return getGroovyDelegate().getFeatureDescriptors(elContext, o);
     }
 
+    @Override
     public Class<?> getCommonPropertyType(ELContext elContext, Object o) {
         return getGroovyDelegate().getCommonPropertyType(elContext, o);
     }

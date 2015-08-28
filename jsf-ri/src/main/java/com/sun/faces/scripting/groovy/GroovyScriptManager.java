@@ -89,6 +89,7 @@ public class GroovyScriptManager implements ScriptManager {
         this.servletContext = servletContext;
     }
 
+    @Override
     public Set<String> getScripts() {
         Set<String> scripts = new HashSet<>();
         processWebInfGroovy(servletContext, servletContext.getResourcePaths(SCRIPT_PATH), scripts);

@@ -193,6 +193,7 @@ public class OutputLinkRenderer extends LinkRenderer {
     }
 
 
+    @Override
     protected void renderAsActive(FacesContext context, UIComponent component)
           throws IOException {
 

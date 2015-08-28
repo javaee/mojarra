@@ -70,6 +70,7 @@ public class NavigationHandlerProxy extends NavigationHandler {
     // ------------------------------------------ Methods from NavigationHandler
 
 
+    @Override
     public void handleNavigation(FacesContext context,
                                  String fromAction,
                                  String outcome) {

@@ -356,6 +356,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     /** Methods From <code>java.io.Writer</code> */
 
+    @Override
     public void close() throws IOException {
 
         closeStartIfNecessary();
@@ -388,6 +389,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 
 
     /** @return the content type such as "text/html" for this ResponseWriter. */
+    @Override
     public String getContentType() {
 
         return contentType;
@@ -402,6 +404,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param writer The <code>Writer</code> that will be used to create
      *               another <code>ResponseWriter</code>.
      */
+    @Override
     public ResponseWriter cloneWithWriter(Writer writer) {
 
         try {
@@ -425,6 +428,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 
 
     /** Output the text for the end of a document. */
+    @Override
     public void endDocument() throws IOException {
 
         /*
@@ -455,6 +459,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @throws NullPointerException if <code>name</code>
      *                              is <code>null</code>
      */
+    @Override
     public void endElement(String name) throws IOException {
 
         if (name == null) {
@@ -603,6 +608,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      *         <a href="http://www.iana.org/assignments/character-sets">theIANA</a>
      *         for a list of character encodings.
      */
+    @Override
     public String getCharacterEncoding() {
 
         return encoding;
@@ -615,6 +621,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      *
      * @throws IOException if an input/output error occurs
      */
+    @Override
     public void startDocument() throws IOException {
 
         // do nothing;
@@ -636,6 +643,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @throws NullPointerException if <code>name</code>
      *                              is <code>null</code>
      */
+    @Override
     public void startElement(String name, UIComponent componentForElement)
           throws IOException {
 
@@ -693,6 +701,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @throws IllegalStateException If startCDATA is called a second time before endCDATA.
      */
     // RELEASE_PENDING_2_1 edburns, rogerk - need to expand on this description.
+    @Override
     public void startCDATA() throws IOException {
         if (writingCdata) {
             throw new IllegalStateException("CDATA tags may not nest");
@@ -710,6 +719,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @throws IOException
      */
     // RELEASE_PENDING_2_1 edburns, rogerk - need to expand on this description.
+    @Override
     public void endCDATA() throws IOException {
         closeStartIfNecessary();
         writer.write("]]>");
@@ -765,6 +775,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @throws IOException           if an input/output error occurs
      * @throws NullPointerException  if <code>name</code> is <code>null</code>
      */
+    @Override
     public void writeAttribute(String name, Object value,
                                String componentPropertyName)
           throws IOException {
@@ -838,6 +849,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @throws NullPointerException if <code>comment</code>
      *                              is <code>null</code>
      */
+    @Override
     public void writeComment(Object comment) throws IOException {
 
         if (comment == null) {
@@ -942,6 +954,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @throws NullPointerException if <code>text</code>
      *                              is <code>null</code>
      */
+    @Override
     public void writeText(Object text, String componentPropertyName)
           throws IOException {
 
@@ -999,6 +1012,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @throws NullPointerException      if <code>text</code>
      *                                   is <code>null</code>
      */
+    @Override
     public void writeText(char text[], int off, int len)
           throws IOException {
 
@@ -1045,6 +1059,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @throws NullPointerException  if <code>name</code> or
      *                               <code>value</code> is <code>null</code>
      */
+    @Override
     public void writeURIAttribute(String name, Object value,
                                   String componentPropertyName)
           throws IOException {

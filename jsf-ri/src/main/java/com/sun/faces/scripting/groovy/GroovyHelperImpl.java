@@ -166,6 +166,7 @@ public class GroovyHelperImpl extends GroovyHelper {
         return result;
     }
 
+    @Override
     public void addURL(URL toAdd) {
         loader.getGroovyScriptEngine().getGroovyClassLoader().addURL(toAdd);
     }
@@ -173,6 +174,7 @@ public class GroovyHelperImpl extends GroovyHelper {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public Class<?> loadScript(String name) {
         try {
             String script = name;
@@ -186,6 +188,7 @@ public class GroovyHelperImpl extends GroovyHelper {
         }
     }
 
+    @Override
     public void setClassLoader() {
         if (loader != null) {
             Thread.currentThread().setContextClassLoader(loader);

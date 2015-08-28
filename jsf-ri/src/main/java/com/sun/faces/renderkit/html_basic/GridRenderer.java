@@ -168,6 +168,7 @@ public class GridRenderer extends BaseTableRenderer {
     // ------------------------------------------------------- Protected Methods
 
 
+    @Override
     protected void renderRow(FacesContext context,
                              UIComponent table,
                              UIComponent child,
@@ -189,6 +190,7 @@ public class GridRenderer extends BaseTableRenderer {
     }
 
 
+    @Override
     protected void renderHeader(FacesContext context,
                                 UIComponent table,
                                 ResponseWriter writer) throws IOException {
@@ -220,6 +222,7 @@ public class GridRenderer extends BaseTableRenderer {
     }
 
 
+    @Override
     protected void renderFooter(FacesContext context,
                                 UIComponent table,
                                 ResponseWriter writer) throws IOException {

@@ -187,6 +187,7 @@ public class CommandLinkRenderer extends LinkRenderer {
      * Note that much of this code is shared with CommandButtonRenderer.renderOnClick
      * RELEASE_PENDING: Consolidate this code into a utility method, if possible.
      */
+    @Override
     protected void renderAsActive(FacesContext context, UIComponent command)
           throws IOException {
 

@@ -66,16 +66,19 @@ public class PhaseListenerProxy implements PhaseListener {
 
 
 
+    @Override
     public void afterPhase(PhaseEvent event) {
         getGroovyDelegate().afterPhase(event);
     }
 
 
+    @Override
     public void beforePhase(PhaseEvent event) {
         getGroovyDelegate().beforePhase(event);
     }
 
 
+    @Override
     public PhaseId getPhaseId() {
         return getGroovyDelegate().getPhaseId();
     }

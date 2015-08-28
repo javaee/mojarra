@@ -103,6 +103,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
     }
 
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 

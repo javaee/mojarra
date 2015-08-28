@@ -87,22 +87,27 @@ public class ViewHandlerProxy extends ViewHandler {
     }
 
 
+    @Override
     public Locale calculateLocale(FacesContext context) {
         return getGroovyDelegate().calculateLocale(context);
     }
 
+    @Override
     public String calculateRenderKitId(FacesContext context) {
         return getGroovyDelegate().calculateRenderKitId(context);
     }
 
+    @Override
     public UIViewRoot createView(FacesContext context, String viewId) {
         return getGroovyDelegate().createView(context, viewId);
     }
 
+    @Override
     public String getActionURL(FacesContext context, String viewId) {
         return getGroovyDelegate().getActionURL(context, viewId);
     }
 
+    @Override
     public String getResourceURL(FacesContext context, String path) {
         return getGroovyDelegate().getResourceURL(context, path);
     }
@@ -145,15 +150,18 @@ public class ViewHandlerProxy extends ViewHandler {
         return getGroovyDelegate().getViewDeclarationLanguage(context, viewId);
     }
 
+    @Override
     public void renderView(FacesContext context, UIViewRoot viewToRender)
     throws IOException, FacesException {
         getGroovyDelegate().renderView(context, viewToRender);
     }
 
+    @Override
     public UIViewRoot restoreView(FacesContext context, String viewId) {
         return getGroovyDelegate().restoreView(context, viewId);
     }
 
+    @Override
     public void writeState(FacesContext context) throws IOException {
         getGroovyDelegate().writeState(context);
     }
