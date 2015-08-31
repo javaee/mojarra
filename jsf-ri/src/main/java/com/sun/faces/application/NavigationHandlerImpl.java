@@ -182,6 +182,22 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                  String outcome) {
         this.handleNavigation(context, fromAction, outcome, "");
     }
+    /*
+     * The Flow.equals() method alone is insufficient because we need to account
+     * for the case where one or the other or both operands may be null.
+     * 
+     */
+    private boolean flowsEqual(Flow flow1, Flow flow2) {
+        boolean result = false;
+        if (flow1 == flow2) {
+            result = true;
+        } else if ((null == flow1) || (null == flow2)) {
+            result = false;
+        } else {
+            result = flow1.equals(flow2);
+        }
+        return result;
+    }
 
     @Override
     public void handleNavigation(FacesContext context, String fromAction, String outcome, String toFlowDocumentId) {
@@ -203,12 +219,50 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 isUIViewActionBroadcastAndViewdsDiffer = !viewIdBefore.equals(viewIdAfter);
             } 
             if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcastAndViewdsDiffer) {
+                Map<String, List<String>> parameters = caseStruct.navCase.getParameters();
                 
                 // perform a 302 redirect.
+                // If this a redirect that starts causes a flow transition, ensure
+                // the necessary metadata is appended to the query string
+                
+                // If at least one of newFlow and currentFlow is not null 
+                if (null != caseStruct.newFlow || null != caseStruct.currentFlow) {
+                    if (!flowsEqual(caseStruct.newFlow, caseStruct.currentFlow)) {
+                        if (null == parameters) {
+                            parameters = new HashMap<>();
+                        }
+                        // If we are exiting all flows 
+                        if (null == caseStruct.newFlow) {
+                            parameters.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, 
+                                           Arrays.asList(FlowHandler.NULL_FLOW));
+                            parameters.put(FlowHandler.FLOW_ID_REQUEST_PARAM_NAME, Arrays.asList(""));
+                            FlowHandler fh = context.getApplication().getFlowHandler();
+                            if (fh instanceof FlowHandlerImpl) {
+                                FlowHandlerImpl fhi = (FlowHandlerImpl) fh;
+                                List<String> flowReturnDepthValues = new ArrayList<>();
+                                flowReturnDepthValues.add("" + fhi.getAndClearReturnModeDepth(context));
+                                parameters.put(FlowHandlerImpl.FLOW_RETURN_DEPTH_PARAM_NAME, flowReturnDepthValues);
+                            }
+                            
+                        } else {
+                            // If either of the two pieces of flow metadata are present in the caseStruct
+                            if (!parameters.containsKey(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME) || 
+                                    !parameters.containsKey(FlowHandler.FLOW_ID_REQUEST_PARAM_NAME)) {
+                                // Overwrite both of them.
+                                List<String> toFlowDocumentIdParam = Arrays.asList(caseStruct.navCase.getToFlowDocumentId());
+                                parameters.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, toFlowDocumentIdParam);
+                                
+                                List<String> flowIdParam = Arrays.asList(caseStruct.newFlow.getId());
+                                parameters.put(FlowHandler.FLOW_ID_REQUEST_PARAM_NAME, flowIdParam);
+                            }
+                        }
+                    }
+                }
+                
                 String redirectUrl =
                       viewHandler.getRedirectURL(context,
                                                  caseStruct.viewId,
-                                                 SharedUtils.evaluateExpressions(context, caseStruct.navCase.getParameters()),
+                                                 SharedUtils.evaluateExpressions(context, parameters),
                                                  caseStruct.navCase.isIncludeViewParams());
                 try {
                     if (LOGGER.isLoggable(Level.FINE)) {
