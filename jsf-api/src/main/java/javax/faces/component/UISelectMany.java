@@ -274,6 +274,7 @@ public class UISelectMany extends UIInput {
     // -------------------------------------------------------------- Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);

@@ -117,6 +117,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
     /**
      * <p>Return <code>true</code> if the iteration has more elements.</p>
      */
+    @Override
     public boolean hasNext() {
 
         if (items != null) {
@@ -146,6 +147,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      * @throws NoSuchElementException if there are no more elements
      */
     @SuppressWarnings({"unchecked"})
+    @Override
     public SelectItem next() {
 
         if (!hasNext()) {
@@ -162,6 +164,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
     /**
      * <p>Throw UnsupportedOperationException.</p>
      */
+    @Override
     public void remove() {
 
         throw new UnsupportedOperationException();
@@ -269,6 +272,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         // ----------------------------------------------- Methods from Iterator
 
 
+        @Override
         public boolean hasNext() {
 
             return !nextCalled;
@@ -276,6 +280,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         }
 
 
+        @Override
         public SelectItem next() {
 
             if (nextCalled) {
@@ -287,6 +292,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         }
 
 
+        @Override
         public void remove() {
 
             throw new UnsupportedOperationException();
@@ -331,6 +337,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         // ----------------------------------------------- Methods from Iterator
 
 
+        @Override
         public boolean hasNext() {
 
             return iterator.hasNext();
@@ -338,6 +345,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         }
 
 
+        @Override
         public SelectItem next() {
 
             Map.Entry entry = (Map.Entry) iterator.next();
@@ -350,6 +358,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         }
 
 
+        @Override
         public void remove() {
 
             throw new UnsupportedOperationException();
@@ -588,12 +597,14 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         // ----------------------------------------------- Methods from Iterator
 
 
+        @Override
         public boolean hasNext() {
 
             return (index < count);
 
         }
 
+        @Override
         public SelectItem next() {
 
             if (index >= count) {
@@ -609,6 +620,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
 
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -648,6 +660,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         // ----------------------------------------------- Methods from Iterator
 
 
+        @Override
         public boolean hasNext() {
 
             return iterator.hasNext();
@@ -655,6 +668,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         }
 
 
+        @Override
         public SelectItem next() {
 
             Object item = iterator.next();
@@ -667,6 +681,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         }
 
 
+        @Override
         public void remove() {
 
             throw new UnsupportedOperationException();

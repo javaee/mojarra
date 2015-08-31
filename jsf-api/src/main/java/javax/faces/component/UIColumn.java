@@ -87,6 +87,7 @@ public class UIColumn extends UIComponentBase {
      * 
      * @return the component family.
      */
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);

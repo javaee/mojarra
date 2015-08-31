@@ -82,6 +82,7 @@ class MethodBindingValidator extends MethodBindingAdapterBase implements Validat
 
     // ------------------------------------------------------- Validator
 
+    @Override
     public void validate(FacesContext context,
                          UIComponent  component,
                          Object       value) throws ValidatorException {
@@ -115,6 +116,7 @@ class MethodBindingValidator extends MethodBindingAdapterBase implements Validat
 
     
 
+    @Override
     public Object saveState(FacesContext context) {
         if (context == null) {
             throw new NullPointerException();
@@ -139,6 +141,7 @@ class MethodBindingValidator extends MethodBindingAdapterBase implements Validat
 	return result;
     }
 
+    @Override
     public void restoreState(FacesContext context, Object state) {
         if (context == null) {
             throw new NullPointerException();
@@ -188,10 +191,12 @@ class MethodBindingValidator extends MethodBindingAdapterBase implements Validat
 
     private boolean tranzient = false;
 
+    @Override
     public boolean isTransient() {
 	return tranzient;
     }
 
+    @Override
     public void setTransient(boolean newTransientValue) {
 	tranzient = newTransientValue;
     }

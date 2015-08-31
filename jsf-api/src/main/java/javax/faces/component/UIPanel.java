@@ -82,6 +82,7 @@ public class UIPanel extends UIComponentBase {
     // -------------------------------------------------- UIComponent Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);

@@ -108,6 +108,7 @@ public class RestoreViewPhase extends Phase {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public PhaseId getId() {
 
         return PhaseId.RESTORE_VIEW;
@@ -133,6 +134,7 @@ public class RestoreViewPhase extends Phase {
      * POSTCONDITION: The facesContext has been initialized with a tree.
      */
 
+    @Override
     public void execute(FacesContext facesContext) throws FacesException {
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -451,6 +453,7 @@ public class RestoreViewPhase extends Phase {
             VisitContext visitContext = VisitContext.createVisitContext(facesContext, null, hints);
             root.visitTree(visitContext, new VisitCallback() {
 
+                        @Override
                         public VisitResult visit(VisitContext context, UIComponent target) {
                             postRestoreStateEvent.setComponent(target);
                             target.processEvent(postRestoreStateEvent);

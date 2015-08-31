@@ -90,6 +90,7 @@ public class UISelectBoolean extends UIInput {
     // -------------------------------------------------------------- Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -152,6 +153,7 @@ public class UISelectBoolean extends UIInput {
      * @deprecated This has been replaced by {@link
      * #getValueExpression}.
      */
+    @Override
     public ValueBinding getValueBinding(String name) {
 
         if ("selected".equals(name)) {
@@ -181,6 +183,7 @@ public class UISelectBoolean extends UIInput {
      *
      * @deprecated This has been replaced by {@link #setValueExpression}.
      */
+    @Override
     public void setValueBinding(String name, ValueBinding binding) {
 
         if ("selected".equals(name)) {
@@ -204,6 +207,7 @@ public class UISelectBoolean extends UIInput {
      *  is <code>null</code>
      * @since 1.2
      */
+    @Override
     public ValueExpression getValueExpression(String name) {
 
         if ("selected".equals(name)) {
@@ -228,6 +232,7 @@ public class UISelectBoolean extends UIInput {
      *  is <code>null</code>
      * @since 1.2
      */
+    @Override
     public void setValueExpression(String name, ValueExpression binding) {
 
         if ("selected".equals(name)) {

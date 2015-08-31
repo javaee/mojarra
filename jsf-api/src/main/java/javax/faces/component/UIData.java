@@ -248,6 +248,7 @@ public class UIData extends UIComponentBase
     // -------------------------------------------------------------- Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -772,6 +773,7 @@ public class UIData extends UIComponentBase
      * @deprecated This has been replaced by {@link #setValueExpression(java.lang.String,
      *javax.el.ValueExpression)}.
      */
+    @Override
     public void setValueBinding(String name, ValueBinding binding) {
 
         if (null != name) {
@@ -806,6 +808,7 @@ public class UIData extends UIComponentBase
      * @throws NullPointerException     if <code>name</code> is <code>null</code>
      * @since 1.2
      */
+    @Override
     public void setValueExpression(String name, ValueExpression binding) {
 
         if (null != name) {
@@ -832,6 +835,7 @@ public class UIData extends UIComponentBase
      *
      * @throws NullPointerException if <code>context</code> is <code>null</code>
      */
+    @Override
     public String getClientId(FacesContext context) {
 
         if (context == null) {
@@ -931,6 +935,7 @@ public class UIData extends UIComponentBase
      *                              rowIndex from the argument <code>clientId</code>.
      * @since 1.2
      */
+    @Override
     public boolean invokeOnComponent(FacesContext context, String clientId,
                                      ContextCallback callback)
           throws FacesException {
@@ -1070,6 +1075,7 @@ public class UIData extends UIComponentBase
      *                               {@link UIViewRoot}
      * @throws NullPointerException  if <code>event</code> is <code>null</code>
      */
+    @Override
     public void queueEvent(FacesEvent event) {
 
         super.queueEvent(new WrapperEvent(this, event, getRowIndex()));
@@ -1094,6 +1100,7 @@ public class UIData extends UIComponentBase
      *                                  this component
      * @throws NullPointerException     if <code>event</code> is <code>null</code>
      */
+    @Override
     public void broadcast(FacesEvent event)
           throws AbortProcessingException {
 
@@ -1142,6 +1149,7 @@ public class UIData extends UIComponentBase
      *                              rendering
      * @throws NullPointerException if <code>context</code> is <code>null</code>
      */
+    @Override
     public void encodeBegin(FacesContext context) throws IOException {
 
         preEncode(context);
@@ -1177,6 +1185,7 @@ public class UIData extends UIComponentBase
      *
      * @throws NullPointerException if <code>context</code> is <code>null</code>
      */
+    @Override
     public void processDecodes(FacesContext context) {
 
         if (context == null) {
@@ -1220,6 +1229,7 @@ public class UIData extends UIComponentBase
      * @see javax.faces.event.PreValidateEvent
      * @see javax.faces.event.PostValidateEvent
      */
+    @Override
     public void processValidators(FacesContext context) {
 
         if (context == null) {
@@ -1270,6 +1280,7 @@ public class UIData extends UIComponentBase
      *
      * @throws NullPointerException if <code>context</code> is <code>null</code>
      */
+    @Override
     public void processUpdates(FacesContext context) {
 
         if (context == null) {
@@ -1287,6 +1298,7 @@ public class UIData extends UIComponentBase
 
     }
 
+    @Override
     public String createUniqueId(FacesContext context, String seed) {
         Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
         int lastId = ((i != null) ? i : 0);
@@ -1882,6 +1894,7 @@ public class UIData extends UIComponentBase
             this.forClass = forClass;
         }
 
+        @Override
         public Class<?> forClass() {
             return forClass;
         }
@@ -2540,6 +2553,7 @@ class SavedState implements Serializable {
 				|| !valid || submitted;
 	}
     
+    @Override
     public String toString() {
         return ("submittedValue: " + submittedValue +
                 " value: " + value +
@@ -2571,18 +2585,22 @@ class WrapperEvent extends FacesEvent {
         return (this.rowIndex);
     }
 
+    @Override
     public PhaseId getPhaseId() {
         return (this.event.getPhaseId());
     }
 
+    @Override
     public void setPhaseId(PhaseId phaseId) {
         this.event.setPhaseId(phaseId);
     }
 
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (false);
     }
 
+    @Override
     public void processListener(FacesListener listener) {
         throw new IllegalStateException();
     }

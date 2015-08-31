@@ -87,6 +87,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
      * @param value
      * @return the original value in the delta-map, if not present, the old value in the main map
      */
+    @Override
     public Object put(Serializable key, Object value) {
 
         if(component.initialStateMarked() || value instanceof PartialStateHolder) {
@@ -113,6 +114,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
      * @param key
      * @return the removed object in the delta-map. if not present, the removed object from the main map
      */
+    @Override
     public Object remove(Serializable key) {
         if(component.initialStateMarked()) {
             Object retVal = deltaMap.remove(key);
@@ -134,6 +136,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     /**
      * @see StateHelper#put(java.io.Serializable, String, Object)
      */
+    @Override
     public Object put(Serializable key, String mapKey, Object value) {
 
         Object ret = null;
@@ -170,6 +173,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
      * @param key
      * @return
      */
+    @Override
     public Object get(Serializable key) {
         return defaultMap.get(key);
     }
@@ -178,6 +182,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     /**
      * @see StateHelper#eval(java.io.Serializable)
      */
+    @Override
     public Object eval(Serializable key) {
         return eval(key, null);
     }
@@ -186,6 +191,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     /**
      * @see StateHelper#eval(java.io.Serializable, Object)
      */
+    @Override
     public Object eval(Serializable key, Object defaultValue) {
         Object retVal = get(key);
         if (retVal == null) {
@@ -203,6 +209,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     /**
      * @see StateHelper#add(java.io.Serializable, Object)
      */
+    @Override
     public void add(Serializable key, Object value) {
 
         if (component.initialStateMarked()) {
@@ -226,6 +233,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     /**
      * @see StateHelper#remove(java.io.Serializable, Object)
      */
+    @Override
     public Object remove(Serializable key, Object valueOrKey) {
         Object source = get(key);
         if (source instanceof Collection) {
@@ -248,6 +256,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
      * @param context
      * @return the saved state
      */
+    @Override
     public Object saveState(FacesContext context) {
         if (context == null) {
             throw new NullPointerException();
@@ -270,6 +279,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
      * @param context FacesContext
      * @param state the state to be restored.
      */
+    @Override
     public void restoreState(FacesContext context, Object state) {
 
         if (context == null) {
@@ -355,6 +365,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     /**
      * @see javax.faces.component.StateHolder#isTransient()
      */
+    @Override
     public boolean isTransient() {
         return isTransient;
     }
@@ -363,6 +374,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     /**
      * @see StateHolder#setTransient(boolean)
      */
+    @Override
     public void setTransient(boolean newTransientValue) {
         isTransient = newTransientValue;
     }
@@ -464,11 +476,13 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     }
 
 
+    @Override
     public Object getTransient(Object key)
     {
         return (transientState == null) ? null : transientState.get(key);
     }
 
+    @Override
     public Object getTransient(Object key, Object defaultValue)
     {
         Object returnValue = (transientState == null) ? null : transientState.get(key);
@@ -479,6 +493,7 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
         return defaultValue;
     }
 
+    @Override
     public Object putTransient(Object key, Object value)
     {
         if (transientState == null)
@@ -489,11 +504,13 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void restoreTransientState(FacesContext context, Object state)
     {
         transientState = (Map<Object, Object>) state;
     }
     
+    @Override
     public Object saveTransientState(FacesContext context)
     {
         return transientState;

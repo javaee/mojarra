@@ -127,6 +127,7 @@ public class UIOutput extends UIComponentBase
     // -------------------------------------------------------------- Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -137,6 +138,7 @@ public class UIOutput extends UIComponentBase
     // --------------------------------------- EditableValueHolder Properties
 
 
+    @Override
     public Converter getConverter() {
 
         if (this.converter != null) {
@@ -147,6 +149,7 @@ public class UIOutput extends UIComponentBase
     }
 
 
+    @Override
     public void setConverter(Converter converter) {
 
         clearInitialState();
@@ -158,6 +161,7 @@ public class UIOutput extends UIComponentBase
     }
 
 
+    @Override
     public Object getLocalValue() {
 
         return getStateHelper().get(PropertyKeys.value);
@@ -169,6 +173,7 @@ public class UIOutput extends UIComponentBase
      * 
      * @since 2.2
      */
+    @Override
     public Object getValue() {
 
         return getStateHelper().eval(PropertyKeys.value);
@@ -176,6 +181,7 @@ public class UIOutput extends UIComponentBase
     }
 
 
+    @Override
     public void setValue(Object value) {
         getStateHelper().put(PropertyKeys.value, value);
 

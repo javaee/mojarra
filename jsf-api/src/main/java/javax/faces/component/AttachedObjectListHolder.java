@@ -62,6 +62,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
     // ------------------------------------- Methods from PartialStateHolder
 
 
+    @Override
     public void markInitialState() {
 
         if (!attachedObjects.isEmpty()) {
@@ -76,6 +77,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
     }
 
 
+    @Override
     public boolean initialStateMarked() {
 
         return initialState;
@@ -83,6 +85,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
     }
 
 
+    @Override
     public void clearInitialState() {
 
         if (!attachedObjects.isEmpty()) {
@@ -100,6 +103,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
     // -------------------------------------------- Methods from StateHolder
 
 
+    @Override
     public Object saveState(FacesContext context) {
 
         if (context == null) {
@@ -136,6 +140,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
     }
 
 
+    @Override
     public void restoreState(FacesContext context, Object state) {
 
         if (context == null) {
@@ -173,6 +178,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
     }
 
 
+    @Override
     public boolean isTransient() {
 
         return false;
@@ -180,6 +186,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
     }
 
 
+    @Override
     public void setTransient(boolean newTransientValue) {
 
         // no-op

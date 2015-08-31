@@ -86,6 +86,7 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
      * @throws NullPointerException {@inheritDoc}     
      * @throws AbortProcessingException {@inheritDoc}     
      */ 
+    @Override
     public void processValueChange(ValueChangeEvent actionEvent) throws AbortProcessingException {
                          
         if (actionEvent == null) {
@@ -114,6 +115,7 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
 
     
 
+    @Override
     public Object saveState(FacesContext context) {
         if (context == null) {
             throw new NullPointerException();
@@ -138,6 +140,7 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
 	return result;
     }
 
+    @Override
     public void restoreState(FacesContext context, Object state) {
         if (context == null) {
             throw new NullPointerException();
@@ -187,10 +190,12 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
 
     private boolean tranzient = false;
 
+    @Override
     public boolean isTransient() {
 	return tranzient;
     }
 
+    @Override
     public void setTransient(boolean newTransientValue) {
 	tranzient = newTransientValue;
     }

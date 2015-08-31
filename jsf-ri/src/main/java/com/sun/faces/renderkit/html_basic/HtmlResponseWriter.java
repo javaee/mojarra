@@ -372,6 +372,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      *
      * @throws IOException if an input/output error occurs.
      */
+    @Override
     public void flush() throws IOException {
 
         // NOTE: Internal buffer's contents (the ivar "buffer") is

@@ -189,6 +189,7 @@ public class SerializationProviderFactory {
          *
          * @return an <code>ObjectOutputStream</code>
          */
+        @Override
         public ObjectOutputStream createObjectOutputStream(
               OutputStream destination) throws IOException {
             return new ObjectOutputStream(destination);
@@ -203,6 +204,7 @@ public class SerializationProviderFactory {
          *
          * @return an <code>ObjectInputStream</code>
          */
+        @Override
         public ObjectInputStream createObjectInputStream(InputStream source)
         throws IOException {
             return new ApplicationObjectInputStream(source);

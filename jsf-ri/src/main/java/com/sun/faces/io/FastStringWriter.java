@@ -114,6 +114,7 @@ public class FastStringWriter extends Writer {
      *
      * @throws IOException
      */
+    @Override
     public void close() throws IOException {
     }
 

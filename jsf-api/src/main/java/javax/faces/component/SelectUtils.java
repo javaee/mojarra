@@ -244,10 +244,12 @@ class SelectUtils {
         private Object items[];
         private int index = 0;
 
+        @Override
         public boolean hasNext() {
             return (index < items.length);
         }
 
+        @Override
         public Object next() {
             try {
                 return (items[index++]);
@@ -256,6 +258,7 @@ class SelectUtils {
             }
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }

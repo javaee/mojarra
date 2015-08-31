@@ -69,6 +69,7 @@ class WeldAwareGroovySupportFilter implements Filter {
     private Class singletonClass;
     private Method singletonSetMethod;
 
+    @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         sc = filterConfig.getServletContext();
         try {
@@ -95,6 +96,7 @@ class WeldAwareGroovySupportFilter implements Filter {
         
     }
 
+    @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain filterChain)
@@ -160,6 +162,7 @@ class WeldAwareGroovySupportFilter implements Filter {
     }
     
 
+    @Override
     public void destroy() {
         // no-op
     }

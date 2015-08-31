@@ -121,6 +121,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
     // -------------------------------------------------------------- Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -215,6 +216,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      *
      * @throws NullPointerException {@inheritDoc}
      */
+    @Override
     public void processDecodes(FacesContext context) {
 
         if (context == null) {
@@ -248,6 +250,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      * @see javax.faces.event.PreValidateEvent
      * @see javax.faces.event.PostValidateEvent
      */
+    @Override
     public void processValidators(FacesContext context) {
 
         if (context == null) {
@@ -278,6 +281,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      *
      * @throws NullPointerException {@inheritDoc}
      */
+    @Override
     public void processUpdates(FacesContext context) {
 
         if (context == null) {
@@ -316,6 +320,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      * @param seed an optional seed value - e.g. based on the position of the component in the VDL-template
      * @return a unique-id in this component-container
      */
+    @Override
     public String createUniqueId(FacesContext context, String seed) {
         if (isPrependId()) {
             Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
@@ -341,6 +346,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      * its descendent's <code>clientIds</code> depending on the value of
      * this form's {@link #isPrependId} property.</p>
      */
+    @Override
     public String getContainerClientId(FacesContext context) {
         if (this.isPrependId()) {
             return super.getContainerClientId(context);

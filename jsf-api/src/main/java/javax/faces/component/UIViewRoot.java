@@ -269,6 +269,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     /**
      * @see UIComponent#getFamily()
      */
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -696,6 +697,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @throws NullPointerException  if <code>event</code>
      *                               is <code>null</code>
      */
+    @Override
     public void queueEvent(FacesEvent event) {
 
         if (event == null) {
@@ -1334,6 +1336,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @param seed an optional seed value - e.g. based on the position of the component in the VDL-template
      * @return a unique-id in this component-container
      */
+    @Override
     public String createUniqueId(FacesContext context, String seed) {
         if (seed != null) {
             return UIViewRoot.UNIQUE_ID_PREFIX + seed;

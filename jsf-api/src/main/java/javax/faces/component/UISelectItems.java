@@ -110,6 +110,7 @@ public class UISelectItems extends UIComponentBase {
     // -------------------------------------------------------------- Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
