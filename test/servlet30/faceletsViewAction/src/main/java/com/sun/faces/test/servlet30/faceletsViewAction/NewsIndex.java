@@ -38,82 +38,41 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.facelets.viewAction.newsReader;
+package com.sun.faces.test.servlet30.faceletsViewAction;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 
 
-@RequestScoped @ManagedBean
-public class NewsReader {
+@ApplicationScoped @ManagedBean(eager = true)
+public class NewsIndex {
 
-    private FacesContext facesContext;
-
-    @ManagedProperty("#{newsIndex}")
-    private NewsIndex newsIndex;
-
-    private List<NewsStory> stories;
-
-    private NewsStory selectedStory;
-
-    private Long selectedStoryId;
+    private AtomicLong sequenceGenerator;
+    private Map<Long, NewsStory> entries;
 
     @PostConstruct
-    public void postConstruct() {
-        facesContext = FacesContext.getCurrentInstance();
-        stories = new ArrayList<NewsStory>(newsIndex.getEntries().values());
+    public void postContruct() {
+        sequenceGenerator = new AtomicLong();
+        entries = new TreeMap<Long, NewsStory>();
+
+        entries.put(sequenceGenerator.incrementAndGet(), new NewsStory(sequenceGenerator.get(), "Story 1 Headline: Glassfish V3 released", "Story 1 Content: After much anticipation, Glassfish V3 has finally been released. And it's a really great piece of engineering."));
+        entries.put(sequenceGenerator.incrementAndGet(), new NewsStory(sequenceGenerator.get(), "Story 2 Headline: ICEfaces evolves integration with NetBeans IDE and GlassFish", "Story 2 Content: The most recent release of ICEfaces (v1.7.2SP1) enhances the migration of existing Project Woodstock applications to ICEfaces. With the latest ICEfaces NetBeans plugin, it's now possible to add the ICEfaces framework to an existing Woodstock project, and begin to develop ICEfaces pages along side existing Woodstock pages."));
     }
 
-    public void loadStory() {
-        if (!facesContext.isValidationFailed()) {
-            NewsStory story = newsIndex.getStory(selectedStoryId);
-            if (story != null) {
-                selectedStory = story;
-                return;
-            }
+    public Map<Long, NewsStory> getEntries() {
+        return entries;
+    }
 
-            facesContext.addMessage(null, new FacesMessage("The headline you requested does not exist."));
+    public NewsStory getStory(Long id) {
+        if (id == null) {
+            return null;
         }
-
-    }
-    
-    public String goToPage01IfValidationFailed() {
-        if (facesContext.isValidationFailed()) {
-            return "/page01";
-        }
-        return null;
-    }
-
-    public List<NewsStory> getStories() {
-        return stories;
-    }
-
-    public NewsStory getSelectedStory() {
-        return selectedStory;
-    }
-
-    public Long getSelectedStoryId() {
-        return selectedStoryId;
-    }
-
-    public void setSelectedStoryId(Long storyId) {
-        this.selectedStoryId = storyId;
-    }
-    
-    public boolean isMissingStoryId() {
-        return null == selectedStoryId;
-    }
-
-    // Injected Properties
-
-    public void setNewsIndex(NewsIndex newsIndex) {
-        this.newsIndex = newsIndex;
+        
+        return entries.get(id);
     }
 
 }

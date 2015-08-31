@@ -38,31 +38,82 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.facelets.viewAction.newsReader;
+package com.sun.faces.test.servlet30.faceletsViewAction;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 
 
-public class NewsStory {
+@RequestScoped @ManagedBean
+public class NewsReader {
 
-    private Long id;
-    private String headline;
-    private String content;
+    private FacesContext facesContext;
 
-    public NewsStory(Long id, String headline, String content) {
-        this.id = id;
-        this.headline = headline;
-        this.content = content;
+    @ManagedProperty("#{newsIndex}")
+    private NewsIndex newsIndex;
+
+    private List<NewsStory> stories;
+
+    private NewsStory selectedStory;
+
+    private Long selectedStoryId;
+
+    @PostConstruct
+    public void postConstruct() {
+        facesContext = FacesContext.getCurrentInstance();
+        stories = new ArrayList<NewsStory>(newsIndex.getEntries().values());
     }
 
-    public Long getId() {
-        return id;
-    }
+    public void loadStory() {
+        if (!facesContext.isValidationFailed()) {
+            NewsStory story = newsIndex.getStory(selectedStoryId);
+            if (story != null) {
+                selectedStory = story;
+                return;
+            }
 
-    public String getContent() {
-        return content;
+            facesContext.addMessage(null, new FacesMessage("The headline you requested does not exist."));
+        }
+
     }
     
-    public String getHeadline() {
-        return headline;
+    public String goToPage01IfValidationFailed() {
+        if (facesContext.isValidationFailed()) {
+            return "/page01";
+        }
+        return null;
+    }
+
+    public List<NewsStory> getStories() {
+        return stories;
+    }
+
+    public NewsStory getSelectedStory() {
+        return selectedStory;
+    }
+
+    public Long getSelectedStoryId() {
+        return selectedStoryId;
+    }
+
+    public void setSelectedStoryId(Long storyId) {
+        this.selectedStoryId = storyId;
+    }
+    
+    public boolean isMissingStoryId() {
+        return null == selectedStoryId;
+    }
+
+    // Injected Properties
+
+    public void setNewsIndex(NewsIndex newsIndex) {
+        this.newsIndex = newsIndex;
     }
 
 }

@@ -115,6 +115,7 @@
         <module>facelets</module>
         <module>faceletsEmptyAsNull</module>
         <module>faceletsFindChild</module>
+        <module>faceletsViewaction</module>
         <module>facesComponentTag</module>
         <module>facesContext</module>
         <module>facesContextInit</module>

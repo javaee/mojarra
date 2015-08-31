@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.facelets.viewAction.newsReader;
+package com.sun.faces.test.servlet30.faceletsViewAction;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import java.util.ArrayList;

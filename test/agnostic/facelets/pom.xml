@@ -55,6 +55,5 @@
     <name>Mojarra ${project.version} - Test - Agnostic - Facelets</name>
     <modules>
         <module>ccInJar</module>
-        <module>viewAction</module>
     </modules>
 </project>
