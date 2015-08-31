@@ -121,6 +121,7 @@
         <module>factory</module>
         <module>findResourcesInJar</module>
         <module>flash</module>
+        <module>flashBasic</module>
         <module>flashForceWriteCookie</module>
         <module>flashNoSession</module>
         <module>implicitContract</module>
