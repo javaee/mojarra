@@ -52,7 +52,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - Flash</name>
     <modules>
-        <module>basic</module>
         <module>chunkRedirect</module>
         <module>custom</module>
     </modules>
