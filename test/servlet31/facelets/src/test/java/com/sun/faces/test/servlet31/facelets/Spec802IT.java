@@ -116,13 +116,13 @@ public class Spec802IT {
         pageText = page.getElementById("textOutput").getTextContent();
         assertTrue(!pageText.contains(textValue));
     }
-    
+
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
     @Test
     public void testFileUploadMultipleTimes() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/uploadMultipleTimes.xhtml");
 
-        String basedir = System.getProperty("project.build.directory") + File.separator + "..";
+        String basedir = System.getProperty("basedir");
         HtmlFileInput fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess.txt");
 
@@ -130,9 +130,10 @@ public class Spec802IT {
 
         page = button.click();
 
-        String pageText = page.asXml();
-        assertTrue(pageText.contains("83"));
-        
+        String pageText = page.getBody().asXml();
+        assertTrue(pageText.contains("(?s).*bytes\\s+sent\\s+=\\s+83.*")
+                || pageText.contains("(?s).*bytes\\s+sent\\s+=\\s+-1.*"));
+
         fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess2.txt");
 
@@ -142,7 +143,7 @@ public class Spec802IT {
 
         pageText = page.getBody().asXml();
         assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+107.*"));
-        
+
         fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess3.txt");
 
@@ -152,9 +153,9 @@ public class Spec802IT {
 
         pageText = page.getBody().asXml();
         assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+124.*"));
-        
+
     }
-    
+
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
     @Test
     public void testFileUploadNoEncType() throws Exception {

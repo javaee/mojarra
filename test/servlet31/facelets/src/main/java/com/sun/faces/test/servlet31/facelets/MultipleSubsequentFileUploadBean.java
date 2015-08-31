@@ -50,7 +50,6 @@ public class MultipleSubsequentFileUploadBean {
     private Part file;
 
     public String doUpload() {
-        file.getSize();
         return null;
     }
 
