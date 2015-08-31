@@ -39,6 +39,7 @@
  */
 package com.sun.faces.test.servlet31.facelets;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlFileInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -121,7 +122,7 @@ public class Spec802IT {
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
     @Test
     public void testFileUploadMultipleTimes() throws Exception {
-        webClient.getOptions().setJavaScriptEnabled(false);
+        webClient = new WebClient(BrowserVersion.CHROME);
         HtmlPage page = webClient.getPage(webUrl + "faces/uploadMultipleTimes.xhtml");
 
         String basedir = System.getProperty("basedir");
@@ -154,7 +155,6 @@ public class Spec802IT {
 
         pageText = page.getBody().asXml();
         assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+124.*"));
-        webClient.getOptions().setJavaScriptEnabled(true);
     }
 
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
