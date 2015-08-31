@@ -122,7 +122,7 @@ public class Spec802IT {
     public void testFileUploadMultipleTimes() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/uploadMultipleTimes.xhtml");
 
-        String basedir = System.getProperty("basedir");
+        String basedir = System.getProperty("project.build.directory") + File.separator + "..";
         HtmlFileInput fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess.txt");
 
