@@ -120,8 +120,8 @@ public class Spec802IT {
 
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
     @Test
-    @Ignore
     public void testFileUploadMultipleTimes() throws Exception {
+        webClient.getOptions().setJavaScriptEnabled(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/uploadMultipleTimes.xhtml");
 
         String basedir = System.getProperty("basedir");
@@ -133,8 +133,7 @@ public class Spec802IT {
         page = button.click();
 
         String pageText = page.getBody().asXml();
-        assertTrue(pageText.contains("(?s).*bytes\\s+sent\\s+=\\s+83.*")
-                || pageText.contains("(?s).*bytes\\s+sent\\s+=\\s+-1.*"));
+        assertTrue(pageText.contains("(?s).*bytes\\s+sent\\s+=\\s+83.*"));
 
         fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess2.txt");
@@ -155,7 +154,7 @@ public class Spec802IT {
 
         pageText = page.getBody().asXml();
         assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+124.*"));
-
+        webClient.getOptions().setJavaScriptEnabled(true);
     }
 
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
