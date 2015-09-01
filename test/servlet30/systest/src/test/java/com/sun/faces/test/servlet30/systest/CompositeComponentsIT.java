@@ -307,12 +307,16 @@ public class CompositeComponentsIT {
      * </p>
      */
     @Test
-    @Ignore
     public void testValidator3() throws Exception {
-//        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
-//        validateValidatorMessagePresent(page,
-//                                        "form3:s3",
-//                                        "form3:validator3:input:input");
+        HtmlPage page = webClient.getPage(webUrl + "faces/composite/attachedvalidator.xhtml");
+        /*
+         * When systest migrated this test was found not to be working on client side state saving.
+         */
+        if (!page.asXml().contains("State Saving Method: client")) {
+            validateValidatorMessagePresent(page,
+                                        "form3:s3",
+                                        "form3:validator3:input:input");
+        }
     }
 
 
