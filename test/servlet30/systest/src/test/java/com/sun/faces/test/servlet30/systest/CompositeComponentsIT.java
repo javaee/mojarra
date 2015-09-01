@@ -327,12 +327,16 @@ public class CompositeComponentsIT {
      * </p>
      */
     @Test
-    @Ignore
     public void testValidator4() throws Exception {
-//        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
-//        validateValidatorMessagePresent(page,
-//                                        "form4:s4",
-//                                        "form4:validator4:naming:input");
+        HtmlPage page = webClient.getPage(webUrl + "faces/composite/attachedvalidator.xhtml");
+        /*
+         * When systest migrated this test was found not to be working on client side state saving.
+         */
+        if (!page.asXml().contains("State Saving Method: client")) {
+            validateValidatorMessagePresent(page,
+                                        "form4:s4",
+                                        "form4:validator4:naming:input");
+        }
     }
 
     /**
