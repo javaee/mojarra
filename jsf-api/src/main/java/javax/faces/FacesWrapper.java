@@ -44,6 +44,7 @@ package javax.faces;
  * <p class="changed_added_2_0">Any wrapper class in JSF that must provide
  * access to the object it wraps must implement this interface.</p>
  * 
+ * @param <T> the wrapped type.
  * @since 2.0
  */
 public interface FacesWrapper<T> {
@@ -53,6 +54,7 @@ public interface FacesWrapper<T> {
      * interface uses this method to return an instance of the class
      * being wrapped.</p>
      * 
+     * @return the wrapped instance.
      * @since 2.0
      */
     public T getWrapped();

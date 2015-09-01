@@ -114,8 +114,8 @@ import javax.faces.view.ViewMetadata;
  * different viewId called for a redirect.  <span
  * class="changed_added_2_3">If the navigation will result in a flow
  * transition, the appropriate metadata must be included in the query
- * string for the redirect.  See section JSF.7.4.2 <emphasis>Default
- * NavigationHandler Algorithm</emphasis>, for the discussion of how to
+ * string for the redirect.  See section JSF.7.4.2 Default
+ * NavigationHandler Algorithm, for the discussion of how to
  * handle {@code &lt;redirect /&gt;} cases.</span></p>
 
  * <p>It's important to note that the full component tree is not built
