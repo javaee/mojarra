@@ -134,6 +134,7 @@
         <module>initRequestParameterMap</module>
         <module>invalidMapping</module>
         <module>lateBindings</module>
+	<module>lifecycleFacesServletAccess</module>
         <module>listener</module>
         <module>localeConfig</module>
         <module>multiTenantSetsTccl</module>

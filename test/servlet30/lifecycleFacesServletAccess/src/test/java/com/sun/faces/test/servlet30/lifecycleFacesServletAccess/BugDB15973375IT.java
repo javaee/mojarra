@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.lifecycle.facesServletAccess;
+package com.sun.faces.test.servlet30.lifecycleFacesServletAccess;
 
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -47,7 +47,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class Issue15973375IT {
+public class BugDB15973375IT {
 
     private String webUrl;
     private WebClient webClient;
