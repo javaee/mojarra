@@ -58,7 +58,6 @@
         <module>clientWindow</module>
         <module>csrf</module>
         <module>debugObjectOutputStream</module>
-        <module>optionsRequest</module>
         <module>unserializableServerState_negative</module>
         <module>unserializableServerState_positive</module>
     </modules>

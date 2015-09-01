@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.lifecycle.optionsRequest;
+package com.sun.faces.test.servlet30.lifecycleOptionsRequest;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebClient;
