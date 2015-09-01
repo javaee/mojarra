@@ -75,6 +75,7 @@ public abstract class ExceptionHandlerFactory implements FacesWrapper<ExceptionH
      * access to the implementation being wrapped.  A default implementation
      * is provided that returns <code>null</code>.</p>
      */
+    @Override
     public ExceptionHandlerFactory getWrapped() {
         return null;
     }

@@ -73,6 +73,7 @@ public abstract class ExternalContextFactory implements FacesWrapper<ExternalCon
      * @since 2.0
      */
 
+    @Override
     public ExternalContextFactory getWrapped() {
         return null;
     }

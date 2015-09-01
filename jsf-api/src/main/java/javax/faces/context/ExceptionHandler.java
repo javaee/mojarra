@@ -167,12 +167,14 @@ public abstract class ExceptionHandler implements SystemEventListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public abstract void processEvent(SystemEvent exceptionQueuedEvent) throws AbortProcessingException;
 
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public abstract boolean isListenerForSource(Object source);
 
     

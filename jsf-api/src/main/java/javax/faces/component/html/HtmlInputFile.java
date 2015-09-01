@@ -102,6 +102,7 @@ public class HtmlInputFile extends javax.faces.component.UIInput implements Clie
         String toString;
         PropertyKeys(String toString) { this.toString = toString; }
         PropertyKeys() { }
+        @Override
         public String toString() {
             return ((toString != null) ? toString : super.toString());
         }
@@ -675,10 +676,12 @@ public class HtmlInputFile extends javax.faces.component.UIInput implements Clie
 
     private static final Collection<String> EVENT_NAMES = Collections.unmodifiableCollection(Arrays.asList("blur","change","valueChange","click","dblclick","focus","keydown","keypress","keyup","mousedown","mousemove","mouseout","mouseover","mouseup","select"));
 
+    @Override
     public Collection<String> getEventNames() {
         return EVENT_NAMES;    }
 
 
+    @Override
     public String getDefaultEventName() {
         return "valueChange";    }
 

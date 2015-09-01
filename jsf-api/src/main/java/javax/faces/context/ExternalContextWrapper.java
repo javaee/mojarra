@@ -346,6 +346,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      *
      * @see javax.faces.context.ExternalContext#getRequestParameterNames()
      */
+    @Override
     public Iterator<String> getRequestParameterNames() {
         return getWrapped().getRequestParameterNames();
     }
@@ -357,6 +358,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      *
      * @see javax.faces.context.ExternalContext#getRequestParameterValuesMap()
      */
+    @Override
     public Map<String, String[]> getRequestParameterValuesMap() {
         return getWrapped().getRequestParameterValuesMap();
     }
@@ -368,6 +370,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      *
      * @see javax.faces.context.ExternalContext#getRequestPathInfo()
      */
+    @Override
     public String getRequestPathInfo() {
         return getWrapped().getRequestPathInfo();
     }
@@ -379,6 +382,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      *
      * @see javax.faces.context.ExternalContext#getRequestServletPath()
      */
+    @Override
     public String getRequestServletPath() {
         return getWrapped().getRequestServletPath();
     }
@@ -390,6 +394,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      *
      * @see javax.faces.context.ExternalContext#getResource(String) 
      */
+    @Override
     public URL getResource(String path) throws MalformedURLException {
         return getWrapped().getResource(path);
     }
@@ -401,6 +406,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      *
      * @see javax.faces.context.ExternalContext#getResourceAsStream(String)
      */
+    @Override
     public InputStream getResourceAsStream(String path) {
         return getWrapped().getResourceAsStream(path);
     }
@@ -412,6 +418,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      *
      * @see javax.faces.context.ExternalContext#getResourcePaths(String)
      */
+    @Override
     public Set<String> getResourcePaths(String path) {
         return getWrapped().getResourcePaths(path);
     }
@@ -423,6 +430,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      *
      * @see javax.faces.context.ExternalContext#getResponse()
      */
+    @Override
     public Object getResponse() {
         return getWrapped().getResponse();
     }
@@ -434,6 +442,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      *
      * @see javax.faces.context.ExternalContext#getSession(boolean)
      */
+    @Override
     public Object getSession(boolean create) {
         return getWrapped().getSession(create);
     }
@@ -459,6 +468,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      *
      * @see javax.faces.context.ExternalContext#getSessionMap()
      */
+    @Override
     public Map<String, Object> getSessionMap() {
         return getWrapped().getSessionMap();
     }

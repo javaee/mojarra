@@ -125,6 +125,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
      *
      * @since 2.0
      */
+    @Override
     public Set<ClientBehaviorHint> getHints() {
         return HINTS;
     }

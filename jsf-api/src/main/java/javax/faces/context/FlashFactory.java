@@ -81,6 +81,7 @@ public abstract class FlashFactory implements FacesWrapper<FlashFactory> {
      * 
      * @since 2.2
      */
+    @Override
     public FlashFactory getWrapped() {
         return null;
     }

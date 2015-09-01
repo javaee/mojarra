@@ -885,6 +885,7 @@ public abstract class FacesContext {
      * {@link FacesContext} instance for each processing thread.</p>
      */
     private static ThreadLocal<FacesContext> instance = new ThreadLocal<FacesContext>() {
+            @Override
             protected FacesContext initialValue() { return (null); }
         };
 

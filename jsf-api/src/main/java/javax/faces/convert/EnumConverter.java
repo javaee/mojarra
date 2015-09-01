@@ -131,6 +131,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
+    @Override
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
 
@@ -188,6 +189,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
+    @Override
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {
 
@@ -227,6 +229,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
 
     // ----------------------------------------------------------- StateHolder
 
+    @Override
     public void restoreState(FacesContext facesContext, Object object) {
         if (facesContext == null) {
             throw new NullPointerException();
@@ -236,6 +239,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
         }
     }
 
+    @Override
     public Object saveState(FacesContext facesContext) {
         if (facesContext == null) {
             throw new NullPointerException();
@@ -248,24 +252,29 @@ public class EnumConverter implements Converter, PartialStateHolder {
 
     private boolean isTransient = false;
 
+    @Override
     public void setTransient(boolean b) {
         isTransient = b;
     }
 
+    @Override
     public boolean isTransient() {
         return isTransient;
     }
 
     private boolean initialState;
 
+    @Override
     public void markInitialState() {
         initialState = true;
     }
 
+    @Override
     public boolean initialStateMarked() {
         return initialState;
     }
 
+    @Override
     public void clearInitialState() {
         initialState = false;
     }

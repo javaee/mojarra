@@ -73,6 +73,7 @@ public abstract class PartialViewContextFactory implements FacesWrapper<PartialV
     /**
      * @see javax.faces.FacesWrapper#getWrapped()
      */
+    @Override
     public PartialViewContextFactory getWrapped() {
 
         return null;

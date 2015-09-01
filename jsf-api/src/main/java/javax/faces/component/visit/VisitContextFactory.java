@@ -64,6 +64,7 @@ public abstract class VisitContextFactory implements FacesWrapper<VisitContextFa
      * is provided that returns <code>null</code>.</p>
      * @since 2.0
      */
+    @Override
     public VisitContextFactory getWrapped() {
         return null;
     }

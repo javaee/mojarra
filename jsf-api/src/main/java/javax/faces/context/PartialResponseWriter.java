@@ -106,6 +106,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @see ResponseWriterWrapper#getWrapped()
      * @since 2.0
      */
+    @Override
     public ResponseWriter getWrapped() {
         return writer;
     }
@@ -116,6 +117,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @throws IOException if an input/output error occurs
      * @since 2.0
      */
+    @Override
     public void startDocument() throws IOException {
         ResponseWriter writer = getWrapped();
         String encoding = writer.getCharacterEncoding( );
@@ -137,6 +139,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @throws IOException if an input/output error occurs
      * @since 2.0
      */
+    @Override
     public void endDocument() throws IOException {
         endChangesIfNecessary();
         ResponseWriter writer = getWrapped();

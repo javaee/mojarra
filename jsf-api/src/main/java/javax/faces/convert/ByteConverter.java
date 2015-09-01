@@ -95,6 +95,7 @@ public class ByteConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
+    @Override
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
 
@@ -130,6 +131,7 @@ public class ByteConverter implements Converter {
      * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
+    @Override
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {
 

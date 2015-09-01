@@ -116,6 +116,7 @@ public class RestoreViewPhase extends Phase {
     }
 
 
+    @Override
     public void doPhase(FacesContext context,
                         Lifecycle lifecycle,
                         ListIterator<PhaseListener> listeners) {

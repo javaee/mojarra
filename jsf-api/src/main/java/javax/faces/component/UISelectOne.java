@@ -106,6 +106,7 @@ public class UISelectOne extends UIInput {
     // -------------------------------------------------------------- Properties
 
 
+    @Override
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -140,6 +141,7 @@ public class UISelectOne extends UIInput {
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
+    @Override
     protected void validateValue(FacesContext context, Object value) {
 
         // Skip validation if it is not necessary

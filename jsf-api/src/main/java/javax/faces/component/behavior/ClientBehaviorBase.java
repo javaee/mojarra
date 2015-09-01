@@ -91,6 +91,7 @@ public class ClientBehaviorBase extends BehaviorBase implements ClientBehavior {
      *
      * @since 2.0
      */
+    @Override
     public String getScript(ClientBehaviorContext behaviorContext) {
 
         if (null == behaviorContext) {
@@ -120,6 +121,7 @@ public class ClientBehaviorBase extends BehaviorBase implements ClientBehavior {
      *
      * @since 2.0
      */
+    @Override
     public void decode(FacesContext context,
                        UIComponent component) {
     
@@ -160,6 +162,7 @@ public class ClientBehaviorBase extends BehaviorBase implements ClientBehavior {
      *
      * @since 2.0
      */
+    @Override
     public Set<ClientBehaviorHint> getHints() {
         return Collections.emptySet();
     }
