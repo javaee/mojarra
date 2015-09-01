@@ -41,7 +41,6 @@ package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -308,11 +307,12 @@ public class CompositeComponentsIT {
      */
     @Test
     public void testValidator3() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/composite/attachedvalidator.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
          * When systest migrated this test was found not to be working on client side state saving.
          */
         if (!page.asXml().contains("State Saving Method: client")) {
+            page = webClient.getPage(webUrl + "faces/composite/attachedvalidator.xhtml");
             validateValidatorMessagePresent(page,
                                         "form3:s3",
                                         "form3:validator3:input:input");
@@ -332,11 +332,12 @@ public class CompositeComponentsIT {
      */
     @Test
     public void testValidator4() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/composite/attachedvalidator.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
          * When systest migrated this test was found not to be working on client side state saving.
          */
         if (!page.asXml().contains("State Saving Method: client")) {
+            page = webClient.getPage(webUrl + "faces/composite/attachedvalidator.xhtml");
             validateValidatorMessagePresent(page,
                                         "form4:s4",
                                         "form4:validator4:naming:input");

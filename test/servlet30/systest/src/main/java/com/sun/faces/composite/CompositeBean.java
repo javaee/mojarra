@@ -66,12 +66,6 @@ import javax.faces.convert.Converter;
 @RequestScoped
 public class CompositeBean {
 
-    public String getStateSavingMethod() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        return facesContext.getApplication().getStateManager().isSavingStateInClient(facesContext) ?
-                "client" : "server";
-    }
-
     public List<String> getTableInputValues() {
         List<String> result = new ArrayList<String>();
         result.add("a value");
