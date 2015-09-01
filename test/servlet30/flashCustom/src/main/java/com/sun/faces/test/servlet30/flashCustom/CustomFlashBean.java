@@ -37,22 +37,18 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.flash.custom;
+package com.sun.faces.test.servlet30.flashCustom;
 
-import javax.faces.FacesWrapper;
-import javax.faces.context.Flash;
-import javax.faces.context.FlashWrapper;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
-public class CustomFlash extends FlashWrapper implements FacesWrapper<Flash> {
+@ManagedBean(name = "customFlashBean")
+@RequestScoped
+public class CustomFlashBean {
 
-    private final Flash parent;
-
-    public CustomFlash(Flash parent) {
-        this.parent = parent;
-    }
-
-    @Override
-    public Flash getWrapped() {
-        return parent;
+    public String getFlashClassName() {
+        String result = FacesContext.getCurrentInstance().getExternalContext().getFlash().getClass().getName();
+        return result;
     }
 }

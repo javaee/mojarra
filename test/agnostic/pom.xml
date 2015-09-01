@@ -63,7 +63,6 @@
     </dependencies>
     <modules>
         <module>facelets</module>
-        <module>flash</module>
         <module>lifecycle</module>
         <module>vdl</module>
     </modules>

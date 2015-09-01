@@ -37,18 +37,29 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.flash.custom;
+package com.sun.faces.test.servlet30.flashCustom;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
+import javax.faces.context.FlashFactory;
 
-@ManagedBean(name = "customFlashBean")
-@RequestScoped
-public class CustomFlashBean {
+public class CustomFlashFactory extends FlashFactory {
 
-    public String getFlashClassName() {
-        String result = FacesContext.getCurrentInstance().getExternalContext().getFlash().getClass().getName();
-        return result;
+    private FlashFactory parent;
+
+    public CustomFlashFactory() {
+    }
+    
+    public CustomFlashFactory(FlashFactory parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public Flash getFlash(boolean create) {
+        return new CustomFlash(getWrapped().getFlash(create));
+    }
+    
+    @Override
+    public FlashFactory getWrapped() {
+        return parent;
     }
 }

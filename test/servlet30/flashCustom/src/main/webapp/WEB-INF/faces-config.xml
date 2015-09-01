@@ -47,6 +47,6 @@
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
               version="2.2">
     <factory>
-        <flash-factory>com.sun.faces.test.agnostic.flash.custom.CustomFlashFactory</flash-factory>
+        <flash-factory>com.sun.faces.test.servlet30.flashCustom.CustomFlashFactory</flash-factory>
     </factory>
 </faces-config>

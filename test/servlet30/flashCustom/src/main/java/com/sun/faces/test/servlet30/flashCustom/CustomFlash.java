@@ -37,29 +37,22 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.flash.custom;
+package com.sun.faces.test.servlet30.flashCustom;
 
+import javax.faces.FacesWrapper;
 import javax.faces.context.Flash;
-import javax.faces.context.FlashFactory;
+import javax.faces.context.FlashWrapper;
 
-public class CustomFlashFactory extends FlashFactory {
+public class CustomFlash extends FlashWrapper implements FacesWrapper<Flash> {
 
-    private FlashFactory parent;
+    private final Flash parent;
 
-    public CustomFlashFactory() {
-    }
-    
-    public CustomFlashFactory(FlashFactory parent) {
+    public CustomFlash(Flash parent) {
         this.parent = parent;
     }
 
     @Override
-    public Flash getFlash(boolean create) {
-        return new CustomFlash(getWrapped().getFlash(create));
-    }
-    
-    @Override
-    public FlashFactory getWrapped() {
+    public Flash getWrapped() {
         return parent;
     }
 }
