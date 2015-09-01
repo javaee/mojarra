@@ -81,6 +81,8 @@ public class PreDestroyCustomScopeEvent extends SystemEvent {
     /**
      * <p class="changed_added_2_0">Return the <code>ScopeContext</code>
      * for this event.</p>
+     * 
+     * @return the scope context.
      */
     public ScopeContext getContext() {
 

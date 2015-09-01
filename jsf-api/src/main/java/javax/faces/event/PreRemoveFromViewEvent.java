@@ -89,7 +89,9 @@ public class PreRemoveFromViewEvent extends ComponentSystemEvent {
      * <p class="changed_added_2_0">Returns <code>true</code> if and
      * only if the argument <code>listener</code> is an instance of
      * {@link SystemEventListener}.</p>
-     * @param listener
+     * 
+     * @param listener the faces listener.
+     * @return true if the listener is an appropriate one, false otherwise.
      */
     @Override
     public boolean isAppropriateListener(FacesListener listener) {

@@ -70,7 +70,7 @@ public class PreValidateEvent extends ComponentSystemEvent {
 
     /**
 
-     * <p class="changed_added_2_0"></p>
+     * <p class="changed_added_2_0">Constructor</p>
 
      * @param component the <code>UIComponent</code> that is about to be
      * validated.
