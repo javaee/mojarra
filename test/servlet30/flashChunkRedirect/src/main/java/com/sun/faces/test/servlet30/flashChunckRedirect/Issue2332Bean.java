@@ -1,4 +1,4 @@
-package com.sun.faces.test.agnostic.flash.chunkRedirect;
+package com.sun.faces.test.servlet30.flashChunckRedirect;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;

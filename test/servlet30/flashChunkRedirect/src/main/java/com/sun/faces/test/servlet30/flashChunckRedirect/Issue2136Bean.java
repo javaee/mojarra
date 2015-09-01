@@ -1,4 +1,4 @@
-package com.sun.faces.test.agnostic.flash.chunkRedirect;
+package com.sun.faces.test.servlet30.flashChunckRedirect;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;

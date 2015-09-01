@@ -1,5 +1,3 @@
-package com.sun.faces.test.agnostic.flash.chunkRedirect;
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -39,21 +37,21 @@ package com.sun.faces.test.agnostic.flash.chunkRedirect;
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
+package com.sun.faces.test.servlet30.flashChunkRedirect;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import org.junit.*;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
- * Integration tests for issue #2332
+ * Integration tests for issue #2136
  *
  * @author Manfred Riem (manfred.riem@oracle.com)
  */
-public class Issue2332IT {
+public class Issue2136IT {
 
     private String webUrl;
     private WebClient webClient;
@@ -71,20 +69,11 @@ public class Issue2332IT {
 
     @Test
     public void testFlashChunkingLink1() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement link = page.getHtmlElementById("form:link1");
-        assertNotNull("Unable to find form:link1 element", link);
-        page = link.click();
-        webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.getBody().asText().indexOf("== Flash value LINK1 ==") != -1);
-    }
-
-    @Test
-    public void testFlashChunkingLink2() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement link = page.getHtmlElementById("form:link2");
-        assertNotNull("Unable to find form:link2 element", link);
-        page = link.click();
-        assertTrue(page.getBody().asText().indexOf("== Flash value LINK2 ==") != -1);
+        HtmlPage page = webClient.getPage(webUrl + "faces/issue2136/issue2136.xhtml");
+        HtmlInput input = (HtmlInput) page.getElementById("form:input");
+        input.type("12345");
+        HtmlSubmitInput submit = (HtmlSubmitInput) page.getElementById("form:submit");
+        page = submit.click();
+        assertTrue(page.getBody().asText().indexOf("12345") != -1);
     }
 }

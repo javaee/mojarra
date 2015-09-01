@@ -123,6 +123,7 @@
         <module>findResourcesInJar</module>
         <module>flash</module>
         <module>flashBasic</module>
+	<module>flashChunkRedirect</module>
         <module>flashForceWriteCookie</module>
         <module>flashNoSession</module>
         <module>implicitContract</module>
