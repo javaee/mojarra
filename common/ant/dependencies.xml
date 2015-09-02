@@ -89,7 +89,6 @@
     <!--<property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>-->
     <property name="maven2.mirror" value="http://repo.exist.com/maven2/"/>
     <property name="java.net.maven" value="http://download.java.net/maven/1"/>
-    <property name="java.net.maven2" value="http://download.java.net/maven/2"/>
     <property name="codehaus.maven" value="http://repo1.maven.org/maven2"/>
     <property name="download.java.net" value="http://download.java.net/javaee5/external/shared"/>
     <property name="jboss.maven2" value="http://repository.jboss.com/maven2"/>
@@ -385,7 +384,7 @@
                 </not>
             </and>
             <then>
-                <get src="${java.net.maven}/com.sun.wts.tools.mri/jars/maven-repository-importer-${maven.repository.importer.version}.jar"
+                <get src="${central.maven2}/com/sun/wts/tools/mri/maven-repository-importer/${maven.repository.importer.version}/maven-repository-importer-${maven.repository.importer.version}.jar"
                      dest="${maven.repository.importer.jar}"
                      usetimestamp="true"/>
 
@@ -398,7 +397,7 @@
                 <available file="${javaee-api.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven2}/javax/javaee-api/${javaee-api.version}/javaee-api-${javaee-api.version}.jar"
+                <get src="${central.maven2}/javax/javaee-api/${javaee-api.version}/javaee-api-${javaee-api.version}.jar"
                      dest="${javaee-api.jar}"
                      usetimestamp="true"/>
 
@@ -424,7 +423,7 @@
                 <available file="${servlet.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.servlet/jars/servlet-api-${servlet.api.version}.jar"
+                <get src="${central.maven2}/javax/servlet/servlet-api/${servlet.api.version}/servlet-api-${servlet.api.version}.jar"
                      dest="${servlet.jar}"
                      usetimestamp="true"/>
 
@@ -489,7 +488,7 @@
                 <available file="${jstl.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/jstl/jars/jstl-${jstl.api.version}.jar"
+                <get src="${central.maven2}/jstl/jstl/${jstl.api.version}/jstl-${jstl.api.version}.jar"
                      dest="${jstl.jar}"
                      usetimestamp="true"/>
 
@@ -528,7 +527,7 @@
                 <available file="${groovy.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${codehaus.maven}/org/codehaus/groovy/groovy-all/${groovy.version}/groovy-all-${groovy.version}.jar"
+                <get src="${central.maven2}/org/codehaus/groovy/groovy-all/${groovy.version}/groovy-all-${groovy.version}.jar"
                      dest="${groovy.jar}"
                      usetimestamp="true"/>
             </then>
