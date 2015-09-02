@@ -291,7 +291,7 @@
                         src="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
                         dest="${dependency.base.dir}"/>
                 <copy tofile="${yuicompressor.jar}"
-                      file="${yuicompressor.home}/build/yuicompressor-${yuicompressor.version}.jar"/>
+                      file="${yuicompressor.home}/yuicompressor-${yuicompressor.version}.jar"/>
             </then>
         </if>
 
