@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.agnostic.lifecycle.debugObjectOutputStream;
+package com.sun.faces.test.servlet30.lifecycleDebugObjectOutputStream;
 
 import java.io.IOException;
 import java.io.NotSerializableException;
