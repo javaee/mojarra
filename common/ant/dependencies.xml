@@ -276,7 +276,7 @@
         <if>
             <and>
                 <not>
-                    <available file="${yuicompressor.home}" property="ignored"/>
+                    <available file="${yuicompressor.jar}" property="ignored"/>
                 </not>
                 <not>
                     <isset property="build.source"/>
