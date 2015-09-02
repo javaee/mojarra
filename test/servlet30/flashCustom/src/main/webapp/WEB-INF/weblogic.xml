@@ -4,5 +4,5 @@
     <keepgenerated>true</keepgenerated>
     <debug>true</debug>
   </jsp-descriptor>
-  <context-root/>
+  <context-root>/test-servlet30-flashCustom</context-root>
 </weblogic-web-app>
