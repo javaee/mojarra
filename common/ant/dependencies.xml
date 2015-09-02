@@ -82,7 +82,7 @@
     <property name="javax-inject.version" value="1"/>
     <property name="javax-enterprise.version" value="1.1"/>
     <property name="maven.repository.importer.version" value="1.2"/>
-    <property name="yuicompressor.version" value="2.4.2"/>
+    <property name="yuicompressor.version" value="2.4.8"/>
 
     <property name="central.maven2" value="http://repo1.maven.org/maven2" />
     <property name="redhat.maven2" value="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases"/>
@@ -284,7 +284,7 @@
                 </not>
             </and>
             <then>
-                <get src="http://cloud.github.com/downloads/yui/yuicompressor/yuicompressor-${yuicompressor.version}.zip"
+                <get src="https://github.com/yui/yuicompressor/releases/download/v${yuicompressor.version}/yuicompressor-${yuicompressor.version}.zip"
                      dest="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
                      usetimestamp="true"/>
                 <unzip
