@@ -41,6 +41,7 @@
 package javax.faces.event;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -78,5 +79,18 @@ public class PreRenderComponentEvent extends ComponentSystemEvent {
     public PreRenderComponentEvent(UIComponent component) {
         super(component);
     }
-
+    
+    /**
+     * <p class="changed_added_2_3">Instantiate a new
+     * <code>PreRenderComponentEvent</code> that indicates the argument
+     * <code>component</code> is about to be rendered.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param component the <code>UIComponent</code> that is about to be
+     * rendered.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
+     */
+    public PreRenderComponentEvent(FacesContext facesContext, UIComponent component) {
+        super(facesContext, component);
+    }
 }

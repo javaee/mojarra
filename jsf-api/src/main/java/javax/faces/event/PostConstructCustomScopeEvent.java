@@ -40,6 +40,8 @@
 
 package javax.faces.event;
 
+import javax.faces.context.FacesContext;
+
 /**
  * <p class="changed_added_2_0">This class is provided to allow custom
  * scopes to publish a "post construct" event in the same way that other
@@ -81,7 +83,20 @@ public class PostConstructCustomScopeEvent extends SystemEvent {
         
     }
 
-
+    /**
+     * <p class="changed_added_2_3">An instance of this event indicates
+     * that the custom scope enclosed within the argument
+     * <code>scopeContext</code> was just created.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param scopeContext A structure that contains the name of the
+     * scope and the scope itself exposed as a <code>Map&lt;String,
+     * Object&gt;</code>.
+     */
+    public PostConstructCustomScopeEvent(FacesContext facesContext, ScopeContext scopeContext) {
+        super(facesContext, scopeContext);
+    }
+    
     // ---------------------------------------------------------- Public Methods
 
 

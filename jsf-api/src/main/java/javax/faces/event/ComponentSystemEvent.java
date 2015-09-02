@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -75,6 +75,22 @@ public abstract class ComponentSystemEvent extends SystemEvent {
         super(component);
     }
 
+    /**
+     * <p class="changed_added_2_3">Pass the argument
+     * <code>component</code> to the superclass constructor.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param component the <code>UIComponent</code> reference to be
+     * passed to the superclass constructor.
+     *
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
+     * 
+     * @since 2.0
+     */
+    public ComponentSystemEvent(FacesContext facesContext, UIComponent component) {
+        super(facesContext, component);
+    }
+    
     /**
      * <p class="changed_added_2_2">Return <code>true</code> if the argument
      * {@link FacesListener} is an instance of the appropriate listener class that this event

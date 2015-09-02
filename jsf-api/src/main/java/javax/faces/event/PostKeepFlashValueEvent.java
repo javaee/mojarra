@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,6 +40,7 @@
 
 package javax.faces.event;
 
+import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 
 /**
@@ -69,6 +70,21 @@ public class PostKeepFlashValueEvent extends SystemEvent {
      */
     public PostKeepFlashValueEvent(String key) {
         super(null == key ? Flash.NULL_VALUE : key);
+    }
+          
+    /**
+     * <p class="changed_added_2_3">Instantiate a new
+     * <code>PostKeepFlashValueEvent</code> that indicates the argument
+     * <code>key</code> was just kept in the flash. If the argument is 
+     * <code>null</code>, the literal {@link Flash#NULL_VALUE} must be passed
+     * to the superclass constructor.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param key the key in the flash that was just kept.
+     *
+     */
+    public PostKeepFlashValueEvent(FacesContext facesContext, String key) {
+        super(facesContext, key);
     }
     
     public String getKey() {

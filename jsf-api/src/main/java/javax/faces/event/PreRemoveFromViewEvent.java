@@ -41,6 +41,7 @@
 package javax.faces.event;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -81,7 +82,21 @@ public class PreRemoveFromViewEvent extends ComponentSystemEvent {
 
     }
 
-
+    /**
+     * <p class="changed_added_2_3">Instantiate a new
+     * <code>BeforeRemoveFromView</code> that indicates the argument
+     * <code>component</code> is about to be removed from the view.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param component the <code>UIComponent</code> that is about to be
+     * removed from the view.
+     * @throws IllegalArgumentException if <code>component</code> is
+     *  <code>null</code>
+     */
+    public PreRemoveFromViewEvent(FacesContext facesContext, UIComponent component) {
+        super(facesContext, component);
+    }
+    
     // --------------------------------------- Methods from ComponentSystemEvent
 
 

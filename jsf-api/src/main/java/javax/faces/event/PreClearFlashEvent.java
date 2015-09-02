@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,7 @@
 package javax.faces.event;
 
 import java.util.Map;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -70,5 +71,18 @@ public class PreClearFlashEvent extends SystemEvent {
     public PreClearFlashEvent(Map<String, Object> source) {
         super(source);
     }
-    
+            
+    /**
+     * <p class="changed_added_2_3">Instantiate a new
+     * <code>PreClearFlashEvent</code> that indicates the argument
+     * <code>key</code> was just put to the flash.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param source Map containing the values about to be cleared  This need not
+     * be the actual {@link javax.faces.context.Flash} instance.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
+     */
+    public PreClearFlashEvent(FacesContext facesContext, Map<String, Object> source) {
+        super(facesContext, source);
+    }
 }

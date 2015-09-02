@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,7 @@
 package javax.faces.event;
 
 import javax.faces.application.Application;
+import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0">This event must be published by the
@@ -61,7 +62,7 @@ public class PostConstructApplicationEvent extends SystemEvent {
 
     /**
      * <p class="changed_added_2_0">Constructs a new
-     * <code>AppliationPostConstructEvent</code> for this
+     * <code>PostConstructApplicationEvent</code> for this
      * application.</p>
      * @param application the application that has been configured
      * @since 2.0
@@ -71,6 +72,20 @@ public class PostConstructApplicationEvent extends SystemEvent {
         super(application);
     }
 
+    /**
+     * <p class="changed_added_2_3">Constructs a new
+     * <code>PostConstructApplicationEvent</code> for this
+     * application.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param application the application that has been configured
+     * @since 2.0
+     */
+
+    public PostConstructApplicationEvent(FacesContext facesContext, Application application) {
+        super(facesContext, application);
+    }
+    
     /**
      * <p class="changed_added_2_0">The source {@link Application} that sent this event.</p>
      * 

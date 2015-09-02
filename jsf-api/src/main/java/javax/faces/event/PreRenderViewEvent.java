@@ -40,7 +40,9 @@
 
 package javax.faces.event;
 
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -89,5 +91,18 @@ public class PreRenderViewEvent extends ComponentSystemEvent {
     public PreRenderViewEvent(UIViewRoot root) {
         super(root);
     }
-
+    
+    /**
+     * <p class="changed_added_2_3">Instantiate a new
+     * <code>PreRenderViewEvent</code> that indicates the argument
+     * <code>root</code> is about to be rendered.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param root the <code>UIViewRoot</code> that is about to be
+     * rendered.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
+     */
+    public PreRenderViewEvent(FacesContext facesContext, UIViewRoot root) {
+        super(facesContext, root);
+    }
 }

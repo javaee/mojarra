@@ -40,6 +40,7 @@
 
 package javax.faces.event;
 
+import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0">The system event facility will create an
@@ -72,7 +73,22 @@ public class ExceptionQueuedEvent extends SystemEvent {
     public ExceptionQueuedEvent(ExceptionQueuedEventContext eventContext) {
         super(eventContext);
     }
-
+    
+    /**
+     * <p class="changed_added_2_3">Instantiate a new
+     * <code>ExceptionQueuedEvent</code> that indicates the argument
+     * <code>ExceptionQueuedEventContext</code> occurred.</p>
+     *
+     * @param facesContext the Faces context.
+     * @param eventContext the <code>ExceptionQueuedEventContext</code> that
+     * contextualizes this <code>ExceptionQueuedEvent</code>.
+     *
+     * @since 2.0
+     */
+    public ExceptionQueuedEvent(FacesContext facesContext, ExceptionQueuedEventContext eventContext) {
+        super(facesContext, eventContext);
+    }
+    
     /**
      * <p class="changed_added_2_0">Return the
      * <code>ExceptionQueuedEventContext</code> for this event instance.</p>

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,7 @@
 package javax.faces.event;
 
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -74,5 +75,19 @@ public class PostConstructViewMapEvent extends ComponentSystemEvent {
     public PostConstructViewMapEvent(UIViewRoot root) {
         super(root);
     }
-
+    
+   /**
+     * <p class="changed_added_2_3">Instantiate a new
+     * <code>PostConstructViewMapEvent</code> that indicates the argument
+     * <code>root</code> was just associated with its view map.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param root the <code>UIViewRoot</code> for which a view map has
+     * just been created.
+     *
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
+     */
+    public PostConstructViewMapEvent(FacesContext facesContext, UIViewRoot root) {
+        super(facesContext, root);
+    }
 }

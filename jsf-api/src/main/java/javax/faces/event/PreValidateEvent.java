@@ -41,6 +41,8 @@
 package javax.faces.event;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -80,5 +82,16 @@ public class PreValidateEvent extends ComponentSystemEvent {
     public PreValidateEvent(UIComponent component) {
         super(component);
     }
-
+    
+    /**
+     * <p class="changed_added_2_2">Constructor</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param component the <code>UIComponent</code> that is about to be
+     * validated.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
+     */
+    public PreValidateEvent(FacesContext facesContext, UIComponent component) {
+        super(facesContext, component);
+    }
 }

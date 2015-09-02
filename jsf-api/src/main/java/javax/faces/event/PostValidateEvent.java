@@ -41,6 +41,7 @@
 package javax.faces.event;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -80,5 +81,17 @@ public class PostValidateEvent extends ComponentSystemEvent {
     public PostValidateEvent(UIComponent component) {
         super(component);
     }
+        
+    /**
+     * <p class="changed_added_2_3">Constructor</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param component the <code>UIComponent</code> that is about to be
+     * validated.
 
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
+     */
+    public PostValidateEvent(FacesContext facesContext, UIComponent component) {
+        super(facesContext, component);
+    }
 }

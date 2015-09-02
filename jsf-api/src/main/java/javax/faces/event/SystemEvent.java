@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,7 @@
 package javax.faces.event;
 
 import java.util.EventObject;
+import javax.faces.context.FacesContext;
 
 /**
  * <p><strong class="changed_added_2_0 changed_modified_2_2">SystemEvent</strong> 
@@ -53,6 +54,10 @@ public abstract class SystemEvent extends EventObject {
 
     private static final long serialVersionUID = 2696415667461888462L;
 
+    /**
+     * <p class="changed_added_2_3">Stores the Faces context.</p>
+     */
+    private transient FacesContext facesContext;
 
     // ------------------------------------------------------------ Constructors
 
@@ -71,9 +76,40 @@ public abstract class SystemEvent extends EventObject {
         super(source);
     }
 
+    /**
+     * <p class="changed_added_2_3">Pass the argument
+     * <code>source</code> to the superclass constructor.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param source the <code>source</code> reference to be
+     * passed to the superclass constructor.
+     *
+     * @throws IllegalArgumentException if the argument is
+     * <code>null</code>.
+     */
+    public SystemEvent(FacesContext facesContext, Object source) {
+        super(source);
+    }
 
     // ---------------------------------------------------------- Public Methods
 
+    /**
+     * <p class="changed_added_2_3">Get the Faces context.</p>
+     * 
+     * <p>
+     *  If the constructor was passed a FacesContext we return it, otherwise
+     *  we call FacesContext.getCurrentInstance() and return it.
+     * </p>
+     * 
+     * @return the Faces context.
+     * @since 2.3
+     */
+    public FacesContext getFacesContext() {
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+        return facesContext;
+    }
 
     /**
      * <p><span class="changed_modified_2_2">Return</span> <code>true</code> 
@@ -95,7 +131,7 @@ public abstract class SystemEvent extends EventObject {
      * <p>Broadcast this event instance to the specified
      * {@link FacesListener}, by whatever mechanism is appropriate.  Typically,
      * this will be accomplished by calling an event processing method, and
-     * passing this instance as a paramter.</p>
+     * passing this instance as a parameter.</p>
      *
      * @param listener {@link FacesListener} to send this {@link FacesEvent} to
      *

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,7 @@
 package javax.faces.event;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -127,6 +128,19 @@ public class PostAddToViewEvent extends ComponentSystemEvent {
 
     }
 
+    /**
+     * <p class="changed_added_2_3">Instantiate a new
+     * <code>PostAddToViewEvent</code> that indicates the argument
+     * <code>component</code> was just added to the view.</p>
+     * 
+     * @param facesContext the Faces context.
+     * @param component the <code>UIComponent</code> that has just been
+     * added to the view.
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
+     */
+    public PostAddToViewEvent(FacesContext facesContext, UIComponent component) {
+        super(facesContext, component);
+    }
 
     // --------------------------------------- Methods from ComponentSystemEvent
 
