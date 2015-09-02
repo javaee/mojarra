@@ -92,6 +92,7 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
 	this.binding = binding;
     }
 
+    @Override
     protected boolean hasBinding() {
 	return null != binding;
     }
@@ -161,6 +162,7 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
      * <p>Release any resources allocated during the execution of this
      * tag handler.</p>
      */
+    @Override
     public void release() {
 	
 	this.suppressed = false;
@@ -175,6 +177,7 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
     /**
      * @param component {@inheritDoc} 
      */
+    @Override
     protected void setProperties(UIComponent component) {
         // The "id" property is explicitly set when components are created
         // so it does not need to be set here
@@ -204,6 +207,7 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
      * @param context {@inheritDoc} 
      * @param newId {@inheritDoc}
      */
+    @Override
     protected UIComponent createComponent(FacesContext context, String newId) {
         UIComponent component;
         Application application = context.getApplication();
@@ -263,34 +267,42 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
 
         }
 
+        @Override
         public String getComponentType() {
             return classicDelegate.getComponentType();
         }
 
+        @Override
         public String getRendererType() {
             return classicDelegate.getRendererType();
         }
 
+        @Override
         public int doStartTag() throws JspException {
             throw new IllegalStateException();
         }
 
+        @Override
         public int doEndTag() throws JspException {
             throw new IllegalStateException();
         }
 
+        @Override
         public UIComponent getComponentInstance() {
             return classicDelegate.getComponentInstance();
         }
 
+        @Override
         public boolean getCreated() {
             return classicDelegate.getCreated();
         }
 
+        @Override
         public Tag getParent() {
             return classicDelegate.getParent();
         }
 
+        @Override
         public void setParent(Tag parent) {
             throw new IllegalStateException();
         }

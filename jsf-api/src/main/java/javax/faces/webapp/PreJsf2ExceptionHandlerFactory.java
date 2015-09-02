@@ -104,6 +104,7 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
      * @return a new {@link ExceptionHandler} that behaves in a fashion compatible
      *  with specifications prior to JavaServerFaces 1.2
      */
+    @Override
     public ExceptionHandler getExceptionHandler() {
 
         return new PreJsf2ExceptionHandler();
@@ -142,6 +143,7 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
         /**
          * @see ExceptionHandler@getHandledExceptionQueuedEvent()
          */
+        @Override
         public ExceptionQueuedEvent getHandledExceptionQueuedEvent() {
 
             return handled;
@@ -154,6 +156,7 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
          * 
          * @since 2.0
          */
+        @Override
         public void handle() throws FacesException {
 
             for (Iterator<ExceptionQueuedEvent> i = getUnhandledExceptionQueuedEvents().iterator(); i.hasNext();) {
@@ -194,6 +197,7 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
         /**
          * @see javax.faces.context.ExceptionHandler#isListenerForSource(Object)
          */
+        @Override
         public boolean isListenerForSource(Object source) {
 
             return (source instanceof ExceptionQueuedEventContext);
@@ -204,6 +208,7 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
         /**
          * @see javax.faces.context.ExceptionHandler#processEvent(javax.faces.event.SystemEvent)
          */
+        @Override
         public void processEvent(SystemEvent event)
               throws AbortProcessingException {
 
@@ -220,6 +225,7 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
         /**
          * @see ExceptionHandler#getRootCause(Throwable)
          */
+        @Override
         public Throwable getRootCause(Throwable t) {
 
             if (t == null) {
@@ -246,6 +252,7 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
         /**
          * @see javax.faces.context.ExceptionHandler#getUnhandledExceptionQueuedEvents()
          */
+        @Override
         public Iterable<ExceptionQueuedEvent> getUnhandledExceptionQueuedEvents() {
 
             return ((unhandledExceptions != null)
@@ -260,6 +267,7 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
          *
          * @see javax.faces.context.ExceptionHandler#getHandledExceptionQueuedEvents()
          */
+        @Override
         public Iterable<ExceptionQueuedEvent> getHandledExceptionQueuedEvents() {
 
             return ((handledExceptions != null)

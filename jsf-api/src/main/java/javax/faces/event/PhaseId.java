@@ -92,6 +92,7 @@ public class PhaseId implements Comparable {
      *
      * @param other The other object to be compared to
      */
+    @Override
     public int compareTo(Object other) {
 
         return this.ordinal - ((PhaseId) other).ordinal;
@@ -112,6 +113,7 @@ public class PhaseId implements Comparable {
     /**
      * <p>Return a String representation of this {@link PhaseId} instance.</p>
      */
+    @Override
     public String toString() {
         if (null == phaseName) {
             return (String.valueOf(this.ordinal));

@@ -130,6 +130,7 @@ public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
      * @since 2.0
      */
 
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         getTagHandlerDelegate().apply(ctx, parent);
     }

@@ -70,6 +70,7 @@ public class RequiredValidator implements Validator {
      * @throws ValidatorException   {@inheritDoc}
 
      */
+    @Override
     public void validate(FacesContext context,
                          UIComponent component,
                          Object value) {

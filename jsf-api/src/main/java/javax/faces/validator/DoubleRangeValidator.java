@@ -256,6 +256,7 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
      * @throws NullPointerException {@inheritDoc}
      * @throws ValidatorException   {@inheritDoc}
      */
+    @Override
     public void validate(FacesContext context,
                          UIComponent component,
                          Object value) throws ValidatorException {
@@ -398,6 +399,7 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
     // ----------------------------------------------------- StateHolder Methods
 
 
+    @Override
     public Object saveState(FacesContext context) {
 
         if (context == null) {
@@ -414,6 +416,7 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
     }
 
 
+    @Override
     public void restoreState(FacesContext context, Object state) {
 
         if (context == null) {
@@ -431,6 +434,7 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
     private boolean transientValue = false;
 
 
+    @Override
     public boolean isTransient() {
 
         return (this.transientValue);
@@ -438,6 +442,7 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
     }
 
 
+    @Override
     public void setTransient(boolean transientValue) {
 
         this.transientValue = transientValue;
@@ -446,14 +451,17 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
 
     private boolean initialState;
 
+    @Override
     public void markInitialState() {
         initialState = true;
     }
 
+    @Override
     public boolean initialStateMarked() {
         return initialState;
     }
 
+    @Override
     public void clearInitialState() {
         initialState = false;
     }

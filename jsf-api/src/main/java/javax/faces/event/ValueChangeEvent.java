@@ -135,6 +135,7 @@ public class ValueChangeEvent extends FacesEvent {
     // ------------------------------------------------- Event Broadcast Methods
 
 
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
 
         return (listener instanceof ValueChangeListener);
@@ -144,6 +145,7 @@ public class ValueChangeEvent extends FacesEvent {
     /**
      * @throws AbortProcessingException {@inheritDoc}
      */ 
+    @Override
     public void processListener(FacesListener listener) {
 
         ((ValueChangeListener) listener).processValueChange(this);

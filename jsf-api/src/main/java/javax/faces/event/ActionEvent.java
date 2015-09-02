@@ -80,6 +80,7 @@ public class ActionEvent extends FacesEvent {
     // ------------------------------------------------- Event Broadcast Methods
 
 
+    @Override
     public  boolean isAppropriateListener(FacesListener listener) {
 
         return (listener instanceof ActionListener);
@@ -89,6 +90,7 @@ public class ActionEvent extends FacesEvent {
     /**
      * @throws AbortProcessingException {@inheritDoc}
      */ 
+    @Override
     public void processListener(FacesListener listener) {
 
         ((ActionListener) listener).processAction(this);

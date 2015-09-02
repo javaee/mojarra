@@ -79,6 +79,7 @@ public abstract class FacesContextFactory implements FacesWrapper<FacesContextFa
      * @since 2.0
      */
 
+    @Override
     public FacesContextFactory getWrapped() {
         return null;
     }

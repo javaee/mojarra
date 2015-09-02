@@ -318,6 +318,7 @@ public final class FacesServlet implements Servlet {
     /**
      * <p>Release all resources acquired at startup time.</p>
      */
+    @Override
     public void destroy() {
 
         facesContextFactory = null;
@@ -331,6 +332,7 @@ public final class FacesServlet implements Servlet {
     /**
      * <p>Return the <code>ServletConfig</code> instance for this servlet.</p>
      */
+    @Override
     public ServletConfig getServletConfig() {
 
         return (this.servletConfig);
@@ -341,6 +343,7 @@ public final class FacesServlet implements Servlet {
     /**
      * <p>Return information about this Servlet.</p>
      */
+    @Override
     public String getServletInfo() {
 
         return (this.getClass().getName());
@@ -356,6 +359,7 @@ public final class FacesServlet implements Servlet {
      * config file that is parsed before or during the processing of
      * this <code>init()</code> method.
      */
+    @Override
     public void init(ServletConfig servletConfig) throws ServletException {
 
         // Save our ServletConfig instance

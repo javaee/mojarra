@@ -253,6 +253,7 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
      * @throws NullPointerException {@inheritDoc}
      * @throws ValidatorException   {@inheritDoc}
      */
+    @Override
     public void validate(FacesContext context,
                          UIComponent component,
                          Object value) throws ValidatorException {
@@ -309,6 +310,7 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
     }
 
 
+    @Override
     public boolean equals(Object otherObj) {
 
         if (!(otherObj instanceof LongRangeValidator)) {
@@ -323,6 +325,7 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
     }
 
 
+    @Override
     public int hashCode() {
 
         int hashCode = Long.valueOf(getMinimum()).hashCode()
@@ -379,6 +382,7 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
     // ----------------------------------------------------- StateHolder Methods
 
 
+    @Override
     public Object saveState(FacesContext context) {
 
         if (context == null) {
@@ -395,6 +399,7 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
     }
 
 
+    @Override
     public void restoreState(FacesContext context, Object state) {
 
         if (context == null) {
@@ -412,6 +417,7 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
     private boolean transientValue = false;
 
 
+    @Override
     public boolean isTransient() {
 
         return (this.transientValue);
@@ -419,6 +425,7 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
     }
 
 
+    @Override
     public void setTransient(boolean transientValue) {
 
         this.transientValue = transientValue;
@@ -427,14 +434,17 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
 
     private boolean initialState;
 
+    @Override
     public void markInitialState() {
         initialState = true;
     }
 
+    @Override
     public boolean initialStateMarked() {
         return initialState;
     }
 
+    @Override
     public void clearInitialState() {
         initialState = false;
     }

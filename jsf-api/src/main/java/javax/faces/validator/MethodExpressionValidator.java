@@ -93,6 +93,7 @@ public class MethodExpressionValidator implements Validator, StateHolder {
      * @throws NullPointerException {@inheritDoc}
      * @throws ValidatorException   {@inheritDoc}
      */
+    @Override
     public void validate(FacesContext context,
                          UIComponent component,
                          Object value) throws ValidatorException {
@@ -118,6 +119,7 @@ public class MethodExpressionValidator implements Validator, StateHolder {
     // ----------------------------------------------------- StateHolder Methods
 
 
+    @Override
     public Object saveState(FacesContext context) {
         if (context == null) {
             throw new NullPointerException();
@@ -129,6 +131,7 @@ public class MethodExpressionValidator implements Validator, StateHolder {
     }
 
 
+    @Override
     public void restoreState(FacesContext context, Object state) {
         if (context == null) {
             throw new NullPointerException();
@@ -144,6 +147,7 @@ public class MethodExpressionValidator implements Validator, StateHolder {
     private boolean transientValue = false;
 
 
+    @Override
     public boolean isTransient() {
 
         return (this.transientValue);
@@ -151,6 +155,7 @@ public class MethodExpressionValidator implements Validator, StateHolder {
     }
 
 
+    @Override
     public void setTransient(boolean transientValue) {
 
         this.transientValue = transientValue;

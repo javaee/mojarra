@@ -96,6 +96,7 @@ public abstract class FaceletsAttachedObjectHandler extends DelegatingMetaTagHan
      * @param parent The <code>UIComponent</code> to which this attached
      * object must be applied.
      */
+    @Override
     public final void applyAttachedObject(FacesContext ctx, UIComponent parent) {
         getAttachedObjectHandlerHelper().applyAttachedObject(ctx, parent);
     }
@@ -105,6 +106,7 @@ public abstract class FaceletsAttachedObjectHandler extends DelegatingMetaTagHan
      * attribute.  This enables the runtime to know to which inner
      * component this attached object should be retargeted.</p>
      */
+    @Override
     public final String getFor() {
         return getAttachedObjectHandlerHelper().getFor();
     }

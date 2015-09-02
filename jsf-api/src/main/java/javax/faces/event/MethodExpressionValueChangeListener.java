@@ -132,6 +132,7 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
      * @throws NullPointerException if the argument valueChangeEvent is null.
      * @throws AbortProcessingException {@inheritDoc}     
      */ 
+    @Override
     public void processValueChange(ValueChangeEvent valueChangeEvent) throws AbortProcessingException {
                          
         if (valueChangeEvent == null) {
@@ -161,6 +162,7 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
      * <p class="changed_modified_2_0">Both {@link MethodExpression}
      * instances described in the constructor must be saved.</p>
      */
+    @Override
     public Object saveState(FacesContext context) {
 
         if (context == null) {
@@ -175,6 +177,7 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
      * <p class="changed_modified_2_0">Both {@link MethodExpression}
      * instances described in the constructor must be restored.</p>
      */
+    @Override
     public void restoreState(FacesContext context, Object state) {
 
         if (context == null) {
@@ -189,6 +192,7 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
     }
 
 
+    @Override
     public boolean isTransient() {
 
         return isTransient;
@@ -196,6 +200,7 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
     }
 
 
+    @Override
     public void setTransient(boolean newTransientValue) {
 
         isTransient = newTransientValue;

@@ -133,6 +133,7 @@ public class MethodExpressionActionListener implements ActionListener,
      * @throws NullPointerException {@inheritDoc}     
      * @throws AbortProcessingException {@inheritDoc}     
      */
+    @Override
     public void processAction(ActionEvent actionEvent) throws AbortProcessingException {
 
         if (actionEvent == null) {
@@ -165,6 +166,7 @@ public class MethodExpressionActionListener implements ActionListener,
      * <p class="changed_modified_2_0">Both {@link MethodExpression}
      * instances described in the constructor must be saved.</p>
      */
+    @Override
     public Object saveState(FacesContext context) {
 
         if (context == null) {
@@ -179,6 +181,7 @@ public class MethodExpressionActionListener implements ActionListener,
      * <p class="changed_modified_2_0">Both {@link MethodExpression}
      * instances described in the constructor must be restored.</p>
      */
+    @Override
     public void restoreState(FacesContext context, Object state) {
 
         if (context == null) {
@@ -193,6 +196,7 @@ public class MethodExpressionActionListener implements ActionListener,
     }
 
 
+    @Override
     public boolean isTransient() {
 
         return isTransient;
@@ -200,6 +204,7 @@ public class MethodExpressionActionListener implements ActionListener,
     }
 
 
+    @Override
     public void setTransient(boolean newTransientValue) {
 
         isTransient = newTransientValue;

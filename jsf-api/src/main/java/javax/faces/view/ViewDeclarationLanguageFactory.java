@@ -78,6 +78,7 @@ public abstract class ViewDeclarationLanguageFactory implements FacesWrapper<Vie
      * access to the implementation being wrapped.  A default implementation
      * is provided that returns <code>null</code>.</p>
      */
+    @Override
     public ViewDeclarationLanguageFactory getWrapped() {
         return null;
     }

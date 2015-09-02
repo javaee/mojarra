@@ -110,6 +110,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
      *
      * @throws javax.faces.FacesException if an error occurs getting the row availability
      */ 
+    @Override
     public boolean isRowAvailable() {
 
         if (result == null) {
@@ -131,6 +132,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
      *
      * @throws javax.faces.FacesException if an error occurs getting the row count
      */
+    @Override
     public int getRowCount() {
 
         if (result == null) {
@@ -157,6 +159,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
+    @Override
     public SortedMap<String,Object> getRowData() {
 
         if (result == null) {
@@ -174,6 +177,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
     /**
      * @throws javax.faces.FacesException {@inheritDoc}     
      */ 
+    @Override
     public int getRowIndex() {
 
         return (index);
@@ -185,6 +189,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
      * @throws javax.faces.FacesException {@inheritDoc}
      * @throws IllegalArgumentException {@inheritDoc}
      */ 
+    @Override
     public void setRowIndex(int rowIndex) {
 
         if (rowIndex < -1) {
@@ -214,6 +219,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
     }
 
 
+    @Override
     public Object getWrappedData() {
 
         return (this.result);
@@ -225,6 +231,7 @@ public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
      * @throws ClassCastException if <code>data</code> is
      *  non-<code>null</code> and is not a <code>Result</code>
      */
+    @Override
     public void setWrappedData(Object data) {
 
         if (data == null) {

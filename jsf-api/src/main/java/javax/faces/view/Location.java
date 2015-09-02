@@ -110,6 +110,7 @@ public class Location implements Serializable {
         return path;
     }
 
+    @Override
     public String toString() {
         return path + " @" + this.line + "," + this.column;
     }

@@ -255,6 +255,7 @@ public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
      * javax.faces.context.ExceptionHandler} for the current
      * request.</p>
      */
+    @Override
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass) {
 
         if (null == listener) {

@@ -90,6 +90,7 @@ public final class CompositeFaceletHandler implements FaceletHandler {
      * component represented by this element instance.
      * @since 2.0
      */
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         for (int i = 0; i < len; i++) {
             this.children[i].apply(ctx, parent);

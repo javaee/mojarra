@@ -260,6 +260,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
      *
      * @throws ValidatorException   {@inheritDoc}
      */
+    @Override
     public void validate(FacesContext context,
                          UIComponent component,
                          Object value) {
@@ -430,6 +431,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
 
     // ----------------------------------------------------- StateHolder Methods
 
+    @Override
     public Object saveState(FacesContext context) {
         if (context == null) {
             throw new NullPointerException();
@@ -442,6 +444,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
         return null;
     }
 
+    @Override
     public void restoreState(FacesContext context, Object state) {
         if (context == null) {
             throw new NullPointerException();
@@ -453,24 +456,29 @@ public class BeanValidator implements Validator, PartialStateHolder {
     }
 
     private boolean initialState;
+    @Override
     public void markInitialState() {
         initialState = true;
     }
 
+    @Override
     public boolean initialStateMarked() {
         return initialState;
     }
 
+    @Override
     public void clearInitialState() {
         initialState = false;
     }
 
     private boolean transientValue = false;
 
+    @Override
     public boolean isTransient() {
         return this.transientValue;
     }
 
+    @Override
     public void setTransient(boolean transientValue) {
         this.transientValue = transientValue;
     }
@@ -485,6 +493,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
             this.delegate = delegate;
         }
 
+        @Override
         public String interpolate(String message, MessageInterpolator.Context context) {
             Locale locale = this.context.getViewRoot().getLocale();
             if (locale == null) {
@@ -493,6 +502,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
             return delegate.interpolate(message, context, locale);
         }
 
+        @Override
         public String interpolate(String message, MessageInterpolator.Context context, Locale locale) {
             return delegate.interpolate(message, context, locale);
         }

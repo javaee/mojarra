@@ -437,6 +437,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      *
      * @param pageContext The enclosing <code>PageContext</code>
      */
+    @Override
     public void setPageContext(PageContext pageContext) {
 
         this.pageContext = pageContext;
@@ -447,6 +448,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     /**
      * <p>Return the <code>Tag</code> that is the parent of this instance.</p>
      */
+    @Override
     public Tag getParent() {
 
         return (this.parent);
@@ -459,6 +461,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      *
      * @param parent The new parent <code>Tag</code>
      */
+    @Override
     public void setParent(Tag parent) {
 
         this.parent = parent;
@@ -789,6 +792,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     // Methods related to the createdComponents and createdFacets lists.
     //
 
+    @Override
     protected int getIndexOfNextChildTag() {
 
         if (createdComponents != null) {
@@ -799,6 +803,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
     }
 
+    @Override
     protected void addChild(UIComponent child) {
 
         if (createdComponents == null) {
@@ -822,6 +827,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         this.addChild(child);
     }
 
+    @Override
     protected void addFacet(String name) {
 
         if (createdFacets == null) {
@@ -1260,6 +1266,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      *
      * @throws JspException if an error occurs
      */
+    @Override
     public int doStartTag() throws JspException {
         // make sure that these ivars are reset at the beginning of the
         // lifecycle for this tag.
@@ -1438,6 +1445,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      *
      * @throws JspException if an error occurs
      */
+    @Override
     public int doEndTag() throws JspException
     {
         // Remove old children and facets as needed
@@ -1485,6 +1493,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <p>Release any resources allocated during the execution of this
      * tag handler.</p>
      */
+    @Override
     public void release() {
 
         this.parent = null;
@@ -1522,6 +1531,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      *
      * @param bodyContent The new <code>BodyContent</code> for this tag
      */
+    @Override
     public void setBodyContent(BodyContent bodyContent) {
 
         this.bodyContent = bodyContent;
@@ -1556,6 +1566,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      *
      * @throws JspException if an error is encountered
      */
+    @Override
     public void doInitBody() throws JspException {
 
         // Default implementation does nothing
@@ -1570,6 +1581,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <p>Return result from {@link #getDoAfterBodyValue}</p>
      * @throws JspException if an error is encountered
      */
+    @Override
     public int doAfterBody() throws JspException {
 
         UIComponent verbatim;
@@ -1632,6 +1644,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * non-<code>null</code> and starts with {@link
      * UIViewRoot#UNIQUE_ID_PREFIX}.
      */
+    @Override
     public void setId(String id) {
         if (null != id && id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
             throw new IllegalArgumentException();
@@ -1841,6 +1854,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * be unique within the page.
      */
 
+    @Override
     public void setJspId(String id) {
         // reset JSP ID here instead of release as we may need
         // to check the ID after the tag has been used
@@ -2008,6 +2022,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * execution of <code>doStartTag()</code> and <code>doEndTag()</code>
      * on this tag instance.</p>
      */
+    @Override
     public UIComponent getComponentInstance() {
 
         return (this.component);
@@ -2022,6 +2037,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * between the execution of <code>doStartTag()</code> and
      * <code>doEndTag()</code> on this tag instance.</p>
      */
+    @Override
     public boolean getCreated() {
 
         return (this.created);
@@ -2032,6 +2048,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         return (this.namingContainerChildIds);
     }
 
+    @Override
     protected FacesContext getFacesContext() {
 
         if (context == null) {

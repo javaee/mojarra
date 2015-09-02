@@ -85,6 +85,7 @@ public abstract class UIComponentELTag extends UIComponentClassicTagBase impleme
 	this.binding = binding;
     }
 
+    @Override
     protected boolean hasBinding() {
 	return null != binding;
     }
@@ -113,6 +114,7 @@ public abstract class UIComponentELTag extends UIComponentClassicTagBase impleme
      * <code>getFacesContext().getELContext()</code>.</p>
      */
 
+    @Override
     protected ELContext getELContext() {
 	FacesContext fc = getFacesContext();
 	ELContext result = null;
@@ -131,6 +133,7 @@ public abstract class UIComponentELTag extends UIComponentClassicTagBase impleme
      * <p>Release any resources allocated during the execution of this
      * tag handler.</p>
      */
+    @Override
     public void release() {
 
 	this.binding = null;
@@ -179,6 +182,7 @@ public abstract class UIComponentELTag extends UIComponentClassicTagBase impleme
      * @param component {@link UIComponent} whose properties are to be
      *  overridden
      */
+    @Override
     protected void setProperties(UIComponent component) {
         // The "id" property is explicitly set when components are created
         // so it does not need to be set here
@@ -215,6 +219,7 @@ public abstract class UIComponentELTag extends UIComponentClassicTagBase impleme
      * @param context {@link FacesContext} for the current request
      * @param newId id of the component
      */
+    @Override
     protected UIComponent createComponent(FacesContext context, String newId) throws JspException {
         UIComponent component;
         Application application = context.getApplication();

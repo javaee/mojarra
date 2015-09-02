@@ -99,6 +99,7 @@ public class FacetTag extends TagSupport {
     /**
      * <p>Release any resources allocated by this tag instance.
      */
+    @Override
     public void release() {
 
         super.release();
@@ -111,6 +112,7 @@ public class FacetTag extends TagSupport {
      * <p>Return <code>EVAL_BODY_INCLUDE</code> to cause nested body
      * content to be evaluated.</p>
      */
+    @Override
     public int doStartTag() throws JspException {
 
         return (EVAL_BODY_INCLUDE);

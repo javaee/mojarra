@@ -96,6 +96,7 @@ public class AjaxBehaviorEvent extends BehaviorEvent {
      *
      * @since 2.0
      */
+    @Override
     public  boolean isAppropriateListener(FacesListener listener) {
 
         return (listener instanceof AjaxBehaviorListener);
@@ -117,6 +118,7 @@ public class AjaxBehaviorEvent extends BehaviorEvent {
      *
      * @since 2.0
      */ 
+    @Override
     public void processListener(FacesListener listener) {
 
         ((AjaxBehaviorListener) listener).processAjaxBehavior(this);

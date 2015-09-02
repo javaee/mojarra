@@ -79,6 +79,7 @@ public abstract class RenderKitFactory implements FacesWrapper<RenderKitFactory>
      * @since 2.0
      */
 
+    @Override
     public RenderKitFactory getWrapped() {
         return null;
     }

@@ -264,6 +264,7 @@ public abstract class DataModel<E> implements Iterable<E> {
      * 
      * @since 2.0
      */
+    @Override
     public Iterator<E> iterator() {
 
         return new DataModelIterator<>(this);
@@ -298,6 +299,7 @@ public abstract class DataModel<E> implements Iterable<E> {
         /**
          * @see java.util.Iterator#hasNext()
          */
+        @Override
         public boolean hasNext() {
 
             return model.isRowAvailable();
@@ -308,6 +310,7 @@ public abstract class DataModel<E> implements Iterable<E> {
         /**
          * @see java.util.Iterator#next()
          */
+        @Override
         public T next() {
 
             if (!model.isRowAvailable()) {
@@ -324,6 +327,7 @@ public abstract class DataModel<E> implements Iterable<E> {
          * Unsupported.
          * @see java.util.Iterator#remove()
          */
+        @Override
         public void remove() {
 
             throw new UnsupportedOperationException();

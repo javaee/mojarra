@@ -102,6 +102,7 @@ public class ListDataModel<E> extends DataModel<E> {
      *
      * @throws javax.faces.FacesException if an error occurs getting the row availability
      */
+    @Override
     public boolean isRowAvailable() {
 
         if (list == null) {
@@ -122,6 +123,7 @@ public class ListDataModel<E> extends DataModel<E> {
      *
      * @throws javax.faces.FacesException if an error occurs getting the row count
      */
+    @Override
     public int getRowCount() {
 
         if (list == null) {
@@ -141,6 +143,7 @@ public class ListDataModel<E> extends DataModel<E> {
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
+    @Override
     public E getRowData() {
 
         if (list == null) {
@@ -157,6 +160,7 @@ public class ListDataModel<E> extends DataModel<E> {
     /**
      * @throws javax.faces.FacesException {@inheritDoc}     
      */ 
+    @Override
     public int getRowIndex() {
 
         return (index);
@@ -168,6 +172,7 @@ public class ListDataModel<E> extends DataModel<E> {
      * @throws javax.faces.FacesException {@inheritDoc}
      * @throws IllegalArgumentException {@inheritDoc}
      */ 
+    @Override
     public void setRowIndex(int rowIndex) {
 
         if (rowIndex < -1) {
@@ -197,6 +202,7 @@ public class ListDataModel<E> extends DataModel<E> {
     }
 
 
+    @Override
     public Object getWrappedData() {
 
         return (this.list);
@@ -208,6 +214,7 @@ public class ListDataModel<E> extends DataModel<E> {
      * @throws ClassCastException if <code>data</code> is
      *  non-<code>null</code> and is not a <code>List</code>
      */
+    @Override
     public void setWrappedData(Object data) {
 
         if (data == null) {
