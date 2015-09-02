@@ -136,6 +136,7 @@
         <module>lateBindings</module>
         <module>lifecycleBasic</module>
 	<module>lifecycleClientWindow</module>
+	<module>lifecycleCsrf</module>
 	<module>lifecycleFacesServletAccess</module>
 	<module>lifecycleOptionsRequest</module>
         <module>listener</module>

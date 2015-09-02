@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.test.agnostic.lifecycle.csrf;
+package com.sun.faces.test.servlet30.lifecycleCsrf;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
