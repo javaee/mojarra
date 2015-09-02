@@ -135,6 +135,7 @@
         <module>invalidMapping</module>
         <module>lateBindings</module>
         <module>lifecycleBasic</module>
+	<module>lifecycleClientWindow</module>
 	<module>lifecycleFacesServletAccess</module>
 	<module>lifecycleOptionsRequest</module>
         <module>listener</module>

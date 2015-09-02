@@ -1,4 +1,4 @@
-package com.sun.faces.test.agnostic.lifecycle.clientWindow;
+package com.sun.faces.test.servlet30.lifecycleClientWindow;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -42,7 +42,7 @@
 
 -->
 <glassfish-web-app error-url="">
-  <context-root>/test-agnostic-lifecycle-clientWindow</context-root>
+  <context-root>/test-servlet30-lifecycleClientWindow</context-root>
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">
