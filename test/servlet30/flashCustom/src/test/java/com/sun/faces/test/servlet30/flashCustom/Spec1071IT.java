@@ -66,6 +66,6 @@ public class Spec1071IT {
     @Test
     public void testNoDuplicateId() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/customflash.xhtml");
-        assertTrue(Pattern.matches("(?s).*com.sun.faces.test.agnostic.flash.custom.CustomFlash.*", page.asXml()));
+        assertTrue(Pattern.matches("(?s).*com.sun.faces.test.servlet30.flashCustom.CustomFlash.*", page.asXml()));
     }
 }
