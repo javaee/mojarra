@@ -169,7 +169,7 @@ public class ApplicationAssociate {
         new ThreadLocal<ApplicationAssociate>() {
             @Override
             protected ApplicationAssociate initialValue() {
-                return (null);
+                return null;
             }
         };
 
@@ -346,8 +346,8 @@ public class ApplicationAssociate {
             return null;
         }
         Map applicationMap = externalContext.getApplicationMap();
-        return ((ApplicationAssociate)
-             applicationMap.get(ASSOCIATE_KEY));
+        return (ApplicationAssociate)
+             applicationMap.get(ASSOCIATE_KEY);
     }
     
     public long getTimeOfInstantiation() {
@@ -480,9 +480,9 @@ public class ApplicationAssociate {
         // Ensure custom resolvers are inserted at the correct place.
         VariableResolver vr = this.getLegacyVariableResolver();
         if (null != vr) {
-            assert(null != this.getLegacyVRChainHeadWrapperForJsp());
+            assert null != this.getLegacyVRChainHeadWrapperForJsp();
             this.getLegacyVRChainHeadWrapperForJsp().setWrapped(vr);
-            assert(null != this.getLegacyVRChainHeadWrapperForFaces());
+            assert null != this.getLegacyVRChainHeadWrapperForFaces();
             this.getLegacyVRChainHeadWrapperForFaces().setWrapped(vr);
         }
     }
@@ -655,7 +655,7 @@ public class ApplicationAssociate {
     
     public void addFacesComponent(FacesComponentUsage facesComponentUsage) {
         FacesComponent facesComponent = facesComponentUsage.getAnnotation();
-        assert(facesComponent.createTag());
+        assert facesComponent.createTag();
         if (null == facesComponentsByNamespace) {
             facesComponentsByNamespace = new HashMap<>();
         }
@@ -753,7 +753,7 @@ public class ApplicationAssociate {
                 locale = defaultLocale;
             }
         }
-        assert (null != locale);
+        assert null != locale;
         //ResourceBundleBean bean = resourceBundles.get(var);
         return bundle.getResourceBundle(locale);
 

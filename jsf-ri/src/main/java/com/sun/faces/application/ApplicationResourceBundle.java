@@ -144,7 +144,7 @@ public class ApplicationResourceBundle {
             displayName = queryMap(locale, displayNames);            
         }
 
-        return ((displayName != null) ? displayName : "");
+        return displayName != null ? displayName : "";
 
     }
 
@@ -161,7 +161,7 @@ public class ApplicationResourceBundle {
            description = queryMap(locale, descriptions);
         }
 
-        return ((description != null) ? description : "");
+        return description != null ? description : "";
 
     }
 

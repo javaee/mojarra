@@ -409,10 +409,10 @@ public class ApplicationImpl extends Application {
     @Override
     public ELContextListener [] getELContextListeners() {
         if (!elContextListeners.isEmpty()) {
-            return (elContextListeners.toArray(
-                       new ELContextListener[elContextListeners.size()]));
+            return elContextListeners.toArray(
+                       new ELContextListener[elContextListeners.size()]);
         } else {
-            return (EMPTY_EL_CTX_LIST_ARRAY);
+            return EMPTY_EL_CTX_LIST_ARRAY;
         }
     }
 
@@ -810,7 +810,7 @@ public class ApplicationImpl extends Application {
         } catch (ELException elex) {
             throw new ReferenceSyntaxException(elex);
         }
-        return (new MethodBindingMethodExpressionAdapter(result));
+        return new MethodBindingMethodExpressionAdapter(result);
 
     }
 
@@ -834,7 +834,7 @@ public class ApplicationImpl extends Application {
          } catch (ELException elex) {
             throw new ReferenceSyntaxException(elex);
          } 
-         return (new ValueBindingValueExpressionAdapter(result));
+         return new ValueBindingValueExpressionAdapter(result);
 
     }
 
@@ -1061,7 +1061,7 @@ public class ApplicationImpl extends Application {
             result = app.createComponent("javax.faces.NamingContainer");
         }
 
-        assert (null != result);
+        assert null != result;
 
         result.setRendererType("javax.faces.Composite");
         Map<String, Object> attrs = result.getAttributes();
@@ -1603,8 +1603,8 @@ public class ApplicationImpl extends Application {
         defaultLocale = locale;
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, (MessageFormat.format("set defaultLocale ''{0}''",
-                                                         defaultLocale.getClass().getName())));
+            LOGGER.log(Level.FINE, MessageFormat.format("set defaultLocale ''{0}''",
+                                                         defaultLocale.getClass().getName()));
         }
     }
 
@@ -1794,7 +1794,7 @@ public class ApplicationImpl extends Application {
      * @return The new object instance.
      */
     private Object newThing(String key, ViewMemberInstanceFactoryMetadataMap<String, Object> map) {
-        assert (key != null && map != null);
+        assert key != null && map != null;
 
         Object result;
         Class<?> clazz;
@@ -1804,7 +1804,7 @@ public class ApplicationImpl extends Application {
         if (value == null) {
             return null;
         }
-        assert (value instanceof String || value instanceof Class);
+        assert value instanceof String || value instanceof Class;
         if (value instanceof String) {
              String cValue = (String) value;
              try {
@@ -1812,7 +1812,7 @@ public class ApplicationImpl extends Application {
                 if (!associate.isDevModeEnabled()) {
                     map.put(key, clazz);
                 } 
-                assert (clazz != null);
+                assert clazz != null;
              } catch (Exception e) {
                  throw new FacesException(e.getMessage(), e);
              }
@@ -1832,9 +1832,9 @@ public class ApplicationImpl extends Application {
             } while (null != (t = t.getCause()));
             t = previousT;
             
-            throw new FacesException((MessageUtils.getExceptionMessageString(
+            throw new FacesException(MessageUtils.getExceptionMessageString(
                   MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
-                  clazz.getName())), t);
+                  clazz.getName()), t);
         }
 
         return result;
@@ -1863,7 +1863,7 @@ public class ApplicationImpl extends Application {
      * @return The new object instance.
      */
     protected Object newConverter(Class<?> key, Map<Class<?>,Object> map, Class<?> targetClass) {
-        assert (key != null && map != null);
+        assert key != null && map != null;
 
         Object result = null;
         Class<?> clazz;
@@ -1873,7 +1873,7 @@ public class ApplicationImpl extends Application {
         if (value == null) {
             return null;
         }
-        assert (value instanceof String || value instanceof Class);
+        assert value instanceof String || value instanceof Class;
         if (value instanceof String) {
             String cValue = (String) value;
              try {
@@ -1881,7 +1881,7 @@ public class ApplicationImpl extends Application {
                 if (!associate.isDevModeEnabled()) {
                     map.put(key, clazz);
                 }
-                assert (clazz != null);
+                assert clazz != null;
              } catch (Exception e) {
                  throw new FacesException(e.getMessage(), e);
              }
@@ -1907,9 +1907,9 @@ public class ApplicationImpl extends Application {
         }       
         
         if (null != cause) {           
-            throw new FacesException((MessageUtils.getExceptionMessageString(
+            throw new FacesException(MessageUtils.getExceptionMessageString(
                     MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, 
-                    clazz.getName())), cause);
+                    clazz.getName()), cause);
             
         }
         return result;
@@ -2035,7 +2035,7 @@ public class ApplicationImpl extends Application {
                                                          componentType,
                                                          rendererType,
                                                          applyAnnotations);
-                componentExpression.setValue((ctx.getELContext()), c);
+                componentExpression.setValue(ctx.getELContext(), c);
             } else if (applyAnnotations) {
                 this.applyAnnotations(ctx, rendererType, c);
             }
@@ -2149,7 +2149,7 @@ public class ApplicationImpl extends Application {
             Map<Class<? extends SystemEvent>, Boolean> data = getDataStructure(ctx);
             result = data.get(systemEventClass);
 
-            return (null == result ? false : result);
+            return null == result ? false : result;
         }
 
         public void setGuard(FacesContext ctx, Class<? extends SystemEvent> systemEventClass) {
@@ -2251,7 +2251,7 @@ public class ApplicationImpl extends Application {
                     if (event == null) {
                         event = eventInfo.createSystemEvent(source);
                     }
-                    assert (event != null);
+                    assert event != null;
                     if (event.isAppropriateListener(curListener)) {
                         event.processListener(curListener);
                     }
@@ -2298,7 +2298,7 @@ public class ApplicationImpl extends Application {
                               if (event == null) {
                                   event = eventInfo.createSystemEvent(source);
                               }
-                              assert (event != null);
+                              assert event != null;
                               if (!processedListeners.containsKey(curListener)
                                        && event.isAppropriateListener(curListener)) {
                                   processedSomeEvents = true;
@@ -2413,8 +2413,8 @@ public class ApplicationImpl extends Application {
                                       boolean useSourceForLookup) {
 
             Class<?> sourceClass =
-                  ((useSourceForLookup) ?
-                       ((sourceBaseType != null)
+                  (useSourceForLookup ?
+                       (sourceBaseType != null
                                           ? sourceBaseType
                                           : source.getClass())
                                         : Void.class);
@@ -2511,7 +2511,7 @@ public class ApplicationImpl extends Application {
 
         public EventInfo getEventInfo(Class<?> source) {
 
-            Class<?> sourceClass = ((source == null) ? Void.class : source);
+            Class<?> sourceClass = (source == null) ? Void.class : source;
             return cache.get(sourceClass);
 
         }
