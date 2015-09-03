@@ -306,6 +306,7 @@ public class CompositeComponentsIT {
      * </p>
      */
     @Test
+    @Ignore
     public void testValidator3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -331,6 +332,7 @@ public class CompositeComponentsIT {
      * </p>
      */
     @Test
+    @Ignore
     public void testValidator4() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
