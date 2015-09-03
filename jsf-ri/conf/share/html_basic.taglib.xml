@@ -9079,15 +9079,6 @@
         </attribute>
         <attribute>
             <description>
-                Javascript code executed when text within this
-                element is selected by the user.
-            </description>
-            <name>onselect</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description>
                 Flag indicating that this component will prohibit changes by
                 the user. The element may receive focus unless it has also
                 been disabled. A value of false causes
@@ -9541,15 +9532,6 @@
         </attribute>
         <attribute>
             <description>
-                Javascript code executed when text within this
-                element is selected by the user.
-            </description>
-            <name>onselect</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description>
                 Flag indicating that this component will prohibit changes by
                 the user. The element may receive focus unless it has also
                 been disabled. A value of false causes
@@ -9974,15 +9956,6 @@
                 released over this element.
             </description>
             <name>onmouseup</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description>
-                Javascript code executed when text within this
-                element is selected by the user.
-            </description>
-            <name>onselect</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
@@ -10419,15 +10392,6 @@
                 released over this element.
             </description>
             <name>onmouseup</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description>
-                Javascript code executed when text within this
-                element is selected by the user.
-            </description>
-            <name>onselect</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>

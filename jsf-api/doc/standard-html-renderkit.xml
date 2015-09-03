@@ -18910,20 +18910,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
-          Javascript code executed when text within this
-          element is selected by the user.
-        </description>
-      <display-name>Text Select Script</display-name>
-      <icon/>
-      <property-name>onselect</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <ignored-by-renderer>true</ignored-by-renderer>
-        <behavior/>
-      </property-extension>
-    </property>
-    <property>
-      <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
           been disabled.  A value of false causes
@@ -19680,20 +19666,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
-          Javascript code executed when text within this
-          element is selected by the user.
-        </description>
-      <display-name>Text Select Script</display-name>
-      <icon/>
-      <property-name>onselect</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <ignored-by-renderer>true</ignored-by-renderer>
-        <behavior/>
-      </property-extension>
-    </property>
-    <property>
-      <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
           been disabled.  A value of false causes
@@ -20423,20 +20395,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <behavior/>
         <behavior>valueChange</behavior>
         <default-behavior>true</default-behavior>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when text within this
-          element is selected by the user.
-        </description>
-      <display-name>Text Select Script</display-name>
-      <icon/>
-      <property-name>onselect</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <ignored-by-renderer>true</ignored-by-renderer>
-        <behavior/>
       </property-extension>
     </property>
     <property>
@@ -21180,20 +21138,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <behavior/>
         <behavior>valueChange</behavior>
         <default-behavior>true</default-behavior>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when text within this
-          element is selected by the user.
-        </description>
-      <display-name>Text Select Script</display-name>
-      <icon/>
-      <property-name>onselect</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <ignored-by-renderer>true</ignored-by-renderer>
-        <behavior/>
       </property-extension>
     </property>
     <property>
