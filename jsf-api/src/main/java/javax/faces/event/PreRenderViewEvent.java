@@ -40,7 +40,6 @@
 
 package javax.faces.event;
 
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 

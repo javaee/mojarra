@@ -40,7 +40,6 @@
 
 package javax.faces.event;
 
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 

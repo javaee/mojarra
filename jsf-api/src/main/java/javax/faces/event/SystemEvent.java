@@ -89,6 +89,7 @@ public abstract class SystemEvent extends EventObject {
      */
     public SystemEvent(FacesContext facesContext, Object source) {
         super(source);
+        this.facesContext = facesContext;
     }
 
     // ---------------------------------------------------------- Public Methods
