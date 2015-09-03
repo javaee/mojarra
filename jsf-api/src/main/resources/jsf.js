@@ -529,10 +529,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             var findscripts = /<script[^>]*>([\S\s]*?)<\/script>/igm;
             // Regex to find one script, to isolate it's content [2] and attributes [1]
             var findscript = /<script([^>]*)>([\S\s]*?)<\/script>/im;
-            // Regex to remove leading cruft
-            var stripStart = /^\s*(<!--)*\s*(\/\/)*\s*(\/\*)*\s*\n*\**\n*\s*\*.*\n*\s*\*\/(<!\[CDATA\[)*/;
-            // Regex to find src attribute
-            var findsrc = /src="([\S]*?)"/im;
+            // Regex to find type attribute
             var findtype = /type="([\S]*?)"/im;
             var initialnodes = [];
             var scripts = [];
@@ -548,59 +545,13 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         continue;
                     }
                 }
-                var src = [];
-                // check if src specified
-                src = scriptStr[1].match(findsrc);
-                var script;
-                if ( !!src && src[1]) {
-                    // if this is a file, load it
-                    var url = src[1];
-                    // if this is another copy of jsf.js, don't load it
-                    // it's never necessary, and can make debugging difficult
-                    if (/\/javax.faces.resource\/jsf.js\?ln=javax\.faces/.test(url)) {
-                        script = false;
-                    } else {
-                        script = loadScript(url);
-                    }
-                } else if (!!scriptStr && scriptStr[2]){
-                    // else get content of tag, without leading CDATA and such
-                    script = scriptStr[2].replace(stripStart,"");
-                } else {
-                    script = false;
-                }
-                if (!!script) {
-                    scripts.push(script);
-                }
+                scripts.push(scriptStr);
             }
             return scripts;
         };
 
         /**
-         * Load a script via a url, use synchronous XHR request.  This is liable to be slow,
-         * but it's probably the only correct way.
-         * @param url the url to load
-         * @ignore
-         */
-        var loadScript = function loadScript(url) {
-            var xhr = getTransport(null);
-            if (xhr === null) {
-                return "";
-            }
-
-            xhr.open("GET", url, false);
-            xhr.setRequestHeader("Content-Type", "application/x-javascript");
-            xhr.send(null);
-
-            // PENDING graceful error handling
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                    return xhr.responseText;
-            }
-
-            return "";
-        };
-
-        /**
-         * Run an array of scripts text
+         * Run an array of script nodes
          * @param scripts array of script nodes
          * @ignore
          */
@@ -609,14 +560,45 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 return;
             }
 
+            // Regex to find src attribute
+            var findsrc = /src="([\S]*?)"/im;
+            // Regex to match current script
+            var jsfjs = /\/javax.faces.resource\/jsf.js(\.[^?]+)?\?ln=javax\.faces/;
+            // Regex to remove leading cruft
+            var stripStart = /^\s*(<!--)*\s*(\/\/)*\s*(\/\*)*\s*\n*\**\n*\s*\*.*\n*\s*\*\/(<!\[CDATA\[)*/;
+
             var head = document.getElementsByTagName('head')[0] || document.documentElement;
+
             while (scripts.length) {
-                // create script node
-                var scriptNode = document.createElement('script');
-                scriptNode.type = 'text/javascript';
-                scriptNode.text = scripts.shift(); // add the code to the script node
-                head.appendChild(scriptNode); // add it to the page
-                head.removeChild(scriptNode); // then remove it
+            	var scriptStr = scripts.shift();
+                var src = scriptStr[1].match(findsrc);
+
+                if (!!src && src[1]) {
+                    // if this is a file, load it
+                    var url = src[1];
+                    // if this is another copy of jsf.js, don't load it
+                    // it's never necessary, and can make debugging difficult
+                    if (!jsfjs.test(url)) {
+                        // create script node
+                        var scriptNode = document.createElement('script');
+                        scriptNode.type = 'text/javascript';
+                        scriptNode.src = url; // add the src to the script node
+                        head.appendChild(scriptNode); // add it to the page
+                        head.removeChild(scriptNode); // then remove it
+                    }
+                } else if (!!scriptStr && scriptStr[2]) {
+                    // else get content of tag, without leading CDATA and such
+                    var script = scriptStr[2].replace(stripStart,"");
+
+                    if (!!script) {
+                        // create script node
+                        var scriptNode = document.createElement('script');
+                        scriptNode.type = 'text/javascript';
+                        scriptNode.text = script; // add the code to the script node
+                        head.appendChild(scriptNode); // add it to the page
+                        head.removeChild(scriptNode); // then remove it
+                    }
+                }
             }
         };
 
