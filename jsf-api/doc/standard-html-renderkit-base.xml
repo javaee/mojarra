@@ -939,7 +939,7 @@
         <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props-noselect.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="listbox-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
@@ -965,7 +965,7 @@
         <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props-noselect.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="menu-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
@@ -991,7 +991,7 @@
         <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props-noselect.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="listbox-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
@@ -1017,7 +1017,7 @@
         <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props-noselect.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="menu-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
