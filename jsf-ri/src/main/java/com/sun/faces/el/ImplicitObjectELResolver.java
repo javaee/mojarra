@@ -109,7 +109,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         } else {
             FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
             ExternalContext extCtx = facesContext.getExternalContext();
-	            switch (index) {
+                switch (index) {
                 case APPLICATION:
                     context.setPropertyResolved(true);
                     return extCtx.getContext();
@@ -117,6 +117,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                     context.setPropertyResolved(true);
                     return extCtx.getApplicationMap();
                 case COMPOSITE_COMPONENT:
+                    context.setPropertyResolved(true);
                     // The following five lines violate the specification.
                     // The specification states that the 'cc' implicit object
                     // always evaluates to the current composite component,
@@ -132,7 +133,6 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                     if (o == null) {
                         o = UIComponent.getCurrentCompositeComponent(facesContext);
                     }
-                    context.setPropertyResolved(o != null);
                     return o;
                 case COMPONENT:
                     UIComponent c = UIComponent.getCurrentComponent(facesContext);
