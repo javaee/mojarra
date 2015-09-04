@@ -144,7 +144,7 @@ public class Spec802IT {
         page = button.click();
 
         String pageText = page.getBody().asXml();
-        assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+83.*"));
+        assertTrue(pageText.contains("JSR-344"));
         
         fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess2.txt");
@@ -154,7 +154,7 @@ public class Spec802IT {
         page = button.click();
 
         pageText = page.getBody().asXml();
-        assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+107.*"));
+        assertTrue(pageText.contains("Additional bytes here."));
         
         fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess3.txt");
@@ -164,7 +164,7 @@ public class Spec802IT {
         page = button.click();
 
         pageText = page.getBody().asXml();
-        assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+124.*"));
+        assertTrue(pageText.contains("Yet more bytes."));
         
     }
 }
