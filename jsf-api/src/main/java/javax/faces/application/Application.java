@@ -213,6 +213,21 @@ public abstract class Application {
      * must be provided that performs the functions described in the
      * {@link NavigationHandler} class description.</p>
      * 
+     * <div class="changed_added_2_3">
+     *  <ul>
+     *   <li>
+     *    The <code>NavigationHandler</code> implementation is declared in the 
+     *    application configuration resources by giving the fully qualified 
+     *    class name as the value of the <code>&lt;navigation-handler&gt;</code>
+     *    element within the <code>&lt;application&gt;</code> element.  
+     *   </li>
+     *  </ul>
+     *  <p>
+     *   The runtime must employ the decorator pattern as for every other 
+     *   pluggable artifact in JSF.
+     *  </p>
+     * </div>
+     * 
      * @return the navigation handler.
      */
     public abstract NavigationHandler getNavigationHandler();
