@@ -135,8 +135,8 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                     }
                     return o;
                 case COMPONENT:
+                    context.setPropertyResolved(true);
                     UIComponent c = UIComponent.getCurrentComponent(facesContext);
-                    context.setPropertyResolved(c != null);
                     return c;
                 case COOKIE:
                     context.setPropertyResolved(true);
