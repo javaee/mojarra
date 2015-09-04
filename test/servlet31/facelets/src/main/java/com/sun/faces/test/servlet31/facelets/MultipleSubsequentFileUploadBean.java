@@ -39,6 +39,9 @@
  */
 package com.sun.faces.test.servlet31.facelets;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
 import javax.servlet.http.Part;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -51,6 +54,20 @@ public class MultipleSubsequentFileUploadBean {
 
     public String doUpload() {
         return null;
+    }
+
+    public String getFileText() {
+        String fileText = "";
+
+        if (null != getFile()) {
+            try {
+                InputStream is = getFile().getInputStream();
+                fileText = new Scanner(is).useDelimiter("\\A").next();
+            } catch (IOException ex) {
+
+            }
+        }
+        return fileText;
     }
 
     public Part getFile() {

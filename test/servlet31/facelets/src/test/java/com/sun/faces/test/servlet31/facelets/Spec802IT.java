@@ -121,7 +121,6 @@ public class Spec802IT {
 
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
     @Test
-    @Ignore
     public void testFileUploadMultipleTimes() throws Exception {
         webClient = new WebClient(BrowserVersion.FIREFOX_31);
         HtmlPage page = webClient.getPage(webUrl + "faces/uploadMultipleTimes.xhtml");
@@ -135,7 +134,7 @@ public class Spec802IT {
         page = button.click();
 
         String pageText = page.getBody().asXml();
-        assertTrue(pageText.contains("(?s).*bytes\\s+sent\\s+=\\s+83.*"));
+        assertTrue(pageText.contains("JSR-344"));
 
         fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess2.txt");
@@ -145,7 +144,7 @@ public class Spec802IT {
         page = button.click();
 
         pageText = page.getBody().asXml();
-        assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+107.*"));
+        assertTrue(pageText.contains("Additional bytes here."));
 
         fileInput = (HtmlFileInput) page.getElementById("file");
         fileInput.setValueAttribute(basedir + File.separator + "inputFileSuccess3.txt");
@@ -155,7 +154,7 @@ public class Spec802IT {
         page = button.click();
 
         pageText = page.getBody().asXml();
-        assertTrue(pageText.matches("(?s).*bytes\\s+sent\\s+=\\s+124.*"));
+        assertTrue(pageText.contains("Yet more bytes."));
     }
 
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
