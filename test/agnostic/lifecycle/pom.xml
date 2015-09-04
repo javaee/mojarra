@@ -54,7 +54,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - Lifecycle</name>
     <modules>
-        <module>unserializableServerState_negative</module>
         <module>unserializableServerState_positive</module>
     </modules>
 </project>

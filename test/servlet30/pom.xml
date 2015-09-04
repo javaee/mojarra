@@ -140,6 +140,7 @@
 	<module>lifecycleDebugOutputStream</module>
 	<module>lifecycleFacesServletAccess</module>
 	<module>lifecycleOptionsRequest</module>
+	<module>lifecycleServerStateNegative</module>
         <module>listener</module>
         <module>localeConfig</module>
         <module>multiTenantSetsTccl</module>
