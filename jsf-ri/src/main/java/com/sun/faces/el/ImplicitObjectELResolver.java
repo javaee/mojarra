@@ -148,14 +148,13 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                     context.setPropertyResolved(true);
                     return facesContext.getExternalContext().getFlash();
                 case FACES_FLOW:
+                    context.setPropertyResolved(true);
                     FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
+                    Map<Object, Object> flowScope = null;
                     if (null != flowHandler) {
-                        Map<Object, Object> flowScope = flowHandler.getCurrentFlowScope();
-                        if (null != flowScope) {
-                            context.setPropertyResolved(true);
-                        }
-                        return flowScope;
+                        flowScope = flowHandler.getCurrentFlowScope();
                     }
+                    return flowScope;
                 case HEADER:
                     context.setPropertyResolved(true);
                     return extCtx.getRequestHeaderMap();
