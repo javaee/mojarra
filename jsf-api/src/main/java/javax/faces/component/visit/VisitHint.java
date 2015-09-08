@@ -72,9 +72,10 @@ public enum VisitHint {
   SKIP_ITERATION,
 
   /**
-   * <p class="changed_added_2_0">Hint that indicates that the visit is
-   * being performed as part of lifecycle phase execution and as such
-   * phase-specific actions (initialization) may be taken.</p>
+   * <p class="changed_added_2_0 changed_modified_2_3">
+   * Hint that indicates that the visit is being performed as part of lifecycle
+   * phase execution.
+   * </p>
    * @since 2.0
    */
   EXECUTE_LIFECYCLE,
