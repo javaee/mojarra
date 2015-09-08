@@ -86,15 +86,20 @@ public class AdminGUIIT {
             try {
                 page = webClient.getPage(url + "common/index.jsf?bare=true");
             } catch (Exception e) {
-                page = webClient.getPage(url + "common/index.jsf");
+                try {
+                    page = webClient.getPage(url + "common/index.jsf");
+                } catch (Exception e2) {
+                    page = null;
+                }
             }
-            
-            HtmlElement element = page.getHtmlElementById("Login.username");
-            if (element != null) {
-                break;
-            } else {
-                Thread.sleep(30000);
+
+            if (page != null) {
+                HtmlElement element = page.getHtmlElementById("Login.username");
+                if (element != null) {
+                    break;
+                }
             }
+            Thread.sleep(30000);
         }
 
         page.getHtmlElementById("Login.username").type("admin");
