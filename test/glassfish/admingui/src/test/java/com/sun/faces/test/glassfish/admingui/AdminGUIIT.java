@@ -50,6 +50,7 @@ import com.gargoylesoftware.htmlunit.util.Cookie;
 import java.util.List;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class AdminGUIIT {
@@ -69,6 +70,7 @@ public class AdminGUIIT {
     }
 
     @Test
+    @Ignore
     public void testDeployExerciseUndeploy() throws Exception {
         HtmlPage page = null;
         HtmlSubmitInput button;
