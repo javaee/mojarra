@@ -65,7 +65,7 @@ public class FlowMapProducer extends CdiProducer<Map<Object, Object>> {
     private static final long serialVersionUID = 1L;
     
     public FlowMapProducer() {
-        super.name("flowScopex")
+        super.name("flowScope")
              .scope(FlowScoped.class)
              .qualifiers(new FlowMapAnnotationLiteral())
              .types(
