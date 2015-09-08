@@ -45,6 +45,7 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceAlwaysWriteFlashCookie;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ViewRootPhaseListenerQueuesException;
 import com.sun.faces.facelets.impl.DefaultResourceResolver;
 import com.sun.faces.util.Util;
 
@@ -124,6 +125,10 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
         attrs.put(PartialStateSaving, webConfig.isOptionEnabled(PartialStateSaving) ?
                 Boolean.TRUE : Boolean.FALSE);
         attrs.put(ForceAlwaysWriteFlashCookie, webConfig.isOptionEnabled(ForceAlwaysWriteFlashCookie) ?
+                Boolean.TRUE : Boolean.FALSE);
+        // We must use getQualifiedName here because the consumer is in jsf-api 
+        // and thus cannot import the enum.
+        attrs.put(ViewRootPhaseListenerQueuesException.getQualifiedName(), webConfig.isOptionEnabled(ViewRootPhaseListenerQueuesException) ?
                 Boolean.TRUE : Boolean.FALSE);
         
         Object nonDefaultResourceResolver = extContext.getApplicationMap().get(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME);

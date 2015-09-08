@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -158,6 +158,19 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     /** <p>The standard component family for this component.</p> */
     public static final String COMPONENT_FAMILY = "javax.faces.ViewRoot";
+    
+    /**
+     * <p class="changed_added_2_3">If this param is set, and calling 
+     * toLowerCase().equals("true") on a
+     * String representation of its value returns true, exceptions thrown
+     * by {@link PhaseListener}s installed on the {@code UIViewRoot} are
+     * queued to the {@link javax.faces.context.ExceptionHandler} instead of 
+     * being logged and swallowed.</p>
+     * 
+     * @since 2.3
+     */
+    public static final String VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME = 
+            "javax.faces.VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS";
 
 
     /**
@@ -976,17 +989,19 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }        
 
     /**
-     * <p><span class="changed_added_2_0">Override</span> the default
-     * {@link UIComponentBase#encodeBegin} behavior.  If
+     * <p><span class="changed_added_2_0 changed_modified_2_3">
+     * Override</span> the default {@link UIComponentBase#encodeBegin} behavior.  If
      * {@link #getBeforePhaseListener} returns non-<code>null</code>,
      * invoke it, passing a {@link PhaseEvent} for the {@link
      * PhaseId#RENDER_RESPONSE} phase.  If the internal list populated
      * by calls to {@link #addPhaseListener} is non-empty, any listeners
      * in that list must have their {@link PhaseListener#beforePhase}
-     * method called, passing the <code>PhaseEvent</code>.  Any errors
-     * that occur during invocation of any of the the beforePhase
-     * listeners must be logged and swallowed.  After listeners are invoked
-     * call superclass processing.</p>
+     * method called, passing the <code>PhaseEvent</code>.  Any {@code Exception}s
+     * that occur during invocation of any of the beforePhase
+     * listeners must be logged and swallowed, <span class="changed_added_2_3">
+     * unless the {@link #VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME}
+     * parameter is set.  In that case, the {@code Exception} must be passed to the
+     * {@link javax.faces.context.ExceptionHandler} as well.</span></p>
      */
     @Override
     public void encodeBegin(FacesContext context) throws IOException {
@@ -1020,12 +1035,15 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
     /**
-     * <p class="changed_added_2_0"> If {@link #getAfterPhaseListener}
-     * returns non-<code>null</code>, invoke it, passing a {@link
+     * <p class="changed_added_2_0"><span class="changed_modified_2_3">If</span> 
+     * {@link #getAfterPhaseListener} returns non-<code>null</code>, invoke it, passing a {@link
      * PhaseEvent} for the {@link PhaseId#RENDER_RESPONSE} phase.  Any
-     * errors that occur during invocation of the afterPhase listener
-     * must be logged and swallowed.  If the current view has view
-     * parameters, as indicated by a non-empty and
+     * {@code Exception}s that occur during invocation of the afterPhase listener
+     * must be logged and swallowed, <span class="changed_added_2_3">
+     * unless the {@link #VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME}
+     * parameter is set.  In that case, the {@code Exception} must be passed to the
+     * {@link javax.faces.context.ExceptionHandler} as well.</span>.  If the 
+     * current view has view parameters, as indicated by a non-empty and
      * non-<code>UnsupportedOperationException</code> throwing return
      * from {@link javax.faces.view.ViewDeclarationLanguage#getViewMetadata(javax.faces.context.FacesContext, String)},
      * call {@link UIViewParameter#encodeAll} on each parameter.  If
@@ -1096,6 +1114,13 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                                new Object[] { expression.getExpressionString(),
                                               (isBefore ? "beforePhase" : "afterPhase")});
                 }
+                if (context.getAttributes().containsKey(VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME)) {
+                    ExceptionQueuedEventContext extx = new ExceptionQueuedEventContext(context, e);
+                    String booleanKey = isBefore ? ExceptionQueuedEventContext.IN_BEFORE_PHASE_KEY : ExceptionQueuedEventContext.IN_AFTER_PHASE_KEY;
+                    extx.getAttributes().put(booleanKey, Boolean.TRUE);
+                    context.getApplication().publishEvent(context, ExceptionQueuedEvent.class, extx);
+                    
+                }
                 return;
             }
         }
@@ -1126,6 +1151,14 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                             LOGGER.log(Level.SEVERE,
                                        "severe.component.uiviewroot_error_invoking_phaselistener",
                                        curListener.getClass().getName());
+                        }
+                        if (context.getAttributes().containsKey(VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME) &&
+                            (Boolean)context.getAttributes().get(VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME)) {
+                            ExceptionQueuedEventContext extx = new ExceptionQueuedEventContext(context, e);
+                            String booleanKey = isBefore ? ExceptionQueuedEventContext.IN_BEFORE_PHASE_KEY : ExceptionQueuedEventContext.IN_AFTER_PHASE_KEY;
+                            extx.getAttributes().put(booleanKey, Boolean.TRUE);
+                            context.getApplication().publishEvent(context, ExceptionQueuedEvent.class, extx);
+                            
                         }
                         return;
                     }

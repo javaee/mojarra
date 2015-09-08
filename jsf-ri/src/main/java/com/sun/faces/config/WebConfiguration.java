@@ -78,6 +78,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIViewRoot;
 import javax.faces.convert.Converter;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.ClientWindow;
@@ -1425,6 +1426,9 @@ public class WebConfiguration {
             false),
         EnableCdiResolverChain(
             "javax.faces.ENABLE_CDI_RESOLVER_CHAIN",
+            false),
+        ViewRootPhaseListenerQueuesException(
+            UIViewRoot.VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME,
             false);
 
         private BooleanWebContextInitParameter alternate;
