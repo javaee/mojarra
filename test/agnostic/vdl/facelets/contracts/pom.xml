@@ -54,7 +54,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts</name>
     <modules>
-        <module>basic_contract_in_jar</module>
         <module>basic_contract_jar</module>
         <module>extended</module>
         <module>sample</module>

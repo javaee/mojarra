@@ -78,6 +78,7 @@
         <module>configFile</module>
         <module>configLowercase</module>
 	<module>contractBasic</module>
+	<module>contractBasicInJar</module>
         <module>contractUsingHostHeader</module>
         <module>contractUsingViewRoot</module>
         <module>converter</module>

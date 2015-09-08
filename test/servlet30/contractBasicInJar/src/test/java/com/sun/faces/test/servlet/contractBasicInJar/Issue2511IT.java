@@ -38,17 +38,22 @@
  * holder.
 
  */
-package com.sun.faces.test.agnostic.vdl.facelets.contracts.basic_in_jar;
+package com.sun.faces.test.servlet.contractBasicInJar;
 
+import com.gargoylesoftware.htmlunit.html.HtmlLink;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlImage;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-public class Spec1338IT {
+public class Issue2511IT {
     
     private String webUrl;
     private WebClient webClient;
@@ -65,22 +70,51 @@ public class Spec1338IT {
     }
 
     @Test
-    public void testResourcesFound() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/useResourceInContractInJar.xhtml");
+    public void testTemplatesAreUsed() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        String text = page.asText();
         
-        HtmlImage image = page.getHtmlElementById("img01");
-        String src = image.getSrcAttribute();
+        assertTrue(text.contains("Top Navigation Menu"));
         
-        assertTrue(src.contains("/faces/javax.faces.resource/img01.gif"));
-        assertTrue(src.contains("con=resourcesInContractInJar"));
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
         
-        image = page.getHtmlElementById("img02");
-        src = image.getSrcAttribute();
-        
-        assertTrue(src.contains("/faces/javax.faces.resource/img02.gif"));
-        assertTrue(src.contains("con=resourcesInContractInJar"));
+        text = page.asText();
+        assertTrue(text.contains("Left Side Navigation Menu"));
         
     }
 
+    @Test
+    public void testResourcesAreRendered() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        
+        examineCss(page.getElementsByTagName("link"));
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+        
+        examineCss(page.getElementsByTagName("link"));
+    }
+    
+    private void examineCss(DomNodeList<DomElement> cssFiles) throws Exception {
+        HtmlLink curLink;
+        String href;
+        String content;
+        for (DomElement cur : cssFiles) {
+            curLink = (HtmlLink) cur;
+            href = curLink.getHrefAttribute();
+            assertTrue(href.contains("con=siteLayout"));
+            if (href.contains("default.css")) {
+                content = curLink.getWebResponse(true).getContentAsString("UTF-8");
+                assertTrue(content.contains("#AFAFAF"));
+            } else if (href.contains("cssLayout.css")) {
+                content = curLink.getWebResponse(true).getContentAsString("UTF-8");
+                assertTrue(content.contains("#036fab"));
+            } else {
+                fail();
+            }
+        }
+        
+    }
 
 }
