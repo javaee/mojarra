@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,17 +38,25 @@
  * holder.
 
  */
-package com.sun.faces.test.agnostic.vdl.facelets.contracts.basic;
+package com.sun.faces.servlet30.contractBasic;
 
-import com.gargoylesoftware.htmlunit.WebClient;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import com.gargoylesoftware.htmlunit.html.HtmlLink;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-public class Issue2914IT {
+public class Issue2511IT {
     
     private String webUrl;
     private WebClient webClient;
@@ -67,8 +75,49 @@ public class Issue2914IT {
     @Test
     public void testTemplatesAreUsed() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
-        HtmlElement stayButton = page.getHtmlElementById("currentButton");
-        page = stayButton.click();
-        assertEquals(200, page.getWebResponse().getStatusCode());
+        String text = page.asText();
+        
+        assertTrue(text.contains("Top Navigation Menu"));
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+        
+        text = page.asText();
+        assertTrue(text.contains("Left Side Navigation Menu"));
+        
     }
+
+    @Test
+    public void testResourcesAreRendered() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/index.xhtml");
+        
+        examineCss(page.getElementsByTagName("link"));
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+        
+        examineCss(page.getElementsByTagName("link"));
+    }
+    
+    private void examineCss(DomNodeList<DomElement> cssFiles) throws Exception {
+        HtmlLink curLink;
+        String href;
+        String content;
+        for (DomElement cur : cssFiles) {
+            curLink = (HtmlLink) cur;
+            href = curLink.getHrefAttribute();
+            assertTrue(href.contains("con=siteLayout"));
+            if (href.contains("default.css")) {
+                content = curLink.getWebResponse(true).getContentAsString("UTF-8");
+                assertTrue(content.contains("#AFAFAF"));
+            } else if (href.contains("cssLayout.css")) {
+                content = curLink.getWebResponse(true).getContentAsString("UTF-8");
+                assertTrue(content.contains("#036fab"));
+            } else {
+                fail();
+            }
+        }
+        
+    }
+
 }
