@@ -250,7 +250,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
         return null;
     }
 
-    private boolean isTransient = false;
+    private boolean isTransient;
 
     @Override
     public void setTransient(boolean b) {

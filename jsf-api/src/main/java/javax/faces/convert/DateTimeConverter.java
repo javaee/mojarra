@@ -604,7 +604,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
     }
 
 
-    private boolean transientFlag = false;
+    private boolean transientFlag;
 
 
     @Override

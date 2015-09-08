@@ -962,7 +962,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
     }
 
 
-    private boolean transientFlag = false;
+    private boolean transientFlag;
 
 
     @Override

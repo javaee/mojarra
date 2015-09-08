@@ -215,7 +215,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 String viewIdBefore = context.getViewRoot().getViewId();
                 viewIdBefore = (null == viewIdBefore) ? "" : viewIdBefore;
                 String viewIdAfter = caseStruct.navCase.getToViewId(context);
-                viewIdAfter = (null == viewIdAfter) ? "" : viewIdAfter;
+                viewIdAfter = (null == viewIdAfter) ? "" : viewIdAfter; // NOPMD
                 isUIViewActionBroadcastAndViewdsDiffer = !viewIdBefore.equals(viewIdAfter);
             } 
             if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcastAndViewdsDiffer) {
@@ -226,13 +226,13 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 // the necessary metadata is appended to the query string
                 
                 // If at least one of newFlow and currentFlow is not null 
-                if (null != caseStruct.newFlow || null != caseStruct.currentFlow) {
-                    if (!flowsEqual(caseStruct.newFlow, caseStruct.currentFlow)) {
-                        if (null == parameters) {
+                if (null != caseStruct.newFlow || null != caseStruct.currentFlow) { // NOPMD
+                    if (!flowsEqual(caseStruct.newFlow, caseStruct.currentFlow)) { // NOPMD
+                        if (null == parameters) { // NOPMD
                             parameters = new HashMap<>();
                         }
                         // If we are exiting all flows 
-                        if (null == caseStruct.newFlow) {
+                        if (null == caseStruct.newFlow) { // NOPMD
                             parameters.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, 
                                            Arrays.asList(FlowHandler.NULL_FLOW));
                             parameters.put(FlowHandler.FLOW_ID_REQUEST_PARAM_NAME, Arrays.asList(""));
@@ -240,7 +240,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                             if (fh instanceof FlowHandlerImpl) {
                                 FlowHandlerImpl fhi = (FlowHandlerImpl) fh;
                                 List<String> flowReturnDepthValues = new ArrayList<>();
-                                flowReturnDepthValues.add("" + fhi.getAndClearReturnModeDepth(context));
+                                flowReturnDepthValues.add(Integer.toString(fhi.getAndClearReturnModeDepth(context)));
                                 parameters.put(FlowHandlerImpl.FLOW_RETURN_DEPTH_PARAM_NAME, flowReturnDepthValues);
                             }
                             

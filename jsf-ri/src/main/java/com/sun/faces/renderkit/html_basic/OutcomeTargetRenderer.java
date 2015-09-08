@@ -246,7 +246,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
                 if (fh instanceof FlowHandlerImpl) {
                     FlowHandlerImpl fhi = (FlowHandlerImpl) fh;
                     List<String> flowReturnDepthValues = new ArrayList<>();
-                    flowReturnDepthValues.add("" + fhi.getAndClearReturnModeDepth(context));
+                    flowReturnDepthValues.add(Integer.toString(fhi.getAndClearReturnModeDepth(context)));
                     existingParams.put(FlowHandlerImpl.FLOW_RETURN_DEPTH_PARAM_NAME, flowReturnDepthValues);
                 }
                 
