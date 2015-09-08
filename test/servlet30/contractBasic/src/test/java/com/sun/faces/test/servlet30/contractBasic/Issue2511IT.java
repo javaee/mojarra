@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.servlet30.contractBasic;
+package com.sun.faces.test.servlet30.contractBasic;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

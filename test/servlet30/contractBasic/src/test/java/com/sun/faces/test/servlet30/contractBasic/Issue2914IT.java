@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.servlet30.contractBasic;
+package com.sun.faces.test.servlet30.contractBasic;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
