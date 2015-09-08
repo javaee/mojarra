@@ -293,7 +293,7 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
         }
 
         @Override
-        public boolean getCreated() {
+        public boolean getCreated() { // NOPMD
             return classicDelegate.getCreated();
         }
 

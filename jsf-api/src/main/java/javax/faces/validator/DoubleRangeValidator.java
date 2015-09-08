@@ -431,7 +431,7 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
     }
 
 
-    private boolean transientValue = false;
+    private boolean transientValue;
 
 
     @Override

@@ -594,8 +594,8 @@ public class ResultSetDataModel extends DataModel<Map<String,Object>> {
             this.keys = map.keySet().iterator();
         }
 
-        private ResultSetMap map = null;
-        private Iterator<String> keys = null;
+        private ResultSetMap map;
+        private Iterator<String> keys;
 
         @Override
         public boolean hasNext() {
@@ -764,7 +764,7 @@ public class ResultSetDataModel extends DataModel<Map<String,Object>> {
             this.keys = map.realKeys();
         }
 
-        private Iterator<String> keys = null;
+        private Iterator<String> keys;
 
         @Override
         public boolean hasNext() {

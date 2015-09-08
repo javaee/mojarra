@@ -208,7 +208,7 @@ public class RegexValidator implements Validator, PartialStateHolder {
     }
 
 
-    private boolean transientValue = false;
+    private boolean transientValue;
 
 
     @Override

@@ -144,7 +144,7 @@ public class MethodExpressionValidator implements Validator, StateHolder {
     }
 
 
-    private boolean transientValue = false;
+    private boolean transientValue;
 
 
     @Override

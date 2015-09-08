@@ -414,7 +414,7 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
     }
 
 
-    private boolean transientValue = false;
+    private boolean transientValue;
 
 
     @Override

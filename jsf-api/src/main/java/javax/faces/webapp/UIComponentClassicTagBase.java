@@ -2038,7 +2038,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <code>doEndTag()</code> on this tag instance.</p>
      */
     @Override
-    public boolean getCreated() {
+    public boolean getCreated() { // NOPMD
 
         return (this.created);
 
