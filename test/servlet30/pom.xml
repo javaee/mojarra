@@ -81,6 +81,7 @@
 	<module>configInJarOnly</module>
 	<module>contractBasic</module>
 	<module>contractBasicInJar</module>
+	<module>contractBasicJar</module>
 	<module>contractExtended</module>
 	<module>contractSample</module>
 	<module>contractSimple</module>

@@ -47,14 +47,13 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts</groupId>
+        <groupId>com.sun.faces.test.servlet30</groupId>
         <artifactId>pom</artifactId>
         <version>2.3.0-m04-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts</groupId>
-    <artifactId>contract_jar</artifactId>
+    <artifactId>contractBasicJar</artifactId>
     <packaging>jar</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts - Contract in JAR, the actual jar</name>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Contract Basic JAR</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
