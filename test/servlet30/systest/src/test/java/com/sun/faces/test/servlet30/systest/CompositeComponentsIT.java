@@ -375,7 +375,6 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testValidator3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -390,7 +389,6 @@ public class CompositeComponentsIT {
                                         "form3:validator3:input:input");
         }
     }
-
 
     /**
      * <p>
