@@ -283,13 +283,27 @@ public class CompositeComponentsIT {
      *  'targets' attribute within the composite:implementation section
      *  of actionSource4.xhtml.
      * </p>
+     * 
+     * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testActionSource4() throws Exception {
-//        HtmlPage page = getPage("/faces/composite/actionsource.xhtml");
-//        validateActionMessagePresent(page,
-//                                     "form:actionsource4:naming:command");  
+        HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
+        /*
+         * When systest migrated this test was found not to be working on client side state saving
+         * and when serializing the server state.
+         */
+        if (!page.asXml().contains("State Saving Method: client") &&
+                !page.asXml().contains("Serializing Server State: true")) {
+            page = webClient.getPage(webUrl + "faces/composite/actionsource.xhtml");
+            validateActionMessagePresent(page,
+                                     "form:actionsource4:naming:command");  
+        }
+    }
+    
+    private void validateActionMessagePresent(HtmlPage page, String commandId) throws Exception {
+        page = pushButton(page, commandId);
+        validateMessage(page, "Action Invoked", commandId);
     }
 
     /**
