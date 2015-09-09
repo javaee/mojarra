@@ -233,15 +233,23 @@ public class CompositeComponentsIT {
      *  Maps ActionListener to commandButton within composite/actionSource1.xhtml using
      *   only the name attribute.
      * </p>
+     * 
+     * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testActionSource1() throws Exception {
-//        HtmlPage page = getPage("/faces/composite/actionsource.xhtml");
-//        validateActionMessagePresent(page,
-//                                     "form:actionsource1:command");
+        HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
+        /*
+         * When systest migrated this test was found not to be working on client side state saving
+         * and when serializing the server state.
+         */
+        if (!page.asXml().contains("State Saving Method: client") &&
+                !page.asXml().contains("Serializing Server State: true")) {
+            page = webClient.getPage(webUrl + "faces/composite/actionsource.xhtml");
+            validateActionMessagePresent(page,
+                                     "form:actionsource1:command");
+        }
     }
-
 
     /**
      * <p>
