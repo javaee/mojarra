@@ -81,6 +81,7 @@
 	<module>contractBasicInJar</module>
 	<module>contractExtended</module>
 	<module>contractSample</module>
+	<module>contractSimple</module>
         <module>contractUsingHostHeader</module>
         <module>contractUsingViewRoot</module>
         <module>converter</module>

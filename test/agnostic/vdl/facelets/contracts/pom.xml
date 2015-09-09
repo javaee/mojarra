@@ -56,6 +56,5 @@
     <modules>
         <module>basic_contract_jar</module>
         <module>extended</module>
-        <module>simple</module>
     </modules>
 </project>

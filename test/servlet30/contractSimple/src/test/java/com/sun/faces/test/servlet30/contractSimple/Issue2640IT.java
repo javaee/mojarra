@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.agnostic.vdl.facelets.contracts.simple;
+package com.sun.faces.test.servlet30.contractSimple;
 
 import com.gargoylesoftware.htmlunit.html.HtmlLink;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
