@@ -80,6 +80,7 @@
 	<module>contractBasic</module>
 	<module>contractBasicInJar</module>
 	<module>contractExtended</module>
+	<module>contractSample</module>
         <module>contractUsingHostHeader</module>
         <module>contractUsingViewRoot</module>
         <module>converter</module>

@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.agnostic.vdl.facelets.contracts.sample;
+package com.sun.faces.test.servlet30.contractSample;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
