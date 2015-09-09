@@ -41,6 +41,7 @@ package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -217,7 +218,8 @@ public class CompositeComponentsIT {
         if (!page.asXml().contains("State Saving Method: client") &&
                 !page.asXml().contains("Serializing Server State: true")) {
             page = webClient.getPage(webUrl + "faces/composite/nesting08.xhtml");
-            HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
+            HtmlForm form = page.getForms().get(0);
+            HtmlSubmitInput button = (HtmlSubmitInput) form.getHtmlElementById("form:submit");
             assertNotNull(button);
             page = button.click();
             assertTrue(page.asText().contains("Action invoked"));
