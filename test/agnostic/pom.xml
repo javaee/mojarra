@@ -62,7 +62,6 @@
         </dependency>
     </dependencies>
     <modules>
-        <module>facelets</module>
         <module>vdl</module>
     </modules>
 </project>

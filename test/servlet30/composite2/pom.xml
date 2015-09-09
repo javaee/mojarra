@@ -57,8 +57,8 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>com.sun.faces.test.agnostic.facelets</groupId>
-            <artifactId>ccInJar</artifactId>
+            <groupId>com.sun.faces.test.servlet30</groupId>
+            <artifactId>composite2Jar</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
