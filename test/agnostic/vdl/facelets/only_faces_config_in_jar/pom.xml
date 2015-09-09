@@ -54,7 +54,6 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - Agnostic - VDL - only_faces_config_in_jar</name>
     <modules>
-        <module>app</module> 
         <module>jar</module>
     </modules>
 </project>

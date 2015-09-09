@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,37 +37,34 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.servlet30.configInJarOnly;
 
-package com.sun.faces.test.agnostic.vdl.facelets.only_faces_config_in_jar;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import java.io.Serializable;
+public class Issue2841IT {
 
-import javax.faces.bean.ManagedBean;
+    private String webUrl;
+    private WebClient webClient;
 
-@ManagedBean(name = "test")
-public class TestBean implements Serializable {
-
-    private String[] strList;
-
-    public String[] getStrList() {
-        strList = new String[10];
-        for (int i = 0; i < 10; i++) {
-            strList[i] = "str" + i;
-        }
-        return strList;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public void setStrList(String[] strList) {
-        this.strList = strList;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    public int size = 5;
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
+    @Test
+    public void testId() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        assertTrue(page.asText().contains("lstr0 lstr1 lstr2 lstr3 lstr4"));
     }
 }

@@ -45,16 +45,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.agnostic.vdl.facelets.only_faces_config_in_jar</groupId>
+        <groupId>com.sun.faces.test.servlet30</groupId>
         <artifactId>pom</artifactId>
         <version>2.3.0-m04-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.agnostic.vdl.facelets.only_faces_config_in_jar</groupId>
-    <artifactId>only_faces_config_in_jar_app</artifactId>
+    <artifactId>configInJarOnly</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - only_faces_config_in_jar_app</name>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Config in JAR only</name>
     <build>
-        <finalName>test-agnostic-vdl-facelets-only_faces_config_in_jar_app</finalName>
+        <finalName>test-servlet30-configInJarOnly</finalName>
     </build>
     <dependencies>
         <dependency>
