@@ -208,7 +208,6 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testMethodExpressionNesting() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
