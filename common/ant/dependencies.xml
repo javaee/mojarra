@@ -70,7 +70,7 @@
     <property name="javaee-api.version" value="7.0"/>
     <property name="groovy.version" value="1.6.9"/>
     <property name="maven.repository.importer.version" value="1.2"/>
-    <property name="yuicompressor.version" value="2.4.2"/>
+    <property name="yuicompressor.version" value="2.4.8"/>
 
     <property name="central.maven2" value="http://repo1.maven.org/maven2" />
 
@@ -243,14 +243,14 @@
                 </not>
             </and>
             <then>
-                <get src="http://www.julienlecomte.net/yuicompressor/yuicompressor-${yuicompressor.version}.zip"
+                <get src="https://github.com/yui/yuicompressor/releases/download/v${yuicompressor.version}/yuicompressor-${yuicompressor.version}.zip"
                      dest="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
                      usetimestamp="true"/>
                 <unzip
                         src="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
                         dest="${dependency.base.dir}"/>
                 <copy tofile="${yuicompressor.jar}"
-                      file="${yuicompressor.home}/build/yuicompressor-${yuicompressor.version}.jar"/>
+                      file="${dependency.base.dir}/yuicompressor-${yuicompressor.version}.jar"/>
             </then>
         </if>
 
