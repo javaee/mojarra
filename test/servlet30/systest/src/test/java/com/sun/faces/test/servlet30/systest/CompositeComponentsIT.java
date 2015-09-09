@@ -434,21 +434,56 @@ public class CompositeComponentsIT {
      *  'targets' attribute within the composite:implementation section
      *  of validator4.xhtml.
      * </p>
+     * 
+     * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testConverters() throws Exception {
-//
-//        String[] messageSuffixes = new String[] {
-//              "form:converter1:input",
-//              "form2:converter2:it2",
-//              "form3:converter3:input:input",
-//              "form4:converter4:naming:input"
-//        };
-//
-//        HtmlPage page = getPage("/faces/composite/attachedconverter.xhtml");
-//        validateConverterMessages(page, messageSuffixes);
-//        page = pushButton(page, "cf:clear");
-//        validateConverterMessages(page, messageSuffixes);
+        HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
+        /*
+         * When systest migrated this test was found not to be working on client side state saving
+         * and when serializing the server state.
+         */
+        if (!page.asXml().contains("State Saving Method: client") &&
+                !page.asXml().contains("Serializing Server State: true")) {
+
+            String[] messageSuffixes = new String[] {
+                  "form:converter1:input",
+                  "form2:converter2:it2",
+                  "form3:converter3:input:input",
+                  "form4:converter4:naming:input"
+            };
+
+            page = webClient.getPage(webUrl + "faces/composite/attachedconverter.xhtml");
+            validateConverterMessages(page, messageSuffixes);
+            page = pushButton(page, "cf:clear");
+            validateConverterMessages(page, messageSuffixes);
+        }
+    }
+    
+    private void validateConverterMessages(HtmlPage page, String[] messageSuffixes) {
+
+        List<HtmlUnorderedList> list = page.getBody().getHtmlElementsByTagName("ul");
+
+        HtmlUnorderedList ulist = list.get(0);
+        assertEquals("messages", ulist.getId());
+        int count = 0;
+
+        for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+            if (count > messageSuffixes.length) {
+                fail("Expected only four message to be displayed");
+            }
+            String message = ("Converter Invoked : " + messageSuffixes[count]);
+            count++;
+            assertTrue(e instanceof HtmlListItem);
+            assertEquals(message, message, e.asText());
+        }
+
+        if (list.size() == 2) {
+            ulist = list.get(1);
+            for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+                fail("Messages have been redisplayed");
+            }
+        }
     }
 }
