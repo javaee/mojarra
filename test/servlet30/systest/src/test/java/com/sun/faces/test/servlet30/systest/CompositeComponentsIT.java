@@ -288,14 +288,23 @@ public class CompositeComponentsIT {
      *   Maps Validator to inputText within composite/validator2.xhtml using
      *   name and target attributes.
      * </p>
+     * 
+     * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testValidator2() throws Exception {
-//        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
-//        validateValidatorMessagePresent(page,
-//                                        "form2:s2",
-//                                        "form2:validator2:it2");
+        HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
+        /*
+         * When systest migrated this test was found not to be working on client side state saving
+         * and when serializing the server state.
+         */
+        if (!page.asXml().contains("State Saving Method: client") &&
+                !page.asXml().contains("Serializing Server State: true")) {
+            page = webClient.getPage(webUrl + "faces/composite/attachedvalidator.xhtml");
+            validateValidatorMessagePresent(page,
+                                        "form2:s2",
+                                        "form2:validator2:it2");
+        }
     }
 
 
