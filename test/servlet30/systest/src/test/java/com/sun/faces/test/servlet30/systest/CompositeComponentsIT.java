@@ -203,15 +203,24 @@ public class CompositeComponentsIT {
     
     /**
      * Added for issue 1298.
+     * 
+     * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testMethodExpressionNesting() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/composite/nesting08.xhtml");
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
-        assertNotNull(button);
-        page = button.click();
-        assertTrue(page.asText().contains("Action invoked"));
+        HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
+        /*
+         * When systest migrated this test was found not to be working on client side state saving
+         * and when serializing the server state.
+         */
+        if (!page.asXml().contains("State Saving Method: client") &&
+                !page.asXml().contains("Serializing Server State: true")) {
+            page = webClient.getPage(webUrl + "faces/composite/nesting08.xhtml");
+            HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
+            assertNotNull(button);
+            page = button.click();
+            assertTrue(page.asText().contains("Action invoked"));
+        }
     }
 
     //issue 1696
