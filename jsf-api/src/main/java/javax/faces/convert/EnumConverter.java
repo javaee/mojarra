@@ -172,13 +172,13 @@ public class EnumConverter implements Converter, PartialStateHolder {
     }
 
     /**
-     * <p>Convert the enum constant given by the <code>value</code>
+     * <p class="changed_modified_2_3">Convert the enum constant given by the <code>value</code>
      * argument into a String.  If no target class argument has been
      * provided to the constructor of this instance, throw a
      * <code>ConverterException</code> containing the {@link
      * #ENUM_NO_CLASS_ID} message with proper parameters. If the
      * <code>value</code> argument is <code>null</code>, return
-     * <code>null</code>.  If the value is an instance of the provided
+     * the empty String.  If the value is an instance of the provided
      * target class, return its string value by <span
      * class="changed_added_2_0">casting it to a
      * <code>java.lang.Enum</code> and returning the result of calling
@@ -206,11 +206,8 @@ public class EnumConverter implements Converter, PartialStateHolder {
                            component)));
         }
 
-        // If the specified value is null, return null
+        // If the specified value is null, return the empty string.
         if (value == null) {
-            // FIXSPEC even though the Javadoc states that we need to return 
-            // null the master Converter contract states that a null value 
-            // results in a zero-length string (see JAVASERVERFACES_SPEC_PUBLIC-1217)
             return "";
         }
 
