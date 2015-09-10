@@ -76,7 +76,7 @@
     <property name="el.version" value="1.0"/>
     <property name="validation.version" value="1.0.0.GA" />
     <property name="bean-validator.version" value="3.0-JBoss-4.0.0.Beta3"/>
-    <property name="javax-inject.version" value="1.0-PFD-1"/>
+    <property name="javax-inject.version" value="1"/>
     <property name="javax-enterprise.version" value="1.0-SP1"/>
     <property name="maven.repository.importer.version" value="1.2"/>
     <property name="yuicompressor.version" value="2.4.8"/>
