@@ -79,6 +79,14 @@ public class TestHtmlUtils extends TestCase {
         testURLEncoding("/index.jsf?joe=10&f=20&amp;",
                 "/index.jsf?joe=10&amp;f=20&amp;",
                 "/index.jsf?joe=10&amp;f=20&amp;");
+        //Test URL with non-ASCII characters in URI.
+        testURLEncoding("/\u03b5\u03bb/\u05d9\u05ea/\u043a\u0438/\u064a\u0629\u064f\u200e\u200e/\ud55c\uae00/index.jsf",
+        		"/%CE%B5%CE%BB/%D7%99%D7%AA/%D0%BA%D0%B8/%D9%8A%D8%A9%D9%8F%E2%80%8E%E2%80%8E/%ED%95%9C%EA%B8%80/index.jsf",
+        		"/%CE%B5%CE%BB/%D7%99%D7%AA/%D0%BA%D0%B8/%D9%8A%D8%A9%D9%8F%E2%80%8E%E2%80%8E/%ED%95%9C%EA%B8%80/index.jsf");
+        //Test URL with non-ASCII characters in query string.
+        testURLEncoding("/index.jsf?greek=\u03b5\u03bb&cyrillic=\u043a\u0438&hebrew=\u05d9\u05ea&arabic=\u064a\u0629\u064f\u200e\u200e&korean=\ud55c\uae00",
+        		"/index.jsf?greek=%CE%B5%CE%BB&amp;cyrillic=%D0%BA%D0%B8&amp;hebrew=%D7%99%D7%AA&amp;arabic=%D9%8A%D8%A9%D9%8F%E2%80%8E%E2%80%8E&amp;korean=%ED%95%9C%EA%B8%80",
+        		"/index.jsf?greek=%CE%B5%CE%BB&amp;cyrillic=%D0%BA%D0%B8&amp;hebrew=%D7%99%D7%AA&amp;arabic=%D9%8A%D8%A9%D9%8F%E2%80%8E%E2%80%8E&amp;korean=%ED%95%9C%EA%B8%80");
     }
 
     public void testControlCharacters() throws IOException {

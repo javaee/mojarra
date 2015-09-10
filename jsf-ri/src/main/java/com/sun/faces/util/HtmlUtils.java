@@ -40,19 +40,19 @@
 
 package com.sun.faces.util;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.util.BitSet;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Arrays;
+import java.util.BitSet;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
 
 /**
  * Utility class for HTML.
@@ -618,10 +618,7 @@ public class HtmlUtils {
      * Writes a string into URL-encoded format out to a Writer.
      * <p/>
      * All characters before the start of the query string will be encoded
-     * using ISO-8859-1.
-     * PENDING: Ideally, we'd encode characters before the query string
-     * using UTF-8, which is what the HTML spec recommends.  Unfortunately,
-     * the Apache server doesn't support this until 2.0.
+     * using UTF-8.
      * <p/>
      * Characters after the start of the query string will be encoded
      * using a client-defined encoding.  You'll need to use the encoding
@@ -666,10 +663,8 @@ public class HtmlUtils {
                     if (ch == ' ') {
                         out.write('+');
                     } else {
-                        // ISO-8859-1.  Blindly assume the character will be < 255.
-                        // Not much we can do if it isn't.
-                        writeURIDoubleHex(out, ch);
-
+                        textBuff[i] = ch;
+                        encodeURIString(out, textBuff, "UTF-8", i, i + 1);
                     }
                 }
                 // DO NOT encode '%'.  If you do, then for starters,
@@ -706,10 +701,7 @@ public class HtmlUtils {
      * Writes a string into URL-encoded format out to a Writer.
      * <p/>
      * All characters before the start of the query string will be encoded
-     * using ISO-8859-1.
-     * PENDING: Ideally, we'd encode characters before the query string
-     * using UTF-8, which is what the HTML spec recommends.  Unfortunately,
-     * the Apache server doesn't support this until 2.0.
+     * using UTF-8.
      * <p/>
      * Characters after the start of the query string will be encoded
      * using a client-defined encoding.  You'll need to use the encoding
@@ -747,7 +739,7 @@ public class HtmlUtils {
             char ch = textBuff[i];
 
             if ((ch < 33) || (ch > 126)) {
-                writeURIDoubleHex(out, ch);
+               	encodeURIString(out, textBuff, "UTF-8", i, i + 1);
             }
             // DO NOT encode '%'.  If you do, then for starters,
             // we'll double-encode anything that's pre-encoded.
@@ -765,7 +757,7 @@ public class HtmlUtils {
             // as if it were in the request's character set.  So use
             // the real encoding for those!
             else if (ch == '?') {
-           out.write('?');
+                out.write('?');
                 encodeURIString(out,
                                 textBuff,
                                 queryEncoding,
@@ -1240,4 +1232,5 @@ public class HtmlUtils {
         }
         
     }
+
 }
