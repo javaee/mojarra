@@ -48,6 +48,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
 import java.util.List;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
@@ -207,6 +208,7 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testMethodExpressionNesting() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
