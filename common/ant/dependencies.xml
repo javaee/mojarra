@@ -72,8 +72,9 @@
     <property name="bean-validator.version" value="3.0-JBoss-4.0.0.Beta3"/>
     <property name="javax-inject.version" value="1"/>
     <property name="maven.repository.importer.version" value="1.2"/>
-    <property name="yuicompressor.version" value="2.4.2"/>
+    <property name="yuicompressor.version" value="2.4.8"/>
 
+    <property name="central.maven2" value="http://repo1.maven.org/maven2" />
     <property name="redhat.maven2" value="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases"/>
     <!--<property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>-->
     <property name="maven2.mirror" value="http://repo1.maven.org/maven2/"/>
@@ -176,7 +177,7 @@
                 </not>
             </and>
             <then>
-                <get src="${java.net.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
+                <get src="${central.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
                      dest="${junit.jar}"
                      usetimestamp="true"/>
             </then>
@@ -210,21 +211,21 @@
         <if>
             <and>
                 <not>
-                    <available file="${yuicompressor.home}" property="ignored"/>
+                    <available file="${yuicompressor.jar}" property="ignored"/>
                 </not>
                 <not>
                     <isset property="build.source"/>
                 </not>
             </and>
             <then>
-                <get src="http://www.julienlecomte.net/yuicompressor/yuicompressor-${yuicompressor.version}.zip"
+                <get src="https://github.com/yui/yuicompressor/releases/download/v${yuicompressor.version}/yuicompressor-${yuicompressor.version}.zip"
                      dest="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
                      usetimestamp="true"/>
                 <unzip
                         src="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
                         dest="${dependency.base.dir}"/>
                 <copy tofile="${yuicompressor.jar}"
-                      file="${yuicompressor.home}/build/yuicompressor-${yuicompressor.version}.jar"/>
+                      file="${dependency.base.dir}/yuicompressor-${yuicompressor.version}.jar"/>
             </then>
         </if>
 
@@ -260,7 +261,7 @@
                 </not>
             </and>
             <then>
-                <get src="${maven2.mirror}/taglibrarydoc/tlddoc/${taglibdoc.version}/tlddoc-${taglibdoc.version}.jar"
+                <get src="${central.maven2}/taglibrarydoc/tlddoc/${taglibdoc.version}/tlddoc-${taglibdoc.version}.jar"
                      dest="${tlddoc.jar}"
                      usetimestamp="true"/>
 
@@ -289,7 +290,7 @@
 
 
         <!-- MAVEN REPOSITORY IMPORTER -->
-        <if>
+<!--        <if>
             <and>
                 <not>
                     <available file="${maven.repository.importer.jar}" property="ignored"/>
@@ -304,7 +305,7 @@
                      usetimestamp="true"/>
 
             </then>
-        </if>
+        </if>-->
 
         <!-- SERVLET API -->
         <if>
@@ -312,7 +313,7 @@
                 <available file="${servlet.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.servlet/jars/servlet-api-${servlet.api.version}.jar"
+                <get src="${central.maven2}/javax/servlet/servlet-api/${servlet.api.version}/servlet-api-${servlet.api.version}.jar"
                      dest="${servlet.jar}"
                      usetimestamp="true"/>
 
@@ -414,6 +415,7 @@
         </if>
         -->
         <!-- Groovy -->
+        <!--
         <if>
             <not>
                 <available file="${groovy.jar}" property="ignored"/>
@@ -424,13 +426,14 @@
                      usetimestamp="true"/>
             </then>
         </if>
+        -->
         <!-- JSR 330 -->
         <if>
             <not>
                 <available file="${javax-inject.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${maven2.mirror}/javax/inject/javax.inject/${javax-inject.version}/javax.inject-${javax-inject.version}.jar"
+                <get src="${central.maven2}/javax/inject/javax.inject/${javax-inject.version}/javax.inject-${javax-inject.version}.jar"
                      dest="${javax-inject.jar}"
                      usetimestamp="true"/>
             </then>
