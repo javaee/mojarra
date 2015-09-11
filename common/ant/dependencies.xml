@@ -80,7 +80,7 @@
     <property name="javax-inject.version" value="1"/>
     <property name="javax-enterprise.version" value="1.0-SP1"/>
     <property name="maven.repository.importer.version" value="1.2"/>
-    <property name="yuicompressor.version" value="2.4.2"/>
+    <property name="yuicompressor.version" value="2.4.8"/>
 
     <property name="central.maven2" value="http://repo1.maven.org/maven2" />
     <property name="redhat.maven2" value="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases"/>
@@ -191,7 +191,7 @@
                 </not>
             </and>
             <then>
-                <get src="${java.net.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
+                <get src="${central.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
                      dest="${junit.jar}"
                      usetimestamp="true"/>
             </then>
@@ -225,21 +225,21 @@
         <if>
             <and>
                 <not>
-                    <available file="${yuicompressor.home}" property="ignored"/>
+                    <available file="${yuicompressor.jar}" property="ignored"/>
                 </not>
                 <not>
                     <isset property="build.source"/>
                 </not>
             </and>
             <then>
-                <get src="http://www.julienlecomte.net/yuicompressor/yuicompressor-${yuicompressor.version}.zip"
+                <get src="https://github.com/yui/yuicompressor/releases/download/v${yuicompressor.version}/yuicompressor-${yuicompressor.version}.zip"
                      dest="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
                      usetimestamp="true"/>
                 <unzip
                         src="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
                         dest="${dependency.base.dir}"/>
                 <copy tofile="${yuicompressor.jar}"
-                      file="${yuicompressor.home}/build/yuicompressor-${yuicompressor.version}.jar"/>
+                      file="${dependency.base.dir}/yuicompressor-${yuicompressor.version}.jar"/>
             </then>
         </if>
 
@@ -304,7 +304,7 @@
 
 
         <!-- MAVEN REPOSITORY IMPORTER -->
-        <if>
+<!--        <if>
             <and>
                 <not>
                     <available file="${maven.repository.importer.jar}" property="ignored"/>
@@ -319,7 +319,7 @@
                      usetimestamp="true"/>
 
             </then>
-        </if>
+        </if>-->
 
         <!-- JAVAEE API -->
         <if>
@@ -327,7 +327,7 @@
                 <available file="${javaee-api.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven2}/javax/javaee-api/${javaee-api.version}/javaee-api-${javaee-api.version}.jar"
+                <get src="${central.maven2}/javax/javaee-api/${javaee-api.version}/javaee-api-${javaee-api.version}.jar"
                      dest="${javaee-api.jar}"
                      usetimestamp="true"/>
 
@@ -339,7 +339,7 @@
                 <available file="${servlet.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.servlet/jars/servlet-api-${servlet.api.version}.jar"
+                <get src="${central.maven2}/javax/servlet/servlet-api/${servlet.api.version}/servlet-api-${servlet.api.version}.jar"
                      dest="${servlet.jar}"
                      usetimestamp="true"/>
 
@@ -404,7 +404,7 @@
                 <available file="${jstl.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/jstl/jars/jstl-${jstl.api.version}.jar"
+                <get src="${central.maven2}/jstl/jstl/${jstl.api.version}/jstl-${jstl.api.version}.jar"
                      dest="${jstl.jar}"
                      usetimestamp="true"/>
 
