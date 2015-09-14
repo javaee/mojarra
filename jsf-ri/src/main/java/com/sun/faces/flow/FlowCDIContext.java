@@ -355,7 +355,6 @@ public class FlowCDIContext implements Context, Serializable {
         Map<String, CreationalContext<?>> creationalMap = mapHelper.getFlowScopedCreationalMapForCurrentFlow();
         assert(!flowScopedBeanMap.isEmpty());
         assert(!creationalMap.isEmpty());
-        List<String> flowScopedBeansToRemove = new ArrayList<>();
         BeanManager beanManager = (BeanManager) Util.getCdiBeanManager(facesContext);
         
         for (Entry<String, Object> entry : flowScopedBeanMap.entrySet()) {
@@ -368,13 +367,11 @@ public class FlowCDIContext implements Context, Serializable {
             CreationalContext creational = creationalMap.get(passivationCapableId);
             
             owner.destroy(bean, creational);
-            flowScopedBeansToRemove.add(passivationCapableId);
         }
         
-        for (String cur : flowScopedBeansToRemove) {
-            flowScopedBeanMap.remove(cur);
-            creationalMap.remove(cur);
-        }
+        flowScopedBeanMap.clear();
+        creationalMap.clear();
+        
         mapHelper.updateSession();
         
         if (Util.isCdiOneOneOrLater(facesContext)) {
