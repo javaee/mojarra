@@ -84,6 +84,7 @@ public class CdiExtension implements Extension {
         afterBeanDiscovery.addBean(new FlowMapProducer());
         afterBeanDiscovery.addBean(new HeaderMapProducer());
         afterBeanDiscovery.addBean(new HeaderValuesMapProducer());
+        afterBeanDiscovery.addBean(new InitParameterMapProducer());
         afterBeanDiscovery.addBean(new ExternalContextProducer());
         afterBeanDiscovery.addBean(new FacesContextProducer());
         afterBeanDiscovery.addBean(new RequestCookieMapProducer());
