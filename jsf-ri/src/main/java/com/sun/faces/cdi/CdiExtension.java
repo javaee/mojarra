@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
@@ -107,17 +108,13 @@ public class CdiExtension implements Extension {
     @SuppressWarnings("unchecked")
     public <T extends DataModel<?>> void processBean(@Observes ProcessBean<T> event, BeanManager beanManager) {
         
-        // Collect all classes annotated by @FacesDataModel in a Map
-        // Key: (collection) class that a DataModel implementations wraps
-        // Value: the DataModel implementation class
-        
-        getAnnotation(beanManager, event.getAnnotated(), FacesDataModel.class)
-           .ifPresent(d -> 
-               forClassToDataModelClass.put(
-                   d.forClass(), 
-                   (Class<? extends DataModel<?>>) event.getBean().getBeanClass()
-               )
-           );
+        Optional result;
+        result = getAnnotation(beanManager, event.getAnnotated(), FacesDataModel.class);
+        if (null != result && result.isPresent()) {
+            FacesDataModel d = (FacesDataModel) result.get();
+            forClassToDataModelClass.put(d.forClass(), 
+                   (Class<? extends DataModel<?>>) event.getBean().getBeanClass());
+        }
     }
     
     /**
