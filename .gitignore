@@ -20,3 +20,5 @@ target/
 test/**/.classpath
 test/**/.project
 /nbproject/private/
+/dependencies
+glassfish-8.0/
