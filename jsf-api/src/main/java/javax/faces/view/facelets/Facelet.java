@@ -84,10 +84,16 @@ public abstract class Facelet {
      * @param parent
      *            The UIComponent to populate in a compositional fashion. In
      *            most cases a Facelet will be base a UIViewRoot.
-     * @throws IOException
-     * @throws javax.faces.FacesException
-     * @throws FaceletException
-     * @throws javax.el.ELException
+     * 
+     * @throws IOException if unable to load a file necessary to apply this {@code Facelet}
+
+     * @throws FaceletException if unable to parse the markup loaded in applying this {@code Facelet}
+
+     * @throws javax.faces.FacesException if unable to create child <code>UIComponent</code> instances
+
+     * @throws javax.el.ELException if any of the expressions in the markup
+     * loaded during the apply fail
+
      */
     public abstract void apply(FacesContext facesContext, UIComponent parent)
     throws IOException;

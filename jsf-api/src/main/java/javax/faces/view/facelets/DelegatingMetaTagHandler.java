@@ -143,6 +143,15 @@ public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
      *
      * @param c the <code>UIComponent</code> of the
      * component represented by this element instance.
+     * 
+     * @throws IOException if thrown by the next {@link FaceletHandler}
+
+     * @throws FaceletException if thrown by the next {@link FaceletHandler}
+
+     * @throws javax.faces.FacesException if thrown by the next {@link FaceletHandler}
+
+     * @throws javax.el.ELException if thrown by the next {@link FaceletHandler}
+
      * @since 2.0
      */
 
