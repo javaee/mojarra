@@ -107,7 +107,12 @@ import javax.faces.render.Renderer;
  * definition of a <code>Component</code>, that class must also
  * implement {@link javax.faces.event.ComponentSystemEventListener}.
  * </p>
-
+ * 
+ * <p class="changed_added_2_3">Dynamically modifying the component tree can 
+ * happen at any time, during and after restoring the view, but not during 
+ * state saving and needs to function properly with respect to rendering and 
+ * state saving
+ * </p>
  */
 
 public abstract class UIComponent implements PartialStateHolder, TransientStateHolder, SystemEventListenerHolder,
