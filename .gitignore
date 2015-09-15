@@ -19,3 +19,4 @@ target/
 .settings/
 test/**/.classpath
 test/**/.project
+/nbproject/private/
