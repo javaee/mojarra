@@ -707,11 +707,15 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
     /**
-     * <p>In addition to the standard <code>processValidators</code> behavior
+     * <p><span class="changed_modified_2_3">In</span> addition to the standard 
+     * <code>processValidators</code> behavior
      * inherited from {@link UIComponentBase}, calls <code>validate()</code>
      * if the <code>immediate</code> property is false (which is the
      * default);  if the component is invalid afterwards, calls
      * {@link FacesContext#renderResponse}.
+     * <span class="changed_added_2_3">To ensure the {@code PostValidateEvent}
+     * is published at the proper time, this component must be validated first,
+     * followed by the component's children and facets.</span>
      * If a <code>RuntimeException</code> is thrown during
      * validation processing, calls {@link FacesContext#renderResponse}
      * and re-throw the exception.

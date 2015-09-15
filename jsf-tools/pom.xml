@@ -133,24 +133,6 @@
     </profile>
     <profile>
       <id>vdldoc</id>
-      <pluginRepositories>
-        <pluginRepository>
-          <id>sonatypeSnapshots</id>
-          <name>Sonatype Snapshots</name>
-          <releases>
-            <enabled>false</enabled>
-            <updatePolicy>always</updatePolicy>
-            <checksumPolicy>ignore</checksumPolicy>
-          </releases>
-          <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-            <checksumPolicy>ignore</checksumPolicy>
-          </snapshots>
-          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-          <layout>default</layout>
-        </pluginRepository>
-      </pluginRepositories>
       <build>
         <plugins>
           <plugin>
@@ -196,7 +178,7 @@
         </plugins>
       </build>
       <properties>
-        <vdldoc.version>2.1-SNAPSHOT</vdldoc.version>
+        <vdldoc.version>2.1</vdldoc.version>
         <spec.version>2.3</spec.version>
         <doctitle>JSF ${spec.version} VDL Documentation</doctitle>
       </properties>
