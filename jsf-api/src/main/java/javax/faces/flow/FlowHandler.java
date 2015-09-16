@@ -175,8 +175,6 @@ public abstract class FlowHandler {
      * constant as the parameter name for a parameter representing the flow id
      * of the flow that this component will cause to be entered.</p>
      * 
-     * <p class="changed_added_2_2"></p>
-     * 
      * @since 2.2
      */
     public static final String FLOW_ID_REQUEST_PARAM_NAME = "jffi";
@@ -207,6 +205,8 @@ public abstract class FlowHandler {
      * <p class="changed_added_2_2">Return the {@code Map} that backs
      * the {@code #{flowScope}} EL implicit object or {@code null}
      * if no flow is currently active. </p>
+     * 
+     * @return the {@code Map} for this flow scope.
      *
      * @since 2.2
      */ 
@@ -227,6 +227,8 @@ public abstract class FlowHandler {
      * scope of the {@code definingDocument}.
 
      * @throws NullPointerException if any of the parameters are {@code null}
+     * 
+     * @return the {@code Flow} for the argument identifiers.
      *
      * @since 2.2
      */ 
@@ -277,6 +279,8 @@ public abstract class FlowHandler {
      * @param context the {@code FacesContext} for the current request.
      * 
      * @throws NullPointerException if any of the parameters are {@code null}
+     * 
+     * @return the current {@code Flow} or {@code null} if no flow is active
      *
      * @since 2.2
      */
@@ -285,6 +289,8 @@ public abstract class FlowHandler {
     /**
      * <p class="changed_added_2_2">Convenience overload that calls {@link FacesContext#getCurrentInstance()}
      * and then calls through to {@link #getCurrentFlow(javax.faces.context.FacesContext)}. </p>
+     * 
+     * @return the current {@code Flow} or {@code null} if no flow is active
      * 
      * @since 2.2
      */
@@ -302,6 +308,8 @@ public abstract class FlowHandler {
      * @throws NullPointerException if {@code context} is {@code null}
      * 
      * @since 2.2
+     * 
+     * @return the last displayed viewId.
      */
     
     public abstract String getLastDisplayedViewId(FacesContext context);
@@ -476,6 +484,8 @@ public abstract class FlowHandler {
      * scope of the {@code definingDocument}.
 
      * @throws NullPointerException if any of the parameters are {@code null}
+     * 
+     * @return true if and only if the referenced flow is active
      *
      * @since 2.2
      */

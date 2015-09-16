@@ -68,6 +68,8 @@ public abstract class Flow {
      * Flow.  This must be unique within the defining document (such as
      * an Application Configuration Resources file), but need not be
      * unique within the entire application.</p>
+     * 
+     * @return the id.
 
      * @since 2.2
      */
@@ -77,6 +79,8 @@ public abstract class Flow {
     /**
      * <p class="changed_added_2_2">Return the immutable application unique 
      * identifier for the document in which the argument flow is defined.</p>
+     * 
+     * @return the defining document id
 
      * @since 2.2
      */
@@ -87,6 +91,8 @@ public abstract class Flow {
      * <p class="changed_added_2_2">Return the immutable id for the
      * default node that should be activated when this flow is
      * entered.</p>
+     * 
+     * @return the id of the start node
      *
      * @since 2.2
      */
@@ -99,10 +105,8 @@ public abstract class Flow {
      * before exiting this flow.  Any {@link FlowScoped} beans declared
      * for this flow must remain in scope until after control returns
      * from the method referenced by this {@code MethodExpression}.</p>
-
-     * <div class="changed_added_2_2">
-
-     * </div>
+     * 
+     * @return the {@code MethodExpresion} for the finalizer.
 
      * @since 2.2
      */
@@ -113,10 +117,8 @@ public abstract class Flow {
      * <p class="changed_added_2_2">Return the {@code MethodExpression}
      * that must be called by the runtime immediately after activating
      * any {@link FlowScoped} beans declared for this flow.</p>
-
-     * <div class="changed_added_2_2">
-
-     * </div>
+     * 
+     * @return the {@code MethodExpresion} for the initializer.
 
      * @since 2.2
      */
@@ -134,11 +136,9 @@ public abstract class Flow {
      * parameters are associated with a specific flow instance, while
      * outbound parameters are associated with a {@link FlowCallNode}
      * that causes the transition to a new flow.</p>
-
-     * <div class="changed_added_2_2">
-
-     * </div>
-
+     * 
+     * @return the inbound parameters
+     * 
      * @since 2.2
      */
 
@@ -147,11 +147,8 @@ public abstract class Flow {
     /**
      * <p class="changed_added_2_2">Return an immutable data structure
      * containing all of the view nodes declared for this flow.</p>
-
-     * <div class="changed_added_2_2">
-
-     * </div>
-
+     * 
+     * @return the view nodes for this flow
      * @since 2.2
      */
     public abstract List<ViewNode> getViews();
@@ -159,11 +156,9 @@ public abstract class Flow {
     /**
      * <p class="changed_added_2_2">Return an immutable data structure
      * containing all of the return nodes declared for this flow.</p>
-
-     * <div class="changed_added_2_2">
-
-     * </div>
-
+     * 
+     * @return the return nodes for this flow.
+     * 
      * @since 2.2
      */
     public abstract Map<String,ReturnNode> getReturns();
@@ -171,11 +166,9 @@ public abstract class Flow {
     /**
      * <p class="changed_added_2_2">Return an immutable data structure
      * containing all of the switch nodes declared for this flow.</p>
-
-     * <div class="changed_added_2_2">
-
-     * </div>
-
+     * 
+     * @return the switch nodes for this flow
+     * 
      * @since 2.2
      */
     public abstract Map<String,SwitchNode> getSwitches();
@@ -183,11 +176,9 @@ public abstract class Flow {
     /**
      * <p class="changed_added_2_2">Return an immutable data structure
      * containing all the flow call nodes declared for this flow.</p>
-
-     * <div class="changed_added_2_2">
-
-     * </div>
-
+     * 
+     * @return the flow call nodes for this flow
+     * 
      * @since 2.2
      */
     public abstract Map<String,FlowCallNode> getFlowCalls();
@@ -197,11 +188,11 @@ public abstract class Flow {
      * represents calling the {@code targetFlow} from this flow, or
      * {@code null} if {@code targetFlow} cannot be reached from this
      * flow.</p>
-
-     * <div class="changed_added_2_2">
-
-     * </div>
-
+     * 
+     * @param targetFlow the flow for which the {@link FlowCallNode} is to be returned
+     * 
+     * @return a {@link FlowCallNode} for the argument flow or {@code null}
+     * 
      * @since 2.2
      */
     public abstract FlowCallNode getFlowCall(Flow targetFlow);
@@ -209,11 +200,9 @@ public abstract class Flow {
     /**
      * <p class="changed_added_2_2">Return an immutable data structure
      * containing all the method call nodes declared for this flow.</p>
-
-     * <div class="changed_added_2_2">
-
-     * </div>
-
+     * 
+     * @return the method call nodes for this flow
+     * 
      * @since 2.2
      */
     public abstract List<MethodCallNode> getMethodCalls();
@@ -222,8 +211,23 @@ public abstract class Flow {
     
     // <editor-fold defaultstate="collapsed" desc="Graph navigation">
     
+    /**
+     * <p class="changed_added_2_2">Return the generic {@link FlowNode} by id, 
+     * or {@code null} if not found.</p>
+     * 
+     * @param nodeId the node id for which the {@link FlowNode} is to be returned
+     * 
+     * @return the {@link FlowNode} or {@code null}
+     */
+    
     public abstract FlowNode getNode(String nodeId);
     
+    /**
+     * <p class="changed_added_2_2">Return an unmodifiable view of the 
+     * navigation cases within this flow.</p>
+     * 
+     * @return the navigation cases, 
+     */
     public abstract Map<String, Set<NavigationCase>> getNavigationCases();
     
     // </editor-fold>
@@ -232,10 +236,12 @@ public abstract class Flow {
     
     
     /**
-     * <p class="changed_added_2_2">Obtain the current {@link
-     * javax.faces.lifecycle.ClientWindow} from the {@link
-     * javax.faces.context.ExternalContext}.  Get the window's id and 
+     * <p class="changed_added_2_2">Get the {@link ClientWindow}'s id and 
      * append "_" and the return from {@link #getId}.  Return the result.</p>
+     * 
+     * @return the generated client window id for this flow.
+     * 
+     * @param curWindow the 
      *
      * @since 2.2
      */

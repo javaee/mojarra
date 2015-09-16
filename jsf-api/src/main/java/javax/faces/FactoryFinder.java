@@ -266,6 +266,8 @@ public final class FactoryFinder {
      *                                  implementation class for the specified factory name
      * @throws NullPointerException     if <code>factoryname</code>
      *                                  is null
+     * 
+     * @return the found factory instance
      */
     public static Object getFactory(String factoryName)
          throws FacesException {
@@ -303,6 +305,11 @@ public final class FactoryFinder {
      *                                  identify a standard JavaServer Faces factory name
      * @throws NullPointerException     if <code>factoryname</code>
      *                                  is null
+     * 
+     * @param factoryName the name to be used in a subsequent call to {@link #getFactory}.
+     * 
+     * @param implName the fully qualified class name of the factory corresponding
+     * to {@code factoryName}.
      */
     public static void setFactory(String factoryName,
                                   String implName) {

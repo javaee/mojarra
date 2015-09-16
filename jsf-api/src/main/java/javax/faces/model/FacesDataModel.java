@@ -66,6 +66,8 @@ public @interface FacesDataModel {
      * <p class="changed_added_2_3">The value of this annotation
      * attribute is taken to be the type that the DataModel that is
      * annotated with this annotation is able to wrap.</p>
+     * 
+     * @return the type that the DataModel that is annotated with this annotation is able to wrap
      */
     Class<?> forClass() default Object.class;
 }

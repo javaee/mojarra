@@ -69,6 +69,8 @@ public interface TextHandler {
     /**
      * <p class="changed_added_2_0">Returns the literal String value of the 
      * contained text.</p>
+     * 
+     * @return the literal String value of the contained text
      */
     public String getText();
     
@@ -77,6 +79,8 @@ public interface TextHandler {
      * of the contained text after evaluating EL.</p>
      *
      * @param ctx the <code>FaceletContext</code> for this view execution
+     * 
+     * @return the resolved literal String value of the contained text after evaluating EL
      */
     public String getText(FaceletContext ctx);
 }

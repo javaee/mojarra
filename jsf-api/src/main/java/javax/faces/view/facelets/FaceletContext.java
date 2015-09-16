@@ -86,6 +86,8 @@ public abstract class FaceletContext extends ELContext {
      * <p class="changed_added_2_0">The current FacesContext bound to
      * this "request".  Must not be <code>null</code>.</p>
      * 
+     * @return The current FacesContext bound to this "request".
+     * 
      * @since 2.0
      */
     public abstract FacesContext getFacesContext();
@@ -96,6 +98,8 @@ public abstract class FaceletContext extends ELContext {
      * 
      * @param base the string from which to generate the ID.
      *
+     * @return the generated id
+     * 
      * @since 2.0
      */
     public abstract String generateUniqueId(String base);
@@ -104,6 +108,8 @@ public abstract class FaceletContext extends ELContext {
      * <p class="changed_added_2_0">The ExpressionFactory to use within
      * the Facelet this context is executing upon.  Must not be
      * <code>null</code>.</p>
+     * 
+     * @return the {@code ExpressionFactory} for this Facelet.
      * 
      * @since 2.0
      */
@@ -147,6 +153,9 @@ public abstract class FaceletContext extends ELContext {
      * backed by the current VariableMapper</p>
      * 
      * @param name the name of the attribute to return.
+     * 
+     * @return the value of the named attribute
+     * 
      * @since 2.0
      */
     public abstract Object getAttribute(String name);
