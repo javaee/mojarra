@@ -51,7 +51,7 @@
     </parent>
     <artifactId>contractSample</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra ${project.version} - Test - Servlet - Contract Sample</name>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Contract Sample</name>
     <build>
         <finalName>test-servlet30-contractSample</finalName>
     </build>
