@@ -374,7 +374,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
             // Document getter method
             String description = "<p>Return the value of the <code>" +
-                                 pb.getPropertyName() + "</code> property.</p>";
+                                 pb.getPropertyName() + "</code> property.</p>" + 
+                                 "\n@return the property value";
             DescriptionBean db = pb.getDescription("");
             if (db != null) {
                 String temp = db.getDescription().trim();
@@ -447,10 +448,15 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             //writer.fwrite("}\n\n");
 
             // Generate the setter method
+            
+            String maybeUnderscore = (pb.getPropertyName().equals("for") || pb.getPropertyName().equals("public"))
+                    ? "_" : "";
+            
             writer.writeJavadocComment("<p>Set the value of the <code>"
                                        +
                                        pb.getPropertyName()
-                                       + "</code> property.</p>\n");
+                                       + "</code> property.</p>"
+                                       + "\n@param " + maybeUnderscore + pb.getPropertyName() + " the new property value\n");
 
             writer.fwrite("public void set");
             writer.write(capitalize(pb.getPropertyName()));
