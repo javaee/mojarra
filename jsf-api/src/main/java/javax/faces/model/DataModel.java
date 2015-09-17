@@ -92,6 +92,8 @@ public abstract class DataModel<E> implements Iterable<E> {
      * <code>wrappedData</code> is available, return <code>false</code>.</p>
      *
      * @throws javax.faces.FacesException if an error occurs getting the row availability
+     * 
+     * @return true if and only if there is data available at the current index, false otherwise.
      */
     public abstract boolean isRowAvailable();
 
@@ -102,18 +104,23 @@ public abstract class DataModel<E> implements Iterable<E> {
      * <code>wrappedData</code> is available, return -1.</p>
      *
      * @throws javax.faces.FacesException if an error occurs getting the row count
+     * 
+     * @return the number of rows of data represented by this {@code DataModel}
      */
     public abstract int getRowCount();
 
 
     /**
-     * <p>Return an object representing the data for the currenty selected
+     * <p>Return an object representing the data for the currently selected
      * row index.  If no <code>wrappedData</code> is available, return
      * <code>null</code>.</p>
      *
      * @throws javax.faces.FacesException if an error occurs getting the row data
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
+     * 
+     * @return an object representing the data for the currently selected
+     * row index
      */
     public abstract E getRowData();
 
@@ -124,6 +131,8 @@ public abstract class DataModel<E> implements Iterable<E> {
      * is available, return -1.</p>
      *
      * @throws javax.faces.FacesException if an error occurs getting the row index
+     * 
+     * @return the index of the currently selected row
      */
     public abstract int getRowIndex();
 
@@ -156,6 +165,8 @@ public abstract class DataModel<E> implements Iterable<E> {
     /**
      * <p>Return the object representing the data wrapped by this
      * {@link DataModel}, if any.</p>
+     * 
+     * @return the {@code Object} that this model wraps.
      */
     public abstract Object getWrappedData();
 
@@ -222,6 +233,8 @@ public abstract class DataModel<E> implements Iterable<E> {
      * <p>Return the set of {@link DataModelListener}s interested in
      * notifications from this {@link DataModel}.  If there are no such
      * listeners, an empty array is returned.</p>
+     * 
+     * @return the listeners for this instance, or an empty array
      */
     public DataModelListener[] getDataModelListeners() {
 

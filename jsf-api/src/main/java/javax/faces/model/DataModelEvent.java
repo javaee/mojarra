@@ -90,6 +90,8 @@ public class DataModelEvent extends EventObject {
 
     /**
      * <p>Return the {@link DataModel} that fired this event.</p>
+     * 
+     * @return the {@link DataModel} that fired this event
      */
     public DataModel getDataModel() {
 
@@ -101,6 +103,9 @@ public class DataModelEvent extends EventObject {
     /**
      * <p>Return the object representing the data for the specified row index,
      * or <code>null</code> for no associated row data.</p>
+     * 
+     * @return the object representing the data for the specified row index,
+     * or <code>null</code> for no associated row data
      */
     public Object getRowData() {
 
@@ -111,6 +116,8 @@ public class DataModelEvent extends EventObject {
 
     /**
      * <p>Return the row index for this event, or -1 for no specific row.</p>
+     * 
+     * @return the row index for this event, or -1 for no specific row
      */
     public int getRowIndex() {
 

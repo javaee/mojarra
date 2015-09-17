@@ -37,37 +37,18 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.faces.model;
+package com.sun.faces.cdi;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import javax.inject.Qualifier;
+import javax.enterprise.util.AnnotationLiteral;
+import javax.faces.annotation.RequestMap;
 
 /**
- * *<p class="changed_added_2_3">The presence of this annotation
- * on a class automatically registers the class with the runtime as a
- * {@link DataModel} that's capable of wrapping a type indicated by the
- * {@link FacesDataModel#forClass()} attribute.
+ * An annotation literal for <code>@RequestMap</code>.
  * 
+ * @since 2.3
+ * @see RequestMap
  */
-
-@Retention(RUNTIME)
-@Target(TYPE)
-@Inherited
-@Qualifier
-public @interface FacesDataModel {
-    
-    /**
-     * <p class="changed_added_2_3">The value of this annotation
-     * attribute is taken to be the type that the DataModel that is
-     * annotated with this annotation is able to wrap.</p>
-     * 
-     * @return the type that the DataModel that is annotated with this annotation is able to wrap
-     */
-    Class<?> forClass() default Object.class;
+@SuppressWarnings("all")
+class RequestMapAnnotationLiteral extends AnnotationLiteral<RequestMap> implements RequestMap {
+    private static final long serialVersionUID = 1L;
 }

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,37 +37,21 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.faces.model;
+package javax.faces.annotation;
 
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
-/**
- * *<p class="changed_added_2_3">The presence of this annotation
- * on a class automatically registers the class with the runtime as a
- * {@link DataModel} that's capable of wrapping a type indicated by the
- * {@link FacesDataModel#forClass()} attribute.
- * 
- */
-
-@Retention(RUNTIME)
-@Target(TYPE)
-@Inherited
+@Target({TYPE, METHOD, PARAMETER, FIELD})
 @Qualifier
-public @interface FacesDataModel {
-    
-    /**
-     * <p class="changed_added_2_3">The value of this annotation
-     * attribute is taken to be the type that the DataModel that is
-     * annotated with this annotation is able to wrap.</p>
-     * 
-     * @return the type that the DataModel that is annotated with this annotation is able to wrap
-     */
-    Class<?> forClass() default Object.class;
+@Retention(value = RUNTIME)
+public @interface RequestMap {
 }

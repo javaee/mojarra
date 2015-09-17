@@ -75,6 +75,8 @@ public abstract class TagHandlerDelegateFactory implements FacesWrapper<TagHandl
      * @param owner the <code>ComponentHandler</code> instance being
      * helped by this helper instance.
      *
+     * @return the newly created instance
+     * 
      * @since 2.0
      */ 
     public abstract TagHandlerDelegate createComponentHandlerDelegate(ComponentHandler owner);
@@ -87,6 +89,8 @@ public abstract class TagHandlerDelegateFactory implements FacesWrapper<TagHandl
      * @param owner the <code>ValidatorHandler</code> instance being
      * helped by this helper instance.
      *
+     * @return the newly created instance
+     * 
      * @since 2.0
      */ 
     public abstract TagHandlerDelegate createValidatorHandlerDelegate(ValidatorHandler owner);
@@ -99,6 +103,8 @@ public abstract class TagHandlerDelegateFactory implements FacesWrapper<TagHandl
      * @param owner the <code>ValidatorHandler</code> instance being
      * helped by this helper instance.
      *
+     * @return the newly created instance
+     * 
      * @since 2.0
      */ 
     public abstract TagHandlerDelegate createConverterHandlerDelegate(ConverterHandler owner);
@@ -111,6 +117,8 @@ public abstract class TagHandlerDelegateFactory implements FacesWrapper<TagHandl
      * @param owner the <code>ValidatorHandler</code> instance being
      * helped by this helper instance.
      *
+     * @return the newly created instance
+     * 
      * @since 2.0
      */ 
     public abstract TagHandlerDelegate createBehaviorHandlerDelegate(BehaviorHandler owner);

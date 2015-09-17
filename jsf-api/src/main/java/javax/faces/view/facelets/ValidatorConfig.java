@@ -71,6 +71,9 @@ public interface ValidatorConfig extends TagConfig {
     /**
      * <p class="changed_added_2_0">Return the validator-id associated with a 
      * particular validator in your faces-config</p>
+     * 
+     * @return the validator-id
+     * 
      * @since 2.0
      */
     public String getValidatorId();

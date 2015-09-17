@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,37 +37,54 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.faces.model;
+package com.sun.faces.test.javaee8.el;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M03;
+import static org.junit.Assert.assertTrue;
 
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import javax.inject.Qualifier;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
 
 /**
- * *<p class="changed_added_2_3">The presence of this annotation
- * on a class automatically registers the class with the runtime as a
- * {@link DataModel} that's capable of wrapping a type indicated by the
- * {@link FacesDataModel#forClass()} attribute.
- * 
+ * Tests the availability of the request map via EL
+ *
  */
+@RunWith(JsfTestRunner.class)
+public class Spec1393IT {
 
-@Retention(RUNTIME)
-@Target(TYPE)
-@Inherited
-@Qualifier
-public @interface FacesDataModel {
-    
-    /**
-     * <p class="changed_added_2_3">The value of this annotation
-     * attribute is taken to be the type that the DataModel that is
-     * annotated with this annotation is able to wrap.</p>
-     * 
-     * @return the type that the DataModel that is annotated with this annotation is able to wrap
-     */
-    Class<?> forClass() default Object.class;
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
+    }
+
+    @After
+    public void tearDown() {
+        webClient.close();
+    }
+
+    @Test
+    @JsfTest(value = JSF_2_3_0_M03, excludes = { WEBLOGIC_12_2_1, WEBLOGIC_12_1_4 })
+    public void testRequestMap() throws Exception {
+        
+        HtmlPage page = webClient.getPage(webUrl + "requestMap.xhtml");
+        
+        System.out.println(page.asXml());
+        
+        // Request attribute is set in AttributeFilter
+        assertTrue(page.asXml().contains("fooAttribute:bar"));
+    }
+
 }

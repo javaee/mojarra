@@ -97,6 +97,8 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
      * <p class="changed_added_2_0">Return the implementation specific
      * delegate instance that provides the bulk of the work for this
      * handler instance.</p>
+     * 
+     * @return the implementation specific delegate instance
      */
     @Override
     protected TagHandlerDelegate getTagHandlerDelegate() {
@@ -116,6 +118,10 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
      * declaration that has the attribute "disabled" which resolves to
      * false, instructing Facelets not to register a default validator
      * with the same id.</p>
+     * 
+     * @param ctx the FaceletContext for this {@code Facelet}
+     * 
+     * @return the validator-id
      */
     public String getValidatorId(FaceletContext ctx) {
         if (validatorId == null) {
@@ -133,6 +139,8 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
     /**
      * <p class="changed_added_2_0">Return the <code>TagConfig</code>
      * subclass used to configure this handler instance.</p>
+     * 
+     * @return the <code>TagConfig</code> subclass used to configure this handler instance.
      */
     public ValidatorConfig getValidatorConfig() {
 
