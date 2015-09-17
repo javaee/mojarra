@@ -125,6 +125,8 @@ public abstract class RenderKitFactory implements FacesWrapper<RenderKitFactory>
      *  can be returned for the specified identifier
      * @throws NullPointerException if <code>renderKitId</code> is
      * <code>null</code>
+     * 
+     * @return a {@link RenderKit} instance
      */
     public abstract RenderKit getRenderKit(FacesContext context, 
 					   String renderKitId);
@@ -135,6 +137,8 @@ public abstract class RenderKitFactory implements FacesWrapper<RenderKitFactory>
      * identifiers registered with this factory.  This set must include
      * the value specified by <code>RenderKitFactory.HTML_BASIC_RENDER_KIT</code>.
      * </p>
+     * 
+     * @return an <code>Iterator</code> over the set of render kit identifiers
      */
     public abstract Iterator<String> getRenderKitIds();
 

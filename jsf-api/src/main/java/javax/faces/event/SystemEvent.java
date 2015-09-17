@@ -120,6 +120,8 @@ public abstract class SystemEvent extends EventObject {
      * is a {@link ComponentSystemEventListener}.</span></p>
      *
      * @param listener {@link FacesListener} to evaluate
+     * 
+     * @return the result as specified above
      */
     public boolean isAppropriateListener(FacesListener listener) {
 

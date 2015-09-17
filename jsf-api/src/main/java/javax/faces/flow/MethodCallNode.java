@@ -65,6 +65,8 @@ public abstract class MethodCallNode extends FlowNode {
      * invoked to when control passes to this node.</p>
      * 
      * @since 2.2
+     * 
+     * @return the {@code MethodExpression} to be invoked to when control passes to this node
      */
     public abstract MethodExpression getMethodExpression();
 
@@ -73,6 +75,8 @@ public abstract class MethodCallNode extends FlowNode {
      * used in the event of a {@code null} return from the method.</p>
      * 
      * @since 2.2
+     * 
+     * @return the {@code outcome}
      */
     public abstract ValueExpression getOutcome();
     
@@ -81,6 +85,8 @@ public abstract class MethodCallNode extends FlowNode {
      * to the method.</p>
      * 
      * @since 2.2
+     * 
+     * @return the parameters to be passed to the method
      */
     public abstract List<Parameter> getParameters();
 

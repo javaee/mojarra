@@ -54,6 +54,8 @@ public abstract class Parameter {
      * <p class="changed_added_2_2">Return the name of the parameter</p>
      * 
      * @since 2.2
+     * 
+     * @return the name of the parameter
      */
     
     public abstract String getName();
@@ -64,6 +66,8 @@ public abstract class Parameter {
      * may only ever be evaluated in a "get" operation.</p>
      * 
      * @since 2.2
+     * 
+     * @return a {@code ValueExpression} for the value of the parameter
      */
     public abstract ValueExpression getValue();
 

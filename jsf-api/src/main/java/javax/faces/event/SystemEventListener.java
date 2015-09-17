@@ -75,6 +75,8 @@ public interface SystemEventListener extends FacesListener {
      *
      * @param source the source that is inquiring about the
      * appropriateness of sending an event to this listener instance.  
+     * 
+     * @return the value as specified above
      */ 
     public boolean isListenerForSource(Object source);
 

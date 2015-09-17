@@ -85,6 +85,8 @@ public @interface FlowScoped {
      * Flow#getId} of a defined flow for this application.</p>
      *
      * @since 2.2
+     * 
+     * @return the id of this flow
      */
     String value();
 
@@ -95,6 +97,8 @@ public @interface FlowScoped {
      * ids are unique within the scope of the application.</p>
      *
      * @since 2.2
+     * 
+     * @return the defining document id of this flow
      */
     
     String definingDocumentId() default "";

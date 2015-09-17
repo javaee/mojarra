@@ -129,6 +129,8 @@ public abstract class LifecycleFactory implements FacesWrapper<LifecycleFactory>
      *  can be returned for the specified identifier
      * @throws NullPointerException if <code>lifecycleId</code>
      *  is <code>null</code>
+     * 
+     * @return the {@code Lifecycle} instance
      */
     public abstract Lifecycle getLifecycle(String lifecycleId);
 
@@ -138,6 +140,9 @@ public abstract class LifecycleFactory implements FacesWrapper<LifecycleFactory>
      * identifiers supported by this factory.  This set must include
      * the value specified by <code>LifecycleFactory.DEFAULT_LIFECYCLE</code>.
      * </p>
+     * 
+     * @return an {@code Iterator} over the set of lifecycle
+     * identifiers supported by this factory
      */
     public abstract Iterator<String> getLifecycleIds();
 

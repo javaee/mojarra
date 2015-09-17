@@ -148,6 +148,8 @@ public abstract class ClientWindow {
      * specification of how to derive this value.</p>
      * 
      * @since 2.2
+     * 
+     * @return the id of the {@code ClientWindow}
      */
     
     public abstract String getId();
@@ -231,6 +233,8 @@ public abstract class ClientWindow {
      * without having access to an actual {@code ClientWindow} instance.</p>
      * 
      * @param context the {@link FacesContext} for this request.
+     * 
+     * @return the result as specified above
      * 
      * @since 2.2
      */

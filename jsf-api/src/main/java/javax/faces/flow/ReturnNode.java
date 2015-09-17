@@ -58,6 +58,8 @@ public abstract class ReturnNode extends FlowNode {
      * @param context the {@link FacesContext} for this request.
      * @throws NullPointerException if {@code context} is {@code null}.
      * @since 2.2
+     * 
+     * @return the {@code fromOutcome}
      */
     public abstract String getFromOutcome(FacesContext context); 
     

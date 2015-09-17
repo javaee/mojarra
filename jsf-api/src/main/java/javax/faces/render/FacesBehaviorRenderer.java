@@ -104,6 +104,8 @@ public @interface FacesBehaviorRenderer {
      * installed.</p>
      *
      * @since 2.0
+     * 
+     * @return the <em>render-kit-id</em>
      */ 
 
     String renderKitId() default RenderKitFactory.HTML_BASIC_RENDER_KIT;

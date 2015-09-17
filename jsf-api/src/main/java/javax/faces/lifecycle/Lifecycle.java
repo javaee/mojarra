@@ -113,6 +113,7 @@ public abstract class Lifecycle {
      * Store the new <code>ClientWindow</code> by calling
      * {@link javax.faces.context.ExternalContext#setClientWindow(javax.faces.lifecycle.ClientWindow)}.</p>
      * 
+     * @param context the {@link FacesContext} for this request.
      * 
      * @since 2.2
      */
@@ -125,6 +126,8 @@ public abstract class Lifecycle {
      * <p>Return the set of registered {@link PhaseListener}s for this
      * {@link Lifecycle} instance.  If there are no registered listeners,
      * a zero-length array is returned.</p>
+     * 
+     * @return the set of registered {@link PhaseListener}s
      */
     public abstract PhaseListener[] getPhaseListeners();
 

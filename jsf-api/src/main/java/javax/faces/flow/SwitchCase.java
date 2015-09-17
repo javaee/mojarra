@@ -55,6 +55,8 @@ public abstract class SwitchCase {
      * return {@code true}.</p>
      * 
      * @since 2.2
+     * 
+     * @return the outcome
      */
     public abstract String getFromOutcome();
 
@@ -63,6 +65,8 @@ public abstract class SwitchCase {
      * taken, {@code false} otherwise.</p>
      * 
      * @since 2.2
+     * 
+     * @return a value indicating whether or not this condition should be taken
      */
     public abstract Boolean getCondition(FacesContext context);
     

@@ -56,6 +56,8 @@ public abstract class ViewNode extends FlowNode {
      * that defines this view node.  This must be unique within the
      * flow.</p>
      * @since 2.2
+     * 
+     * @return the VDL document id
      */
     public abstract String getVdlDocumentId();
 
