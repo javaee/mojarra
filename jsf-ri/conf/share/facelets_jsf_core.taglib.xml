@@ -1908,6 +1908,54 @@ of POJOs.
             <type>java.lang.String</type>
         </attribute>
     </tag>
+
+    <tag>
+        <description><![CDATA[
+
+            <p class="changed_added_2_3">Enable class-level validations on CDI based backing beans.</p>
+
+        ]]></description>
+        <tag-name>validateWholeBean</tag-name>
+        <component>
+            <component-type>com.sun.faces.ext.validateWholeBean</component-type>
+            <renderer-type/>
+        </component>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.</p>
+
+
+            ]]></description>
+            <name>disabled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_3">A ValueExpression referencing the bean to be validated.</p>
+
+            ]]></description>
+            <name>bean</name>
+            <required>true</required>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_3">A ValueExpression whose value is a space separated list of client ids of components whose local values are to serve as the values of the respective properties of the bean to be validated.</p>
+
+            ]]></description>
+            <name>bean</name>
+            <required>true</required>
+            <type>java.lang.Object</type>
+        </attribute>
+
+    </tag>
+
+
     <tag>
         <description><![CDATA[
 

@@ -39,48 +39,42 @@
 
  */
 
-package com.sun.faces.test.javaee6web.multiFieldValidation;
+/*
+ * Copyright 2014 OmniFaces.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-import javax.validation.constraints.NotNull;
-import javax.validation.executable.ValidateOnExecution;
+package com.sun.faces.util.copier;
 
-@Named
-@RequestScoped
-@Password
-@ValidateOnExecution
-public class BackingBean implements PasswordHolder {
-    
-    private String password1;
-    
-    private String password2;
+/**
+ * Copier that doesn't actually copy an object fully, but just returns a new instance of the same type.
+ * <p>
+ * The object that is to be copied has to implement a public default constructor.
+ * 
+ * @since 2.0
+ * @author Arjan Tijms
+ *
+ */
+public class NewInstanceCopier implements Copier {
 
-    public BackingBean() {
-        password1="";
-        password2="";
-    }
-    
-    @NotNull
-    @Override
-    public String getPassword1() {
-        return password1;
-    }
-
-    public void setPassword1(String password1) {
-        this.password1 = password1;
-    }
-
-    @NotNull
-    @Override
-    public String getPassword2() {
-        return password2;
-    }
-
-    public void setPassword2(String password2) {
-        this.password2 = password2;
-    }
-    
-    
-
+	@Override
+	public Object copy(Object object) {
+		try {
+			return object.getClass().newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+	
 }

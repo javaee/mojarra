@@ -62,6 +62,8 @@
             
         </h:panelGrid>
         
+        <f:validateWholeBean bean='#{backingBean}' properties='password1 password2'/>
+        
         <p><h:messages /></p>
         
         <h:commandButton value="submit" />

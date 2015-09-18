@@ -39,48 +39,44 @@
 
  */
 
-package com.sun.faces.test.javaee6web.multiFieldValidation;
+package com.sun.faces.util.copier;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-import javax.validation.constraints.NotNull;
-import javax.validation.executable.ValidateOnExecution;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-@Named
-@RequestScoped
-@Password
-@ValidateOnExecution
-public class BackingBean implements PasswordHolder {
-    
-    private String password1;
-    
-    private String password2;
+/**
+ * Copier that copies an object by serializing and subsequently deserializing it again.
+ * <p>
+ * As per the platform serialization rules, the object and all its non transient dependencies have
+ * to implement the {@link Serializable} interface.
+ *
+ * @since 2.0
+ * @author Arjan Tijms
+ *
+ */
+public class SerializationCopier implements Copier {
 
-    public BackingBean() {
-        password1="";
-        password2="";
-    }
-    
-    @NotNull
-    @Override
-    public String getPassword1() {
-        return password1;
-    }
+	@Override
+	public Object copy(Object object) {
 
-    public void setPassword1(String password1) {
-        this.password1 = password1;
-    }
+		if (!(object instanceof Serializable)) {
+			throw new IllegalStateException("Can't copy object of type " + object.getClass() + " since it doesn't implement Serializable");
+		}
 
-    @NotNull
-    @Override
-    public String getPassword2() {
-        return password2;
-    }
+		try {
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			new ObjectOutputStream(outputStream).writeObject(object);
 
-    public void setPassword2(String password2) {
-        this.password2 = password2;
-    }
-    
-    
+			return new ObjectInputStream(new ByteArrayInputStream(outputStream.toByteArray())).readObject();
+
+		} catch (IOException | ClassNotFoundException e) {
+			throw new IllegalStateException(e);
+		}
+
+	}
 
 }

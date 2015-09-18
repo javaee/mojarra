@@ -39,48 +39,75 @@
 
  */
 
-package com.sun.faces.test.javaee6web.multiFieldValidation;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-import javax.validation.constraints.NotNull;
-import javax.validation.executable.ValidateOnExecution;
+/*
+ * Copyright 2014 OmniFaces.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-@Named
-@RequestScoped
-@Password
-@ValidateOnExecution
-public class BackingBean implements PasswordHolder {
-    
-    private String password1;
-    
-    private String password2;
+package com.sun.faces.util.copier;
 
-    public BackingBean() {
-        password1="";
-        password2="";
-    }
-    
-    @NotNull
-    @Override
-    public String getPassword1() {
-        return password1;
-    }
+import static java.lang.String.format;
 
-    public void setPassword1(String password1) {
-        this.password1 = password1;
-    }
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-    @NotNull
-    @Override
-    public String getPassword2() {
-        return password2;
-    }
+/**
+ * Copier that copies an object using the {@link Cloneable} facility.
+ *
+ * @since 2.0
+ * @author Arjan Tijms
+ *
+ */
+public class CloneCopier implements Copier {
 
-    public void setPassword2(String password2) {
-        this.password2 = password2;
-    }
-    
-    
+	private static final String ERROR_CANT_CLONE =
+			"Can not clone object of type %s since it doesn't implement Cloneable";
+
+	@Override
+	public Object copy(Object object) {
+
+		if (!(object instanceof Cloneable)) {
+			throw new IllegalStateException(format(ERROR_CANT_CLONE, object.getClass()));
+		}
+
+		try {
+
+			Method cloneMethod = getMethod(object, "clone");
+
+			if (!cloneMethod.isAccessible()) {
+				cloneMethod.setAccessible(true);
+			}
+
+			return cloneMethod.invoke(object);
+
+
+		} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	private Method getMethod(Object object, String name) {
+		for (Class<?> c = object.getClass(); c != null; c = c.getSuperclass()) {
+			for (Method method : c.getDeclaredMethods()) {
+				if (method.getName().equals(name)) {
+					return method;
+				}
+			}
+		}
+
+		return null;
+	}
 
 }
