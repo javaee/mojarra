@@ -59,7 +59,7 @@ import javax.validation.groups.Default;
 
 /**
  * <p class="changed_added_2_0"><span
- * class="changed_modified_2_0_rev_a">A Validator</span> that delegates
+ * class="changed_modified_2_0_rev_a changed_modified_2_3">A Validator</span> that delegates
  * validation of the bean property to the Bean Validation API.</p>
  * @since 2.0
  */
@@ -77,8 +77,8 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * validator, as defined by the JSF specification.</p>
      */
     public static final String VALIDATOR_ID = "javax.faces.Bean";
-
-	/**
+    
+    /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * a constraint failure is found.  The message format string for
      * this message may optionally include the following placeholders:
@@ -130,7 +130,20 @@ public class BeanValidator implements Validator, PartialStateHolder {
      */
     public static final String DISABLE_DEFAULT_BEAN_VALIDATOR_PARAM_NAME =
             "javax.faces.validator.DISABLE_DEFAULT_BEAN_VALIDATOR";
-
+    
+    
+    //----------------------------------------------------------- multi-field validation
+    
+    /**
+     * <p class="changed_added_2_3">Special value to indicate the proposed value
+     * for a property failed field-level validation.  This prevents any attempt
+     * to perform class level validation.</p>
+     */
+    private static final String FAILED_FIELD_LEVEL_VALIDATION = VALIDATOR_ID + ".FAILED_FIELD_LEVEL_VALIDATION";
+    
+    private static final String MULTI_FIELD_VALIDATION_CANDIDATES =
+            VALIDATOR_ID + ".MULTI_FIELD_VALIDATION_CANDIDATES";
+    
     /**
      * <p class="changed_added_2_0">A comma-separated list of validation
      * groups which are used to filter which validations get checked by
@@ -348,9 +361,66 @@ public class BeanValidator implements Validator, PartialStateHolder {
                     }
                     toThrow = new ValidatorException(messages);
                 }
+                
+                // Record the fact that this field failed validation, so that multi-field
+                // validation is not attempted.
+                if (hasExplicitlyDefinedValidationGroups(validationGroupsArray)) {
+                    Map<Object, Map<String, Object>> multiFieldCandidates = getCandidates(context, true);
+                    Object val = valueReference.getBase();
+                    Map<String, Object> candidate = multiFieldCandidates.getOrDefault(val, new HashMap<>());
+                    candidate.put(valueReference.getProperty(), FAILED_FIELD_LEVEL_VALIDATION);
+                }
+                
                 throw toThrow;
             }
-        }        
+        }
+        
+        // Record the fact that this field passed validation, so that multi-field
+        // validation can be performed if desired
+        if (hasExplicitlyDefinedValidationGroups(validationGroupsArray)) {
+            Map<Object, Map<String, Object>> multiFieldCandidates = getCandidates(context, true);
+            Object val = valueReference.getBase();
+            Map<String, Object> candidate = multiFieldCandidates.getOrDefault(val, new HashMap<>());
+            candidate.put(valueReference.getProperty(), value);
+            multiFieldCandidates.putIfAbsent(val, candidate);
+        }
+    }
+    
+   /*
+    * We need to store a data structure in FacesContext attrs that captures the necessary
+    * information for multi-field validation to be performed by a UIValidateWholeBean.
+    * This is
+    *
+    * the object instance, a subset of whose properties are the set of fields to be considered
+    * in the multi field validation.
+    *
+    * the name=value pairs for each of the fields
+    *
+    * FacesContext.getAttributes().get(MULTI_FIELD_VALIDATION_CANDIDATES) returns
+    * Map<Object, Map<String, Object>>.
+    */
+    private Map<Object, Map<String, Object>> getCandidates(FacesContext context, boolean create) {
+        Map<Object, Map<String, Object>> result;
+        Map<Object, Object> attrs = context.getAttributes();
+        result = (Map<Object, Map<String, Object>>) attrs.get(MULTI_FIELD_VALIDATION_CANDIDATES);
+        if (null == result) {
+            if (create) {
+                result = new HashMap<>();
+                attrs.put(MULTI_FIELD_VALIDATION_CANDIDATES, result);
+            } else {
+                result = Collections.emptyMap();
+            } 
+        }
+        
+        return result;
+    }
+    
+    private boolean hasExplicitlyDefinedValidationGroups(Class [] validationGroupsArray) {
+        boolean result;
+        
+        result = !(1 == validationGroupsArray.length && Default.class == validationGroupsArray[0]);
+        
+        return result;
     }
     
     private boolean isResolvable(ValueReference ref, 

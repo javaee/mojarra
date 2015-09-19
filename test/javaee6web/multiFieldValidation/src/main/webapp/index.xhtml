@@ -56,13 +56,19 @@
     <h:form prependId="false">
         <h:panelGrid columns="2">
             
-            <h:outputText value="Password" />  <h:inputText id="password1" value='#{backingBean.password1}'/>
+            <h:outputText value="Password" />  
+            <h:inputSecret id="password1" value='#{backingBean.password1}'>
+                <f:validateBean validationGroups="com.sun.faces.test.javaee6web.multiFieldValidation.PasswordValidationGroup" />
+            </h:inputSecret>
             
-            <h:outputText value="Password again" /> <h:inputText id="password2" value='#{backingBean.password2}'/>
+            <h:outputText value="Password again" /> 
+            <h:inputSecret id="password2" value='#{backingBean.password2}'>
+                <f:validateBean validationGroups="com.sun.faces.test.javaee6web.multiFieldValidation.PasswordValidationGroup" />
+            </h:inputSecret>
             
         </h:panelGrid>
         
-        <f:validateWholeBean bean='#{backingBean}' properties='password1 password2'/>
+        <f:validateWholeBean value='#{backingBean}' validationGroups="com.sun.faces.test.javaee6web.multiFieldValidation.PasswordValidationGroup" />
         
         <p><h:messages /></p>
         

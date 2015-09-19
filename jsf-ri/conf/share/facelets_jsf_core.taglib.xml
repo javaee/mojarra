@@ -1930,7 +1930,32 @@ of POJOs.
 
             ]]></description>
             <name>disabled</name>
+            <required>false</required>
             <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_3">A comma-separated list of
+                validation groups. A validation group is a
+                fully-qualified class name.</p>
+
+            ]]></description>
+            <name>validationGroups</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_3">A ValueExpression enabled
+                attribute that, if present, will be used as the text of
+                the validator message.</p>
+
+            ]]></description>
+            <name>validatorMessage</name>
+            <required>true</required>
+            <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description><![CDATA[
@@ -1938,17 +1963,7 @@ of POJOs.
                 <p class="changed_added_2_3">A ValueExpression referencing the bean to be validated.</p>
 
             ]]></description>
-            <name>bean</name>
-            <required>true</required>
-            <type>java.lang.Object</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-
-                <p class="changed_added_2_3">A ValueExpression whose value is a space separated list of client ids of components whose local values are to serve as the values of the respective properties of the bean to be validated.</p>
-
-            ]]></description>
-            <name>bean</name>
+            <name>value</name>
             <required>true</required>
             <type>java.lang.Object</type>
         </attribute>

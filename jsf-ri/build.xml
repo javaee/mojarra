@@ -183,6 +183,12 @@
             </fileset>
         </copy>
 
+        <filter token="package" value="com.sun.faces.ext.component"/>
+        <copy file="${tools.dir}/template-src/MessageFactory.java"
+              todir="${build.generate.dir}/com/sun/faces/ext/component"
+              filtering="true"/>
+
+
         <replace
               file="${build.generate.dir}/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
               token="@serialVersionUID@"
