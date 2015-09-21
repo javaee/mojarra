@@ -39,54 +39,24 @@
 
  */
 
-package com.sun.faces.test.javaee6web.multiFieldValidation;
+package com.sun.faces.test.javaee6web.multiFieldValidation.failingDevTimePreconditions;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-import javax.validation.constraints.NotNull;
+import com.sun.faces.test.javaee6web.multiFieldValidation.PasswordHolder;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
-@Named
-@RequestScoped
-@Password(groups = PasswordValidationGroup.class)
-public class BackingBean implements PasswordHolder, Cloneable {
-    
-    private String password1;
-    
-    private String password2;
-
-    public BackingBean() {
-        password1="";
-        password2="";
-    }
+class PasswordValidator implements ConstraintValidator<Password, PasswordHolder> {
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        BackingBean other = (BackingBean) super.clone();
-        other.setPassword1(this.getPassword1());
-        other.setPassword2(this.getPassword2());
-        return other;
-    }
-    
-    @NotNull
+    public void initialize(Password constraintAnnotation) { }
+
     @Override
-    public String getPassword1() {
-        return password1;
-    }
+    public boolean isValid(PasswordHolder value, ConstraintValidatorContext context) {
+        boolean result;
+        
+        result = value.getPassword1().equals(value.getPassword2());
 
-    public void setPassword1(String password1) {
-        this.password1 = password1;
-    }
-
-    @NotNull
-    @Override
-    public String getPassword2() {
-        return password2;
-    }
-
-    public void setPassword2(String password2) {
-        this.password2 = password2;
+        return result;
     }
     
-    
-
 }

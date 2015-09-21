@@ -46,7 +46,6 @@ import com.sun.faces.util.copier.NewInstanceCopier;
 import com.sun.faces.util.copier.SerializationCopier;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +55,6 @@ import javax.faces.component.PartialStateHolder;
 import javax.faces.context.FacesContext;
 import static javax.faces.validator.BeanValidator.EMPTY_VALIDATION_GROUPS_PATTERN;
 import static javax.faces.validator.BeanValidator.VALIDATION_GROUPS_DELIMITER;
-import static javax.faces.validator.BeanValidator.VALIDATOR_ID;
 import static com.sun.faces.util.ReflectionUtils.setProperties;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -66,8 +64,11 @@ import java.util.logging.Logger;
 import javax.el.ELException;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponentBase;
+import javax.faces.validator.BeanValidator;
 import static javax.faces.validator.BeanValidator.MESSAGE_ID;
 import static javax.faces.validator.BeanValidator.VALIDATOR_FACTORY_KEY;
+import static javax.faces.validator.BeanValidator.ComponentValueTuple;
+import static javax.faces.validator.BeanValidator.ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME;
 import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
@@ -167,6 +168,9 @@ public class UIValidateWholeBean extends UIComponentBase implements PartialState
     
     @Override
     public void processValidators(FacesContext context) {
+        if (!wholeBeanValidationEnabled(context)) {
+            return;
+        }
         try {
             executeWholeBeanValidation(context);
         }
@@ -206,18 +210,19 @@ public class UIValidateWholeBean extends UIComponentBase implements PartialState
         Object val = beanVE.getValue(context.getELContext());
         
         // Inspect the status of field level validation
-        Map<Object, Map<String, Object>> candidates = getCandidates(context, false);
+        Map<Object, Map<String, ComponentValueTuple>> candidates = 
+                BeanValidator.getMultiFieldValidationCandidates(context, false);
         if (candidates.isEmpty()) {
             return;
         }
         if (!candidates.containsKey(val)) {
             return;
         }
-        Map<String, Object> candidate = candidates.get(val);
+        Map<String, BeanValidator.ComponentValueTuple> candidate = candidates.get(val);
         
         // Verify that none of the field level properties failed validation
-        for (Map.Entry<String, Object> cur : candidate.entrySet()) {
-            if (FAILED_FIELD_LEVEL_VALIDATION.equals(cur.getValue())) {
+        for (Map.Entry<String, ComponentValueTuple> cur : candidate.entrySet()) {
+            if (BeanValidator.FAILED_FIELD_LEVEL_VALIDATION.equals(cur.getValue().getValue())) {
                 return;
             }
         }
@@ -280,7 +285,11 @@ public class UIValidateWholeBean extends UIComponentBase implements PartialState
         Class [] validationGroupArray;
         validationGroupArray = parseValidationGroups(groups);
         // Populate the value copy with the validated values from the candidate
-        setProperties(valCopy, candidate);
+        Map<String, Object> propertiesToSet = new HashMap<>();
+        for (Map.Entry<String, ComponentValueTuple> cur : candidate.entrySet()) {
+            propertiesToSet.put(cur.getKey(), cur.getValue().getValue());
+        }
+        setProperties(valCopy, propertiesToSet);
         Set result = null;
         try {
             result = beanValidator.validate(valCopy, validationGroupArray);
@@ -297,28 +306,42 @@ public class UIValidateWholeBean extends UIComponentBase implements PartialState
             ValidatorException toThrow;
             if (1 == violations.size()) {
                 ConstraintViolation violation = violations.iterator().next();
-                    toThrow = new ValidatorException(MessageFactory.getMessage(
+                toThrow = new ValidatorException(MessageFactory.getMessage(
                           context,
                           MESSAGE_ID,
                           violation.getMessage(),
                           MessageFactory.getLabel(context, this)));
                 } else {
-                    Set<FacesMessage> messages = new LinkedHashSet<>(
-                          violations.size());
-                    for (ConstraintViolation violation : violations) {
-                        messages.add(MessageFactory.getMessage(context,
+                  Set<FacesMessage> messages = new LinkedHashSet<>(
+                        violations.size());
+                  for (ConstraintViolation violation : violations) {
+                      messages.add(MessageFactory.getMessage(context,
                                                                MESSAGE_ID,
                                                                violation.getMessage(),
                                                                MessageFactory.getLabel(
                                                                      context,
                                                                      this)));
-                    }
-                    toThrow = new ValidatorException(messages);
-                }
+                  }
+                  toThrow = new ValidatorException(messages);
+            }
+            
+            // Mark the components as invalid to prevent them from receiving
+            // values during updateModelValues
+            for (Map.Entry<String, ComponentValueTuple> cur : candidate.entrySet()) {
+                cur.getValue().getComponent().setValid(false);
+            }
                 
             throw toThrow;
         }
     }
+    
+    private boolean wholeBeanValidationEnabled(FacesContext context) {
+        
+        Map<Object,Object> attrs = context.getAttributes();
+        return ((attrs.containsKey(ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME) &&
+                 (Boolean)attrs.get(ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME)));
+    }
+    
     
     private static class JsfAwareMessageInterpolator implements MessageInterpolator {
 
@@ -412,44 +435,4 @@ public class UIValidateWholeBean extends UIComponentBase implements PartialState
         cachedValidationGroups = validationGroupsList.toArray(new Class[validationGroupsList.size()]);
         return cachedValidationGroups;
     }
-    
-   /*
-    * Copied from jsf-api because we can't import private stuff.
-    */
-     
-    private static final String FAILED_FIELD_LEVEL_VALIDATION = VALIDATOR_ID + ".FAILED_FIELD_LEVEL_VALIDATION";
-    
-    private static final String MULTI_FIELD_VALIDATION_CANDIDATES =
-            VALIDATOR_ID + ".MULTI_FIELD_VALIDATION_CANDIDATES";
-    
-   /*
-    * We need to store a data structure in FacesContext attrs that captures the necessary
-    * information for multi-field validation to be performed by a UIValidateWholeBean.
-    * This is
-    *
-    * the object instance, a subset of whose properties are the set of fields to be considered
-    * in the multi field validation.
-    *
-    * the name=value pairs for each of the fields
-    *
-    * FacesContext.getAttributes().get(MULTI_FIELD_VALIDATION_CANDIDATES) returns
-    * Map<Object, Map<String, Object>>.
-    */
-    private Map<Object, Map<String, Object>> getCandidates(FacesContext context, boolean create) {
-        Map<Object, Map<String, Object>> result;
-        Map<Object, Object> attrs = context.getAttributes();
-        result = (Map<Object, Map<String, Object>>) attrs.get(MULTI_FIELD_VALIDATION_CANDIDATES);
-        if (null == result) {
-            if (create) {
-                result = new HashMap<>();
-                attrs.put(MULTI_FIELD_VALIDATION_CANDIDATES, result);
-            } else {
-                result = Collections.emptyMap();
-            } 
-        }
-        
-        return result;
-    }
-    
-    
 }  

@@ -38,8 +38,8 @@
  * holder.
 
  */
-package com.sun.faces.test.javaee6web.multiFieldValidation;
+package com.sun.faces.test.javaee6web.multiFieldValidation.simple;
 
-public interface PasswordValidationGroup {
+interface PasswordValidationGroup {
     
 }

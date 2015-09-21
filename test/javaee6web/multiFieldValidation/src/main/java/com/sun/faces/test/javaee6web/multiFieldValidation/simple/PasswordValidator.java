@@ -39,12 +39,13 @@
 
  */
 
-package com.sun.faces.test.javaee6web.multiFieldValidation;
+package com.sun.faces.test.javaee6web.multiFieldValidation.simple;
 
+import com.sun.faces.test.javaee6web.multiFieldValidation.PasswordHolder;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class PasswordValidator implements ConstraintValidator<Password, PasswordHolder> {
+class PasswordValidator implements ConstraintValidator<Password, PasswordHolder> {
 
     @Override
     public void initialize(Password constraintAnnotation) { }
@@ -58,9 +59,4 @@ public class PasswordValidator implements ConstraintValidator<Password, Password
         return result;
     }
     
-    
-    
-    
-    
-
 }

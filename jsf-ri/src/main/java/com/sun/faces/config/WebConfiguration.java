@@ -1429,6 +1429,9 @@ public class WebConfiguration {
             false),
         ViewRootPhaseListenerQueuesException(
             UIViewRoot.VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME,
+            false),
+        EnableValidateWholeBean(
+            BeanValidator.ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME,
             false);
 
         private BooleanWebContextInitParameter alternate;

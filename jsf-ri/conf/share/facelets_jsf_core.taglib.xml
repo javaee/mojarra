@@ -1912,9 +1912,133 @@ of POJOs.
     <tag>
         <description><![CDATA[
 
-            <p class="changed_added_2_3">Enable class-level validations on CDI based backing beans.</p>
+            <p class="changed_added_2_3">Support multi-field validation
+            by enabling class-level Bean Validation on CDI based backing
+            beans.  This feature must explicitly be enabled by setting
+            the application parameter specified in the javadoc for the
+            symbolic constant
+            <code>javax.faces.validator.BeanValidator.ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME</code>.
+            If this parameter is not set, or is set to false, this tag
+            must be a no-op.  Following the specification of the feature
+            is a non-normative example.</p>
 
-        ]]></description>
+            <div class="changed_added_2_3">
+
+            <p>This tag must be backed by a <code>UIComponentBase</code>
+            subclass that implements <code>PartialStateHolder</code>.
+            It must override <code>processValidators</code> to take the
+            following actions.</p>
+
+            <ul>
+
+            <p>Resolve the <code>value</code> to
+            its <code>Object</code>.
+            Call <code>BeanValidator.getMultiFieldValidationCandates</code>
+            passing <code>false</code> as the second argument.  Let the
+            returned <code>Map</code> be called <em>candidate</em> for
+            discussion.  If <em>candidate</em> is empty, return
+            immediately.  If <em>candidate</em> does not have an entry
+            for <code>value</code>, return immediately.  Otherwise, if
+            any of the entries in <em>candidate</em>
+            have <code>ComponentValueTuple</code> values
+            whose <code>value</code> property is equal to the literal
+            String <code>BeanValidator.FAILED_FIELD_LEVEL_VALIDATION</code>,
+            return immediately.</p>
+
+            <p>Otherwise it can be assumed that all field-level
+            validations for this class-level validation have not failed.
+            Class-level bean validation must operate on a sufficiently
+            populated bean instance.  This differs from JSF field-level
+            validation, which prevents means from being populated with
+            invalid values.  To accomodate this difference, the bean
+            instance must be copied, populated with the
+            already-validated field values, and then subjected to class
+            level validation.  The copying must proceed in the following
+            order.</p>
+
+            <ol>
+            
+            <li><p>If the bean implements <code>Cloneable</code>, clone
+            the bean instance.</p></li>
+
+	    <li><p>Otherwise, if the bean
+            implements <code>Serializable</code>, use that to copy the
+            bean instance.</p></li>
+
+	    <li><p>Otherwise, if the bean has a copy constructor, use
+            that to copy the bean instance.</p></li>
+
+	    <li><p>Otherwise, invoke the <code>newInstance()</code> method
+            on the bean's <code>Class</code>.</p></li>
+
+	    <li><p>If none of these techniques yields a copy,
+            throw <code>FacesException</code>.</p></li>
+
+            </ol>
+
+            <p>Obtain the value of the <code>validationGroups</code>
+            attribute.  If this value is not present or not valid,
+            throw <code>FacesException</code>.</p>
+
+            <p>Obtain a reference to
+            a <code>javax.validation.Validator</code> instance using the
+            same steps described in the javadoc
+            for <code>javax.faces.validator.BeanValidator.validate.</code>
+            Let the instance be called <em>beanValidator</em> for
+            discussion.</p>
+
+            <p>Use <em>candidate</em> to populate the copied bean with
+            property values.</p>
+
+            <p>Call the <code>validate</code> method
+            on <em>beanValidator</em>, passing the populated copied bean
+            and the validation groups as arguments.</p>
+
+            
+
+            </ul>
+
+            <p>This tag must be placed in the component tree after all
+            of the fields that are to be included in the multi-field
+            validation.  If this precondition is not met, the results
+            of applying this tag are unspecified.</p>
+
+            <p>This tag must be used in concert with
+            <code>&lt;f:validateBean /&gt;</code> and Bean Validation as
+            shown in this brief example of the common case of ensuring
+            two password fields are individually valid and also both the
+            same.</p>
+
+            <p>First, the <code>ConstraintValidator</code>
+            implementation.</p>
+
+<pre><code>
+public class PasswordValidator implements ConstraintValidator<Password, PasswordHolder> {
+
+  @Override
+  public void initialize(Password constraintAnnotation) { }
+
+  @Override
+  public boolean isValid(PasswordHolder value, ConstraintValidatorContext context) {
+    boolean result;
+    
+    result = value.getPassword1().equals(value.getPassword2());
+
+    return result;
+  }
+
+}
+</code></pre>
+
+            <p>Note that a <code>PasswordHolder</code> instance is
+            passed to the <code>isValid()</code> method.  This instance
+            is guaranteed to be fully populated with valid values </p>
+
+
+            </div>
+
+
+]]></description>
         <tag-name>validateWholeBean</tag-name>
         <component>
             <component-type>com.sun.faces.ext.validateWholeBean</component-type>
@@ -1923,9 +2047,9 @@ of POJOs.
 
         <attribute>
             <description><![CDATA[
-                <p class="changed_added_2_3">A boolean value
-                enabling page level determination of whether or not this
-                validator is enabled on the enclosing component.</p>
+
+                <p class="changed_added_2_3">A boolean value enabling or
+                disabling this validation component.</p>
 
 
             ]]></description>

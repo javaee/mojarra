@@ -46,6 +46,7 @@ import java.util.logging.Logger;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.PartialStateHolder;
@@ -131,6 +132,17 @@ public class BeanValidator implements Validator, PartialStateHolder {
     public static final String DISABLE_DEFAULT_BEAN_VALIDATOR_PARAM_NAME =
             "javax.faces.validator.DISABLE_DEFAULT_BEAN_VALIDATOR";
     
+    /**
+     * <p class="changed_added_2_3">If this param is set, and calling 
+     * toLowerCase().equals("true") on a
+     * String representation of its value returns {@code true} take
+     * the additional actions relating to {@code &lt;validateWholeBean /&gt;
+     * specified in {@link #validate}.</p>
+     * 
+     * @since 2.3
+     */
+    public static final String ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME = 
+            "javax.faces.validator.ENABLE_VALIDATE_WHOLE_BEAN";
     
     //----------------------------------------------------------- multi-field validation
     
@@ -139,7 +151,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * for a property failed field-level validation.  This prevents any attempt
      * to perform class level validation.</p>
      */
-    private static final String FAILED_FIELD_LEVEL_VALIDATION = VALIDATOR_ID + ".FAILED_FIELD_LEVEL_VALIDATION";
+    public static final String FAILED_FIELD_LEVEL_VALIDATION = VALIDATOR_ID + ".FAILED_FIELD_LEVEL_VALIDATION";
     
     private static final String MULTI_FIELD_VALIDATION_CANDIDATES =
             VALIDATOR_ID + ".MULTI_FIELD_VALIDATION_CANDIDATES";
@@ -195,8 +207,8 @@ public class BeanValidator implements Validator, PartialStateHolder {
     }
 
     /**
-     * <p class="changed_added_2_0">Verify that the value is valid
-     * according to the Bean Validation constraints.</p>
+     * <p class="changed_added_2_0"><span class="changed_modified_2_3">Verify</span>
+     * that the value is valid according to the Bean Validation constraints.</p>
      *
      * <div class="changed_added_2_0">
 
@@ -262,9 +274,26 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * ConstraintViolation#getMessage}.  Capture all such
      * <code>FacesMessage</code> instances into a
      * <code>Collection</code> and pass them to {@link
-     * ValidatorException#ValidatorException(java.util.Collection)},
-     * throwing the new exception.</p>
-
+     * ValidatorException#ValidatorException(java.util.Collection)}.
+     * <span class="changed_added_2_3">If the {@link #ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME}
+     * application parameter is enabled and this {@code Validator} instance
+     * has validation groups other than or in addition to the {@code Default}
+     * group, record the fact that this field failed validation by calling
+     * {@link #getMultiFieldValidationCandidates} passing true as the second
+     * argument.  With the returned {@code Map}, get or create an entry for the 
+     * return from {@code ValueReference.getBase()}.  With the returned {@code Map},
+     * add an entry with the key being {@code ValueReference.getProperty()} and
+     * the value being a new {@link ComponentValueTuple} with the argument {@component}
+     * as the {@link EditableValueHolder} and {@link #FAILED_FIELD_LEVEL_VALIDATION}
+     * as the value.  Regardless of whether or not {@link #ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME}
+     * is set, throw the new exception.</span></p>
+     * 
+     * <p class="changed_added_2_3">If the {@link #ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME}
+     * application parameter is enabled and the returned {@code Set} is empty, create
+     * an entry in the {@code Map} returned from {@link #getMultiFieldValidationCandidates}
+     * as above, but use the argument {@code value} as the value of the 
+     * {@link ComponentValueTuple}.</p>
+     * 
      * </div>
      *
      * @param context {@inheritDoc}
@@ -362,13 +391,17 @@ public class BeanValidator implements Validator, PartialStateHolder {
                     toThrow = new ValidatorException(messages);
                 }
                 
+                
                 // Record the fact that this field failed validation, so that multi-field
                 // validation is not attempted.
-                if (hasExplicitlyDefinedValidationGroups(validationGroupsArray)) {
-                    Map<Object, Map<String, Object>> multiFieldCandidates = getCandidates(context, true);
+                if (wholeBeanValidationEnabled(context, validationGroupsArray)) {
+                    Map<Object, Map<String, ComponentValueTuple>> multiFieldCandidates = getMultiFieldValidationCandidates(context, true);
                     Object val = valueReference.getBase();
-                    Map<String, Object> candidate = multiFieldCandidates.getOrDefault(val, new HashMap<>());
-                    candidate.put(valueReference.getProperty(), FAILED_FIELD_LEVEL_VALIDATION);
+                    Map<String, ComponentValueTuple> candidate = multiFieldCandidates.getOrDefault(val, new HashMap<>());
+                    ComponentValueTuple tuple = new ComponentValueTuple((EditableValueHolder) component, 
+                            FAILED_FIELD_LEVEL_VALIDATION);
+                    candidate.put(valueReference.getProperty(), tuple);
+                    multiFieldCandidates.putIfAbsent(val, candidate);
                 }
                 
                 throw toThrow;
@@ -377,32 +410,71 @@ public class BeanValidator implements Validator, PartialStateHolder {
         
         // Record the fact that this field passed validation, so that multi-field
         // validation can be performed if desired
-        if (hasExplicitlyDefinedValidationGroups(validationGroupsArray)) {
-            Map<Object, Map<String, Object>> multiFieldCandidates = getCandidates(context, true);
+        if (wholeBeanValidationEnabled(context, validationGroupsArray)) {
+            Map<Object, Map<String, ComponentValueTuple>> multiFieldCandidates = getMultiFieldValidationCandidates(context, true);
             Object val = valueReference.getBase();
-            Map<String, Object> candidate = multiFieldCandidates.getOrDefault(val, new HashMap<>());
-            candidate.put(valueReference.getProperty(), value);
+            Map<String, ComponentValueTuple> candidate = multiFieldCandidates.getOrDefault(val, new HashMap<>());
+            ComponentValueTuple tuple = new ComponentValueTuple((EditableValueHolder) component, value);
+            candidate.put(valueReference.getProperty(), tuple);
             multiFieldCandidates.putIfAbsent(val, candidate);
         }
     }
     
-   /*
-    * We need to store a data structure in FacesContext attrs that captures the necessary
-    * information for multi-field validation to be performed by a UIValidateWholeBean.
-    * This is
+   /**
+    * <p class="changed_added_2_3">Returns a data structure that stores 
+    * the information necessary to perform class-level validation
+    * by {@code &lt;f:validateWholeBean &gt;} components elsewhere in the tree.
+    * The lifetime of this data structure does not extend beyond the current 
+    * {@code FacesContext}.  The data structure must conform to the following
+    * specification.</p>
+    * 
+    * <div class="changed_added_2_3">
+    * 
+    * <ul>
+    * 
+    * <li><p>It is a non-thread-safe {@code Map}.</p></li>
+    * 
+    * <li><p>Keys are CDI bean instances that are referenced by the {@code value}
+    * attribute of {@code &lt;f:validateWholeBean &gt;} components.</p></li>
+    * 
+    * <li>
+    * 
+    * <p>Values are {@code Map}s that represent the properties to be stored 
+    * on the CDI bean instance that is the current key.  The inner {@code Map}
+    * must conform to the following specification.</p>
+    * 
+    * <ul>
+    * 
+    * <li><p>It is a non-thread-safe {@code Map}.</p></li>
+    * 
+    * <li><p>Keys are property names.</p></li>
+    * 
+    * <li><p>Values are {@link ComponentValueTuple} instances.</p></li>
+    * 
+    * </ul>
+    * 
+    * </li>
+    * 
+    * 
+    * 
+    * </ul>
+    * 
+    * </div>
+    * 
+    * @param context the {@link FacesContext} for this request
+    * 
+    * @param create if {@code true}, the data structure must be created if not present.
+    * If {@code false} the data structure must not be created and {@code Collections.emptyMap()}
+    * must be returned.
     *
-    * the object instance, a subset of whose properties are the set of fields to be considered
-    * in the multi field validation.
-    *
-    * the name=value pairs for each of the fields
-    *
-    * FacesContext.getAttributes().get(MULTI_FIELD_VALIDATION_CANDIDATES) returns
-    * Map<Object, Map<String, Object>>.
+    * @return the data structure representing the multi-field validation candidates
+    * 
+    * @since 2.3
     */
-    private Map<Object, Map<String, Object>> getCandidates(FacesContext context, boolean create) {
-        Map<Object, Map<String, Object>> result;
+    public static Map<Object, Map<String, ComponentValueTuple>> getMultiFieldValidationCandidates(FacesContext context, boolean create) {
         Map<Object, Object> attrs = context.getAttributes();
-        result = (Map<Object, Map<String, Object>>) attrs.get(MULTI_FIELD_VALIDATION_CANDIDATES);
+        Map<Object, Map<String, ComponentValueTuple>> result;
+        result = (Map<Object, Map<String, ComponentValueTuple>>) attrs.get(MULTI_FIELD_VALIDATION_CANDIDATES);
         if (null == result) {
             if (create) {
                 result = new HashMap<>();
@@ -415,8 +487,76 @@ public class BeanValidator implements Validator, PartialStateHolder {
         return result;
     }
     
-    private boolean hasExplicitlyDefinedValidationGroups(Class [] validationGroupsArray) {
+    /**
+     * <p class="changed_added_2_3">A data structure storing a tuple of 
+     * {@link EditableValueHolder} with its potential value.  See 
+     * {@link #getMultiFieldValidationCandidates(javax.faces.context.FacesContext, boolean)}</p>
+     * 
+     * @since 2.3
+     */
+    public static class ComponentValueTuple {
+        private EditableValueHolder component;
+        private Object value;
+
+        public ComponentValueTuple(EditableValueHolder component, Object value) {
+            this.component = component;
+            this.value = value;
+        }
+        
+        public EditableValueHolder getComponent() {
+            return component;
+        }
+
+        public void setComponent(EditableValueHolder component) {
+            this.component = component;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public void setValue(Object value) {
+            this.value = value;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 23 * hash + Objects.hashCode(this.component);
+            hash = 23 * hash + Objects.hashCode(this.value);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final ComponentValueTuple other = (ComponentValueTuple) obj;
+            if (!Objects.equals(this.component, other.component)) {
+                return false;
+            }
+            if (!Objects.equals(this.value, other.value)) {
+                return false;
+            }
+            return true;
+        }
+        
+        
+    }
+    
+    private boolean wholeBeanValidationEnabled(FacesContext context, 
+            Class [] validationGroupsArray) {
         boolean result;
+        
+        Map<Object,Object> attrs = context.getAttributes();
+        if (!(attrs.containsKey(ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME) &&
+             (Boolean)attrs.get(ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME))) { // NOPMD
+            return false;
+        }
         
         result = !(1 == validationGroupsArray.length && Default.class == validationGroupsArray[0]);
         
