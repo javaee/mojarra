@@ -259,6 +259,8 @@ public class UIData extends UIComponentBase
     /**
      * <p>Return the zero-relative row number of the first row to be
      * displayed.</p>
+     * 
+     * @return the row number.
      */
     public int getFirst() {
 
@@ -288,6 +290,8 @@ public class UIData extends UIComponentBase
     /**
      * <p>Return the footer facet of this component (if any).  A convenience
      * method for <code>getFacet("footer")</code>.</p>
+     * 
+     * @return the footer facet.
      */
     public UIComponent getFooter() {
 
@@ -314,6 +318,8 @@ public class UIData extends UIComponentBase
     /**
      * <p>Return the header facet of this component (if any).  A convenience
      * method for <code>getFacet("header")</code>.</p>
+     * 
+     * @return the header facet.
      */
     public UIComponent getHeader() {
 
@@ -342,6 +348,8 @@ public class UIData extends UIComponentBase
      * available at the current <code>rowIndex</code>.  If no
      * <code>wrappedData</code> is available, return <code>false</code>.</p>
      *
+     * @return whether the row is available.
+     * 
      * @throws FacesException if an error occurs getting the row availability
      */
     public boolean isRowAvailable() {
@@ -355,6 +363,7 @@ public class UIData extends UIComponentBase
      * <p>Return the number of rows in the underlying data model.  If the number
      * of available rows is unknown, return -1.</p>
      *
+     * @return the row count.
      * @throws FacesException if an error occurs getting the row count
      */
     public int getRowCount() {
@@ -368,6 +377,8 @@ public class UIData extends UIComponentBase
      * <p>Return the data object representing the data for the currently
      * selected row index, if any.</p>
      *
+     * @return the row data.
+     * 
      * @throws FacesException           if an error occurs getting the row data
      * @throws IllegalArgumentException if now row data is available at the
      *                                  currently specified row index
@@ -384,6 +395,8 @@ public class UIData extends UIComponentBase
      * are not currently positioned on a row, return -1.  This property is
      * <strong>not</strong> enabled for value binding expressions.</p>
      *
+     * @return the row index.
+     * 
      * @throws FacesException if an error occurs getting the row index
      */
     public int getRowIndex() {
@@ -435,7 +448,7 @@ public class UIData extends UIComponentBase
      *
      * <p>To save current state information for all descendant components,
      * {@link UIData} must maintain per-row information for each descendant
-     * as follows:<p>
+     * as follows:</p>
      * <ul>
      * <li>If the descendant is an instance of <code>EditableValueHolder</code>, save
      *     the state of its <code>localValue</code> property.</li>
@@ -610,6 +623,8 @@ public class UIData extends UIComponentBase
     /**
      * <p>Return the number of rows to be displayed, or zero for all remaining
      * rows in the table.  The default value of this property is zero.</p>
+     * 
+     * @return the number of rows.
      */
     public int getRows() {
 
@@ -641,6 +656,8 @@ public class UIData extends UIComponentBase
      * <p>Return the request-scope attribute under which the data object for the
      * current row will be exposed when iterating.  This property is
      * <strong>not</strong> enabled for value binding expressions.</p>
+     * 
+     *  @return he request-scope attribute.
      */
     public String getVar() {
 
@@ -666,6 +683,8 @@ public class UIData extends UIComponentBase
      * <code>rowStatePreserved</code> JavaBeans property. See
      * {@link #setRowStatePreserved}.</p>
      *
+     * @return the value of the  <code>rowStatePreserved</code>.
+     * 
      * @since 2.1
      */
 
@@ -703,6 +722,7 @@ public class UIData extends UIComponentBase
 
      * </div>
      *
+     * @param the flag if the state should be preserved. 
      *
      * @since 2.1
      */
@@ -1329,7 +1349,7 @@ public class UIData extends UIComponentBase
      * <em>doVisitChildren</em> be <code>true</code>.  If
      * <em>doVisitChildren</em> is <code>true</code> and
      * <em>visitResult</em> is {@link VisitResult#ACCEPT}, take the
-     * following action.<p>
+     * following action.</p>
 
      * <ul>
 

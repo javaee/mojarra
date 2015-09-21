@@ -272,8 +272,8 @@ public class NavigationCase {
 
 
     /**
-     * <p class="changed_added_2_0">Return the <code>&lt;from-action&gt;
-     * for this <code>&lt;navigation-case&gt;</code></code></p>
+     * <p class="changed_added_2_0">Return the <code>&lt;from-action&gt;</code>
+     * for this <code>&lt;navigation-case&gt;</code></p>
      * 
      * @return the from action.
      */
@@ -285,8 +285,8 @@ public class NavigationCase {
 
 
     /**
-     * <p class="changed_added_2_0">Return the <code>&lt;from-outcome&gt;
-     * for this <code>&lt;navigation-case&gt;</code></code></p>
+     * <p class="changed_added_2_0">Return the <code>&lt;from-outcome&gt;</code>
+     * for this <code>&lt;navigation-case&gt;</code></p>
      * 
      * @return the from outcome.
      */
