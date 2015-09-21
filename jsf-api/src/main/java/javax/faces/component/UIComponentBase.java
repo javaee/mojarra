@@ -1730,6 +1730,8 @@ public abstract class UIComponentBase extends UIComponent {
      *                       <code>List</code> instance, or an Object.  The
      *                       <code>attachedObject</code> (or the elements that comprise
      *                       <code>attachedObject</code> may implement {@link StateHolder}.
+     *                       
+     * @return The state object to be saved.
      * @throws NullPointerException if the context argument is null.
      */
 
@@ -1812,6 +1814,9 @@ public abstract class UIComponentBase extends UIComponent {
      * @param context  the {@link FacesContext} for this request
      * @param stateObj the opaque object returned from {@link
      *                 #saveAttachedState}
+     *                 
+     * @return the object restored from <code>stateObj</code>.
+     * 
      * @throws NullPointerException  if context is null.
      * @throws IllegalStateException if the object is not
      *                               previously returned by {@link #saveAttachedState}.
@@ -2092,6 +2097,7 @@ public abstract class UIComponentBase extends UIComponent {
      * override this method to return a non-Empty <code>Collection</code>
      * of the client event names that the component supports.</p>
      *
+     * @return the collection of event names.
      * @since 2.0
      */
     public Collection<String> getEventNames() {
@@ -2117,7 +2123,8 @@ public abstract class UIComponentBase extends UIComponent {
      * {@link javax.faces.component.behavior.ClientBehaviorHolder}, and must add
      * an implementation of
      * {@link javax.faces.component.behavior.ClientBehaviorHolder#getEventNames}.</p>
-     *
+     * 
+     * @return behaviors associated with this component.
      * @since 2.0
      */
     public Map<String, List<ClientBehavior>> getClientBehaviors() {
@@ -2141,6 +2148,8 @@ public abstract class UIComponentBase extends UIComponent {
      * {@link javax.faces.component.behavior.ClientBehaviorHolder}, and must
      * provide an implementation of
      * {@link javax.faces.component.behavior.ClientBehaviorHolder#getEventNames}.</p>
+     * 
+     * @return the default event name.
      */
     public String getDefaultEventName() {
         assertClientBehaviorHolder();

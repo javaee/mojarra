@@ -219,7 +219,8 @@ public class UICommand extends UIComponentBase
     /**
      * <p>Returns the <code>value</code> property of the
      * <code>UICommand</code>. This is most often rendered as a label.</p>
-     * @return 
+     * 
+     * @return The object representing the value of this component.
      */
     public Object getValue() {
 

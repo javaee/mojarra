@@ -379,6 +379,10 @@ public class FacesMessage implements Serializable {
     /**
      * <p>Persist {@link javax.faces.application.FacesMessage} artifacts,
      * including the non serializable <code>Severity</code>.</p>
+     * 
+     * @param out The target stream to which the object will be written.
+     * 
+     * @throws IOException Any of the usual Input/Output related exceptions.
      */
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
@@ -391,6 +395,12 @@ public class FacesMessage implements Serializable {
     /**
      * <p>Reconstruct {@link javax.faces.application.FacesMessage} from
      * serialized artifacts.</p>
+     * 
+     * @param in The binary input of the object to be read
+     * 
+     * @throws IOException Any of the usual Input/Output related exceptions.
+     * @throws ClassNotFoundException Class of a serialized object cannot be found.
+     * 
      */
     private void readObject(ObjectInputStream in)
         throws IOException, ClassNotFoundException {
