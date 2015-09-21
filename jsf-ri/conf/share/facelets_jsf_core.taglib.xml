@@ -1913,47 +1913,104 @@ of POJOs.
         <description><![CDATA[
 
             <p class="changed_added_2_3">Support multi-field validation
-            by enabling class-level Bean Validation on CDI based backing
+            by enabling class-level bean validation on CDI based backing
             beans.  This feature must explicitly be enabled by setting
             the application parameter specified in the javadoc for the
             symbolic constant
             <code>javax.faces.validator.BeanValidator.ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME</code>.
             If this parameter is not set, or is set to false, this tag
-            must be a no-op.  Following the specification of the feature
-            is a non-normative example.</p>
+            must be a no-op.  A non-normative example follows the
+            specification of the feature.</p>
 
             <div class="changed_added_2_3">
 
-            <p>This tag must be backed by a <code>UIComponentBase</code>
-            subclass that implements <code>PartialStateHolder</code>.
-            It must override <code>processValidators</code> to take the
-            following actions.</p>
+            <p>At a high level, the feature provides for a
+            <code>UIInput</code> subclass that maintains its own special
+            private <code>Validator</code> that consumes the data
+            structure returned
+            from <code>BeanValidator.getMultiFieldValidationCandates</code>
+            and uses that information to perform class-level bean
+            validation.  For discussion, this
+            special <code>Validator</code> is called
+            the <em>wholeBeanValidator</em>.</p>
+
+            <p>This tag must be backed by a <code>UIInput</code>
+            component with the following specializations.</p>
 
             <ul>
 
-            <p>Resolve the <code>value</code> to
+            <li><p>Override <code>getSubmittedValue()</code> to return a
+            non-null non empty String.  This
+            allows <code>UIInput.validate()</code> to
+            call <em>wholeBeanValidator.validate()</em>.</p></li>
+
+	    <li><p>Override <code>setConverter()</code> to be a no-op.
+	    It does not make sense to allow a converter to be
+	    installed.</p></li>
+
+
+	    <li><p>Override <code>addValidator()</code> to be a no-op
+	    unless the argument is an instance
+	    of <em>wholeBeanValidator</em>.  It does not make sense to
+	    allow additional validators to be installed.</p></li>
+
+            <li><p>Override <code>validate()</code> to take the
+            following actions.</p>
+
+	      <ul>
+                
+	        <li><p>If the feature is not enabled, return
+	        immediately.</p></li>
+
+	        <li><p>If the <em>wholeBeanValidator</em> has not yet
+	        been installed, instantiate and install it.</p></li>
+
+	        <li><p>Call <code>super.validate()</code>.</p></li>
+                
+	      </ul>
+
+            </li>
+
+            </ul>
+
+            <p>The <em>wholeBeanValidator</em> must have
+            a <code>validate()</code> method that performs the following
+            actions.  Due to the above specification, this method will
+            only ever be passed the special <code>UIInput</code>
+            component.</p>
+            
+            <ul>
+
+            <p>Resolve the <code>value</code> of the component to
             its <code>Object</code>.
             Call <code>BeanValidator.getMultiFieldValidationCandates</code>
             passing <code>false</code> as the second argument.  Let the
-            returned <code>Map</code> be called <em>candidate</em> for
-            discussion.  If <em>candidate</em> is empty, return
-            immediately.  If <em>candidate</em> does not have an entry
-            for <code>value</code>, return immediately.  Otherwise, if
-            any of the entries in <em>candidate</em>
+            returned <code>Map</code> be called <em>candidates</em> for
+            discussion.  If <em>candidates</em> is empty, return
+            immediately.  If <em>candidates</em> does not have an entry
+            for <code>value</code>, return immediately.  Otherwise, use
+            the <code>value</code> to lookup an entry
+            in <em>candidates</em>.  This entry will be
+            called <em>candidate</em> for discussion.  If any of the
+            entries in <em>candidate</em>
             have <code>ComponentValueTuple</code> values
             whose <code>value</code> property is equal to the literal
             String <code>BeanValidator.FAILED_FIELD_LEVEL_VALIDATION</code>,
-            return immediately.</p>
+            return immediately.  This ensures class-level validation is
+            only performed on an instance whose fields are all
+            individually valid.</p>
 
             <p>Otherwise it can be assumed that all field-level
-            validations for this class-level validation have not failed.
-            Class-level bean validation must operate on a sufficiently
-            populated bean instance.  This differs from JSF field-level
-            validation, which prevents means from being populated with
-            invalid values.  To accomodate this difference, the bean
-            instance must be copied, populated with the
-            already-validated field values, and then subjected to class
-            level validation.  The copying must proceed in the following
+            validations for this class-level validation have passed.</p>
+
+            <p>Class-level bean validation must operate on a
+            sufficiently populated bean instance.  This differs from JSF
+            field-level validation, which prevents beans from being
+            populated with invalid values.  To accomodate this
+            difference, the <code>value</code> must be copied, populated
+            with the already-validated field values from
+            the <em>candidate</em>, and then subjected to class-level
+            validation.  The copying must proceed in the following
             order.</p>
 
             <ol>
@@ -1976,25 +2033,42 @@ of POJOs.
 
             </ol>
 
-            <p>Obtain the value of the <code>validationGroups</code>
-            attribute.  If this value is not present or not valid,
-            throw <code>FacesException</code>.</p>
+            <p>Use <em>candidate</em> to populate the copied bean with
+            property values.</p>
 
             <p>Obtain a reference to
             a <code>javax.validation.Validator</code> instance using the
             same steps described in the javadoc
-            for <code>javax.faces.validator.BeanValidator.validate.</code>
+            for <code>javax.faces.validator.BeanValidator.validate()</code>.
             Let the instance be called <em>beanValidator</em> for
             discussion.</p>
 
-            <p>Use <em>candidate</em> to populate the copied bean with
-            property values.</p>
+            <p>Obtain the value of the <code>validationGroups</code>
+            attribute using the same steps described in the javadoc
+            for <code>javax.faces.validator.BeanValidator.validate()</code>.
+            If this value is not present or not valid,
+            throw <code>FacesException</code>.</p>
 
             <p>Call the <code>validate</code> method
             on <em>beanValidator</em>, passing the populated copied bean
             and the validation groups as arguments.</p>
 
-            
+            <p>If the
+            returned <code>Set&lt;ConstraintViolation&gt;</code> is
+            non-empty, for each element in the <code>Set</code>, create
+            a <code>FacesMessage</code> where the summary and detail are
+            the return from
+            calling <code>ConstraintViolation.getMessage()</code>.
+            Capture all such <code>FacesMessage</code> instances into
+            a <code>Collection</code> and pass them
+            to <code>ValidatorException</code>.  Using
+            the <code>component</code> property of
+            the <code>ComponentValueTuple</code>s from
+            the <em>candidate</em>, call <code>setValid(false)</code> on
+            all of the components.  This is essential to prevent the
+            invalid value from being set into the model duling the
+            update model values phase.  Finally, throw the
+            exception.</p>
 
             </ul>
 
@@ -2003,17 +2077,20 @@ of POJOs.
             validation.  If this precondition is not met, the results
             of applying this tag are unspecified.</p>
 
-            <p>This tag must be used in concert with
-            <code>&lt;f:validateBean /&gt;</code> and Bean Validation as
-            shown in this brief example of the common case of ensuring
-            two password fields are individually valid and also both the
-            same.</p>
+            <p>This tag must be used in concert
+            with <code>&lt;f:validateBean /&gt;</code> and Bean
+            Validation. Here is a brief example of the common case of
+            ensuring two password fields are individually valid and also
+            both the same.  The feature requires the use of
+            the <code>validationGroups</code> attribute on all of
+            the <code>&lt;f:validateBean /&gt;</code> tags and
+            the <code>&lt;f:validateWholeBean /&gt;</code> tag.</p>
 
-            <p>First, the <code>ConstraintValidator</code>
-            implementation.</p>
+            <p>Here is an example of the feature in action.  First,
+            the <code>ConstraintValidator</code> implementation.</p>
 
 <pre><code>
-public class PasswordValidator implements ConstraintValidator<Password, PasswordHolder> {
+public class PasswordValidator implements ConstraintValidator&lt;Password, PasswordHolder&gt; {
 
   @Override
   public void initialize(Password constraintAnnotation) { }
@@ -2031,9 +2108,100 @@ public class PasswordValidator implements ConstraintValidator<Password, Password
 </code></pre>
 
             <p>Note that a <code>PasswordHolder</code> instance is
-            passed to the <code>isValid()</code> method.  This instance
-            is guaranteed to be fully populated with valid values </p>
+            passed to the <code>isValid()</code> method.  This method
+            will only be called if the individual properties of
+            the <code>PasswordHolder</code> are valid.  This fact allows
+            the <code>isValid()</code> method to inspect the properties
+            and perform effective class-level validtion.</p>
 
+            <p>Next, the <code>Constraint</code>.</p>
+
+<pre><code>
+@Constraint(validatedBy=PasswordValidator.class)
+@Target(TYPE)
+@Retention(RUNTIME)
+@interface Password {
+
+    String message() default "Password fields must match";
+    Class[] groups() default {};
+    Class[] payload() default {};
+}
+</code></pre>
+
+            <p>Now the backing bean constrained by
+            this <code>Constraint</code>.  Note the use
+            of <code>groups</code>.  Note the fact that the bean
+            implements <code>Cloneable</code>.</p>
+
+<pre><code>
+@Named
+@RequestScoped
+@Password(groups = PasswordValidationGroup.class)
+public class BackingBean implements PasswordHolder, Cloneable {
+    
+    private String password1;
+    
+    private String password2;
+
+    public BackingBean() {
+        password1="";
+        password2="";
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        BackingBean other = (BackingBean) super.clone();
+        other.setPassword1(this.getPassword1());
+        other.setPassword2(this.getPassword2());
+        return other;
+    }
+    
+    @NotNull(groups=PasswordValidationGroup.class)
+    @Size(max=16, min=8, message="Password must be between 8 and 16 characters long",
+            groups = PasswordValidationGroup.class)
+    @Override
+    public String getPassword1() {
+        return password1;
+    }
+
+    public void setPassword1(String password1) {
+        this.password1 = password1;
+    }
+
+    @NotNull(groups=PasswordValidationGroup.class)
+    @Size(max=16, min=8, message="Password must be between 8 and 16 characters long",
+            groups = PasswordValidationGroup.class)
+    @Override
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
+    }
+    
+}
+</code></pre>
+
+            <p>Finally, the Facelets view.</p>
+<pre><code>
+&lt;h:panelGrid columns="2"&gt;
+
+    &lt;h:outputText value="Password" /&gt;  
+    &lt;h:inputSecret id="password1" value='#{backingBean.password1}'&gt;
+        &lt;f:validateBean validationGroups="PasswordValidationGroup" /&gt;
+    &lt;/h:inputSecret&gt;
+    
+    &lt;h:outputText value="Password again" /&gt; 
+    &lt;h:inputSecret id="password2" value='#{backingBean.password2}'&gt;
+        &lt;f:validateBean validationGroups="PasswordValidationGroup" /&gt;
+    &lt;/h:inputSecret&gt;
+    
+&lt;/h:panelGrid&gt;
+
+&lt;f:validateWholeBean value='#{backingBean}' 
+   validationGroups="PasswordValidationGroup" /&gt;
+</code></pre>
 
             </div>
 
@@ -2066,18 +2234,6 @@ public class PasswordValidator implements ConstraintValidator<Password, Password
 
             ]]></description>
             <name>validationGroups</name>
-            <required>true</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[
-
-                <p class="changed_added_2_3">A ValueExpression enabled
-                attribute that, if present, will be used as the text of
-                the validator message.</p>
-
-            ]]></description>
-            <name>validatorMessage</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>

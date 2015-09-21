@@ -275,24 +275,35 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * <code>FacesMessage</code> instances into a
      * <code>Collection</code> and pass them to {@link
      * ValidatorException#ValidatorException(java.util.Collection)}.
-     * <span class="changed_added_2_3">If the {@link #ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME}
-     * application parameter is enabled and this {@code Validator} instance
-     * has validation groups other than or in addition to the {@code Default}
-     * group, record the fact that this field failed validation by calling
-     * {@link #getMultiFieldValidationCandidates} passing true as the second
-     * argument.  With the returned {@code Map}, get or create an entry for the 
-     * return from {@code ValueReference.getBase()}.  With the returned {@code Map},
-     * add an entry with the key being {@code ValueReference.getProperty()} and
-     * the value being a new {@link ComponentValueTuple} with the argument {@component}
-     * as the {@link EditableValueHolder} and {@link #FAILED_FIELD_LEVEL_VALIDATION}
-     * as the value.  Regardless of whether or not {@link #ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME}
-     * is set, throw the new exception.</span></p>
+     * <span class="changed_added_2_3">If the {@link
+     * #ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME} application parameter is
+     * enabled and this {@code Validator} instance has validation groups
+     * other than or in addition to the {@code Default} group, record
+     * the fact that this field failed validation.  Call {@link
+     * #getMultiFieldValidationCandidates} passing {@code true} as the
+     * second argument.  Let the returned {@code Map} be called
+     * <em>candidates</em> for discussion.  Get or create an entry in
+     * <em>candidates</em> (using the return from {@code
+     * ValueReference.getBase() as the key) to represent the bean on
+     * which this current validator is validating a single property.
+     * This entry is itself a {@code Map}, called <em>candidate</em> for
+     * discussion.  Add an entry in <em>candidate</em> with the key
+     * being <code>ValueReference.getProperty()</code> and the value
+     * being a new {@link BeanValidator.ComponentValueTuple} with the
+     * argument <code>component</code> as the {@link
+     * javax.faces.component.EditableValueHolder} and {@link
+     * #FAILED_FIELD_LEVEL_VALIDATION} as the value.  Regardless of
+     * whether or not {@link #ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME} is
+     * set, throw the new exception.</span></p>
      * 
-     * <p class="changed_added_2_3">If the {@link #ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME}
-     * application parameter is enabled and the returned {@code Set} is empty, create
-     * an entry in the {@code Map} returned from {@link #getMultiFieldValidationCandidates}
-     * as above, but use the argument {@code value} as the value of the 
-     * {@link ComponentValueTuple}.</p>
+     * <p class="changed_added_2_3">If the returned {@code Set} is
+     * empty, the {@link #ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME}
+     * application parameter is enabled and this {@code Validator}
+     * instance has validation groups other than or in addition to the
+     * {@code Default} group, get or create an entry in the
+     * <em>candidates</em> and a <em>candidate</em> representing this
+     * valid property as above, but use the argument {@code value} as
+     * the value of the {@link ComponentValueTuple}.</p>
      * 
      * </div>
      *
@@ -421,12 +432,12 @@ public class BeanValidator implements Validator, PartialStateHolder {
     }
     
    /**
-    * <p class="changed_added_2_3">Returns a data structure that stores 
-    * the information necessary to perform class-level validation
-    * by {@code &lt;f:validateWholeBean &gt;} components elsewhere in the tree.
-    * The lifetime of this data structure does not extend beyond the current 
-    * {@code FacesContext}.  The data structure must conform to the following
-    * specification.</p>
+    * <p class="changed_added_2_3">Returns a data structure that stores
+    * the information necessary to perform class-level validation by
+    * <code>&lt;f:validateWholeBean &gt;</code> components elsewhere in
+    * the tree.  The lifetime of this data structure does not extend
+    * beyond the current {@code FacesContext}.  The data structure must
+    * conform to the following specification.</p>
     * 
     * <div class="changed_added_2_3">
     * 
@@ -434,8 +445,9 @@ public class BeanValidator implements Validator, PartialStateHolder {
     * 
     * <li><p>It is a non-thread-safe {@code Map}.</p></li>
     * 
-    * <li><p>Keys are CDI bean instances that are referenced by the {@code value}
-    * attribute of {@code &lt;f:validateWholeBean &gt;} components.</p></li>
+    * <li><p>Keys are CDI bean instances that are referenced by the
+    * {@code value} attribute of <code>&lt;f:validateWholeBean
+    * &gt;</code> components.</p></li>
     * 
     * <li>
     * 
