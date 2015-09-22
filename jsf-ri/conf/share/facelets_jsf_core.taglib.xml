@@ -1995,7 +1995,7 @@ of POJOs.
             entries in <em>candidate</em>
             have <code>ComponentValueTuple</code> values
             whose <code>value</code> property is equal to the literal
-            String <code>BeanValidator.FAILED_FIELD_LEVEL_VALIDATION</code>,
+            String <code>ComponentValueTuple.FAILED_FIELD_LEVEL_VALIDATION</code>,
             return immediately.  This ensures class-level validation is
             only performed on an instance whose fields are all
             individually valid.</p>
@@ -2066,7 +2066,7 @@ of POJOs.
             the <code>ComponentValueTuple</code>s from
             the <em>candidate</em>, call <code>setValid(false)</code> on
             all of the components.  This is essential to prevent the
-            invalid value from being set into the model duling the
+            invalid value from being set into the model during the
             update model values phase.  Finally, throw the
             exception.</p>
 
@@ -2086,8 +2086,8 @@ of POJOs.
             the <code>&lt;f:validateBean /&gt;</code> tags and
             the <code>&lt;f:validateWholeBean /&gt;</code> tag.</p>
 
-            <p>Here is an example of the feature in action.  First,
-            the <code>ConstraintValidator</code> implementation.</p>
+            <p>First, the <code>ConstraintValidator</code>
+            implementation.</p>
 
 <pre><code>
 public class PasswordValidator implements ConstraintValidator&lt;Password, PasswordHolder&gt; {

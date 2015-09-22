@@ -136,7 +136,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * <p class="changed_added_2_3">If this param is set, and calling 
      * toLowerCase().equals("true") on a
      * String representation of its value returns {@code true} take
-     * the additional actions relating to {@code &lt;validateWholeBean /&gt;
+     * the additional actions relating to <code>&lt;validateWholeBean /&gt;</code>
      * specified in {@link #validate}.</p>
      * 
      * @since 2.3
@@ -145,13 +145,6 @@ public class BeanValidator implements Validator, PartialStateHolder {
             "javax.faces.validator.ENABLE_VALIDATE_WHOLE_BEAN";
     
     //----------------------------------------------------------- multi-field validation
-    
-    /**
-     * <p class="changed_added_2_3">Special value to indicate the proposed value
-     * for a property failed field-level validation.  This prevents any attempt
-     * to perform class level validation.</p>
-     */
-    public static final String FAILED_FIELD_LEVEL_VALIDATION = VALIDATOR_ID + ".FAILED_FIELD_LEVEL_VALIDATION";
     
     private static final String MULTI_FIELD_VALIDATION_CANDIDATES =
             VALIDATOR_ID + ".MULTI_FIELD_VALIDATION_CANDIDATES";
@@ -201,6 +194,8 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * groups will be inherited from the branch defaults, or if there
      * are no branch defaults, the {@link
      * javax.validation.groups.Default} group will be used.</p>
+     * 
+     * @return the value of the {@code validatinGroups} attribute.
      */
     public String getValidationGroups() {
         return validationGroups;
@@ -283,16 +278,16 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * #getMultiFieldValidationCandidates} passing {@code true} as the
      * second argument.  Let the returned {@code Map} be called
      * <em>candidates</em> for discussion.  Get or create an entry in
-     * <em>candidates</em> (using the return from {@code
-     * ValueReference.getBase() as the key) to represent the bean on
+     * <em>candidates</em> (using the return from <code>ValueReference.getBase()</code>
+     * as the key) to represent the bean on
      * which this current validator is validating a single property.
-     * This entry is itself a {@code Map}, called <em>candidate</em> for
+     * This entry is itself a <code>Map</code>, called <em>candidate</em> for
      * discussion.  Add an entry in <em>candidate</em> with the key
      * being <code>ValueReference.getProperty()</code> and the value
-     * being a new {@link BeanValidator.ComponentValueTuple} with the
+     * being a new <code>BeanValidator.ComponentValueTuple</code>, with the
      * argument <code>component</code> as the {@link
-     * javax.faces.component.EditableValueHolder} and {@link
-     * #FAILED_FIELD_LEVEL_VALIDATION} as the value.  Regardless of
+     * javax.faces.component.EditableValueHolder}, and {@link
+     * ComponentValueTuple#FAILED_FIELD_LEVEL_VALIDATION} as the value.  Regardless of
      * whether or not {@link #ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME} is
      * set, throw the new exception.</span></p>
      * 
@@ -306,7 +301,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * the value of the {@link ComponentValueTuple}.</p>
      * 
      * </div>
-     *
+     * 
      * @param context {@inheritDoc}
      * @param component {@inheritDoc}
      * @param value {@inheritDoc}
@@ -410,7 +405,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
                     Object val = valueReference.getBase();
                     Map<String, ComponentValueTuple> candidate = multiFieldCandidates.getOrDefault(val, new HashMap<>());
                     ComponentValueTuple tuple = new ComponentValueTuple((EditableValueHolder) component, 
-                            FAILED_FIELD_LEVEL_VALIDATION);
+                            ComponentValueTuple.FAILED_FIELD_LEVEL_VALIDATION);
                     candidate.put(valueReference.getProperty(), tuple);
                     multiFieldCandidates.putIfAbsent(val, candidate);
                 }
@@ -509,6 +504,13 @@ public class BeanValidator implements Validator, PartialStateHolder {
     public static class ComponentValueTuple {
         private EditableValueHolder component;
         private Object value;
+        
+        /**
+         * <p class="changed_added_2_3">Special value to indicate the proposed value
+         * for a property failed field-level validation.  This prevents any attempt
+         * to perform class level validation.</p>
+         */
+        public static final String FAILED_FIELD_LEVEL_VALIDATION = VALIDATOR_ID + ".FAILED_FIELD_LEVEL_VALIDATION";
 
         public ComponentValueTuple(EditableValueHolder component, Object value) {
             this.component = component;

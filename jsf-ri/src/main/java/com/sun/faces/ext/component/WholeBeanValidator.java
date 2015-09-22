@@ -51,7 +51,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 import javax.el.ValueExpression;
@@ -60,6 +59,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.BeanValidator;
+import static javax.faces.validator.BeanValidator.ComponentValueTuple;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
@@ -82,14 +82,14 @@ class WholeBeanValidator implements Validator {
         Object val = beanVE.getValue(context.getELContext());
         
         // Inspect the status of field level validation
-        Map<Object, Map<String, BeanValidator.ComponentValueTuple>> candidates = BeanValidator.getMultiFieldValidationCandidates(context, false);
+        Map<Object, Map<String, ComponentValueTuple>> candidates = BeanValidator.getMultiFieldValidationCandidates(context, false);
         if (candidates.isEmpty() || !candidates.containsKey(val)) {
             return;
         }
-        Map<String, BeanValidator.ComponentValueTuple> candidate = candidates.get(val);
+        Map<String, ComponentValueTuple> candidate = candidates.get(val);
         // Verify that none of the field level properties failed validation
-        for (Map.Entry<String, BeanValidator.ComponentValueTuple> cur : candidate.entrySet()) {
-            if (BeanValidator.FAILED_FIELD_LEVEL_VALIDATION.equals(cur.getValue().getValue())) {
+        for (Map.Entry<String, ComponentValueTuple> cur : candidate.entrySet()) {
+            if (ComponentValueTuple.FAILED_FIELD_LEVEL_VALIDATION.equals(cur.getValue().getValue())) { // NOPMD
                 return;
             }
         }
@@ -121,7 +121,7 @@ class WholeBeanValidator implements Validator {
             }
             // Mark the components as invalid to prevent them from receiving
             // values during updateModelValues
-            for (Map.Entry<String, BeanValidator.ComponentValueTuple> cur : candidate.entrySet()) {
+            for (Map.Entry<String, ComponentValueTuple> cur : candidate.entrySet()) {
                 cur.getValue().getComponent().setValid(false);
             }
             throw toThrow;
@@ -130,12 +130,12 @@ class WholeBeanValidator implements Validator {
     
     private Object copyObjectAndPopulateWithCandidateValues(ValueExpression beanVE,
             Object val, 
-            Map<String, BeanValidator.ComponentValueTuple> candidate) {
+            Map<String, ComponentValueTuple> candidate) {
         // <editor-fold defaultstate="collapsed">
         
         // Populate the value copy with the validated values from the candidate
         Map<String, Object> propertiesToSet = new HashMap<>();
-        for (Map.Entry<String, BeanValidator.ComponentValueTuple> cur : candidate.entrySet()) {
+        for (Map.Entry<String, ComponentValueTuple> cur : candidate.entrySet()) {
             propertiesToSet.put(cur.getKey(), cur.getValue().getValue());
         }
         // Copy the value so that class-level validation can be performed
