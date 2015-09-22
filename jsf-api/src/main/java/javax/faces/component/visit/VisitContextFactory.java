@@ -78,6 +78,9 @@ public abstract class VisitContextFactory implements FacesWrapper<VisitContextFa
      * <code>null</code> all components will be visited.
      * @param hints the <code>VisitHints</code> that apply to this
      * visit.
+     * 
+     *  @return the instance of <code>VisitContext</code>.
+     * 
      * @since 2.0
      */
     public abstract VisitContext getVisitContext(FacesContext context, 

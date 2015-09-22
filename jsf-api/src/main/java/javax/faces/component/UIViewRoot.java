@@ -1709,11 +1709,14 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      *
      * @param systemEvent the <code>Class</code> of event for which the
      * listeners must be returned.
-
+     * 
+     * @return Collection of view listeners.
+     * 
      * @throws NullPointerException if argument <code>systemEvent</code>
      * is <code>null</code>.
      *
      * @since 2.0
+     * 
      */
     public List<SystemEventListener> getViewListenersForEventClass(Class<? extends SystemEvent> systemEvent) {
 

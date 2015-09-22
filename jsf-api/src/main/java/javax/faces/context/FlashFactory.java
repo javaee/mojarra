@@ -94,6 +94,8 @@ public abstract class FlashFactory implements FacesWrapper<FlashFactory> {
      * necessary; <code>false</code> to return <code>null</code> if there's no 
      * instance in the current <code>session</code>.
      * 
+     *  @return the instance of <code>Flash</code>.
+     * 
      * @since 2.2
      */
     public abstract Flash getFlash(boolean create);

@@ -277,7 +277,7 @@ public abstract class ExternalContext {
     /**
      * <p><span class="changed_modified_2_2">Return</span> the input URL, after performing any rewriting needed to
      * ensure that it will correctly identify an addressable action in the
-     * current application.<p>
+     * current application.</p>
      * 
      * <p class="changed_added_2_2">Encoding the {@link javax.faces.lifecycle.ClientWindow}</p>
      *
@@ -305,6 +305,8 @@ public abstract class ExternalContext {
      * <code>encodeURL(url)</code>.</p>
      *
      * @param url The input URL to be encoded
+     * 
+     * @return the encoded URL.
      *
      * @throws NullPointerException if <code>url</code>
      *  is <code>null</code>
@@ -321,6 +323,8 @@ public abstract class ExternalContext {
      *
      * @param name Name to be encoded
      * 
+     * @return the unique name prefixed with namespace.
+     * 
      * <!-- Removed the throws clause in 2.2 -->
      *
      */
@@ -330,14 +334,16 @@ public abstract class ExternalContext {
     /**
      * <p>Return the input URL, after performing any rewriting needed to
      * ensure that it will correctly identify an addressable resource in the
-     * current application.<p>
+     * current application.</p>
      * 
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.http.HttpServletResponse</code> method
      * <code>encodeURL(url)</code>.</p>
      *
      * @param url The input URL to be encoded
-     *
+     * 
+     *  @return the encoded resource URL.
+     * 
      * @throws NullPointerException if <code>url</code>
      *  is <code>null</code>
      */
@@ -384,6 +390,8 @@ public abstract class ExternalContext {
      * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
      * <code>removeAttribute()</code>, and <code>setAttribute()</code>.</p>
      *
+     * @return the map associated with the backed <code>ServletContext</code>.
+     *
      */
     public abstract Map<String, Object> getApplicationMap();
 
@@ -400,6 +408,7 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getAuthType()</code>.</p>
      *
+     * @return the authentication type.
      */
     public abstract String getAuthType();
 
@@ -409,6 +418,8 @@ public abstract class ExternalContext {
      * for this application.  The default implementation will throw
      * <code>UnsupportedOperationException</code>.  Compliant JSF
      * runtimes must provide an implementation of this method.</p>
+     *
+     * @return the <code>Flash</code> for this application. 
      *
      * @since 2.0
      */ 
@@ -450,7 +461,8 @@ public abstract class ExternalContext {
      * </div>
      *
      * @param file The file for which the mime type should be obtained.
-
+     *
+     * @return the MIME type of the file.
      *
      * @since 2.0
      */
@@ -482,6 +494,8 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em>  This must be the current application's
      * <code>javax.servlet.ServletContext</code> instance.</p>
      *
+     * @return the object of the <code>ServletContext</code>.
+     *
      */
     public abstract Object getContext();
 
@@ -500,9 +514,9 @@ public abstract class ExternalContext {
      * the sole purpose of not breaking existing applications that
      * extend this class.</p>
      *
+     * @return the name the <code>ServletContext</code>.
      *
      */
-
     public String getContextName() {
 
         if (defaultExternalContext != null) {
@@ -531,6 +545,7 @@ public abstract class ExternalContext {
      * the sole purpose of not breaking existing applications that
      * extend this class.</p>
      *
+     * @return the context path of this application.
      *
      * @since 2.2
      */
@@ -564,6 +579,9 @@ public abstract class ExternalContext {
      *
      * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
+     *  
+     *  @return the value of the specified parameter.
+     *  
      */
     public abstract String getInitParameter(String name);
 
@@ -591,6 +609,8 @@ public abstract class ExternalContext {
      * method <code>getInitParameterNames</code>, and putting
      * each configured parameter name/value pair into the result.</p>
      *
+     * @return the init parameter map for this application.
+     *
      */
     public abstract Map<String, String> getInitParameterMap();
     
@@ -603,6 +623,8 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getRemoteUser()</code>.</p>
      *
+     * @return the user name of the current request.
+     *
      */
     public abstract String getRemoteUser();
 
@@ -613,6 +635,8 @@ public abstract class ExternalContext {
      *
      * <p><em>Servlet:</em>  This must be the current request's
      * <code>javax.servlet.http.HttpServletRequest</code> instance.</p>
+     *
+     * @return the instance of the current request.
      *
      */
     public abstract Object getRequest();
@@ -627,6 +651,7 @@ public abstract class ExternalContext {
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
+     * @param request the request object to be set.
      *
      * @since 1.2
      */
@@ -657,6 +682,8 @@ public abstract class ExternalContext {
      *
      * </div>
      *
+     * @return the name of the scheme.
+     *
      * @since 2.0
      */
     public String getRequestScheme() {
@@ -684,6 +711,8 @@ public abstract class ExternalContext {
      * extend this class.</p>
      *
      * </div>
+     *
+     * @return the host name of the server.
      *
      * @since 2.0
      */
@@ -714,6 +743,8 @@ public abstract class ExternalContext {
      *
      * </div>
      *
+     * @return the port number to which the request was sent.
+     *
      * @since 2.0
      */
     public int getRequestServerPort() {
@@ -743,6 +774,8 @@ public abstract class ExternalContext {
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
+     * 
+     * @param encoding the encoding name to be set.
      *
      * @throws java.io.UnsupportedEncodingException if this is not a valid
      * encoding 
@@ -790,6 +823,8 @@ public abstract class ExternalContext {
      *
      * @param path The context of the requested initialization parameter
      *
+     * @return the real path for the specified virtual path.
+     *
      * @since 2.0
      */
     public String getRealPath(String path) {
@@ -811,6 +846,7 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getContextPath()</code>.</p>
      *
+     * @return the context path for this request.
      */
     public abstract String getRequestContextPath();
 
@@ -828,6 +864,8 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getCookies()</code>, unless <code>null</code> was returned,
      * in which case this must be a zero-length array.</p>
+     *
+     * @return the cookie map in the current request.
      *
      */
     public abstract Map<String, Object> getRequestCookieMap();
@@ -847,6 +885,8 @@ public abstract class ExternalContext {
      * the <code>javax.servlet.http.HttpServletRequest</code> methods
      * <code>getHeader()</code> and <code>getHeaderNames()</code>.</p>
      *
+     * @return the header map in the current request.
+     *
      */
     public abstract Map<String, String> getRequestHeaderMap();
     
@@ -865,6 +905,7 @@ public abstract class ExternalContext {
      * the <code>javax.servlet.http.HttpServletRequest</code> methods
      * <code>getHeaders()</code> and <code>getHeaderNames()</code>.</p>
      *
+     * @return the header values map in the current request.
      */
     public abstract Map<String, String []> getRequestHeaderValuesMap();
     
@@ -877,6 +918,7 @@ public abstract class ExternalContext {
      * <code>javax.servlet.ServletRequest</code> method
      * <code>getLocale()</code>.</p>
      *
+     * @return the <code>Locale</code> of the current request.
      */
     public abstract Locale getRequestLocale();
     
@@ -889,6 +931,8 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em> This must be an <code>Iterator</code>
      * over the values returned by the <code>javax.servlet.ServletRequest</code>
      * method <code>getLocales()</code>.</p>
+     *
+     * @return the <code>Iterator</code> of <code>Locale</code>s of the current request.
      *
      */
     public abstract Iterator<Locale> getRequestLocales();
@@ -924,6 +968,8 @@ public abstract class ExternalContext {
      * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
      * <code>removeAttribute()</code>, and <code>setAttribute()</code>.</p>
      *
+     * @return the map including the attributes of the current request.
+     *
      */
     public abstract Map<String, Object> getRequestMap();
 
@@ -940,6 +986,8 @@ public abstract class ExternalContext {
      * the <code>javax.servlet.ServletRequest</code> methods
      * <code>getParameter()</code> and <code>getParameterNames()</code>.</p>
      *
+     * @return the map for the current request parameters.
+     *
      */
     public abstract Map<String, String> getRequestParameterMap();
     
@@ -951,6 +999,8 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em> This must be an <code>Iterator</code> over the
      * values returned by the <code>javax.servlet.ServletRequest</code>
      * method <code>getParameterNames()</code>.</p>
+     *
+     * @return the <code>Iterator</code> for the names of the current request parameters.
      *
      */
     public abstract Iterator<String> getRequestParameterNames();
@@ -969,6 +1019,8 @@ public abstract class ExternalContext {
      * <code>getParameterValues()</code> and
      * <code>getParameterNames()</code>.</p>
      *
+     * @return the map for the parameter values of the current request.
+     *
      */
     public abstract Map<String, String []> getRequestParameterValuesMap();
     
@@ -980,6 +1032,8 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getPathInfo()</code>.</p>
+     *
+     * @return the path information of the current request.
      *
      */
     public abstract String getRequestPathInfo();
@@ -993,6 +1047,7 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getServletPath()</code>.</p>
      *
+     * @return the servlet path information of the current request.
      */
     public abstract String getRequestServletPath();
     
@@ -1009,6 +1064,8 @@ public abstract class ExternalContext {
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
+     *
+     * @return the character encoding currently being used.
      *
      * @since 1.2
      *
@@ -1036,6 +1093,8 @@ public abstract class ExternalContext {
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
+     * @return the Content-Type for this request.
+     *
      * @since 1.2
      */
     public String getRequestContentType() {
@@ -1057,6 +1116,8 @@ public abstract class ExternalContext {
      * <code>UnsupportedOperationException</code> and is provided for
      * the sole purpose of not breaking existing applications that
      * extend this class.</p>
+     *
+     * @return the content length of the current request.
      *
      * @since 2.0
      */
@@ -1092,6 +1153,8 @@ public abstract class ExternalContext {
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
+     * @return the name of the character encoding.
+     *
      * @since 1.2
      */
     public String getResponseCharacterEncoding() {
@@ -1118,6 +1181,8 @@ public abstract class ExternalContext {
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
+     *
+     * @return the MIME Content-Type for this response.
      *
      * @since 1.2
      */
@@ -1155,6 +1220,8 @@ public abstract class ExternalContext {
      * @param path The path to the requested resource, which must
      *  start with a slash ("/" character
      *
+     * @return the URL of the resource.
+     *
      * @throws MalformedURLException if the specified path
      *  is not in the correct form
      * @throws NullPointerException if <code>path</code>
@@ -1186,6 +1253,8 @@ public abstract class ExternalContext {
      * @param path The path to the requested resource, which must
      *  start with a slash ("/" character
      *
+     * @return the <code>InputStream</code> for the application resource.
+     *
      * @throws NullPointerException if <code>path</code>
      *  is <code>null</code>
      */
@@ -1214,6 +1283,8 @@ public abstract class ExternalContext {
      * @param path Partial path used to match resources, which must
      *  start with a slash ("/") character
      *
+     * @return the <code>Set</code> of resource paths for the application resources.
+     *
      * @throws NullPointerException if <code>path</code>
      *  is <code>null</code>
      */
@@ -1227,6 +1298,7 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em>  This is the current request's
      * <code>javax.servlet.http.HttpServletResponse</code> instance.</p>
      *
+     * @return the instance of the current <code>javax.servlet.http.HttpServletResponse</code>.
      */
     public abstract Object getResponse();
 
@@ -1240,6 +1312,7 @@ public abstract class ExternalContext {
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
+     * @param response the response instance to be set.
      *
      * @since 1.2
      */
@@ -1270,6 +1343,10 @@ public abstract class ExternalContext {
      *
      * </div>
      *
+     * @return the <code>OutputStream</code> for the current response.
+     *
+     * @throws IOException any IO related exception.
+     *
      * @since 2.0
      */
     public OutputStream getResponseOutputStream() throws IOException {
@@ -1299,6 +1376,10 @@ public abstract class ExternalContext {
      *
      * </div>
      *
+     * @return the <code>Writer</code> for the current response.
+     * 
+     * @throws IOException any IO related exception.
+     *
      * @since 2.0
      */
     public Writer getResponseOutputWriter() throws IOException {
@@ -1326,6 +1407,7 @@ public abstract class ExternalContext {
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
+     * @param encoding the character encoding to be sent by the current response.
      *
      * @since 1.2
      *
@@ -1389,6 +1471,8 @@ public abstract class ExternalContext {
      *
      * @param create Flag indicating whether or not a new session should be
      *  created if there is no session associated with the current request
+     *  
+     *  @return the session object of the current request.
      */
     public abstract Object getSession(boolean create);
     
@@ -1412,6 +1496,8 @@ public abstract class ExternalContext {
      * 
      * @param create Flag indicating whether or not a new session should be
      *  created if there is no session associated with the current request
+     *  
+     *  @return the session id for the current request.
      */
     public String getSessionId(boolean create) {
         String result = "";
@@ -1489,6 +1575,8 @@ public abstract class ExternalContext {
      * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
      * <code>removeAttribute()</code>, and <code>setAttribute()</code>.</p>
      *
+     * @return the session map for the current application.
+     *
      */
     public abstract Map<String, Object> getSessionMap();
 
@@ -1501,7 +1589,8 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getUserPrincipal()</code>.</p>
-     *
+     * 
+     * @return the <code>Principal</code> object.
      */
     public abstract Principal getUserPrincipal();
     
@@ -1513,6 +1602,7 @@ public abstract class ExternalContext {
      * 
      * @since 2.2
      *
+     *  @return the instance of the <code>ClientWindow</code>.
      */
     public ClientWindow getClientWindow() {
         if (defaultExternalContext != null) {
@@ -1564,6 +1654,8 @@ public abstract class ExternalContext {
      *
      * @param role Logical role name to be checked
      *
+     * @return the flag indicating whether the current user is in the specified role. 
+     * 
      * @throws NullPointerException if <code>role</code>
      *  is <code>null</code>
      */
@@ -1758,6 +1850,8 @@ public abstract class ExternalContext {
      * extend this class.</p>
      *
      * @since 2.0
+     * 
+     * @return the buffer size of the response.
      */
     public int getResponseBufferSize() {
 
@@ -1783,6 +1877,8 @@ public abstract class ExternalContext {
      * extend this class.</p>
      *
      * @since 2.0
+     * 
+     * @return the flag indicating whether the current response has been committed.
      */
     public boolean isResponseCommitted() {
 
@@ -1835,6 +1931,8 @@ public abstract class ExternalContext {
      * @param message an option message to detail the cause of the code
      *
      * @since 2.0
+     * 
+     * @throws IOException any IO related exceptions.
      */
     public void responseSendError(int statusCode, String message) throws IOException {
 
@@ -1891,6 +1989,8 @@ public abstract class ExternalContext {
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
+     * @param interval the value to be set.
+     *
      * @since 2.1
      */
     public void setSessionMaxInactiveInterval(int interval) {
@@ -1933,6 +2033,8 @@ public abstract class ExternalContext {
      * extend this class.</p>
      *
      * @since 2.0
+     * 
+     * @throws IOException any IO related exception.
      */
     public void responseFlushBuffer() throws IOException {
 
@@ -1956,6 +2058,8 @@ public abstract class ExternalContext {
      * <code>UnsupportedOperationException</code> and is provided for
      * the sole purpose of not breaking existing applications that
      * extend this class.</p>
+     *
+     * @param length the value to be set.
      *
      * @since 2.0
      */
@@ -1995,6 +2099,9 @@ public abstract class ExternalContext {
      *
      * @param baseUrl    The base URL onto which the query string generated by this method will be appended. The URL may contain query parameters.
      * @param parameters The collection of Parameter objects, representing name=value pairs that are used to produce a query string
+     * 
+     * @return the result of encoding.
+     * 
      * @since 2.0
      */
     public String encodeBookmarkableURL(String baseUrl,
@@ -2022,6 +2129,8 @@ public abstract class ExternalContext {
      *
      * @param baseUrl    The base URL onto which the query string generated by this method will be appended. The URL may contain query parameters.
      * @param parameters The collection of Parameter objects, representing name=value pairs that are used to produce a query string
+     * 
+     * @return the result of encoding.
      * @since 2.0
      */
     public String encodeRedirectURL(String baseUrl,
@@ -2047,8 +2156,6 @@ public abstract class ExternalContext {
      *
      * <div class="changed_added_2_0">
      *
-     * <p><p>
-     *
      * <p><em>Servlet:</em>Returns the same encoded URL as the
      * {@link #encodeActionURL(String url)} method.</p>
      *
@@ -2058,6 +2165,8 @@ public abstract class ExternalContext {
      * </div>
      *
      * @param url The input URL to be encoded
+     *
+     * @return the encoded URL.
      *
      * @throws NullPointerException if <code>url</code>
      *  is <code>null</code>
@@ -2084,6 +2193,8 @@ public abstract class ExternalContext {
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
+     *
+     * @return the boolean indicating whether this request is secured.
      *
      * @since 2.1
      */

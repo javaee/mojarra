@@ -722,7 +722,7 @@ public class UIData extends UIComponentBase
 
      * </div>
      *
-     * @param the flag if the state should be preserved. 
+     * @param preserveComponentState the flag if the state should be preserved. 
      *
      * @since 2.1
      */
@@ -752,6 +752,8 @@ public class UIData extends UIComponentBase
      * </ul>
      * <p>All other types will be adapted using the {@link ScalarDataModel}
      * class, which will treat the object as a single row of data.</p>
+     * 
+     *  @return the object for the value.
      */
     public Object getValue() {
 

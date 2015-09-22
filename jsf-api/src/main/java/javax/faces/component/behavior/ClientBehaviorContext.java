@@ -89,6 +89,8 @@ public abstract class ClientBehaviorContext {
      * <p class="changed_added_2_0">Returns the {@link FacesContext} for 
      * the current request.</p>
      *
+     * @return the {@link FacesContext}.
+     *
      * @since 2.0
      */
     abstract public FacesContext getFacesContext();
@@ -96,6 +98,8 @@ public abstract class ClientBehaviorContext {
     /**
      * <p class="changed_added_2_0">Returns the {@link UIComponent} that is 
      * requesting the {@link ClientBehavior} script.</p>
+     *
+     * @return the component.
      *
      * @since 2.0
      */
@@ -105,6 +109,8 @@ public abstract class ClientBehaviorContext {
      * <p class="changed_added_2_0">Returns the name of the behavior event 
      * for which the ClientBehavior script is being requested. </p>
      *
+     * @return the event name.
+     * 
      * @since 2.0
      */
     abstract public String getEventName();
@@ -136,6 +142,8 @@ public abstract class ClientBehaviorContext {
      * {@link ClientBehavior} implementations should include when posting back data 
      * into the Faces lifecycle.  If no parameters are specified, this method
      * returns an empty (non-null) collection.</p>
+     *
+     * @return the parameters.
      *
      * @since 2.0
      */
@@ -240,6 +248,8 @@ public abstract class ClientBehaviorContext {
         /**
          * <p class="changed_added_2_0">Returns the Parameter's name.</p>
          *
+         * @return the parameter's name.
+         *
          * @since 2.0
          */
         public String getName() {
@@ -248,6 +258,8 @@ public abstract class ClientBehaviorContext {
 
         /**
          * <p class="changed_added_2_0">Returns the Parameter's value.</p>
+         *
+         * @return the parameter's value.
          *
          * @since 2.0
          */

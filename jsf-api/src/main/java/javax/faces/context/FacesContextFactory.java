@@ -123,6 +123,8 @@ public abstract class FacesContextFactory implements FacesWrapper<FacesContextFa
      * @param lifecycle The {@link Lifecycle} instance being used
      *  to process this request
      *
+     * @return the instance of <code>FacesContext</code>.
+     *
      * @throws FacesException if a {@link FacesContext} cannot be
      *  constructed for the specified parameters
      * @throws NullPointerException if any of the parameters

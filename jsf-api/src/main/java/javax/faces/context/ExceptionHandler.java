@@ -143,6 +143,9 @@ public abstract class ExceptionHandler implements SystemEventListener {
     /**
      * <p class="changed_added_2_0">Return the first
      * <code>ExceptionQueuedEvent</code> handled by this handler.</p>
+     * 
+     * @return instance of <code>ExceptionQueuedEvent</code>.
+     * 
      */
     public abstract ExceptionQueuedEvent getHandledExceptionQueuedEvent();
 
@@ -151,6 +154,9 @@ public abstract class ExceptionHandler implements SystemEventListener {
      * <p class="changed_added_2_0">Return an <code>Iterable</code> over
      * all <code>ExceptionQueuedEvent</code>s that have not yet been handled
      * by the {@link #handle} method.</p>
+     * 
+     *  @return the unhandled set of <code>ExceptionQueuedEvent</code>s.
+     * 
      */
     public abstract Iterable<ExceptionQueuedEvent> getUnhandledExceptionQueuedEvents();
 
@@ -160,6 +166,9 @@ public abstract class ExceptionHandler implements SystemEventListener {
      * return an <code>Iterable</code> over all
      * <code>ExceptionQueuedEvent</code>s that have been handled by the {@link
      * #handle} method.</p>
+     * 
+     * @return an <code>Iterable</code> over all <code>ExceptionQueuedEvent</code>s.
+     * 
      */
     public abstract Iterable<ExceptionQueuedEvent> getHandledExceptionQueuedEvents();
 
@@ -184,10 +193,14 @@ public abstract class ExceptionHandler implements SystemEventListener {
      * <code>getClass()</code> is not equal to
      * <code>FacesException.class</code> or
      * <code>javax.el.ELException.class</code>.  If there is no root cause, <code>null</code> is returned.</p>
-
+     *
+     * @param t passed-in wrapped <code>Throwable</code>.
+     *
+     * @return unwrapped object.
+     * 
      * @throws NullPointerException if argument <code>t</code> is
      * <code>null</code>.
-
+     * 
      * @since 2.0
      */
     public abstract Throwable getRootCause(Throwable t);
