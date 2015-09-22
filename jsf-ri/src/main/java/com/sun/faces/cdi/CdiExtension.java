@@ -90,6 +90,7 @@ public class CdiExtension implements Extension {
         afterBeanDiscovery.addBean(new RequestParameterValuesMapProducer());
         afterBeanDiscovery.addBean(new RequestProducer());
         afterBeanDiscovery.addBean(new RequestMapProducer());
+        afterBeanDiscovery.addBean(new ResourceHandlerProducer());
         afterBeanDiscovery.addBean(new ExternalContextProducer());
         afterBeanDiscovery.addBean(new FacesContextProducer());
         afterBeanDiscovery.addBean(new RequestCookieMapProducer());
