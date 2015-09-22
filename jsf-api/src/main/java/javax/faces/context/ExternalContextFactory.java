@@ -92,10 +92,13 @@ public abstract class ExternalContextFactory implements FacesWrapper<ExternalCon
      * @param response In servlet environments, the
      * <code>ServletResponse</code> that is to be processed
      *
+     * @return the instance of <code>ExternalContext</code>.
+     *
      * @throws FacesException if a {@link ExternalContext} cannot be
      *  constructed for the specified parameters
      * @throws NullPointerException if any of the parameters
      *  are <code>null</code>
+     *  
      */
     public abstract ExternalContext getExternalContext
         (Object context, Object request,

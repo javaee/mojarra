@@ -136,6 +136,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * the client callback function that should be run in the event of
      * an error.
      *
+     * @return the JavaScript function name of <code>ONERROR</code>.
+     * 
      * @since 2.0
      */
     public String getOnerror() {
@@ -166,6 +168,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * client callback function that should be run on the occurance
      * of a client-side event.
      *
+     * @return the JavaScript function name of <code>ONEVENT</code>.
+     *      
      * @since 2.0
      */
     public String getOnevent() {
@@ -198,7 +202,9 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * processing lifecycle.</p>
      * <p>Note that the returned collection may be unmodifiable.  Modifications
      * should be performed by calling {@link #setExecute}.</p>
-     *
+     * 
+     * @return the JavaScript function name of <code>EXECUTE</code>.
+     * 
      * @since 2.0
      */
     public Collection<String> getExecute() {
@@ -227,7 +233,9 @@ public class AjaxBehavior extends ClientBehaviorBase {
     /**
      * <p class="changed_added_2_2">Returns the delay value, or <code>null</code>
      * if no value was set.</p>
-     *
+     * 
+     * @return the delay value.
+     * 
      * @since 2.2
      */
     public String getDelay() {
@@ -262,6 +270,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * <p>Note that the returned collection may be unmodifiable.  Modifications
      * should be performed by calling {@link #setRender}.</p>
      *
+     * @return  the ids of components to render.
+     *
      * @since 2.0
      */
     public Collection<String> getRender() {
@@ -290,6 +300,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
     /**
      * <p class="changed_added_2_2">
      * Return the resetValues status of this behavior.</p>
+     *
+     *  @return the resetValues status.
      * 
      * @since 2.2
      */
@@ -302,6 +314,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
     /**
      * <p class="changed_added_2_2">
      * Set the resetValues status of this behavior.</p>
+     * 
+     *  @param resetValues the resetValues status.
      * 
      * @since 2.2
      */
@@ -317,6 +331,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
     /**
      * <p class="changed_added_2_0">Return the disabled status of this behavior.</p>
      *
+     * @return the disabled status of this behavior.
+     *
      * @since 2.0
      */
     public boolean isDisabled() {
@@ -328,6 +344,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
     /**
      * <p class="changed_added_2_0">Sets the disabled status of this 
      * behavior.</p>
+     *
+     * @param disabled the flag to be set.
      *
      * @since 2.0
      */
@@ -342,6 +360,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * <p class="changed_added_2_0">Return the immediate status of this 
      * behavior.</p>
      *
+     * @return  the immediate status.
+     * 
      * @since 2.0
      */
     public boolean isImmediate() {
@@ -353,6 +373,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
     /**
      * <p class="changed_added_2_0">Sets the immediate status of this 
      * behavior.</p>
+     *
+     * @param immediate the flag to be set.
      *
      * @since 2.0
      */
@@ -371,7 +393,9 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * on the parent component's immediate status when immediate is not 
      * explicitly specified on the <code>AjaxBehavior</code>.
      * </p>
-     *
+     *  
+     *  @return the flag whether the immediate attribute is specified.
+     *  
      * @since 2.0
      */
     public boolean isImmediateSet() {
@@ -383,6 +407,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * is specified.  Returns true if the resetValues attribute is specified,
      * either as a locally set property or as a value expression. 
      * </p>
+     *
+     * @return the flag whether the resetValues attribute is specified.
      *
      * @since 2.2
      */
@@ -397,6 +423,8 @@ public class AjaxBehavior extends ClientBehaviorBase {
      *
      * @param name Name of the property for which to retrieve a
      *  {@link ValueExpression}
+     *
+     * @return the {@link ValueExpression}.
      *
      * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>

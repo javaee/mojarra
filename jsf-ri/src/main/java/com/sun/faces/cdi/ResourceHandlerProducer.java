@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,53 +37,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.cdi;
 
-package javax.faces.component.visit;
-
-import java.util.Collection;
-import java.util.Set;
-import javax.faces.FacesWrapper;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.application.Application;
+import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0">Provide for separation of interface and
- * implementation for the {@link VisitContext} contract.</p>
- * 
-
- * @since 2.0
+ * <p class="changed_added_2_3">
+ *  The ResourceHandlerProducer is the CDI producer that allows you to inject the 
+ *  ResourceHandler and to do EL resolving of #{resource}
+ * </p>
+ *
+ * @since 2.3
+ * @see ResourceHandler
+ * @see Application#getResourceHandler()
  */
-public abstract class VisitContextFactory implements FacesWrapper<VisitContextFactory> {
-
-    public VisitContextFactory() {
-    }
-    
-    /**
-     * <p class="changed_added_2_0">If this factory has been decorated, the 
-     * implementation doing the decorating may override this method to provide
-     * access to the implementation being wrapped.  A default implementation
-     * is provided that returns <code>null</code>.</p>
-     * @since 2.0
-     */
-    @Override
-    public VisitContextFactory getWrapped() {
-        return null;
-    }
-
+public class ResourceHandlerProducer extends CdiProducer<ResourceHandler> {
 
     /**
-     * <p class="changed_added_2_0">Return a new {@link VisitContext}
-     * instance.</p>
-     * @param context the <code>FacesContext</code> for this request.
-     * @param ids a <code>Collection</code> of clientIds to visit.  If
-     * <code>null</code> all components will be visited.
-     * @param hints the <code>VisitHints</code> that apply to this
-     * visit.
-     * 
-     *  @return the instance of <code>VisitContext</code>.
-     * 
-     * @since 2.0
+     * Serialization version
      */
-    public abstract VisitContext getVisitContext(FacesContext context, 
-            Collection<String> ids, Set<VisitHint> hints);
+    private static final long serialVersionUID = 1L;
     
+    public ResourceHandlerProducer() {
+        super.name("resource")
+             .scope(RequestScoped.class)
+             .beanClassAndType(ResourceHandler.class)
+             .create(e -> FacesContext.getCurrentInstance().getApplication().getResourceHandler());
+    }
+
 }

@@ -86,6 +86,8 @@ public class UpdateModelException extends FacesException {
      * <p class="changed_added_2_0">Return the <code>FacesMessage</code>
      * passed to the constructor.</p>
      *
+     * @return the message of this exception.
+     *
      * @since 2.0
      */
 

@@ -121,6 +121,9 @@ abstract public class VisitContext {
     /**
      * <p class="changed_added_2_0">Returns the FacesContext for the
      * current request.</p>
+     * 
+     *  @return the FacesContext.
+     * 
      * @since 2.0
      */
     abstract public FacesContext getFacesContext();
@@ -134,6 +137,9 @@ abstract public class VisitContext {
      * partial visit is beign performed, returns a modifiable collection
      * containing the client ids of the components that should be
      * visited.  </p>
+     * 
+     *  @return the ids of the components to visit
+     * 
      */
     abstract public Collection<String> getIdsToVisit();
 

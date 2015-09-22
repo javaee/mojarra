@@ -232,6 +232,8 @@ public abstract class Flash implements Map<String, Object> {
      *
      * </div>
      *
+     * @return the boolean flag whether keeping messages or not.
+     *
      * @since 2.0
      *
      */
@@ -267,7 +269,9 @@ public abstract class Flash implements Map<String, Object> {
      * argument.</p></li>
      * </ul>
      * </div>
-
+     *
+     * @return the value of this property for the flash for this session.
+     *
      */
     
     public abstract boolean isRedirect();

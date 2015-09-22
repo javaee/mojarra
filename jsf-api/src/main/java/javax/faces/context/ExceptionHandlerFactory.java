@@ -88,7 +88,10 @@ public abstract class ExceptionHandlerFactory implements FacesWrapper<ExceptionH
      * For example, in some cases it may be desirable for an 
      * <code>ExceptionHandler</code> to write error information
      * to the response instead of throwing exceptions as in the case of
-     * Ajax applications.</p> 
+     * Ajax applications.</p>
+     * 
+     *  @return newly created <code>ExceptionHandler</code>.
+     *  
      */
     public abstract ExceptionHandler getExceptionHandler();
     

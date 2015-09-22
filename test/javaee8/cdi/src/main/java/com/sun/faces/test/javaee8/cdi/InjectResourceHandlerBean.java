@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,53 +37,22 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.test.javaee8.cdi;
 
-package javax.faces.component.visit;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.application.ResourceHandler;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-import java.util.Collection;
-import java.util.Set;
-import javax.faces.FacesWrapper;
-import javax.faces.context.FacesContext;
-
-/**
- * <p class="changed_added_2_0">Provide for separation of interface and
- * implementation for the {@link VisitContext} contract.</p>
- * 
-
- * @since 2.0
- */
-public abstract class VisitContextFactory implements FacesWrapper<VisitContextFactory> {
-
-    public VisitContextFactory() {
-    }
+@Named
+@RequestScoped
+public class InjectResourceHandlerBean {
     
-    /**
-     * <p class="changed_added_2_0">If this factory has been decorated, the 
-     * implementation doing the decorating may override this method to provide
-     * access to the implementation being wrapped.  A default implementation
-     * is provided that returns <code>null</code>.</p>
-     * @since 2.0
-     */
-    @Override
-    public VisitContextFactory getWrapped() {
-        return null;
+    @Inject
+    private ResourceHandler resourceHandler;
+    
+    public boolean isJsfLibraryExists() {
+        return resourceHandler.libraryExists("javax.faces");
     }
 
-
-    /**
-     * <p class="changed_added_2_0">Return a new {@link VisitContext}
-     * instance.</p>
-     * @param context the <code>FacesContext</code> for this request.
-     * @param ids a <code>Collection</code> of clientIds to visit.  If
-     * <code>null</code> all components will be visited.
-     * @param hints the <code>VisitHints</code> that apply to this
-     * visit.
-     * 
-     *  @return the instance of <code>VisitContext</code>.
-     * 
-     * @since 2.0
-     */
-    public abstract VisitContext getVisitContext(FacesContext context, 
-            Collection<String> ids, Set<VisitHint> hints);
-    
 }
