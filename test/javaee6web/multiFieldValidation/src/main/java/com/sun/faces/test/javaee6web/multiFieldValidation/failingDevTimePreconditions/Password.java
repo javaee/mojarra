@@ -52,7 +52,7 @@ import javax.validation.Constraint;
 @Retention(RUNTIME)
 @interface Password {
 
-    String message() default "Password fields must match";
+    String message() default "Password fields must match: password1 [${validatedValue.password1}] password2 [${validatedValue.password2}]";
     Class[] groups() default {};
     Class[] payload() default {};
 }
