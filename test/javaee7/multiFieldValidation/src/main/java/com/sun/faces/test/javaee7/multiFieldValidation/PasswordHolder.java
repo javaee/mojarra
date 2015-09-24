@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.javaee6web.multiFieldValidation;
+package com.sun.faces.test.javaee7.multiFieldValidation;
 
 public interface PasswordHolder {
     

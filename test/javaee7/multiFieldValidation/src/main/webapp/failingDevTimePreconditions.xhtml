@@ -58,21 +58,25 @@
         <h:panelGrid columns="3">
             
             <h:outputText value="Password" />  
-            <h:inputSecret id="password1" value='#{failingDevTimePreconditions.password1}'>
-                <f:validateBean validationGroups="com.sun.faces.test.javaee6web.multiFieldValidation.failingDevTimePreconditions.PasswordValidationGroup" />
-            </h:inputSecret>
+            <h:inputText id="password1" value='#{failingDevTimePreconditions.password1}'>
+                <f:validateBean validationGroups="com.sun.faces.test.javaee7.multiFieldValidation.failingDevTimePreconditions.PasswordValidationGroup" />
+            </h:inputText>
             
             <f:validateWholeBean value='#{failingDevTimePreconditions}' 
-               validationGroups="com.sun.faces.test.javaee6web.multiFieldValidation.failingDevTimePreconditions.PasswordValidationGroup" />
+               validationGroups="com.sun.faces.test.javaee7.multiFieldValidation.failingDevTimePreconditions.PasswordValidationGroup" />
         
             <h:outputText value="Password again" /> 
-            <h:inputSecret id="password2" value='#{failingDevTimePreconditions.password2}'>
-                <f:validateBean validationGroups="com.sun.faces.test.javaee6web.multiFieldValidation.failingDevTimePreconditions.PasswordValidationGroup" />
-            </h:inputSecret>
+            <h:inputText id="password2" value='#{failingDevTimePreconditions.password2}'>
+                <f:validateBean validationGroups="com.sun.faces.test.javaee7.multiFieldValidation.failingDevTimePreconditions.PasswordValidationGroup" />
+            </h:inputText>
             
         </h:panelGrid>
         
         <p><h:messages /></p>
+        
+        <p id="password1Value">#{failingDevTimePreconditions.password1}</p>
+
+        <p id="password2Value">#{failingDevTimePreconditions.password2}</p>
         
         <h:commandButton value="submit" />
     </h:form>

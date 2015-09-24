@@ -75,6 +75,7 @@
         <module>cdiNoBeansXml</module>
         <module>el</module>
         <module>facelets</module>
+        <module>multiFieldValidation</module>
         <module>viewActionCdiViewScoped</module>
     </modules>
 </project>

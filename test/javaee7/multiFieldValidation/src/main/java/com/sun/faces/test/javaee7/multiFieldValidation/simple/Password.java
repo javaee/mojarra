@@ -38,8 +38,21 @@
  * holder.
 
  */
-package com.sun.faces.test.javaee6web.multiFieldValidation.simple;
 
-interface PasswordValidationGroup {
-    
+package com.sun.faces.test.javaee7.multiFieldValidation.simple;
+
+import static java.lang.annotation.ElementType.TYPE;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.validation.Constraint;
+
+@Constraint(validatedBy=PasswordValidator.class)
+@Target(TYPE)
+@Retention(RUNTIME)
+@interface Password {
+
+    String message() default "Password fields must match";
+    Class[] groups() default {};
+    Class[] payload() default {};
 }

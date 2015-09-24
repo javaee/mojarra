@@ -39,9 +39,9 @@
 
  */
 
-package com.sun.faces.test.javaee6web.multiFieldValidation.simple;
+package com.sun.faces.test.javaee7.multiFieldValidation.simple;
 
-import com.sun.faces.test.javaee6web.multiFieldValidation.PasswordHolder;
+import com.sun.faces.test.javaee7.multiFieldValidation.PasswordHolder;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 

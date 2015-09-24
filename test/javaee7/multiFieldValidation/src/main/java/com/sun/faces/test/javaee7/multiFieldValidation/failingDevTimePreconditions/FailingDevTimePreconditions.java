@@ -39,17 +39,19 @@
 
  */
 
-package com.sun.faces.test.javaee6web.multiFieldValidation.failingDevTimePreconditions;
+package com.sun.faces.test.javaee7.multiFieldValidation.failingDevTimePreconditions;
 
-import com.sun.faces.test.javaee6web.multiFieldValidation.PasswordHolder;
-import javax.enterprise.context.RequestScoped;
+import com.sun.faces.test.javaee7.multiFieldValidation.PasswordHolder;
+import java.io.Serializable;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
 @Named
-@RequestScoped
+@SessionScoped
 @Password(groups = PasswordValidationGroup.class)
-public class FailingDevTimePreconditions implements PasswordHolder, Cloneable {
+public class FailingDevTimePreconditions implements PasswordHolder, Cloneable, Serializable {
+    private static final long serialVersionUID = 3090640848750726353L;
     
     private String password1;
     

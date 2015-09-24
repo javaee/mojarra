@@ -39,20 +39,62 @@
 
  */
 
-package com.sun.faces.test.javaee6web.multiFieldValidation.simple;
+package com.sun.faces.test.javaee7.multiFieldValidation.simple;
 
-import static java.lang.annotation.ElementType.TYPE;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import javax.validation.Constraint;
+import com.sun.faces.test.javaee7.multiFieldValidation.PasswordHolder;
+import java.io.Serializable;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-@Constraint(validatedBy=PasswordValidator.class)
-@Target(TYPE)
-@Retention(RUNTIME)
-@interface Password {
+@Named
+@SessionScoped
+@Password(groups = PasswordValidationGroup.class)
+public class BackingBean implements PasswordHolder, Cloneable, Serializable {
+    private static final long serialVersionUID = -196915525701059134L;
+    
+    private String password1;
+    
+    private String password2;
 
-    String message() default "Password fields must match";
-    Class[] groups() default {};
-    Class[] payload() default {};
+    public BackingBean() {
+        password1="";
+        password2="";
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        BackingBean other = (BackingBean) super.clone();
+        other.setPassword1(this.getPassword1());
+        other.setPassword2(this.getPassword2());
+        return other;
+    }
+    
+    @NotNull(groups=PasswordValidationGroup.class)
+    @Size(max=16, min=8, message="Password must be between 8 and 16 characters long",
+            groups = PasswordValidationGroup.class)
+    @Override
+    public String getPassword1() {
+        return password1;
+    }
+
+    public void setPassword1(String password1) {
+        this.password1 = password1;
+    }
+
+    @NotNull(groups=PasswordValidationGroup.class)
+    @Size(max=16, min=8, message="Password must be between 8 and 16 characters long",
+            groups = PasswordValidationGroup.class)
+    @Override
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
+    }
+    
+    
+
 }

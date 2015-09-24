@@ -38,8 +38,21 @@
  * holder.
 
  */
-package com.sun.faces.test.javaee6web.multiFieldValidation.failingDevTimePreconditions;
 
-interface PasswordValidationGroup {
-    
+package com.sun.faces.test.javaee7.multiFieldValidation.failingDevTimePreconditions;
+
+import static java.lang.annotation.ElementType.TYPE;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.validation.Constraint;
+
+@Constraint(validatedBy=PasswordValidator.class)
+@Target(TYPE)
+@Retention(RUNTIME)
+@interface Password {
+
+    String message() default "Password fields must match: password1 [${validatedValue.password1}] password2 [${validatedValue.password2}]";
+    Class[] groups() default {};
+    Class[] payload() default {};
 }
