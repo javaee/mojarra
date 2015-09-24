@@ -72,7 +72,7 @@ public class BackingBean implements PasswordHolder, Cloneable, Serializable {
     }
     
     @NotNull(groups=PasswordValidationGroup.class)
-    @Size(max=16, min=8, message="Password must be between 8 and 16 characters long",
+    @Size(max=16, min=8, message="Password must be between 8 and 16 characters long [${validatedValue}]",
             groups = PasswordValidationGroup.class)
     @Override
     public String getPassword1() {
@@ -84,7 +84,7 @@ public class BackingBean implements PasswordHolder, Cloneable, Serializable {
     }
 
     @NotNull(groups=PasswordValidationGroup.class)
-    @Size(max=16, min=8, message="Password must be between 8 and 16 characters long",
+    @Size(max=16, min=8, message="Password must be between 8 and 16 characters long [${validatedValue}]",
             groups = PasswordValidationGroup.class)
     @Override
     public String getPassword2() {
