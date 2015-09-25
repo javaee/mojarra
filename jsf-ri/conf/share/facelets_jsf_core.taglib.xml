@@ -1924,13 +1924,11 @@ of POJOs.
 
             <div class="changed_added_2_3">
 
-            <p>At a high level, the feature provides for a
-            <code>UIInput</code> subclass that maintains its own special
-            private <code>Validator</code> that consumes the data
-            structure returned
-            from <code>BeanValidator.getMultiFieldValidationCandates</code>
-            and uses that information to perform class-level bean
-            validation.  For discussion, this
+            <p>At a high level, the feature provides for
+            a <code>UIInput</code> subclass that maintains its own
+            special private <code>Validator</code> that uses information
+            from one or more <code>&lt;f:validateBean /&gt;</code>s to
+            perform class-level bean validation.  For discussion, this
             special <code>Validator</code> is called
             the <em>wholeBeanValidator</em>.</p>
 
@@ -1963,7 +1961,8 @@ of POJOs.
 	        immediately.</p></li>
 
 	        <li><p>If the <em>wholeBeanValidator</em> has not yet
-	        been installed, instantiate and install it.</p></li>
+	        been installed, instantiate and pass it to 
+                <code>this.addValidator()</code>.</p></li>
 
 	        <li><p>Call <code>super.validate()</code>.</p></li>
                 
@@ -1982,23 +1981,21 @@ of POJOs.
             <ul>
 
             <p>Resolve the <code>value</code> of the component to
-            its <code>Object</code>.
-            Call <code>BeanValidator.getMultiFieldValidationCandates</code>
-            passing <code>false</code> as the second argument.  Let the
-            returned <code>Map</code> be called <em>candidates</em> for
-            discussion.  If <em>candidates</em> is empty, return
-            immediately.  If <em>candidates</em> does not have an entry
-            for <code>value</code>, return immediately.  Otherwise, use
-            the <code>value</code> to lookup an entry
-            in <em>candidates</em>.  This entry will be
-            called <em>candidate</em> for discussion.  If any of the
-            entries in <em>candidate</em>
-            have <code>ComponentValueTuple</code> values
-            whose <code>value</code> property is equal to the literal
-            String <code>ComponentValueTuple.FAILED_FIELD_LEVEL_VALIDATION</code>,
-            return immediately.  This ensures class-level validation is
-            only performed on an instance whose fields are all
-            individually valid.</p>
+            its <code>Object</code>.  Assume that
+            this <code>value</code> is the bean whose properties are
+            intended to be populated by components whose values are each
+            validated by <code>&lt;f:validateBean /&gt;</code> tags.
+            For discussion, this bean is called the <em>candidate
+            bean</em> and the properties and their respective values are
+            called the <em>candidate values</em>.  If the <em>candidate
+            bean</em> cannot be referenced, return immediately
+            from <code>validate()</code>.  Use the information recorded
+            by each of those <code>&lt;f:validateBean /&gt;</code> tags
+            to ensure that none of the <em>candidate values</em> are
+            invalid.  If any of them are invalid, return immediately
+            from <code>validate()</code>.  This ensures class-level
+            validation is only performed on an instance whose fields are
+            all individually valid.</p>
 
             <p>Otherwise it can be assumed that all field-level
             validations for this class-level validation have passed.</p>
@@ -2007,34 +2004,35 @@ of POJOs.
             sufficiently populated bean instance.  This differs from JSF
             field-level validation, which prevents beans from being
             populated with invalid values.  To accomodate this
-            difference, the <code>value</code> must be copied, populated
-            with the already-validated field values from
-            the <em>candidate</em>, and then subjected to class-level
-            validation.  The copying must proceed in the following
-            order.</p>
+            difference, the <em>candidate bean</em> must be copied,
+            populated with the already-validated <em>candidate
+            values</em>, and then subjected to class-level validation.
+            The copying must proceed in the following order.</p>
 
             <ol>
             
-            <li><p>If the bean implements <code>Cloneable</code>, clone
-            the bean instance.</p></li>
+	    <li><p>Invoke the <code>newInstance()</code> method on the
+            bean's <code>Class</code>.  If this throws
+            any <code>Exception</code>, swallow it and
+            continue.</p></li>
 
-	    <li><p>Otherwise, if the bean
-            implements <code>Serializable</code>, use that to copy the
-            bean instance.</p></li>
+	    <li><p>If the bean implements <code>Serializable</code>, use
+            that to copy the bean instance.</p></li>
+
+            <li><p>Otherwise, if the bean
+            implements <code>Cloneable</code>, clone the bean
+            instance.</p></li>
 
 	    <li><p>Otherwise, if the bean has a copy constructor, use
             that to copy the bean instance.</p></li>
-
-	    <li><p>Otherwise, invoke the <code>newInstance()</code> method
-            on the bean's <code>Class</code>.</p></li>
 
 	    <li><p>If none of these techniques yields a copy,
             throw <code>FacesException</code>.</p></li>
 
             </ol>
 
-            <p>Use <em>candidate</em> to populate the copied bean with
-            property values.</p>
+            <p>Populate the copied bean with the <em>candidate
+            values</em>.</p>
 
             <p>Obtain a reference to
             a <code>javax.validation.Validator</code> instance using the
@@ -2049,9 +2047,10 @@ of POJOs.
             If this value is not present or not valid,
             throw <code>FacesException</code>.</p>
 
-            <p>Call the <code>validate</code> method
-            on <em>beanValidator</em>, passing the populated copied bean
-            and the validation groups as arguments.</p>
+            <p>Call the <code>validate</code> method on
+            <em>beanValidator</em>, passing the populated copied bean
+            and the validation groups as arguments.  The copied bean can
+            be discarded at this point.</p>
 
             <p>If the
             returned <code>Set&lt;ConstraintViolation&gt;</code> is
@@ -2061,14 +2060,13 @@ of POJOs.
             calling <code>ConstraintViolation.getMessage()</code>.
             Capture all such <code>FacesMessage</code> instances into
             a <code>Collection</code> and pass them
-            to <code>ValidatorException</code>.  Using
-            the <code>component</code> property of
-            the <code>ComponentValueTuple</code>s from
-            the <em>candidate</em>, call <code>setValid(false)</code> on
-            all of the components.  This is essential to prevent the
-            invalid value from being set into the model during the
-            update model values phase.  Finally, throw the
-            exception.</p>
+            to <code>ValidatorException</code>.  Using information
+            recorded by the <code>&lt;f:validateBean /&gt;</code>
+            tag(s), call <code>setValid(false)</code> on all of the
+            components whose values contributed to this class-level
+            validation.  This is essential to prevent the invalid value
+            from being set into the model during the update model values
+            phase.  Finally, throw the exception.</p>
 
             </ul>
 

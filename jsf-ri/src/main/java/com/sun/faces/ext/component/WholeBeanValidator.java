@@ -59,7 +59,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.BeanValidator;
-import static javax.faces.validator.BeanValidator.ComponentValueTuple;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
@@ -68,6 +67,10 @@ import javax.validation.Validation;
 import javax.validation.ValidationException;
 import javax.validation.ValidatorContext;
 import javax.validation.ValidatorFactory;
+
+import static com.sun.faces.ext.component.MultiFieldValidationUtils.FAILED_FIELD_LEVEL_VALIDATION;
+import javax.faces.component.EditableValueHolder;
+
 
 class WholeBeanValidator implements Validator {
     private static final Logger LOGGER =
@@ -82,14 +85,14 @@ class WholeBeanValidator implements Validator {
         Object val = beanVE.getValue(context.getELContext());
         
         // Inspect the status of field level validation
-        Map<Object, Map<String, ComponentValueTuple>> candidates = BeanValidator.getMultiFieldValidationCandidates(context, false);
+        Map<Object, Map<String, Map<String, Object>>> candidates = MultiFieldValidationUtils.getMultiFieldValidationCandidates(context, false);
         if (candidates.isEmpty() || !candidates.containsKey(val)) {
             return;
         }
-        Map<String, ComponentValueTuple> candidate = candidates.get(val);
+        Map<String, Map<String, Object>> candidate = candidates.get(val);
         // Verify that none of the field level properties failed validation
-        for (Map.Entry<String, ComponentValueTuple> cur : candidate.entrySet()) {
-            if (ComponentValueTuple.FAILED_FIELD_LEVEL_VALIDATION.equals(cur.getValue().getValue())) { // NOPMD
+        for (Map.Entry<String, Map<String, Object>> cur : candidate.entrySet()) {
+            if (FAILED_FIELD_LEVEL_VALIDATION.equals(cur.getValue().get("value"))) { // NOPMD
                 return;
             }
         }
@@ -121,8 +124,8 @@ class WholeBeanValidator implements Validator {
             }
             // Mark the components as invalid to prevent them from receiving
             // values during updateModelValues
-            for (Map.Entry<String, ComponentValueTuple> cur : candidate.entrySet()) {
-                cur.getValue().getComponent().setValid(false);
+            for (Map.Entry<String, Map<String, Object>> cur : candidate.entrySet()) {
+                ((EditableValueHolder)cur.getValue().get("component")).setValid(false);
             }
             throw toThrow;
         }
@@ -130,38 +133,40 @@ class WholeBeanValidator implements Validator {
     
     private Object copyObjectAndPopulateWithCandidateValues(ValueExpression beanVE,
             Object val, 
-            Map<String, ComponentValueTuple> candidate) {
+            Map<String, Map<String, Object>> candidate) {
         // <editor-fold defaultstate="collapsed">
         
         // Populate the value copy with the validated values from the candidate
         Map<String, Object> propertiesToSet = new HashMap<>();
-        for (Map.Entry<String, ComponentValueTuple> cur : candidate.entrySet()) {
-            propertiesToSet.put(cur.getKey(), cur.getValue().getValue());
+        for (Map.Entry<String, Map<String, Object>> cur : candidate.entrySet()) {
+            propertiesToSet.put(cur.getKey(), cur.getValue().get("value"));
         }
         // Copy the value so that class-level validation can be performed
         // without corrupting the real value
         Object valCopy = null;
-        if (val instanceof Cloneable) {
-            try {
-                CloneCopier cc = new CloneCopier();
-                valCopy = cc.copy(val);
-            } catch (IllegalStateException ise) {
-            }
-        } else if (val instanceof Serializable) {
-            try {
-                SerializationCopier sc = new SerializationCopier();
-                valCopy = sc.copy(val);
-            } catch (IllegalStateException ise) {
-            }
-        } else {
-            try {
-                CopyCtorCopier ccc = new CopyCtorCopier();
-                valCopy = ccc.copy(val);
-            } catch (IllegalStateException ise) {
+        try {
+            NewInstanceCopier nic = new NewInstanceCopier();
+            valCopy = nic.copy(val);
+        } catch (IllegalStateException ise2) {
+        }
+        if (null == valCopy) {
+            if (val instanceof Serializable) {
                 try {
-                    NewInstanceCopier nic = new NewInstanceCopier();
-                    valCopy = nic.copy(val);
-                } catch (IllegalStateException ise2) {
+                    SerializationCopier sc = new SerializationCopier();
+                    valCopy = sc.copy(val);
+                } catch (IllegalStateException ise) {
+                }
+            } else if (val instanceof Cloneable) {
+                try {
+                    CloneCopier cc = new CloneCopier();
+                    valCopy = cc.copy(val);
+                } catch (IllegalStateException ise) {
+                }
+            } else {
+                try {
+                    CopyCtorCopier ccc = new CopyCtorCopier();
+                    valCopy = ccc.copy(val);
+                } catch (IllegalStateException ise) {
                 }
             }
         }

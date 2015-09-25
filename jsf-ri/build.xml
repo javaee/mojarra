@@ -187,7 +187,9 @@
         <copy file="${tools.dir}/template-src/MessageFactory.java"
               todir="${build.generate.dir}/com/sun/faces/ext/component"
               filtering="true"/>
-
+        <copy file="${tools.dir}/template-src/MultiFieldValidationUtils.java"
+              todir="${build.generate.dir}/com/sun/faces/ext/component"
+              filtering="true"/>
 
         <replace
               file="${build.generate.dir}/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
