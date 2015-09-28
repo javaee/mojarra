@@ -1914,9 +1914,15 @@ of POJOs.
 
             <p class="changed_added_2_3">Support multi-field validation
             by enabling class-level bean validation on CDI based backing
-            beans.  This feature must explicitly be enabled by setting
-            the application parameter specified in the javadoc for the
-            symbolic constant
+            beans.  This feature causes a temporary copy of the bean
+            referenced by the <code>value</code> attribute, for the sole
+            purpose of populating the bean with field values already
+            validated by <code>&lt;f:validateBean /&gt;</code> and then
+            performing class-level validation on the copy.  Regardless
+            of the result of the class-level validation, the copy is
+            discarded.  This feature must explicitly be enabled by
+            setting the application parameter specified in the javadoc
+            for the symbolic constant
             <code>javax.faces.validator.BeanValidator.ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME</code>.
             If this parameter is not set, or is set to false, this tag
             must be a no-op.  A non-normative example follows the
