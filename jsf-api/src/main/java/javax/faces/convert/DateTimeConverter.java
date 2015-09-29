@@ -47,13 +47,16 @@ import javax.faces.context.FacesContext;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
 
 /**
- * <p><span class="changed_modified_2_0_rev_a">{@link Converter}</span>
+ * <p><span class="changed_modified_2_0_rev_a changed_modified_2_3">{@link Converter}</span>
  * implementation for <code>java.util.Date</code> values.</p>
  *
  * <p>The <code>getAsObject()</code> method parses a String into a
@@ -74,7 +77,9 @@ import java.util.TimeZone;
  * will be ignored.</li>
  * <li>If a <code>pattern</code> has not been specified, parsing will be based
  * on the <code>type</code> property, which expects a date value, a time
- * value, or both.  Any date and time values included will be parsed in
+ * value, both, <span class="changed_added_2_3">or one of several values specific
+ * to classes in {@code java.time}.</span>.  Any date and time 
+ * values included will be parsed in
  * accordance to the styles specified by <code>dateStyle</code> and
  * <code>timeStyle</code>, respectively.</li>
  * <li>If a <code>timezone</code> has been specified, it must be passed
@@ -103,7 +108,7 @@ import java.util.TimeZone;
  * will be ignored.</li>
  * <li>If a <code>pattern</code> has not been specified, formatting will be
  * based on the <code>type</code> property, which includes a date value,
- * a time value, or both into the formatted String.  Any date and time
+ * a time value, both or into the formatted String.  Any date and time
  * values included will be formatted in accordance to the styles specified
  * by <code>dateStyle</code> and <code>timeStyle</code>, respectively.</li>
  * </ul>
@@ -379,7 +384,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         }
 
         Object returnValue = null;
-        DateFormat parser = null;
+        FormatWrapper parser = null;
 
         try {
 
@@ -428,6 +433,38 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         }
         return returnValue;
     }
+    
+    private static class FormatWrapper {
+        
+        private final DateFormat df;
+        private final DateTimeFormatter dtf;
+
+        private FormatWrapper(DateFormat wrapped) {
+            this.df = wrapped;
+            this.dtf = null;
+        }
+        
+        private FormatWrapper(DateTimeFormatter dtf) {
+            this.df = null;
+            this.dtf = dtf;
+        }
+        
+        private Object parse(CharSequence text) throws ParseException {
+            Object result = (null != df) ? df.parse((String) text) : dtf.parse(text);
+            
+            return result;
+        }
+        
+        private String format(Object obj) {
+            return (null != df) ? df.format(obj) : dtf.format((TemporalAccessor) obj);
+        }
+        
+        private void setTimeZone(TimeZone zone) {
+            if (null != df) {
+                df.setTimeZone(zone);
+            }
+        }
+    }
 
     /**
      * @throws ConverterException   {@inheritDoc}
@@ -458,7 +495,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
             Locale locale = getLocale(context);
 
             // Create and configure the formatter to be used
-            DateFormat formatter = getDateFormat(locale);
+            FormatWrapper formatter = getDateFormat(locale);
             if (null != timeZone) {
                 formatter.setTimeZone(timeZone);
             }
@@ -488,7 +525,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      *                and parsing conventions
      * @throws ConverterException if no instance can be created
      */
-    private DateFormat getDateFormat(Locale locale) {
+    private FormatWrapper getDateFormat(Locale locale) {
 
         // PENDING(craigmcc) - Implement pooling if needed for performance?
 
@@ -497,7 +534,8 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
                  " be specified.");
         }
 
-        DateFormat df;
+        DateFormat df = null;
+        DateTimeFormatter dtf = null;
         if (pattern != null) {
             df = new SimpleDateFormat(pattern, locale);
         } else if (type.equals("both")) {
@@ -507,13 +545,21 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
             df = DateFormat.getDateInstance(getStyle(dateStyle), locale);
         } else if (type.equals("time")) {
             df = DateFormat.getTimeInstance(getStyle(timeStyle), locale);
+        } else if (type.equals("localDateTime")) { 
+            dtf = DateTimeFormatter.ofLocalizedDateTime(getFormatStyle(dateStyle));
         } else {
             // PENDING(craigmcc) - i18n
             throw new IllegalArgumentException("Invalid type: " + type);
         }
-        df.setLenient(false);
-        return (df);
+        if (null != df) {
+            df.setLenient(false);
+            return new FormatWrapper(df);
+        } else if (null != dtf) {
+            return new FormatWrapper(dtf);
+        }
 
+        // PENDING(craigmcc) - i18n
+        throw new IllegalArgumentException("Invalid type: " + type);
     }
 
 
@@ -559,6 +605,25 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         }
         // PENDING(craigmcc) - i18n
         throw new ConverterException("Invalid style '" + name + '\'');
+    }
+    
+    private static FormatStyle getFormatStyle(String name) {
+        if (null != name) { 
+            switch (name) {
+                case "default":
+                case "medium":
+                    return (FormatStyle.MEDIUM);
+                case "short":
+                    return (FormatStyle.SHORT);
+                case "long":
+                    return (FormatStyle.LONG);
+                case "full":
+                    return (FormatStyle.FULL);
+            }
+        }
+        // PENDING(craigmcc) - i18n
+        throw new ConverterException("Invalid style '" + name + '\'');
+        
     }
 
     // ----------------------------------------------------- StateHolder Methods
