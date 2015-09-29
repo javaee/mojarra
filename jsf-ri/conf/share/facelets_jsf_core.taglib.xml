@@ -329,8 +329,11 @@
     </tag>
     <tag>
         <description><![CDATA[
-            <p>Register a DateTimeConverter instance on the UIComponent associated
+
+            <p><span class="changed_modified_2_3">Register</span> a
+            DateTimeConverter instance on the UIComponent associated
             with the closest parent UIComponent custom action.</p>
+
         ]]></description>
         <tag-name>convertDateTime</tag-name>
         <converter>
@@ -417,11 +420,20 @@
             <type>java.lang.Object</type>
         </attribute>
         <attribute>
-            <description><![CDATA[
-                <p>Specifies what contents the string value will be
-                formatted to include, or parsed expecting. Valid
-                values are "date", "time", and "both". Default
-                value is "date".</p>
+            <description><![CDATA[ 
+
+            <p><span class="changed_modified_2_3">Specifies</span> what
+            contents the string value will be formatted to include, or
+            parsed expecting. Valid values are "date", "time",
+            "both"<span class="changed_added_2_3">, "localDate",
+            "localDateTime", "localTime", "offsetTime", and
+            "offsetDateTime".  The values starting with "local"
+            correspond to Java SE 8 Date Time API classes in package
+            <code>java.time</code> with the name derived by upper casing
+            the first letter.  For example,
+            <code>java.time.LocalDate</code>.</span> Default value is
+            "date".</p>
+
             ]]></description>
             <name>type</name>
             <type>java.lang.String</type>
