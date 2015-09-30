@@ -66,35 +66,5 @@ public class ImplicitObjectELResolverTest extends TestCase {
 
         assertTrue(mockFacesContext.getELContext().isPropertyResolved());
     }
-    
-    @Test
-    public void testGetValueForComponent() throws Exception {
-
-        MockFacesContext mockFacesContext = new MockFacesContext(
-            new MockExternalContext(
-                new MockServletContext(),
-                new MockHttpServletRequest(), 
-                new MockHttpServletResponse()));
-        mockFacesContext.setApplication(new MockApplication());
-
-        new ImplicitObjectELResolver().getValue(mockFacesContext.getELContext(), null, "component");
-
-        assertTrue(mockFacesContext.getELContext().isPropertyResolved());
-    }
-    
-    @Test
-    public void testGetValueForFlowScope() throws Exception {
-
-        MockFacesContext mockFacesContext = new MockFacesContext(
-            new MockExternalContext(
-                new MockServletContext(),
-                new MockHttpServletRequest(), 
-                new MockHttpServletResponse()));
-        mockFacesContext.setApplication(new MockApplication());
-
-        new ImplicitObjectELResolver().getValue(mockFacesContext.getELContext(), null, "flowScope");
-
-        assertTrue(mockFacesContext.getELContext().isPropertyResolved());
-    }
 
 }
