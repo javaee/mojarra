@@ -41,16 +41,16 @@ package com.sun.faces.test.glassfish.admingui;
 
 import com.gargoylesoftware.htmlunit.CookieManager;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
+import com.gargoylesoftware.htmlunit.html.DomElement;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.util.Cookie;
-import java.util.List;
+import java.util.Iterator;
 import org.junit.After;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class AdminGUIIT {
@@ -70,8 +70,7 @@ public class AdminGUIIT {
     }
 
     @Test
-    @Ignore
-    public void testDeployExerciseUndeploy() throws Exception {
+    public void testAppHasDeployForm() throws Exception {
         HtmlPage page = null;
         HtmlSubmitInput button;
 
@@ -104,8 +103,10 @@ public class AdminGUIIT {
             Thread.sleep(30000);
         }
 
+        /** 20150930-edburns
         page.getHtmlElementById("Login.username").type("admin");
         page.getHtmlElementById("Login.password").type("adminadmin");
+        */
         page = page.getHtmlElementById("loginButton").click();
 
         Cookie jSessionID = cm.getCookie("JSESSIONID");
@@ -113,27 +114,20 @@ public class AdminGUIIT {
         cm.addCookie(c1);
 
         page = webClient.getPage(url + "common/applications/applications.jsf?bare=true");
-        // In the table of deployed apps, find the one in which we are interested.
-        List<HtmlAnchor> links = page.getAnchors();
-        HtmlAnchor appLink = null;
-        for (HtmlAnchor cur : links) {
-            String href = cur.getHrefAttribute();
-            String hrefId = cur.getId();
-            if (null != href && href.contains("test-glassfish-admingui")
-                    && null != hrefId && hrefId.contains(":link") && hrefId.contains(":deployTable")) {
-                appLink = cur;
-                break;
+        
+        HtmlSubmitInput deployButton = page.getHtmlElementById("propertyForm:deployTable:topActionsGroup1:deployButton");
+        page = deployButton.click();
+        
+        DomNodeList<DomElement> forms = page.getElementsByTagName("form");
+        Iterator<DomElement> formIter = forms.iterator();
+        boolean foundUplaodForm = false;
+        while (formIter.hasNext()) {
+            DomElement cur = formIter.next();
+            String actionAttr = cur.getAttribute("action");
+            if (null != actionAttr && actionAttr.contains("upload")) {
+                foundUplaodForm = true;
             }
         }
-        String id = appLink.getId();
-        String checkboxId = id.replace("col1:link", "col0:select");
-        HtmlCheckBoxInput myCheckbox = (HtmlCheckBoxInput) page.getElementById(checkboxId);
-        page = (HtmlPage) myCheckbox.setChecked(true);
-
-        // remove the app
-        button = (HtmlSubmitInput) page.getElementById("propertyForm:deployTable:topActionsGroup1:button1");
-        button.removeAttribute("disabled");
-
-        page = button.click();
+        assertTrue(foundUplaodForm);
     }
 }
