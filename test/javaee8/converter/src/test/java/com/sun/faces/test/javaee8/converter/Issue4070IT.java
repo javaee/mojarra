@@ -41,11 +41,13 @@ package com.sun.faces.test.javaee8.converter;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class Issue4070IT {
 
@@ -64,12 +66,32 @@ public class Issue4070IT {
     }
 
     @Test
-    public void testConverterInstallation() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/issue1660.xhtml");
-        assertTrue(page.asXml().matches("(?s).*Simple\\s+value\\s+is\\s+VALUE1.*"));
+    public void testJavaTimeTypes() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/Issue4070Using.xhtml");
         
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
-        page = button.click();       
-        assertTrue(page.asXml().matches("(?s).*Simple\\s+value\\s+is\\s+VALUE1.*"));       
+        HtmlTextInput input;
+        HtmlSubmitInput submit;
+        HtmlSpan output;
+        String value;
+        
+        page = doTest(page, "Sep 30, 2015 4:14:43 PM", "localDateTime", "2015-09-30T16:14:43");
+                
+        page = doTest(page, "Sep 30, 2015", "localDate", "2015-09-30");
+        
+    }
+    
+    private HtmlPage doTest(HtmlPage page, String value, String inputId, String expected) throws Exception {
+        HtmlTextInput input;
+        HtmlSubmitInput submit;
+        HtmlSpan output;
+
+        input = page.getHtmlElementById(inputId);
+        input.setValueAttribute(value);
+        submit = page.getHtmlElementById("submit");
+        page = submit.click();
+        output = page.getHtmlElementById(inputId + "Value");
+        assertEquals(expected, output.getTextContent());
+        
+        return page;
     }
 }

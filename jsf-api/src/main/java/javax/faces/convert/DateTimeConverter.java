@@ -47,9 +47,16 @@ import javax.faces.context.FacesContext;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalQuery;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -438,19 +445,22 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         
         private final DateFormat df;
         private final DateTimeFormatter dtf;
+        private final TemporalQuery from;
 
         private FormatWrapper(DateFormat wrapped) {
             this.df = wrapped;
             this.dtf = null;
+            this.from = null;
         }
         
-        private FormatWrapper(DateTimeFormatter dtf) {
+        private FormatWrapper(DateTimeFormatter dtf, TemporalQuery from) {
             this.df = null;
             this.dtf = dtf;
+            this.from = from;;
         }
         
         private Object parse(CharSequence text) throws ParseException {
-            Object result = (null != df) ? df.parse((String) text) : dtf.parse(text);
+            Object result = (null != df) ? df.parse((String) text) : dtf.parse(text, from);
             
             return result;
         }
@@ -536,6 +546,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
 
         DateFormat df = null;
         DateTimeFormatter dtf = null;
+        TemporalQuery from = null;
         if (pattern != null) {
             df = new SimpleDateFormat(pattern, locale);
         } else if (type.equals("both")) {
@@ -545,8 +556,24 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
             df = DateFormat.getDateInstance(getStyle(dateStyle), locale);
         } else if (type.equals("time")) {
             df = DateFormat.getTimeInstance(getStyle(timeStyle), locale);
+        } else if (type.equals("localDate")) { 
+            dtf = DateTimeFormatter.ofLocalizedDate(getFormatStyle(dateStyle));
+            from = LocalDate::from;
         } else if (type.equals("localDateTime")) { 
             dtf = DateTimeFormatter.ofLocalizedDateTime(getFormatStyle(dateStyle));
+            from = LocalDateTime::from;
+        } else if (type.equals("localTime")) { 
+            dtf = DateTimeFormatter.ofLocalizedTime(getFormatStyle(dateStyle));
+            from = LocalTime::from;
+        } else if (type.equals("offsetTime")) { 
+            dtf = DateTimeFormatter.ISO_OFFSET_TIME;
+            from = OffsetTime::from;
+        } else if (type.equals("offsetDateTime")) { 
+            dtf = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+            from = OffsetDateTime::from;
+        } else if (type.equals("zonedDateTime")) { 
+            dtf = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+            from = ZonedDateTime::from;
         } else {
             // PENDING(craigmcc) - i18n
             throw new IllegalArgumentException("Invalid type: " + type);
@@ -555,7 +582,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
             df.setLenient(false);
             return new FormatWrapper(df);
         } else if (null != dtf) {
-            return new FormatWrapper(dtf);
+            return new FormatWrapper(dtf, from);
         }
 
         // PENDING(craigmcc) - i18n
