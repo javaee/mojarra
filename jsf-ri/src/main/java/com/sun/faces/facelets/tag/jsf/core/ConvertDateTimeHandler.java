@@ -125,6 +125,15 @@ public final class ConvertDateTimeHandler extends ConverterHandler {
         }
         if (this.pattern != null) {
             c.setPattern(this.pattern.getValue(ctx));
+            // JAVASERVERFACES_SPEC_PUBLIC-1370 Allow pattern and type to co-exist
+            // for java.time values
+            if (this.type != null) {
+                String typeStr = this.type.getValue(ctx);
+                if (isJavaTimeType(typeStr)) {
+                    c.setType(typeStr);
+                }
+            }
+            
         } else {
             if (this.type != null) {
                 c.setType(this.type.getValue(ctx));
@@ -154,6 +163,16 @@ public final class ConvertDateTimeHandler extends ConverterHandler {
 	            }
             }
         }
+    }
+    
+    private static boolean isJavaTimeType(String type) {
+        boolean result = false;
+        if (null != type && type.length() > 1) {
+            char c = type.charAt(0);
+            result = c == 'l' || c == 'o' || c == 'z';
+        }
+        
+        return result;
     }
 
     @Override

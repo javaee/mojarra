@@ -76,7 +76,7 @@ public class Issue4070IT {
         
         page = doTest(page, "Sep 30, 2015 4:14:43 PM", "localDateTime", "2015-09-30T16:14:43");
                 
-        page = doTest(page, "Sep 30, 2015", "localDate", "2015-09-30");
+        // page = doTest(page, "Sep 30, 2015", "localDate", "2015-09-30");
         
     }
     

@@ -547,7 +547,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         DateFormat df = null;
         DateTimeFormatter dtf = null;
         TemporalQuery from = null;
-        if (pattern != null) {
+        if (pattern != null && !isJavaTimeType(type)) {
             df = new SimpleDateFormat(pattern, locale);
         } else if (type.equals("both")) {
             df = DateFormat.getDateTimeInstance
@@ -557,22 +557,28 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         } else if (type.equals("time")) {
             df = DateFormat.getTimeInstance(getStyle(timeStyle), locale);
         } else if (type.equals("localDate")) { 
-            dtf = DateTimeFormatter.ofLocalizedDate(getFormatStyle(dateStyle));
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+                    DateTimeFormatter.ofLocalizedDate(getFormatStyle(dateStyle));
             from = LocalDate::from;
         } else if (type.equals("localDateTime")) { 
-            dtf = DateTimeFormatter.ofLocalizedDateTime(getFormatStyle(dateStyle));
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+                    DateTimeFormatter.ofLocalizedDateTime(getFormatStyle(dateStyle));
             from = LocalDateTime::from;
         } else if (type.equals("localTime")) { 
-            dtf = DateTimeFormatter.ofLocalizedTime(getFormatStyle(dateStyle));
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+                    DateTimeFormatter.ofLocalizedTime(getFormatStyle(dateStyle));
             from = LocalTime::from;
         } else if (type.equals("offsetTime")) { 
-            dtf = DateTimeFormatter.ISO_OFFSET_TIME;
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+                    DateTimeFormatter.ISO_OFFSET_TIME;
             from = OffsetTime::from;
         } else if (type.equals("offsetDateTime")) { 
-            dtf = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+                    DateTimeFormatter.ISO_OFFSET_DATE_TIME;
             from = OffsetDateTime::from;
         } else if (type.equals("zonedDateTime")) { 
-            dtf = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+                    DateTimeFormatter.ISO_ZONED_DATE_TIME;
             from = ZonedDateTime::from;
         } else {
             // PENDING(craigmcc) - i18n
@@ -589,6 +595,15 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         throw new IllegalArgumentException("Invalid type: " + type);
     }
 
+    private static boolean isJavaTimeType(String type) {
+        boolean result = false;
+        if (null != type && type.length() > 1) {
+            char c = type.charAt(0);
+            result = c == 'l' || c == 'o' || c == 'z';
+        }
+        
+        return result;
+    }
 
     /**
      * <p>Return the <code>Locale</code> we will use for localizing our
