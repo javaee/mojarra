@@ -215,8 +215,9 @@ public class UIValidateWholeBean extends UIInput implements PartialStateHolder {
         }
         Object[] result = null;
         if (!initialStateMarked()) {
-            Object[] values = new Object[1];
+            Object[] values = new Object[2];
             values[0] = validationGroups;
+            values[1] = super.saveState(context);
             return values;
         }
         return result;
@@ -230,6 +231,8 @@ public class UIValidateWholeBean extends UIInput implements PartialStateHolder {
         if (state != null) {
             Object[] values = (Object[]) state;
             validationGroups = (String) values[0];
+            Object parentState = values[1];
+            super.restoreState(context, parentState);
         }
     }
 
