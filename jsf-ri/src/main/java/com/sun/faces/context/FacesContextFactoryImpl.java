@@ -46,6 +46,7 @@ import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceAlwaysWriteFlashCookie;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ViewRootPhaseListenerQueuesException;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableValidateWholeBean;
 import com.sun.faces.facelets.impl.DefaultResourceResolver;
 import com.sun.faces.util.Util;
 
@@ -130,6 +131,8 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
         // and thus cannot import the enum.
         attrs.put(ViewRootPhaseListenerQueuesException.getQualifiedName(), webConfig.isOptionEnabled(ViewRootPhaseListenerQueuesException) ?
                 Boolean.TRUE : Boolean.FALSE);
+        attrs.put(EnableValidateWholeBean.getQualifiedName(), webConfig.isOptionEnabled(EnableValidateWholeBean) ?
+                Boolean.TRUE : Boolean.FALSE);        
         
         Object nonDefaultResourceResolver = extContext.getApplicationMap().get(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME);
         if (null != nonDefaultResourceResolver) {

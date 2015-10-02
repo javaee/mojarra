@@ -281,6 +281,12 @@
         <component-class>com.sun.faces.ext.component.UIFocus</component-class>
     </component>
 
+    <component>
+        <component-type>com.sun.faces.ext.validateWholeBean</component-type>
+        <component-class>com.sun.faces.ext.component.UIValidateWholeBean</component-class>
+    </component>
+
+
     <!-- Facelets Custom Components -->
     
     <component>

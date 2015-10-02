@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import com.sun.faces.ext.component.UIValidateWholeBean;
 import com.sun.faces.facelets.tag.AbstractTagLibrary;
 
 import javax.faces.component.UIParameter;
@@ -146,6 +147,8 @@ public final class CoreLibrary extends AbstractTagLibrary {
         this.addValidator("validateRegex", RegexValidator.VALIDATOR_ID);
         
         this.addValidator("validateRequired", RequiredValidator.VALIDATOR_ID);
+        
+        this.addComponent("validateWholeBean", UIValidateWholeBean.FAMILY, null);
 
         this.addValidator("validator", null, ValidateDelegateHandler.class);
 

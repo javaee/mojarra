@@ -334,6 +334,9 @@
         <copy file="${tools.dir}/template-src/MessageFactory.java"
               todir="${build.generate.dir}/javax/faces/validator"
               filtering="true"/>
+        <copy file="${tools.dir}/template-src/MultiFieldValidationUtils.java"
+              todir="${build.generate.dir}/javax/faces/validator"
+              filtering="true"/>
 
         <filter token="package" value="javax.faces.webapp"/>
         <copy file="${tools.dir}/template-src/MessageFactory.java"
