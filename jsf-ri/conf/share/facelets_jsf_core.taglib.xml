@@ -356,11 +356,11 @@
                 formatting style which determines how the date component
                 of a date string is to be formatted and parsed.  Applied
                 only if type is "date", "both", <span
-                class="changed_modified_2_3">"localDate",
+                class="changed_added_2_3">"localDate",
                 "localDateTime", or "zonedDateTime"</span>. Valid values
                 are "default", "short", "medium", "long", and "full".
                 Default value is "default".  <span
-                class="changed_modified_2_3">If a <code>java.time</code> 
+                class="changed_added_2_3">If a <code>java.time</code> 
                 formatter is being used, yet the dateStyle is set to "default", 
                 the value "medium" is assumed.</span></p>
 
@@ -416,7 +416,7 @@
                 "offsetTime"</span>.
                 Valid values are "default", "short", "medium", "long",
                 and "full". Default value is "default".  <span
-                class="changed_modified_2_3">If a <code>java.time</code> 
+                class="changed_added_2_3">If a <code>java.time</code> 
                 formatter is being used, yet the timeStyle is set to "default", 
                 the value "medium" is assumed.</span></p>
 
@@ -444,11 +444,11 @@
             "both"<span class="changed_added_2_3">, "localDate",
             "localDateTime", "localTime", "offsetTime",
             "offsetDateTime", and "zonedDateTime".  The values starting
-            with "local" correspond to Java SE 8 Date Time API classes
-            in package <code>java.time</code> with the name derived by
-            upper casing the first letter.  For example,
-            <code>java.time.LocalDate</code>.</span> Default value is
-            "date".</p>
+            with "local", "offset" and "zoned" correspond to Java SE 8
+            Date Time API classes in package <code>java.time</code> with
+            the name derived by upper casing the first letter.  For
+            example, <code>java.time.LocalDate</code> for the value
+            "localDate".</span> Default value is "date".</p>
 
             ]]></description>
             <name>type</name>

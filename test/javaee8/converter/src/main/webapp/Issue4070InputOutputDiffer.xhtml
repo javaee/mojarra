@@ -10,15 +10,15 @@
     <h:body>
         <h:form prependId="false" id="form">
             
-            <p>medium localDate value: [Sep 30, 2015]</p>
+            <p>medium localDate value: [30.09.2015]</p>
             
             <h:panelGrid border="1" columns="3">
                 
                 <h:outputText value="localDateLabel" />
             
-                <input type="text" jsf:id="localDate" value="#{backingBean.localDate}">
+                <h:inputText id="localDate" value="#{backingBean.localDate}">
                     <f:convertDateTime type="localDate" pattern="dd.MM.uuuu" />
-                </input>
+                </h:inputText>
             
                 <h:outputText id="localDateValue" value="#{backingBean.localDate}">
                     <f:convertDateTime type="localDate" pattern="dd.MM.uu" />

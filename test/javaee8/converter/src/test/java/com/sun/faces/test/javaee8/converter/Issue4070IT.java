@@ -67,20 +67,24 @@ public class Issue4070IT {
 
     @Test
     public void testJavaTimeTypes() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/Issue4070Using.xhtml");
         
-        HtmlTextInput input;
-        HtmlSubmitInput submit;
-        HtmlSpan output;
-        String value;
-        
-        page = doTest(page, "Sep 30, 2015 4:14:43 PM", "localDateTime", "2015-09-30T16:14:43");
+        doTestJavaTimeTypes("Sep 30, 2015 4:14:43 PM", "localDateTime", "2015-09-30T16:14:43");
                 
-        // page = doTest(page, "Sep 30, 2015", "localDate", "2015-09-30");
+        doTestJavaTimeTypes("Sep 30, 2015", "localDate", "2015-09-30");
+        
+        doTestJavaTimeTypes("4:52:56 PM", "localTime", "16:52:56");
+        
+        doTestJavaTimeTypes("17:07:19.358-04:00", "offsetTime", "17:07:19.358-04:00");     
+
+        doTestJavaTimeTypes("2015-09-30T17:24:36.529-04:00", "offsetDateTime", "2015-09-30T17:24:36.529-04:00");
+        
+        doTestJavaTimeTypes("2015-09-30T17:31:42.09-04:00[America/New_York]", "zonedDateTime", "2015-09-30T17:31:42.090-04:00[America/New_York]");        
         
     }
     
-    private HtmlPage doTest(HtmlPage page, String value, String inputId, String expected) throws Exception {
+    private void doTestJavaTimeTypes(String value, String inputId, String expected) throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/Issue4070Using.xhtml");
+        
         HtmlTextInput input;
         HtmlSubmitInput submit;
         HtmlSpan output;
@@ -91,7 +95,23 @@ public class Issue4070IT {
         page = submit.click();
         output = page.getHtmlElementById(inputId + "Value");
         assertEquals(expected, output.getTextContent());
-        
-        return page;
     }
+    
+    @Test
+    public void testInputOutputDiffer() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "faces/Issue4070InputOutputDiffer.xhtml");
+        
+        HtmlTextInput input;
+        HtmlSubmitInput submit;
+        HtmlSpan output;
+
+        input = page.getHtmlElementById("localDate");
+        input.setValueAttribute("30.09.2015");
+        submit = page.getHtmlElementById("submit");
+        page = submit.click();
+        output = page.getHtmlElementById("localDateValue");
+        assertEquals("30.09.15", output.getTextContent());
+        
+    }
+    
 }

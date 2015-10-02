@@ -21,50 +21,50 @@
                 
                 <h:outputText value="localDateLabel" />
             
-                <input type="text" jsf:id="localDate" value="#{backingBean.localDate}">
+                <h:inputText id="localDate" value="#{backingBean.localDate}">
                     <f:convertDateTime type="localDate" />
-                </input>
+                </h:inputText>
             
                 <h:outputText id="localDateValue" value="#{backingBean.localDate}" />
                 
                 
                 <h:outputText value="localDateTimeLabel" />
             
-                <input type="text" jsf:id="localDateTime" value="#{backingBean.localDateTime}">
+                <h:inputText id="localDateTime" value="#{backingBean.localDateTime}">
                     <f:convertDateTime type="localDateTime" />
-                </input>
+                </h:inputText>
             
                 <h:outputText id="localDateTimeValue" value="#{backingBean.localDateTime}" />
 
                 <h:outputText value="localTimeLabel" />
             
-                <input type="text" jsf:id="localTime" value="#{backingBean.localTime}">
+                <h:inputText id="localTime" value="#{backingBean.localTime}">
                     <f:convertDateTime type="localTime" />
-                </input>
+                </h:inputText>
             
                 <h:outputText id="localTimeValue" value="#{backingBean.localTime}" />
                 
                 <h:outputText value="offsetTimeLabel" />
             
-                <input type="text" jsf:id="offsetTime" value="#{backingBean.offsetTime}">
+                <h:inputText id="offsetTime" value="#{backingBean.offsetTime}">
                     <f:convertDateTime type="offsetTime" />
-                </input>
+                </h:inputText>
             
                 <h:outputText id="offsetTimeValue" value="#{backingBean.offsetTime}" />
 
                 <h:outputText value="offsetDateTimeLabel" />
             
-                <input type="text" jsf:id="offsetDateTime" value="#{backingBean.offsetDateTime}">
+                <h:inputText id="offsetDateTime" value="#{backingBean.offsetDateTime}">
                     <f:convertDateTime type="offsetDateTime" />
-                </input>
+                </h:inputText>
             
                 <h:outputText id="offsetDateTimeValue" value="#{backingBean.offsetDateTime}" />
                 
                 <h:outputText value="zonedDateTimeLabel" />
             
-                <input type="text" jsf:id="zonedDateTime" value="#{backingBean.zonedDateTime}">
+                <h:inputText id="zonedDateTime" value="#{backingBean.zonedDateTime}">
                     <f:convertDateTime type="zonedDateTime" />
-                </input>
+                </h:inputText>
             
                 <h:outputText id="zonedDateTimeValue" value="#{backingBean.zonedDateTime}" />
             </h:panelGrid>

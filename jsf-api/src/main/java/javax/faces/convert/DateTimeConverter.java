@@ -77,23 +77,33 @@ import java.util.TimeZone;
  * <li>If the <code>locale</code> property is not null,
  * use that <code>Locale</code> for managing parsing.  Otherwise, use the
  * <code>Locale</code> from the <code>UIViewRoot</code>.</li>
- * <li>If a <code>pattern</code> has been specified, its syntax must conform
- * the rules specified by <code>java.text.SimpleDateFormat</code>.  Such
- * a pattern will be used to parse, and the <code>type</code>,
- * <code>dateStyle</code>, and <code>timeStyle</code> properties
- * will be ignored.</li>
- * <li>If a <code>pattern</code> has not been specified, parsing will be based
- * on the <code>type</code> property, which expects a date value, a time
- * value, both, <span class="changed_added_2_3">or one of several values specific
- * to classes in {@code java.time}.</span>.  Any date and time 
- * values included will be parsed in
+ *
+ * <li>If a <code>pattern</code> has been specified, its syntax must
+ * conform the rules specified by
+ * <code>java.text.SimpleDateFormat</code> <span
+ * class="changed_added_2_3">or {@code
+ * java.time.format.DateTimeFormatter}.  Which of these two formatters
+ * is used depends on the value of {@code type}.</span> Such a pattern
+ * will be used to parse, and the <code>type</code>,
+ * <code>dateStyle</code>, and <code>timeStyle</code> properties will be
+ * ignored, <span class="changed_added_2_3">unless the value of {@code
+ * type} is one of the {@code java.time} specific values listed in
+ * {@link #setType}.  In this case, {@code DateTimeFormatter.ofPattern(String, Locale)}
+ * must be called, passing the value of {@code pattern} as the first argument and 
+ * the current {@code Locale} as the second argument, 
+ * and this formatter must be used to parse the incoming value.</span></li>
+ *
+ * <li>If a <code>pattern</code> has not been specified, parsing will be
+ * based on the <code>type</code> property, which expects a date value,
+ * a time value, both, <span class="changed_added_2_3">or one of several
+ * values specific to classes in {@code java.time} as listed in {@link
+ * #setType}.</span> Any date and time values included will be parsed in
  * accordance to the styles specified by <code>dateStyle</code> and
- * <code>timeStyle</code>, respectively.</li>
- * <li>If a <code>timezone</code> has been specified, it must be passed
- * to the underlying <code>DateFormat</code> instance.  Otherwise
- * the "GMT" timezone is used.</li>
- * <li>In all cases, parsing must be non-lenient; the given string must
- * strictly adhere to the parsing format.</li>
+ * <code>timeStyle</code>, respectively.</li> <li>If a
+ * <code>timezone</code> has been specified, it must be passed to the
+ * underlying <code>DateFormat</code> instance.  Otherwise the "GMT"
+ * timezone is used.</li> <li>In all cases, parsing must be non-lenient;
+ * the given string must strictly adhere to the parsing format.</li>
  * </ul>
  * 
  * <p>The <code>getAsString()</code> method expects a value of type
@@ -108,11 +118,23 @@ import java.util.TimeZone;
  * <li>If a <code>timezone</code> has been specified, it must be passed
  * to the underlying <code>DateFormat</code> instance.  Otherwise
  * the "GMT" timezone is used.</li>
- * <li>If a <code>pattern</code> has been specified, its syntax must conform
- * the rules specified by <code>java.text.SimpleDateFormat</code>.  Such
- * a pattern will be used to format, and the <code>type</code>,
- * <code>dateStyle</code>, and <code>timeStyle</code> properties
- * will be ignored.</li>
+
+ * <li>If a <code>pattern</code> has been specified, its syntax must
+ * conform the rules specified by
+ * <code>java.text.SimpleDateFormat</code> <span
+ * class="changed_added_2_3">or {@code
+ * java.time.format.DateTimeFormatter}.  Which of these two formatters
+ * is used depends on the value of {@code type}.</span> Such a pattern
+ * will be used to format, and the <code>type</code>,
+ * <code>dateStyle</code>, and <code>timeStyle</code> properties will be
+ * ignored, <span class="changed_added_2_3">unless the value of {@code
+ * type} is one of the {@code java.time} specific values listed in
+ * {@link #setType}.  In this case, {@code
+ * DateTimeFormatter.ofPattern(String, Locale)} must be called, passing
+ * the value of {@code pattern} as the first argument and the current
+ * {@code Locale} as the second argument, and this formatter must be
+ * used to format the outgoing value.</span></li>
+
  * <li>If a <code>pattern</code> has not been specified, formatting will be
  * based on the <code>type</code> property, which includes a date value,
  * a time value, both or into the formatted String.  Any date and time
@@ -361,11 +383,19 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
 
 
     /**
-     * <p>Set the type of value to be formatted or parsed.
-     * Valid values are <code>both</code>, <code>date</code>, or
-     * <code>time</code>.
-     * An invalid value will cause a {@link ConverterException} when
-     * <code>getAsObject()</code> or <code>getAsString()</code> is called.</p>
+     * <p><span class="changed_modified_2_3">Set</span> the type of
+     * value to be formatted or parsed.  Valid values are
+     * <code>both</code>, <code>date</code>, <code>time</code> <span
+     * class="changed_added_2_3">{@code localDate}, {@code
+     * localDateTime}, {@code localTime}, {@code offsetTime}, {@code
+     * offsetDateTime}, or {@code zonedDateTime}. The values starting
+     * with "local", "offset" and "zoned" correspond to Java SE 8 Date
+     * Time API classes in package <code>java.time</code> with the name
+     * derived by upper casing the first letter.  For example,
+     * <code>java.time.LocalDate</code> for the value
+     * <code>"localDate"</code>.</span> An invalid value will cause a {@link
+     * ConverterException} when <code>getAsObject()</code> or
+     * <code>getAsString()</code> is called.</p>
      *
      * @param type The new date style
      */
@@ -456,7 +486,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         private FormatWrapper(DateTimeFormatter dtf, TemporalQuery from) {
             this.df = null;
             this.dtf = dtf;
-            this.from = from;;
+            this.from = from;
         }
         
         private Object parse(CharSequence text) throws ParseException {
@@ -557,27 +587,27 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         } else if (type.equals("time")) {
             df = DateFormat.getTimeInstance(getStyle(timeStyle), locale);
         } else if (type.equals("localDate")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
                     DateTimeFormatter.ofLocalizedDate(getFormatStyle(dateStyle));
             from = LocalDate::from;
         } else if (type.equals("localDateTime")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
                     DateTimeFormatter.ofLocalizedDateTime(getFormatStyle(dateStyle));
             from = LocalDateTime::from;
         } else if (type.equals("localTime")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
                     DateTimeFormatter.ofLocalizedTime(getFormatStyle(dateStyle));
             from = LocalTime::from;
         } else if (type.equals("offsetTime")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
                     DateTimeFormatter.ISO_OFFSET_TIME;
             from = OffsetTime::from;
         } else if (type.equals("offsetDateTime")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
                     DateTimeFormatter.ISO_OFFSET_DATE_TIME;
             from = OffsetDateTime::from;
         } else if (type.equals("zonedDateTime")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern) : 
+            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
                     DateTimeFormatter.ISO_ZONED_DATE_TIME;
             from = ZonedDateTime::from;
         } else {
