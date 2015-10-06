@@ -85,11 +85,12 @@ import javax.faces.event.SystemEventListenerHolder;
 import javax.faces.render.Renderer;
 
 /**
- * <p><strong class="changed_modified_2_0 changed_modified_2_0_rev_a 
- * changed_modified_2_1 changed_modified_2_2 changed_modified_2_2">UIComponent</strong>
- * is the base class for all user interface components in JavaServer Faces.
- * The set of {@link UIComponent} instances associated with a particular request
- * and response are organized into a component tree under a {@link
+ * <p><strong class="changed_modified_2_0 changed_modified_2_0_rev_a
+ * changed_modified_2_1 changed_modified_2_2
+ * changed_modified_2_3">UIComponent</strong> is the base class for all
+ * user interface components in JavaServer Faces.  The set of {@link
+ * UIComponent} instances associated with a particular request and
+ * response are organized into a component tree under a {@link
  * UIViewRoot} that represents the entire content of the request or
  * response.</p>
  *
