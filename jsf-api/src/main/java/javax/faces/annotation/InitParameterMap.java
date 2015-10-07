@@ -50,6 +50,14 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
+/**
+ * <p class="changed_added_2_3">The presence of this annotation (along
+ * with {@code @Inject}) on a field of type <code>Map&lt;String,
+ * String&gt;</code> causes the map returned from {@link
+ * javax.faces.context.ExternalContext#getInitParameterMap} to be
+ * injected as the value of that field. </p>
+ */
+
 @Target({TYPE, METHOD, PARAMETER, FIELD})
 @Qualifier
 @Retention(value = RUNTIME)

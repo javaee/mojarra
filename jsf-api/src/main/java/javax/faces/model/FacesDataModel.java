@@ -49,7 +49,7 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
- * *<p class="changed_added_2_3">The presence of this annotation
+ * <p class="changed_added_2_3">The presence of this annotation
  * on a class automatically registers the class with the runtime as a
  * {@link DataModel} that's capable of wrapping a type indicated by the
  * {@link FacesDataModel#forClass()} attribute.
