@@ -291,6 +291,8 @@ public abstract class ResponseStateManager {
      * @param context The {@link FacesContext} instance for the current request
      * @param state The serialized state information previously saved
      *
+     * @throws IOException if the state cannot be written for any reason
+     *
      */
     public void writeState(FacesContext context,
                            SerializedView state) throws IOException {
@@ -325,7 +327,10 @@ public abstract class ResponseStateManager {
      * cannot be determined.
      * 
      * @since 2.2
+     *
      * 
+     * @return the value of the statelessness of this run through the
+     * lifecycle.
      *  
      */
     
@@ -386,6 +391,7 @@ public abstract class ResponseStateManager {
      * @param context The {@link FacesContext} instance for the current request
      * @param viewId View identifier of the view to be restored
      *
+     * @return the tree structure portion of the state
      */
     public Object getTreeStructureToRestore(FacesContext context, 
 					    String viewId) {
@@ -402,6 +408,8 @@ public abstract class ResponseStateManager {
      * The default implementation returns <code>null</code>.
      *
      * @param context The {@link FacesContext} instance for the current request
+     * 
+     * @return the component state portion of the state
      *
      */
     public Object getComponentStateToRestore(FacesContext context) {
@@ -431,6 +439,10 @@ public abstract class ResponseStateManager {
      * javax.faces.context.ExternalContext}'s <code>requestParameterMap</code> and return
      * <code>true</code> if its size is greater than 0.</p>
      *
+     * @param context the {@code FacesContext} for the current request.
+     *
+     * @return the value as specified above
+     * 
      * @since 1.2
      */
 

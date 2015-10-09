@@ -79,6 +79,8 @@ public class MethodExpressionValidator implements Validator, StateHolder {
 
     /**
      * <p>Construct a {@link Validator} that contains a {@link MethodExpression}.</p>
+     *
+     * @param methodExpression the expression to wrap
      */
     public MethodExpressionValidator(MethodExpression methodExpression) {
 

@@ -94,6 +94,8 @@ public class ExceptionQueuedEvent extends SystemEvent {
      * <code>ExceptionQueuedEventContext</code> for this event instance.</p>
      *
      * @since 2.0
+     *
+     * @return the context
      */
 
     public ExceptionQueuedEventContext getContext() {

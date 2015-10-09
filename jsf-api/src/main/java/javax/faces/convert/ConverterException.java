@@ -141,6 +141,8 @@ public class ConverterException extends FacesException {
      * <p>Returns the FacesMessage associated with this exception; this
      * will only be available if the converter that thew this exception
      * instance placed it there.
+     *
+     * @return the message
      */
     public FacesMessage getFacesMessage() {
         return facesMessage;

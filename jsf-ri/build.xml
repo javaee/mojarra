@@ -86,7 +86,7 @@
     <property name="dependency.jar.dir" value="${dependency.base.dir}/jars"/>
     <property name="yuicompressor.jar" value="${dependency.jar.dir}/yuicompressor.jar"/>
     <property name="build.javadocs.dir" value="${build.dir}/javadocs"/>
-    <property name="javadoc.private" value="true"/>
+    <property name="javadoc.private" value="false"/>
     <property name="javadoc.protected" value="false"/>
     <property name="DocName" value="Mojarra Implementation Javadoc"/>
 

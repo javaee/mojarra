@@ -166,7 +166,8 @@ public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
 
 
     /**
-     * <p class="changed_added_2_0"></p>
+     * <p class="changed_added_2_0">The {@link FacesContext} for this
+     * request.</p>
      * @return the {@link FacesContext} used to create this
      *  <code>ExceptionQueuedEventContext</code> instance.
      */
@@ -179,6 +180,8 @@ public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
     /**
      * <p class="changed_added_2_0">Return the <code>exception</code>
      * property.</p>
+     *
+     * @return the exception
      */
     public Throwable getException() {
 
@@ -191,6 +194,8 @@ public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
      * <p class="changed_added_2_0">Return the <code>UIComponent</code>
      * which was being processed when the exception was thrown. If none
      * or not available, this will be <code>null</code>.</p>
+     *
+     * @return the component
      */
     public UIComponent getComponent() {
 
@@ -203,6 +208,8 @@ public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
      * <p class="changed_added_2_0">Return the <code>PhaseId</code>
      * which was being processed when the exception was thrown. If none
      * or not available, this will be <code>null</code>.</p>
+     *
+     * @return the phase id
      */
     public PhaseId getPhaseId() {
 
@@ -238,6 +245,8 @@ public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
     /**
      * <p class="changed_added_2_0">A <code>Map</code> of attributes
      * relevant to the context of this <code>ExceptionQueuedEvent</code>.</p>
+     *
+     * @return attributes related to this context
      */
     public Map<Object, Object> getAttributes() {
 

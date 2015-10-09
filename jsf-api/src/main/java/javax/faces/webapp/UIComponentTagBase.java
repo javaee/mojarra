@@ -66,6 +66,8 @@ public abstract class UIComponentTagBase extends Object implements JspTag {
      * request.  This value will be non-<code>null</code> only from the
      * beginning of <code>doStartTag()</code> through the end of
      * <code>doEndTag()</code> for each tag instance.</p>
+     *
+     * @return the {@code FacesContext} for the current request.
      */
     protected abstract FacesContext getFacesContext();
 
@@ -75,6 +77,8 @@ public abstract class UIComponentTagBase extends Object implements JspTag {
      *
      * <p>This is a convenience for
      * <code>getFacesContext().getELContext()</code>.</p>
+     *
+     * @return the {code ELContext} for this {@code FacesContext}
      */
 
     protected ELContext getELContext() {
@@ -126,6 +130,8 @@ public abstract class UIComponentTagBase extends Object implements JspTag {
      * {@link javax.faces.application.Application#createComponent} to create
      * the {@link UIComponent} instance for this tag.  Subclasses must
      * override this method to return the appropriate value.</p>
+     *
+     * @return the component type
      */
     public abstract String getComponentType();
 
@@ -135,6 +141,8 @@ public abstract class UIComponentTagBase extends Object implements JspTag {
      * <code>null</code> to ask the component to render itself directly.
      * Subclasses must override this method to return the appropriate value.
      * </p>
+     *
+     * @return the renderer type
      */
     public abstract String getRendererType();
 
@@ -144,6 +152,8 @@ public abstract class UIComponentTagBase extends Object implements JspTag {
      * within this tag, and only returns useful results between the
      * execution of <code>doStartTag()</code> and <code>doEndTag()</code>
      * on this tag instance.</p>
+     *
+     * @return the component
      */
     public abstract UIComponent getComponentInstance();
 
@@ -153,6 +163,8 @@ public abstract class UIComponentTagBase extends Object implements JspTag {
      * used by tags nested within this tag, and only returns useful results
      * between the execution of <code>doStartTag()</code> and
      * <code>doEndTag()</code> on this tag instance.</p>
+     *
+     * @return the result as specified above
      */
     public abstract boolean getCreated();
 
@@ -160,6 +172,8 @@ public abstract class UIComponentTagBase extends Object implements JspTag {
      * <p>Return the index of the next child to be added as a child of
      * this tag.  The default implementation maintains a list of created
      * components and returns the size of the list.</p>
+     *
+     * @return the index
      */
 
     protected abstract int getIndexOfNextChildTag();

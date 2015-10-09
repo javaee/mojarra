@@ -143,6 +143,8 @@ public abstract class ValidatorELTag extends TagSupport {
      * on our surrounding {@link UIComponent}.</p>
      *
      * @throws JspException if a new instance cannot be created
+     *
+     * @return the created {@code Validator}
      */
     protected abstract Validator createValidator()
         throws JspException;

@@ -103,6 +103,8 @@ public abstract class BehaviorEvent extends FacesEvent {
      * that sent this event.
      *
      * @since 2.0
+     *
+     * @return the {@code Behavior}
      */
     public Behavior getBehavior() {
         return behavior;

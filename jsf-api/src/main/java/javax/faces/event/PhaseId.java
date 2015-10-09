@@ -102,6 +102,8 @@ public class PhaseId implements Comparable {
 
     /**
      * <p>Return the ordinal value of this {@link PhaseId} instance.</p>
+     *
+     * @return the ordinal
      */
     public int getOrdinal() {
 
@@ -126,6 +128,8 @@ public class PhaseId implements Comparable {
      * <p class="changed_added_2_2">Return the name of this phase.</p>
      * 
      * @since 2.2
+     *
+     * @return the name
      */
 
     public String getName() {
@@ -146,6 +150,8 @@ public class PhaseId implements Comparable {
      * corresponding to the argument <code>phase</code> cannot be found.
      *
      * @since 2.2
+     *
+     * @return the phase id corresponding to the argument {@code phase}
      */
     
     public static PhaseId phaseIdValueOf(String phase) {

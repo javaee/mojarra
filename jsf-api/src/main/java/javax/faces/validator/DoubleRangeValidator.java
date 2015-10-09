@@ -202,6 +202,8 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
      * <p>Return the maximum value to be enforced by this {@link
      * Validator} or <code>Double.MAX_VALUE</code> if it has not been
      * set.</p>
+     *
+     * @return the maximum
      */
     public double getMaximum() {
 
@@ -230,6 +232,8 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
      * <p>Return the minimum value to be enforced by this {@link
      * Validator}, or <code>Double.MIN_VALUE</code> if it has not been
      * set.</p>
+     *
+     * @return the minimum value
      */
     public double getMinimum() {
 

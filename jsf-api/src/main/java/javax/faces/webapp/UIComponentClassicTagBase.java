@@ -347,6 +347,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      *
      * @throws JspException to cause <code>doStart()</code> to
      *  throw an exception
+     *
+     * @return the value to return from <code>doStart()</code>
      */
     protected int getDoStartValue() throws JspException {
 
@@ -362,6 +364,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      *
      * @throws JspException to cause <code>doEnd()</code> to
      *  throw an exception
+     *
+     * @return the value to return from <code>doEnd()</code>
      */
     protected int getDoEndValue() throws JspException {
 
@@ -660,6 +664,12 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <li>Call <code>setProperties()</code>.
      * <li>Add the new component as a child or facet of its parent</li>
      * </ol>
+     *
+     * @param context the {@code FacesContext} for the current request.
+     *
+     * @return the found component
+     *
+     * @throws JspException if an unexpected condition arises while finding the component
      */
     protected UIComponent findComponent(FacesContext context) throws JspException
     {
@@ -758,6 +768,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * if any; otherwise, return <code>null</code>.</p>
      *
      * @param context <code>PageContext</code> for the current page
+     *
+     * @return the parent tag
      */
     public static UIComponentClassicTagBase getParentUIComponentClassicTagBase(PageContext context)
     {
@@ -1089,6 +1101,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * of this tag instance or return null if there is no body content,
      * the body content is whitespace, or the body content is a
      * comment.</p>
+     *
+     * @return the component 
      */
 
     protected UIComponent createVerbatimComponentFromBodyContent() {
@@ -1143,6 +1157,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <p><code>id</code> is
      * <code>FacesContext.getViewRoot().createUniqueId()</code></p>
      *
+     *
+     * @return the component
      */
 
     protected UIOutput createVerbatimComponent() {
@@ -1162,6 +1178,14 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <i>component</i> in the parent's child list.  <i>verbatim</i> is
      * added to the list at the position immediatly preceding
      * <i>component</i>.</p>
+     *
+     * 
+     * @param parentTag the parent tag
+     *
+     * @param verbatim the verbatim to add before the component
+     *
+     * @param component the component to be added after the component
+     *
      */
 
     protected void addVerbatimBeforeComponent(
@@ -1207,6 +1231,12 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <i>component</i> in the parent's child list.  <i>verbatim</i> is
      * added to the list at the position immediatly following
      * <i>component</i>.</p>
+     *
+     * @param parentTag the parent tag
+     *
+     * @param verbatim the verbatim to add after the component
+     *
+     * @param component the component to be added before the component
      */
 
     protected void addVerbatimAfterComponent(UIComponentClassicTagBase parentTag,
@@ -1512,6 +1542,13 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <p>Return the flag value that should be returned from the
      * <code>doAfterBody()</code> method when it is called.  Subclasses
      * may override this method to return the appropriate value.</p>
+     *
+     * @return the value to return from <code>doAfterBody()</code>
+     *
+     * @return JspException if the value cannot be returned
+     *
+     * @throws JspException if an unexpected condition arises while
+     * getting the value
      */
     protected int getDoAfterBodyValue() throws JspException {
 
@@ -1541,6 +1578,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     /**
      * <p>Get the <code>JspWriter</code> from our <code>BodyContent</code>.
      * </p>
+     *
+     * @return the writer
      */
     public JspWriter getPreviousOut() {
 
@@ -1656,6 +1695,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
     /**
      * <p>Return the <code>id</code> value assigned by the page author.</p>
+     *
+     * @return the id of this tag
      */
     protected String getId() {
 
@@ -1669,6 +1710,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * previously returned value.  Otherwise, if {@link #getJspId}
      * returns non-<code>null</code>, prepend {@link #UNIQUE_ID_PREFIX}
      * to the <code>jspId</code> and return the result.</p>
+     *
+     * @return the value as specified above
      */
 
     protected String getFacesJspId() {
@@ -1745,6 +1788,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * Returns the <code>List</code> of {@link UIComponent} ids created or
      * located by nested {@link UIComponentTag}s while processing the current
      * request.
+     *
+     * @return the created components
      */
     protected List<String> getCreatedComponents() {
         return createdComponents;
@@ -1998,6 +2043,10 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * properties.  </p>
      * @param context {@link FacesContext} for the current request
      * @param newId id of the component
+     *
+     * @return the created component
+     *
+     * @throws JspException if the component cannot be created
      */
 
     protected abstract UIComponent createComponent(FacesContext context,
@@ -2009,6 +2058,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * necessary to allow subclasses that expose the
      * <code>binding</code> property as an Faces 1.1 style EL property
      * as well as subclasses that expose it as an EL API property.</p>
+     *
+     * @return whether or not this component has a binding attribute
      */
 
     protected abstract boolean hasBinding();
@@ -2075,6 +2126,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <p>Return the facet name that we should be stored under, if any;
      * otherwise, return null (indicating that we will be a child component).
      * </p>
+     *
+     * @return the name of the facet
      */
     protected String getFacetName() {
 

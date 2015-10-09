@@ -101,6 +101,9 @@ public abstract class ViewDeclarationLanguageFactory implements FacesWrapper<Vie
      * @since 2.0
      * 
      * @throws NullPointerException if <code>viewId</code> is null.
+     *
+     * @return the {@code ViewDeclarationLanguage} corresponding to the
+     * argument {@code viewId}
      * 
      */
     public abstract ViewDeclarationLanguage getViewDeclarationLanguage(String viewId);

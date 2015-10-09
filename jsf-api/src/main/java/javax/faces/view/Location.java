@@ -87,6 +87,7 @@ public class Location implements Serializable {
     /**
      * <p class="changed_added_2_0">Return the estimated character column.</p>
      * 
+     * @return the column
      */
     public int getColumn() {
         return column;
@@ -95,6 +96,8 @@ public class Location implements Serializable {
     /**
      * <p class="changed_added_2_0">Return the line number in the page
      * for this location.</p>
+     *
+     * @return the line number
      * 
      */
     public int getLine() {
@@ -104,6 +107,8 @@ public class Location implements Serializable {
     /**
      * <p class="changed_added_2_0">Return the file path to the page
      * represented by this location.</p>
+     *
+     * @return the file path
      * 
      */
     public String getPath() {

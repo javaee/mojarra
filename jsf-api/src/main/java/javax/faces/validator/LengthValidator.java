@@ -167,6 +167,8 @@ public class LengthValidator implements Validator, PartialStateHolder {
      * <p>Return the maximum length to be enforced by this {@link
      * Validator}, or <code>0</code> if the maximum has not been
      * set.</p>
+     * 
+     * @return the maximum
      */
     public int getMaximum() {
 
@@ -195,6 +197,8 @@ public class LengthValidator implements Validator, PartialStateHolder {
      * <p>Return the minimum length to be enforced by this {@link
      * Validator}, or <code>0</code> if the minimum has not been
      * set.</p>
+     *
+     * @return the minimum
      */
     public int getMinimum() {
 

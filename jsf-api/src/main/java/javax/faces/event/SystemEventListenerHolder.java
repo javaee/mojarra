@@ -70,8 +70,11 @@ public interface SystemEventListenerHolder {
      * instances that have been installed into the class implementing
      * this interface.</p>
      * </div>
+     *
+     * @param facesEventClass the class for which listeners are to be returned
      * 
      * @return the listeners for the argument class
+     *
      */
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass);
 

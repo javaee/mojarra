@@ -64,6 +64,8 @@ public abstract class ResponseWriter extends Writer {
      * <p>Return the content type (such as "text/html") for this {@link
      * ResponseWriter}.  Note: this must not include the "charset="
      * suffix.</p>
+     *
+     * @return the content type
      */
     public abstract String getContentType();
 
@@ -73,6 +75,8 @@ public abstract class ResponseWriter extends Writer {
      * {@link ResponseWriter}.  Please see <a
      * href="http://www.iana.org/assignments/character-sets">the
      * IANA</a> for a list of character encodings.</p>
+     *
+     * @return the character encoding
      */
     public abstract String getCharacterEncoding();
 
@@ -385,6 +389,8 @@ public abstract class ResponseWriter extends Writer {
      * using the specified <code>Writer</code> as the output destination.</p>
      *
      * @param writer The <code>Writer</code> that is the output destination
+     *
+     * @return the new <code>ResponseWriter</code>
      */
     public abstract ResponseWriter cloneWithWriter(Writer writer);
 

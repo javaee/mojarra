@@ -129,6 +129,8 @@ public abstract class PartialViewContext {
      *  this instance has been released
      *
      * @since 2.0
+     *
+     * @return the ids for the execute portion of the lifecycle
      */
     public abstract Collection<String> getExecuteIds();
     
@@ -146,6 +148,8 @@ public abstract class PartialViewContext {
      *  this instance has been released
      *
      * @since 2.0
+     *
+     * @return the ids for the render portion of the lifecycle
      */
     public abstract Collection<String> getRenderIds();
 
@@ -160,6 +164,8 @@ public abstract class PartialViewContext {
      *  this instance has been released
      *
      * @since 2.0
+     *
+     * @return the {@code ResponseWriter} for output
      */
     public abstract PartialResponseWriter getPartialResponseWriter();
 
@@ -174,6 +180,8 @@ public abstract class PartialViewContext {
      *  this instance has been released
      *
      * @since 2.0
+     *
+     * @return whether or not this is an ajax request
      */
     public abstract boolean isAjaxRequest();
 
@@ -189,6 +197,8 @@ public abstract class PartialViewContext {
      *  this instance has been released
      *
      * @since 2.0
+     *
+     * @return whether or not this request is partial
      */
     public abstract boolean isPartialRequest();
 
@@ -204,6 +214,8 @@ public abstract class PartialViewContext {
      *  this instance has been released
      *
      * @since 2.0
+     *
+     * @return whether or not this is an execute all request
      */
     public abstract boolean isExecuteAll();
 
@@ -219,6 +231,8 @@ public abstract class PartialViewContext {
      *  this instance has been released
      *
      * @since 2.0
+     *
+     * @return whether or not this is a render all request
      */
     public abstract boolean isRenderAll();
     
@@ -233,6 +247,8 @@ public abstract class PartialViewContext {
      * method to take the specified action.</p>
      * 
      * @since 2.2
+     *
+     * @return whether or not this is a reset values request
      */
     public boolean isResetValues() {
         return false;

@@ -201,6 +201,8 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
 
     /**
      * <p>Return the maximum value to be enforced by this {@link Validator}.</p>
+     *
+     * @return the maximum
      */
     public long getMaximum() {
 
@@ -227,6 +229,8 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
 
     /**
      * <p>Return the minimum value to be enforced by this {@link Validator}.</p>
+     *
+     * @return the minimum
      */
     public long getMinimum() {
 

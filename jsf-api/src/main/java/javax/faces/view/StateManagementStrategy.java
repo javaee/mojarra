@@ -115,6 +115,8 @@ public abstract class StateManagementStrategy {
      * @param context the <code>FacesContext</code> for this request.
      *
      * @since 2.0
+     * 
+     * @return the saved view state
      */
 
     public abstract Object saveView(FacesContext context);
@@ -189,6 +191,8 @@ public abstract class StateManagementStrategy {
      * @param renderKitId the render kit id for this state.
 
      * @since 2.0
+     *
+     * @return the root of the restored view
      */
 
     public abstract UIViewRoot restoreView(FacesContext context, String viewId,

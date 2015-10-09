@@ -231,6 +231,8 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
     /**
      * <p>Return the style to be used to format or parse dates.  If not set,
      * the default value, <code>default</code>, is returned.</p>
+     *
+     * @return the style
      */
     public String getDateStyle() {
 
@@ -261,6 +263,8 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      * dates and times. If not explicitly set, the <code>Locale</code> stored
      * in the {@link javax.faces.component.UIViewRoot} for the current
      * request is returned.</p>
+     *
+     * @return the {@code Locale}
      */
     public Locale getLocale() {
 
@@ -292,6 +296,8 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
     /**
      * <p>Return the format pattern to be used when formatting and
      * parsing dates and times.</p>
+     *
+     * @return the pattern
      */
     public String getPattern() {
 
@@ -320,6 +326,8 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
     /**
      * <p>Return the style to be used to format or parse times.  If not set,
      * the default value, <code>default</code>, is returned.</p>
+     *
+     * @return the time style
      */
     public String getTimeStyle() {
 
@@ -349,6 +357,8 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      * <p>Return the <code>TimeZone</code> used to interpret a time value.
      * If not explicitly set, the default time zone of <code>GMT</code>
      * returned.</p>
+     *
+     * @return the {@code TimeZone}
      */
     public TimeZone getTimeZone() {
 
@@ -374,6 +384,8 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      * <p>Return the type of value to be formatted or parsed.
      * If not explicitly set, the default type, <code>date</code>
      * is returned.</p>
+     *
+     * @return the type
      */
     public String getType() {
 

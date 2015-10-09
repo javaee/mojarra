@@ -73,6 +73,8 @@ public class FacetTag extends TagSupport {
 
     /**
      * <p>Return the name to be assigned to this facet.</p>
+     *
+     * @return the name
      */
     public String getName() {
 

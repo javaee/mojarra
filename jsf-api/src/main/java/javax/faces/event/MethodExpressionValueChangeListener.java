@@ -102,6 +102,9 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
 
    /**
      * <p>Construct a {@link ValueChangeListener} that contains a {@link MethodExpression}.</p>
+     *
+     * @param methodExpressionOneArg a method expression that takes one argument
+     * @param methodExpressionZeroArg a method expression that takes zero arguments
      */
     public MethodExpressionValueChangeListener(MethodExpression methodExpressionOneArg,
             MethodExpression methodExpressionZeroArg) {

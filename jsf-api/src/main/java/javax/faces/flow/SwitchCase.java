@@ -66,6 +66,8 @@ public abstract class SwitchCase {
      * 
      * @since 2.2
      * 
+     * @param context the {@code FacesContext} for the current request.
+     *
      * @return a value indicating whether or not this condition should be taken
      */
     public abstract Boolean getCondition(FacesContext context);

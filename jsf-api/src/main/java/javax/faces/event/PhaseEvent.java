@@ -90,6 +90,9 @@ public class PhaseEvent extends EventObject {
     
     /**
      * <p>Return the {@link FacesContext} for the request being processed.</p>
+     *
+     * @return the {@code FacesContext} for the current request.
+     *
      */
     public FacesContext getFacesContext() {
 
@@ -104,6 +107,8 @@ public class PhaseEvent extends EventObject {
     /**
      * <p>Return the {@link PhaseId} representing the current request
      * processing lifecycle phase.</p>
+     *
+     * @return the phase id
      */
     public PhaseId getPhaseId() {
 

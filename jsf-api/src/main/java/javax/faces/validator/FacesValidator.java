@@ -83,6 +83,8 @@ public @interface FacesValidator {
      * <code>getSimpleName</code> on the class to which this annotation
      * is attached and lowercasing the first character.  If more than one
      * validator with this derived name is found, the results are undefined.</span></p>
+     *
+     * @return the validator-id
      */ 
 
     String value() default "";
@@ -92,6 +94,8 @@ public @interface FacesValidator {
      * id for this annotation is added to the list of default validators
      * by a call to {@link
      * javax.faces.application.Application#addDefaultValidatorId}.</p>
+     *
+     * @return whether or not this is a default validator
      */ 
 
     boolean isDefault() default false;

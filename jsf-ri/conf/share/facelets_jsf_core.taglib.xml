@@ -1599,13 +1599,22 @@ of POJOs.
         <description><![CDATA[<p>
 
             <span class="changed_added_2_0">
-            A validator that delegates the validation of the local value
-            to the Bean Validation API. The validationGroups attribute
-            serves as a filter that instructs the Bean Validation API which
-            contraints to enforce. If there are any constraint violations
-            reported by Bean Validation, the value is considered invalid.
 
-            </p>
+            <p><span class="changed_modified_2_3>A validator</span> that
+            delegates the validation of the local value to the Bean
+            Validation API. The validationGroups attribute serves as a
+            filter that instructs the Bean Validation API which
+            contraints to enforce. If there are any constraint
+            violations reported by Bean Validation, the value is
+            considered invalid.  <span class="changed_added_2_3">An
+            instance of this validator can participate in class-level
+            validation provided the preconditions mentioned in
+            <code>&lt;f:validateWholeBean /&gt;</code> are met.  Please
+            see the documentation for <code>&lt;f:validateWholeBean
+            /&gt;</code> and 
+            <code>javax.faces.validator.BeanValidator.validate()</code> for 
+            the specification and usage example.</span></p>
+
         ]]></description>
         <tag-name>validateBean</tag-name>
         <validator>

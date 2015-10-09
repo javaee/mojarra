@@ -83,6 +83,8 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
      *
      * @throws IllegalArgumentException if the specified binding is not a
      * valid value binding expression.
+     *
+     * @throws JspException if the binding cannot be set
      */
     public void setBinding(String binding) throws JspException {
 	if (!isValueReference(binding)) {
@@ -142,6 +144,9 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
      *
      * @throws NullPointerException if <code>value</code> is
      *  <code>null</code>
+     *
+     * @return whether or not this value has the correct syntax for a
+     * value binding expression
      */
     public static boolean isValueReference(String value) {
 
@@ -234,6 +239,8 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
      * if any; otherwise, return <code>null</code>.</p>
      *
      * @param context <code>PageContext</code> for the current page
+     *
+     * @return the parent tag
      */
     public static UIComponentTag getParentUIComponentTag(PageContext context) {
 

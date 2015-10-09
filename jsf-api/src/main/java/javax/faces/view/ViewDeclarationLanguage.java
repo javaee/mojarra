@@ -107,6 +107,8 @@ public abstract class ViewDeclarationLanguage {
      *
      * @throws UnsupportedOperationException if this is a JSP VDL
      * implementation.
+     *
+     * @return the component metadata
      */
     public abstract BeanInfo getComponentMetadata(FacesContext context, Resource componentResource);
 
@@ -129,6 +131,8 @@ public abstract class ViewDeclarationLanguage {
      *
      * @throws javax.faces.FacesException if there is an error in
      * obtaining the metadata
+     *
+     * @return the view metadata
      */
     public abstract ViewMetadata getViewMetadata(FacesContext context, String viewId);
 
@@ -151,6 +155,9 @@ public abstract class ViewDeclarationLanguage {
      * obtaining the script component resource
      * @throws UnsupportedOperationException if this is a JSP VDL
      * implementation.
+     *
+     * @return the {@link Resource} corresponding to the argument {@code
+     * componentResource}
      */
     public abstract Resource getScriptComponentResource(FacesContext context,
                                                         Resource componentResource);
@@ -168,8 +175,10 @@ public abstract class ViewDeclarationLanguage {
      *
      * @throws NullPointerException if any of the arguments are
      * <code>null</code>
-
+     *
      * @since 2.0
+     *
+     * @return the newly created view root
      */
 
     public abstract UIViewRoot createView(FacesContext context,
@@ -200,6 +209,8 @@ public abstract class ViewDeclarationLanguage {
      * {@code tagName} are {@code null}
      * 
      * @since 2.2
+     *
+     * @return the newly created component
      */
     
     public UIComponent createComponent(FacesContext context, 
@@ -219,6 +230,8 @@ public abstract class ViewDeclarationLanguage {
      *
      * @throws NullPointerException if any of the arguments are
      * <code>null</code>
+     *
+     * @return the restored view
      */
     public abstract UIViewRoot restoreView(FacesContext context, String viewId);
 
@@ -343,6 +356,8 @@ public abstract class ViewDeclarationLanguage {
      * attached objects must be attached.  This UIComponent must have
      * its component metadata already associated and available from via
      * the JavaBeans API.
+     *
+     * @param handlers the tag handlers for the attached objects
      *
      * @throws NullPointerException if any of the arguments are
      * <code>null</code>.
@@ -507,6 +522,8 @@ public abstract class ViewDeclarationLanguage {
      * contracts should be calculated.
      * 
      * @since 2.2
+     *
+     * @return the calculated list of resource library contract names
      */
     
     public List<String> calculateResourceLibraryContracts(FacesContext context,
@@ -561,6 +578,8 @@ public abstract class ViewDeclarationLanguage {
 
      * @param root the <code>UIViewRoot</code> to populate with children
      * using techniques specific to this VDL implementation.
+     *
+     * @throws IOException if view cannot be built for any reason
      */
     public abstract void buildView(FacesContext context, UIViewRoot root)
     throws IOException;
@@ -577,6 +596,8 @@ public abstract class ViewDeclarationLanguage {
      *
      * @throws NullPointerException if any of the arguments are
      * <code>null</code>
+     *
+     * @throws IOException if the view cannot be rendered for any reason
      */
     public abstract void renderView(FacesContext context,
                                     UIViewRoot view)
@@ -591,6 +612,11 @@ public abstract class ViewDeclarationLanguage {
      * Implementations that provide the VDL for Facelets for JSF 2.0 and
      * later must return non-<code>null</code> from this method.</p>
      *
+     * @param context the {@code FacesContext} for the current request.
+     *
+     * @param viewId the view id.
+     *
+     * @return the strategy as specified above
      *
      * @since 2.0
      */ 
@@ -611,7 +637,11 @@ public abstract class ViewDeclarationLanguage {
      * @param context The <code>FacesContext</code> for this request.
      * @param viewId the view id to test
      *
+     * @return the result as specified above
+     *
      * @since 2.1
+     *
+     * 
      */    
     public boolean viewExists(FacesContext context, 
                               String viewId) {
@@ -629,6 +659,8 @@ public abstract class ViewDeclarationLanguage {
      * <p>The default implementation returns the fully qualified class name
      * of the view declaration language implementation.  Subclasses may
      * override to provide a more meaningful id.</p>
+     *
+     * @return the id of this view declaration language
      *
      * @since 2.1
      */

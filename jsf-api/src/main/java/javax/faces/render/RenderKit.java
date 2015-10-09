@@ -184,6 +184,11 @@ public abstract class RenderKit {
      * <p>Use the provided <code>OutputStream</code> to create a new
      * {@link ResponseStream} instance.</p>
      *
+     * @param out the {@code OutputStream} around which to create the
+     * {@link ResponseStream}
+     *
+     * @return the new {@link ResponseStream}
+     *
      */ 
     public abstract ResponseStream createResponseStream(OutputStream out);
 

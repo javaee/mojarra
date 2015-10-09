@@ -109,6 +109,8 @@ public class RegexValidator implements Validator, PartialStateHolder {
     /**
      * <p>Return the <code>ValueExpression</code> that yields the
      * regular expression pattern when evaluated.</p>
+     *
+     * @return the pattern
      */
 
     public String getPattern() {

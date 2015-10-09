@@ -165,6 +165,8 @@ public @interface ListenerFor {
      * not honor subclass relationships.  It is valid to have EL
      * Expressions in the value of this attribute, as long as the
      * expression resolves to an instance of the expected type.</p>
+     *
+     * @return the event class
      */
 
     public Class<? extends SystemEvent> systemEventClass();
@@ -176,6 +178,8 @@ public @interface ListenerFor {
      * attribute.  It is valid to have EL Expressions in the value of
      * this attribute, as long as the expression resolves to an instance
      * of the expected type.</p>
+     *
+     * @return the source class
      */ 
     public Class sourceClass() default Void.class;
 

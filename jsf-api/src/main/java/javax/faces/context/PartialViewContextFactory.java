@@ -90,6 +90,8 @@ public abstract class PartialViewContextFactory implements FacesWrapper<PartialV
      * using the current {@link FacesContext} instance.</p>
      *
      * @param context the {@link FacesContext} for the current request. 
+     *
+     * @return the {@link PartialViewContext} as specified above
      */
     public abstract PartialViewContext getPartialViewContext(FacesContext context);
     

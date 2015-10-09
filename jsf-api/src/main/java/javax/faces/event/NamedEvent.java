@@ -96,6 +96,8 @@ public @interface NamedEvent {
 
      *
      * </div>
+     *
+     * @return the short name
      */
     String shortName() default "";
 }

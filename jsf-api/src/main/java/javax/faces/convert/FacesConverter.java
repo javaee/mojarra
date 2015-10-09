@@ -106,6 +106,8 @@ public @interface FacesConverter {
      * instances of this class of converter can be instantiated by
      * calling {@link
      * javax.faces.application.Application#createConverter(java.lang.String)}.</p>
+     *
+     * @return the converter-id
      */ 
 
     String value() default "";
@@ -116,6 +118,8 @@ public @interface FacesConverter {
      * which instances of this class of converter can be instantiated by
      * calling {@link
      * javax.faces.application.Application#createConverter(java.lang.Class)}.</p>
+     *
+     * @return the class
      */ 
 
     Class forClass() default Object.class;
@@ -125,6 +129,8 @@ public @interface FacesConverter {
      * <p class="changed_added_2_3">The value of this annotation attribute is
      * taken to be an indicator that flags whether or not the given converter
      * is a CDI managed converter. </p>
+     *
+     * @return whether or not this converter is managed by CDI
      */
     
     boolean managed() default false;

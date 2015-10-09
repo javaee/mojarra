@@ -68,6 +68,8 @@ public abstract class VariableResolver {
      *  <code>cause</code> property of this exception)
      * @throws NullPointerException if <code>context</code>
      *  or <code>name</code> is <code>null</code>
+     *
+     * @return the result of the resolution
      */
     public abstract Object resolveVariable(FacesContext context, String name)
         throws EvaluationException;

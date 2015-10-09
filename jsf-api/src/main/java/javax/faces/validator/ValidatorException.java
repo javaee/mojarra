@@ -71,7 +71,8 @@ public class ValidatorException extends FacesException {
     /**
      * <p class="changed_added_2_0">Allow this one exception to contain
      * multiple messages.</p>
-     * @param messages
+     *
+     * @param messages the list of messages for this exception
      * 
      * @since 2.0
      */
@@ -115,6 +116,8 @@ public class ValidatorException extends FacesException {
      * was created with a constructor that takes 
      * <code>Collection&lt;FacesMessage&gt;</code>, this method returns the first
      * message in the <code>Collection</code></p>
+     *
+     * @return the message
      */
     public FacesMessage getFacesMessage() {
         FacesMessage result = this.message;
@@ -132,6 +135,8 @@ public class ValidatorException extends FacesException {
      * collection, otherwise this method returns <code>null</code>.</p>
      * 
      * @since 2.0
+     *
+     * @return the messages
      */
 
     public Collection<FacesMessage> getFacesMessages() {

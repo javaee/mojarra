@@ -240,6 +240,8 @@ public class NumberConverter implements Converter, PartialStateHolder {
      * <p>Return the ISO 4217 currency code used by <code>getAsString()</code>
      * with a <code>type</code> of <code>currency</code>.  If not set,
      * the value used will be based on the formatting <code>Locale</code>.</p>
+     *
+     * @return the currency code
      */
     public String getCurrencyCode() {
 
@@ -266,6 +268,8 @@ public class NumberConverter implements Converter, PartialStateHolder {
      * <p>Return the currency symbol used by <code>getAsString()</code>
      * with a <code>type</code> of <code>currency</code>.  If not set,
      * the value used will be based on the formatting <code>Locale</code>.</p>
+     * 
+     * @return the currency symbol
      */
     public String getCurrencySymbol() {
 
@@ -292,6 +296,8 @@ public class NumberConverter implements Converter, PartialStateHolder {
      * <p>Return <code>true</code> if <code>getAsString</code> should include
      * grouping separators if necessary.  If not modified, the default value
      * is <code>true</code>.</p>
+     *
+     * @return whether or not grouping is used
      */
     public boolean isGroupingUsed() {
 
@@ -318,6 +324,8 @@ public class NumberConverter implements Converter, PartialStateHolder {
      * <p>Return <code>true</code> if only the integer portion of the given
      * value should be returned from <code>getAsObject()</code>.  If not
      * modified, the default value is <code>false</code>.</p>
+     * 
+     * @return whether or not this is integer only
      */
     public boolean isIntegerOnly() {
 
@@ -343,6 +351,8 @@ public class NumberConverter implements Converter, PartialStateHolder {
     /**
      * <p>Return the maximum number of digits <code>getAsString()</code> should
      * render in the fraction portion of the result.</p>
+     *
+     * @return the maximum fraction digits
      */
     public int getMaxFractionDigits() {
 
@@ -369,6 +379,8 @@ public class NumberConverter implements Converter, PartialStateHolder {
     /**
      * <p>Return the maximum number of digits <code>getAsString()</code> should
      * render in the integer portion of the result.</p>
+     *
+     * @return the max integer digits
      */
     public int getMaxIntegerDigits() {
 
@@ -395,6 +407,8 @@ public class NumberConverter implements Converter, PartialStateHolder {
     /**
      * <p>Return the minimum number of digits <code>getAsString()</code> should
      * render in the fraction portion of the result.</p>
+     * 
+     * @return the min fraction digits
      */
     public int getMinFractionDigits() {
 
@@ -421,6 +435,8 @@ public class NumberConverter implements Converter, PartialStateHolder {
     /**
      * <p>Return the minimum number of digits <code>getAsString()</code> should
      * render in the integer portion of the result.</p>
+     *
+     * @return the minimum integer digits
      */
     public int getMinIntegerDigits() {
 
@@ -449,6 +465,8 @@ public class NumberConverter implements Converter, PartialStateHolder {
      * If this value is <code>null</code>, the <code>Locale</code> stored
      * in the {@link javax.faces.component.UIViewRoot} for the current request
      * will be utilized.</p>
+     *
+     * @return the {@code Locale} for this converter
      */
     public Locale getLocale() {
 
@@ -480,6 +498,8 @@ public class NumberConverter implements Converter, PartialStateHolder {
     /**
      * <p>Return the format pattern to be used when formatting and
      * parsing numbers.</p>
+     *
+     * @return the pattern
      */
     public String getPattern() {
 
@@ -508,6 +528,8 @@ public class NumberConverter implements Converter, PartialStateHolder {
     /**
      * <p>Return the number type to be used when formatting and parsing numbers.
      * If not modified, the default type is <code>number</code>.</p>
+     *
+     * @return the type
      */
     public String getType() {
 

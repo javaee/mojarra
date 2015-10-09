@@ -151,6 +151,8 @@ public abstract class ComponentSystemEvent extends SystemEvent {
      * <p class="changed_added_2_0">the source {@link UIComponent} that sent this event.</p>
      * 
      * @since 2.0
+     *
+     * @return the component for this event
      */
     public UIComponent getComponent() {
 

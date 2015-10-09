@@ -93,6 +93,11 @@ public interface AttachedObjectTarget {
      * javax.faces.view.ViewDeclarationLanguage#retargetAttachedObjects}
      * method to take the appropriate action on the attached object.</p>
      *
+     * @param topLevelComponent the top level component for this
+     * composite component.
+     *
+     * @return the result as specified above
+     *
      */
     public List<UIComponent> getTargets(UIComponent topLevelComponent);
 
@@ -101,6 +106,9 @@ public interface AttachedObjectTarget {
      * <p class="changed_added_2_0">Returns the name by which this
      * attached object target is exposed to the <em>page
      * author</em>.</p>
+     *
+     *
+     * @return the name of the attached object target
      * 
      */
     public String getName();
