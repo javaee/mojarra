@@ -1600,7 +1600,7 @@ of POJOs.
 
             <span class="changed_added_2_0">
 
-            <p><span class="changed_modified_2_3>A validator</span> that
+            <p><span class="changed_modified_2_3">A validator</span> that
             delegates the validation of the local value to the Bean
             Validation API. The validationGroups attribute serves as a
             filter that instructs the Bean Validation API which
