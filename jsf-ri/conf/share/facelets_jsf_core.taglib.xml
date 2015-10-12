@@ -2268,6 +2268,15 @@ public class BackingBean implements PasswordHolder, Cloneable {
         </attribute>
         <attribute>
             <description><![CDATA[
+                <p class="changed_added_2_3">Component identifier of the
+                UIInput component to be created.</p>
+            ]]></description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
 
                 <p class="changed_added_2_3">A comma-separated list of
                 validation groups. A validation group is a
