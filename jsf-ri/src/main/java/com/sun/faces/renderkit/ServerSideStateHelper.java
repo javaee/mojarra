@@ -64,6 +64,7 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.GenerateUniqueServerStateIds;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.TypedCollections;
+import com.sun.faces.util.LRUMap;
 import java.util.Collections;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
