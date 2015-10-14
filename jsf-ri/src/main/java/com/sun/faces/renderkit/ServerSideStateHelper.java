@@ -64,7 +64,7 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.GenerateUniqueServerStateIds;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.TypedCollections;
-import com.sun.faces.util.LRUMap;
+import java.util.Collections;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 
@@ -185,7 +185,7 @@ public class ServerSideStateHelper extends StateHelper {
                       (Map) sessionMap
                             .get(LOGICAL_VIEW_MAP), String.class, Map.class);
                 if (logicalMap == null) {
-                    logicalMap = new LRUMap<String, Map>(numberOfLogicalViews);
+                    logicalMap = Collections.synchronizedMap(new LRUMap<String, Map>(numberOfLogicalViews));
                     sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
                 }
 
@@ -213,7 +213,7 @@ public class ServerSideStateHelper extends StateHelper {
                       TypedCollections.dynamicallyCastMap(
                             logicalMap.get(idInLogicalMap), String.class, Object[].class);
                 if (actualMap == null) {
-                    actualMap = new LRUMap<String, Object[]>(numberOfViews);
+                    actualMap = Collections.synchronizedMap(new LRUMap<String, Object[]>(numberOfViews));
                     logicalMap.put(idInLogicalMap, actualMap);
                 }
 
