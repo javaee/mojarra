@@ -541,11 +541,17 @@ public class HtmlResponseWriter extends ResponseWriter {
                 }
             }
         }
-        isScript = false;
-        isStyle = false;
+        
+        if ( !withinScript || isScript ) {
+            isScript = false;
+        }  else if ( !withinStyle || isStyle) {
+            isStyle = false;
+        }
 
-	dontEscape = false;
-
+        if ( !withinScript && !withinScript ) {
+            dontEscape = false;
+        }
+            
         if ("cdata".equalsIgnoreCase(name)) {
             endCDATA();
             return;
