@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+            <composite:attribute name="value" />
+            <composite:attribute name="list" />
+	</composite:interface>
+	
+	<composite:implementation>
+            <h:outputScript>
+                <ui:repeat value="#{cc.attrs.list}">
+                    <ui:repeat value="#{cc.attrs.list}">
+                        #{cc.attrs.value}<span>test</span>
+                    </ui:repeat>
+                </ui:repeat>
+            </h:outputScript>
+	</composite:implementation>
+</html>
