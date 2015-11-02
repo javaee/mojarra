@@ -916,6 +916,10 @@ public class RenderKitUtils {
                 if (typeSubTypeParts.length == 1) {
                     type = typeSubTypeParts[0].trim();
                     subtype = "*";
+                }
+                else if (typeSubTypeParts.length == 0) {
+                    type = typeSubType.toString();
+                    subtype = "";
                 } else {
                     type = typeSubTypeParts[0].trim();
                     subtype = typeSubTypeParts[1].trim();
