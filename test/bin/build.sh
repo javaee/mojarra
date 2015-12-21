@@ -45,6 +45,7 @@ cd ..
 
 printf 'Running initial ant build from %s\n' "$(pwd)"
 
+# ant main clean main after release, e.g. m05 changed to m06
 ant clean main
 
 exit_code=$?
