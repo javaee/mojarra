@@ -76,5 +76,6 @@
         <module>el</module>
         <module>facelets</module>
         <module>xhtmlMappingToFaceletByDefault</module>
+        <module>ajax</module>
     </modules>
 </project>
