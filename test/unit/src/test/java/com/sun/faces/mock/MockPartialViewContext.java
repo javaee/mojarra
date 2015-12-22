@@ -84,6 +84,11 @@ public class MockPartialViewContext extends PartialViewContext {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public List<String> getEvalScripts() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     public void setRenderPhaseClientIds(List<String> renderPhaseClientIds) {
         throw new UnsupportedOperationException();
     }

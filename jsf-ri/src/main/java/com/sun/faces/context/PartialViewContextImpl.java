@@ -40,12 +40,27 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.component.visit.PartialVisitContext;
+import static javax.faces.FactoryFinder.VISIT_CONTEXT_FACTORY;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitContextFactory;
+import javax.faces.component.visit.VisitContextWrapper;
 import javax.faces.component.visit.VisitHint;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.ExternalContext;
@@ -54,27 +69,13 @@ import javax.faces.context.PartialResponseWriter;
 import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.PhaseId;
-
-import java.io.Writer;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
-import javax.faces.FactoryFinder;
-import static javax.faces.FactoryFinder.VISIT_CONTEXT_FACTORY;
-import javax.faces.component.visit.VisitContextFactory;
-import javax.faces.component.visit.VisitContextWrapper;
 import javax.faces.lifecycle.ClientWindow;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+
+import com.sun.faces.component.visit.PartialVisitContext;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
  public class PartialViewContextImpl extends PartialViewContext {
 
@@ -87,6 +88,7 @@ import javax.faces.render.RenderKitFactory;
     private PartialResponseWriter partialResponseWriter;
     private List<String> executeIds;
     private Collection<String> renderIds;
+    private List<String> evalScripts;
     private Boolean ajaxRequest;
     private Boolean partialRequest;
     private Boolean renderAll;
@@ -237,6 +239,20 @@ import javax.faces.render.RenderKitFactory;
 
     }
 
+	/**
+	 * @see javax.faces.context.PartialViewContext#getEvalScripts()
+	 */
+	@Override
+	public List<String> getEvalScripts() {
+		assertNotReleased();
+
+		if (evalScripts == null) {
+			evalScripts = new ArrayList<>(1);
+		}
+
+		return evalScripts;
+	}
+
     /**
      * @see PartialViewContext#processPartial(javax.faces.event.PhaseId) 
      */
@@ -323,6 +339,7 @@ import javax.faces.render.RenderKitFactory;
                 }
 
                 renderState(ctx);
+                renderEvalScripts(ctx);
 
                 writer.endDocument();
             } catch (IOException ex) {
@@ -359,6 +376,7 @@ import javax.faces.render.RenderKitFactory;
         partialResponseWriter = null;
         executeIds = null;
         renderIds = null;
+        evalScripts = null;
         ctx = null;
         partialRequest = null;
 
@@ -493,6 +511,17 @@ import javax.faces.render.RenderKitFactory;
             writer.endUpdate();
         }
     }
+
+	private void renderEvalScripts(FacesContext context) throws IOException {
+		PartialViewContext pvc = context.getPartialViewContext();
+		PartialResponseWriter writer = pvc.getPartialResponseWriter();
+
+		for (String evalScript : pvc.getEvalScripts()) {
+			writer.startEval();
+			writer.write(evalScript);
+			writer.endEval();
+		}
+	}
 
     private PartialResponseWriter createPartialResponseWriter() {
 
