@@ -538,10 +538,12 @@
         </copy>
         <copy failonerror="false" overwrite="true" todir="${build.dir}/vdldocs/facelets/h">
            <fileset dir="${basedir}/../jsf-api/build/generate/facesdoc/HTML_BASIC">
-             <include name="javax.faces.Outputjavax.faces.resource.Script.html" />
            </fileset>
         </copy>
-
+        <copy failonerror="false" overwrite="true" todir="${build.dir}/vdldocs/javadocs">
+           <fileset dir="${basedir}/../jsf-api/build/javadocs">
+           </fileset>
+        </copy>
     </target>
 
 
