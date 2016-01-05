@@ -42,13 +42,16 @@ package com.sun.faces.test.servlet30.ajaxnamespace;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
 import static org.junit.Assert.assertTrue;
 
 public class Issue3031IT {
@@ -114,6 +117,26 @@ public class Issue3031IT {
     }
     
     @Test
+    public void testAjaxWithParams() throws Exception {
+    	HtmlPage page = webClient.getPage(webUrl);
+        
+        HtmlElement input = (HtmlElement) page.getElementById("MyNamingContainerj_id1:ajaxInputParams");
+        assertTrue(null != input);
+        assertTrue(input instanceof HtmlTextInput);
+        HtmlTextInput textInput = (HtmlTextInput) input;
+        textInput.setText("MyText");
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("MyNamingContainerj_id1:ajaxSubmitParams");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+
+        HtmlElement output = (HtmlElement) page.getElementById("MyNamingContainerj_id1:ajaxOutputParams");
+        assertTrue(output.asText().contains("MyText value"));
+
+
+    }
+
+    @Test
     public void testNonAjax() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         
@@ -128,8 +151,26 @@ public class Issue3031IT {
         
         HtmlElement output = (HtmlElement) page.getElementById("MyNamingContainerj_id1:nonAjaxOutput");
         assertTrue(output.asText().contains("MyNonAjaxText"));
-
-        
+ 
+ 
     }
 
+    @Test
+    public void testNonAjaxWithParams() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        
+        HtmlElement input = (HtmlElement) page.getElementById("MyNamingContainerj_id1:nonAjaxInputParams");
+        assertTrue(null != input);
+        assertTrue(input instanceof HtmlTextInput);
+        HtmlTextInput textInput = (HtmlTextInput) input;
+        textInput.setText("MyNonAjaxText");
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("MyNamingContainerj_id1:nonAjaxSubmitParams");
+        page = button.click();
+        
+        HtmlElement output = (HtmlElement) page.getElementById("MyNamingContainerj_id1:nonAjaxOutputParams");
+        assertTrue(output.asText().contains("MyNonAjaxText value"));
+
+
+    }
 }

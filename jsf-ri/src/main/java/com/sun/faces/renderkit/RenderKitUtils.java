@@ -66,6 +66,7 @@ import javax.faces.render.Renderer;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
@@ -1622,8 +1623,21 @@ public class RenderKitUtils {
         appendProperty(builder, componentClientId, componentClientId);
 
         if ((null != params) && (!params.isEmpty())) {
+
+            String namingContainerId = "";
+
+            WebConfiguration webConfig = WebConfiguration.getInstance();
+            boolean namespaceParameters = webConfig.isOptionEnabled(BooleanWebContextInitParameter.NamespaceParameters);
+
+            if (namespaceParameters) {
+                UIViewRoot viewRoot = context.getViewRoot();
+                if (viewRoot instanceof NamingContainer) {
+                    namingContainerId = viewRoot.getContainerClientId(context);
+                }
+            }
+
             for (ClientBehaviorContext.Parameter param : params) {
-                appendProperty(builder, param.getName(), param.getValue());
+                appendProperty(builder, namingContainerId + param.getName(), param.getValue());
             }
         }
 
