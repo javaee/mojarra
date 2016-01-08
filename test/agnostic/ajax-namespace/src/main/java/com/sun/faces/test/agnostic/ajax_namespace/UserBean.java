@@ -2,13 +2,14 @@ package com.sun.faces.test.agnostic.ajax_namespace;
 
 import java.io.Serializable;
 import java.util.Date;
-
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.validator.ValidatorException;
 
 @ManagedBean
@@ -89,6 +90,16 @@ public class UserBean implements Serializable {
                 new FacesMessage("Successfully added new user");
         FacesContext.getCurrentInstance().addMessage(null, doneMessage);
         return "done";
+    }
+    
+    public void paramActionListener (ActionEvent actionEvent) {
+    	Map<String, String> params = 
+    			FacesContext.getCurrentInstance().getExternalContext().
+    			getRequestParameterMap();
+        String paramValue = params.get("param");
+        if (paramValue != null) {
+    		this.lastName = this.lastName + " " + params.get("param");
+    	}
     }
 }
 
