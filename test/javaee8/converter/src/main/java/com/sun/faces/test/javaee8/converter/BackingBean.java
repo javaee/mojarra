@@ -48,6 +48,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
+import java.util.Locale;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -56,6 +57,12 @@ import javax.inject.Named;
 public class BackingBean implements Serializable {
     private static final long serialVersionUID = 1544275452223321526L;
 
+    private Locale locale = new Locale("en", "US");
+    
+    public Locale getLocale() {
+       return locale;
+    }
+    
     private LocalDateTime localDateTime;
 
     public LocalDateTime getLocalDateTime() {
@@ -116,5 +123,44 @@ public class BackingBean implements Serializable {
         this.zonedDateTime = zonedDateTime;
     }
     
+    private LocalDateTime localDateTime1;
+
+    public LocalDateTime getLocalDateTime1() {
+        return localDateTime1;
+    }
+
+    public void setLocalDateTime1(LocalDateTime localDateTime) {
+        this.localDateTime1 = localDateTime;
+    }
+    
+    private LocalDateTime localDateTime2;
+
+    public LocalDateTime getLocalDateTime2() {
+        return localDateTime2;
+    }
+
+    public void setLocalDateTime2(LocalDateTime localDateTime) {
+        this.localDateTime2 = localDateTime;
+    }
+
+    private LocalTime localTime1;
+
+    public LocalTime getLocalTime1() {
+        return localTime1;
+    }
+
+    public void setLocalTime1(LocalTime localTime) {
+        this.localTime1 = localTime;
+    }
+
+    private LocalTime localTime2;
+
+    public LocalTime getLocalTime2() {
+        return localTime2;
+    }
+
+    public void setLocalTime2(LocalTime localTime) {
+        this.localTime2 = localTime;
+    }
     
 }

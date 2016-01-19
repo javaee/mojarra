@@ -604,11 +604,11 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
             from = LocalDate::from;
         } else if (type.equals("localDateTime")) { 
             dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
-                    DateTimeFormatter.ofLocalizedDateTime(getFormatStyle(dateStyle));
+                    DateTimeFormatter.ofLocalizedDateTime(getFormatStyle(dateStyle), getFormatStyle(timeStyle));
             from = LocalDateTime::from;
         } else if (type.equals("localTime")) { 
             dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
-                    DateTimeFormatter.ofLocalizedTime(getFormatStyle(dateStyle));
+                    DateTimeFormatter.ofLocalizedTime(getFormatStyle(timeStyle));
             from = LocalTime::from;
         } else if (type.equals("offsetTime")) { 
             dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
