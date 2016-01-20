@@ -116,12 +116,12 @@
                    wcag-datatable,
                    suppress-xml-decl,
                    process-as-jspx,
-                   request-char-encoding-no-session,
                    bogus-render-kit-id,
                    characterCombat"/>
     <!--
 
        EXCLUDED APPLICATIONS:
+	  request-char-encoding-no-session
           view-expired
           core-tags
           el-performance
