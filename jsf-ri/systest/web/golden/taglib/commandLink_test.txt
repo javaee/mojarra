@@ -1,0 +1,27 @@
+
+
+
+
+<html>
+<head>
+    
+    
+    <title>commandLink_test.jsp</title>
+</head>
+<body>
+    
+    
+<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="form01" value="form01" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id233:j_id234" />
+
+<script type="text/javascript" language="Javascript">
+<!--
+function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length;i++) {f.removeChild(adp[i]);}}};function apf(f, pvp) {var adp = new Array();f.adp = adp;var i = 0;for (k in pvp) {var p = document.createElement("input");p.type = "hidden";p.name = k;p.value = pvp[k];f.appendChild(p);adp[i++] = p;}};function jsfcljs(f, pvp, t) {apf(f, pvp);var ft = f.target;if (t) {f.target = t;}f.submit();f.target = ft;dpf(f);};
+//-->
+</script>
+<a id="form01:hyperlink01" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form01'),{'form01:hyperlink01':'form01:hyperlink01'},'');}return false">My Link</a><a id="form01:hyperlink02" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form01'),{'form01:hyperlink02':'form01:hyperlink02'},'');}return false">This is a String property</a><a id="form01:hyperlink03" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form01'),{'form01:hyperlink03':'form01:hyperlink03'},'');}return false">RES-BUNDLE LINK</a><a id="form01:hyperlink04" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form01'),{'form01:hyperlink04':'form01:hyperlink04'},'');}return false"><img src="duke.gif" /></a><a id="form01:hyperlink05" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form01'),{'form01:hyperlink05':'form01:hyperlink05'},'');}return false"><img src="resbundle_image.gif" /></a><a id="form01:hyperlink06" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form01'),{'form01:hyperlink06':'form01:hyperlink06','param1':'value1'},'');}return false">Paramter Link</a>
+</form>
+</body>
+</html>
+

@@ -1,0 +1,4 @@
+This demo shows how to set up a simple project using Groovy to write a component.
+
+For more information, please see:
+http://blogs.sun.com/rlubke/entry/groovy_mojarra
