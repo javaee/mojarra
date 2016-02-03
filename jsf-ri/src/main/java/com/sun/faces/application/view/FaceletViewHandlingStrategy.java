@@ -1998,8 +1998,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 assert (null != expectedReturnType);
                 assert (null != expectedParameters);
 
+                FaceletContext faceletCtx = (FaceletContext)ctx.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
                 MethodExpression me = f
-                      .createMethodExpression(ctx.getELContext(),
+                      .createMethodExpression(faceletCtx ,
                                               ve.getExpressionString(),
                                               expectedReturnType,
                                               expectedParameters);
