@@ -1,0 +1,66 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+#
+# Copyright 2008 Sun Microsystems, Inc. All rights reserved.
+#
+# The contents of this file are subject to the terms of either the GNU
+# General Public License Version 2 only ("GPL") or the Common Development
+# and Distribution License("CDDL") (collectively, the "License").  You
+# may not use this file except in compliance with the License. You can obtain
+# a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+# or updatetool/LICENSE.txt.  See the License for the specific
+# language governing permissions and limitations under the License.
+#
+# When distributing the software, include this License Header Notice in each
+# file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+# Sun designates this particular file as subject to the "Classpath" exception
+# as provided by Sun in the GPL Version 2 section of the License file that
+# accompanied this code.  If applicable, add the following below the License
+# Header, with the fields enclosed by brackets [] replaced by your own
+# identifying information: "Portions Copyrighted [year]
+# [name of copyright owner]"
+#
+# Contributor(s):
+#
+# If you wish your version of this file to be governed by only the CDDL or
+# only the GPL Version 2, indicate your decision by adding "[Contributor]
+# elects to include this software in this distribution under the [CDDL or GPL
+# Version 2] license."  If you don't indicate a single choice of license, a
+# recipient has the option to distribute your version of this file under
+# either the CDDL, the GPL Version 2 or to extend the choice of license to
+# its licensees as provided above.  However, if you add GPL Version 2 code
+# and therefore, elected the GPL Version 2 license, then the option applies
+# only if the new code is made subject to such option by the copyright
+# holder.
+#
+# RELEASE_PENDING: version number needs to be updated to a correct version
+pkg = {
+    "name"          : "glassfish-jsf",
+    "version"       : "1.2.13,0-1",
+    "depends"       : {
+                       "pkg:/glassfish-jsf@1.2" : {"type" : "incorporate"},
+                       "pkg:/glassfish-common" : { "type" : "require" }
+                      },
+    "attributes"    : {
+                        "pkg.summary" : "JSF 1.2_13 implementation",
+                        "pkg.description" : "Updated JSF 1.2 implementation. \
+ This version contains mostly bug fixes.  See the release notes at the project site (https://javaserverfaces.dev.java.net) for details.",
+                        "info.classification" : "Application Servers" 
+                      },
+
+    "files"         : {
+                       "jsf1.2/LICENSE"      : {"mode" : "0644"},
+                       "jsf1.2/README"       : {"mode" : "0644"},
+                       },
+
+    "licenses"      : {
+                       "jsf1.2/LICENSE"      : {"license" : "JSF-LICENSE"},
+                       },
+
+    "dirtrees"      : [
+                        "glassfish",
+                        "jsf1.2",
+                      ]
+}

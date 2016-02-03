@@ -1,0 +1,62 @@
+
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+<html>
+<head>
+<title>subview04</title>
+</head>
+<body>
+<p>
+[A]</p>
+
+
+<p>Begin test &lt;c:include&gt; with subview tag in including page</p>
+
+<p>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+bar01
+</p>
+
+
+<p>subview04</p>
+
+
+<p>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+bar02
+
+</p>
+
+
+<p>End test &lt;c:include&gt; with subview tag in including page</p>
+</body>
+</html>
+

@@ -1,0 +1,92 @@
+Instructions on promoting a build:
+
+Engineering finishes JSF 1.2 update release code.
+
+Ensure all tests pass via:
+ant clean main test.with.container.refresh
+
+
+Tag build.
+Currently, we're using a tag format of
+JSF_1_2_<PATCH_NUMBER>_bXX - where "PATCH_NUMBER" is a monotonically increasing number, and
+"XX" represents the current promotion number (01, 02, 03, etc).
+
+cvs tag -R JSF_1_2_14_B01
+
+RE (Terena) promotes the build.
+Engineering needs to give RE the tag name, build.type, and build.number
+RE changes variables found in common.xml (build.type, etc) via -D as part of build
+    build.type will be set to a value such as BETA, RC, FCS, etc.
+    build.number will be a monotonically increasing integer, incremented for each build (i.e., b01, b02)
+
+Push To Maven 1:
+The push to maven in 1.2 is a manual process.  Obtain the bundle that RE promotes
+(see their promotion email) and extract the jsf-api and jsf-impl.jars.
+
+Update your local build.properties and set impl.version to the version of this patch
+release (e.g., 1.2_14).
+
+Build the workspace locally.  Replace the jsf-api and jsf-impl artifacts that
+were just built with those jars from the RE promoted bundle.
+
+In both jsf-api and jsf-impl directories, edit (but don't commit) the
+push-to-maven-prepare target and replace all occurrences of ${snapshot.version}
+to ${impl.version} and then invoke the push-to-maven target.
+
+It takes some time for the artifacts that were pushed to be visible on the
+java.net Maven 1 repository.  Check the following URL to ensure push was successful:
+
+  http://download.java.net/maven/1/javax.faces/jars/
+
+NOTE: both api and impl jars are visible there.
+
+RELEASING TO JAVA.NET
+=========================================
+NOTE: we currently don't push every promoted build to java.net.  These instructions
+      are for pushing a release to the public.  The steps above are valid in
+      all cases.
+
+ - Copy the downloaded binary and source bundles promoted from RE to a local
+   directory.  These bundles are what will be made available to the public.
+   (You can obtain the bundles by referencing the link in the RE promotion mai),
+
+ - Prepare release notes:
+    + check out the website:  cvs -d :pserver:<j.net uid>@cvs.dev.java.net:/cvs co -P -d jsf-web javaserverfaces
+    + if releasing a new patch release:
+       * copy the directory structure of an existing version to the new version
+         (e.g. rsync -r -C 1.2_12/* 1.2_13).  If this is another cut
+       * replace the old version numbers with the new version numbers
+       * update changelog.html with:
+         - outline of new features (if any)
+         - new context init parameters (if any - see older release notes for examples)
+         - issues resolved
+           + To get the list of issues, use the report tool to generate a report
+             and gather a list of all issues resolved for this patch release
+             (this may span several builds).  The table for the resolved
+             issues should be two columns for the issue ID and description.
+             Ensure the ID is a hyperlink.  I use a FireFox addon called
+             Scrapbook to copy a selection of issues into a separate
+             html document and then cut/paste into changelog.html.  Don't forget
+             to update the row styles (again, see older changelogs for examples)
+        * check in the new directory structure and files
+     + if releasing an update to an existing version (i.e. 1.2_14 RC1 to 1.2_14 RC2)
+       * update the version in the existing release notes
+       * append the issues resolved between the two versions in changelog.xhtml
+         (Use the 1.2_05 release notes for an example)
+   - Upload the binary and source bundles to java.net.  The new directory
+     should be placed under: Downloads->Release->Version
+   - In the same directory, add a link that refers to the Release Notes (see
+     previous versions for an example)
+   - Update download.html:
+     + If necessary move the version being replaced to Archived Releases
+     + Add the new version using the existing format
+   - Create a new download button for the new version using
+     images/downloadbackground.png.  I use gimp to do the image manipulation.
+     Add the new version to the template using Sans Bold font.  Adjust the
+     font weight to fill the button.  Save the image as download<version>.png
+     (e.g. download1212.png).  Check the image in to CVS.
+   - Update index.html to reference the new download button.  Have the link
+     the image refers to point to the folder containing the new build (should
+     display the source, binary, and release notes).
+   - Add a new announcement using the project's news facility.  Use existing
+     announcements as a template.
