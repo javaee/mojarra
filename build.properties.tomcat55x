@@ -1,0 +1,134 @@
+#
+# 
+# Copyright 2005 Sun Microsystems, Inc. All rights reserved.
+# SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms
+#
+#
+# -----------------------------------------------------------------------------
+# build.properties.sample
+#
+# This is an example "build.properties" file, used to customize building the
+# javaserverfaces-sources for your local environment.  It defines the location
+# of all external modules that the javaserverfaces-source project relies on.
+#
+# $Id: build.properties.template,v 1.1 2005/12/14 22:27:06 rlubke Exp $
+# -----------------------------------------------------------------------------
+
+# --------------------------------------------------
+#    BUILD REQUIRES ANT 1.6.5 OR ABOVE
+# --------------------------------------------------
+
+# --------------------------------------------------
+# Set this to the directory in which the sources
+# were checked out into
+# --------------------------------------------------
+jsf.build.home=<SET CURRENT DIRECTORY>
+
+# --------------------------------------------------
+#    Container Name - a simple identifier which maps
+#      to a set of ant files in 
+#      ${jsf.build.home}/common/ant/${container.name}
+#   
+#     See ${jsf.build.home}/common/ant/template/README
+#     for details on these files
+# --------------------------------------------------
+container.name=tomcat55x
+
+# --------------------------------------------------
+#    Path to the web container installation
+# --------------------------------------------------
+container.home=
+container.host=localhost
+container.port=8080
+
+# --------------------------------------------------
+#    Tomcat 5.5.x specific properties needed by
+#    ${jsf.build.home}/common/ant/tomcat55x/container.xml
+#
+#    tomcat.manager.user - administrative user
+#    tomcat.manager.password - the password of
+#     the administrative user
+#    tomcat.manager.url - the URL of the manager
+#     application
+# --------------------------------------------------
+tomcat.manager.user=tomcat
+tomcat.manager.password=tomcat
+tomcat.manager.url=http://${container.host}:${container.port}/manager
+
+
+# --------------------------------------------------
+#    Compilation flags
+# --------------------------------------------------
+compile.deprecation=off
+compile.debug=true
+
+# --------------------------------------------------
+#    Java 'Endorsed' directory
+# --------------------------------------------------
+endorsed.dirs=${container.home}/common/endorsed
+
+# --------------------------------------------------
+#    Base library path
+#     - Base location where the following build
+#     - dependencies can be found
+#     JUnit 3.8.1 (http://www.junit.org)
+#     HtmlUnit 1.7 (http://htmlunit.sourceforge.net)
+#     Cactus 13-1.7.1 (http://jakarta.apache.org/cactus/)#    
+#     Taglibrarydoc 1.3 (https://taglibrarydoc.dev.java.net)
+#     commons-beanutils 1.7.0 (http://archive.apache.org/dist/jakarta/commons/beanutils/binaries/)
+#     commons-digester 1.5 (http://archive.apache.org/dist/jakarta/commons/digester/binaries/)
+#     commons-logging 1.0.4 (http://jakarta.apache.org/site/downloads/downloads_commons-logging.cgi)
+#     JSTL 1.1 (http://jakarta.apache.org/site/downloads/downloads_taglibs-standard.cgi)
+#     Install all of these dependencies into the directory
+#     referenced by dependency.base.dir and the build will 
+#     pick up the libraries automatically.
+# --------------------------------------------------
+dependency.base.dir=
+junit.home=${dependency.base.dir}/junit3.8.1
+htmlunit.home=${dependency.base.dir}/htmlunit-1.4
+cactus.home=${dependency.base.dir}/jakarta-cactus-13-1.7.1
+taglibdoc.home=${dependency.base.dir}/taglibrarydoc-1_3
+commons.beanutils.home=${dependency.base.dir}/commons-beanutils-1.7.0
+commons.digester.home=${dependency.base.dir}/commons-digester-1.5
+commons.logging.home=${dependency.base.dir}/commons-logging-1.0.4
+jstl.home=${dependency.base.dir}/jakarta-taglibs-standard-1.1.2
+
+
+
+# --------------------------------------------------
+#    Web application packaging
+#      - true: dependent libraries packaged with
+#              applications
+#      - false: no dependent libraries packaged with
+#               applications
+# --------------------------------------------------
+build.standalone=true
+
+# --------------------------------------------------
+#   Unit testing 
+#     - If 'yes', then the unit tests will stop 
+#       running if any failure occurs
+#     - If 'no', then the unit tests will run 
+#       through to completion regardless of errors
+# --------------------------------------------------
+halt.on.failure=yes
+
+
+# --------------------------------------------------
+#     Debugging control Flags 
+#
+# Define the arguments to give to the jvm to enable debugging
+# If this is commented out, no debugging arguments will be passed.
+# Make sure to uncomment the proper arguments for your platform.
+# --------------------------------------------------
+
+# --------------------------------------------------
+#    Unix
+# --------------------------------------------------
+#debug.jvm.args = -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n
+
+# --------------------------------------------------
+#    Windows
+## -------------------------------------------------- 
+#debug.jvm.args = -Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n
+

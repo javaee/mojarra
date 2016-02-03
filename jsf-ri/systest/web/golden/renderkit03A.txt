@@ -1,0 +1,10 @@
+<HTML>
+
+    
+    
+
+         
+          This IS TEXT FROM THE CUSTOM RENDERER 
+       
+
+</HTML>

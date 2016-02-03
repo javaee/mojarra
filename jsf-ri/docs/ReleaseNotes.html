@@ -1,0 +1,666 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+  <meta content="text/html; charset=iso-8859-1"
+ http-equiv="Content-Type">
+  <meta
+ content="Mozilla/4.79C-CCK-MCD  [en] (X11; U; SunOS 5.8 sun4u) [Netscape]"
+ name="GENERATOR">
+  <title>JavaServer Faces 1.1 FCS Release Notes</title>
+  <link href="style/default.css" type="text/css" rel="stylesheet">
+</head>
+<body bgcolor="#ffffff">
+<center>
+<h1>JavaServer<sup><font size="-1">TM</font></sup> Faces (JSF) 1.1_01
+FCS<br>
+Release Notes</h1>
+</center>
+<hr>
+<br>
+<a name="14145"></a>For an updated, online version of these release
+notes, see <a
+ href="http://java.sun.com/j2ee/javaserverfaces/docs/ReleaseNotes.html">
+Release Notes</a>
+<p>Revised: 20040817
+</p>
+<p><a name="13552"></a>The purpose of this release is to provide a
+reference implementation of the JavaServer Faces framework.
+</p>
+<p>This FCS release of JavaServer Faces technology provides a final
+version of the JSF technology which was developed under
+the Java Community Process(SM) ("JCP(SM)") as <a
+ href="http://jcp.org/jsr/detail/127.jsp">JSR127</a>. </p>
+<h1>&nbsp;Contents</h1>
+<ul>
+  <li> <a href="#operating_systems">Supported Operating Systems</a></li>
+  <li> <a href="#required_software">Required Software</a></li>
+  <li> <a href="#release_includes">What This Release Includes</a></li>
+  <li> <a href="#release_new">What's New in This Release</a></li>
+  <li> <a href="#migrating">Migrating from 1.0 to 1.1</a></li>
+  <li> <a href="#logging">Logging Support And Configuration Steps</a><br>
+  </li>
+  <li> <a href="#issues">Known Issues</a></li>
+</ul>
+<a name="operating_systems"></a>
+<h1>Supported Operating Systems</h1>
+<ul>
+  <li>Solaris 8</li>
+  <li>Solaris 9</li>
+  <li>Windows 2000</li>
+  <li>Windows XP</li>
+  <li>GNU/Linux (Red Hat 7.2)</li>
+</ul>
+<a name="required_software"></a>
+<h1>Required Software</h1>
+This release requires that you install the software listed in the
+following
+table. Only those versions listed in the table have been tested and are
+supported.
+<br>
+&nbsp;
+<br>
+&nbsp;
+<table border="3">
+  <caption>TABLE 1 Required Software</caption> <tbody>
+    <tr>
+      <th>Software</th>
+      <th>Version
+      <p>&nbsp;</p>
+      </th>
+    </tr>
+    <tr>
+      <td>Java Development Kit&nbsp;</td>
+      <td>version 1.3.1 or later&nbsp;</td>
+    </tr>
+    <tr>
+      <td>Java Web Services Developer Pack or<br>
+Sun Java System Application Server <br>
+      </td>
+      <td>version 1.3 or later<br>
+version 8.0 or later<br>
+      </td>
+    </tr>
+    <tr>
+      <td>Microsoft Internet Explorer or Netscape Navigator&nbsp;</td>
+      <td>version 6 (IE) <br>
+version 7 (Netscape)</td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <tbody>
+    <tr>
+      <td><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="release_includes"></a>
+</p>
+<h1>What This Release Includes</h1>
+<ul>
+&nbsp; <li>html_basic.tld: A JSP custom tag library for building
+JavaServer
+Faces applications
+that render to an HTML client.</li>
+  <li>jsf_core.tld: A JSP custom tag library for representing core
+actions
+independent
+of a particular RenderKit.</li>
+  <li>An API and reference implementation that provide user interface
+components, model object management, pluggable rendering, server side
+validation, data conversion, event processing, page flow management,
+and
+custom extensibility for all of these things.</li>
+  <li>A set of demos in the samples directory. Please note that these
+demos
+are provided as a proof-of-concept rather than a best-practices guide
+for writing JavaServer Faces applications. </li>
+</ul>
+<p><a name="release_new"></a>
+</p>
+<h1>What's New in This Release</h1>
+<ul>
+  <li>In order to reduce the number of bytes sent to the client in the
+state saving client mode, state can be optionally compressed before it
+is encoded and written as a hidden field. This is turned <span
+ style="font-weight: bold;">on</span> by default.&nbsp; You can turn
+off
+this feature by setting the <span style="font-style: italic;">ServletContext&nbsp;
+    </span>Init Parameter "<span style="font-style: italic;">com.sun.faces.COMPRESS_STATE</span>"&nbsp;
+to false in your
+web deployment descriptor (web.xml) file.</li>
+</ul>
+<ul>
+  <li>Removed explicit casts and dependencies to ServletContext.&nbsp;
+Important for Portlet environments.</li>
+</ul>
+<ul>
+  <li>Configuration system correctly recognizes application default
+locale.</li>
+</ul>
+<ul>
+  <li>Fixed client state saving bug where components were not rendered
+on postback for jsp pages containing verbatim tags.&nbsp; This was due
+to an
+"allignment" problem between state saving and restoration (client mode).</li>
+</ul>
+<ul>
+  <li>Fixed bug where <span style="font-style: italic;">SelectManyCheckboxListRenderer</span>&nbsp;
+was rendering a "border" attribute as part of the HTML "input"
+element.&nbsp; "border" is not a valid HTML attribute of "input"
+element.</li>
+</ul>
+<ul>
+  <li>Fixed bug where <span style="font-style: italic;">OutputMessageRenderer</span>&nbsp;
+was not rendering the "id" attribute as part of the HTML "span" element.</li>
+</ul>
+<ul>
+  <li>Fixed bug where <span style="font-style: italic;">RadioRenderer&nbsp;
+    </span>was rendering a "border" attribute as part of the HTML
+"input" element.&nbsp; "border" is not a valid HTML attribute of
+"input" element.</li>
+</ul>
+<ul>
+  <li>Performance Enhancements:</li>
+  <ul>
+    <li>Improved the rendering performance of large DataTable(s) by
+replacing String concatenation mechanism with a nested HashMap data
+structure in <span style="font-style: italic;">RenderKitImpl</span>.</li>
+  </ul>
+</ul>
+<ul>
+  <ul>
+    <li>&nbsp;Avoid synchronization issues by loading <span
+ style="font-style: italic;">UIComponentBase&nbsp; </span>property
+descriptor information in the constructor which guarantees readonly
+access.&nbsp; To further optimize look up, the saved map of descriptors
+is keyed by "name" instead of array of property descriptors.</li>
+  </ul>
+</ul>
+<ul>
+  <ul>
+    <li>Improved the performance of checking whether a component's
+rendering should be suppressed in <span style="font-style: italic;">UIComponentTag</span>.</li>
+  </ul>
+</ul>
+<ul>
+  <ul>
+    <li>Improved the performance of configuration file processing by
+parsing one merged configuration file (merged from <span
+ style="font-style: italic;">standard-html-renderkit.xml</span> and <span
+ style="font-style: italic;">jsf-ri-config.xml</span>).<br>
+    </li>
+  </ul>
+</ul>
+<ul>
+  <li>Fixed bug where an exception would be thrown if you had a managed
+bean property referencing a non managed bean.&nbsp; <span
+ style="font-style: italic;">ManageBeanFactory</span>&nbsp; threw an
+exception because it didn't know the scope of the referenced non
+managed bean.</li>
+</ul>
+<ul>
+  <li>Fixed bug where managed bean Map (and List) properties (that were
+were not created, but retrieved) were being set.</li>
+</ul>
+<ul>
+  <li>Fixed bug where <span style="font-style: italic;">MenuRenderer</span>&nbsp;
+generated non-compliant XHTML.</li>
+</ul>
+<ul>
+  <li>Fixed bug where <span style="font-style: italic;">HtmlSelectManyCheckbox</span>&nbsp;
+and <span style="font-style: italic;">HtmlSelectOneRadio</span>&nbsp;
+handled the "style" attribute incorrectly.</li>
+</ul>
+<ul>
+  <li>Fixed server side state saving to support failover. Instead of
+saving the view in session (since the <span style="font-style: italic;">UIComponent</span>
+instances are not serializable), the <span style="font-style: italic;">SerializedView</span>
+(result of calling <span style="font-style: italic;">getTreeStructureToSave()
+    </span>and <span style="font-style: italic;">getTreeStateToSave()</span>)
+is saved&nbsp; in the session.&nbsp; This can be enabled by using the <span
+ style="font-style: italic;">ServletContext&nbsp; </span>Init
+Parameter "com.sun.faces.enableHigh Availability"</li>
+</ul>
+<ul>
+  <li>Removed component id from error messages.</li>
+</ul>
+<ul>
+  <li>Fixed bug where command link components across multiple forms was
+not working.</li>
+</ul>
+<ul>
+  <li>Removed erroneous "back slash" characters from messages files.</li>
+</ul>
+<ul>
+  <li>Fixed bug where "required=true" was not working for <span
+ style="font-style: italic;">UISelectOne</span> component.</li>
+</ul>
+<ul>
+  <li>Fixed bug where <span style="font-style: italic;">DateTimeConverter</span>&nbsp;
+was not properly throwing an "IllegalArgumentException". <br>
+  </li>
+</ul>
+<ul>
+  <li>JDK 1.3 compatability changes.<br>
+  </li>
+</ul>
+<h1><a name="migrating"></a>Migrating From 1.1 to 1.1_01</h1>
+<p>This implementation is 100% compatible with the 1.1 implementation,
+but many bugs have been fixed. If your application dependend on one of
+these bugs, it will need to be changed. Please see the <a
+ href="#release_new">What's New In this Release</a> section. </p>
+<h1><a name="logging"></a>Logging Support And Configuration Steps</h1>
+JavaServer Faces Reference Implementation in this release leverages the
+Jakarta Commons logging API to provide logging functionality.&nbsp; We
+have followed the guidelines recommended by <a
+ href="http://jakarta.apache.org/commons/logging/userguide.html">http://jakarta.apache.org/commons/logging/userguide.html</a>.&nbsp;
+JavaServer Faces Reference Implementation can be configured to provide
+logging information using the steps below.<br>
+<ol>
+  <li>If you are using Tomcat or JWSDP as your container, you can set
+the following property to tell the container what logging
+implementation you are using as well as the location of your logging
+configuration file.&nbsp; Set&nbsp;&nbsp; <span
+ style="font-style: italic;">CATALINA_OPTS=-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Jdk14Logger
+-Djava.util.logging.config.file=D:\Files_2k\j2sdk1.4.1_03\jre\lib\jsf-log.properties</span></li>
+  <li>&nbsp;We have shown a sample logging configuration file below
+that is configured to get logging output when you are running a
+JavaServer Faces application.&nbsp; The default JDK 1.4 logging
+configuration file is&nbsp; "<span style="font-style: italic;">$JAVA_HOME}/jre/lib/logging.properties</span>".
+You can either manipulate that as per directions below, in which case
+it's global to all Java apps that you run or you can create a jsf.log
+properties as illustrated below. You can change the "<span
+ style="font-style: italic;">java.util.logging.FileHandler.pattern</span>"
+property to control where your logging information is written.<br>
+  </li>
+</ol>
+Here's the jsf-log.properties:<br>
+<br>
+############################################################<br>
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Default Logging Configuration File<br>
+#
+http://java.sun.com/j2se/1.4.2/docs/guide/util/logging/overview.html#1.2<br>
+# You can use a different file by specifying a filename<br>
+# with the java.util.logging.config.file system property.<br>
+# For example java -Djava.util.logging.config.file=myfile<br>
+############################################################<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+############################################################<br>
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Global properties<br>
+############################################################<br>
+<br>
+# "handlers" specifies a comma separated list of log Handler<br>
+# classes.&nbsp; These handlers will be installed during VM startup.<br>
+# Note that these classes must be on the system classpath.<br>
+# By default we only configure a ConsoleHandler, which will only<br>
+# show messages at the INFO and above levels.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+# To also add the FileHandler, use the following line instead.<br>
+handlers= java.util.logging.FileHandler,
+java.util.logging.ConsoleHandler<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+# Default global logging level.<br>
+# This specifies which kinds of events are logged across<br>
+# all loggers.&nbsp; For any given facility this global level<br>
+# can be overriden by a facility specific level<br>
+# Note that the ConsoleHandler also has a separate level<br>
+# setting to limit messages printed to the console.<br>
+#.level= INFO<br>
+.level= INFO<br>
+<br>
+############################################################<br>
+# Handler specific properties.<br>
+# Describes specific configuration info for Handlers.<br>
+############################################################<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+# default file output is in user's home directory.<br>
+java.util.logging.FileHandler.pattern = %h/java%u.log<br>
+java.util.logging.FileHandler.limit = 50000<br>
+java.util.logging.FileHandler.count = 1<br>
+java.util.logging.FileHandler.formatter = java.util.logging.XMLFormatter<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+# Limit the message that are printed on the console to INFO and above.<br>
+java.util.logging.ConsoleHandler.level = INFO<br>
+java.util.logging.ConsoleHandler.formatter =
+java.util.logging.SimpleFormatter<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+############################################################<br>
+# Facility specific properties.<br>
+# Provides extra control for each logger.<br>
+############################################################<br>
+<br>
+# For example, set the com.xyz.foo logger to only log SEVERE<br>
+# messages:<br>
+com.xyz.foo.level = SEVERE<br>
+com.sun.faces.level = ALL<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+If you use the ConsoleHandler ( which would direct all the output to
+catalina.out in the case of standalone Tomcat or launcher.server.log in
+the case of JWSDP ) please make sure that the detail level for
+ConsoleHandler can handle the level set for individual packages. For
+example say you have set the level for "com.sun.faces.el" package to
+"FINEST" as below.<br>
+&nbsp;&nbsp;&nbsp; "<span style="font-style: italic;">com.sun.faces.el.level
+= FINEST</span>"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+You won't see any trace or debug messages unless you also set
+ConsoleHandler.level = FINEST. ConsoleHandler.level caps the detail
+level to the console, no matter what the underlying loggers are set for.<br>
+<br>
+In this release, the Reference Implementation provides logging support
+for the following packages.<br>
+&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">*
+com.sun.faces.application</span><br style="font-style: italic;">
+<span style="font-style: italic;">&nbsp;&nbsp;&nbsp; * com.sun.faces.el</span><br
+ style="font-style: italic;">
+<span style="font-style: italic;">&nbsp;&nbsp;&nbsp; *
+com.sun.faces.lifecycle</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+The logging messages are not localized. Localization as well as logging
+for rest of the RI will be done in a future release.<br>
+<h1><a name="issues">Known</a> Issues With This Release</h1>
+<ul>
+  <li>You can add a "title" attribute to <span
+ style="font-style: italic;">&lt;h:message*&gt;</span>&nbsp; but it
+won't appear. "title" gets rendered with the value of the "summary"
+attribute.&nbsp; Refer to the standard renderer docs for more
+information. "title" will be deprecated from the list of supported
+attributes for <span style="font-style: italic;">&lt;h:message*&gt; </span>in
+the 1.2 release.</li>
+</ul>
+<ul>
+  <li>The standard renderer docs need to be clarified with regards to
+the rendering of the "span" element. The "span" element should be
+rendered if any pass through attributes are present (not just "style"
+and "styleClass").</li>
+</ul>
+<ul>
+  <li>The standard renderer docs specify "accesskey" as an attribute of
+the "select" family of components, which is not in accordance with the
+HTML specification.&nbsp; "accesskey" will be deprecated from the
+"select" family of components in the next release.</li>
+</ul>
+<ul>
+  <li>
+    <p>If your page includes <code>&lt;h:outputLabel&gt;</code>
+components that occur before the components they label, both the label
+and the form must reside within the same <code>&lt;h:form&gt;</code>. </p>
+  </li>
+  <li>
+    <p>Content is not ordered as expected when mixing template text
+with JSF tags. For example this jsp code: </p>
+    <ul>
+      <code> &lt;h:commandLink action="foo"&gt; Not the link text.
+&lt;/h:commandLink&gt; </code>
+    </ul>
+    <p>outputs the string <code>Not the link text.</code> before the
+link. The workaround for this is to enclose the nested text in an <code>&lt;f:verbatim&gt;</code>
+tag, like this:</p>
+    <ul>
+      <code> &lt;h:commandLink action="foo"&gt; &lt;f:verbatim&gt;Not
+the link text.&lt;/f:verbatim&gt; &lt;/h:commandLink&gt; </code>
+    </ul>
+  </li>
+  <li>
+    <p>Do not enclose JavaServer Faces component tags inside of
+iterating JSP tags, such as JSTL's <code>&lt;c:forEach&gt;</code> tag.
+The primary reason for this restriction is that Faces cannot know how
+many times the loop will execute and therefore the number of components
+placed in the tree by this tag is undetermined. This breaks the entire
+id to component matching scheme required by <code>UIComponentTag</code>
+to match tags to <code>UIComponent</code> instances.</p>
+  </li>
+  <li>
+    <p>The Map returned by the UIComponent.getAttributes() method
+implements get() so that if you ask for a key that is implemented as a
+property, you get the property value. However, if you call iterator()
+on the Map, you will get an Iterator that iterates over the "real"
+attributes only, not the properties.</p>
+  </li>
+  <li>
+    <p>the value of <code>javax.faces.component.NamingContainer.SEPARATOR_CHAR</code>
+is '<code>:</code>'. This means that the client id for components will
+be something like "<code>form:checkbox1</code>". The use of the '<code>:</code>'
+character in the id causes problems for CSS stylesheets that try to
+apply style to components using their id. The workaround is to use the
+CSS "<code>class</code>" concept to apply style to a component. </p>
+  </li>
+  <li>
+    <p> When saving state on the server, there is no way for the server
+to know that a view has expired. Thus, if the JSP page changes between
+requests, it's possible there will be inconsistencies between the
+restored tree and the JSP page. Therefore, if you change the JSP page,
+you need to re-start the browser so that the session is lost.</p>
+    <p> In related news, the number of views saved in the session when
+the
+application is configured to save state in the server is configurable
+by
+the RI init context parameter
+"<code>com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION</code>" without quotes.
+This is a non-standard feature, so don't count on it.</p>
+    <p></p>
+  </li>
+  <li>
+    <p>Don't use the '.' character in <code>ResourceBundle</code> keys
+for use in Faces. This character is a reserved character in the JSF EL.
+    </p>
+  </li>
+  <li>
+    <p>When deploying on a non-JWSDP container, you must include all
+the dependent jars in your webapp's WEB-INF/lib directory. It's
+possible it may work without doing this, but this is not a supported
+configuration. </p>
+  </li>
+  <li>
+    <p>If you're using a SunOne Application Server 7.x, Tomcat 4 series
+container, or any container that strictly conforms to JSP 1.2, Servlet
+2.3, you must use JSTL 1.0 instead of JSTL 1.1. </p>
+  </li>
+  <li>
+    <p>There is a known issue in S1AS 7.x, Tomcat 4.x, and Tomcat 5.x
+where security constraints are applied to welcome files. The bug number
+for this S1AS 7.x issue is #5004853.</p>
+    <p>This bug is problematic for the <code>jsf-cardemo</code>
+application since the security constraint is applied to the <code>index.jsp</code>
+welcome file. Since this container applies the security constraint to
+the welcome file, the container displays an error page when an attempt
+to access the application is made. On older versions of S1AS 7.x that
+error code is incorrectly reported as 500. This has since been fixed to
+be the correct number 403.</p>
+    <p>To get around this problem either: </p>
+    <ul>
+      <li>Access the initial CarDemo page directly:<br>
+        <code>http://&lt;SERVER&gt;:&lt;PORT&gt;/jsf-cardemo/chooseLocale.faces</code></li>
+      <li>Modify the security constraint in the <code>web.xml </code>
+welcome file to exclude the <code> index.jsp</code> page.</li>
+    </ul>
+    <p></p>
+    <p>The Java Systems Application Server 8.0 and JWSDP 1.3 do not
+have this problem and properly exclude welcome files from the security
+constraints.</p>
+  </li>
+  <li>
+    <p>The Non-JSP demo does not deploy under tomcat 4.1.29.<br>
+    </p>
+  </li>
+  <li>
+    <p>Some versions of some web containers, such as <a
+ href="http://www.caucho.com/">Resin</a> and <a
+ href="http://www.oracle.com/appserver/">Oracle App Server</a>, don't
+follow the Servlet 2.3 Spec rule of calling ServletContextListeners
+listeners defined in tld files in the META-INF directory of a jar.
+Running a faces webapp in such a container requires you to manually
+declare the ServletContextListener. The <code>listener-class</code>
+you need to specify is <code>com.sun.faces.config.ConfigureListener</code>
+    </p>
+  </li>
+  <li>
+    <p>If you're using component bindings pointing to beans stored in
+session scope with values initialized from the JSP page, you may run
+into some difficulties in the "edit-compile-debug" cycle.</p>
+    <p>Consider this JSP fragment:</p>
+    <p><code> &lt;h:commandButton binding="#{backingBean.button1}"
+value="press me" /&gt; </code></p>
+    <p>Let's say that "backingBean" is stored in session scope. The
+first time the browser views this page, backingBean gets instantiated,
+and initialized with the value "press me". Now, let's say the web-app
+is being authored in place, on the web container. In other words, any
+changes made to the JSP are seen "live" on the server. If you change
+the JSP to alter the value of the button to be different, say like
+this: </p>
+    <p><code> &lt;h:commandButton binding="#{backingBean.button1}"
+value="click me" /&gt; </code></p>
+    <p>and save the page, then re-load the page in the browser, you'll
+see that the button still shows up with the old label, "press me". This
+is because the spec is designed to only initialize the backing bean
+with a value the first time the page is loaded, and the bean is still
+sitting in the session with the old value. There are several
+workarounds to this problem.</p>
+    <ol>
+      <li>
+        <p> use "request" or "none" scope for your backing bean </p>
+      </li>
+      <li>
+        <p> use java code to push the value into the bean, rather than
+JSP </p>
+      </li>
+      <li>
+        <p>ask the user to re-start their browser after modifying the
+JSP page. </p>
+      </li>
+      <li>
+        <p> find a way to invalidate the session when the JSP page has
+changed. </p>
+      </li>
+    </ol>
+  </li>
+  <li>When installing newer versions of JSF sample applications be sure
+to clear your client cache as well as your web container's cached
+files. You may run into consistency problems if you do not clear out
+the cached files.<a name="changes"><br>
+    </a></li>
+</ul>
+<h1></h1>
+<p></p>
+<hr>
+<p>Copyright &copy; 2004 Sun Microsystems, Inc., 4150 Network Circle,
+Santa
+<br>
+Clara, California 95054, U.S.A. All rights reserved.
+</p>
+<p>Sun Microsystems, Inc. has intellectual property rights relating to
+<br>
+technology embodied in this product. In particular, and without
+<br>
+limitation, these intellectual property rights may include one or more
+<br>
+of the U.S. patents listed at http://www.sun.com/patents and one or
+more
+<br>
+additional patents or pending patent applications in the U.S. and other
+<br>
+countries.
+</p>
+<p>This product is distributed under licenses restricting its use,
+copying
+<br>
+distribution, and decompilation. No part of this product may be
+<br>
+reproduced in any form by any means without prior written authorization
+<br>
+of Sun and its licensors, if any.
+</p>
+<p>Third-party software, including font technology, is copyrighted and
+<br>
+licensed from Sun suppliers.
+</p>
+<p>Sun, Sun Microsystems, the Sun logo, the Java Coffee Cup logo,
+<br>
+JavaServer, and Java are trademarks or registered trademarks of Sun
+<br>
+Microsystems, Inc. in the U.S. and other countries.
+</p>
+<p>Federal Acquisitions: Commercial Software - Government Users Subject
+to
+<br>
+Standard License Terms and Conditions.
+</p>
+<p></p>
+<hr width="100%">
+<p>Copyright &copy; 2004 Sun Microsystems, Inc., 4150 Network Circle,
+<br>
+Santa Clara, California 95054, Etats-Unis. Tous droits
+r&eacute;serv&eacute;s.
+</p>
+<p>Sun Microsystems, Inc. a les droits de propri&eacute;t&eacute;
+intellectuels
+relatants
+<br>
+&agrave; la technologie incorpor&eacute;e dans ce produit. En
+particulier,
+et sans la
+<br>
+limitation, ces droits de propri&eacute;t&eacute; intellectuels peuvent
+inclure un ou
+<br>
+plus des brevets am&eacute;ricains &eacute;num&eacute;r&eacute;s
+&agrave;
+http://www.sun.com/patents et un
+<br>
+ou les brevets plus suppl&eacute;mentaires ou les applications de
+brevet
+en
+<br>
+attente dans les Etats - Unis et les autres pays.
+</p>
+<p>Ce produit ou document est prot&eacute;g&eacute; par un copyright et
+distribu&eacute; avec
+<br>
+des licences qui en restreignent l'utilisation, la copie, la
+<br>
+distribution, et la d&eacute;compilation. Aucune partie de ce produit
+ou
+<br>
+document ne peut &ecirc;tre reproduite sous aucune forme, par quelque
+moyen
+<br>
+que ce soit, sans l'autorisation pr&eacute;alable et &eacute;crite
+de Sun et de ses
+<br>
+bailleurs de licence, s'il y ena.
+</p>
+<p>Le logiciel d&eacute;tenu par des tiers, et qui comprend la
+technologie
+<br>
+relative aux polices de caract&egrave;res, est prot&eacute;g&eacute;
+par un copyright et
+<br>
+licenci&eacute; par des fournisseurs de Sun.
+</p>
+<p>Sun, Sun Microsystems, le logo Sun, le logo Java Coffee Cup,
+JavaServer,
+<br>
+et Java sont des marques de fabrique ou des marques
+d&eacute;pos&eacute;es
+de Sun
+<br>
+Microsystems, Inc. aux Etats-Unis et dans d'autres pays.
+<br>
+&nbsp;
+<br>
+<i><font size="-1"><a href="../.dt/tmp/Copyright.html"></a></font></i>&nbsp;
+</p>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Verify property ordering</title>
+    
+    
+  </head>
+
+  <body>
+    <h1>Verify property ordering</h1>
+
+
+
+  <form id="_id0" method="post" action="/jsf-systest/faces/managed04.jsp;jsessionid=D19CB7057ED4944F20EF002C8F3E041C" enctype="application/x-www-form-urlencoded">
+
+ 
+     one two three four 
+    five
+    six
+    seven
+    eight
+   
+  <input type="hidden" name="com.sun.faces.VIEW" id="com.sun.faces.VIEW" value="_id19:_id20" /><input type="hidden" name="_id0" value="_id0" />
+<script type="text/javascript">
+<!--
+function clearFormHiddenParams__id0(curFormName) {
+  var curForm = document.forms[curFormName];
+}
+//-->
+</script>
+</form>
+
+
+
+    <hr>
+  </body>
+</html>

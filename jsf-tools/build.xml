@@ -1,0 +1,365 @@
+<?xml version="1.0"?>
+
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ 
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ 
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+ 
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+ 
+ Contributor(s):
+ 
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+
+
+<!--
+  =======================================================================
+    JSF-TOOLS build file
+  =======================================================================
+-->
+<project name="JSF-TOOLS" default="main" basedir=".">
+
+
+    <property file="${user.home}/build.properties"/>
+    <property file="../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+    <property name="Name" value="JavaServer Faces Tools"/>
+    <property name="name" value="jsf-tools"/>
+   
+
+    <property name="src.dir" value="${basedir}/src"/>   
+    <property name="dist.dir" value="${basedir}/dist"/>   
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="build.classes" value="${build.dir}/classes"/>   
+    <property name="build.lib" value="${build.dir}/lib"/>
+    <property name="build.temp" value="${build.dir}/temp"/>   
+    <property name="build.generate" value="${build.dir}/generate"/>
+    <property name="build.generate.facesdoc"
+              value="${build.dir}/generate/facesdoc"/>
+    <property name="build.generate.tld"
+              value="${build.dir}/generate/conf/share"/>
+    <property name="build.javadocs" value="${build.dir}/javadocs"/>
+    <property name="build.mifdocs" value="${build.dir}/mifdocs"/>
+    <property name="javadoc.private" value="false"/>
+    <property name="javadoc.protected" value="true"/>   
+    <property name="standard-html-renderkit"
+              value="${api.dir}/doc/standard-html-renderkit.xml"/>
+    <property name="standard-html-renderkit-impl"
+              value="${impl.dir}/src/com/sun/faces/standard-html-renderkit-impl.xml"/>
+
+    
+    <path id="tools.classpath">
+        <pathelement location="${build.classes}"/>
+        <pathelement location="${jsf-api.jar}"/>
+        <path refid="compile.classpath"/>
+    </path>   
+
+    <!--
+         ===================================================================
+           Prepare the build
+         ===================================================================
+    -->
+    <target name="prepare.generate">
+        <tstamp/>
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.classes}"/>
+        <mkdir dir="${build.lib}"/>
+        <mkdir dir="${build.generate}"/>
+        <mkdir dir="${build.generate.facesdoc}"/>
+        <mkdir dir="${build.generate.tld}"/>
+        <mkdir dir="${build.temp}"/>
+        <copy todir="${build.temp}">
+            <fileset dir="${api.dir}/doc" includes="*.xml"/>
+        </copy>
+        <copy todir="${build.temp}"
+              file="${standard-html-renderkit-impl}"/>
+    </target>    
+
+    <!--
+         ===================================================================
+           Build the Code Generating code
+         ===================================================================
+    -->
+    <target name="build" depends="generate.taglib"/>   
+
+    <target name="generate.html"
+            depends="tools"
+            if="standard-html-renderkit-impl"
+            unless="skip.generation">
+
+        <java fork="yes"
+              classname="com.sun.faces.generate.HtmlComponentGenerator">
+
+
+            <classpath refid="tools.classpath"/>           
+
+            <sysproperty key="java.endorsed.dirs"
+                         value="${endorsed.dirs}"/>     
+            <sysproperty key="org.apache.commons.logging.LogFactory"
+                         value="org.apache.commons.logging.impl.LogFactoryImpl"/>
+
+            <arg value="--config"/>
+            <arg value="${build.temp}/standard-html-renderkit.xml"/>
+            <arg value="--dir"/>
+            <arg value="${build.generate}"/>
+            <arg value="--dtd"/>
+            <arg value="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN|${api.dir}/doc/web-facesconfig_1_0.dtd|-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN|${api.dir}/doc/web-facesconfig_1_1.dtd"/>
+            <arg value="--copyright"/>
+            <arg value="${basedir}/COPYRIGHT"/>
+
+        </java>
+
+    </target>
+
+
+    <target name="generate.taglib"
+            depends="tools"
+            if="standard-html-renderkit-impl"
+            unless="skip.taglib.generation">
+
+        <java fork="yes"
+              classname="com.sun.faces.generate.HtmlTaglibGenerator">
+
+            <!-- <jvmarg line="${debug.jvm.args}"/> -->
+            <classpath refid="tools.classpath"/>               
+
+            <arg value="--config"/>
+            <arg value="${build.temp}/standard-html-renderkit.xml"/>
+            <arg value="--tlddir"/>
+            <arg value="${build.generate.tld}"/>
+            <arg value="--dir"/>
+            <arg value="${build.generate}"/>
+            <arg value="--dtd"/>
+            <arg value="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN|${api.dir}/doc/web-facesconfig_1_0.dtd|-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN|${api.dir}/doc/web-facesconfig_1_1.dtd"/>
+            <arg value="--copyright"/>
+            <arg value="${basedir}/COPYRIGHT"/>
+            <arg value="--tagdef"/>
+            <arg value="${basedir}/TAG-DEF"/>
+
+        </java>
+
+    </target>
+
+    <target name="tools" depends="prepare.generate"
+            if="standard-html-renderkit-impl">
+
+        <jsf.javac srcdir="${src.dir}"
+               destdir="${build.classes}">
+            <classpath>
+                <path refid="tools.classpath"/>
+            </classpath>                      
+        </jsf.javac>
+
+        <copy todir="${build.classes}">
+            <fileset dir="${src.dir}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+
+    </target>    
+
+    <target name="check.generation.necessity" if="standard-html-renderkit-impl">
+        <uptodate property="skip.generation"
+                  targetfile="${build.generate}/last-generation">
+            <srcfiles dir="${api.dir}/doc">
+                <include name="*.xml"/>
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <target name="check.taglib.generation.necessity"
+            if="standard-html-renderkit-impl">
+        <uptodate property="skip.taglib.generation"
+                  targetfile="${build.generate}/last-taglib-generation">
+            <srcfiles dir="${api.dir}/doc">
+                <include name="*.xml"/>
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <!--
+         ===================================================================
+           Clean up build and distribution directories
+         ===================================================================
+    -->
+    <target name="clean" description="Clean build directory"
+            depends="clean.generated">
+        <delete dir="${build.dir}"/>
+        <delete>
+            <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
+            <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+        </delete>
+        <!-- delete this file since it's copied from another file based on JSP level -->
+        <delete file="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="clean.generated" description="Clean generated code">
+        <delete dir="${build.generate}"/>
+    </target>
+
+    <target name="clean.generated.components"
+            description="Clean generated components code">
+        <delete dir="${build.generate}/javax"/>
+        <delete file="${build.generate}/last-generation"/>
+    </target>
+
+    <target name="clean.generated.taglib"
+            description="Clean generated taglib code">
+        <delete dir="${build.generate}/com"/>
+        <delete dir="${build.generate}/conf"/>
+        <delete file="${build.generate}/last-taglib-generation"/>
+    </target>
+
+    <!--
+         ===================================================================
+           Clean everything
+         ===================================================================
+    -->
+    <target name="allclean" depends="clean">
+    </target>
+
+
+    <!--
+         ===================================================================
+           Create the documentation
+         ===================================================================
+    -->
+
+    <target name="javadoc_check">
+        <uptodate property="javadoc.notrequired"
+                  targetfile="${build.javadocs}/packages.html">
+            <srcfiles dir="${src.dir}" includes="**/*.java"/>
+            <srcfiles dir="${build.generate}" includes="**/*.java"/>
+        </uptodate>
+    </target>
+
+    <target name="javadocs" depends="javadoc_check"
+            unless="javadoc.notrequired"
+            description="Create the JavaDoc documentation">
+        <mkdir dir="${build.javadocs}"/>
+        <javadoc packagenames="javax.*"
+                 destdir="${build.javadocs}"
+                 private="${javadoc.private}"
+                 protected="${javadoc.protected}"
+                 windowtitle="${Name} (${impl.version})"
+                 doctitle="${Name} (${impl.version})"
+                 bottom="Copyright &#169; 2002-2004 Sun Microsystems, Inc. All Rights Reserved.">
+            <fileset dir="${src.dir}">
+                <include name="**/*.java"/>
+            </fileset>
+            <fileset dir="${build.generate}">
+                <include name="**/*.java"/>
+            </fileset>
+            <classpath refid="compile.classpath"/>
+        </javadoc>
+    </target>
+
+    <xmlcatalog id="standard-renderkit">
+
+        <dtd
+              publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+              location="${api.dir}/doc/web-facesconfig_1_1.dtd"/>
+
+    </xmlcatalog>
+
+    <target name="docs" depends="prepare.generate,tools"
+            if="standard-html-renderkit-impl"
+            unless="skip.generation">
+
+        <java fork="yes"
+              classname="com.sun.faces.generate.RenderKitSpecificationGenerator">
+            <jvmarg line="${debug.jvm.args}"/>
+            <classpath refid="tools.classpath"/>          
+
+            <arg value="--config"/>
+            <arg value="${build.temp}/standard-html-renderkit.xml"/>
+            <arg value="--dir"/>
+            <arg value="${build.generate.facesdoc}"/>
+            <arg value="--dtd"/>
+            <arg value="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN|${api.dir}/doc/web-facesconfig_1_0.dtd|-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN|${api.dir}/doc/web-facesconfig_1_1.dtd"/>
+            <arg value="--copyright"/>
+            <arg value="${basedir}/COPYRIGHT"/>
+
+        </java>
+
+        <touch file="${build.generate}/last-generation"/>
+
+
+    </target>
+
+    <!--
+         ===================================================================
+           Main target
+         ===================================================================
+    -->
+    <target name="main" depends="build"
+            description="Generate classes"/>
+
+
+    <!--
+         ===================================================================
+           Distributions target
+         ===================================================================
+    -->
+    <target name="dist" depends="main,javadocs"
+            description="Build distribution files">
+
+        <!-- Create the distributions directory -->
+        <mkdir dir="${dist.dir}"/>
+
+        <!-- Create the binary distribution -->
+        <zip destfile="${dist.dir}/jsf-tools-${impl.version}.zip">
+            <zipfileset dir="${build.dir}"
+                        includes="lib/** javadocs/**"
+                        prefix="jsf-tools-${impl.version}"/>
+        </zip>
+
+        <!-- Create the javadocs distribution -->
+        <zip destfile="${dist.dir}/jsf-tools-javadocs-${impl.version}.zip">
+            <zipfileset dir="${build.dir}"
+                        includes="javadocs/**"
+                        prefix="jsf-tools-${impl.version}"/>
+        </zip>
+
+
+        <!-- Create the source distribution -->
+        <zip destfile="${dist.dir}/jsf-tools-src-${impl.version}.zip">
+            <zipfileset dir="${basedir}"
+                        includes="build.xml COPYRIGHT LICENSE.html"
+                        prefix="jsf-api"/>
+
+            <zipfileset dir="${src.dir}"
+                        excludes="**/CVS/**"
+                        prefix="jsf-api/src"/>
+        </zip>
+
+    </target>
+
+</project>

@@ -1,0 +1,2 @@
+      <form id="form01" method="post" action="/jsf-systest/faces/taglib/command_button_test.jsp;jsessionid=9804610C1F5A391C51671ACD3B3DCE88" enctype="application/x-www-form-urlencoded">
+      <input type="hidden" name="com.sun.faces.VIEW" id="com.sun.faces.VIEW" value="_id97:_id98" /><input type="hidden" name="form01" value="form01" />
