@@ -1,0 +1,2465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module relativePaths="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="web" name="templateDemo" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/templateDemo/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/templateDemo/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="j2meDemo" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/j2meDemo/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/j2meDemo/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web11">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web14">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web16">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web18">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web20">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web22">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web25">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web27">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web29">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web31">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web34">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web36">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web38">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web41">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web42">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web7">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/Web9">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+        </packaging>
+      </configuration>
+      <facet type="jsf" name="JSF" implicit="true">
+        <configuration />
+      </facet>
+    </facet>
+    <facet type="web" name="nonjsp" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/nonjsp/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/nonjsp/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="guessNumber" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/guessNumber/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/guessNumber/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="helloDuke" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/helloDuke/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/helloDuke/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="characterCombat" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/characterCombat/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/characterCombat/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="helloFacelet" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/helloFacelet/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/helloFacelet/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="carstore" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/carstore/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/carstore/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="mappingDemo" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/test/mappingDemo/build/jsf-mappingDemo/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/test/mappingDemo/build/jsf-mappingDemo" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="renderkits" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/renderkits/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/renderkits/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="components" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/components/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/components/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="standard" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/standard/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/standard/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="webtier-sample" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/webtier-sample/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/webtier-sample/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="mojarra_ext" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/mojarra_ext/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/mojarra_ext/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="web" name="GroovyMojarra" implicit="true">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/GroovyMojarra/web/WEB-INF/web.xml" optional="false" version="2.5" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/GroovyMojarra/web" relative="/" />
+        </webroots>
+        <building>
+          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://" />
+          <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
+        </building>
+        <packaging>
+          <containerElement type="facet" facetId="impl/web/cactus-test">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-back-button">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/command-link-redirect">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/converter-property-editor">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/core-tags">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/disable-unicode-escaping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/el-performance">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/invalid-mapping">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/jar-ordering">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/late-bindings">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-datatables">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/nested-loadbundles">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/never-unwrap-exceptions">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/property-resolver-jsp">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-lifecycle">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-statemanager">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/replace-variableresolver">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/string-converter">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/systest">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/view-expired">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/wcag-datatable">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-disabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="facet" facetId="impl/web/write-attribute-script-enabled">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="demo">
+            <attribute name="method" value="1" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="impl">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="GROOVY" level="application">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="JSF 1.2 (2)" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/lib" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
+        </packaging>
+      </configuration>
+    </facet>
+    <facet type="Groovy" name="Groovy" implicit="true">
+      <configuration />
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/carstore/build/javadoc-src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/carstore/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/characterCombat/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/components/build/jsf-components/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/components/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/guessNumber/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/helloDuke/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/helloFacelet/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/j2meDemo/midlet" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/j2meDemo/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mojarra_ext/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/nonjsp/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/renderkits/build/jsf-renderkits/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/renderkits/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/standard/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/mappingDemo/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/webtier-sample/src/java" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/carstore/build" />
+      <excludeFolder url="file://$MODULE_DIR$/components/build" />
+      <excludeFolder url="file://$MODULE_DIR$/guessNumber/build" />
+      <excludeFolder url="file://$MODULE_DIR$/helloDuke/build" />
+      <excludeFolder url="file://$MODULE_DIR$/helloFacelet/build" />
+      <excludeFolder url="file://$MODULE_DIR$/mojarra_ext/build" />
+      <excludeFolder url="file://$MODULE_DIR$/standard/build" />
+      <excludeFolder url="file://$MODULE_DIR$/test/build" />
+      <excludeFolder url="file://$MODULE_DIR$/testresults" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="impl" />
+    <orderEntryProperties />
+  </component>
+</module>
+

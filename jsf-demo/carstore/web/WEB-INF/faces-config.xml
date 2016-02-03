@@ -1,0 +1,373 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ 
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ 
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+ 
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+ 
+ Contributor(s):
+ 
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
+
+    <application>
+        <message-bundle>carstore.bundles.Messages</message-bundle>
+        <locale-config>
+            <default-locale>en</default-locale>
+            <supported-locale>de</supported-locale>
+            <supported-locale>fr</supported-locale>
+            <supported-locale>es</supported-locale>
+        </locale-config>
+        <resource-bundle>
+            <base-name>carstore.bundles.Resources</base-name>
+            <var>bundle</var>
+        </resource-bundle>
+    </application>
+
+    <!-- Validator -->
+    <validator>
+        <description>
+            Registers the concrete Validator implementation,
+            carstore.FormatValidator with the validator
+            identifier, FormatValidator.
+        </description>
+        <validator-id>FormatValidator</validator-id>
+        <validator-class>carstore.FormatValidator</validator-class>
+        <attribute>
+            <description>
+                List of format patterns separated by '|'. The validator
+                compares these patterns against the data entered in a
+                component that has this validator registered on it.
+            </description>
+            <attribute-name>formatPatterns</attribute-name>
+            <attribute-class>java.lang.String</attribute-class>
+        </attribute>
+    </validator>
+
+    <!-- converter -->
+    <converter>
+        <description>
+            Registers the concrete Converter implementation,
+            carstore.CreditCardConverter using the ID,
+            creditCardConverter.
+        </description>
+        <converter-id>creditCardConverter</converter-id>
+        <converter-class>carstore.CreditCardConverter</converter-class>
+    </converter>
+
+    <!-- =================== Initialize Image Map Hotspot Data ============== -->
+
+    <managed-bean>
+        <description>
+            Causes the default VariableResolver implementation to instantiate
+            the
+            managed bean, NA of the class, ImageArea in application
+            scope if the bean does not already exist in any scope and initialize
+            the
+            shape, alt, and coords properties with the values specified by the
+            managed-property elements.
+        </description>
+        <managed-bean-name>NA</managed-bean-name>
+        <managed-bean-class>
+            com.sun.javaee.blueprints.components.ui.model.ImageArea
+        </managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+        <managed-property>
+            <description>
+                Initializes the shape property of the managed bean, NA with the
+                value,
+                poly.
+            </description>
+            <property-name>shape</property-name>
+            <value>poly</value>
+        </managed-property>
+        <managed-property>
+            <description>
+                Initializes the alt property of the managed bean, NA with the
+                value,
+                NAmerica.
+            </description>
+            <property-name>alt</property-name>
+            <value>NAmerica</value>
+        </managed-property>
+        <managed-property>
+            <description>
+                Initializes the coords property of the managed bean, NA with the
+                value
+                specified by the value element.
+            </description>
+            <property-name>coords</property-name>
+            <value>
+                53,109,1,110,2,167,19,168,52,149,67,164,67,165,68,167,70,168,72,170,74,172,75,174,77,175,79,177,81,179,80,179,77,179,81,179,81,178,80,178,82,211,28,238,15,233,15,242,31,252,36,247,36,246,32,239,89,209,92,216,93,216,100,216,103,218,113,217,116,224,124,221,128,230,163,234,185,189,178,177,162,188,143,173,79,173,73,163,79,157,64,142,54,139,53,109
+            </value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>
+            Causes the default VariableResolver implementation to instantiate
+            the
+            managed bean, SA of the class, ImageArea in application
+            scope if the bean does not already exist in any scope and initialize
+            the
+            shape, alt, and coords properties with the values specified by the
+            managed-property elements.
+        </description>
+        <managed-bean-name>SA</managed-bean-name>
+        <managed-bean-class>
+            com.sun.javaee.blueprints.components.ui.model.ImageArea
+        </managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+        <managed-property>
+            <description>
+                Initializes the shape property of the managed bean, SA with the
+                value,
+                poly.
+            </description>
+            <property-name>shape</property-name>
+            <value>poly</value>
+        </managed-property>
+        <managed-property>
+            <description>
+                Initializes the alt property of the managed bean, SA with the
+                value,
+                SAmerica.
+            </description>
+            <property-name>alt</property-name>
+            <value>SAmerica</value>
+        </managed-property>
+        <managed-property>
+            <description>
+                Initializes the coords property of the managed bean, SA with the
+                value
+                specified by the value element.
+            </description>
+            <property-name>coords</property-name>
+            <value>
+                89,217,95,228,100,234,107,239,109,240,109,237,106,231,110,234,113,240,115,246,118,250,125,254,131,256,135,255,140,257,146,263,151,269,157,271,160,273,159,279,157,287,156,294,163,315,168,324,172,329,173,338,172,351,169,368,168,379,167,388,165,399,165,408,170,415,177,420,183,420,183,415,180,408,180,405,186,400,186,395,186,391,188,388,190,384,193,382,196,379,199,377,201,374,201,371,201,366,197,362,197,358,198,354,199,351,199,347,197,344,196,340,194,337,191,335,191,332,194,332,201,332,199,326,193,317,184,310,180,309,179,311,177,314,175,312,174,308,172,305,170,304,171,302,174,298,177,296,177,290,177,288,180,287,183,287,186,287,187,284,188,280,190,279,192,278,191,282,191,286,194,288,196,288,199,286,201,285,204,285,206,285,208,285,206,280,205,279,205,276,205,274,197,270,194,267,191,265,186,262,182,262,177,261,173,261,167,261,165,265,163,266,159,265,157,263,157,260,153,253,149,251,147,251,149,247,149,244,148,240,144,238,141,238,139,241,138,244,137,245,134,246,131,245,130,242,130,238,130,236,130,233,129,230,125,225,123,221,119,221,118,223,117,220,113,219,104,217,101,215,96,215
+            </value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>
+            Causes the default VariableResolver implementation to instantiate
+            the
+            managed bean, gerA of the class, ImageArea in application
+            scope if the bean does not already exist in any scope and initialize
+            the
+            shape, alt, and coords properties with the values specified by the
+            managed-property elements.
+        </description>
+        <managed-bean-name>gerA</managed-bean-name>
+        <managed-bean-class>
+            com.sun.javaee.blueprints.components.ui.model.ImageArea
+        </managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+        <managed-property>
+            <description>
+                Initializes the shape property of the managed bean, gerA with
+                the value
+                poly.
+            </description>
+            <property-name>shape</property-name>
+            <value>poly</value>
+        </managed-property>
+        <managed-property>
+            <description>
+                Initializes the alt property of the managed bean, gerA with the
+                value
+                Germany.
+            </description>
+            <property-name>alt</property-name>
+            <value>Germany</value>
+        </managed-property>
+        <managed-property>
+            <description>
+                Initializes the coords property of the managed bean, gerA with
+                the value
+                specified by the value element.
+            </description>
+            <property-name>coords</property-name>
+            <value>
+                324,163,323,170,322,172,320,173,320,175,321,176,321,177,321,179,321,180,319,180,318,180,317,182,316,183,315,181,314,181,313,181,312,181,311,180,310,177,310,177,307,176,307,173,307,172,308,170,309,169,309,167,309,166,311,165,311,163,311,161,312,159,314,159,316,160,316,162,318,162,319,162
+            </value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>
+            Causes the default VariableResolver implementation to instantiate
+            the
+            managed bean, fraA of the class, ImageArea in application
+            scope if the bean does not already exist in any scope and initialize
+            the
+            shape, alt, and coords properties with the values specified by the
+            managed-property elements.
+        </description>
+        <managed-bean-name>fraA</managed-bean-name>
+        <managed-bean-class>
+            com.sun.javaee.blueprints.components.ui.model.ImageArea
+        </managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+        <managed-property>
+            <description>
+                Initializes the shape property of the managed bean, fraA with
+                the value
+                shape.
+            </description>
+            <property-name>shape</property-name>
+            <value>poly</value>
+        </managed-property>
+        <managed-property>
+            <description>
+                Initializes the alt property of the managed bean, fraA with the
+                value
+                France.
+            </description>
+            <property-name>alt</property-name>
+            <value>France</value>
+        </managed-property>
+        <managed-property>
+            <description>
+                Initializes the coords property of the managed bean, fraA with
+                the value
+                specified by the value element.
+            </description>
+            <property-name>coords</property-name>
+            <value>
+                312,178,308,182,310,184,310,187,310,189,309,191,307,192,305,192,304,192,304,193,303,195,302,195,300,194,299,194,297,194,295,193,295,191,295,189,294,186,293,184,292,182,291,181,289,180,288,178,288,176,289,175,292,175,293,176,294,174,296,174,297,174,299,174,299,172,300,170,302,170,304,172,306,173,308,173,310,174
+            </value>
+        </managed-property>
+    </managed-bean>
+
+    <!-- =================== Business Logic Beans ============== -->
+
+    <managed-bean>
+        <description>
+            Causes the default VariableResolver implementation to instantiate
+            the managed bean, CustomerBean of the class, carstore.CustomerBean
+            in session scope if the bean does not already exist in any scope.
+        </description>
+        <managed-bean-name>customer</managed-bean-name>
+        <managed-bean-class>carstore.CustomerBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <description>
+            The main backing file mean
+        </description>
+        <managed-bean-name>carstore</managed-bean-name>
+        <managed-bean-class>carstore.CarStore</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <navigation-rule>
+        <from-view-id>/chooseLocale.jsp</from-view-id>
+        <navigation-case>
+            <description>
+                Any action on chooseLocale should cause navigation to
+                storeFront.jsp
+            </description>
+            <from-outcome>storeFront</from-outcome>
+            <to-view-id>/storeFront.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/storeFront.jsp</from-view-id>
+        <navigation-case>
+            <description>
+                Any action that returns "carDetail" on storeFront.jsp should
+                cause navigation to carDetail.jsp
+            </description>
+            <from-outcome>carDetail</from-outcome>
+            <to-view-id>/carDetail.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/carDetail.jsp</from-view-id>
+        <navigation-case>
+            <description>
+                Any action that returns "confirmChoices" on carDetail.jsp should
+                cause navigation to confirmChoices.jsp
+            </description>
+            <from-outcome>confirmChoices</from-outcome>
+            <to-view-id>/confirmChoices.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/confirmChoices.jsp</from-view-id>
+        <navigation-case>
+            <description>
+                Any action that returns "carDetail" on confirmChoices.jsp should
+                cause navigation to carDetail.jsp
+            </description>
+            <from-outcome>carDetail</from-outcome>
+            <to-view-id>/carDetail.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/confirmChoices.jsp</from-view-id>
+        <navigation-case>
+            <description>
+                Any action that returns "customerInfo" on confirmChoices.jsp
+                should
+                cause navigation to customerInfo.jsp
+            </description>
+            <from-outcome>customerInfo</from-outcome>
+            <to-view-id>/customerInfo.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/customerInfo.jsp</from-view-id>
+        <navigation-case>
+            <description>
+                Any action that returns "finish" on customerInfo.jsp should
+                cause navigation to finish.jsp
+            </description>
+            <from-outcome>finish</from-outcome>
+            <to-view-id>/finish.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+
+</faces-config>
