@@ -58,6 +58,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Collections;
 
 import javax.faces.FacesException;
 import javax.faces.application.StateManager;
@@ -296,7 +297,7 @@ public class StateManagerImpl extends StateManager {
                 Map<String, Map> logicalMap = TypedCollections.dynamicallyCastMap(
                       (Map) sessionMap.get(LOGICAL_VIEW_MAP), String.class, Map.class);
                 if (logicalMap == null) {
-                    logicalMap = new LRUMap<String, Map>(logicalMapSize);
+                    logicalMap = Collections.synchronizedMap(new LRUMap<String, Map>(logicalMapSize));
                     sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
                 }
             
@@ -316,7 +317,7 @@ public class StateManagerImpl extends StateManager {
                 Map<String, Object[]> actualMap = TypedCollections.dynamicallyCastMap(
                       logicalMap.get(idInLogicalMap), String.class, Object[].class);
                 if (actualMap == null) {
-                    actualMap = new LRUMap<String, Object[]>(actualMapSize);
+                    actualMap = Collections.synchronizedMap(new LRUMap<String, Object[]>(actualMapSize));
                     logicalMap.put(idInLogicalMap, actualMap);
                 }
 
