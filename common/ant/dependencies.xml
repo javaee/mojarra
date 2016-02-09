@@ -61,10 +61,11 @@
     <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.5.5"/>
     <property name="maven.repository.importer.version" value="1.2"/>
-    <property name="appserv-rt.version" value="2.1.1" />
+    <property name="glassfish.version" value="v2.1.1-b31g-linux" />
 
     <property name="central.maven2" value="http://repo1.maven.org/maven2" />
-    <property name="userContent" value="http://slc03qna.us.oracle.com:7070/hudson/userContent/downloads" />
+    <property name="userContent" value="http://slc03qna.us.oracle.com:7070/hudson/userContent" />
+    <property name="userContentDownloads" value="${userContent}/downloads" />
 	
     <property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
 	<property name="java.net.maven" value="http://download.java.net/maven/1"/>
@@ -147,7 +148,7 @@
                 </not>
             </and>
             <then>
-                <get src="${userContent}/htmlunit-${htmlunit.version}.zip"
+                <get src="${userContentDownloads}/htmlunit-${htmlunit.version}.zip"
                      dest="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
                      usetimestamp="true"/>
                 <unzip
@@ -191,7 +192,7 @@
                 <available file="${maven.repository.importer.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${userContent}/maven-repository-importer-${maven.repository.importer.version}.jar"
+                <get src="${userContentDownloads}/maven-repository-importer-${maven.repository.importer.version}.jar"
                      dest="${maven.repository.importer.jar}"
                      usetimestamp="true"/>
 
@@ -204,7 +205,7 @@
                 <available file="${servlet.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${userContent}/servlet-api-${servlet.api.version}.jar"
+                <get src="${userContentDownloads}/servlet-api-${servlet.api.version}.jar"
                      dest="${servlet.jar}"
                      usetimestamp="true"/>
 
@@ -217,7 +218,7 @@
                 <available file="${jsp.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${userContent}/jsp-api-${jsp.api.version}.jar"
+                <get src="${userContentDownloads}/jsp-api-${jsp.api.version}.jar"
                      dest="${jsp.jar}"
                      usetimestamp="true"/>
 
@@ -231,7 +232,7 @@
                 <available file="${jstl.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${userContent}/jstl-${jstl.api.version}.jar"
+                <get src="${userContentDownloads}/jstl-${jstl.api.version}.jar"
                      dest="${jstl.jar}"
                      usetimestamp="true"/>
 
@@ -244,7 +245,7 @@
                 <available file="${annotation.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${userContent}/jsr250-api-${annotation.api.version}.jar"
+                <get src="${userContentDownloads}/jsr250-api-${annotation.api.version}.jar"
                      dest="${annotation.jar}"
                      usetimestamp="true"/>
 
@@ -257,7 +258,7 @@
                 <available file="${portlet.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${userContent}/portlet-api-${portlet.api.version}.jar"
+                <get src="${userContentDownloads}/portlet-api-${portlet.api.version}.jar"
                      dest="${portlet.jar}"
                      usetimestamp="true"/>
             </then>
@@ -269,7 +270,7 @@
                 <available file="${groovy.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${userContent}/groovy-all-${groovy.version}.jar"
+                <get src="${userContentDownloads}/groovy-all-${groovy.version}.jar"
                      dest="${groovy.jar}"
                      usetimestamp="true"/>
             </then>
@@ -338,7 +339,7 @@
     <property name="tomcat6.home"
               value="${dependency.base.dir}/apache-tomcat-6.0.13"/>
     <property name="glassfish.jar"
-              value="${dependency.base.dir}/glassfish/lib/appserv-rt.jar"/>
+              value="${dependency.base.dir}/glassfish-installer-v2.1.1-b31g-linux/glassfish/lib/appserv-rt.jar"/>
     <property name="tomcat6.jar"
               value="${tomcat6.home}/lib/catalina.jar"/>
     <property name="jetty.version.dir" value="6.1.19"/>
@@ -418,10 +419,13 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
                 <available file="${glassfish.jar}" property="ignored"/>
             </not>
             <then>
-                <mkdir dir="${dependency.base.dir}/glassfish/lib" />
-                <get src="${userContent}/appserv-rt-${appserv-rt.version}.jar"
-                     dest="${glassfish.jar}"
+                <get src="${userContent}/glassfish-installer-${glassfish.version}.zip"
+                     dest="${dependency.base.dir}/glassfish-installer-${glassfish.version}.zip"
                      usetimestamp="true"/>
+                <unzip
+                      src="${dependency.base.dir}/glassfish-installer-${glassfish.version}.zip"
+                      dest="${dependency.base.dir}"/>
+
             </then>
         </if>
 
@@ -444,7 +448,7 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
                 <available file="${dependency.base.dir}/jetty-${jetty.version}.zip" property="ignored"/>
             </not>
             <then>
-                <get src="${userContent}/jetty-${jetty.version}.zip"
+                <get src="${userContentDownloads}/jetty-${jetty.version}.zip"
                      dest="${dependency.base.dir}/jetty-${jetty.version}.zip"
                      usetimestamp="true"/>
                 <unzip
