@@ -61,6 +61,7 @@
     <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.5.5"/>
     <property name="maven.repository.importer.version" value="1.2"/>
+    <property name="appserv-rt.version" value="2.1.1" />
 
     <property name="central.maven2" value="http://repo1.maven.org/maven2" />
     <property name="userContent" value="http://slc03qna.us.oracle.com:7070/hudson/userContent/downloads" />
@@ -356,7 +357,7 @@
             description="Downloads containers necessary for building implementation specific additions"
             depends="detect.os">
 
-<!--
+<!-- BugDB 22666897 start
         <if>
             <not>
                 <available file="${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar" property="ignored"/>
@@ -407,6 +408,23 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
             </then>
         </if>
   
+-->
+
+<!-- BugDB 22666897 continued -->
+
+        <!-- glassfish.jar -->
+        <if>
+            <not>
+                <available file="${glassfish.jar}" property="ignored"/>
+            </not>
+            <then>
+                <mkdir dir="${dependency.base.dir}/glassfish/lib" />
+                <get src="${userContent}/appserv-rt-${appserv-rt.version}.jar"
+                     dest="${glassfish.jar}"
+                     usetimestamp="true"/>
+            </then>
+        </if>
+
         <if>
             <not>
                 <available file="${dependency.base.dir}/apache-tomcat-6.0.13.zip"
@@ -426,7 +444,7 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
                 <available file="${dependency.base.dir}/jetty-${jetty.version}.zip" property="ignored"/>
             </not>
             <then>
-                <get src="http://dist.codehaus.org/jetty/jetty-${jetty.version.dir}/jetty-${jetty.version}.zip"
+                <get src="${userContent}/jetty-${jetty.version}.zip"
                      dest="${dependency.base.dir}/jetty-${jetty.version}.zip"
                      usetimestamp="true"/>
                 <unzip
@@ -435,7 +453,7 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
             </then>
         </if>
 
--->
+<!-- BugDB 22666897 end -->
 
     </target>
 
