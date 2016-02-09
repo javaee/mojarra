@@ -128,6 +128,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.el.ELContext;
 import javax.faces.application.ProjectStage;
 import javax.faces.render.ResponseStateManager;
 
@@ -1998,9 +1999,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 assert (null != expectedReturnType);
                 assert (null != expectedParameters);
 
-                FaceletContext faceletCtx = (FaceletContext)ctx.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+                // JAVASERVERFACES-4073
+                ELContext elContext = (ELContext) ctx.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+                if (null == elContext) {
+                    elContext = ctx.getELContext();
+                }
                 MethodExpression me = f
-                      .createMethodExpression(faceletCtx ,
+                      .createMethodExpression(elContext ,
                                               ve.getExpressionString(),
                                               expectedReturnType,
                                               expectedParameters);
