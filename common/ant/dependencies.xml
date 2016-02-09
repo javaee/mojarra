@@ -61,6 +61,9 @@
     <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.5.5"/>
     <property name="maven.repository.importer.version" value="1.2"/>
+
+    <property name="central.maven2" value="http://repo1.maven.org/maven2" />
+    <property name="userContent" value="http://slc03qna.us.oracle.com:7070/hudson/userContent/downloads" />
 	
     <property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
 	<property name="java.net.maven" value="http://download.java.net/maven/1"/>
@@ -113,11 +116,16 @@
 
         <!-- JUNIT -->
         <if>
+            <and>
             <not>
                 <available file="${junit.jar}" property="ignored"/>
             </not>
+                <not>
+                    <isset property="build.source"/>
+                </not>
+            </and>
             <then>
-                <get src="${maven2.mirror}/junit/junit/${junit.version}/junit-${junit.version}.jar"
+                <get src="${central.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
                      dest="${junit.jar}"
                      usetimestamp="true"/>
             </then>
@@ -129,16 +137,21 @@
     	add a bunch more deps.  Maybe another day... :)
     	-->
         <if>
-            <not>
-                <available file="${htmlunit.home}" property="ignored"/>
-            </not>
+            <and>
+                <not>
+                    <available file="${htmlunit.home}" property="ignored"/>
+                </not>
+                <not>
+                    <isset property="build.source"/>
+                </not>
+            </and>
             <then>
-                <get src="http://easynews.dl.sourceforge.net/sourceforge/htmlunit/htmlunit-${htmlunit.version}.zip"
+                <get src="${userContent}/htmlunit-${htmlunit.version}.zip"
                      dest="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
                      usetimestamp="true"/>
                 <unzip
-                      src="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
-                      dest="${dependency.base.dir}"/>
+                        src="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
+                        dest="${dependency.base.dir}"/>
             </then>
         </if>
 
@@ -164,7 +177,7 @@
                 <available file="${tlddoc.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${maven2.mirror}/taglibrarydoc/tlddoc/${taglibdoc.version}/tlddoc-${taglibdoc.version}.jar"
+                <get src="${central.maven2}/taglibrarydoc/tlddoc/${taglibdoc.version}/tlddoc-${taglibdoc.version}.jar"
                      dest="${tlddoc.jar}"
                      usetimestamp="true"/>
 
@@ -177,7 +190,7 @@
                 <available file="${maven.repository.importer.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/com.sun.wts.tools.mri/jars/maven-repository-importer-${maven.repository.importer.version}.jar"
+                <get src="${userContent}/maven-repository-importer-${maven.repository.importer.version}.jar"
                      dest="${maven.repository.importer.jar}"
                      usetimestamp="true"/>
 
@@ -190,7 +203,7 @@
                 <available file="${servlet.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.servlet/jars/servlet-api-${servlet.api.version}.jar"
+                <get src="${userContent}/servlet-api-${servlet.api.version}.jar"
                      dest="${servlet.jar}"
                      usetimestamp="true"/>
 
@@ -203,7 +216,7 @@
                 <available file="${jsp.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.servlet.jsp/jars/jsp-api-${jsp.api.version}.jar"
+                <get src="${userContent}/jsp-api-${jsp.api.version}.jar"
                      dest="${jsp.jar}"
                      usetimestamp="true"/>
 
@@ -217,7 +230,7 @@
                 <available file="${jstl.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/jstl/jars/jstl-${jstl.api.version}.jar"
+                <get src="${userContent}/jstl-${jstl.api.version}.jar"
                      dest="${jstl.jar}"
                      usetimestamp="true"/>
 
@@ -230,7 +243,7 @@
                 <available file="${annotation.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
+                <get src="${userContent}/jsr250-api-${annotation.api.version}.jar"
                      dest="${annotation.jar}"
                      usetimestamp="true"/>
 
@@ -243,7 +256,7 @@
                 <available file="${portlet.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${maven2.mirror}/javax/portlet/portlet-api/${portlet.api.version}/portlet-api-${portlet.api.version}.jar"
+                <get src="${userContent}/portlet-api-${portlet.api.version}.jar"
                      dest="${portlet.jar}"
                      usetimestamp="true"/>
             </then>
@@ -255,7 +268,7 @@
                 <available file="${groovy.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${codehaus.maven}/org/codehaus/groovy/groovy-all/${groovy.version}/groovy-all-${groovy.version}.jar"
+                <get src="${userContent}/groovy-all-${groovy.version}.jar"
                      dest="${groovy.jar}"
                      usetimestamp="true"/>
             </then>
@@ -343,12 +356,13 @@
             description="Downloads containers necessary for building implementation specific additions"
             depends="detect.os">
 
+<!--
         <if>
             <not>
                 <available file="${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar" property="ignored"/>
             </not>
             <then>
-                <!-- The jar is not available, so delete ant dependencies/glassfish dir that may exist and "run" the new jar -->
+                 The jar is not available, so delete ant dependencies/glassfish dir that may exist and "run" the new jar 
                 <echo>
 The current GlassFish installer jar was not found, so we are deleting any 
 existing GlassFish installation in the Mojarra tree.  We will download the 
@@ -380,7 +394,7 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
                 <delete file="${dependency.base.dir}/input"/>
                 <ant antfile="${dependency.base.dir}/glassfish/setup.xml" dir="${dependency.base.dir}/glassfish" target="setup"/>
                 <echo file="${dependency.base.dir}/glassfish/password.txt">AS_ADMIN_PASSWORD=adminadmin</echo>
-                <!--
+                comment-begin
                 Download and install the Eclipse JDT compiler to help speed up unit tests.  See Jan Luehe's
                 blog for more information:  http://blogs.sun.com/jluehe/entry/how_to_enable_eclipse_s.
                 <get src="http://blogs.sun.com/roller/resources/jluehe/jasper-compiler-jdt.jar"
@@ -389,7 +403,7 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
                 <get src="http://blogs.sun.com/roller/resources/jluehe/jasper-compiler-jdt-ext.jar"
                     dest="${dependency.base.dir}/glassfish/lib/jasper-compiler-jdt-ext.jar"
                     usetimestamp="true"/>
-                -->
+                comment-end
             </then>
         </if>
   
@@ -420,6 +434,9 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
                     dest="${dependency.base.dir}"/>
             </then>
         </if>
+
+-->
+
     </target>
 
     <target name="detect.os">
