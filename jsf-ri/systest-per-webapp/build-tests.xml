@@ -75,7 +75,9 @@
                    property-resolver-jsp,
                    never-unwrap-exceptions,
                    write-attribute-script-disabled,
-                   write-attribute-script-enabled"/>
+                   write-attribute-script-enabled,
+                   client-encrypt-by-default,
+                   client-encrypt-by-default-disabled"/>
     <!-- 
        EXCLUDED APPLICATIONS:
           view-expired
@@ -124,6 +126,10 @@
               value="com/sun/faces/systest/WriteAttributeScriptEnabledTestCase.class"/>
     <property name="write-attribute-script-disabled"
               value="com/sun/faces/systest/WriteAttributeScriptDisabledTestCase.class"/>
+    <property name="client-encrypt-by-default"
+              value="com/sun/faces/systest/ClientEncryptByDefaultTestCase.class"/>
+    <property name="client-encrypt-by-default-disabled"
+              value="com/sun/faces/systest/ClientEncryptByDefaultDisabledTestCase.class"/>
     
     
     <!--

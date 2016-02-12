@@ -71,6 +71,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.BufferedOutputStream;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
@@ -433,6 +435,23 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                 guard = new ByteArrayGuard(pass);
             }
         }
+        // BugDB 2966897 make ClientStateSavingPassword on by default unless
+        // it is explicitly disabled.
+        if (null == pass) {
+            boolean clientStateSavingPasswordDisabled = webConfig.isOptionEnabled(BooleanWebContextInitParameter.DisableClientStateSavingPassword);
+            if (!clientStateSavingPasswordDisabled) {
+                try {
+                    SecureRandom prng = SecureRandom.getInstance("SHA1PRNG");
+                    int passwordInt = prng.nextInt();
+                    guard = new ByteArrayGuard("" + passwordInt);
+                } catch (NoSuchAlgorithmException ex) {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+        
         compressState = webConfig.isOptionEnabled(
                             BooleanWebContextInitParameter.CompressViewState);
         String size = webConfig.getOptionValue(

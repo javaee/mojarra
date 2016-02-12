@@ -805,6 +805,10 @@ public class WebConfiguration {
             "com.sun.faces.compressJavaScript",
             true
         ),
+        DisableClientStateSavingPassword(
+            "com.sun.faces.disableClientStateSavingPassword",
+            false
+        ),
         ExternalizeJavaScript(
             "com.sun.faces.externalizeJavaScript",
             false
