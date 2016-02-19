@@ -582,6 +582,7 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
         public static final int NAMEANDTYPE = 12;
         public static final int ASCIZ = 1;
         public static final int UNICODE = 2;
+        public static final int METHODHANDLE = 15;
         public static final int METHODTYPE = 16;
         public static final int INVOKEDYNAMIC = 18 ;
 
@@ -692,6 +693,13 @@ public class JavaClassScanningAnnotationScanner extends AnnotationScanner {
                             return true;
                         }
                         buffer.getShort();
+                        buffer.getShort();
+                        break;
+                    case METHODHANDLE:
+                        if (!refill(buffer, in, 3)) {
+                            return true;
+                        }
+                        buffer.get();
                         buffer.getShort();
                         break;
                     default:
