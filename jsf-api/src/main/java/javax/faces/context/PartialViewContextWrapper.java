@@ -41,6 +41,7 @@
 package javax.faces.context;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.faces.FacesWrapper;
 import javax.faces.event.PhaseId;
@@ -87,7 +88,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
         return getWrapped().getExecuteIds();
     }
 
-     /**
+    /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#getRenderIds()}
      * on the wrapped {@link PartialViewContext} object.</p>
@@ -99,7 +100,21 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
         return getWrapped().getRenderIds();
     }
 
-     /**
+    /**
+     * <p class="changed_added_2_3">
+     * The default behavior of this method is to call 
+     * {@link PartialViewContext#getRenderIds()}
+     * on the wrapped {@link PartialViewContext} object.
+     * </p>
+     *
+     * @see PartialViewContext#getEvalScripts()
+     */
+    @Override
+    public List<String> getEvalScripts() {
+        return getWrapped().getEvalScripts();
+    }
+
+    /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#getPartialResponseWriter()}
      * on the wrapped {@link PartialViewContext} object.</p>
@@ -123,7 +138,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
         getWrapped().setPartialRequest(isPartialRequest);
     }
     
-     /**
+    /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#isAjaxRequest()}
      * on the wrapped {@link PartialViewContext} object.</p>
@@ -135,7 +150,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
         return getWrapped().isAjaxRequest();
     }
 
-     /**
+    /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#isPartialRequest()}
      * on the wrapped {@link PartialViewContext} object.</p>
@@ -147,7 +162,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
         return getWrapped().isPartialRequest();
     }
 
-     /**
+    /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#isExecuteAll()}
      * on the wrapped {@link PartialViewContext} object.</p>
@@ -159,7 +174,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
         return getWrapped().isExecuteAll();
     }
 
-     /**
+    /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#isRenderAll()}
      * on the wrapped {@link PartialViewContext} object.</p>
@@ -171,7 +186,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
         return getWrapped().isRenderAll();
     }
 
-     /**
+    /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#isResetValues()}
      * on the wrapped {@link PartialViewContext} object.</p>
@@ -183,7 +198,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
         return getWrapped().isResetValues();
     }
 
-     /**
+    /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#setRenderAll(boolean)}
      * on the wrapped {@link PartialViewContext} object.</p>
@@ -195,7 +210,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
         getWrapped().setRenderAll(renderAll);
     }
 
-     /**
+    /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#release()}
      * on the wrapped {@link PartialViewContext} object.</p>
@@ -207,7 +222,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
         getWrapped().release();
     }
 
-     /**
+    /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#processPartial(PhaseId)}
      * on the wrapped {@link PartialViewContext} object.</p>

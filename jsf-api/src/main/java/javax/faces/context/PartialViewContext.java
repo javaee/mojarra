@@ -41,6 +41,7 @@
 package javax.faces.context;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.faces.event.PhaseId;
 
@@ -152,6 +153,17 @@ public abstract class PartialViewContext {
      * @return the ids for the render portion of the lifecycle
      */
     public abstract Collection<String> getRenderIds();
+
+	/**
+     * <p class="changed_added_2_3">
+	 * Returns a mutable <code>List</code> of scripts to be evaluated in client side on complete of ajax request.
+     * </p>
+     * 
+	 * @return A mutable <code>List</code> of scripts to be evaluated in client side on complete of ajax request.
+	 * @throws IllegalStateException If this method is called after this instance has been released.
+	 * @since 2.3
+	 */
+	public abstract List<String> getEvalScripts();
 
     /**
      * <p class="changed_added_2_0">Return the {@link ResponseWriter}
