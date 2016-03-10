@@ -50,14 +50,21 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
 
+import javax.enterprise.context.ContextNotActiveException;
+import javax.enterprise.context.spi.Context;
+import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
+import javax.enterprise.inject.spi.InjectionPoint;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.model.DataModel;
 import javax.faces.validator.Validator;
+
+import com.sun.faces.util.Util;
 
 /**
  * A static utility class for CDI.
@@ -163,27 +170,56 @@ public final class CdiUtils {
         return delegatingValidator;
     }
 
+    public static <T> T getBeanReference(Class<T> type, Annotation... qualifiers) {
+        return type.cast(getBeanReferenceByType(Util.getCdiBeanManager(FacesContext.getCurrentInstance()), type, qualifiers));
+    }
+
     /**
-     * 
-     * @param beanManagert the bean manager
+     * @param beanManager the bean manager
      * @param type the required bean type the reference must have
      * @param qualifier the required qualifiers the reference must have
      * @return a bean reference adhering to the required type and qualifiers
      */
-    public static <T> T getBeanReference(BeanManager beanManager, Class<T> type, Annotation qualifier) {
-        return type.cast(getBeanReferenceByType(beanManager, type, qualifier));
+    public static <T> T getBeanReference(BeanManager beanManager, Class<T> type, Annotation... qualifiers) {
+        return type.cast(getBeanReferenceByType(beanManager, type, qualifiers));
     }
 
-    public static Object getBeanReferenceByType(BeanManager beanManager, Type type, Annotation qualifier) {
+    public static Object getBeanReferenceByType(BeanManager beanManager, Type type, Annotation... qualifiers) {
 
         Object beanReference = null;
 
-        Bean<?> bean = beanManager.resolve(beanManager.getBeans(type, qualifier));
+        Bean<?> bean = beanManager.resolve(beanManager.getBeans(type, qualifiers));
         if (bean != null) {
             beanReference = beanManager.getReference(bean, type, beanManager.createCreationalContext(bean));
         }
 
         return beanReference;
+    }
+
+    /**
+     * Returns concrete (non-proxied) bean instance of given class in current context.
+     * 
+     * @param type the required bean type the instance must have
+     * @param create whether to auto-create bean if not exist
+     * @return a bean instance adhering to the required type
+     */
+    public static <T> T getBeanInstance(Class<T> type, boolean create) {
+        BeanManager beanManager = Util.getCdiBeanManager(FacesContext.getCurrentInstance());
+        Bean<T> bean = (Bean<T>) beanManager.resolve(beanManager.getBeans(type));
+
+        if (bean != null) {
+            Context context = beanManager.getContext(bean.getScope());
+
+            if (create) {
+                return context.get(bean, beanManager.createCreationalContext(bean));
+            }
+            else {
+                return context.get(bean);
+            }
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -264,5 +300,46 @@ public final class CdiUtils {
         return (Map<Class<?>, Class<? extends DataModel<?>>>) beanReference;
     }
 
+    /** 
+     * Returns the current injection point.
+     */
+    public static InjectionPoint getCurrentInjectionPoint(BeanManager beanManager, CreationalContext<?> creationalContext) {
+        Bean<? extends Object> bean = beanManager.resolve(beanManager.getBeans(InjectionPoint.class));
+        InjectionPoint injectionPoint = (InjectionPoint) beanManager.getReference(bean, InjectionPoint.class, creationalContext);
+
+        if (injectionPoint == null) { // It's broken in some Weld versions. Below is a work around. 
+            bean = beanManager.resolve(beanManager.getBeans(InjectionPointGenerator.class));
+            injectionPoint = (InjectionPoint) beanManager.getInjectableReference(bean.getInjectionPoints().iterator().next(), creationalContext);
+        }
+
+        return injectionPoint;
+    }
+
+    /**
+     * Returns the qualifier annotation of the given qualifier class from the given injection point.
+     */
+    public static <A extends Annotation> A getQualifier(InjectionPoint injectionPoint, Class<A> qualifierClass) {
+        for (Annotation annotation : injectionPoint.getQualifiers()) {
+            if (qualifierClass.isAssignableFrom(annotation.getClass())) {
+                return qualifierClass.cast(annotation);
+            }
+        }
+
+        return null;
+    }
     
+    /**
+     * Returns true if given scope is active in current context.
+     */
+    public static <S extends Annotation> boolean isScopeActive(Class<S> scope) {
+        BeanManager beanManager = Util.getCdiBeanManager(FacesContext.getCurrentInstance());
+
+        try {
+            Context context = beanManager.getContext(scope);
+            return context.isActive();
+        } catch (ContextNotActiveException ignore) {
+            return false;
+        }
+    }
+
 }

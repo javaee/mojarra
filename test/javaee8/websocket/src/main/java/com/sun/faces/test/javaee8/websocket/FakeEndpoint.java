@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.java.net/public/CDDLGPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -36,58 +36,18 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
- *
  */
+package com.sun.faces.test.javaee8.websocket;
 
-package com.sun.faces.facelets.tag.jsf.core;
+import javax.websocket.Endpoint;
+import javax.websocket.EndpointConfig;
+import javax.websocket.Session;
 
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.view.facelets.*;
-import java.io.IOException;
-import javax.faces.view.AttachedObjectHandler;
-
-
-
-public final class SocketHandler extends TagHandlerImpl implements AttachedObjectHandler {
-
-    private final TagAttribute autoconnect;
-    private final TagAttribute channel;
-    private final TagAttribute onerror;
-    private final TagAttribute onmessage;
-    private final TagAttribute transport;
-
-    public SocketHandler(TagConfig config) {
-        super(config);
-        this.autoconnect = this.getAttribute("autoconnect");
-        this.channel = this.getRequiredAttribute("channel");
-        this.onerror = this.getAttribute("onerror");
-        this.onmessage = this.getAttribute("onmessage");
-        this.transport = this.getAttribute("transport");
-
-    }
-
-    @Override
-    public void apply(FaceletContext ctx, UIComponent parent)
-          throws IOException {
-    }
+public class FakeEndpoint extends Endpoint {
     
     @Override
-    public void applyAttachedObject(FacesContext context, UIComponent parent) {
-        FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
-
-    }
-
-    /* (non-Javadoc)
-     * @see javax.faces.view.AttachedObjectHandler#getFor()
-     */
-    @Override
-    public String getFor() {
-        return null;
+    public void onOpen(Session session, EndpointConfig config) {
+        // https://java.net/jira/browse/WEBSOCKET_SPEC-240
     }
     
-
-
 }

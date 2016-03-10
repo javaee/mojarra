@@ -54,6 +54,8 @@ Import-Package: javax.faces.*,\
   com.sun.faces.*,\
   javax.servlet.annotation.*;resolution:=optional,\
   javax.servlet.*,javax.el.*,javax.inject.*,javax.enterprise.inject.*,javax.enterprise.util.*,javax.enterprise.context.*,javax.annotation.*,javax.crypto.*,\
+  javax.websocket.*;resolution:=optional, \
+  javax.json.*;resolution:=optional, \
   javax.validation.*;resolution:=optional, \
   javax.enterprise.event;resolution:=optional, \
   javax.ejb.*;resolution:=optional, \

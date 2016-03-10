@@ -53,10 +53,15 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.AfterDeploymentValidation;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessBean;
 import javax.faces.model.DataModel;
 import javax.faces.model.FacesDataModel;
+
+import com.sun.faces.push.WebsocketChannelManager;
+import com.sun.faces.push.WebsocketSessionManager;
+import com.sun.faces.push.WebsocketUserManager;
 
 
 
@@ -70,6 +75,21 @@ public class CdiExtension implements Extension {
      */
     private Map<Class<?>, Class<? extends DataModel<?>>> forClassToDataModelClass = new HashMap<>();
 
+    
+    /**
+     * Before bean discovery.
+     * 
+     * @param beforeBeanDiscovery the before bean discovery.
+     * @param beanManager the bean manager.
+     */
+    public void beforeBean(@Observes BeforeBeanDiscovery beforeBeanDiscovery, BeanManager beanManager) {
+        beforeBeanDiscovery.addAnnotatedType(beanManager.createAnnotatedType(WebsocketUserManager.class), null);
+        beforeBeanDiscovery.addAnnotatedType(beanManager.createAnnotatedType(WebsocketSessionManager.class), null);
+        beforeBeanDiscovery.addAnnotatedType(beanManager.createAnnotatedType(WebsocketChannelManager.class), null);
+        beforeBeanDiscovery.addAnnotatedType(beanManager.createAnnotatedType(WebsocketChannelManager.ViewScope.class), null);
+        beforeBeanDiscovery.addAnnotatedType(beanManager.createAnnotatedType(InjectionPointGenerator.class), null);
+        beforeBeanDiscovery.addAnnotatedType(beanManager.createAnnotatedType(WebsocketPushContextProducer.class), null);
+    }
 
     /**
      * After bean discovery.

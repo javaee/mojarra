@@ -40,53 +40,53 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.view.FaceletViewHandlingStrategy;
-import com.sun.faces.facelets.util.Classpath;
-import com.sun.faces.lifecycle.HttpMethodRestrictionsPhaseListener;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import javax.faces.application.ResourceHandler;
-import javax.faces.application.ViewHandler;
-import javax.faces.application.StateManager;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.servlet.ServletContext;
-
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Collections;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
+import javax.faces.application.ResourceHandler;
+import javax.faces.application.StateManager;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.ClientWindow;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.push.PushContext;
 import javax.faces.validator.BeanValidator;
 import javax.faces.view.facelets.ResourceResolver;
 import javax.faces.webapp.FacesServlet;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.ServletContext;
+
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.view.FaceletViewHandlingStrategy;
+import com.sun.faces.facelets.util.Classpath;
+import com.sun.faces.lifecycle.HttpMethodRestrictionsPhaseListener;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 
 /** Class Documentation */
@@ -1432,6 +1432,9 @@ public class WebConfiguration {
             false),
         EnableValidateWholeBean(
             BeanValidator.ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME,
+            false),
+        EnableWebsocketEndpoint(
+            PushContext.ENABLE_WEBSOCKET_ENDPOINT_PARAM_NAME,
             false);
 
         private BooleanWebContextInitParameter alternate;

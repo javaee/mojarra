@@ -1470,34 +1470,34 @@ of POJOs.
 
     <tag>
         <description><![CDATA[
-
-            <p class="changed_added_2_3">Open a WebSocket or Server Sent
-            Event (SSE) connection between the client and the server.</p>
-
+            <p class="changed_added_2_3">
+                Registers a web socket push connection in client side.
+                Push messages can be sent from server side via <code>javax.faces.push.PushContext</code> interface.
+                See also <code>javax.faces.push.Push</code> API documentation for an elaborate instruction on how to use <code>&lt;f:websocket&gt;</code>.
+            </p>
         ]]></description>
-        <tag-name>socket</tag-name>
-        <handler-class>com.sun.faces.facelets.tag.jsf.core.SocketHandler</handler-class>
+        <tag-name>websocket</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.WebsocketHandler</handler-class>
 
         <attribute>
             <description><![CDATA[
-
-                <p class="changed_added_2_3">If true, the client should
-                connect to the channel automatically when the page
-                loads.</p>
-
+                <p class="changed_added_2_3">
+                    The port number of the web socket host, in case it is different from the port number in the request URI.
+                    Defaults to the port number of the request URI.
+                </p>
             ]]></description>
-            <name>autoconnect</name>
+            <name>port</name>
             <required>false</required>
-            <type>java.lang.Boolean</type>
+            <type>java.lang.Integer</type>
         </attribute>
 
         <attribute>
             <description><![CDATA[
-
-                <p class="changed_added_2_3">The channel name to be
-                passed to the underlying transport for this
-                connection.</p>
-
+                <p class="changed_added_2_3">
+                    The name of the web socket channel.
+                    It may not be an EL expression and it may only contain alphanumeric characters, hyphens, underscores and periods.
+                    All open web sockets on the same channel name will receive the same push notification from the server.
+                </p>
             ]]></description>
             <name>channel</name>
             <required>true</required>
@@ -1506,49 +1506,91 @@ of POJOs.
 
         <attribute>
             <description><![CDATA[
-
-                <p class="changed_added_2_3">The name of the JavaScript
-                function that will handle errors.</p>
-
+                <p class="changed_added_2_3">
+                    The scope of the web socket channel.
+                    It may not be an EL expression and allowed values are <code>application</code>, <code>session</code> and <code>view</code>, case insensitive.
+                    When the value is <code>application</code>, then all channels with the same name throughout the application will receive the same push message.
+                    When the value is <code>session</code>, then only the channels with the same name in the current user session will receive the same push message.
+                    When the value is <code>view</code>, then only the channel in the current view will receive the push message.
+                    The default scope is <code>application</code>.
+                    When the <code>user</code> attribute is specified, then the default scope is <code>session</code>.
+                </p>
             ]]></description>
-            <name>onerror</name>
+            <name>scope</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                <![CDATA[
+                    The user identifier of the web socket channel, so that user-targeted push messages can be sent.
+                    It must implement <code>Serializable</code> and preferably have low memory footprint.
+                    Suggestion: use <code>#{request.remoteUser}</code> or <code>#{someLoggedInUser.id}</code>.
+                    All open web sockets on the same channel and user will receive the same push message from the server.
+                ]]>
+            </description>
+            <name>user</name>
+            <required>false</required>
+            <type>java.io.Serializable</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    The JavaScript event handler function that is invoked when the web socket is opened.
+                    The function will be invoked with one argument: the channel name.
+                </p>
+            ]]></description>
+            <name>onopen</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
 
         <attribute>
             <description><![CDATA[
-
-                <p class="changed_added_2_3">The name of the JavaScript
-                function that will handle be called when the server sends data.</p>
-
+                <p class="changed_added_2_3">
+                    The JavaScript event handler function that is invoked when a push message is received from the server.
+                    The function will be invoked with three arguments: the push message, the channel name and the raw <code>MessageEvent</code> itself.
+                </p>
             ]]></description>
             <name>onmessage</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    The JavaScript event handler function that is invoked when the web socket is closed.
+                    The function will be invoked with three arguments: the close reason code, the channel name and the raw <code>CloseEvent</code> itself.
+                    Note that this will also be invoked on errors and that you can inspect the close reason code if an error occurred and which one (i.e. when the code is not 1000).
+                    See also 
+                    <a href="http://tools.ietf.org/html/rfc6455#section-7.4.1">RFC 6455 section 7.4.1</a> 
+                    and
+                    <a href="http://docs.oracle.com/javaee/7/api/javax/websocket/CloseReason.CloseCodes.html">CloseCodes</a>
+                    API for an elaborate list of all close codes.
+                </p>
+            ]]></description>
+            <name>onclose</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
 
         <attribute>
             <description><![CDATA[
-
-                <div class="changed_added_2_3">
-
-                <p>The desired protocol for this connection.  Valid
-                values are 'websocket' and 'sse', without the quotes.
-                If not specified, websocket is assumed.</p>
-
-                <p>A simple fallback mechanism must be provided.  If
-                'websocket' is the value of the transport, but the
-                browser does not support WebSocket, fall back to using
-                SSE.  If SSE is not supported, this tag is effectively a
-                no-op.</p>
-
-                </div>
-
+                <p class="changed_added_2_3">
+                    Whether to (auto)connect the web socket or not.
+                    Defaults to <code>true</code>.
+                    It's interpreted as a JavaScript instruction whether to open or close the web socket push connection.
+                    Note that this attribute is re-evaluated on every ajax request.
+                    You can also explicitly set it to <code>false</code> and then manually control in JavaScript by
+                    <code>jsf.push.open("channelName")</code> and <code>jsf.push.close("channelName")</code>.
+                </p>
             ]]></description>
-            <name>transport</name>
+            <name>connected</name>
             <required>false</required>
-            <type>java.lang.String</type>
+            <type>java.lang.Boolean</type>
         </attribute>
 
     </tag>
@@ -1985,31 +2027,31 @@ of POJOs.
             allows <code>UIInput.validate()</code> to
             call <em>wholeBeanValidator.validate()</em>.</p></li>
 
-	    <li><p>Override <code>setConverter()</code> to be a no-op.
-	    It does not make sense to allow a converter to be
-	    installed.</p></li>
+        <li><p>Override <code>setConverter()</code> to be a no-op.
+        It does not make sense to allow a converter to be
+        installed.</p></li>
 
 
-	    <li><p>Override <code>addValidator()</code> to be a no-op
-	    unless the argument is an instance
-	    of <em>wholeBeanValidator</em>.  It does not make sense to
-	    allow additional validators to be installed.</p></li>
+        <li><p>Override <code>addValidator()</code> to be a no-op
+        unless the argument is an instance
+        of <em>wholeBeanValidator</em>.  It does not make sense to
+        allow additional validators to be installed.</p></li>
 
             <li><p>Override <code>validate()</code> to take the
             following actions.</p>
 
-	      <ul>
+          <ul>
                 
-	        <li><p>If the feature is not enabled, return
-	        immediately.</p></li>
+            <li><p>If the feature is not enabled, return
+            immediately.</p></li>
 
-	        <li><p>If the <em>wholeBeanValidator</em> has not yet
-	        been installed, instantiate and pass it to 
+            <li><p>If the <em>wholeBeanValidator</em> has not yet
+            been installed, instantiate and pass it to 
                 <code>this.addValidator()</code>.</p></li>
 
-	        <li><p>Call <code>super.validate()</code>.</p></li>
+            <li><p>Call <code>super.validate()</code>.</p></li>
                 
-	      </ul>
+          </ul>
 
             </li>
 
@@ -2054,22 +2096,22 @@ of POJOs.
 
             <ol>
             
-	    <li><p>Invoke the <code>newInstance()</code> method on the
+        <li><p>Invoke the <code>newInstance()</code> method on the
             bean's <code>Class</code>.  If this throws
             any <code>Exception</code>, swallow it and
             continue.</p></li>
 
-	    <li><p>If the bean implements <code>Serializable</code>, use
+        <li><p>If the bean implements <code>Serializable</code>, use
             that to copy the bean instance.</p></li>
 
             <li><p>Otherwise, if the bean
             implements <code>Cloneable</code>, clone the bean
             instance.</p></li>
 
-	    <li><p>Otherwise, if the bean has a copy constructor, use
+        <li><p>Otherwise, if the bean has a copy constructor, use
             that to copy the bean instance.</p></li>
 
-	    <li><p>If none of these techniques yields a copy,
+        <li><p>If none of these techniques yields a copy,
             throw <code>FacesException</code>.</p></li>
 
             </ol>

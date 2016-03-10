@@ -58,9 +58,6 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
-import com.sun.faces.ext.component.UIValidateWholeBean;
-import com.sun.faces.facelets.tag.AbstractTagLibrary;
-
 import javax.faces.component.UIParameter;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
@@ -68,7 +65,15 @@ import javax.faces.component.UIViewAction;
 import javax.faces.component.UIViewParameter;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.convert.NumberConverter;
-import javax.faces.validator.*;
+import javax.faces.validator.BeanValidator;
+import javax.faces.validator.DoubleRangeValidator;
+import javax.faces.validator.LengthValidator;
+import javax.faces.validator.LongRangeValidator;
+import javax.faces.validator.RegexValidator;
+import javax.faces.validator.RequiredValidator;
+
+import com.sun.faces.ext.component.UIValidateWholeBean;
+import com.sun.faces.facelets.tag.AbstractTagLibrary;
 
 /**
  * For Tag details, see JSF Core <a target="_new"
@@ -133,7 +138,7 @@ public final class CoreLibrary extends AbstractTagLibrary {
         this.addComponent("selectItems", UISelectItems.COMPONENT_TYPE, null);
         
         this.addTagHandler("setPropertyActionListener", SetPropertyActionListenerHandler.class);
-        
+
         this.addComponent("subview", "javax.faces.NamingContainer", null);
         
         this.addValidator("validateBean", BeanValidator.VALIDATOR_ID);
@@ -159,5 +164,7 @@ public final class CoreLibrary extends AbstractTagLibrary {
         
         this.addComponent("verbatim", "javax.faces.HtmlOutputText",
                           "javax.faces.Text", VerbatimHandler.class);       
+
+        this.addTagHandler("websocket", WebsocketHandler.class);
     }
 }

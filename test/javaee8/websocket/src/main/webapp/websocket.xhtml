@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+    <h:head>
+        <title>Spec1396IT - websocket</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <h:commandButton id="button" value="push" action="#{pushBean.send}"><f:ajax /></h:commandButton>
+        </h:form>
+        <f:websocket channel="push" onmessage="function(message){document.getElementById('form:button').value=message;}" />
+        
+        <div id="user" />
+        <f:websocket channel="user" user="user" onmessage="function(message){document.getElementById('user').innerHTML=message;}" />
+
+        <div id="view" />
+        <f:websocket channel="view" scope="view" onmessage="function(message){document.getElementById('view').innerHTML=message;}" />
+    </h:body>
+</html>

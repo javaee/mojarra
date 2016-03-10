@@ -39,36 +39,34 @@
  */
 package com.sun.faces.config;
 
-import com.sun.faces.RIConstants;
 import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.WebappLifecycleListener;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableGroovyScripting;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableWebsocketEndpoint;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceLoadFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.VerifyFacesConfigObjects;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import com.sun.faces.el.ChainTypeCompositeELResolver;
-import com.sun.faces.el.ELContextImpl;
-import com.sun.faces.el.ELContextListenerImpl;
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.el.FacesCompositeELResolver;
-import com.sun.faces.mgbean.BeanBuilder;
-import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.scripting.groovy.GroovyHelper;
-import com.sun.faces.scripting.groovy.GroovyHelperFactory;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.MojarraThreadFactory;
-import com.sun.faces.util.ReflectionUtils;
-import com.sun.faces.util.Timer;
-import com.sun.faces.util.Util;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.FactoryFinder;
@@ -93,27 +91,37 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
+import javax.websocket.server.ServerContainer;
+import javax.websocket.server.ServerEndpointConfig;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.WebappLifecycleListener;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.el.ChainTypeCompositeELResolver;
+import com.sun.faces.el.ELContextImpl;
+import com.sun.faces.el.ELContextListenerImpl;
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.mgbean.BeanBuilder;
+import com.sun.faces.mgbean.BeanManager;
+import com.sun.faces.push.WebsocketEndpoint;
+import com.sun.faces.scripting.groovy.GroovyHelper;
+import com.sun.faces.scripting.groovy.GroovyHelperFactory;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.MojarraThreadFactory;
+import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Timer;
+import com.sun.faces.util.Util;
 
 /**
  * <p>Parse all relevant JavaServer Faces configuration resources, and
@@ -266,6 +274,19 @@ public class ConfigureListener implements ServletRequestListener,
                 context.setAttribute(RIConstants.ERROR_PAGE_PRESENT_KEY_NAME,
                         isErrorPagePresent);
 
+            }
+
+            // Register websocket endpoint if explicitly enabled.
+            // Note: websocket channel filter is registered in FacesInitializer.
+            if (webConfig.isOptionEnabled(EnableWebsocketEndpoint)) {
+                ServerContainer serverContainer = (ServerContainer) context.getAttribute(ServerContainer.class.getName());
+
+                if (serverContainer == null) {
+                    throw new UnsupportedOperationException("Cannot enable f:websocket."
+                        + " The current websocket container implementation does not support programmatically registering a container-provided endpoint.");
+                }
+
+                serverContainer.addEndpoint(ServerEndpointConfig.Builder.create(WebsocketEndpoint.class, WebsocketEndpoint.URI_TEMPLATE).build());
             }
 
             webConfig.doPostBringupActions();
