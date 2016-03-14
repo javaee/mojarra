@@ -75,9 +75,8 @@ public class Spec1396IT {
     }
 
     public void testEnableWebsocketEndpoint() throws Exception {
-        
         HtmlPage page = webClient.getPage(webUrl + "enableWebsocketEndpoint.xhtml");
-        assertTrue(page.getBody().asText().equals("Param set: true"));
+        assertTrue(page.getHtmlElementById("param").asText().equals("true"));
     }
 
     public void testWebsocket() throws Exception {
