@@ -39,6 +39,7 @@
  */
 package com.sun.faces.push;
 
+import static com.sun.faces.renderkit.RenderKitUtils.installJsfJsIfNecessary;
 import static java.lang.Boolean.TRUE;
 
 import java.util.HashMap;
@@ -124,11 +125,7 @@ public class WebsocketFacesListener implements SystemEventListener {
         FacesContext context = FacesContext.getCurrentInstance();
 
         if (event instanceof PostAddToViewEvent) {
-            UIOutput outputScript = new UIOutput();
-            outputScript.setRendererType("javax.faces.resource.Script");
-            outputScript.getAttributes().put("library", "javax.faces");
-            outputScript.getAttributes().put("name", "jsf.js");
-            context.getViewRoot().addComponentResource(context, outputScript, "head");
+            installJsfJsIfNecessary(context);
         }
         else if (event instanceof PreRenderViewEvent) {
             boolean connected = connectedExpression == null || TRUE.equals(connectedExpression.getValue(context.getELContext()));

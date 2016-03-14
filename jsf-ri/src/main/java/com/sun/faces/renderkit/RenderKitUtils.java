@@ -42,38 +42,55 @@ package com.sun.faces.renderkit;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.math.BigDecimal;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Resource;
-import javax.faces.application.ResourceHandler;
-import javax.faces.application.ProjectStage;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.behavior.*;
+import javax.faces.application.ProjectStage;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
+import javax.faces.component.ActionSource;
+import javax.faces.component.ActionSource2;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIComponentBase;
+import javax.faces.component.UIForm;
+import javax.faces.component.UIOutput;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorContext;
+import javax.faces.component.behavior.ClientBehaviorHint;
+import javax.faces.component.behavior.ClientBehaviorHolder;
+import javax.faces.component.html.HtmlMessages;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.context.ExternalContext;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import javax.faces.render.ResponseStateManager;
 import javax.faces.render.Renderer;
+import javax.faces.render.ResponseStateManager;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
-
-import javax.faces.component.*;
-import javax.faces.component.html.HtmlMessages;
+import com.sun.faces.util.Util;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -1070,6 +1087,35 @@ public class RenderKitUtils {
         return origIdentifier.replace("-", "$_");
     }
 
+    /**
+     * <p>Only install the jsf.js resource if it doesn't exist.
+     * The resource component will be installed with the target "head".
+     * @param context the <code>FacesContext</code> for the current request
+     */
+    public static void installJsfJsIfNecessary(FacesContext context) {
+
+        if (hasScriptBeenRendered(context)) {
+            // Already included, return
+            return;
+        }
+
+        final String name = "jsf.js";
+        final String library = "javax.faces";
+
+        if (hasResourceBeenInstalled(context, name, library)) {
+            setScriptAsRendered(context);
+            return;
+        }
+
+        UIOutput output = new UIOutput();
+        output.setRendererType("javax.faces.resource.Script");
+        output.getAttributes().put("name", name);
+        output.getAttributes().put("library", library);
+        context.getViewRoot().addComponentResource(context, output, "head");
+
+        // Set the context to record script as included
+        setScriptAsRendered(context);
+    }
 
     /**
      * <p>Renders the Javascript necessary to add and remove request

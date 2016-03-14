@@ -58,17 +58,20 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.component.behavior.AjaxBehaviors;
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
 
 import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
@@ -78,15 +81,18 @@ import javax.faces.event.AjaxBehaviorListener;
 import javax.faces.view.AttachedObjectTarget;
 import javax.faces.view.BehaviorHolderAttachedObjectHandler;
 import javax.faces.view.BehaviorHolderAttachedObjectTarget;
-import javax.faces.view.facelets.*;
-import java.beans.BeanDescriptor;
-import java.beans.BeanInfo;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
+import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.CompositeFaceletHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
+import javax.faces.view.facelets.TagHandler;
+
+import com.sun.faces.component.behavior.AjaxBehaviors;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 
 
@@ -228,7 +234,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
 
         // In the wrapping case, we assume that some wrapped component
         // is going to be Ajax enabled and install the Ajax resource.
-        installAjaxResourceIfNecessary();
+        RenderKitUtils.installJsfJsIfNecessary(ctx.getFacesContext());
 
         AjaxBehavior ajaxBehavior = createAjaxBehavior(ctx, eventName);
 
@@ -342,7 +348,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
 
         AjaxBehavior ajaxBehavior = createAjaxBehavior(ctx, eventName);
         bHolder.addClientBehavior(eventName, ajaxBehavior);
-        installAjaxResourceIfNecessary();
+        RenderKitUtils.installJsfJsIfNecessary(ctx.getFacesContext());
     }
 
     // Construct our AjaxBehavior from tag parameters.
@@ -379,35 +385,6 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
             behavior.setValueExpression(attr.getLocalName(),
                                         attr.getValueExpression(ctx, type));
         }    
-    }
-
-    // Only install the Ajax resource if it doesn't exist.
-    // The resource component will be installed with the target "head".
-    //
-    private void installAjaxResourceIfNecessary() {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        if (RenderKitUtils.hasScriptBeenRendered(context)) {
-            // Already included, return
-            return;
-        }
-
-        final String name = "jsf.js";
-        final String library = "javax.faces";
-
-        if (RenderKitUtils.hasResourceBeenInstalled(context, name, library)) {
-            RenderKitUtils.setScriptAsRendered(context);
-            return;
-        }
-        UIOutput output = new UIOutput();
-        output.setRendererType("javax.faces.resource.Script");
-        output.getAttributes().put("name", name);
-        output.getAttributes().put("library", library);
-        context.getViewRoot().addComponentResource(context, output, "head");
-
-        // Set the context to record script as included
-        RenderKitUtils.setScriptAsRendered(context);
-
     }
 
     // Returns an error message for the case where the <f:ajax> event
