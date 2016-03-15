@@ -87,17 +87,49 @@ public class WebappLifecycleListener {
     
     private ServletContext servletContext;
     private ApplicationAssociate applicationAssociate;
-    private List<HttpSession> activeSessions;
+    private ActiveSessions activeSessions;
 
+    /*
+     * An inner class to provide synchronized access to activeSessions
+     */
+    class ActiveSessions {
+
+        private List<HttpSession> activeSessions;
+
+        public ActiveSessions() { 
+            activeSessions = new ArrayList<>(); 
+        }
+
+        public synchronized void add(HttpSession hs) {
+            if (activeSessions == null) {
+                activeSessions = new ArrayList<>();
+            }
+            activeSessions.add(hs);
+        }
+
+        public synchronized void remove(HttpSession hs) {
+            if (activeSessions != null) {
+                activeSessions.remove(hs);
+            }
+        }
+
+        public synchronized List<HttpSession> get() {
+            return new ArrayList<>(activeSessions);
+        }
+   
+    }
 
     // ------------------------------------------------------------ Constructors
 
 
-    public WebappLifecycleListener() { }
+    public WebappLifecycleListener() {
+        this.activeSessions = new ActiveSessions(); 
+    }
 
     public WebappLifecycleListener(ServletContext servletContext) {
 
         this.servletContext = servletContext;
+        this.activeSessions = new ActiveSessions();
 
     }
 
@@ -173,10 +205,7 @@ public class WebappLifecycleListener {
     public void sessionCreated(HttpSessionEvent event) {
         ApplicationAssociate associate = getAssociate();
         // PENDING this should only create a new list if in dev mode
-         if (associate != null && associate.isDevModeEnabled()) {
-            if (activeSessions == null) {
-                activeSessions = new ArrayList<>();
-            }
+        if (associate != null && associate.isDevModeEnabled()) {
             activeSessions.add(event.getSession());
         }
         boolean doCreateToken = true;
@@ -201,9 +230,7 @@ public class WebappLifecycleListener {
      * @param event the notification event
      */
     public void sessionDestroyed(HttpSessionEvent event) {        
-        if (activeSessions != null) {
-            activeSessions.remove(event.getSession());
-        }
+        activeSessions.remove(event.getSession());
                 
         if (Util.isCdiAvailable(servletContext)) {
             FlowCDIContext.sessionDestroyed(event);
@@ -391,7 +418,7 @@ public class WebappLifecycleListener {
 
 
     public List<HttpSession> getActiveSessions() {
-        return new ArrayList<>(activeSessions);
+        return activeSessions.get();
     }
 
 
