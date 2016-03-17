@@ -201,6 +201,11 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
         
         long getNextRefreshTime() {
             // There is no point in calculaing the next refresh time if we are refreshing always/never
+            return (_refreshInterval > 0) ? _nextRefreshTime.get() : 0;
+        }
+
+        long getAndUpdateNextRefreshTime() {
+            // There is no point in calculaing the next refresh time if we are refreshing always/never
             return (_refreshInterval > 0) ? _nextRefreshTime.getAndAdd(_refreshInterval) : 0;
         }
         
@@ -215,9 +220,8 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
 
         @Override
         public boolean isExpired(URL url, Record record) {
-            // getNextRefreshTime() incremenets the next refresh time atomically
-            long ttl = record.getNextRefreshTime();
-            if (System.currentTimeMillis() > ttl) {
+            if (System.currentTimeMillis() > record.getNextRefreshTime()) {
+                record.getAndUpdateNextRefreshTime();
                 long lastModified = Util.getLastModified(url);
                 // The record is considered expired if its original last modified time
                 // is older than the URL's current last modified time
