@@ -61,10 +61,31 @@
         
         <br />
         
+        <h:form id="ajaxFormParams" prependId="false">
+           	<h:inputText id="ajaxInputParams" value="#{userBean.lastName}" />
+            <h:outputText id="ajaxOutputParams" value="#{userBean.lastName}" />
+            <h:commandButton id="ajaxSubmitParams" value="submit" actionListener="#{userBean.paramActionListener}">
+            	<f:ajax render="@form" execute="@form"/>
+            	<f:param name="param" value="value"/>
+            </h:commandButton>
+        </h:form>
+        
+        <br />
+        
         <h:form id="nonAjaxForm" prependId="false">
             <h:inputText id="nonAjaxInput" value="#{userBean.lastName}" />
                <h:outputText id="nonAjaxOutput" value="#{userBean.lastName}" />
             <h:commandButton id="nonAjaxSubmit" value="submit" />
+        </h:form>
+        
+         <br />
+        
+        <h:form id="nonAjaxFormParams" prependId="false">
+            <h:inputText id="nonAjaxInputParams" value="#{userBean.lastName}" />
+               <h:outputText id="nonAjaxOutputParams" value="#{userBean.lastName}" />
+            <h:commandButton id="nonAjaxSubmitParams" value="submit" actionListener="#{userBean.paramActionListener}">
+            	<f:param name="param" value="value"/>
+            </h:commandButton>
         </h:form>
         
     </body>
