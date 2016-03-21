@@ -2394,7 +2394,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
                 var namingContainerId = options["com.sun.faces.namingContainerId"];
                 
-                if (typeof(namingContainerId) === 'undefined' || options === null) {
+                if (typeof(namingContainerId) === 'undefined') {
                     namingContainerId = "";
                 }                
 
@@ -2492,19 +2492,28 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     }
                 }
 
+                // copy all params to args
+                var params = options.params || {};
+                for (var property in params) {
+                    if (params.hasOwnProperty(property)) {
+                        args[namingContainerId + property] = params[property];
+                    }
+                }
+
                 // remove non-passthrough options
                 delete options.execute;
                 delete options.render;
                 delete options.onerror;
                 delete options.onevent;
                 delete options.delay;
+                delete options.resetValues;
+                delete options.params;
+                delete options["com.sun.faces.namingContainerId"];
 
-                // copy all other options to args
+                // copy all other options to args (for backwards compatibility on issue 4115)
                 for (var property in options) {
                     if (options.hasOwnProperty(property)) {
-                        if (property != "com.sun.faces.namingContainerId") {
-                            args[namingContainerId + property] = options[property];
-                        }
+                        args[namingContainerId + property] = options[property];
                     }
                 }
 

@@ -40,8 +40,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.FacesLogger;
-
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -64,6 +62,7 @@ import javax.faces.render.ClientBehaviorRenderer;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.FacesLogger;
 
 /*
  *<b>AjaxBehaviorRenderer</b> renders Ajax behavior for a component.
@@ -277,11 +276,15 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
             }
 
             if (!params.isEmpty()) {
+                RenderKitUtils.appendProperty(ajaxCommand, "params", "{", false);
+
                 for (ClientBehaviorContext.Parameter param : params) {
                     RenderKitUtils.appendProperty(ajaxCommand, 
                                                   param.getName(),
                                                   param.getValue());
                 }
+                
+                ajaxCommand.append("}");
             }
              
             ajaxCommand.append("}");
