@@ -244,7 +244,7 @@ public class ClientSideStateHelper extends StateHelper {
             return "stateless";
         }
 
-        return doGetState(stateString);
+        return doGetState(ctx, stateString);
     }
 
 
@@ -258,7 +258,7 @@ public class ClientSideStateHelper extends StateHelper {
      * @param stateString the Base64 encoded view state
      * @return the view state reconstructed from <code>stateString</code>
      */
-    protected Object doGetState(String stateString) {
+    protected Object doGetState(FacesContext ctx, String stateString) {
         
         if ("stateless".equals(stateString)) {
             return null;
@@ -274,7 +274,7 @@ public class ClientSideStateHelper extends StateHelper {
                 bis.reset();
                 bis.read(decodedBytes, 0, decodedBytes.length);
 
-                bytes = guard.decrypt(decodedBytes);
+                bytes = guard.decrypt(ctx, decodedBytes);
                 if (bytes == null) return null;
                 bis = new ByteArrayInputStream(bytes);
             }
@@ -435,7 +435,7 @@ public class ClientSideStateHelper extends StateHelper {
 
             if (guard != null) {
                 // this will MAC
-                bytes = guard.encrypt(bytes);
+                bytes = guard.encrypt(facesContext, bytes);
             }
 
             // Base 64 encode
