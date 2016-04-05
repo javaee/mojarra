@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.49.4.7 2013/06/11 14:46:00 edburns Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.49.4.6 2009/09/02 23:38:39 rlubke Exp $
  */
 
 /*
@@ -41,12 +41,15 @@
 
 package com.sun.faces.renderkit;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.WebEnvironmentEntry;
+
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
+
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
 import com.sun.faces.spi.SerializationProvider;
@@ -65,14 +68,14 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.BufferedOutputStream;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
@@ -166,20 +169,30 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
 
             ObjectInputStream ois = null;
-
             try {
-                InputStream bis;
-                if (compressState) {
-                    bis = new GZIPInputStream(new Base64InputStream(viewString));
-                } else {
-                    bis = new Base64InputStream(viewString);
-                }
+                // 1. Base64 Decode
+                InputStream bis = new Base64InputStream(viewString);
+                
+                // 2. If state was encrypted, decrypt it.
                 if (guard != null) {
-                    ois = serialProvider.createObjectInputStream(new CipherInputStream(bis, guard.getDecryptionCipher()));
-                } else {
-                    ois = serialProvider.createObjectInputStream(bis);
+                    byte[] bytes = viewString.getBytes(RIConstants.CHAR_ENCODING);
+                    int numRead = bis.read(bytes, 0, bytes.length);
+                    byte[] decodedBytes = new byte[numRead];
+                    bis.reset();
+                    bis.read(decodedBytes, 0, decodedBytes.length);
+
+                    bytes = guard.decrypt(context, decodedBytes);
+                    if (bytes == null) return null;
+                    bis = new ByteArrayInputStream(bytes);
                 }
-               
+   
+                // 3. If state was compressed, expand it.
+                if (compressState) {
+                    bis = new GZIPInputStream(bis);
+                }
+                    
+                ois = serialProvider.createObjectInputStream(bis);
+                
                 long stateTime = 0;
                 if (webConfig.isSet(WebContextInitParameter.ClientStateTimeout)) {
                     try {
@@ -252,27 +265,21 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
         if (stateManager.isSavingStateInClient(context)) {
             ObjectOutputStream oos = null;
+            ByteArrayOutputStream baos  = null;
             try {
+                baos = new ByteArrayOutputStream();
 
-                Base64OutputStreamWriter bos =
-                      new Base64OutputStreamWriter(csBuffSize,
-                                                   writer);
                 OutputStream base;
+                
+                // 1. compress the state
                 if (compressState) {
-                    base = new GZIPOutputStream(bos, 1024);
+                    base = new GZIPOutputStream(baos, 1024);
                 } else {
-                    base = bos;
+                    base = baos;
                 }
-                if (guard != null) {
-                    oos = serialProvider.createObjectOutputStream(
-                          new BufferedOutputStream(
-                                new CipherOutputStream(base, guard.getEncryptionCipher())));
-                } else {
-                    oos = serialProvider
-                          .createObjectOutputStream(new BufferedOutputStream(
-                                base,
-                                1024));
-                }
+            
+                oos = serialProvider
+                      .createObjectOutputStream(new BufferedOutputStream(base));
 
                 if (webConfig.isSet(WebContextInitParameter.ClientStateTimeout)) {
                     oos.writeLong(System.currentTimeMillis());
@@ -284,7 +291,19 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                 oos.flush();
                 oos.close();
 
-                // flush everything to the underlying writer
+                // get bytes for encrypting
+                byte[] bytes =baos.toByteArray();
+
+                // 2. encrypt the state
+                if (guard != null) {
+                    // this will MAC
+                    bytes = guard.encrypt(context, bytes);
+                }
+
+                // 3. Base 64 encode the state
+                Base64OutputStreamWriter bos =
+                    new Base64OutputStreamWriter(bytes.length, writer);
+                bos.write(bytes, 0, bytes.length);
                 bos.finish();
 
                 if (LOGGER.isLoggable(Level.FINE)) {
@@ -424,32 +443,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         webConfig = WebConfiguration.getInstance();
         assert(webConfig != null);
 
-        String pass = webConfig.getEnvironmentEntry(
-                        WebEnvironmentEntry.ClientStateSavingPassword);
-        if (pass != null) {
-            guard = new ByteArrayGuard(pass);
-        } else {
-            pass = webConfig.getEnvironmentEntry(
-                        WebEnvironmentEntry.FullyQualifiedClientStateSavingPassword);
-            if (pass != null) {
-                guard = new ByteArrayGuard(pass);
-            }
-        }
         // BugDB 2966897 make ClientStateSavingPassword on by default unless
         // it is explicitly disabled.
-        if (null == pass) {
-            boolean clientStateSavingPasswordDisabled = webConfig.isOptionEnabled(BooleanWebContextInitParameter.DisableClientStateSavingPassword);
-            if (!clientStateSavingPasswordDisabled) {
-                try {
-                    SecureRandom prng = SecureRandom.getInstance("SHA1PRNG");
-                    int passwordInt = prng.nextInt();
-                    guard = new ByteArrayGuard("" + passwordInt);
-                } catch (NoSuchAlgorithmException ex) {
-                    if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
+        boolean clientStateSavingPasswordDisabled = webConfig.isOptionEnabled(BooleanWebContextInitParameter.DisableClientStateEncryption);
+        if (!clientStateSavingPasswordDisabled) {
+             guard = new ByteArrayGuard();
         }
         
         compressState = webConfig.isOptionEnabled(

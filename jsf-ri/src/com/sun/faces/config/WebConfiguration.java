@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.30.4.16 2013/06/11 14:46:00 edburns Exp $
+ * $Id: WebConfiguration.java,v 1.30.4.13 2009/12/08 18:50:35 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -543,39 +543,25 @@ public class WebConfiguration {
         if (initialContext != null) {
             // process environment entries
             for (WebEnvironmentEntry entry : WebEnvironmentEntry.values()) {
-                String entryName = entry.getQualifiedName();
+                if (!entry.equals(WebEnvironmentEntry.NoOp)) {
+                    String entryName = entry.getQualifiedName();
 
-                try {
-                    String value = (String) initialContext.lookup(entryName);
-                    if (value != null) {
-                        if (LOGGER.isLoggable(Level.INFO)) {
-                            // special logic for ClientStateSavingPassword
-                            if (!entry
-                                  .equals(WebEnvironmentEntry.ClientStateSavingPassword) &&
-                                !entry
-                                  .equals(WebEnvironmentEntry.FullyQualifiedClientStateSavingPassword))
-                            {
+                    try {
+                        String value = (String) initialContext.lookup(entryName);
+                        if (value != null) {
+                            if (LOGGER.isLoggable(Level.INFO)) {
                                 if (LOGGER
-                                      .isLoggable(loggingLevel)) {
+                                        .isLoggable(loggingLevel)) {
                                     LOGGER.log(loggingLevel,
-                                               "jsf.config.webconfig.enventryinfo",
-                                               new Object[]{contextName,
-                                                            entryName,
-                                                            value});
-                                }
-                            } else {
-                                if (LOGGER
-                                      .isLoggable(loggingLevel)) {
-                                    LOGGER.log(loggingLevel,
-                                               "jsf.config.webconfig.enventry.clientencrypt",
-                                               contextName);
+                                            "jsf.config.webconfig.enventry.clientencrypt",
+                                            contextName);
                                 }
                             }
+                            envEntries.put(entry, value);
                         }
-                        envEntries.put(entry, value);
+                    } catch (NamingException ne) {
+                        // log WARNING - unable to lookup value
                     }
-                } catch (NamingException ne) {
-                    // log WARNING - unable to lookup value
                 }
             }
         }
@@ -777,6 +763,10 @@ public class WebConfiguration {
               "com.sun.faces.enableAgressiveSessionDirtying",
               false
         ),
+        DisableClientStateEncryption(
+              "com.sun.faces.disableClientStateEncryption",
+              false
+        ),
         EnableHtmlTagLibraryValidator(
               "com.sun.faces.enableHtmlTagLibValidator",
               false
@@ -805,17 +795,13 @@ public class WebConfiguration {
             "com.sun.faces.compressJavaScript",
             true
         ),
-        DisableClientStateSavingPassword(
-            "com.sun.faces.disableClientStateSavingPassword",
-            false
-        ),
         ExternalizeJavaScript(
             "com.sun.faces.externalizeJavaScript",
             false
         ),
         SendPoweredByHeader(
               "com.sun.faces.sendPoweredByHeader",
-              false
+              true
         ),
         EnableJSStyleHiding(
             "com.sun.faces.enableJSStyleHiding",
@@ -948,8 +934,8 @@ public class WebConfiguration {
      */
     public enum WebEnvironmentEntry {
 
-        FullyQualifiedClientStateSavingPassword("com.sun.faces.ClientStateSavingPassword"),
-        ClientStateSavingPassword("ClientStateSavingPassword");
+
+        NoOp("NoOp");
 
         private static final String JNDI_PREFIX = "java:comp/env/";
         private String qualifiedName;

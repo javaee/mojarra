@@ -58,7 +58,7 @@
     </context-param>
 
     <context-param>
-        <param-name>com.sun.faces.disableClientStateSavingPassword</param-name>
+        <param-name>com.sun.faces.disableClientStateEncryption</param-name>
         <param-value>true</param-value>
     </context-param>
 
