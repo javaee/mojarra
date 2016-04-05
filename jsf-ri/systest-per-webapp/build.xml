@@ -84,7 +84,9 @@
                    property-resolver-jsp,
                    never-unwrap-exceptions,
                    write-attribute-script-disabled,
-                   write-attribute-script-enabled"/>
+                   write-attribute-script-enabled,
+                   client-encrypt-by-default,
+                   client-encrypt-by-default-disabled"/>
     <!--
        EXCLUDED APPLICATIONS:
           view-expired
