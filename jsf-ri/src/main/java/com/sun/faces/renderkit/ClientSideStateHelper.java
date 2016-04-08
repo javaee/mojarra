@@ -166,11 +166,11 @@ public class ClientSideStateHelper extends StateHelper {
                            StringBuilder stateCapture) throws IOException {
 
         if (stateCapture != null) {
-            doWriteState(state, new StringBuilderWriter(stateCapture));
+            doWriteState(ctx, state, new StringBuilderWriter(stateCapture));
         } else {
             ResponseWriter writer = ctx.getResponseWriter();
             writer.write(stateFieldStart);
-            doWriteState(state, writer);
+            doWriteState(ctx, state, writer);
             writer.write(stateFieldEnd);
             writeRenderKitIdField(ctx, writer);
         }
@@ -195,8 +195,8 @@ public class ClientSideStateHelper extends StateHelper {
         if (stateString == null) {
             return null;
         }
-        return doGetState(stateString);
-
+        
+        return doGetState(ctx, stateString);
     }
 
 
@@ -210,7 +210,12 @@ public class ClientSideStateHelper extends StateHelper {
      * @param stateString the Base64 encoded view state
      * @return the view state reconstructed from <code>stateString</code>
      */
-    protected Object doGetState(String stateString) {
+    protected Object doGetState(FacesContext ctx, String stateString) {
+        
+        if ("stateless".equals(stateString)) {
+            return null;
+        }
+        
         ObjectInputStream ois = null;
         InputStream bis = new Base64InputStream(stateString);
         try {
@@ -221,7 +226,7 @@ public class ClientSideStateHelper extends StateHelper {
                 bis.reset();
                 bis.read(decodedBytes, 0, decodedBytes.length);
 
-                bytes = guard.decrypt(decodedBytes);
+                bytes = guard.decrypt(ctx, decodedBytes);
                 if (bytes == null) return null;
                 bis = new ByteArrayInputStream(bytes);
             }
@@ -296,7 +301,7 @@ public class ClientSideStateHelper extends StateHelper {
      * @param writer the <code>Writer</code> to write the content to
      * @throws IOException if an error occurs writing the state to the client
      */
-    protected void doWriteState(Object state, Writer writer)
+    protected void doWriteState(FacesContext facesContext, Object state, Writer writer)
     throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         OutputStream base = null;
@@ -333,7 +338,7 @@ public class ClientSideStateHelper extends StateHelper {
 
             if (guard != null) {
                 // this will MAC
-                bytes = guard.encrypt(bytes);
+                bytes = guard.encrypt(facesContext, bytes);
             }
 
             // Base 64 encode
