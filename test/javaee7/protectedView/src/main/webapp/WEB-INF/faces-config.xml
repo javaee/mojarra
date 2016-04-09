@@ -39,40 +39,16 @@
     only if the new code is made subject to such option by the copyright
     holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
-        <version>2.2.8-15-SNAPSHOT</version>
-    </parent>
-    <groupId>com.sun.faces.test.javaee7</groupId>
-    <artifactId>pom</artifactId>
-    <packaging>pom</packaging>
-    <name>Mojarra ${project.version} - Test - JavaEE 7</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>    
-    <modules>
-	<module>action</module>
-        <module>cdi</module>
-        <module>disableFaceletToXhtmlMapping</module>
-        <module>el</module>
-        <module>beanValidation</module>
-        <module>facelets</module>
-        <module>viewActionCdiViewScoped</module>
-        <module>xhtmlMappingToFaceletByDefault</module>
-    <module>protectedView</module>
-  </modules>
-</project>
+-->
+
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+	
+	<protected-views>
+		<url-pattern>/page2.xhtml</url-pattern>
+	</protected-views>
+	
+
+</faces-config>

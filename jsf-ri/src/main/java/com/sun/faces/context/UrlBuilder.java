@@ -221,9 +221,11 @@ class UrlBuilder {
 
     protected void appendQueryString() {
         boolean hasQueryString = false;
-        if (parameters != null) {
+        
+        parseQueryString();
+        
+        if (parameters != null && parameters.size() > 0 ) {
             // parse residual query string
-            parseQueryString();
             String nextSeparatorChar = QUERY_STRING_SEPARATOR;
             for (Map.Entry<String, List<String>> param : parameters.entrySet()) {
                 for (String value : param.getValue()) {
@@ -235,8 +237,7 @@ class UrlBuilder {
                 }
             }
             hasQueryString = true;
-        }
-        else if (queryString != null) {
+        } else if (queryString != null) { //here the query string will not be UTF-8 encoded, is this correct?
             url.append(QUERY_STRING_SEPARATOR).append(queryString);
             hasQueryString = true;
         }
