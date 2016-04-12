@@ -19,6 +19,8 @@ target/
 .settings/
 test/**/.classpath
 test/**/.project
+spi/**/.classpath
+spi/**/.project
 /nbproject/private/
 /dependencies
 glassfish-8.0/

@@ -1,0 +1,83 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+	   <groupId>org.glassfish.javax.faces.spi</groupId>
+	   <artifactId>websocket-activation-parent</artifactId>
+       <version>2.3.0-m06-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>tyrus-mojarra-activator</artifactId>
+    <packaging>bundle</packaging>
+
+    <name>Mojarra ${project.version} Websocket activation for Tyrus</name>
+
+    <properties>
+        <packages.export>
+            com.sun.faces.tyrus.*
+        </packages.export>
+
+    </properties>
+    
+    <dependencies>
+       <dependency>
+	       <groupId>org.glassfish.tyrus</groupId>
+	       <artifactId>tyrus-container-servlet</artifactId>
+	       <version>1.11</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.glassfish.build</groupId>
+                <artifactId>spec-version-maven-plugin</artifactId>
+                <configuration>
+                    <spec>
+                        <nonFinal>false</nonFinal>
+                        <jarType>impl</jarType>
+                        <specVersion>${spec_version}</specVersion>
+                        <specImplVersion>${spec_impl_version}</specImplVersion>
+                        <implVersion>${impl_version}</implVersion>
+                        <apiPackage>${api_package}</apiPackage>
+                        <implNamespace>${impl_namespace}</implNamespace>
+                    </spec>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>set-spec-properties</goal>
+                            <!--<goal>check-module</goal>-->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+             This plugin is reponsible for packaging artifacts
+             as OSGi bundles.  Please refer to
+             http://felix.apache.org/site/apache-felix-maven-bundle-plugin-bnd.html
+             for more information about how to use this plugin.
+           -->
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <!-- TODO: is it spec plugin bug ? the spec.bundle.version returns 1.0 ?
+                                                <Bundle-Version>${spec.bundle.version}</Bundle-Version>
+                        -->
+                        <Bundle-Version>${spec.implementation.version}</Bundle-Version>
+                        <Bundle-SymbolicName>${spec.bundle.symbolic-name}</Bundle-SymbolicName>
+                        <Extension-Name>${spec.extension.name}</Extension-Name>
+                        <Implementation-Version>${spec.implementation.version}</Implementation-Version>
+                        <Specification-Version>${spec.specification.version}</Specification-Version>
+                        <Export-Package>${packages.export}</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>

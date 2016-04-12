@@ -18,8 +18,15 @@
         <module>websocket-activation</module>
 	</modules>
 
-    <properties>
+   <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<api_package>javax.faces</api_package>
+		<impl_namespace>com.sun.faces</impl_namespace>
+
+		<spec_version>1.0</spec_version>
+		<spec_impl_version>1.0-SNAPSHOT</spec_impl_version>
+		<impl_version>1.0-SNAPSHOT</impl_version>
     </properties>
 
     <dependencies>
