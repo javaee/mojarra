@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <title>Insert title here</title>
+        </head>
+	<body>
+            <h1>Page1</h1>
+            <h:form prependId="false">
+                <h:link id="get_parameter_fparam" outcome="/page2.xhtml" value="get_parameter_fparam">
+                            <f:param name="param1" value="aaa" ></f:param>
+                </h:link>
+                <br></br>
+                <h:link id="get_parameter_outcome" outcome="/page2.xhtml?param1=aaa" value="get_parameter_outcome">
+                </h:link>
+                <br></br>
+                <h:link id="get_parameter_none" outcome="/page2.xhtml" value="get_parameter_none">
+                </h:link>
+                <br></br>
+                <h:commandButton id="button_to_page2" action="/page2.xhtml" value="post"></h:commandButton>
+            </h:form>
+	</body>
+</f:view>
+</html>
