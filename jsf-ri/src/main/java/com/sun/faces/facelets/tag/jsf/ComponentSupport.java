@@ -278,7 +278,7 @@ public final class ComponentSupport {
      * @return the UI component
      */
     public static UIComponent findChildByTagId(FacesContext context, UIComponent parent, String id) {
-        if (isBuildingNewComponentTree(context)) {
+        if ( !context.isPostback() ) {
             return null;
         }
         UIComponent c = null;
