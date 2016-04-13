@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- 
+
+    Project to create the JSF API jar and docs (vdldoc, tlddoc, renderkit docs).
+    
+    This depends on [mojarra home]/impl being installed first (mvn build install).
+
+ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -153,6 +160,55 @@
                 </dependencies>
             </plugin>
             
+            <!-- 
+                Unpack the sources jar that was build and installed by the [mojarra home]/impl project. This way
+                we can compile that source again in this project, but for the final artifact jar we only include
+                the javax.* classes then.
+             -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                
+                <configuration>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>org.glassfish</groupId>
+                            <artifactId>javax.faces</artifactId>
+                            <version>${mojarra.version}</version>
+                            <type>jar</type>
+                            <classifier>sources</classifier>
+                            <outputDirectory>src/main/java</outputDirectory>
+                            <includes>**/*.java</includes>
+                        </artifactItem>
+                        
+                        <artifactItem>
+                            <groupId>org.glassfish</groupId>
+                            <artifactId>javax.faces</artifactId>
+                            <version>${mojarra.version}</version>
+                            <type>jar</type>
+                            <classifier>sources</classifier>
+                            <outputDirectory>src/main/resources</outputDirectory>
+                            <excludes>**/*.java</excludes>
+                        </artifactItem>
+                    </artifactItems>
+                </configuration>
+            </plugin>
+            
+            <!-- 
+                For the final artifact jar we only include the javax.* classes and resources that we compiled from
+                the unpackaged implementation source attachment jar. See the maven-dependency-plugin for this
+                unpackaging. This effectively gives us the API jar.
+             -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -217,86 +273,8 @@
                 </executions>
             </plugin>
             
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                
-                <configuration>
-                    <artifactItems>
-                        <artifactItem>
-                            <groupId>org.glassfish</groupId>
-                            <artifactId>javax.faces</artifactId>
-                            <version>${mojarra.version}</version>
-                            <type>jar</type>
-                            <classifier>sources</classifier>
-                            <outputDirectory>src/main/java</outputDirectory>
-                            <includes>**/*.java</includes>
-                        </artifactItem>
-                        
-                        <artifactItem>
-                            <groupId>org.glassfish</groupId>
-                            <artifactId>javax.faces</artifactId>
-                            <version>${mojarra.version}</version>
-                            <type>jar</type>
-                            <classifier>sources</classifier>
-                            <outputDirectory>src/main/resources</outputDirectory>
-                            <excludes>**/*.java</excludes>
-                        </artifactItem>
-                    </artifactItems>
-                </configuration>
-            </plugin>
-            
         </plugins>
     </build>
-    
-    <contributors>
-        <contributor>
-            <name>Jennifer Ball</name>
-        </contributor>
-        <contributor>
-            <name>Deepak Gothe</name>
-        </contributor>
-        <contributor>
-            <name>Jacob Hookom</name>
-        </contributor>
-        <contributor>
-            <name>Justyna Horwat</name>
-        </contributor>
-        <contributor>
-            <name>Roger Kitain</name>
-        </contributor>
-        <contributor>
-            <name>Jason Lee</name>
-        </contributor>
-        <contributor>
-            <name>Craig McClanahan</name>
-        </contributor>
-        <contributor>
-            <name>Gregory Murray</name>
-        </contributor>
-        <contributor>
-            <name>Raj Premkumar</name>
-        </contributor>
-        <contributor>
-            <name>Stan Silvert</name>
-        </contributor>
-        <contributor>
-            <name>Jayashri Visvanathan</name>
-        </contributor>
-        <contributor>
-            <name>Mike Youngstrom</name>
-        </contributor>
-    </contributors>    
     
     <dependencies>
         <dependency>
@@ -314,6 +292,11 @@
             <optional>true</optional>
         </dependency>
         
+        <!-- 
+            Depend on the source jar of the full implementation Mojarra jar. This is used for
+            unpacking and re-compiling. This jar is created by executing mvn clean install
+            in the [mojarra home]/impl project.       
+         -->
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.faces</artifactId>
@@ -357,6 +340,45 @@
             <timezone>+8</timezone>
         </developer>
     </developers>
+    
+      <contributors>
+        <contributor>
+            <name>Jennifer Ball</name>
+        </contributor>
+        <contributor>
+            <name>Deepak Gothe</name>
+        </contributor>
+        <contributor>
+            <name>Jacob Hookom</name>
+        </contributor>
+        <contributor>
+            <name>Justyna Horwat</name>
+        </contributor>
+        <contributor>
+            <name>Roger Kitain</name>
+        </contributor>
+        <contributor>
+            <name>Jason Lee</name>
+        </contributor>
+        <contributor>
+            <name>Craig McClanahan</name>
+        </contributor>
+        <contributor>
+            <name>Gregory Murray</name>
+        </contributor>
+        <contributor>
+            <name>Raj Premkumar</name>
+        </contributor>
+        <contributor>
+            <name>Stan Silvert</name>
+        </contributor>
+        <contributor>
+            <name>Jayashri Visvanathan</name>
+        </contributor>
+        <contributor>
+            <name>Mike Youngstrom</name>
+        </contributor>
+    </contributors>   
     
     <issueManagement>
         <system>JIRA</system>

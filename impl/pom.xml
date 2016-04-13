@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- 
+
+    Project to create the Mojarra implementation jar.
+    
+    This depends on [mojarra home]/jsf-tools being build first (mvn build install).
+    
+    (note that the jsf-tools jar is only used during the build phase and has no runtime usage)
+
+ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
