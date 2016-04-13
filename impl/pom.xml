@@ -4,19 +4,25 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
     <parent>
         <groupId>net.java</groupId>
         <artifactId>jvnet-parent</artifactId>
         <version>5</version>
     </parent>
+    
     <groupId>org.glassfish</groupId>
     <artifactId>javax.faces</artifactId>
-    <version>2.3.0-m04-SNAPSHOT</version>
+    <version>2.3.0-m06-SNAPSHOT</version>
+    
     <packaging>jar</packaging>
+    
     <name>Mojarra ${project.version}</name>
+    
     <prerequisites>
         <maven>3.1.1</maven>
     </prerequisites>
+    
     <build>
         <plugins>
             <plugin>
@@ -24,6 +30,10 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.7</version>
                 <executions>
+                    
+                    
+                    <!-- ###  C L E A N  ### -->
+                    
                     <execution>
                         <id>clean</id>
                         <phase>clean</phase>
@@ -53,6 +63,10 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    
+                    
+                    <!-- ###  I N I T I A L I Z E  ### -->
+                    
                     <execution>
                         <id>initialize</id>
                         <phase>initialize</phase>
@@ -248,6 +262,10 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    
+                    
+                    <!-- ###  G E N E R A T E   S O U R C E S  ### -->
+                    
                     <execution>
                         <id>generate-sources</id>
                         <phase>generate-sources</phase>
@@ -255,6 +273,11 @@
                             <target>
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
+                                
+                                
+                                
+                                <echo message="Generating source code files" />
+                                
                                 <!--
                                 
                                     Generate standard-html-renderkit.xml
@@ -310,47 +333,23 @@
                                             tofile="src/main/resources/com/sun/faces/standard-html-renderkit.xml"/>
                                     </then>
                                 </if>
-                                <!--
-                                
-                                    Validation is taken care of by the xml-maven-plugin
-                                        
-                                    <taskdef name="validate" classname="com.sun.faces.ant.ValidateTask">
-                                        <classpath>
-                                            <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
-                                            <pathelement location="${jsf-tools-dir}/build/classes"/>
-                                            <pathelement location="src/main/doc"/>
-                                            <path refid="maven.plugin.classpath"/>
-                                        </classpath>
-                                    </taskdef>
-                                    <validate schemaDir="src/main/doc"/>
-                                
-                                -->
-                                <!--
-                                
-                                   Generate MessageFactory.
-                                
-                                  -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.util"/>
-                                <copy file="src/main/template/MessageFactory.java"
-                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/util"
-                                    filtering="true"/>
+                          
+                                    
+                               
                                 <!--
                                 
                                     Generate AttributeManager
+                                    
+                                    This is for generating several UI components based on their taglib descriptions
                                 
                                 -->
                                 <copy todir="${jsf-tools-dir}/build/classes">
-                                    <fileset dir="${jsf-ri-dir}/src/main/resources"
-                                        includes="**/LogStrings.properties"/>
+                                    <fileset dir="${jsf-ri-dir}/src/main/resources" includes="**/LogStrings.properties"/>
                                 </copy>
-                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
-                                    flatten="true">
-                                    <fileset dir="src/main/resources/com/sun/faces"
-                                        includes="*.dtd,*.xsd"/>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" flatten="true">
+                                    <fileset dir="src/main/resources/com/sun/faces" includes="*.dtd,*.xsd"/>
                                 </copy>
-                                <taskdef name="generateAttrManager"
-                                         classname="com.sun.faces.ant.AttributeManagerGenTask">
+                                <taskdef name="generateAttrManager" classname="com.sun.faces.ant.AttributeManagerGenTask">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
                                     </classpath>
@@ -370,19 +369,37 @@
                                 </copy>
                                 <delete dir="build"/>
                                 <delete dir="${jsf-tools-dir}/build"/>
+                                
+                                
+                                <!-- 
+                                    Replace the placeholders in the Java template source files. This effectively
+                                    functions as a kind of C like preprocessor for Java.
+                                    
+                                    Many of the files are package private to prevent exposure to external users. Unfortunately
+                                    if the same class is used by multiple packages, it needs to be copied to each such package
+                                    since JDK 8 and below don't have a module system to prevent exposure otherwise.
+                                    
+                                    The #1, #2, etc in the comments below means the same source file is copied to those multiple
+                                    packages.
+                                
+                                 -->
+                                 
+                            
+                                
                                 <!--
                                 
-                                    Generate TypedCollections
+                                    Generate TypedCollections.java
                                     
-                                    -->
+                                -->
                                 <filter token="protection" value="public"/>
                                 <filter token="package" value="com.sun.faces.util"/>
                                 <copy file="src/main/template/TypedCollections.java"
                                     todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/util"
                                     filtering="true"/>
+                                
                                 <!--
                                 
-                                    Generate SharedUtils #1
+                                    Generate SharedUtils.java #1
                                     
                                 -->
                                 <filter token="protection" value="public"/>
@@ -390,9 +407,10 @@
                                 <copy file="src/main/template/SharedUtils.java"
                                     todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/application"
                                     filtering="true"/>
+                                
                                 <!--
                                 
-                                    Generate SharedUtils #2
+                                    Generate SharedUtils.java #2
                                     
                                 -->
                                 <filter token="protection" value="public"/>
@@ -400,9 +418,10 @@
                                 <copy file="src/main/template/SharedUtils.java"
                                     todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/el"
                                     filtering="true"/>
+                               
                                 <!--
                                     
-                                    Generate SharedUtils #3
+                                    Generate SharedUtils.java #3
                                     
                                 -->
                                 <filter token="protection" value="public"/>
@@ -410,9 +429,10 @@
                                 <copy file="src/main/template/SharedUtils.java"
                                     todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/config/processor"
                                     filtering="true"/>
+                                
                                 <!--
                                 
-                                    Generate SharedUtils #4
+                                    Generate SharedUtils.java #4
                                 
                                 -->
                                 <filter token="protection" value="public"/>
@@ -420,9 +440,10 @@
                                 <copy file="src/main/template/SharedUtils.java"
                                     todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/mgbean"
                                     filtering="true"/>
+                                
                                 <!--
                                 
-                                    Generate StateHolderSaver #1
+                                    Generate StateHolderSaver.java #1
                                     
                                 -->
                                 <filter token="protection" value="public"/>
@@ -434,9 +455,10 @@
                                     file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/view/StateHolderSaver.java"
                                     token="@serialVersionUID@"
                                     value="4866548262845392093L"/>
+                                
                                 <!--
                                 
-                                    Generate StateHolderSaver #2
+                                    Generate StateHolderSaver.java #2
                                     
                                 -->
                                 <filter token="protection" value="public"/>
@@ -448,6 +470,41 @@
                                     file="${project.build.directory}/generated-sources/antrun/com/sun/faces/context/StateHolderSaver.java"
                                     token="@serialVersionUID@"
                                     value="146780782953074472L"/>
+                                    
+                                <!--
+                                
+                                    Generate API MultiFieldValidationUtils.java #1
+                                
+                                -->
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.ext.component"/>
+                                <copy file="src/main/template/MultiFieldValidationUtils.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/ext/component"
+                                    filtering="true"/>
+                                    
+                                <!--
+                                
+                                   Generate MessageFactory.java #1
+                                
+                                  -->
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.util"/>
+                                <copy file="src/main/template/MessageFactory.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/util"
+                                    filtering="true"/>
+                                    
+                                <!--
+                                
+                                   Generate MessageFactory.java #2
+                                
+                                  -->
+                                <filter token="protection" value="public"/>
+                                <filter token="package" value="com.sun.faces.ext.component"/>
+                                <copy file="src/main/template/MessageFactory.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/ext/component"
+                                    filtering="true"/>
+                                    
+                                
                                 <!--
                                 
                                     Generate Adapters
@@ -477,6 +534,7 @@
                                     file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
                                     token="@serialVersionUID@"
                                     value="7410146713650507654L"/>
+                                
                                 <!--
                                 
                                     Generate com.sun.faces.renderkit.html_basic sources
@@ -517,6 +575,7 @@
                                 </copy>
                                 <delete dir="build"/>
                                 <delete dir="${jsf-tools-dir}/build"/>
+                                
                                 <!--
                                 
                                     Generate API components
@@ -552,9 +611,10 @@
                                 </copy>
                                 <delete dir="build"/>
                                 <delete dir="${jsf-tools-dir}/build"/>
+                                
                                 <!--
                                 
-                                    Generate API TypedCollections #1
+                                    Generate API TypedCollections.java #1
                                 
                                 -->
                                 <filter token="protection" value=""/>
@@ -562,9 +622,10 @@
                                 <copy file="src/main/template/TypedCollections.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces"
                                     filtering="true"/>
+                                
                                 <!--
                                 
-                                    Generate API TypedCollections #2
+                                    Generate API TypedCollections.java #2
                                 
                                 -->
                                 <filter token="protection" value=""/>
@@ -572,9 +633,10 @@
                                 <copy file="src/main/template/TypedCollections.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/webapp"
                                     filtering="true"/>
+                                
                                 <!--
                                 
-                                    Generate API TypedCollection #3
+                                    Generate API TypedCollection.java #3
                                 
                                 -->
                                 <filter token="protection" value=""/>
@@ -582,9 +644,10 @@
                                 <copy file="src/main/template/TypedCollections.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
                                     filtering="true"/>
+                                
                                 <!--
                                 
-                                    Generate API MessageFactory #1
+                                    Generate API MessageFactory.java #3
                                     
                                 -->
                                 <filter token="protection" value=""/>
@@ -592,9 +655,10 @@
                                 <copy file="src/main/template/MessageFactory.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
                                     filtering="true"/>
+                                
                                 <!--
                                 
-                                    Generate API MessageFactory #2
+                                    Generate API MessageFactory.java #4
                                 
                                 -->
                                 <filter token="protection" value=""/>
@@ -602,9 +666,10 @@
                                 <copy file="src/main/template/MessageFactory.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/webapp"
                                     filtering="true"/>
+                                
                                 <!--
                                 
-                                    Generate API MessageFactory #3
+                                    Generate API MessageFactory.java #5
                                 
                                 -->
                                 <filter token="protection" value=""/>
@@ -612,9 +677,10 @@
                                 <copy file="src/main/template/MessageFactory.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/validator"
                                     filtering="true"/>
+                               
                                 <!--
                                 
-                                    Generate API MessageFactory #4
+                                    Generate API MessageFactory.java #6
                                 
                                 -->
                                 <filter token="protection" value=""/>
@@ -622,6 +688,21 @@
                                 <copy file="src/main/template/MessageFactory.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/convert"
                                     filtering="true"/>
+                                    
+                                
+                                <!--
+                                
+                                    Generate API MultiFieldValidationUtils.java #2
+                                
+                                -->
+                                <filter token="protection" value=""/>
+                                <filter token="package" value="javax.faces.validator"/>
+                                <copy file="src/main/template/MultiFieldValidationUtils.java"
+                                    todir="${project.build.directory}/generated-sources/antrun/javax/faces/validator"
+                                    filtering="true"/>
+                                
+                                    
+                                
                                 <!--
                                 
                                     Generate API Adapters
@@ -651,9 +732,10 @@
                                     file="${project.build.directory}/generated-sources/antrun/javax/faces/component/ValueBindingValueExpressionAdapter.java"
                                     token="@serialVersionUID@"
                                     value="-8015491904782686906L"/>
+                                
                                 <!--
                                 
-                                    Generate API StateHolderSaver
+                                    Generate API StateHolderSaver.java
                                 
                                 -->
                                 <filter token="protection" value=""/>
@@ -665,9 +747,10 @@
                                     file="${project.build.directory}/generated-sources/antrun/javax/faces/component/StateHolderSaver.java"
                                     token="@serialVersionUID@"
                                     value="6470180891722042701L"/>
+                                
                                 <!--
                                 
-                                    Generate API SharedUtils #1
+                                    Generate API SharedUtils.java #1
                                     
                                 -->
                                 <filter token="protection" value=""/>
@@ -675,9 +758,10 @@
                                 <copy file="src/main/template/SharedUtils.java"
                                     todir="${project.build.directory}/generated-sources/antrun/javax/faces/component"
                                     filtering="true"/>
+                                
                                 <!--
                                 
-                                    Generate API SharedUtils #2
+                                    Generate API SharedUtils.java #2
                                     
                                 -->
                                 <filter token="protection" value=""/>
@@ -691,6 +775,11 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                                 
+                                        
+                    
+                    <!-- ###  G E N E R A T E   R E S O U R C E S  ### -->                    
+                    
                     <execution>
                         <id>generate-resources</id>
                         <phase>generate-resources</phase>
@@ -699,6 +788,7 @@
                                 <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
+                                
                                 <!--
                                 
                                     Copy LogStrings
@@ -714,6 +804,7 @@
                                     value="${project.version}">
                                     <include name="**/LogStrings*.properties"/>
                                 </replace>
+                                
                                 <!--
                                 
                                     Generate META-INF/html_basic.tld
@@ -753,6 +844,7 @@
                                       toDir="${project.build.directory}/generated-resources/antrun/META-INF"/>
                                 <delete dir="build"/>
                                 <delete dir="${jsf-tools-dir}/build"/>
+                                
                                 <!--
                                 
                                     Generate jsf(-uncompressed).js
@@ -770,6 +862,7 @@
                                 <get src="https://github.com/yui/yuicompressor/releases/download/v2.4.8/yuicompressor-2.4.8.jar" dest="yuicompressor.jar" usetimestamp="true"/>
                                 <java jar="yuicompressor.jar" fork="true" failonerror="true"
                                     args="-o ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf.js ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
+                                
                                 <!--
                                 
                                     Unzip injectionproviders.jar
@@ -781,6 +874,7 @@
                                         <exclude name="META-INF/MANIFEST.MF" />
                                     </patternset>
                                 </unzip>
+                                
                                 <!--
                                 
                                     Generate jsf-ri-runtime.xml
@@ -826,6 +920,7 @@
                         </goals>
                     </execution>
                 </executions>
+                                
                 <dependencies>
                     <dependency>
                         <groupId>ant-contrib</groupId>
@@ -850,6 +945,8 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            
+            <!-- Tell Maven we want a Javadoc jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -865,7 +962,9 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>            
+            </plugin>
+                 
+            <!-- Tell Maven we want a source jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -879,6 +978,18 @@
                     </execution>
                 </executions>
             </plugin>
+            
+           <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -912,6 +1023,8 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <!-- This plugin is reponsible for packaging artifacts as OSGi bundles.  -->
             <plugin>
                 <groupId>biz.aQute.bnd</groupId>
                 <artifactId>bnd-maven-plugin</artifactId>
@@ -924,16 +1037,8 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <archive>
-                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-                    </archive>
-                </configuration>
-            </plugin>
+            
+            <!-- Validate that the various XML files are well formed and match their schema-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>xml-maven-plugin</artifactId>
@@ -960,6 +1065,8 @@
             </plugin>
         </plugins>
     </build>
+    
+    
     <dependencies>
         <dependency>
             <groupId>javax</groupId>

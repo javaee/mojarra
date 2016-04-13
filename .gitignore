@@ -21,6 +21,10 @@ test/**/.classpath
 test/**/.project
 spi/**/.classpath
 spi/**/.project
+impl/**/.classpath
+impl/**/.project
+impl/src/**
+impl/bnd.bnd
 /nbproject/private/
 /dependencies
 glassfish-8.0/
