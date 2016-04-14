@@ -18,7 +18,7 @@
         <version>5</version>
     </parent>
     
-    <groupId>javax.faces</groupId>
+    <groupId>org.glassfish</groupId>
     <artifactId>javax.faces-impl</artifactId>
     <version>2.3.0-m06-SNAPSHOT</version>
     
