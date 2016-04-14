@@ -1,4 +1,4 @@
-package com.sun.faces.test.javaee7;
+package com.sun.faces.test.javaee7.protectedview;
 
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
