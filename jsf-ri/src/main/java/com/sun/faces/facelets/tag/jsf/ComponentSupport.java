@@ -253,7 +253,7 @@ public final class ComponentSupport {
      * @return the UI component
      */
     public static UIComponent findChildByTagId(FacesContext context, UIComponent parent, String id) {
-        if (!context.isPostback() || context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+        if ( !context.isPostback() ) {
             return null;
         }
         UIComponent c = null;
