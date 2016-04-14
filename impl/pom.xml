@@ -32,6 +32,11 @@
         <maven>3.1.1</maven>
     </prerequisites>
     
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    
     <build>
         <plugins>
             <plugin>
@@ -81,6 +86,7 @@
                         <phase>initialize</phase>
                         <configuration>
                             <target>
+                               
                                 <!--
                                 
                                     Once migration is completely done this should disappear
@@ -89,6 +95,7 @@
                                 <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
+                                
                                 <!--
                                 
                                     Copy jsf-api sources
@@ -97,6 +104,7 @@
                                 <copy todir="src/main/java">
                                     <fileset dir="${jsf-api-dir}/src/main/java" includes="**/*.java"/>
                                 </copy>
+                                
                                 <!--
                                     
                                     Copy jsf-ri sources
@@ -105,6 +113,7 @@
                                 <copy todir="src/main/java">
                                     <fileset dir="${jsf-ri-dir}/src/main/java" includes="**/*.java"/>
                                 </copy>
+                                
                                 <!--
 
                                     Copy jsf-api resources into src/main/resources
@@ -117,6 +126,7 @@
                                         <exclude name="**/*.jpg"/>
                                     </fileset>
                                 </copy>
+                                
                                 <!--
                                 
                                     Copy jsf-ri resource into src/main/resources
@@ -127,6 +137,7 @@
                                              includes="**/*.properties,**/*.js,**/*.xsd"
                                              excludes="**/LogStrings*.properties"/>
                                 </copy>
+                                
                                 <!--
                                 
                                     Copy *.taglib.xml to src/main/resources
@@ -137,6 +148,7 @@
                                         <include name="*.taglib.xml" /> 
                                     </fileset>
                                 </copy>
+                                
                                 <!--
                                 
                                     Copy META-INF/services files to src/main/resources
@@ -148,6 +160,7 @@
                                     toDir="src/main/resources/META-INF/services" />
                                 <copy file="${jsf-ri-dir}/conf/share/com.sun.faces.util.cdi11.CDIUtil"
                                     toDir="src/main/resources/META-INF/services" />
+                                
                                 <!--
                                 
                                     Copy other static resources to src/main/resources
@@ -182,6 +195,7 @@
                                 </copy>
                                 <copy file="${jsf-ri-dir}/resources/empty-faces-config.xml"
                                     todir="src/main/resources/com/sun/faces" />
+                                
                                 <!--
                                 
                                     Copy API probe provider to src/main/resources
@@ -189,6 +203,7 @@
                                 -->
                                 <copy todir="src/main/resources/META-INF" 
                                       file="${jsf-api-dir}/src/main/resources/mojarra-jsf-api-probe-provider.xml"/>
+                                
                                 <!--
                                 
                                     Copy LICENSE.txt from main project directory
@@ -196,6 +211,7 @@
                                 -->
                                 <copy todir="src/main/resources/META-INF" 
                                     file="${jsf-api-dir}/../legal/jsf-cddl/LICENSE.txt" />
+                                
                                 <!--
                                 
                                     Copy jsf.js and mojarra.js into src/main/js
@@ -205,6 +221,7 @@
                                     <fileset dir="${jsf-api-dir}/src/main/resources" includes="jsf.js"/>
                                     <fileset dir="${jsf-ri-dir}/resources" includes="mojarra.js"/>
                                 </copy>
+                                
                                 <!--
                                 
                                     Copy template-src into src/main/template
@@ -213,6 +230,7 @@
                                 <copy todir="src/main/template">
                                     <fileset dir="${jsf-tools-dir}/template-src"/>
                                 </copy>
+                                
                                 <!--
                                 
                                     Copy API template-src into src/main/template 
@@ -223,6 +241,7 @@
                                         <include name="*Adapter.java"/>
                                     </fileset>
                                 </copy>
+                                
                                 <!--
                                 
                                     Copy and generate BND configuration
@@ -250,6 +269,7 @@
                                     value="javax.faces"/>
                                 <copy tofile="${project.project.build.directory}/../bnd.bnd" 
                                       file="${project.build.directory}/tmp.bnd"/>
+                                
                                 <!--
                                 
                                     Copy the API doc directory.
@@ -258,6 +278,7 @@
                                 <copy todir="src/main/doc">
                                     <fileset dir="${jsf-api-dir}/doc"/>
                                 </copy>
+                                
                                 <!--
                                 
                                     Copy standard-html-renderkit-impl.xml
@@ -1033,7 +1054,9 @@
                 </executions>
             </plugin>
             
-            <!-- This plugin is reponsible for packaging artifacts as OSGi bundles.  -->
+            <!-- This plugin is reponsible for packaging artifacts as OSGi bundles.  
+                 It effectively puts a MANIFEST.MF in the jar artifact that is understood by OSGi.
+            -->
             <plugin>
                 <groupId>biz.aQute.bnd</groupId>
                 <artifactId>bnd-maven-plugin</artifactId>
@@ -1083,6 +1106,7 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
@@ -1091,10 +1115,7 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+
     <scm>
         <connection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</connection>
         <developerConnection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</developerConnection>
