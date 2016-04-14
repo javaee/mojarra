@@ -25,6 +25,7 @@ impl/**/.classpath
 impl/**/.project
 impl/src/**
 impl/bnd.bnd
+impl/strict-impl/src/**
 api/**/.classpath
 api/**/.project
 api/src/**
