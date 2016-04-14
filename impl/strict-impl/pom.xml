@@ -133,6 +133,9 @@
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
+                        <configuration>
+                            <excludePackageNames>com</excludePackageNames>
+                        </configuration>
                         <goals>
                             <goal>jar</goal>
                         </goals>
