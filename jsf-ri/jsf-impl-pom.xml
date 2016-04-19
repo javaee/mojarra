@@ -3,7 +3,7 @@
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  
- Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2016 Sun Microsystems, Inc. All rights reserved.
  
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -40,7 +40,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>javax.faces</groupId>
   <artifactId>jsf-impl</artifactId>
+  <packaging>jar</packaging>
   <version>@VERSION@</version>
+  <name>
+      Oracle's implementation of the JSF 1.2 specification API.
+  </name>
   <description>This is the master POM file for Sun's Implementation of
   the JSF 1.2 Specification.</description>
   <url>http://java.sun.com/javaee/javaserverfaces/</url>
@@ -126,6 +130,10 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <scm>
+      <url>http://java.net/projects/mojarra/sources</url>
+      <connection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</connection>
+  </scm>
   <organization>
     <name>Sun Microsystems, Inc</name>
     <url>http://www.sun.com/</url>
