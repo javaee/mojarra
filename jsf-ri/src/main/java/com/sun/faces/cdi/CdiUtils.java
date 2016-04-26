@@ -53,11 +53,13 @@ import java.util.Queue;
 import javax.enterprise.context.ContextNotActiveException;
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.enterprise.util.TypeLiteral;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -70,6 +72,9 @@ import com.sun.faces.util.Util;
  * A static utility class for CDI.
  */
 public final class CdiUtils {
+    
+    private final static TypeLiteral<Converter<?>> CONVERTER_TYPE_LITERAL = 
+        new TypeLiteral<Converter<?>>() { private static final long serialVersionUID = 1L;};
 
     /**
      * Constructor.
@@ -84,20 +89,14 @@ public final class CdiUtils {
      * @param value the value attribute.
      * @return the converter, or null if we could not match one.
      */
-    public static Converter createConverter(BeanManager beanManager, String value) {
-        Converter delegatingConverter = null;
-        
-        Converter managedConverter = getBeanReference(
-            beanManager,
-            Converter.class,
-            new FacesConverterAnnotationLiteral(value, Object.class)
-        );
+    public static Converter<?> createConverter(BeanManager beanManager, String value) {
+        Converter<?> managedConverter = createConverter(beanManager, new FacesConverterAnnotationLiteral(value, Object.class));
         
         if (managedConverter != null) {
-            delegatingConverter = new CdiConverter(value, Object.class, managedConverter);
+            return new CdiConverter(value, Object.class, managedConverter);
         }
        
-        return delegatingConverter;
+        return null;
     }
 
     /**
@@ -107,20 +106,39 @@ public final class CdiUtils {
      * @param forClass the for class.
      * @return the converter, or null if we could not match one.
      */
-    public static Converter createConverter(BeanManager beanManager, Class forClass) {
-        Converter delegatingConverter = null;
-        
-        Converter managedConverter = getBeanReference(
-            beanManager,
-            Converter.class,
-            new FacesConverterAnnotationLiteral("", forClass)
-        );
+    public static Converter<?> createConverter(BeanManager beanManager, Class<?> forClass) {
+        Converter<?> managedConverter = createConverter(beanManager, new FacesConverterAnnotationLiteral("", forClass));
         
         if (managedConverter != null) {
-            delegatingConverter = new CdiConverter("", forClass, managedConverter);
+            return new CdiConverter("", forClass, managedConverter);
         }
        
-        return delegatingConverter;
+        return null;
+    }
+    
+    private static Converter<?> createConverter(BeanManager beanManager, Annotation qualifier) {
+        Converter<?> managedConverter = null;
+        
+        // Try to find parameterized Converter
+        Instance<Converter<?>> converterInstance =
+            CDI.current()
+               .select(
+                   CONVERTER_TYPE_LITERAL, 
+                   qualifier);
+        
+        if (!converterInstance.isUnsatisfied()) {
+            managedConverter = converterInstance.get();
+        } else {
+            
+            // No parameterized converter, try raw converter            
+            managedConverter = getBeanReference(
+                beanManager,
+                Converter.class,
+                qualifier
+            );
+        }
+        
+        return managedConverter;
     }
 
     /**
