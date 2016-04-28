@@ -73,8 +73,8 @@ import com.sun.faces.util.Util;
  */
 public final class CdiUtils {
     
-    private final static TypeLiteral<Converter<?>> CONVERTER_TYPE_LITERAL = 
-        new TypeLiteral<Converter<?>>() { private static final long serialVersionUID = 1L;};
+    private final static Type CONVERTER_TYPE = 
+        new TypeLiteral<Converter<?>>() { private static final long serialVersionUID = 1L;}.getType();
 
     /**
      * Constructor.
@@ -117,25 +117,19 @@ public final class CdiUtils {
     }
     
     private static Converter<?> createConverter(BeanManager beanManager, Annotation qualifier) {
-        Converter<?> managedConverter = null;
         
-        // Try to find parameterized Converter
-        Instance<Converter<?>> converterInstance =
-            CDI.current()
-               .select(
-                   CONVERTER_TYPE_LITERAL, 
-                   qualifier);
+        // Try to find parameterized converter first     
+        Converter<?> managedConverter = (Converter<?>) getBeanReferenceByType(
+            beanManager,
+            CONVERTER_TYPE,
+            qualifier);
         
-        if (!converterInstance.isUnsatisfied()) {
-            managedConverter = converterInstance.get();
-        } else {
-            
+        if (managedConverter == null) {
             // No parameterized converter, try raw converter            
             managedConverter = getBeanReference(
                 beanManager,
                 Converter.class,
-                qualifier
-            );
+                qualifier);
         }
         
         return managedConverter;
