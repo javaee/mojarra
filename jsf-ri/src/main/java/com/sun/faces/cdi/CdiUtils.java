@@ -53,7 +53,6 @@ import java.util.Queue;
 import javax.enterprise.context.ContextNotActiveException;
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -75,6 +74,9 @@ public final class CdiUtils {
     
     private final static Type CONVERTER_TYPE = 
         new TypeLiteral<Converter<?>>() { private static final long serialVersionUID = 1L;}.getType();
+        
+    private final static Type VALIDATOR_TYPE = 
+        new TypeLiteral<Validator<?>>() { private static final long serialVersionUID = 1L;}.getType();
 
     /**
      * Constructor.
@@ -165,21 +167,30 @@ public final class CdiUtils {
      * @param value the value attribute.
      * @return the validator, or null if we could not match one.
      */
-    public static Validator createValidator(BeanManager beanManager, String value) {
+    public static Validator<?> createValidator(BeanManager beanManager, String value) {
         
-        Validator delegatingValidator = null;
+        Annotation qualifier = new FacesValidatorAnnotationLiteral(value);
         
-        Validator managedValidator = getBeanReference(
+        // Try to find parameterized validator first  
+        Validator<?> managedValidator = (Validator<?>) getBeanReferenceByType(
             beanManager,
-            Validator.class,
-            new FacesValidatorAnnotationLiteral(value)
-        );
+            VALIDATOR_TYPE,
+            qualifier);
+                
+                
+        if (managedValidator == null) {
+            // No parameterized validator, try raw validator
+            managedValidator = getBeanReference(
+                beanManager,
+                Validator.class,
+                qualifier);
+        }
         
         if (managedValidator != null) {
-            delegatingValidator = new CdiValidator(value, managedValidator);
+            return new CdiValidator(value, managedValidator);
         }
     
-        return delegatingValidator;
+        return null;
     }
 
     public static <T> T getBeanReference(Class<T> type, Annotation... qualifiers) {
@@ -217,6 +228,7 @@ public final class CdiUtils {
      */
     public static <T> T getBeanInstance(Class<T> type, boolean create) {
         BeanManager beanManager = Util.getCdiBeanManager(FacesContext.getCurrentInstance());
+        @SuppressWarnings("unchecked")
         Bean<T> bean = (Bean<T>) beanManager.resolve(beanManager.getBeans(type));
 
         if (bean != null) {
