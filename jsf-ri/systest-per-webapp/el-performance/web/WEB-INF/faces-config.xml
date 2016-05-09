@@ -1,0 +1,212 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ 
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ 
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+ 
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+ 
+ Contributor(s):
+ 
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+    version="1.2">
+
+  <managed-bean>
+    <managed-bean-name>lesser</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>booleanProperty</property-name>
+      <value>true</value>
+    </managed-property>
+    <managed-property>
+      <property-name>byteProperty</property-name>
+      <value>11</value>
+    </managed-property>
+    <managed-property>
+      <property-name>doubleProperty</property-name>
+      <value>300.14</value>
+    </managed-property>
+    <managed-property>
+      <property-name>floatProperty</property-name>
+      <value>12.3</value>
+    </managed-property>
+    <managed-property>
+      <property-name>intProperty</property-name>
+      <value>3000</value>
+    </managed-property>
+    <managed-property>
+      <property-name>longProperty</property-name>
+      <value>5000</value>
+    </managed-property>
+    <managed-property>
+      <property-name>shortProperty</property-name>
+      <value>4000</value>
+    </managed-property>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>A String Value</value>
+    </managed-property>
+    <managed-property>
+      <property-name>bean</property-name>
+      <value>#{nested.stringProperty}</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>greater</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>booleanProperty</property-name>
+      <value>false</value>
+    </managed-property>
+    <managed-property>
+      <property-name>byteProperty</property-name>
+      <value>21</value>
+    </managed-property>
+    <managed-property>
+      <property-name>doubleProperty</property-name>
+      <value>321.54</value>
+    </managed-property>
+    <managed-property>
+      <property-name>floatProperty</property-name>
+      <value>21.43</value>
+    </managed-property>
+    <managed-property>
+      <property-name>intProperty</property-name>
+      <value>5000</value>
+    </managed-property>
+    <managed-property>
+      <property-name>longProperty</property-name>
+      <value>54321</value>
+    </managed-property>
+    <managed-property>
+      <property-name>shortProperty</property-name>
+      <value>4321</value>
+    </managed-property>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>New String Value</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>nested</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>nested 0</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>nested1</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>bean</property-name>
+      <value>#{nested2.bean.bean.stringProperty}</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>nested2</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>bean</property-name>
+      <value>#{nested3}</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>nested3</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>bean</property-name>
+      <value>#{nested4}</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>nested4</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>Finally, a simple property</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>evaluator</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.EvaluatorBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>reps</property-name>
+      <value>30000</value>
+    </managed-property>
+    <managed-property>
+      <property-name>expressions</property-name>
+      <list-entries>
+        <value>nested1.bean</value>
+        <null-value/>
+      </list-entries>
+    </managed-property>
+
+
+  </managed-bean>
+
+
+
+</faces-config>

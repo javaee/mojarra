@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>JavaServer(TM) Faces Quick Start Guide</title>
+</head>
+<body bgcolor=#ffffff>
+ 
+
+<h1>
+<center>
+JavaServer<sup><font size=-2>TM</font></sup> Faces
+<br>
+1.1 Release
+<br>
+Quick Start Guide
+</center>
+</h1>
+<hr>
+Here is a brief guide for getting yourself set up to use JavaServer Faces.  
+Refer to the tutorial for more information on using JavaServer Faces.
+<p>
+<ul>
+<li>
+After downloading the web services pack, set these environment variables:
+<p>
+<tt>JAVA_HOME</tt> = the location of your JDK installation.
+<br>
+<tt>JWSDP_HOME</tt> = the location of your web services pack installation.
+<p>
+For more information on setting up your environment, see the 
+<a href="../ReleaseNotes.html">Web Services Pack Release Notes</a> and the
+Preface of the Web Services Pack tutorial.
+<p><li>
+Add this tag library directive to your JSP pages to reference the JSF tag library:
+<p>
+<tt>&lt;%@ taglib uri="http://java.sun.com/jsf/html_basic" prefix="faces" %></tt>
+<p><li>
+See the JavaServer Faces tutorial for help with using the tag library.
+<p><li>
+Create a web application deployment descriptor, called web.xml, to reference 
+<tt>FacesServlet</tt> and <tt>SessionListener</tt>. See
+the example web.xml file in the <tt>docs/examples/web/helloDuke</tt>
+directory for help with writing the web.xml file.  Copy this file to your 
+WEB-INF directory.
+<p><li>
+Add the jsf-api and jsf-ri jar files in <tt>{$JWSP_HOME}/tools/jsfaces</tt> to
+your classpath when you compile your classes, 
+or copy them into the <tt>WEB-INF/lib</tt> directory of your web application
+before you build it.
+</ul>
+
+
+<hr>
+<p>
+<a href="Copyright.html">
+<font size=-1><i>Copyright &#169; 2004 Sun Microsystems, Inc.  
+All rights reserved.</i></font></a>
+
+</body>
+</html>
