@@ -3,7 +3,7 @@
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2016 Sun Microsystems, Inc. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -81,7 +81,9 @@
                    property-resolver-jsp,
                    never-unwrap-exceptions,
                    write-attribute-script-disabled,
-                   write-attribute-script-enabled"/>
+                   write-attribute-script-enabled,
+                   client-encrypt-by-default,
+                   client-encrypt-by-default-disabled"/>
     <!--
        EXCLUDED APPLICATIONS:
           view-expired
