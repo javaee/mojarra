@@ -108,7 +108,6 @@ class UrlBuilder {
         if (name == null || name.trim().length() == 0) {
             throw new IllegalArgumentException("Parameter name cannot be empty");
         }
-        parseQueryString();
         addValuesToParameter(name.trim(), values, true);
 
         return this;
@@ -117,7 +116,6 @@ class UrlBuilder {
 
     public UrlBuilder addParameters(Map<String, List<String>> params) {
         if (params != null && !params.isEmpty()) {
-            parseQueryString();
             for (Map.Entry<String, List<String>> entry : params.entrySet()) {
                 if (entry.getKey() == null || entry.getKey().trim().length() == 0) {
                     throw new IllegalArgumentException("Parameter name cannot be empty");
@@ -222,11 +220,15 @@ class UrlBuilder {
     protected void appendQueryString() {
         boolean hasQueryString = false;
         
-        parseQueryString();
-        
-        if (parameters != null && parameters.size() > 0 ) {
-            // parse residual query string
-            String nextSeparatorChar = QUERY_STRING_SEPARATOR;
+        if (parameters != null) {
+            String nextSeparatorChar;
+            if ( queryString == null ) {
+                nextSeparatorChar = QUERY_STRING_SEPARATOR;
+            } else {
+                nextSeparatorChar = PARAMETER_PAIR_SEPARATOR;
+                url.append(QUERY_STRING_SEPARATOR).append(queryString);
+            }
+            
             for (Map.Entry<String, List<String>> param : parameters.entrySet()) {
                 for (String value : param.getValue()) {
                     url.append(nextSeparatorChar);
@@ -237,7 +239,7 @@ class UrlBuilder {
                 }
             }
             hasQueryString = true;
-        } else if (queryString != null) { //here the query string will not be UTF-8 encoded, is this correct?
+        } else if (queryString != null) { 
             url.append(QUERY_STRING_SEPARATOR).append(queryString);
             hasQueryString = true;
         }
@@ -328,6 +330,10 @@ class UrlBuilder {
             values.removeAll(NULL_LIST);
         }
 
+        if (parameters == null) {
+            parameters = new LinkedHashMap<>();
+        }
+        
         if (replace) {
             parameters.put(name, values);
         }

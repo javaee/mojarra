@@ -71,7 +71,7 @@ public class Bug22995287IT {
         page = link.click();
         
         String pageXml = page.getBody().asXml();
-        assertTrue(pageXml.contains("aaa"));
+        assertTrue(pageXml.contains("foo bar"));
     }
     
     @Test
@@ -82,7 +82,7 @@ public class Bug22995287IT {
         page = link.click();
         
         String pageXml = page.getBody().asXml();
-        assertTrue(pageXml.contains("aaa"));
+        assertTrue(pageXml.contains("foo bar"));
     }
 
     @Test
@@ -106,4 +106,45 @@ public class Bug22995287IT {
         assertTrue(pageXml.contains("Welcome to Page2"));
     }
 
+    @Test
+    public void testPage3CanBeDisplayed1() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlAnchor link = page.getHtmlElementById("page3_get_parameter_fparam");
+        page = link.click();
+        
+        String pageXml = page.getBody().asXml();
+        assertTrue(pageXml.contains("foo bar"));
+    }
+    
+    @Test
+    public void testPage3CanBeDisplayed2() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlAnchor link = page.getHtmlElementById("page3_get_parameter_outcome");
+
+        page = link.click();
+        
+        String pageXml = page.getBody().asXml();
+        assertTrue(pageXml.contains("foo bar"));
+    }
+
+    @Test
+    public void testPage3CanBeDisplayed3() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlAnchor link = page.getHtmlElementById("page3_get_parameter_none");
+
+        page = link.click();
+        
+        String pageXml = page.getBody().asXml();
+        assertTrue(pageXml.contains("Welcome to Page2"));
+    }
+    
+    @Test
+    public void testPage3CanBeDisplayed4() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("page3_button_to_page2");
+        page = button.click();
+        
+        String pageXml = page.getBody().asXml();
+        assertTrue(pageXml.contains("Welcome to Page2"));
+    }
 }
