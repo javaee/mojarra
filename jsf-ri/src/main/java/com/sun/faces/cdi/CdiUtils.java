@@ -58,6 +58,7 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.enterprise.util.TypeLiteral;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -70,6 +71,12 @@ import com.sun.faces.util.Util;
  * A static utility class for CDI.
  */
 public final class CdiUtils {
+    
+    private final static Type CONVERTER_TYPE = 
+        new TypeLiteral<Converter<?>>() { private static final long serialVersionUID = 1L;}.getType();
+        
+    private final static Type VALIDATOR_TYPE = 
+        new TypeLiteral<Validator<?>>() { private static final long serialVersionUID = 1L;}.getType();
 
     /**
      * Constructor.
@@ -84,20 +91,14 @@ public final class CdiUtils {
      * @param value the value attribute.
      * @return the converter, or null if we could not match one.
      */
-    public static Converter createConverter(BeanManager beanManager, String value) {
-        Converter delegatingConverter = null;
-        
-        Converter managedConverter = getBeanReference(
-            beanManager,
-            Converter.class,
-            new FacesConverterAnnotationLiteral(value, Object.class)
-        );
+    public static Converter<?> createConverter(BeanManager beanManager, String value) {
+        Converter<?> managedConverter = createConverter(beanManager, new FacesConverterAnnotationLiteral(value, Object.class));
         
         if (managedConverter != null) {
-            delegatingConverter = new CdiConverter(value, Object.class, managedConverter);
+            return new CdiConverter(value, Object.class, managedConverter);
         }
        
-        return delegatingConverter;
+        return null;
     }
 
     /**
@@ -107,20 +108,33 @@ public final class CdiUtils {
      * @param forClass the for class.
      * @return the converter, or null if we could not match one.
      */
-    public static Converter createConverter(BeanManager beanManager, Class forClass) {
-        Converter delegatingConverter = null;
-        
-        Converter managedConverter = getBeanReference(
-            beanManager,
-            Converter.class,
-            new FacesConverterAnnotationLiteral("", forClass)
-        );
+    public static Converter<?> createConverter(BeanManager beanManager, Class<?> forClass) {
+        Converter<?> managedConverter = createConverter(beanManager, new FacesConverterAnnotationLiteral("", forClass));
         
         if (managedConverter != null) {
-            delegatingConverter = new CdiConverter("", forClass, managedConverter);
+            return new CdiConverter("", forClass, managedConverter);
         }
        
-        return delegatingConverter;
+        return null;
+    }
+    
+    private static Converter<?> createConverter(BeanManager beanManager, Annotation qualifier) {
+        
+        // Try to find parameterized converter first     
+        Converter<?> managedConverter = (Converter<?>) getBeanReferenceByType(
+            beanManager,
+            CONVERTER_TYPE,
+            qualifier);
+        
+        if (managedConverter == null) {
+            // No parameterized converter, try raw converter            
+            managedConverter = getBeanReference(
+                beanManager,
+                Converter.class,
+                qualifier);
+        }
+        
+        return managedConverter;
     }
 
     /**
@@ -153,21 +167,30 @@ public final class CdiUtils {
      * @param value the value attribute.
      * @return the validator, or null if we could not match one.
      */
-    public static Validator createValidator(BeanManager beanManager, String value) {
+    public static Validator<?> createValidator(BeanManager beanManager, String value) {
         
-        Validator delegatingValidator = null;
+        Annotation qualifier = new FacesValidatorAnnotationLiteral(value);
         
-        Validator managedValidator = getBeanReference(
+        // Try to find parameterized validator first  
+        Validator<?> managedValidator = (Validator<?>) getBeanReferenceByType(
             beanManager,
-            Validator.class,
-            new FacesValidatorAnnotationLiteral(value)
-        );
+            VALIDATOR_TYPE,
+            qualifier);
+                
+                
+        if (managedValidator == null) {
+            // No parameterized validator, try raw validator
+            managedValidator = getBeanReference(
+                beanManager,
+                Validator.class,
+                qualifier);
+        }
         
         if (managedValidator != null) {
-            delegatingValidator = new CdiValidator(value, managedValidator);
+            return new CdiValidator(value, managedValidator);
         }
     
-        return delegatingValidator;
+        return null;
     }
 
     public static <T> T getBeanReference(Class<T> type, Annotation... qualifiers) {
@@ -205,6 +228,7 @@ public final class CdiUtils {
      */
     public static <T> T getBeanInstance(Class<T> type, boolean create) {
         BeanManager beanManager = Util.getCdiBeanManager(FacesContext.getCurrentInstance());
+        @SuppressWarnings("unchecked")
         Bean<T> bean = (Bean<T>) beanManager.resolve(beanManager.getBeans(type));
 
         if (bean != null) {
