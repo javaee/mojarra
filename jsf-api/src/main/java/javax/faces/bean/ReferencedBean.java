@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -51,10 +51,14 @@ import java.lang.annotation.Inherited;
  * configuration resources.</p>
  *
  * @since 2.0
+ * @deprecated The referenced-bean concept was used for a design time promise
+ * which however never really took off. There is no direct replacement
+ * for this other than using the XML variant in faces-config.xml.
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
 @Inherited
+@Deprecated
 public @interface ReferencedBean {
 
     /**

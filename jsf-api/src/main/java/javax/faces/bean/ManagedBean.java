@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -99,10 +99,19 @@ import java.lang.annotation.Inherited;
  * </div>
  *
  * @since 2.0
+ * @deprecated This has been replaced by the Managed Beans specification in
+ * general and specifically the dependency injection, scopes and naming
+ * from the CDI specification. Note that the <em>eager</em> attribute
+ * for application scoped beans is replaced specifically by observing
+ * the {@code javax.enterprise.context.Initialized} event for
+ * {@code javax.enterprise.context.ApplicationScoped}. See 6.7.3 of the CDI
+ * spec for further details.
+ * 
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
+@Deprecated
 public @interface ManagedBean {
 
     /**

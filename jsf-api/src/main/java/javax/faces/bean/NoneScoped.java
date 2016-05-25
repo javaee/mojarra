@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -52,9 +52,12 @@ import java.lang.annotation.Inherited;
  * was declared for the corresponding managed bean.</p>
  *
  * @since 2.0
+ * @deprecated This has been replaced by {@code javax.enterprise.context.Dependent}, 
+ * which is a CDI build-in scope with approximately similar semantics.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
+@Deprecated
 public @interface NoneScoped {
 }

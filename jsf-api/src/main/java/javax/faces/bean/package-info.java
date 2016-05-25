@@ -37,29 +37,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.faces.bean;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
 
 /**
- *
- * <p class="changed_added_2_0">When this annotation, along with {@link
- * ManagedBean} is found on a class, the runtime must act as if a
- * <code>&lt;managed-bean-scope&gt;application&lt;managed-bean-scope&gt;</code>
- * element was declared for the corresponding managed bean.</p>
- *
- *
- * @since 2.0
- * @deprecated This has been replaced by {@code javax.enterprise.context.ApplicationScoped}, 
- * which is a CDI build-in scope with similar semantics.
+ * This package is now deprecated. The specification for managed beans from JSF
+ * has been placed into its own specifications, namely Managed Beans and CDI.
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Inherited
 @Deprecated
-public @interface ApplicationScoped {
-}
+package javax.faces.bean;
+
