@@ -52,8 +52,8 @@ import java.lang.annotation.Inherited;
  *
  * @since 2.0
  * @deprecated The referenced-bean concept was used for a design time promise
- * which however never really took off. There is no direct replacement
- * for this other than using the XML variant in faces-config.xml.
+ * which however did not achieve widespread adoption. There is no direct 
+ * replacement for this other than using the XML variant in faces-config.xml.
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
