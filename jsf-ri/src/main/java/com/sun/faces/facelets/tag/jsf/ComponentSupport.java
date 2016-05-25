@@ -278,9 +278,6 @@ public final class ComponentSupport {
      * @return the UI component
      */
     public static UIComponent findChildByTagId(FacesContext context, UIComponent parent, String id) {
-        if ( !context.isPostback() ) {
-            return null;
-        }
         UIComponent c = null;
         UIViewRoot root = context.getViewRoot();
         boolean hasDynamicComponents = (null != root && 
