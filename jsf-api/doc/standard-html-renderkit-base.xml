@@ -419,6 +419,28 @@
     <component>
 
         <description>
+            <![CDATA[<p>Represents an HTML <code>script</code> element for a function that acts
+      like an ajax form submit.  This component must be placed inside
+      a form, and requires JavaScript to be enabled in the client.</p>]]>
+        </description>
+        <display-name>Command Script</display-name>
+        <component-type>javax.faces.HtmlCommandScript</component-type>
+        <component-class>javax.faces.component.html.HtmlCommandScript</component-class>
+
+        <xi:include href="uicomponent-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="actionsource-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="command-script-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Command</base-component-type>
+            <renderer-type>javax.faces.Script</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <description>
             <![CDATA[<p>Represents a set of repeating data (segregated into
       columns by child UIColumn components) that will
       be rendered in an HTML <code>table</code> element.</p>]]>
@@ -1636,6 +1658,57 @@
             <renderer-extension>
                 <renders-children>true</renders-children>
                 <body-tag>true</body-tag>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+
+            <description>
+                <![CDATA[
+                    <p class="changed_added_2_3">
+                        Render a JavaScript function that invokes <code>jsf.ajax.request()</code> function.
+                    </p>
+    
+                    <h3>Encode Behavior</h3>
+                    <p>
+                        Render an HTML <code>script</code> element. If the value of the "name" attribute does not contain a
+                        period <code>.</code> indicating a namespaced function name, then render JavaScript <code>var</code>
+                        keyword, followed by a space character. Render the value of the "name" attribute, followed by 
+                        JavaScript assignment operator. Render JavaScript function which invokes <code>jsf.ajax.request()</code>
+                        with data provided by <code>execute</code>, <code>render</code>, <code>onbegin</code>,
+                        <code>oncomplete</code>, <code>onsuccess</code> and <code>onerror</code> arguments, if any. 
+                    </p>
+                    <p>
+                        If the component being rendered has any <code>UIParameter</code> children, each one of them must be
+                        encoded into <code>params</code> object of the <code>options</code> object of the <code>jsf.ajax.request()</code>
+                        function.
+                    </p>
+                    <p>
+                        If the rendered JavaScript function is invoked with an object argument, each property must be
+                        encoded into <code>params</code> object of the <code>options</code> object of the <code>jsf.ajax.request()</code>
+                        function. This will override any property with the same key.
+                    </p>
+    
+                    <h3>Decode Behavior</h3>
+                    <p>
+                        Obtain the <code>Map</code> from the "requestParameterMap" property of the <code>ExternalContext</code>.
+                        If the value in the <code>Map</code> for the value of the "javax.faces.source" equals to the "clientId" property of the component,
+                        create a <code>javax.faces.event.ActionEvent</code> around the component, and pass it to the <code>queueEvent()</code> method of the component,
+                        which must be an instance of <code>UICommand</code>.
+                    </p>
+                ]]>
+            </description>
+            <component-family>javax.faces.Command</component-family>
+            <renderer-type>javax.faces.Script</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/command-script-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="command-script-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>false</renders-children>
             </renderer-extension>
 
         </renderer>

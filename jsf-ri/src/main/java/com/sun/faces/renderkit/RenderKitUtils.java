@@ -55,6 +55,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -70,6 +71,7 @@ import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.behavior.ClientBehaviorHint;
@@ -87,6 +89,7 @@ import javax.faces.render.ResponseStateManager;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
@@ -482,6 +485,36 @@ public class RenderKitUtils {
                       submitTarget,
                       needsSubmit,
                       false);
+    }
+
+    // Renders the script function for command scripts.
+    public static void renderFunction(FacesContext context, 
+                                      UIComponent component,
+                                      Collection<ClientBehaviorContext.Parameter> params,
+                                      String submitTarget)
+        throws IOException {
+
+        ClientBehaviorContext behaviorContext = ClientBehaviorContext.createClientBehaviorContext(context, component, "action", submitTarget, params);
+        AjaxBehavior behavior = (AjaxBehavior) context.getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
+        mapAttributes(component, behavior, "execute", "render", "onerror", "onevent", "resetValues");
+
+        context.getResponseWriter().append(behavior.getScript(behaviorContext));
+    }
+
+    private static void mapAttributes(UIComponent component, AjaxBehavior behavior, String... attributeNames) {
+        for (String attributeName : attributeNames) {
+            ValueExpression binding = component.getValueExpression(attributeName);
+            
+            if (binding == null) {
+                Object value = component.getAttributes().get(attributeName);
+                
+                if (value != null) {
+                    binding = ELUtils.createValueExpression(value.toString(), value.getClass());
+                }
+            }
+
+            behavior.setValueExpression(attributeName, binding);
+        }
     }
 
     public static String prefixAttribute(final String attrName,
@@ -1529,7 +1562,7 @@ public class RenderKitUtils {
 
     // Append a script to the chain, escaping any single quotes, since
     // our script content is itself nested within single quotes.
-    private static void appendQuotedValue(StringBuilder builder, 
+    public static void appendQuotedValue(StringBuilder builder, 
                                           String script) {
 
         builder.append("'");

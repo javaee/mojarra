@@ -83,5 +83,6 @@
         <module>xhtmlMappingToFaceletByDefault</module>
         <module>ajax</module>
         <module>websocket</module>
+        <module>commandScript</module>
     </modules>
 </project>

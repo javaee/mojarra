@@ -1,5 +1,6 @@
 *.class
 *.jar
+*.jsfdia
 target/
 /bin/
 /dist/

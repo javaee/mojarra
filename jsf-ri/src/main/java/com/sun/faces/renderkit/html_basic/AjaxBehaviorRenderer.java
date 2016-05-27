@@ -41,6 +41,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,6 +55,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorContext;
+import javax.faces.component.html.HtmlCommandScript;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.PhaseId;
@@ -221,6 +223,36 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
             }
         }
 
+        HtmlCommandScript commandScript = (component instanceof HtmlCommandScript) ? (HtmlCommandScript) component : null;
+        
+        if (commandScript != null) {
+            String name = commandScript.getName();
+
+            if (!name.contains(".")) {
+                ajaxCommand.append("var ");
+            }
+
+            ajaxCommand.append(name).append('=').append("function(o){var o=(typeof o==='object')&&o?o:{};");
+            
+            for (ClientBehaviorContext.Parameter param : params) {
+                ajaxCommand.append("o[");
+                RenderKitUtils.appendQuotedValue(ajaxCommand, param.getName());
+                ajaxCommand.append("]=");
+                Object paramValue = param.getValue();
+
+                if (paramValue == null) {
+                    ajaxCommand.append("null");
+                }
+                else {
+                    RenderKitUtils.appendQuotedValue(ajaxCommand, paramValue.toString());
+                }
+
+                ajaxCommand.append(";");
+            }
+            
+            params = Collections.singleton(new ClientBehaviorContext.Parameter("o", null));
+        }
+
         ajaxCommand.append("mojarra.ab(");
 
         if (sourceId == null) {
@@ -231,7 +263,9 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
             ajaxCommand.append("'");
         }
 
-        ajaxCommand.append(",event,'");
+        ajaxCommand.append(",");
+        ajaxCommand.append(commandScript == null ? "event" : "null");
+        ajaxCommand.append(",'");
         ajaxCommand.append(eventName);
         ajaxCommand.append("',");
 
@@ -276,21 +310,35 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
             }
 
             if (!params.isEmpty()) {
-                RenderKitUtils.appendProperty(ajaxCommand, "params", "{", false);
-
-                for (ClientBehaviorContext.Parameter param : params) {
-                    RenderKitUtils.appendProperty(ajaxCommand, 
-                                                  param.getName(),
-                                                  param.getValue());
+                if (commandScript != null) {
+                    RenderKitUtils.appendProperty(ajaxCommand, "params", params.iterator().next().getName(), false);
+                }
+                else {
+                    RenderKitUtils.appendProperty(ajaxCommand, "params", "{", false);
+                    
+                    for (ClientBehaviorContext.Parameter param : params) {
+                        RenderKitUtils.appendProperty(ajaxCommand, 
+                                param.getName(),
+                                param.getValue());
+                    }
+                    
+                    ajaxCommand.append("}");
                 }
                 
-                ajaxCommand.append("}");
             }
              
             ajaxCommand.append("}");
         }
 
         ajaxCommand.append(")");
+
+        if (commandScript != null) {
+            ajaxCommand.append("}");
+
+            if (commandScript.isAutorun()) {
+                ajaxCommand.append(";mojarra.l(").append(commandScript.getName()).append(")");
+            }
+        }
 
         return ajaxCommand.toString();
     }

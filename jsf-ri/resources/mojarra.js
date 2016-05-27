@@ -196,3 +196,27 @@ mojarra.ab = function ab(s, e, n, ex, re, op) {
 
     jsf.ajax.request(s, e, op);
 };
+
+/*
+ * This is called by command script when autorun=true.
+ * 
+ * @param l window onload callback function
+ */
+mojarra.l = function l(l) {
+    if (document.readyState === "complete") {
+        setTimeout(l);
+    }
+    else if (window.addEventListener) {
+        window.addEventListener("load", l, false);
+    }
+    else if (window.attachEvent) {
+        window.attachEvent("onload", l);
+    }
+    else if (typeof window.onload === "function") {
+        var oldListener = window.onload;
+        window.onload = function() { oldListener(); l(); };
+    }
+    else {
+        window.onload = l;
+    }
+};

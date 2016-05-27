@@ -47,6 +47,9 @@
     <command-link-renderer-class>
         com.sun.faces.renderkit.html_basic.CommandLinkRenderer
     </command-link-renderer-class>
+    <command-script-renderer-class>
+        com.sun.faces.renderkit.html_basic.CommandScriptRenderer
+    </command-script-renderer-class>
     <data-table-renderer-class>
         com.sun.faces.renderkit.html_basic.TableRenderer
     </data-table-renderer-class>

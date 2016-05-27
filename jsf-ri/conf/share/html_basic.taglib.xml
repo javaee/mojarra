@@ -2549,6 +2549,184 @@
     </tag>
     <tag>
         <description>
+            <![CDATA[
+                <p class="changed_added_2_3">
+                    Render a JavaScript function that invokes <code>jsf.ajax.request()</code> function.
+                </p>
+
+                <h3>Encode Behavior</h3>
+                <p>
+                    Render an HTML <code>script</code> element. If the value of the "name" attribute does not contain a
+                    period <code>.</code> indicating a namespaced function name, then render JavaScript <code>var</code>
+                    keyword, followed by a space character. Render the value of the "name" attribute, followed by 
+                    JavaScript assignment operator. Render JavaScript function which invokes <code>jsf.ajax.request()</code>
+                    with data provided by <code>execute</code>, <code>render</code>, <code>onbegin</code>,
+                    <code>oncomplete</code>, <code>onsuccess</code> and <code>onerror</code> arguments, if any. 
+                </p>
+                <p>
+                    If the component being rendered has any <code>UIParameter</code> children, each one of them must be
+                    encoded into <code>params</code> object of the <code>options</code> object of the <code>jsf.ajax.request()</code>
+                    function.
+                </p>
+                <p>
+                    If the rendered JavaScript function is invoked with an object argument, each property must be
+                    encoded into <code>params</code> object of the <code>options</code> object of the <code>jsf.ajax.request()</code>
+                    function. This will override any property with the same key.
+                </p>
+
+                <h3>Decode Behavior</h3>
+                <p>
+                    Obtain the <code>Map</code> from the "requestParameterMap" property of the <code>ExternalContext</code>.
+                    If the value in the <code>Map</code> for the value of the "javax.faces.source" equals to the "clientId" property of the component,
+                    create a <code>javax.faces.event.ActionEvent</code> around the component, and pass it to the <code>queueEvent()</code> method of the component,
+                    which must be an instance of <code>UICommand</code>.
+                </p>
+            ]]>
+        </description>
+        <tag-name>commandScript</tag-name>
+        <component>
+            <component-type>javax.faces.HtmlCommandScript</component-type>
+            <renderer-type>javax.faces.Script</renderer-type>
+        </component>
+        <attribute>
+            <description>
+                The component identifier for this component.
+                This value must be unique within the closest parent component that is a naming container.
+            </description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                Name of JavaScript function to be declared, e.g. <code>name="functionName"</code>.
+                This can be a namespaced function name, e.g. <code>name="ez.functionName"</code>.
+            ]]></description>
+            <name>name</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                Whether to execute declared JavaScript function during <code>load</code> event of the <code>window</code>.
+                Defaults to <code>false</code>.
+            ]]></description>
+            <name>autorun</name>
+            <required>false</required>
+            <type>boolean</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                MethodExpression representing the application action to invoke when this component is activated by the user.
+                The expression must evaluate to a public method that takes no parameters,
+                and returns an <code>Object</code>.
+                The <code>toString()</code> of the returned <code>Object</code> is called to derive the logical outcome.
+                This outcome is passed to the <code>NavigationHandler</code> for this application.
+            ]]></description>
+            <name>action</name>
+            <required>false</required>
+            <method-signature>java.lang.Object action()</method-signature>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                MethodExpression representing an action listener method that will be notified when this component is activated by the user.
+                The expression must evaluate to a public method that takes an <code>ActionEvent</code> parameter,
+                with a return type of <code>void</code>,
+                or to a public method that takes no arguments with a return type of <code>void</code>.
+                In the latter case,
+                the method has no way of easily knowing where the event came from,
+                but this can be useful in cases where a notification is needed that "some action happened".
+            ]]></description>
+            <name>actionListener</name>
+            <required>false</required>
+            <method-signature>void actionListener(javax.faces.event.ActionEvent)
+            </method-signature>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                This is a space separated list of client identifiers of components
+                that will participate in the "execute" portion of the Request Processing Lifecycle.
+                If a literal is specified the identifiers must be space delimited.
+                Any of the keywords "@this", "@form", "@all", "@none" may be specified in the identifier list.
+                If not specified, the default value of "@this" is assumed. 
+                For example, <code>@this clientIdOne clientIdTwo</code>.
+            ]]></description>
+            <name>execute</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                This is a space separated list of client identifiers of components
+                that will participate in the "render" portion of the Request Processing Lifecycle.
+                If a literal is specified the identifiers must be space delimited.
+                Any of the keywords "@this", "@form", "@all", "@none" may be specified in the identifier list.
+                If not specified, the default value of "@none" is assumed.
+                For example, <code>@this clientIdOne clientIdTwo</code>.
+            ]]></description>
+            <name>render</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                Reset specific input values.
+                Interpret the value of the <code>render</code> attribute as a space separated list of client identifiers
+                suitable for passing directly to <code>UIViewRoot.resetValues()</code>.
+                The implementation must cause an <code>ActionListener</code> to be attached to the <code>ActionSource</code>
+                component in which this tag is nested that calls <code>UIViewRoot.resetValues()</code> passing the value
+                of the <code>render</code> attribute as the argument.
+            ]]></description>
+            <name>resetValues</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                The name of the JavaScript function that will handle UI events.
+            </description>
+            <name>onevent</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                The name of the JavaScript function that will handle errors.
+            </description>
+            <name>onerror</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Flag indicating that, if this component is activated by the user, notifications should be delivered to
+                interested listeners and actions immediately (that is, during Apply Request Values phase) rather than
+                waiting until Invoke Application phase.
+            </description>
+            <name>immediate</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Flag indicating whether or not this component should be rendered (during Render Response Phase),
+                or processed on any subsequent form submit. Defaults to <code>true</code>.
+            </description>
+            <name>rendered</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                The ValueExpression linking this component to a property in a backing bean.
+            </description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
             &lt;p&gt;Renders an HTML "table" element compliant with the HTML 401
             specification. Render the "caption" facet, if present, inside a
             "caption" element immediately below the "table" element. If the

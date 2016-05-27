@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<!-- ========== Command+Script Properties ================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+<root>
+
+    <property>
+        <description><![CDATA[
+            Name of JavaScript function to be declared, e.g. <code>name="functionName"</code>.
+            This can be a namespaced function name, e.g. <code>name="ez.functionName"</code>.
+        ]]></description>
+        <icon></icon>
+        <property-name>name</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
+
+    <property>
+        <description><![CDATA[
+            Whether to execute declared JavaScript function during <code>load</code> event of the <code>window</code>.
+            Defaults to <code>false</code>.
+        ]]></description>
+        <icon></icon>
+        <property-name>autorun</property-name>
+        <property-class>boolean</property-class>
+    </property>
+
+    <property>
+        <description><![CDATA[
+            This is a space separated list of client identifiers of components
+            that will participate in the "execute" portion of the Request Processing Lifecycle.
+            If a literal is specified the identifiers must be space delimited.
+            Any of the keywords "@this", "@form", "@all", "@none" may be specified in the identifier list.
+            If not specified, the default value of "@this" is assumed. 
+            For example, <code>@this clientIdOne clientIdTwo</code>.
+        ]]></description>
+        <icon></icon>
+        <property-name>execute</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
+
+    <property>
+        <description><![CDATA[
+            This is a space separated list of client identifiers of components
+            that will participate in the "render" portion of the Request Processing Lifecycle.
+            If a literal is specified the identifiers must be space delimited.
+            Any of the keywords "@this", "@form", "@all", "@none" may be specified in the identifier list.
+            If not specified, the default value of "@none" is assumed.
+            For example, <code>@this clientIdOne clientIdTwo</code>.
+        ]]></description>
+        <icon></icon>
+        <property-name>render</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
+
+    <property>
+        <description><![CDATA[
+            Reset specific input values.
+            Interpret the value of the <code>render</code> attribute as a space separated list of client identifiers
+            suitable for passing directly to <code>UIViewRoot.resetValues()</code>.
+            The implementation must cause an <code>ActionListener</code> to be attached to the <code>ActionSource</code>
+            component in which this tag is nested that calls <code>UIViewRoot.resetValues()</code> passing the value
+            of the <code>render</code> attribute as the argument.
+        ]]></description>
+        <icon></icon>
+        <property-name>resetValues</property-name>
+        <property-class>java.lang.Boolean</property-class>
+    </property>
+
+    <property>
+        <description>
+            The name of the JavaScript function that will handle UI events.
+        </description>
+        <icon></icon>
+        <property-name>onevent</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
+
+    <property>
+        <description>
+            The name of the JavaScript function that will handle errors.
+        </description>
+        <icon></icon>
+        <property-name>onerror</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
+
+</root>

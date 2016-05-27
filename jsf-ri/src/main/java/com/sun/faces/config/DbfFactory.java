@@ -40,35 +40,38 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.util.Util;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.servlet.ServletContext;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+
+import org.w3c.dom.ls.LSInput;
+import org.w3c.dom.ls.LSResourceResolver;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
-import org.w3c.dom.ls.LSResourceResolver;
-import org.w3c.dom.ls.LSInput;
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.File;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import javax.servlet.ServletContext;
+
 import com.sun.faces.util.FacesLogger;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.Map;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -719,7 +722,7 @@ public class DbfFactory {
                         // try to load from the file
                         f = new File(FACES_2_3_XSD_FILE);
                         if (!f.exists()) {
-                            throw new IllegalStateException("Unable to find web-facesconfig_2_2.xsd");
+                            throw new IllegalStateException("Unable to find web-facesconfig_2_3.xsd");
                         }
                         url = f.toURI().toURL();
                     }

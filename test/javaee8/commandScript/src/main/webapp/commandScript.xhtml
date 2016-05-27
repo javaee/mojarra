@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+    <h:head>
+        <title>Spec613IT - commandScript</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:commandScript name="foo" autorun="true" action="#{commandScriptBean.setResult('foo')}" render=":result" />
+            <h:commandScript name="bar" action="#{commandScriptBean.setResult('bar')}" render=":result" />
+        </h:form>
+        <h:outputText id="result" value="#{commandScriptBean.result}" />
+    </h:body>
+</html>

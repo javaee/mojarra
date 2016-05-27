@@ -6593,6 +6593,300 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </component-extension>
   </component>
   <component>
+    <description><![CDATA[<p>Represents an HTML <code>script</code> element for a function that acts
+      like an ajax form submit.  This component must be placed inside
+      a form, and requires JavaScript to be enabled in the client.</p>]]></description>
+    <display-name>Command Script</display-name>
+    <component-type>javax.faces.HtmlCommandScript</component-type>
+    <component-class>javax.faces.component.html.HtmlCommandScript</component-class>
+
+    <property>
+      <description><![CDATA[
+          A mutable Map of the attributes associated with
+          this component, keyed by attribute name.
+        ]]></description>
+      <display-name>Attributes Map</display-name>
+      <icon/>
+      <property-name>attributes</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The number of child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component Count</display-name>
+      <icon/>
+      <property-name>childCount</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable List of the child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component List</display-name>
+      <icon/>
+      <property-name>children</property-name>
+      <property-class>java.util.List</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable Map of the facets associated with
+          this component, keyed by facet name.
+        ]]></description>
+      <display-name>Facets Map</display-name>
+      <icon/>
+      <property-name>facets</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component family to which this component belongs.  This property
+          is used to select an appropriate Renderer.
+        ]]></description>
+      <display-name>Component Family</display-name>
+      <icon/>
+      <property-name>family</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+        ]]></description>
+      <display-name>Component Identifier</display-name>
+      <icon/>
+      <property-name>id</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+          The parent component for this component.  On the root component
+          in the component tree (which must be of type UIViewRoot), this
+          property is null.
+        ]]></description>
+      <display-name>Parent Component</display-name>
+      <icon/>
+      <property-name>parent</property-name>
+      <property-class>javax.faces.component.UIComponent</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.  The default value for this property is true.
+        ]]></description>
+      <display-name>Rendered Flag</display-name>
+      <icon/>
+      <property-name>rendered</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Identifier used (in conjunction with the "family" property) to
+          select an appropriate Renderer to encode and decode this component.
+        ]]></description>
+      <display-name>Renderer Type</display-name>
+      <icon/>
+      <property-name>rendererType</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component takes responsibility
+          for rendering its own children.  This decision is normally delegated
+          to the associated Renderer, if there is one.
+        ]]></description>
+      <display-name>Renders Children</display-name>
+      <icon/>
+      <property-name>rendersChildren</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          MethodExpression representing the application action to invoke
+          when this component is activated by the user.  The expression
+          must evaluate to a public method that takes no parameters, and
+          returns an Object (the toString() of which is called to derive
+          the logical outcome) which is passed to the NavigationHandler
+          for this application.
+        </description>
+      <display-name>Application Action</display-name>
+      <icon/>
+      <property-name>action</property-name>
+      <property-class>javax.el.MethodExpression</property-class>
+      <property-extension>
+        <method-signature>
+                java.lang.Object action()
+            </method-signature>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<p>
+
+          MethodExpression representing an action listener method that
+          will be notified when this component is activated by the user.
+          The expression must evaluate to a public method that takes an
+          ActionEvent parameter, with a return type of void, <span
+          class="changed_added_2_0">or to a public method that takes no
+          arguments with a return type of void.  In the latter case, the
+          method has no way of easily knowing where the event came from,
+          but this can be useful in cases where a notification is needed
+          that "some action happened".</span>
+
+</p>]]></description>
+      <display-name>Action Listener</display-name>
+      <icon/>
+      <property-name>actionListener</property-name>
+      <property-class>javax.el.MethodExpression</property-class>
+      <property-extension>
+        <method-signature>
+                void actionListener(javax.faces.event.ActionEvent)
+            </method-signature>
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void actionListener()
+            </method-signature>
+-->
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating that, if this component is activated by the user,
+          notifications should be delivered to interested listeners and actions
+          immediately (that is, during Apply Request Values phase) rather than
+          waiting until Invoke Application phase.
+        </description>
+      <display-name>Immediate Action</display-name>
+      <icon/>
+      <property-name>immediate</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description><![CDATA[
+            Name of JavaScript function to be declared, e.g. <code>name="functionName"</code>.
+            This can be a namespaced function name, e.g. <code>name="ez.functionName"</code>.
+        ]]></description>
+      <icon/>
+      <property-name>name</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+            Whether to execute declared JavaScript function during <code>load</code> event of the <code>window</code>.
+            Defaults to <code>false</code>.
+        ]]></description>
+      <icon/>
+      <property-name>autorun</property-name>
+      <property-class>boolean</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+            This is a space separated list of client identifiers of components
+            that will participate in the "execute" portion of the Request Processing Lifecycle.
+            If a literal is specified the identifiers must be space delimited.
+            Any of the keywords "@this", "@form", "@all", "@none" may be specified in the identifier list.
+            If not specified, the default value of "@this" is assumed. 
+            For example, <code>@this clientIdOne clientIdTwo</code>.
+        ]]></description>
+      <icon/>
+      <property-name>execute</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+            This is a space separated list of client identifiers of components
+            that will participate in the "render" portion of the Request Processing Lifecycle.
+            If a literal is specified the identifiers must be space delimited.
+            Any of the keywords "@this", "@form", "@all", "@none" may be specified in the identifier list.
+            If not specified, the default value of "@none" is assumed.
+            For example, <code>@this clientIdOne clientIdTwo</code>.
+        ]]></description>
+      <icon/>
+      <property-name>render</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+            Reset specific input values.
+            Interpret the value of the <code>render</code> attribute as a space separated list of client identifiers
+            suitable for passing directly to <code>UIViewRoot.resetValues()</code>.
+            The implementation must cause an <code>ActionListener</code> to be attached to the <code>ActionSource</code>
+            component in which this tag is nested that calls <code>UIViewRoot.resetValues()</code> passing the value
+            of the <code>render</code> attribute as the argument.
+        ]]></description>
+      <icon/>
+      <property-name>resetValues</property-name>
+      <property-class>java.lang.Boolean</property-class>
+    </property>
+    <property>
+      <description>
+            The name of the JavaScript function that will handle UI events.
+        </description>
+      <icon/>
+      <property-name>onevent</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>
+            The name of the JavaScript function that will handle errors.
+        </description>
+      <icon/>
+      <property-name>onerror</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+
+    <component-extension>
+      <base-component-type>javax.faces.Command</base-component-type>
+      <renderer-type>javax.faces.Script</renderer-type>
+    </component-extension>
+  </component>
+  <component>
     <description><![CDATA[<p>Represents a set of repeating data (segregated into
       columns by child UIColumn components) that will
       be rendered in an HTML <code>table</code> element.</p>]]></description>
@@ -23701,6 +23995,124 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-extension>
         <renders-children>true</renders-children>
         <body-tag>true</body-tag>
+      </renderer-extension>
+    </renderer>
+    <renderer>
+      <description><![CDATA[
+                    <p class="changed_added_2_3">
+                        Render a JavaScript function that invokes <code>jsf.ajax.request()</code> function.
+                    </p>
+    
+                    <h3>Encode Behavior</h3>
+                    <p>
+                        Render an HTML <code>script</code> element. If the value of the "name" attribute does not contain a
+                        period <code>.</code> indicating a namespaced function name, then render JavaScript <code>var</code>
+                        keyword, followed by a space character. Render the value of the "name" attribute, followed by 
+                        JavaScript assignment operator. Render JavaScript function which invokes <code>jsf.ajax.request()</code>
+                        with data provided by <code>execute</code>, <code>render</code>, <code>onbegin</code>,
+                        <code>oncomplete</code>, <code>onsuccess</code> and <code>onerror</code> arguments, if any. 
+                    </p>
+                    <p>
+                        If the component being rendered has any <code>UIParameter</code> children, each one of them must be
+                        encoded into <code>params</code> object of the <code>options</code> object of the <code>jsf.ajax.request()</code>
+                        function.
+                    </p>
+                    <p>
+                        If the rendered JavaScript function is invoked with an object argument, each property must be
+                        encoded into <code>params</code> object of the <code>options</code> object of the <code>jsf.ajax.request()</code>
+                        function. This will override any property with the same key.
+                    </p>
+    
+                    <h3>Decode Behavior</h3>
+                    <p>
+                        Obtain the <code>Map</code> from the "requestParameterMap" property of the <code>ExternalContext</code>.
+                        If the value in the <code>Map</code> for the value of the "javax.faces.source" equals to the "clientId" property of the component,
+                        create a <code>javax.faces.event.ActionEvent</code> around the component, and pass it to the <code>queueEvent()</code> method of the component,
+                        which must be an instance of <code>UICommand</code>.
+                    </p>
+                ]]></description>
+      <component-family>javax.faces.Command</component-family>
+      <renderer-type>javax.faces.Script</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.CommandScriptRenderer
+    </renderer-class>
+
+      <attribute>
+        <description><![CDATA[
+            Name of JavaScript function to be declared, e.g. <code>name="functionName"</code>.
+            This can be a namespaced function name, e.g. <code>name="ez.functionName"</code>.
+        ]]></description>
+        <icon/>
+        <attribute-name>name</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+            Whether to execute declared JavaScript function during <code>load</code> event of the <code>window</code>.
+            Defaults to <code>false</code>.
+        ]]></description>
+        <icon/>
+        <attribute-name>autorun</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+            This is a space separated list of client identifiers of components
+            that will participate in the "execute" portion of the Request Processing Lifecycle.
+            If a literal is specified the identifiers must be space delimited.
+            Any of the keywords "@this", "@form", "@all", "@none" may be specified in the identifier list.
+            If not specified, the default value of "@this" is assumed. 
+            For example, <code>@this clientIdOne clientIdTwo</code>.
+        ]]></description>
+        <icon/>
+        <attribute-name>execute</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+            This is a space separated list of client identifiers of components
+            that will participate in the "render" portion of the Request Processing Lifecycle.
+            If a literal is specified the identifiers must be space delimited.
+            Any of the keywords "@this", "@form", "@all", "@none" may be specified in the identifier list.
+            If not specified, the default value of "@none" is assumed.
+            For example, <code>@this clientIdOne clientIdTwo</code>.
+        ]]></description>
+        <icon/>
+        <attribute-name>render</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+            Reset specific input values.
+            Interpret the value of the <code>render</code> attribute as a space separated list of client identifiers
+            suitable for passing directly to <code>UIViewRoot.resetValues()</code>.
+            The implementation must cause an <code>ActionListener</code> to be attached to the <code>ActionSource</code>
+            component in which this tag is nested that calls <code>UIViewRoot.resetValues()</code> passing the value
+            of the <code>render</code> attribute as the argument.
+        ]]></description>
+        <icon/>
+        <attribute-name>resetValues</attribute-name>
+        <attribute-class>java.lang.Boolean</attribute-class>
+      </attribute>
+      <attribute>
+        <description>
+            The name of the JavaScript function that will handle UI events.
+        </description>
+        <icon/>
+        <attribute-name>onevent</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description>
+            The name of the JavaScript function that will handle errors.
+        </description>
+        <icon/>
+        <attribute-name>onerror</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <renderer-extension>
+        <renders-children>false</renders-children>
       </renderer-extension>
     </renderer>
     <renderer>

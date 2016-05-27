@@ -89,6 +89,9 @@ public final class HtmlLibrary extends AbstractHtmlLibrary {
         this.addHtmlComponent("commandLink", "javax.faces.HtmlCommandLink",
                 "javax.faces.Link");
 
+        this.addHtmlComponent("commandScript", "javax.faces.HtmlCommandScript",
+                "javax.faces.Script");
+
         this.addHtmlComponent("dataTable", "javax.faces.HtmlDataTable",
                 "javax.faces.Table");
 
