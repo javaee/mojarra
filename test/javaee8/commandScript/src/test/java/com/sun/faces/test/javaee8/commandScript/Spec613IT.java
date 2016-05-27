@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.javaee8.websocket;
+package com.sun.faces.test.javaee8.commandScript;
 
 import static org.junit.Assert.assertTrue;
 
