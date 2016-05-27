@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,20 +42,26 @@ package com.sun.faces.cdi;
 import static com.sun.faces.cdi.CdiUtils.getAnnotation;
 import static java.util.Collections.unmodifiableMap;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.AfterDeploymentValidation;
+import javax.enterprise.inject.spi.AnnotatedField;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessBean;
+import javax.enterprise.inject.spi.ProcessManagedBean;
+import javax.faces.annotation.ManagedProperty;
 import javax.faces.model.DataModel;
 import javax.faces.model.FacesDataModel;
 
@@ -74,6 +80,8 @@ public class CdiExtension implements Extension {
      * Map of classes that can be wrapped by a data model to data model implementation classes
      */
     private Map<Class<?>, Class<? extends DataModel<?>>> forClassToDataModelClass = new HashMap<>();
+    
+    private Set<Type> managedPropertyTargetTypes = new HashSet<>();
 
     
     /**
@@ -138,6 +146,15 @@ public class CdiExtension implements Extension {
                    (Class<? extends DataModel<?>>) event.getBean().getBeanClass());
         }
     }
+    
+    public <T> void collect(@Observes ProcessManagedBean<T> event) {
+        for (AnnotatedField<? super T> field : event.getAnnotatedBeanClass().getFields()) {
+            if (field.isAnnotationPresent(ManagedProperty.class) && field.getBaseType() instanceof Class) {
+                managedPropertyTargetTypes.add(field.getBaseType());
+            }
+        }
+    }
+    
     
     /**
      * After deployment validation
