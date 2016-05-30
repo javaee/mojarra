@@ -43,8 +43,8 @@ package javax.faces.component;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
 import java.util.Map;
+
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -264,9 +264,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     @Override
     public Object getSubmittedValue() {
-
-        return (this.submittedValue);
-
+        if (submittedValue == null && !isValid() && considerEmptyStringNull(FacesContext.getCurrentInstance())) { // JAVASERVERFACES_SPEC_PUBLIC-671
+            return "";
+        } else {
+            return submittedValue;
+        }
     }
 
 
