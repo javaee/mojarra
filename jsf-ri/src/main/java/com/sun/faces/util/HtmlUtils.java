@@ -780,6 +780,19 @@ public class HtmlUtils {
         HtmlUtils.writeText(out, true, true, outbuf, text, textBuffer);
     }
 
+    static public void writeUnescapedTextForXML(Writer out, String text) throws IOException {
+        final int length = text.length();
+
+        for (int i = 0; i < length; i++) {
+            final char ch = text.charAt(i);
+
+            if (ch < 0x20 ? (ch == 0x9 || ch == 0xA || ch == 0xD) : (ch <= 0xD7FF || (ch >= 0xE000 && ch <= 0xFFFD))) {
+                // Only those chars are allowed in XML. https://www.w3.org/TR/xml/#charsets Character Range
+                out.write(ch);
+            }
+        }
+    }
+
     // Encode a String into URI-encoded form.  This code will
     // appear rather (ahem) similar to java.net.URLEncoder
     // This is duplicated below accepting a char[] for the content
