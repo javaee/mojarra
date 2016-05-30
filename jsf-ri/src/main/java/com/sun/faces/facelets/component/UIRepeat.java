@@ -58,7 +58,18 @@
 
 package com.sun.faces.facelets.component;
 
-import com.sun.faces.facelets.tag.IterationStatus;
+import static com.sun.faces.cdi.CdiUtils.createDataModel;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.sql.ResultSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -69,8 +80,8 @@ import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.component.UINamingContainer;
-import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitHint;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
@@ -88,19 +99,7 @@ import javax.faces.model.ResultSetDataModel;
 import javax.faces.model.ScalarDataModel;
 import javax.faces.render.Renderer;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.sql.ResultSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static com.sun.faces.cdi.CdiUtils.createDataModel;
-import static javax.faces.component.UINamingContainer.getSeparatorChar;
+import com.sun.faces.facelets.tag.IterationStatus;
 
 
 public class UIRepeat extends UINamingContainer {
@@ -259,7 +258,30 @@ public class UIRepeat extends UINamingContainer {
         if (this.model == null) {
             Object val = this.getValue();
             if (val == null) {
-                this.model = EMPTY_MODEL;
+                Integer begin = getBegin();
+                Integer end = getEnd();
+
+                if (end == null) {
+                    if (begin == null) {
+                        this.model = EMPTY_MODEL;
+                    } else {
+                        throw new IllegalArgumentException("end");
+                    }
+                } else {
+                    int b = (begin == null) ? 0 : begin;
+                    int e = end;
+                    int d = (b < e) ? 1 : (b > e) ? -1 : 0;
+                    int s = Math.abs(e - b) + 1;
+                    Integer[] array = new Integer[s];
+
+                    for (int i = 0; i < s; i++) {
+                        array[i] = b + (i * d);
+                    }
+
+                    this.model = new ArrayDataModel<>(array);
+                    setBegin(0);
+                    setEnd(s);
+                }
             } else if (val instanceof DataModel) {
                 //noinspection unchecked
                 this.model = (DataModel<Object>) val;

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+    <h:head>
+        <title>Spec1102IT - support "begin" and "end" in ui:repeat</title>
+    </h:head>
+    <h:body>
+        <span id="repeat1"><ui:repeat begin="1" end="3" var="i">#{i}</ui:repeat></span>
+        <span id="repeat2"><ui:repeat begin="-3" end="3" var="i">#{i}</ui:repeat></span>
+        <span id="repeat3"><ui:repeat begin="3" end="-3" var="i">#{i}</ui:repeat></span>
+        <span id="repeat4"><ui:repeat begin="-3" end="3" step="2" var="i">#{i}</ui:repeat></span>
+        <span id="repeat5"><ui:repeat begin="-3" end="3" size="2" var="i">#{i}</ui:repeat></span>
+        <span id="repeat6"><ui:repeat begin="-3" end="3" step="2" size="2" var="i">#{i}</ui:repeat></span>
+        <span id="repeat7"><ui:repeat begin="3" end="3" var="i">#{i}</ui:repeat></span>
+        <span id="repeat8"><ui:repeat end="3" var="i">#{i}</ui:repeat></span>
+    </h:body>
+</html>
