@@ -921,8 +921,9 @@
             <![CDATA[
                 <div class="changed_modified_2_3">
                     <p>
-                        Read-write property setting the begin index of the 
-                        collection to iterate.
+                        If value specified: Iteration begins at the item located at the specified index.
+                        First item of the collection has index 0.
+                        If value not specified: Iteration begins with index set at the specified value.
                     </p>
                 </div>
             ]]>
@@ -936,8 +937,8 @@
             <![CDATA[
                 <div class="changed_modified_2_3">
                     <p>
-                        Read-write property setting the end index of the 
-                        collection to iterate.
+                        If value specified: Iteration ends at the item located at the specified index (inclusive).
+                        If value not specified: Iteration ends when index reaches the specified value (inclusive).
                     </p>
                 </div>
             ]]>
