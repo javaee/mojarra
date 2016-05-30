@@ -75,6 +75,7 @@ import javax.faces.render.RenderKitFactory;
 
 import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.Util;
 
  public class PartialViewContextImpl extends PartialViewContext {
@@ -665,6 +666,10 @@ import com.sun.faces.util.Util;
 
         // ---------------------------------- Methods from PartialResponseWriter
 
+        @Override
+        public void write(String text) throws IOException {
+            HtmlUtils.writeUnescapedTextForXML(getWrapped(), text);
+        }
 
         @Override
         public ResponseWriter getWrapped() {
