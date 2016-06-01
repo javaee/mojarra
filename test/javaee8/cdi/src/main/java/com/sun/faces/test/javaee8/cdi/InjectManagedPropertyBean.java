@@ -39,6 +39,8 @@
  */
 package com.sun.faces.test.javaee8.cdi;
 
+import java.util.Map;
+
 import javax.enterprise.context.RequestScoped;
 import javax.faces.annotation.ManagedProperty;
 import javax.inject.Inject;
@@ -60,7 +62,13 @@ public class InjectManagedPropertyBean {
 	@Inject @ManagedProperty("#{param['test']}")
 	private String testParam;
 	
-	public Integer getInjectedInteger1() {
+	@Inject @ManagedProperty("#{managedPropertyBean.myStringMap}")
+    private Map<String, String> stringMap;
+
+    @Inject @ManagedProperty("#{managedPropertyBean.myIntegerMap}")
+    private Map<Integer, Integer> integerMap;
+
+    public Integer getInjectedInteger1() {
 		return injectedInteger1;
 	}
 
@@ -75,5 +83,13 @@ public class InjectManagedPropertyBean {
 	public String getTestParam() {
 		return testParam;
 	}
+	
+    public Map<String, String> getStringMap() {
+        return stringMap;
+    }
+
+    public Map<Integer, Integer> getIntegerMap() {
+        return integerMap;
+    }
 
 }

@@ -39,6 +39,9 @@
  */
 package com.sun.faces.test.javaee8.cdi;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -57,5 +60,17 @@ public class ManagedPropertyBean {
 	public Integer getMyInteger3() {
 		return 123;
 	}
+	
+    public Map<String, String> getMyStringMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("foo", "bar");
+        return map;
+    }
+    
+    public Map<Integer, Integer> getMyIntegerMap() {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(9, 10);
+        return map;
+    }
 	
 }

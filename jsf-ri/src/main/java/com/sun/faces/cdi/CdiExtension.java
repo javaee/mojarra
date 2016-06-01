@@ -42,6 +42,7 @@ package com.sun.faces.cdi;
 import static com.sun.faces.cdi.CdiUtils.getAnnotation;
 import static java.util.Collections.unmodifiableMap;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -152,7 +153,7 @@ public class CdiExtension implements Extension {
     
     public <T> void collect(@Observes ProcessManagedBean<T> event) {
         for (AnnotatedField<? super T> field : event.getAnnotatedBeanClass().getFields()) {
-            if (field.isAnnotationPresent(ManagedProperty.class) && field.getBaseType() instanceof Class) {
+            if (field.isAnnotationPresent(ManagedProperty.class) && (field.getBaseType() instanceof Class || field.getBaseType() instanceof ParameterizedType)) {
                 managedPropertyTargetTypes.add(field.getBaseType());
             }
         }
