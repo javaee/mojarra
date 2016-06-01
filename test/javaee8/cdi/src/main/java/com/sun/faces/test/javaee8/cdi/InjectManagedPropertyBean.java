@@ -50,40 +50,40 @@ import javax.inject.Named;
 @RequestScoped
 public class InjectManagedPropertyBean {
 
-	@Inject @ManagedProperty("#{managedPropertyBean.myInteger1}")
-	private Integer injectedInteger1;
-	
-	@Inject @ManagedProperty("#{managedPropertyBean.myInteger2}")
-	private Integer injectedInteger2;
-	
-	@Inject @ManagedProperty("#{managedPropertyBean.myInteger3}")
-	private Integer injectedInteger3;
+    @Inject @ManagedProperty("#{managedPropertyBean.myInteger1}")
+    private Integer injectedInteger1;
 
-	@Inject @ManagedProperty("#{param['test']}")
-	private String testParam;
-	
-	@Inject @ManagedProperty("#{managedPropertyBean.myStringMap}")
+    @Inject @ManagedProperty("#{managedPropertyBean.myInteger2}")
+    private Integer injectedInteger2;
+    
+    @Inject @ManagedProperty("#{managedPropertyBean.myInteger3}")
+    private Integer injectedInteger3;
+
+    @Inject @ManagedProperty("#{param['test']}")
+    private String testParam;
+    
+    @Inject @ManagedProperty("#{managedPropertyBean.myStringMap}")
     private Map<String, String> stringMap;
 
     @Inject @ManagedProperty("#{managedPropertyBean.myIntegerMap}")
     private Map<Integer, Integer> integerMap;
 
     public Integer getInjectedInteger1() {
-		return injectedInteger1;
-	}
+        return injectedInteger1;
+    }
 
-	public Integer getInjectedInteger2() {
-		return injectedInteger2;
-	}
+    public Integer getInjectedInteger2() {
+        return injectedInteger2;
+    }
 
-	public Integer getInjectedInteger3() {
-		return injectedInteger3;
-	}
+    public Integer getInjectedInteger3() {
+        return injectedInteger3;
+    }
 
-	public String getTestParam() {
-		return testParam;
-	}
-	
+    public String getTestParam() {
+        return testParam;
+    }
+    
     public Map<String, String> getStringMap() {
         return stringMap;
     }
