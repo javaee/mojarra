@@ -38,31 +38,29 @@
  * holder.
  */
 package com.sun.faces.cdi;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
+import javax.enterprise.util.AnnotationLiteral;
+import javax.faces.annotation.ManagedProperty;
 
 /**
- * <p class="changed_added_2_3">
- * The ApplicationProducer is the CDI producer that allows EL resolving 
- * of #{application}
- * </p>
- *
- * @since 2.3
- * @see ExternalContext
+ * An annotation literal for {@link ManagedProperty}
+ * 
  */
-public class ApplicationProducer extends CdiProducer<Object> {
-    
-    /**
-     * Serialization version
-     */
+@SuppressWarnings("all")
+class ManagedPropertyLiteral extends AnnotationLiteral<ManagedProperty> implements ManagedProperty {
     private static final long serialVersionUID = 1L;
     
-    public ApplicationProducer() {
-        super.name("application")
-             .scope(ApplicationScoped.class)
-             .create(e -> FacesContext.getCurrentInstance().getExternalContext().getContext());
+    private final String value;
+    
+    public ManagedPropertyLiteral() {
+        this("");
     }
-
+    
+    public ManagedPropertyLiteral(String value) {
+        this.value = value;
+    }
+    
+    @Override
+    public String value() {
+        return value;
+    }
 }

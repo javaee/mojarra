@@ -104,7 +104,7 @@ public class CdiExtension implements Extension {
      *
      * @param afterBeanDiscovery the after bean discovery.
      */
-    public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery) {
+    public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery, BeanManager beanManager) {
         afterBeanDiscovery.addBean(new ApplicationProducer());
         afterBeanDiscovery.addBean(new ApplicationMapProducer());
         afterBeanDiscovery.addBean(new CompositeComponentProducer());
@@ -127,6 +127,10 @@ public class CdiExtension implements Extension {
         afterBeanDiscovery.addBean(new ViewMapProducer());
         afterBeanDiscovery.addBean(new ViewProducer());
         afterBeanDiscovery.addBean(new DataModelClassesMapProducer());
+        
+        for (Type type : managedPropertyTargetTypes) {
+            afterBeanDiscovery.addBean(new ManagedPropertyProducer(type, beanManager));
+        }
     }
     
     /**
@@ -138,12 +142,11 @@ public class CdiExtension implements Extension {
     @SuppressWarnings("unchecked")
     public <T extends DataModel<?>> void processBean(@Observes ProcessBean<T> event, BeanManager beanManager) {
         
-        Optional result;
-        result = getAnnotation(beanManager, event.getAnnotated(), FacesDataModel.class);
-        if (null != result && result.isPresent()) {
-            FacesDataModel d = (FacesDataModel) result.get();
-            forClassToDataModelClass.put(d.forClass(), 
-                   (Class<? extends DataModel<?>>) event.getBean().getBeanClass());
+        Optional<FacesDataModel> optionalFacesDataModel = getAnnotation(beanManager, event.getAnnotated(), FacesDataModel.class);
+        if (optionalFacesDataModel.isPresent()) {
+            forClassToDataModelClass.put(
+                optionalFacesDataModel.get().forClass(), 
+                (Class<? extends DataModel<?>>) event.getBean().getBeanClass());
         }
     }
     

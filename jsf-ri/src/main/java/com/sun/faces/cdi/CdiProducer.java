@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,13 +39,15 @@
  */
 package com.sun.faces.cdi;
 
-import static com.sun.faces.util.CollectionsUtils.asSet;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
+import static java.util.Collections.unmodifiableSet;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -76,10 +78,11 @@ abstract class CdiProducer<T> implements Bean<T>, PassivationCapable, Serializab
      */
     private Boolean active;
     
+    private String id = this.getClass().getName();
     private String name;
     private Class<?> beanClass = Object.class;
     private Set<Type> types = singleton(Object.class);
-    private Set<Annotation> qualifiers = singleton(new DefaultAnnotationLiteral());
+    private Set<Annotation> qualifiers = unmodifiableSet(asSet(new DefaultAnnotationLiteral(), new AnyAnnotationLiteral()));
     private Class<? extends Annotation> scope = Dependent.class;
     private Function<CreationalContext<T>, T> create;
     
@@ -95,12 +98,7 @@ abstract class CdiProducer<T> implements Bean<T>, PassivationCapable, Serializab
      */
     @Override
     public String getId() {
-        // In general just the class name is enough to fully identify
-        // a particular producer. If functionally different instances of
-        // the same producer class exists (e.g. when using a constructor
-        // with arguments) a subclass needs a return a more specific
-        // value here.
-        return this.getClass().getName();
+        return id;
     }
     
     @Override
@@ -250,6 +248,16 @@ abstract class CdiProducer<T> implements Bean<T>, PassivationCapable, Serializab
     protected CdiProducer<T> scope(Class<? extends Annotation> scope) {
         this.scope = scope;
         return this;
+    }
+    
+    protected CdiProducer<T> addToId(Object object) {
+        id = id + " " + object.toString();
+        return this;
+    }
+    
+    @SafeVarargs
+    protected static <T> Set<T> asSet(T... a) {
+        return new HashSet<T>(asList(a));
     }
     
 }
