@@ -311,6 +311,14 @@
                                 <!--
                                 
                                     Generate standard-html-renderkit.xml
+                                    
+                                    This works by taking /jsf-api/doc/standard-html-renderkit-base.xml
+                                    which contains a lot of xincludes, and then writing out a new file
+                                    called standard-html-renderkit.xml with the xincludes replaced by the
+                                    actual file contents.
+                                    
+                                    (p.s. in a way this is compensating for components in faces-config not 
+                                    being able to use inheritance)
                                 
                                 -->
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
@@ -323,6 +331,13 @@
                                 <if>
                                     <equals arg1="${osfamily}" arg2="unix"/>
                                     <then>
+                                        
+                                        <!-- 
+                                            Copy a lot of -props.xml files to -attrs.xml.
+                                            
+                                            For some reason, source files are kept as -props.xml, but some
+                                            (and curiously not all) are xi included as -attrs.xml)
+                                         -->
                                         <copy todir="src/main/doc" overwrite="true">
                                             <mapper type="glob"
                                                 from="*-props.xml"
@@ -337,18 +352,36 @@
                                                 <include name="outcometargetbutton-props.xml"/>
                                             </fileset>
                                         </copy>
+                                        
+                                        <!-- 
+                                            Global search for "property" tags in the newly copied -attrs.xml files and replace
+                                            by "attribute" tags
+                                         -->
                                         <replace dir="src/main/doc" summary="true">
                                             <include name="*-attrs.xml"/>
-                                            <replacefilter token="&lt;property"
+                                            <replacefilter 
+                                                token="&lt;property"
                                                 value="&lt;attribute"/>
-                                            <replacefilter token="&lt;/property"
+                                            <replacefilter 
+                                                token="&lt;/property"
                                                 value="&lt;/attribute"/>
-                                            <replacefilter token="Properties"
+                                            <replacefilter 
+                                                token="Properties"
                                                 value="Attributes"/>
                                         </replace>
+                                        
+                                        <!-- 
+                                            Use the xmllint commandline tool to do the actual inclusion of the xincludes
+                                            and write out the file with the include directives replaced by their
+                                            respective content.
+                                         -->
                                         <exec executable="xmllint" dir="src/main/doc" failonerror="true">
                                             <arg line="--xinclude --format --output standard-html-renderkit.xml standard-html-renderkit-base.xml"/>
                                         </exec>
+                                        
+                                        <!-- 
+                                            Add a warning that the file is generated and should not be edited manually.
+                                         -->
                                         <replace file="src/main/doc/standard-html-renderkit.xml">
                                             <replacetoken><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></replacetoken>
                                             <replacevalue><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -370,7 +403,10 @@
                                 
                                     Generate AttributeManager
                                     
-                                    This is for generating several UI components based on their taglib descriptions
+                                    AttributeManager is a class that contains mappings between the standard components
+                                    and the passthrough attributes associated with them.
+                                    
+                                    This is used in the generating of several UI components based on their taglib descriptions
                                 
                                 -->
                                 <copy todir="${jsf-tools-dir}/build/classes">

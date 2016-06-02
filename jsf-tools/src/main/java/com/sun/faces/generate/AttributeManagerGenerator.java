@@ -43,6 +43,12 @@ package com.sun.faces.generate;
 import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.PropertyBean;
+import com.sun.faces.renderkit.Attribute;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.CollectionsUtils;
+
+import static com.sun.faces.renderkit.Attribute.attr;
+import static com.sun.faces.util.CollectionsUtils.ar;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -50,10 +56,62 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Iterator;
 
 /**
- * PENDING
+ * This class is used to generate the AttributeManager, which is used
+ * by mainly Renderers to render passthrough attribues (via
+ * RenderKitUtils#renderPassThruAttributes)
+ * 
+ * <p>
+ * The AttributeManager mainly holds a [component name/attributes] map, and the code to
+ * create that map is the main things this generator generates.
+ * 
+ * Prior to this generator, Mojarra maintained a static list of passthrough attributes that would 
+ * be applied to all components when rendered. The main problem with doing this is that some components
+ * have a very small list of passthrough attributes and so we'd waste cycles processing the generic list.
+ *  
+ * To alleviate this issue:
+ *
+ *<pre>
+ * 1.  Added a new code generator, AttributeManagerGenerator, which will
+ *     leverage the xml metadata in jsf-api/doc to generate a class which
+ *     has knowledge of which components have which pass through attributes.
+ *     This generated class will expose a method that will allow renderers
+ *     to lookup the set of passthrough attributes appropriate to the component
+ *     they handle.
+ *  2. Update all renderers that render passthrough attributes to store
+ *     the attribute lookup result in a static variable
+ *  3. Remove the RenderKitUtil.renderPassThruAttributes() methods containing
+ *     excludes.  Rely on the generator to provide the correct attributes.
+ *  4. Remove all the logic (sorting, verifying) associated with the excludes
+ *  5. Update the RenderKitUtils.shouldRenderAttribute() logic to check
+ *     if the value to be rendered is a String (as most are).  If it is, return
+ *     true and bypass the remainder of the checks.
+ *</pre>
+ *
+ * <p>
+ * After profiling RenderKitUtils.renderPassThruAttributes has dropped quite in 
+ * terms of cpu usage compared to the previous implementation.
+ * 
+ * <p>
+ * The following shows an example of this generated Map:
+ * 
+ * <code>
+ * <pre>
+ * private static Map&lt;String,Attribute[]> ATTRIBUTE_LOOKUP=CollectionsUtils.&lt;String,Attribute[]>map()
+ *      .add("CommandButton",ar(
+ *          attr("accesskey")
+ *          ,attr("alt")
+ *          ,attr("dir")
+ *          ,attr("lang")
+ *          ,attr("onblur","blur")
+ *          ...
+ * </pre>
+ * </code>
+ * 
+ *  
  */
 public class AttributeManagerGenerator extends AbstractGenerator {
 
