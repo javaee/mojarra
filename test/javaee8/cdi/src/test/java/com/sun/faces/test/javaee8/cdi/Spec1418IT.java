@@ -96,5 +96,15 @@ public class Spec1418IT {
         
         assertTrue(page.asXml().contains("testParam:foo"));
     }
+    
+    @Test
+    @JsfTest(value = JSF_2_3_0_M06, excludes = { WEBLOGIC_12_2_1, WEBLOGIC_12_1_4 })
+    public void testManagedPropertyGenericMap() throws Exception {
+        
+        HtmlPage page = webClient.getPage(webUrl + "injectManagedProperty.xhtml");
+        
+        assertTrue(page.asXml().contains("stringMap:bar"));
+        assertTrue(page.asXml().contains("integerMap:10"));
+    }
 
 }
