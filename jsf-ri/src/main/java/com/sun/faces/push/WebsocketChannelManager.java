@@ -134,6 +134,7 @@ public class WebsocketChannelManager implements Serializable {
      * @return The web socket channel identifier. This can be used as web socket URI.
      * @throws IllegalArgumentException When the scope is invalid or when channel already exists on a different scope.
      */
+    @SuppressWarnings("unchecked")
     public String register(String channel, String scope, Serializable user) {
         switch (Scope.of(scope, user)) {
             case APPLICATION: return register(null, channel, APPLICATION_SCOPE, sessionScope, getViewScope(false));
@@ -143,8 +144,8 @@ public class WebsocketChannelManager implements Serializable {
         }
     }
 
-    @SafeVarargs
-    private final String register(Serializable user, String channel, Map<String, String> targetScope, Map<String, String>... otherScopes) {
+    @SuppressWarnings("unchecked")
+    private String register(Serializable user, String channel, Map<String, String> targetScope, Map<String, String>... otherScopes) {
         if (!targetScope.containsKey(channel)) {
             for (Map<String, String> otherScope : otherScopes) {
                 if (otherScope.containsKey(channel)) {
