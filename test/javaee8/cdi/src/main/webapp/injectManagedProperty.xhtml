@@ -13,5 +13,7 @@
         integer2:#{injectManagedPropertyBean.injectedInteger2} <br/>
         integer3:#{injectManagedPropertyBean.injectedInteger3} <br/>
         testParam:#{injectManagedPropertyBean.testParam} <br/>
+        stringMap:#{injectManagedPropertyBean.stringMap['foo']} <br/>
+        integerMap:#{injectManagedPropertyBean.integerMap[(9).intValue()]} <br/>
     </h:body>
 </html>
