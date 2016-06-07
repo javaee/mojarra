@@ -43,12 +43,6 @@ package com.sun.faces.generate;
 import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.PropertyBean;
-import com.sun.faces.renderkit.Attribute;
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.CollectionsUtils;
-
-import static com.sun.faces.renderkit.Attribute.attr;
-import static com.sun.faces.util.CollectionsUtils.ar;
 
 import java.io.File;
 import java.io.FileWriter;

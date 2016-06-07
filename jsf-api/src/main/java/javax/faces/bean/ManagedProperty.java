@@ -63,8 +63,8 @@ import java.lang.annotation.Target;
  * does not have the <code>ManagedBean</code> annotation, the implementation
  * must take no action on this annotation.</p>
  * 
- * @deprecated At the time of writing there is no direct replacement for this
- * annotation, but one is planned to be added for JSF 2.3.
+ * @deprecated This has been replaced by {@code javax.faces.annotation.ManagedProperty}, 
+ * which is a CDI build-in bean with similar semantics
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
