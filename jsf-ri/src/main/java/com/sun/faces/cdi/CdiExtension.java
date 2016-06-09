@@ -41,6 +41,7 @@ package com.sun.faces.cdi;
 
 import static com.sun.faces.cdi.CdiUtils.getAnnotation;
 import static java.util.Collections.unmodifiableMap;
+import static javax.faces.annotation.FacesConfig.Version.JSF_2_2;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -62,6 +63,8 @@ import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessBean;
 import javax.enterprise.inject.spi.ProcessManagedBean;
+import javax.faces.annotation.FacesConfig;
+import javax.faces.annotation.FacesConfig.Version;
 import javax.faces.annotation.ManagedProperty;
 import javax.faces.model.DataModel;
 import javax.faces.model.FacesDataModel;
@@ -83,6 +86,8 @@ public class CdiExtension implements Extension {
     private Map<Class<?>, Class<? extends DataModel<?>>> forClassToDataModelClass = new HashMap<>();
     
     private Set<Type> managedPropertyTargetTypes = new HashSet<>();
+    
+    private boolean addBeansForJSFImplicitObjects;
 
     
     /**
@@ -106,27 +111,30 @@ public class CdiExtension implements Extension {
      * @param afterBeanDiscovery the after bean discovery.
      */
     public void afterBean(final @Observes AfterBeanDiscovery afterBeanDiscovery, BeanManager beanManager) {
-        afterBeanDiscovery.addBean(new ApplicationProducer());
-        afterBeanDiscovery.addBean(new ApplicationMapProducer());
-        afterBeanDiscovery.addBean(new CompositeComponentProducer());
-        afterBeanDiscovery.addBean(new ComponentProducer());
-        afterBeanDiscovery.addBean(new FlashProducer());
-        afterBeanDiscovery.addBean(new FlowMapProducer());
-        afterBeanDiscovery.addBean(new HeaderMapProducer());
-        afterBeanDiscovery.addBean(new HeaderValuesMapProducer());
-        afterBeanDiscovery.addBean(new InitParameterMapProducer());
-        afterBeanDiscovery.addBean(new RequestParameterMapProducer());
-        afterBeanDiscovery.addBean(new RequestParameterValuesMapProducer());
-        afterBeanDiscovery.addBean(new RequestProducer());
-        afterBeanDiscovery.addBean(new RequestMapProducer());
-        afterBeanDiscovery.addBean(new ResourceHandlerProducer());
-        afterBeanDiscovery.addBean(new ExternalContextProducer());
-        afterBeanDiscovery.addBean(new FacesContextProducer());
-        afterBeanDiscovery.addBean(new RequestCookieMapProducer());
-        afterBeanDiscovery.addBean(new SessionProducer());
-        afterBeanDiscovery.addBean(new SessionMapProducer());
-        afterBeanDiscovery.addBean(new ViewMapProducer());
-        afterBeanDiscovery.addBean(new ViewProducer());
+        if (addBeansForJSFImplicitObjects) {
+            afterBeanDiscovery.addBean(new ApplicationProducer());
+            afterBeanDiscovery.addBean(new ApplicationMapProducer());
+            afterBeanDiscovery.addBean(new CompositeComponentProducer());
+            afterBeanDiscovery.addBean(new ComponentProducer());
+            afterBeanDiscovery.addBean(new FlashProducer());
+            afterBeanDiscovery.addBean(new FlowMapProducer());
+            afterBeanDiscovery.addBean(new HeaderMapProducer());
+            afterBeanDiscovery.addBean(new HeaderValuesMapProducer());
+            afterBeanDiscovery.addBean(new InitParameterMapProducer());
+            afterBeanDiscovery.addBean(new RequestParameterMapProducer());
+            afterBeanDiscovery.addBean(new RequestParameterValuesMapProducer());
+            afterBeanDiscovery.addBean(new RequestProducer());
+            afterBeanDiscovery.addBean(new RequestMapProducer());
+            afterBeanDiscovery.addBean(new ResourceHandlerProducer());
+            afterBeanDiscovery.addBean(new ExternalContextProducer());
+            afterBeanDiscovery.addBean(new FacesContextProducer());
+            afterBeanDiscovery.addBean(new RequestCookieMapProducer());
+            afterBeanDiscovery.addBean(new SessionProducer());
+            afterBeanDiscovery.addBean(new SessionMapProducer());
+            afterBeanDiscovery.addBean(new ViewMapProducer());
+            afterBeanDiscovery.addBean(new ViewProducer());
+        }
+        
         afterBeanDiscovery.addBean(new DataModelClassesMapProducer());
         
         for (Type type : managedPropertyTargetTypes) {
@@ -151,12 +159,22 @@ public class CdiExtension implements Extension {
         }
     }
     
-    public <T> void collect(@Observes ProcessManagedBean<T> event) {
+    public <T> void collect(@Observes ProcessManagedBean<T> eventIn, BeanManager beanManager) {
+        
+        ProcessManagedBean<T> event = eventIn; // JDK8 u60 workaround
+        
+        getAnnotation(beanManager, event.getAnnotated(), FacesConfig.class)
+            .ifPresent(config -> addBeansForJSFImplicitObjects(config.version()));
+        
         for (AnnotatedField<? super T> field : event.getAnnotatedBeanClass().getFields()) {
             if (field.isAnnotationPresent(ManagedProperty.class) && (field.getBaseType() instanceof Class || field.getBaseType() instanceof ParameterizedType)) {
                 managedPropertyTargetTypes.add(field.getBaseType());
             }
         }
+    }
+    
+    private void addBeansForJSFImplicitObjects(Version version) {
+        addBeansForJSFImplicitObjects = version.ordinal() > JSF_2_2.ordinal();
     }
     
     
