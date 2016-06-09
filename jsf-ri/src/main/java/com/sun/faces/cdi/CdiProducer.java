@@ -56,9 +56,6 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.PassivationCapable;
-import javax.faces.context.FacesContext;
-
-import com.sun.faces.config.WebConfiguration;
 
 /**
  * An abstract base class used by the CDI producers for some common
@@ -72,11 +69,6 @@ abstract class CdiProducer<T> implements Bean<T>, PassivationCapable, Serializab
      * Serialization version
      */
     private static final long serialVersionUID = 1L;
-    
-    /**
-     * Stores the active flag.
-     */
-    private Boolean active;
     
     private String id = this.getClass().getName();
     private String name;
@@ -133,7 +125,6 @@ abstract class CdiProducer<T> implements Bean<T>, PassivationCapable, Serializab
     
     @Override
     public T create(CreationalContext<T> creationalContext) {
-        checkActive();
         return create.apply(creationalContext);
     }
     
@@ -191,26 +182,6 @@ abstract class CdiProducer<T> implements Bean<T>, PassivationCapable, Serializab
     @Override
     public boolean isNullable() {
         return false;
-    }
-
-    /**
-     * Check if we are active.
-     */
-    protected void checkActive() {
-        if (active == null) {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            WebConfiguration webConfig = WebConfiguration.getInstance(facesContext.getExternalContext());
-            active = webConfig.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.EnableCdiResolverChain);
-        }
-
-        if (!active) {
-            throw new IllegalStateException("Cannot use @Inject without setting context-param \"javax.faces.ENABLE_CDI_RESOLVER_CHAIN\" to \"true\"");
-        }
-    }
-    
-    protected CdiProducer<T> active(boolean active) {
-        this.active = active;
-        return this;
     }
     
     protected CdiProducer<T> name(String name) {
