@@ -5,7 +5,7 @@
     <parent>
 	   <groupId>org.glassfish.mojarra</groupId>
 	   <artifactId>websocket-activation-parent</artifactId>
-       <version>2.3.0-m06-SNAPSHOT</version>
+       <version>2.3.0-m06</version>
     </parent>
 
     <artifactId>tyrus-mojarra-activator</artifactId>
