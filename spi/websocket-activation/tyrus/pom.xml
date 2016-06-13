@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
-	   <groupId>org.glassfish.javax.faces.spi</groupId>
+	   <groupId>org.glassfish.mojarra</groupId>
 	   <artifactId>websocket-activation-parent</artifactId>
        <version>2.3.0-m06-SNAPSHOT</version>
     </parent>
