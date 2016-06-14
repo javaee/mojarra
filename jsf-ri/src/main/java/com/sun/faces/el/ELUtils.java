@@ -42,12 +42,22 @@ package com.sun.faces.el;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.cdi.CdiExtension;
+import com.sun.faces.cdi.CdiUtils;
 import com.sun.faces.context.flash.FlashELResolver;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.MessageUtils;
 
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
+
+import static com.sun.faces.cdi.CdiUtils.getBeanReference;
+import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
+import static com.sun.faces.util.Util.getCdiBeanManager;
+import static com.sun.faces.util.Util.getFacesConfigXmlVersion;
+import static com.sun.faces.util.Util.getWebXmlVersion;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.el.ArrayELResolver;
@@ -231,27 +241,40 @@ public class ELUtils {
      * @param composite a <code>CompositeELResolver</code>
      * @param associate our ApplicationAssociate
      */
-    public static void buildFacesResolver(FacesCompositeELResolver composite,
-                                          ApplicationAssociate associate) {
+    public static void buildFacesResolver(FacesCompositeELResolver composite, ApplicationAssociate associate) {
 
         if (associate == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "associate");
-            throw new NullPointerException(message);
+            throw new NullPointerException(
+                getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID, "associate"));
         }
 
         if (composite == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "composite");
-            throw new NullPointerException(message);
+            throw new NullPointerException(
+                getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID, "composite"));
         }
         
         FacesContext facesContext = FacesContext.getCurrentInstance();
+        
+        javax.enterprise.inject.spi.BeanManager beanManager = getCdiBeanManager(facesContext);
+        
+        if (beanManager == null) {
+            // TODO: use version enum and >=
+            if (getFacesConfigXmlVersion(facesContext).equals("2.3") || getWebXmlVersion(facesContext).equals("4.0")) {
+                throw new FacesException("Unable to find CDI BeanManager");
+            }
+        } else {
+            CdiExtension cdiExtension = getBeanReference(beanManager, CdiExtension.class);
+            if (cdiExtension.isAddBeansForJSFImplicitObjects()) {
+                composite.add(beanManager.getELResolver());
+            }
+        }
+        
+        
         if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
                 Util.getWebXmlVersion(facesContext).equals("4.0")) {
             
-            javax.enterprise.inject.spi.BeanManager beanManager = 
-                 Util.getCdiBeanManager(facesContext);
+//            javax.enterprise.inject.spi.BeanManager beanManager = 
+//                 Util.getCdiBeanManager(facesContext);
             
             if (beanManager != null) {
                 composite.add(beanManager.getELResolver());
@@ -298,8 +321,7 @@ public class ELUtils {
         }
     }
     
-    private static void addEL3_0_Resolvers(FacesCompositeELResolver composite, 
-            ApplicationAssociate associate) {
+    private static void addEL3_0_Resolvers(FacesCompositeELResolver composite, ApplicationAssociate associate) {
         ExpressionFactory ef = associate.getExpressionFactory();
         Method getStreamELResolverMethod = ReflectionUtils.lookupMethod(ExpressionFactory.class, 
                 "getStreamELResolver", RIConstants.EMPTY_CLASS_ARGS);
@@ -325,27 +347,40 @@ public class ELUtils {
      * @param composite a <code>CompositeELResolver</code>
      * @param associate our ApplicationAssociate
      */
-    public static void buildJSPResolver(FacesCompositeELResolver composite,
-                                        ApplicationAssociate associate) {
+    public static void buildJSPResolver(FacesCompositeELResolver composite, ApplicationAssociate associate) {
 
         if (associate == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "associate");
-            throw new NullPointerException(message);
+            throw new NullPointerException(
+                getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID, "associate"));
         }
 
         if (composite == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "composite");
-            throw new NullPointerException(message);
+            throw new NullPointerException(
+                getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID, "composite"));
         }
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
+        
+        javax.enterprise.inject.spi.BeanManager beanManager = getCdiBeanManager(facesContext);
+        
+        if (beanManager == null) {
+            // TODO: use version enum and >=
+            if (getFacesConfigXmlVersion(facesContext).equals("2.3") || getWebXmlVersion(facesContext).equals("4.0")) {
+                throw new FacesException("Unable to find CDI BeanManager");
+            }
+        } else {
+            CdiExtension cdiExtension = getBeanReference(beanManager, CdiExtension.class);
+            if (cdiExtension.isAddBeansForJSFImplicitObjects()) {
+                composite.add(beanManager.getELResolver());
+            }
+        }
+        
+        
         if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
                 Util.getWebXmlVersion(facesContext).equals("4.0")) {
             
-            javax.enterprise.inject.spi.BeanManager beanManager = 
-                 Util.getCdiBeanManager(facesContext);
+//            javax.enterprise.inject.spi.BeanManager beanManager = 
+//                 Util.getCdiBeanManager(facesContext);
             
             if (beanManager != null) {
                 composite.add(beanManager.getELResolver());

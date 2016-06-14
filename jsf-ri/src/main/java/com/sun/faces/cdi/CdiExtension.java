@@ -64,7 +64,6 @@ import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessBean;
 import javax.enterprise.inject.spi.ProcessManagedBean;
 import javax.faces.annotation.FacesConfig;
-import javax.faces.annotation.FacesConfig.Version;
 import javax.faces.annotation.ManagedProperty;
 import javax.faces.model.DataModel;
 import javax.faces.model.FacesDataModel;
@@ -89,7 +88,6 @@ public class CdiExtension implements Extension {
     
     private boolean addBeansForJSFImplicitObjects;
 
-    
     /**
      * Before bean discovery.
      * 
@@ -164,7 +162,8 @@ public class CdiExtension implements Extension {
         ProcessManagedBean<T> event = eventIn; // JDK8 u60 workaround
         
         getAnnotation(beanManager, event.getAnnotated(), FacesConfig.class)
-            .ifPresent(config -> addBeansForJSFImplicitObjects(config.version()));
+            .ifPresent(config -> 
+                setAddBeansForJSFImplicitObjects(config.version().ordinal() > JSF_2_2.ordinal()));  
         
         for (AnnotatedField<? super T> field : event.getAnnotatedBeanClass().getFields()) {
             if (field.isAnnotationPresent(ManagedProperty.class) && (field.getBaseType() instanceof Class || field.getBaseType() instanceof ParameterizedType)) {
@@ -172,11 +171,6 @@ public class CdiExtension implements Extension {
             }
         }
     }
-    
-    private void addBeansForJSFImplicitObjects(Version version) {
-        addBeansForJSFImplicitObjects = version.ordinal() > JSF_2_2.ordinal();
-    }
-    
     
     /**
      * After deployment validation
@@ -242,6 +236,14 @@ public class CdiExtension implements Extension {
      */
     public Map<Class<?>, Class<? extends DataModel<?>>> getForClassToDataModelClass() {
         return forClassToDataModelClass;
+    }
+    
+    public boolean isAddBeansForJSFImplicitObjects() {
+        return addBeansForJSFImplicitObjects;
+    }
+
+    public void setAddBeansForJSFImplicitObjects(boolean addBeansForJSFImplicitObjects) {
+        this.addBeansForJSFImplicitObjects = addBeansForJSFImplicitObjects;
     }
 
 }
