@@ -40,8 +40,18 @@
 
 package javax.faces.annotation;
 
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static javax.faces.annotation.FacesConfig.Version.JSF_2_2;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import javax.inject.Qualifier;
+
+@Qualifier
+@Target(TYPE)
+@Retention(RUNTIME)
 public @interface FacesConfig {
     
     public static enum Version { 
