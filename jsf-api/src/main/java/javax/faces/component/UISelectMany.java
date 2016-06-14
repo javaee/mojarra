@@ -45,11 +45,12 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
 import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
 
 
 /**
@@ -95,7 +96,9 @@ import javax.faces.convert.Converter;
  * type.</p></li> 
 
  * <li class="changed_added_2_0"><p>A <code>java.util.Collection</code>.
- * Do not convert the values.</p></li>
+ * <span class="changed_modified_2_3">Look up the registered by-class
+ * {@link javax.faces.convert.Converter} for the first non-<code>null</code>
+ * item value of provided set of available options.</span></p></li>
  * </ul>
  * </blockquote>
  *

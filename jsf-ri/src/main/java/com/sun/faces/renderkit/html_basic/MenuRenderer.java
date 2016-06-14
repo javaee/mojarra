@@ -51,23 +51,26 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Queue;
-import java.util.LinkedList;
 import java.util.logging.Level;
 
 import javax.el.ELException;
-import javax.el.ValueExpression;
 import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
@@ -78,7 +81,6 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
-import javax.faces.FacesException;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.io.FastStringWriter;
@@ -87,10 +89,9 @@ import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.SelectItemsIterator;
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.ReflectionUtils;
-import java.lang.reflect.InvocationTargetException;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
 
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of
@@ -431,29 +432,31 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         // attached converter takes priority
         if (null == (converter = uiSelectMany.getConverter())) {
-            // Otherwise, look for a by-type converter
-            if (null == (converter = Util.getConverterForClass(elementType,
-                                                               context))) {
-                // if that fails, and the attached values are of Object type,
-                // we don't need conversion.
-                if (elementType.equals(Object.class)) {
-                    return newValues;
-                }
-                StringBuffer valueStr = new StringBuffer();
-                for (int i = 0; i < len; i++) {
-                    if (i == 0) {
-                        valueStr.append(newValues[i]);
-                    } else {
-                        valueStr.append(' ').append(newValues[i]);
+            // Otherwise, look for a by-type converter based on model value.
+            if (null == (converter = Util.getConverterForClass(elementType, context))) {
+                // Otherwise, look for a by-type converter based on first non-null available select item value.
+                if (null == (converter = getConverterForSelectManyValues(context, uiSelectMany))) {
+                    // if that fails, and the attached values are of Object type,
+                    // we don't need conversion.
+                    if (elementType.equals(Object.class)) {
+                        return newValues;
                     }
+                    StringBuffer valueStr = new StringBuffer();
+                    for (int i = 0; i < len; i++) {
+                        if (i == 0) {
+                            valueStr.append(newValues[i]);
+                        } else {
+                            valueStr.append(' ').append(newValues[i]);
+                        }
+                    }
+                    Object[] params = {
+                            valueStr.toString(),
+                            "null Converter"
+                    };
+                    
+                    throw new ConverterException(MessageUtils.getExceptionMessage(
+                            MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
                 }
-                Object[] params = {
-                      valueStr.toString(),
-                      "null Converter"
-                };
-
-                throw new ConverterException(MessageUtils.getExceptionMessage(
-                      MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
             }
         }
 
@@ -520,6 +523,31 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     }
 
+    protected Converter<?> getConverterForSelectManyValues(FacesContext context, UISelectMany component) {
+        Iterator<SelectItem> selectItems = RenderKitUtils.getSelectItems(context, component);
+
+        while (selectItems.hasNext()) {
+            SelectItem selectItem = selectItems.next();
+            Object value = null;
+
+            if (selectItem instanceof SelectItemGroup) {
+                SelectItem[] groupItems = ((SelectItemGroup) selectItem).getSelectItems();
+                
+                if (groupItems != null && groupItems.length > 0) {
+                    value = groupItems[0].getValue();
+                }
+            }
+            else {
+                value = selectItem.getValue();
+            }
+            
+            if (value != null) {
+                return Util.getConverterForClass(value.getClass(), context);
+            }
+        }
+        
+        return null;
+    }
 
     protected boolean renderOption(FacesContext context,
                                    UIComponent component,
