@@ -38,21 +38,26 @@
  * holder.
 
  */
-
 package com.sun.faces.util.copier;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
- * Copier that copies an object by serializing and subsequently deserializing it again.
+ * Copier that copies an object by serializing and subsequently deserializing it
+ * again.
  * <p>
- * As per the platform serialization rules, the object and all its non transient dependencies have
- * to implement the {@link Serializable} interface.
+ * As per the platform serialization rules, the object and all its non transient
+ * dependencies have to implement the {@link Serializable} interface.
  *
  * @since 2.0
  * @author Arjan Tijms
@@ -60,23 +65,90 @@ import java.io.Serializable;
  */
 public class SerializationCopier implements Copier {
 
-	@Override
-	public Object copy(Object object) {
+    private static final String SERIALIZATION_COPIER_ERROR
+            = "SerializationCopier cannot be used in this case. Please try other copier (e.g. MultiStrategyCopier, NewInstanceCopier, CopyCtorCopier, CloneCopier).";
 
-		if (!(object instanceof Serializable)) {
-			throw new IllegalStateException("Can't copy object of type " + object.getClass() + " since it doesn't implement Serializable");
-		}
+    @Override
+    public Object copy(Object object) {
 
-		try {
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			new ObjectOutputStream(outputStream).writeObject(object);
+        if (!(object instanceof Serializable)) {
+            throw new IllegalStateException("Can't copy object of type " + object.getClass() + " since it doesn't implement Serializable");
+        }
 
-			return new ObjectInputStream(new ByteArrayInputStream(outputStream.toByteArray())).readObject();
+        try {
+            return copyOutIn(object);
+        } catch (IOException | ClassNotFoundException e) {
+            throw new IllegalArgumentException(SERIALIZATION_COPIER_ERROR);
+        }
+    }
 
-		} catch (IOException | ClassNotFoundException e) {
-			throw new IllegalStateException(e);
-		}
+    @SuppressWarnings("unchecked")
+    private static <T> T copyOutIn(T object) throws ClassNotFoundException, IOException {
 
-	}
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        Out out = new Out(byteArrayOutputStream);
 
+        out.writeObject(object);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        In in = new In(byteArrayInputStream, out);
+
+        @SuppressWarnings("unchecked")
+        T cloned = (T) in.readObject();
+
+        return cloned;
+    }
+
+    private static class In extends ObjectInputStream {
+
+        private final Out out;
+
+        In(InputStream inputStream, Out out) throws IOException {
+            super(inputStream);
+            this.out = out;
+        }
+
+        @Override
+        protected Class<?> resolveProxyClass(String[] interfaceNames)
+                throws IOException, ClassNotFoundException {
+            return out.queue.poll();
+        }
+
+        @Override
+        protected Class<?> resolveClass(ObjectStreamClass objectStreamClass)
+                throws IOException, ClassNotFoundException {
+
+            String actuallyfound = null;
+            Class<?> pollclass = out.queue.poll();
+
+            if (pollclass != null) {
+                actuallyfound = pollclass.getName();
+            }
+
+            if (!objectStreamClass.getName().equals(actuallyfound)) {
+                throw new IllegalArgumentException(SERIALIZATION_COPIER_ERROR);
+            }
+            return pollclass;
+        }
+    }
+
+    private static class Out extends ObjectOutputStream {
+
+        Queue<Class<?>> queue = new LinkedList<>();
+
+        Out(OutputStream out) throws IOException {
+            super(out);
+        }
+
+        @Override
+        protected void annotateClass(Class<?> c) {
+            queue.add(c);
+        }
+
+        @Override
+        protected void annotateProxyClass(Class<?> c) {
+            queue.add(c);
+        }
+    }
 }
