@@ -54,7 +54,6 @@ import javax.faces.application.ProjectStage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIViewRoot;
 import javax.faces.render.RenderKit;
-
 import javax.el.ELContext;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UINamingContainer;
@@ -970,6 +969,11 @@ public abstract class FacesContext {
             // In the init case, this will return null if JSF hasn't been
             // initialized in the ServletContext corresponding to this 
             // Thread's context ClassLoader.
+            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+            if (cl == null) {
+                return null;
+            }
+            
             FacesContextFactory privateFacesContextFactory = (FacesContextFactory) FactoryFinder.getFactory("com.sun.faces.ServletContextFacesContextFactory");
             if (null != privateFacesContextFactory) {
                 facesContext = privateFacesContextFactory.getFacesContext(null, null, null, null);
