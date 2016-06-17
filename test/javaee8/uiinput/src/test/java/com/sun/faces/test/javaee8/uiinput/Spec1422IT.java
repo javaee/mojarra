@@ -72,23 +72,44 @@ public class Spec1422IT {
         webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
 
         HtmlPage page;
-        HtmlCheckBoxInput checkbox1;
-        HtmlCheckBoxInput checkbox2;
-        HtmlCheckBoxInput checkbox3;
+        HtmlCheckBoxInput item1;
+        HtmlCheckBoxInput item2;
+        HtmlCheckBoxInput item3;
+        HtmlCheckBoxInput number1;
+        HtmlCheckBoxInput number2;
+        HtmlCheckBoxInput number3;
+        HtmlCheckBoxInput number4;
+        HtmlCheckBoxInput number5;
+        HtmlCheckBoxInput number6;
+        HtmlCheckBoxInput number7;
         HtmlSubmitInput button;
 
         page = webClient.getPage(webUrl + "spec1422.xhtml");
         assertTrue(page.getHtmlElementById("form:result").asText().isEmpty());
 
-        checkbox1 = (HtmlCheckBoxInput) page.getHtmlElementById("form:checkboxes:0");
-        checkbox2 = (HtmlCheckBoxInput) page.getHtmlElementById("form:checkboxes:1");
-        checkbox3 = (HtmlCheckBoxInput) page.getHtmlElementById("form:checkboxes:2");
+        item1 = (HtmlCheckBoxInput) page.getHtmlElementById("form:items:0");
+        item2 = (HtmlCheckBoxInput) page.getHtmlElementById("form:items:1");
+        item3 = (HtmlCheckBoxInput) page.getHtmlElementById("form:items:2");
+        number1 = (HtmlCheckBoxInput) page.getHtmlElementById("form:numbers:0");
+        number2 = (HtmlCheckBoxInput) page.getHtmlElementById("form:numbers:1");
+        number3 = (HtmlCheckBoxInput) page.getHtmlElementById("form:numbers:2");
+        number4 = (HtmlCheckBoxInput) page.getHtmlElementById("form:numbers:3");
+        number5 = (HtmlCheckBoxInput) page.getHtmlElementById("form:numbers:4");
+        number6 = (HtmlCheckBoxInput) page.getHtmlElementById("form:numbers:5");
+        number7 = (HtmlCheckBoxInput) page.getHtmlElementById("form:numbers:6");
         button = (HtmlSubmitInput) page.getHtmlElementById("form:button");
-        checkbox1.setChecked(true);
-        checkbox2.setChecked(true);
-        checkbox3.setChecked(true);
+        item1.setChecked(true);
+        item2.setChecked(true);
+        item3.setChecked(true);
+        number1.setChecked(true);
+        number2.setChecked(true);
+        number3.setChecked(true);
+        number4.setChecked(true);
+        number5.setChecked(true);
+        number6.setChecked(true);
+        number7.setChecked(true);
         page = button.click();
-        assertTrue(page.getHtmlElementById("form:result").asText().equals("[ONE, TWO, THREE]"));
+        assertTrue(page.getHtmlElementById("form:result").asText().equals("[ONE, TWO, THREE][null, 1, 2, 3, 4.5, 6.7, 8.9]"));
     }
 
     @After

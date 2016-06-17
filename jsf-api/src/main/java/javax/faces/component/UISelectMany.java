@@ -96,9 +96,10 @@ import javax.faces.el.ValueBinding;
  * type.</p></li> 
 
  * <li class="changed_added_2_0"><p>A <code>java.util.Collection</code>.
- * <span class="changed_modified_2_3">Look up the registered by-class
- * {@link javax.faces.convert.Converter} for the first non-<code>null</code>
- * item value of provided set of available options.</span></p></li>
+ * Do not convert the values. <span class="changed_modified_2_3">Instead,
+ * convert the provided set of available options to string, exactly as done
+ * during render response, and for any match with the submitted values, add
+ * the available option as object to the collection.</span></p></li>
  * </ul>
  * </blockquote>
  *
