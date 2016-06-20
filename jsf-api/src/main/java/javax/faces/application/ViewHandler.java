@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -737,8 +737,9 @@ public abstract class ViewHandler {
      * <code>Ajax</code> requests, the state is obtained by calling
      * {@link StateManager#getViewState}
      * and then written into the <code>Ajax</code> response during final
-     * encoding 
-     * ({@link javax.faces.component.UIViewRoot#encodeEnd}. 
+     * encoding <span class="changed_modified_2_3">
+     * ({@link javax.faces.context.PartialViewContext#processPartial(javax.faces.event.PhaseId)})
+     * </span>.
      * </p>
      *
      * @param context {@link FacesContext} for the current request

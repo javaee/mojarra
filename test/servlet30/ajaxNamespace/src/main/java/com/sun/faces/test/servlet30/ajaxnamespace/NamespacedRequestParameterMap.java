@@ -63,7 +63,7 @@ public class NamespacedRequestParameterMap extends RequestParameterMap {
 	public String get(Object key) {
 		String mapKey = key.toString();
 
-		String value = request.getParameter(getNamingContainerId() + mapKey);
+		String value = request.getParameter(getNamingContainerPrefix() + mapKey);
 
 		if (value == null && !mapKey.equals("param")) {
 			value = request.getParameter(mapKey);
@@ -74,7 +74,7 @@ public class NamespacedRequestParameterMap extends RequestParameterMap {
 	@Override
 	public boolean containsKey(Object key) {
 		String mapKey = key.toString();
-		boolean contains = (request.getParameter(getNamingContainerId()
+		boolean contains = (request.getParameter(getNamingContainerPrefix()
 				+ mapKey) != null);
 
 		if (!contains && !mapKey.equals("param")) {

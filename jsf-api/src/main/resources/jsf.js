@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2013 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2016 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -455,33 +455,51 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             }
             return null;
         };
-        
+
         /**
-         * Get the form element which encloses the supplied element
-         * identified by the supplied identifier.
-         * @param id - the element id to act against in search
-         * @returns form element representing enclosing form, or null if not found.
-         * @ignore
+         * Get an array of all POST form elements covered in the render target list whose ID starts with the same 
+         * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; value as the submitting form.
+         * This array does not contain the submitting form itself.
          */
-        var getFormForId = function getFormForId(id) {
-            if (id) {
-                var node = document.getElementById(id);
-                while (node) {
-                    if (node.nodeName && (node.nodeName.toLowerCase() == 'form')) {
-                        return node;
-                    }
-                    if (node.form) {
-                        return node.form;
-                    }
-                    if (node.parentNode) {
-                        node = node.parentNode;
-                    } else {
-                        node = null;                     
+        var getRenderForms = function getRenderForms(context, namingContainerPrefix) {
+            var renderForms = [];
+
+            var add = function(element) {
+                if (element && element.nodeName 
+                            && element.nodeName.toLowerCase() == "form" 
+                            && element.method == "post" 
+                            && element.id 
+                            && element.id != context.formid 
+                            && element.id.indexOf(namingContainerPrefix) == 0)
+                {
+                    renderForms.push(element);
+                }
+                else {
+                    var forms = element.getElementsByTagName("form");
+
+                    for (var i = 0; i < forms.length; i++) {
+                        add(forms[i]);
                     }
                 }
             }
-            return null;
-        };
+
+            if (context.render) {
+                if (context.render.indexOf("@all") >= 0) {
+                    add(document);
+                }
+                else {
+                    var clientIds = context.render.split(" ");
+
+                    for (var i = 0; i < clientIds.length; i++) {
+                        if (clientIds.hasOwnProperty(i)) {
+                            add(document.getElementById(clientIds[i]));
+                        }
+                    }
+                }
+            }
+
+            return renderForms;
+        }
 
         /**
          * Check if a value exists in an array
@@ -1193,7 +1211,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         };
 
         /**
-         * Find view state field for a given form.
+         * Find javax.faces.ViewState field for a given form.
          * @param form
          * @ignore
          */
@@ -1216,35 +1234,52 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         };
 
         /**
+         * Find javax.faces.ClientWindow field for a given form.
+         * @param form
+         * @ignore
+         */
+        var getWindowIdElement = function getWindowIdElement(form) {
+            var windowIdElement = form['javax.faces.ClientWindow'];
+
+            if (windowIdElement) {
+                return windowIdElement;
+            } else {
+                var formElements = form.elements;
+                for (var i = 0, length = formElements.length; i < length; i++) {
+                    var formElement = formElements[i];
+                    if (formElement.name && (formElement.name.indexOf('javax.faces.ClientWindow') >= 0)) {
+                        return formElement;
+                    }
+                }
+            }
+
+            return undefined;
+        };
+
+        /**
          * Do update.
          * @param element element to update
          * @param context context of request
          * @ignore
          */
-        var doUpdate = function doUpdate(element, context, partialResponseId) {
+        var doUpdate = function doUpdate(element, context, namingContainerPrefix) {
             var id, content, markup, state, windowId;
             var stateForm, windowIdForm;
             var scripts = []; // temp holding value for array of script nodes
 
             id = element.getAttribute('id');
-            var viewStateRegex = new RegExp("javax.faces.ViewState" +
-                                            jsf.separatorchar + ".*$");
-            var windowIdRegex = new RegExp("^.*" + jsf.separatorchar + 
-                                           "javax.faces.ClientWindow" +
-                                            jsf.separatorchar + ".*$");
+            var viewStateRegex = new RegExp(namingContainerPrefix + "javax.faces.ViewState" + jsf.separatorchar + ".+$");
+            var windowIdRegex = new RegExp(namingContainerPrefix + "javax.faces.ClientWindow" + jsf.separatorchar + ".+$");
+
             if (id.match(viewStateRegex)) {
 
-                state = element.firstChild;
+                var firstChild = element.firstChild;
+                state = (typeof firstChild.wholeText !== 'undefined') ? firstChild.wholeText : firstChild.nodeValue;
 
                 // Now set the view state from the server into the DOM
                 // but only for the form that submitted the request.
 
-                if (typeof context.formid !== 'undefined' && context.formid !== null) {
-                    stateForm = getFormForId(context.formid);
-                } else {
-                    stateForm = getFormForId(context.element.id);
-                }
-
+                stateForm = document.getElementById(context.formid);
                 if (!stateForm || !stateForm.elements) {
                     // if the form went away for some reason, or it lacks elements 
                     // we're going to just return silently.
@@ -1254,46 +1289,31 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 if (typeof field == 'undefined') {
                     field = document.createElement("input");
                     field.type = "hidden";
-                    field.name = "javax.faces.ViewState";
+                    field.name = namingContainerPrefix + "javax.faces.ViewState";
                     stateForm.appendChild(field);
                 }
-                if (typeof state.wholeText !== 'undefined') {
-                    field.value = state.wholeText;
-                } else {
-                    field.value = state.nodeValue;
-                }
+                field.value = state;
 
                 // Now set the view state from the server into the DOM
-                // for any form that is a render target.
+                // for any POST form that is covered in the render target list.
 
-                if (typeof context.render !== 'undefined' && context.render !== null) {
-                    var temp = context.render.split(' ');
-                    for (var i = 0; i < temp.length; i++) {
-                        if (temp.hasOwnProperty(i)) {
-                            // See if the element is a form and
-                            // the form is not the one that caused the submission..
-                            var f = document.forms[temp[i]];
-                            if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
-                                field = getViewStateElement(f);
-                                if (typeof field === 'undefined') {
-                                    field = document.createElement("input");
-                                    field.type = "hidden";
-                                    field.name = "javax.faces.ViewState";
-                                    f.appendChild(field);
-                                }
-                                if (typeof state.wholeText !== 'undefined') {
-                                    field.value = state.wholeText;
-                                } else {
-                                    field.value = state.nodeValue;
-                                }
-                            }
-                        }
+                var renderForms = getRenderForms(context, namingContainerPrefix);
+
+                for (var i = 0; i < renderForms.length; i++) {
+                    var f = renderForms[i];
+                    field = getViewStateElement(f);
+                    if (typeof field === 'undefined') {
+                        field = document.createElement("input");
+                        field.type = "hidden";
+                        field.name = namingContainerPrefix + "javax.faces.ViewState";
+                        f.appendChild(field);
                     }
+                    field.value = state;
                 }
                 return;
             } else if (id.match(windowIdRegex)) {
 
-                windowId = element.firstChild;
+                windowId = element.firstChild.nodeValue;
 
                 // Now set the windowId from the server into the DOM
                 // but only for the form that submitted the request.
@@ -1304,37 +1324,30 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     // we're going to just return silently.
                     return;
                 }
-                var field = windowIdForm.elements["javax.faces.ClientWindow"];
+                var field = getWindowIdElement(windowIdForm);
                 if (typeof field == 'undefined') {
                     field = document.createElement("input");
                     field.type = "hidden";
-                    field.name = "javax.faces.ClientWindow";
+                    field.name = namingContainerPrefix + "javax.faces.ClientWindow";
                     windowIdForm.appendChild(field);
                 }
-                field.value = windowId.nodeValue;
+                field.value = windowId;
 
                 // Now set the windowId from the server into the DOM
-                // for any form that is a render target.
+                // for any POST form that is covered in the render target list.
 
-                if (typeof context.render !== 'undefined' && context.render !== null) {
-                    var temp = context.render.split(' ');
-                    for (var i = 0; i < temp.length; i++) {
-                        if (temp.hasOwnProperty(i)) {
-                            // See if the element is a form and
-                            // the form is not the one that caused the submission..
-                            var f = document.forms[temp[i]];
-                            if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
-                                field = f.elements["javax.faces.ClientWindow"];
-                                if (typeof field === 'undefined') {
-                                    field = document.createElement("input");
-                                    field.type = "hidden";
-                                    field.name = "javax.faces.ClientWindow";
-                                    f.appendChild(field);
-                                }
-                                field.value = windowId.nodeValue;
-                            }
-                        }
+                var renderForms = getRenderForms(context, namingContainerPrefix);
+
+                for (var i = 0; i < renderForms.length; i++) {
+                    var f = renderForms[i];
+                    field = f.elements["javax.faces.ClientWindow"];
+                    if (typeof field === 'undefined') {
+                        field = document.createElement("input");
+                        field.type = "hidden";
+                        field.name = namingContainerPrefix + "javax.faces.ClientWindow";
+                        f.appendChild(field);
                     }
+                    field.value = windowId.nodeValue;
                 }
                 return;
             }
@@ -2048,7 +2061,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <p><b>Implementation Requirements:</b></p>
              * This function must:
              * <ul>
-             * <li>Be used within the context of a <code>form</code>.</li>
+             * <li>Be used within the context of a <code>form</code><span class="changed_added_2_3">,
+             * else throw an error</span>.</li>
              * <li>Capture the element that triggered this Ajax request
              * (from the <code>source</code> argument, also known as the
              * <code>source</code> element.</li>
@@ -2059,6 +2073,16 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <li>If the <code>source</code> argument is a <code>string</code>, find the
              * DOM element for that <code>string</code> identifier.
              * <li>If the DOM element could not be determined, throw an error.</li>
+             * <li class="changed_added_2_3">If the <code>javax.faces.ViewState</code> 
+             * element could not be found, throw an error.</li>
+             * <li class="changed_added_2_3">If the <code>javax.faces.ViewState</code> 
+             * element has a <code>&lt;update id="&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;</code>
+             * prefix, where &lt;SEP&gt; is the currently configured
+             * <code>UINamingContainer.getSeparatorChar()</code> and
+             * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; is the return from
+             * <code>UIViewRoot.getContainerClientId()</code> on the
+             * view from whence this state originated, then remember it as <i>namespace prefix</i>.
+             * This is needed during encoding of the set of post data arguments.</li>
              * <li>If the <code>onerror</code> and <code>onevent</code> arguments are set,
              * they must be functions, or throw an error.
              * <li>Determine the <code>source</code> element's <code>form</code>
@@ -2175,7 +2199,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * </li>
              * </ul>
              * </li>
-             * <li>Encode the set of post data arguments.</li>
+             * <li>Encode the set of post data arguments. <span class="changed_added_2_3">
+             * If the <code>javax.faces.ViewState</code> element has a namespace prefix, then
+             * make sure that all post data arguments are prefixed with this namespace prefix.
+             * </span></li>
              * <li>Join the encoded view state with the encoded set of post data arguments
              * to form the <code>query string</code> that will be sent to the server.</li>
              * <li>Create a request <code>context</code> object and set the properties:
@@ -2212,7 +2239,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <code>XMLHttpRequest</code> would have been sent with.
              * In this way, the server side processing of the request
              * will be identical whether or the request is multipart or
-             * not.</span></p  
+             * not.</span></p>
             
              * <div class="changed_added_2_2">
 
@@ -2222,9 +2249,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * behave uniformly regardless of the multipart or
              * <code>XMLHttpRequest</code> nature of the transport.</p>
 
-             * </div>
-
-</li>
+             * </div></li>
              * </ul>
              * Form serialization should occur just before the request is sent to minimize 
              * the amount of time between the creation of the serialized form data and the 
@@ -2323,7 +2348,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
             request: function request(source, event, options) {
 
-                var element, form;   //  Element variables
+                var element, form, viewStateElement;   //  Element variables
                 var all, none;
                 
                 var context = {};
@@ -2342,7 +2367,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 } else if (typeof source === 'object') {
                     element = source;
                 } else {
-                    throw new Error("jsf.request: source must be object or string");
+                    throw new Error("jsf.ajax.request: source must be object or string");
                 }
                 // attempt to handle case of name unset
                 // this might be true in a badly written composite component
@@ -2378,6 +2403,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 if (!form) {
                     throw new Error("jsf.ajax.request: Method must be called within a form");
                 }
+
+                viewStateElement = getViewStateElement(form);
+                if (!viewStateElement) {
+                    throw new Error("jsf.ajax.request: Form has no view state element");
+                }
+                
                 context.form = form;
                 context.formid = form.id;
                 
@@ -2392,20 +2423,16 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
                 var args = {};
 
-                var namingContainerId = options["com.sun.faces.namingContainerId"];
-                
-                if (typeof(namingContainerId) === 'undefined') {
-                    namingContainerId = "";
-                }                
+                var namingContainerPrefix = viewStateElement.name.substring(0, viewStateElement.name.indexOf("javax.faces.ViewState"));
 
-                args[namingContainerId + "javax.faces.source"] = element.id;
+                args[namingContainerPrefix + "javax.faces.source"] = element.id;
 
                 if (event && !!event.type) {
-                    args[namingContainerId + "javax.faces.partial.event"] = event.type;
+                    args[namingContainerPrefix + "javax.faces.partial.event"] = event.type;
                 }
 
                 if ("resetValues" in options) {
-                    args[namingContainerId + "javax.faces.partial.resetValues"] = options.resetValues;
+                    args[namingContainerPrefix + "javax.faces.partial.resetValues"] = options.resetValues;
                 }
 
                 // If we have 'execute' identifiers:
@@ -2416,9 +2443,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // delimited.
 
                 if (options.execute) {
-                    none = options.execute.search(/@none/);
+                    none = options.execute.indexOf("@none");
                     if (none < 0) {
-                        all = options.execute.search(/@all/);
+                        all = options.execute.indexOf("@all");
                         if (all < 0) {
                             options.execute = options.execute.replace("@this", element.id);
                             options.execute = options.execute.replace("@form", form.id);
@@ -2429,24 +2456,24 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         } else {
                             options.execute = "@all";
                         }
-                        args[namingContainerId + "javax.faces.partial.execute"] = options.execute;
+                        args[namingContainerPrefix + "javax.faces.partial.execute"] = options.execute;
                     }
                 } else {
                     options.execute = element.name + " " + element.id;
-                    args[namingContainerId + "javax.faces.partial.execute"] = options.execute;
+                    args[namingContainerPrefix + "javax.faces.partial.execute"] = options.execute;
                 }
 
                 if (options.render) {
-                    none = options.render.search(/@none/);
+                    none = options.render.indexOf("@none");
                     if (none < 0) {
-                        all = options.render.search(/@all/);
+                        all = options.render.indexOf("@all");
                         if (all < 0) {
                             options.render = options.render.replace("@this", element.id);
                             options.render = options.render.replace("@form", form.id);
                         } else {
                             options.render = "@all";
                         }
-                        args[namingContainerId + "javax.faces.partial.render"] = options.render;
+                        args[namingContainerPrefix + "javax.faces.partial.render"] = options.render;
                     }
                 }
                 var explicitlyDoNotDelay = ((typeof options.delay == 'undefined') || (typeof options.delay == 'string') &&
@@ -2496,7 +2523,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var params = options.params || {};
                 for (var property in params) {
                     if (params.hasOwnProperty(property)) {
-                        args[namingContainerId + property] = params[property];
+                        args[namingContainerPrefix + property] = params[property];
                     }
                 }
 
@@ -2508,16 +2535,15 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 delete options.delay;
                 delete options.resetValues;
                 delete options.params;
-                delete options["com.sun.faces.namingContainerId"];
 
                 // copy all other options to args (for backwards compatibility on issue 4115)
                 for (var property in options) {
                     if (options.hasOwnProperty(property)) {
-                        args[namingContainerId + property] = options[property];
+                        args[namingContainerPrefix + property] = options[property];
                     }
                 }
 
-                args[namingContainerId + "javax.faces.partial.ajax"] = "true";
+                args[namingContainerPrefix + "javax.faces.partial.ajax"] = "true";
                 args["method"] = "POST";
 
                 // Determine the posting url
@@ -2535,7 +2561,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     ajaxEngine.context.onevent = onevent;
                     ajaxEngine.context.onerror = onerror;
                     ajaxEngine.context.sourceid = element.id;
-                    ajaxEngine.context.render = args[namingContainerId + "javax.faces.partial.render"];
+                    ajaxEngine.context.render = args[namingContainerPrefix + "javax.faces.partial.render"];
                     ajaxEngine.sendRequest();
 
                     // null out element variables to protect against IE memory leak
@@ -2602,7 +2628,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * locate and update the submitting form's
              * <code>javax.faces.ViewState</code> value with the
              * <code>CDATA</code> contents from the response.
-             * &lt;SEP&gt: is the currently configured
+             * &lt;SEP&gt; is the currently configured
              * <code>UINamingContainer.getSeparatorChar()</code>.
              * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; is the return from
              * <code>UIViewRoot.getContainerClientId()</code> on the
@@ -2613,8 +2639,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * correctness in parity with what is done in the
              * corresponding non-partial JSF view.  Locate and update
              * the <code>javax.faces.ViewState</code> value for all
-             * forms specified in the <code>render</code> target
-             * list.</li>
+             * POST forms covered in the <code>render</code> target
+             * list whose ID starts with the same 
+             * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; value.</li>
 
              * <li class="changed_added_2_2">If an
              * <code>update</code> element is found in the response with
@@ -2628,7 +2655,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * locate and update the submitting form's
              * <code>javax.faces.ClientWindow</code> value with the
              * <code>CDATA</code> contents from the response.
-             * &lt;SEP&gt: is the currently configured
+             * &lt;SEP&gt; is the currently configured
              * <code>UINamingContainer.getSeparatorChar()</code>.
              * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; is the return from
              * <code>UIViewRoot.getContainerClientId()</code> on the
@@ -2639,8 +2666,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * correctness in parity with what is done in the
              * corresponding non-partial JSF view.  Locate and update
              * the <code>javax.faces.ClientWindow</code> value for all
-             * forms specified in the <code>render</code> target
-             * list.</li>
+             * POST forms covered in the <code>render</code> target
+             * list whose ID starts with the same 
+             * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; value.</li>
 
 
              * <li>If an <code>update</code> element is found in the response with the identifier
@@ -2794,7 +2822,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 }
 
                 var partialResponse = xml.getElementsByTagName("partial-response")[0];
-                var partialResponseId = partialResponse.getAttribute("id");
+                var namingContainerId = partialResponse.getAttribute("id");
+                var namingContainerPrefix = namingContainerId ? (namingContainerId + jsf.separatorchar) : "";
                 var responseType = partialResponse.firstChild;
 
                 for (var i = 0; i < partialResponse.childNodes.length; i++) {
@@ -2845,7 +2874,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     for (var i = 0; i < changes.length; i++) {
                         switch (changes[i].nodeName) {
                             case "update":
-                                doUpdate(changes[i], context, partialResponseId);
+                                doUpdate(changes[i], context, namingContainerPrefix);
                                 break;
                             case "delete":
                                 doDelete(changes[i]);

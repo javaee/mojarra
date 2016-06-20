@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -65,7 +65,6 @@ import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.ActionSource;
 import javax.faces.component.ActionSource2;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIForm;
@@ -88,7 +87,6 @@ import javax.faces.render.ResponseStateManager;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.util.FacesLogger;
@@ -1502,6 +1500,17 @@ public class RenderKitUtils {
     }
 
 
+    /**
+     * If view root is instance of naming container, prepend its container client id to namespace given parameter name.
+     * @param context Involved faces context.
+     * @param name Request parameter name.
+     * @return The request parameter name, if necessary namespaced.
+     */
+    public static String getParameterName(FacesContext context, String name) {
+        return Util.getNamingContainerPrefix(context) + name;
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -1702,21 +1711,8 @@ public class RenderKitUtils {
         appendProperty(builder, componentClientId, componentClientId);
 
         if ((null != params) && (!params.isEmpty())) {
-
-            String namingContainerId = "";
-
-            WebConfiguration webConfig = WebConfiguration.getInstance();
-            boolean namespaceParameters = webConfig.isOptionEnabled(BooleanWebContextInitParameter.NamespaceParameters);
-
-            if (namespaceParameters) {
-                UIViewRoot viewRoot = context.getViewRoot();
-                if (viewRoot instanceof NamingContainer) {
-                    namingContainerId = viewRoot.getContainerClientId(context);
-                }
-            }
-
             for (ClientBehaviorContext.Parameter param : params) {
-                appendProperty(builder, namingContainerId + param.getName(), param.getValue());
+                appendProperty(builder, getParameterName(context, param.getName()), param.getValue());
             }
         }
 

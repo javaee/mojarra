@@ -42,21 +42,6 @@
 
 package com.sun.faces.util;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.io.FastStringWriter;
-import javax.el.ELResolver;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.application.Application;
-import javax.faces.application.StateManager;
-import javax.faces.application.ViewHandler;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.event.AbortProcessingException;
 import java.beans.FeatureDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,16 +52,30 @@ import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
+import javax.el.ELResolver;
+import javax.el.ValueExpression;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.application.ProjectStage;
+import javax.faces.application.StateManager;
+import javax.faces.application.ViewHandler;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.render.ResponseStateManager;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -89,7 +88,12 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
 import org.xml.sax.InputSource;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.io.FastStringWriter;
 
 /**
  * <B>Util</B> is a class ...
@@ -999,6 +1003,26 @@ public class Util {
         }
 
         return false;
+    }
+    
+    /**
+     * If view root is instance of naming container, return its container client id, suffixed with separator character.
+     * @param context Involved faces context.
+     * @return The naming container prefix, or an empty string if the view root is not an instance of naming container.
+     */
+    public static String getNamingContainerPrefix(FacesContext context) {
+        UIViewRoot viewRoot = context.getViewRoot();
+
+        if (viewRoot == null) {
+            Application application = context.getApplication();
+            viewRoot = (UIViewRoot) application.createComponent(UIViewRoot.COMPONENT_TYPE);
+        }
+
+        if (viewRoot instanceof NamingContainer) {
+            return viewRoot.getContainerClientId(context) + UINamingContainer.getSeparatorChar(context);
+        } else {
+            return "";
+        }
     }
     
     public static String getViewStateId(FacesContext context) {
