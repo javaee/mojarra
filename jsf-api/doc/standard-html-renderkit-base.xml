@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -123,6 +123,19 @@
         <component-extension>
             <component-family>javax.faces.Graphic</component-family>
             <renderer-type>javax.faces.Image</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+        <component-type>javax.faces.ImportConstants</component-type>
+        <component-class>javax.faces.component.UIImportConstants</component-class>
+
+        <xi:include href="uiimportconstants-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.ImportConstants</component-family>
         </component-extension>
 
     </component>

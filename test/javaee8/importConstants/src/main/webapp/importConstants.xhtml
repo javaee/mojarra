@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+    <f:metadata>
+        <f:importConstants type="javax.faces.application.StateManager" />
+        <f:importConstants type="javax.faces.component.visit.VisitResult" />
+    </f:metadata>
+    <h:head>
+        <title>Spec1424IT - importConstants</title>
+    </h:head>
+    <h:body>
+        <h:outputText id="result" value="#{initParam[StateManager.PARTIAL_STATE_SAVING_PARAM_NAME]}" />
+        <h:outputText id="results" value="#{VisitResult}" />
+    </h:body>
+</html>

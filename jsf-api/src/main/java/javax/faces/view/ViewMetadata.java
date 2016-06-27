@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,14 +40,16 @@
 
 package javax.faces.view;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIImportConstants;
+import javax.faces.component.UIViewAction;
 import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewAction;
 import javax.faces.context.FacesContext;
 
 /**
@@ -96,6 +98,9 @@ public abstract class ViewMetadata {
      *   The contents of the current UIViewRoot's ViewMap must be copied 
      *   to the ViewMap of the new UIViewRoot before applying the tag handlers.
      *  </li>
+     *  <li class="changed_added_2_3">
+     *   The {@link UIImportConstants} must be processed after applying the tag handlers.
+     *  </li>
      * </ul>
      *
      * @param context the {@link FacesContext} for the current request
@@ -138,7 +143,7 @@ public abstract class ViewMetadata {
         return params;
 
     }
-    
+
     /**
      * <p class="changed_added_2_2"> Utility method to extract view
      * metadata from the provided {@link UIViewRoot}.  </p>
@@ -170,6 +175,35 @@ public abstract class ViewMetadata {
         
         return actions;
     }
+
+    /**
+     * <p class="changed_added_2_3">Utility method to extract view metadata from the provided {@link UIViewRoot}.</p>
+     *
+     * @param root The {@link UIViewRoot} from which the metadata will be extracted.
+     *
+     * @return A <code>Collection</code> of {@link UIImportConstants} instances.
+     * If the view has no metadata, the collection will be empty.
+     */
+    public static Collection<UIImportConstants> getImportConstants(UIViewRoot root) {
+        Collection<UIImportConstants> importConstants;
+        UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
+
+        if (metadataFacet == null) {
+            importConstants = Collections.emptyList();
+        } else {
+            importConstants = new ArrayList<>();
+            List<UIComponent> children = metadataFacet.getChildren();
+            int len = children.size();
+            for (int i = 0; i < len; i++) {
+                UIComponent c = children.get(i);
+                if (c instanceof UIImportConstants) {
+                    importConstants.add((UIImportConstants) c);
+                }
+            }
+        }
+
+        return importConstants;
+    }
     
     /**
      * <p class="changed_added_2_2">Utility method to determine if the 
@@ -193,6 +227,5 @@ public abstract class ViewMetadata {
         
         return result;
     }
-
 
 }
