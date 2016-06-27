@@ -183,12 +183,6 @@ public class ViewMetadataImpl extends ViewMetadata {
                 throw new IllegalArgumentException("UIImportConstants type attribute is required.");
             }
 
-            Map<String, Object> applicationMap = context.getExternalContext().getApplicationMap();
-
-            if (applicationMap.containsKey(type)) {
-                continue;
-            }
-
             String var = importConstants.getVar();
 
             if (var == null) {
@@ -197,7 +191,11 @@ public class ViewMetadataImpl extends ViewMetadata {
                 var = type.substring(Math.max(innerClass, outerClass) + 1);
             }
 
-            applicationMap.putIfAbsent(var, collectConstants(type));
+            Map<String, Object> applicationMap = context.getExternalContext().getApplicationMap();
+
+            if (!applicationMap.containsKey(type)) {
+                applicationMap.putIfAbsent(var, collectConstants(type));
+            }
         }
     }
 
