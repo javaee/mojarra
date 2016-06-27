@@ -40,10 +40,11 @@
 
 package javax.faces.view;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIImportConstants;
@@ -122,26 +123,7 @@ public abstract class ViewMetadata {
      * empty.
      */
     public static Collection<UIViewParameter> getViewParameters(UIViewRoot root) {
-
-        Collection<UIViewParameter> params;
-        UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
-
-        if (metadataFacet == null) {
-            params = Collections.emptyList();
-        } else {
-            params = new ArrayList<>();
-            List<UIComponent> children = metadataFacet.getChildren();
-            int len = children.size();
-            for (int i = 0; i < len; i++) {
-                UIComponent c = children.get(i);
-                if (c instanceof UIViewParameter) {
-                    params.add((UIViewParameter) c);
-                }
-            }
-        }
-
-        return params;
-
+        return getMetadataChildren(root, UIViewParameter.class);
     }
 
     /**
@@ -156,24 +138,7 @@ public abstract class ViewMetadata {
      * empty.
      */
     public static Collection<UIViewAction> getViewActions(UIViewRoot root) {
-        Collection<UIViewAction> actions;
-        UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
-
-        if (metadataFacet == null) {
-            actions = Collections.emptyList();
-        } else {
-            actions = new ArrayList<>();
-            List<UIComponent> children = metadataFacet.getChildren();
-            int len = children.size();
-            for (int i = 0; i < len; i++) {
-                UIComponent c = children.get(i);
-                if (c instanceof UIViewAction) {
-                    actions.add((UIViewAction) c);
-                }
-            }
-        }
-        
-        return actions;
+        return getMetadataChildren(root, UIViewAction.class);
     }
 
     /**
@@ -185,26 +150,9 @@ public abstract class ViewMetadata {
      * If the view has no metadata, the collection will be empty.
      */
     public static Collection<UIImportConstants> getImportConstants(UIViewRoot root) {
-        Collection<UIImportConstants> importConstants;
-        UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
-
-        if (metadataFacet == null) {
-            importConstants = Collections.emptyList();
-        } else {
-            importConstants = new ArrayList<>();
-            List<UIComponent> children = metadataFacet.getChildren();
-            int len = children.size();
-            for (int i = 0; i < len; i++) {
-                UIComponent c = children.get(i);
-                if (c instanceof UIImportConstants) {
-                    importConstants.add((UIImportConstants) c);
-                }
-            }
-        }
-
-        return importConstants;
+        return getMetadataChildren(root, UIImportConstants.class);
     }
-    
+
     /**
      * <p class="changed_added_2_2">Utility method to determine if the 
      * the provided {@link UIViewRoot} has metadata.  The default implementation will 
@@ -217,15 +165,18 @@ public abstract class ViewMetadata {
      *
      * @return true if the view has metadata, false otherwise.
      */
-    public static boolean hasMetadata(UIViewRoot root) {
-        boolean result = false;
-        
-        UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
-        if (null != metadataFacet) {
-            result = 0 < metadataFacet.getChildCount();
-        }
-        
-        return result;
+    public static boolean hasMetadata(UIViewRoot root) {    
+        return getMetadataFacet(root).map(m -> m.getChildCount() > 0).orElse(false);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <C extends UIComponent> List<C> getMetadataChildren(UIViewRoot root, Class<C> type) {
+        return (List<C>) getMetadataFacet(root).map(m -> m.getChildren()).orElseGet(Collections::emptyList)
+                                               .stream().filter(c -> type.isInstance(c)).collect(Collectors.toList());
+    }
+
+    private static Optional<UIComponent> getMetadataFacet(UIViewRoot root) {
+        return Optional.ofNullable(root.getFacet(UIViewRoot.METADATA_FACET_NAME));
     }
 
 }
