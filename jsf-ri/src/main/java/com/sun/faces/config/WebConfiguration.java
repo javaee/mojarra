@@ -1432,6 +1432,9 @@ public class WebConfiguration {
             false),
         EnableWebsocketEndpoint(
             PushContext.ENABLE_WEBSOCKET_ENDPOINT_PARAM_NAME,
+            false),
+        DisallowDoctypeDecl(
+            "com.sun.faces.disallowDoctypeDecl",
             false);
 
         private BooleanWebContextInitParameter alternate;
