@@ -40,21 +40,20 @@
  
 package com.sun.faces.ext.component;
 
+import static com.sun.faces.ext.component.MessageFactory.getLabel;
+import static com.sun.faces.ext.component.MessageFactory.getMessage;
 import static com.sun.faces.ext.component.MultiFieldValidationUtils.FAILED_FIELD_LEVEL_VALIDATION;
 import static com.sun.faces.ext.component.MultiFieldValidationUtils.getMultiFieldValidationCandidates;
-import static com.sun.faces.util.ReflectionUtils.instance;
+import static com.sun.faces.util.BeanValidation.getBeanValidator;
 import static com.sun.faces.util.ReflectionUtils.setProperties;
 import static com.sun.faces.util.Util.getValueExpressionNullSafe;
+import static com.sun.faces.util.copier.CopierUtils.getCopier;
 import static javax.faces.component.visit.VisitContext.createVisitContext;
 import static javax.faces.component.visit.VisitResult.ACCEPT;
-import static javax.faces.validator.BeanValidator.VALIDATOR_FACTORY_KEY;
-import static javax.validation.Validation.buildDefaultValidatorFactory;
+import static javax.faces.validator.BeanValidator.MESSAGE_ID;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -71,17 +70,9 @@ import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.BeanValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
-import javax.validation.MessageInterpolator;
-import javax.validation.ValidationException;
-import javax.validation.ValidatorContext;
-import javax.validation.ValidatorFactory;
-
-import com.sun.faces.util.copier.Copier;
-import com.sun.faces.util.copier.MultiStrategyCopier;
 
 class WholeBeanValidator implements Validator<Object> {
 
@@ -90,12 +81,6 @@ class WholeBeanValidator implements Validator<Object> {
     
     private static final String ERROR_MISSING_FORM
             = "f:validateWholeBean must be nested directly in an UIForm.";
-
-    private static final String ERROR_COPIER_NAME = "The copier name should be a Java valid simple/qualified name.";
-
-    private static final String COPIER_PREFIX = "com.sun.faces.util.copier.";
-
-    private Class cc = null;
     
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
@@ -111,6 +96,9 @@ class WholeBeanValidator implements Validator<Object> {
 
         // The "whole" bean that we're going to validate at the class level
         Object wholeBean = wholeBeanVE.getValue(context.getELContext());
+        
+        // A shortened or fully qualified class name, or EL expression pointing
+        // to a type that copies the target bean for validation
         String copierType = (String) component.getAttributes().get("copierType");
         
         // Inspect the status of field level validation
@@ -130,35 +118,33 @@ class WholeBeanValidator implements Validator<Object> {
             return;
         }
         
-        Object wholeBeanCopy = copyObjectAndPopulateWithCandidateValues(context, wholeBeanVE, wholeBean, copierType, validationCandidate);
-        javax.validation.Validator beanValidator = getBeanValidator(context);
-
-        Class<?>[] validationGroupArray = component.getValidationGroupsArray();
-        Set result = null;
-        try {            
-            result = beanValidator.validate(wholeBeanCopy, validationGroupArray);            
-        } catch (IllegalArgumentException iae) {
-            String failureMessage = "Unable to validate expression " + wholeBeanVE.getExpressionString() + " using Bean Validation.  Unable to get value of expression. " + " Message from Bean Validation: " + iae.getMessage();
-            LOGGER.fine(failureMessage);
-        }
+        // Perform the actual bean validation on a copy of the whole bean
+        Set<ConstraintViolation<?>> violations = doBeanValidation(
+            getBeanValidator(context), 
+            copyBeanAndPopulateWithCandidateValues(
+                context, wholeBeanVE, wholeBean, copierType, validationCandidate), 
+            component.getValidationGroupsArray(), 
+            wholeBeanVE);
         
-        Set<ConstraintViolation<?>> violations = result;
+        // If there are any violations, transform them into a JSF validator exception
         if (violations != null && !violations.isEmpty()) {
             ValidatorException toThrow;
-            if (1 == violations.size()) {
-                ConstraintViolation violation = violations.iterator().next();
-                toThrow = new ValidatorException(MessageFactory.getMessage(context, BeanValidator.MESSAGE_ID, violation.getMessage(), MessageFactory.getLabel(context, component)));
+            
+            if (violations.size() == 1) {
+                ConstraintViolation<?> violation = violations.iterator().next();
+                toThrow = new ValidatorException(getMessage(context, MESSAGE_ID, violation.getMessage(), getLabel(context, component)));
             } else {
                 Set<FacesMessage> messages = new LinkedHashSet<>(violations.size());
-                for (ConstraintViolation violation : violations) {
-                    messages.add(MessageFactory.getMessage(context, BeanValidator.MESSAGE_ID, violation.getMessage(), MessageFactory.getLabel(context, component)));
+                for (ConstraintViolation<?> violation : violations) {
+                    messages.add(getMessage(context, MESSAGE_ID, violation.getMessage(), getLabel(context, component)));
                 }
                 toThrow = new ValidatorException(messages);
             }
+            
             // Mark the components as invalid to prevent them from receiving
             // values during updateModelValues
-            for (Map.Entry<String, Map<String, Object>> cur : validationCandidate.entrySet()) {
-                ((EditableValueHolder) cur.getValue().get("component")).setValid(false);
+            for (Entry<String, Map<String, Object>> validationCandidateEntry : validationCandidate.entrySet()) {
+                invalidateComponent(validationCandidateEntry);
             }
             
             throw toThrow;
@@ -176,6 +162,10 @@ class WholeBeanValidator implements Validator<Object> {
     
     private boolean isFailedFieldLevelValidation(Entry<String, Map<String, Object>> wholeBeanPropertyEntry) {
         return FAILED_FIELD_LEVEL_VALIDATION.equals(wholeBeanPropertyEntry.getValue().get("value"));
+    }
+    
+    private void invalidateComponent(Entry<String, Map<String, Object>> wholeBeanPropertyEntry) {
+        ((EditableValueHolder) wholeBeanPropertyEntry.getValue().get("component")).setValid(false);
     }
     
     private boolean hasAnyBeanPropertyFailedValidation(FacesContext context, Object wholeBean) {
@@ -197,198 +187,49 @@ class WholeBeanValidator implements Validator<Object> {
         return false;
     }
 
-    private Object copyObjectAndPopulateWithCandidateValues(FacesContext context, ValueExpression wholeBeanVE,
+    private Object copyBeanAndPopulateWithCandidateValues(FacesContext context, ValueExpression wholeBeanVE,
             Object wholeBean, String copierType, Map<String, Map<String, Object>> candidate) {
 
-        // Populate the value copy with the validated values from the candidate
+        // Populate the bean copy with the validated values from the candidate
         Map<String, Object> propertiesToSet = new HashMap<>();
         for (Entry<String, Map<String, Object>> propertyEntry : candidate.entrySet()) {
             propertiesToSet.put(propertyEntry.getKey(), propertyEntry.getValue().get("value"));
         }
 
-        // Copy the value so that class-level validation can be performed
-        // without corrupting the real value
+        // Copy the whole bean so that class-level validation can be performed
+        // without corrupting the real whole bean
         
-        Object wholeBeanCopy  = getCopier(context, copierType)
+        Object wholeBeanCopy = getCopier(context, copierType)
                                     .copy(wholeBean);
 
         if (wholeBeanCopy == null) {
-            throw new FacesException("Unable to copy value from " + wholeBeanVE.getExpressionString());
+            throw new FacesException("Unable to copy bean from " + wholeBeanVE.getExpressionString());
         }
 
         setProperties(wholeBeanCopy, propertiesToSet);
         
         return wholeBeanCopy;
     }
-
-    private javax.validation.Validator getBeanValidator(FacesContext context) {
-        ValidatorFactory validatorFactory = getValidatorFactory(context);
-        
-        ValidatorContext validatorContext = validatorFactory.usingContext();
-        MessageInterpolator jsfMessageInterpolator = new JsfAwareMessageInterpolator(context, validatorFactory.getMessageInterpolator());
-        validatorContext.messageInterpolator(jsfMessageInterpolator);
-        
-        return validatorContext.getValidator();
-    }
     
-    private ValidatorFactory getValidatorFactory(FacesContext context) {
-        ValidatorFactory validatorFactory = null;
+    private Set<ConstraintViolation<?>> doBeanValidation(javax.validation.Validator beanValidator, Object wholeBeanCopy, Class<?>[] validationGroupArray, ValueExpression wholeBeanVE) {
         
-        Object cachedObject = context.getExternalContext()
-                                     .getApplicationMap()
-                                     .get(VALIDATOR_FACTORY_KEY);
+        @SuppressWarnings("rawtypes")
+        Set violationsRaw = null;
         
-        
-        if (cachedObject instanceof ValidatorFactory) {
-            validatorFactory = (ValidatorFactory) cachedObject;
-        } else {
-            try {
-                validatorFactory = buildDefaultValidatorFactory();
-            } catch (ValidationException e) {
-                throw new FacesException("Could not build a default Bean Validator factory", e);
-            }
-            
-            context.getExternalContext()
-                   .getApplicationMap()
-                   .put(VALIDATOR_FACTORY_KEY, validatorFactory);
+        try {            
+            violationsRaw = beanValidator.validate(wholeBeanCopy, validationGroupArray);            
+        } catch (IllegalArgumentException iae) {
+            LOGGER.fine(
+                "Unable to validate expression " + wholeBeanVE.getExpressionString() + 
+                " using Bean Validation.  Unable to get value of expression. " + 
+                " Message from Bean Validation: " + iae.getMessage());
         }
         
-        return validatorFactory;
-    }
-
-    private static class JsfAwareMessageInterpolator implements MessageInterpolator {
-
-        private final FacesContext context;
-        private final MessageInterpolator delegate;
-
-        public JsfAwareMessageInterpolator(FacesContext context, MessageInterpolator delegate) {
-            this.context = context;
-            this.delegate = delegate;
-        }
-
-        @Override
-        public String interpolate(String message, MessageInterpolator.Context context) {
-            Locale locale = this.context.getViewRoot().getLocale();
-            if (locale == null) {
-                locale = Locale.getDefault();
-            }
-            return delegate.interpolate(message, context, locale);
-        }
-
-        @Override
-        public String interpolate(String message, MessageInterpolator.Context context, Locale locale) {
-            return delegate.interpolate(message, context, locale);
-        }
-    }
-
-    private Copier getCopier(FacesContext context, String copierType) {
-        Copier copier = null;
-
-        if (!isEmpty(copierType)) {
-
-            // TODO: or should validate only against {"MultiStrategyCopier", "SerializationCopier",
-            // "NewInstanceCopier", "CopyCtorCopier", "CloneCopier"} strings / enum
-            
-            if (isCopierTypeSimpleName(copierType)) {                
-                copierType = COPIER_PREFIX.concat(copierType);
-            } else if (!isName(copierType)) {
-                throw new IllegalArgumentException(ERROR_COPIER_NAME);
-            }
-
-            Object expressionResult = evaluateExpressionGet(context, copierType);
-
-            if (expressionResult instanceof Copier) {
-                copier = (Copier) expressionResult;
-            } else if (expressionResult instanceof String) {
-                copier = instance((String) expressionResult);
-            }
-        }
-
-        if (copier == null) {
-            copier = new MultiStrategyCopier();
-        }
+        @SuppressWarnings("unchecked")
+        Set<ConstraintViolation<?>> violations = violationsRaw;
         
-        return copier;
+        return violations;
     }
-
-    @SuppressWarnings("unchecked")
-    private static <T> T evaluateExpressionGet(FacesContext context, String expression) {
-        if (expression == null) {
-            return null;
-        }
-
-        return (T) context.getApplication().evaluateExpressionGet(context, expression, Object.class);
-    }
-
-    private static boolean isCopierTypeSimpleName(String copierType) {
-        return (isIdentifier(copierType) && !(isKeyword(copierType)));
-    }
-
-    // maybe the following four methods should be moved in com.sun.faces.util   
-    private static boolean isEmpty(String string) {
-        return string == null || string.isEmpty();
-    }
-
-    private static boolean isName(CharSequence name) {
-        String id = name.toString();
-
-        for (String s : id.split("\\.", -1)) {
-            if (!isIdentifier(s) || isKeyword(s)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean isIdentifier(CharSequence name) {
-        String id = name.toString();
-
-        if (id.length() == 0) {
-            return false;
-        }
-        int cp = id.codePointAt(0);
-        if (!Character.isJavaIdentifierStart(cp)) {
-            return false;
-        }
-        for (int i = Character.charCount(cp);
-                i < id.length();
-                i += Character.charCount(cp)) {
-            cp = id.codePointAt(i);
-            if (!Character.isJavaIdentifierPart(cp)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean isKeyword(CharSequence s) {
-        String keywordOrLiteral = s.toString();
-        return keywords.contains(keywordOrLiteral);
-    }
-
-    private final static Set<String> keywords;
-
-    static {
-        Set<String> s = new HashSet<String>();
-        String[] kws = {
-            "abstract", "continue", "for", "new", "switch",
-            "assert", "default", "if", "package", "synchronized",
-            "boolean", "do", "goto", "private", "this",
-            "break", "double", "implements", "protected", "throw",
-            "byte", "else", "import", "public", "throws",
-            "case", "enum", "instanceof", "return", "transient",
-            "catch", "extends", "int", "short", "try",
-            "char", "final", "interface", "static", "void",
-            "class", "finally", "long", "strictfp", "volatile",
-            "const", "float", "native", "super", "while",
-            // literals
-            "null", "true", "false"
-        };
-        for (String kw : kws) {
-            s.add(kw);
-        }
-        keywords = Collections.unmodifiableSet(s);
-    }    
 
     private static class AddRemainingCandidateFieldsCallback implements VisitCallback {
 

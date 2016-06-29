@@ -52,7 +52,9 @@ import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -441,6 +443,17 @@ public class Util {
         notNullAttribute(name, valueExpression);
         
         return valueExpression;
+    }
+    
+    public static <T> List<T> reverse(List<T> list) {
+        int length = list.size();
+        List<T> result = new ArrayList<>(length);
+
+        for (int i = length - 1; i >= 0; i--) {
+            result.add(list.get(i));
+        }
+
+        return result;
     }
 
 

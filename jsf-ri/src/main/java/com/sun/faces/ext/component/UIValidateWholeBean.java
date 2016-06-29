@@ -39,6 +39,7 @@
  */
 package com.sun.faces.ext.component;
 
+import static com.sun.faces.util.Util.reverse;
 import static java.lang.Boolean.TRUE;
 import static javax.faces.validator.BeanValidator.EMPTY_VALIDATION_GROUPS_PATTERN;
 import static javax.faces.validator.BeanValidator.ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME;
@@ -278,17 +279,6 @@ public class UIValidateWholeBean extends UIInput implements PartialStateHolder {
                 throw new FacesException("Validation group not found: " + className);
             }
         }
-    }
-    
-    private static <T> List<T> reverse(List<T> list) {
-        int length = list.size();
-        List<T> result = new ArrayList<>(length);
-
-        for (int i = length - 1; i >= 0; i--) {
-            result.add(list.get(i));
-        }
-
-        return result;
     }
     
     private static class BreakException extends RuntimeException {
