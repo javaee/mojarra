@@ -1425,7 +1425,10 @@ public class WebConfiguration {
             false),
         ForceAlwaysWriteFlashCookie(
             "com.sun.faces.forceAlwaysWriteFlashCookie",
-            false);
+            false),
+        DisallowDoctypeDecl(
+            "com.sun.faces.disallowDoctypeDecl",
+             false);
 
         private BooleanWebContextInitParameter alternate;
 

@@ -58,6 +58,8 @@
 
 package com.sun.faces.facelets.compiler;
 
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisallowDoctypeDecl;
+
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.FaceletsConfiguration;
 import com.sun.faces.config.WebConfiguration;
@@ -292,6 +294,14 @@ public final class SAXCompiler extends Compiler {
                 }
             }
         }
+
+        protected boolean isDisallowDoctypeDeclSet() {
+            return unit.getWebConfiguration().isSet(DisallowDoctypeDecl);
+        }
+
+        protected boolean isDisallowDoctypeDecl() {
+            return unit.getWebConfiguration().isOptionEnabled(DisallowDoctypeDecl);
+        }
     }
 
 
@@ -521,6 +531,9 @@ public final class SAXCompiler extends Compiler {
         factory.setFeature("http://xml.org/sax/features/validation", this
                 .isValidating());
         factory.setValidating(this.isValidating());
+        if (handler.isDisallowDoctypeDeclSet()) {
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", handler.isDisallowDoctypeDecl());
+        }
         SAXParser parser = factory.newSAXParser();
         XMLReader reader = parser.getXMLReader();
         reader.setProperty("http://xml.org/sax/properties/lexical-handler",
