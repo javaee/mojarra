@@ -50,7 +50,6 @@ import static javax.faces.component.visit.VisitResult.ACCEPT;
 import static javax.faces.validator.BeanValidator.VALIDATOR_FACTORY_KEY;
 import static javax.validation.Validation.buildDefaultValidatorFactory;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -81,11 +80,8 @@ import javax.validation.ValidationException;
 import javax.validation.ValidatorContext;
 import javax.validation.ValidatorFactory;
 
-import com.sun.faces.util.copier.CloneCopier;
 import com.sun.faces.util.copier.Copier;
-import com.sun.faces.util.copier.CopyCtorCopier;
-import com.sun.faces.util.copier.NewInstanceCopier;
-import com.sun.faces.util.copier.SerializationCopier;
+import com.sun.faces.util.copier.MultiStrategyCopier;
 
 class WholeBeanValidator implements Validator<Object> {
 
@@ -206,49 +202,17 @@ class WholeBeanValidator implements Validator<Object> {
 
         // Populate the value copy with the validated values from the candidate
         Map<String, Object> propertiesToSet = new HashMap<>();
-        for (Entry<String, Map<String, Object>> cur : candidate.entrySet()) {
-            propertiesToSet.put(cur.getKey(), cur.getValue().get("value"));
+        for (Entry<String, Map<String, Object>> propertyEntry : candidate.entrySet()) {
+            propertiesToSet.put(propertyEntry.getKey(), propertyEntry.getValue().get("value"));
         }
 
         // Copy the value so that class-level validation can be performed
         // without corrupting the real value
-		
-        // Check if the user has specified a copy strategy         
-        Object wholeBeanCopy = null;
-        Copier copier = getCopier(context, copierType);
         
-        if (copier != null) {
-            wholeBeanCopy = copier.copy(wholeBean);
-        } else {
-            try {
-                NewInstanceCopier nic = new NewInstanceCopier();
-                wholeBeanCopy = nic.copy(wholeBean);                
-            } catch (IllegalStateException ise2) {
-            }
-            if (null == wholeBeanCopy) {
-                if (wholeBean instanceof Serializable) {
-                    try {
-                        SerializationCopier sc = new SerializationCopier();
-                        wholeBeanCopy = sc.copy(wholeBean);                        
-                    } catch (IllegalStateException ise) {
-                    }
-                } else if (wholeBean instanceof Cloneable) {
-                    try {
-                        CloneCopier cc = new CloneCopier();
-                        wholeBeanCopy = cc.copy(wholeBean);                        
-                    } catch (IllegalStateException ise) {
-                    }
-                } else {
-                    try {
-                        CopyCtorCopier ccc = new CopyCtorCopier();
-                        wholeBeanCopy = ccc.copy(wholeBean);                        
-                    } catch (IllegalStateException ise) {
-                    }
-                }
-            }
-        }
+        Object wholeBeanCopy  = getCopier(context, copierType)
+                                    .copy(wholeBean);
 
-        if (null == wholeBeanCopy) {
+        if (wholeBeanCopy == null) {
             throw new FacesException("Unable to copy value from " + wholeBeanVE.getExpressionString());
         }
 
@@ -322,8 +286,9 @@ class WholeBeanValidator implements Validator<Object> {
 
         if (!isEmpty(copierType)) {
 
-            // or should validate only against {"MultiStrategyCopier", "SerializationCopier",
-            // "NewInstanceCopier", "CopyCtorCopier", "CloneCopier"} strings?
+            // TODO: or should validate only against {"MultiStrategyCopier", "SerializationCopier",
+            // "NewInstanceCopier", "CopyCtorCopier", "CloneCopier"} strings / enum
+            
             if (isCopierTypeSimpleName(copierType)) {                
                 copierType = COPIER_PREFIX.concat(copierType);
             } else if (!isName(copierType)) {
@@ -339,11 +304,10 @@ class WholeBeanValidator implements Validator<Object> {
             }
         }
 
-        // default to the hard-coded copy strategy and let MultiStrategyCopier
-		// as an user option
-        // if (copier == null) {
-        //     copier = new MultiStrategyCopier();
-        // }
+        if (copier == null) {
+            copier = new MultiStrategyCopier();
+        }
+        
         return copier;
     }
 
@@ -442,23 +406,32 @@ class WholeBeanValidator implements Validator<Object> {
         }
 
         @Override
-        public VisitResult visit(VisitContext vc, UIComponent uic) {            
-            if ((uic instanceof EditableValueHolder) && (uic.isRendered()) && (!(uic instanceof UIValidateWholeBean))) {
-                ValueExpression valueExpression = uic.getValueExpression("value");                
+        public VisitResult visit(VisitContext visitContext, UIComponent component) {            
+            if (component instanceof EditableValueHolder && component.isRendered() && !(component instanceof UIValidateWholeBean)) {
+                ValueExpression valueExpression = component.getValueExpression("value");                
+                
                 if (valueExpression != null) {
 
-                    ValueExpressionAnalyzer expressionAnalyzer = new ValueExpressionAnalyzer(valueExpression);
-                    ValueReference valueReference = expressionAnalyzer.getReference(context.getELContext());                    
+                    ValueReference valueReference = new ValueExpressionAnalyzer(valueExpression)
+                                                            .getReference(context.getELContext());                
 
-                    if ((valueReference != null) && (valueReference.getBase().equals(base))) {
+                    if (valueReference != null && valueReference.getBase().equals(base)) {
                         Map<String, Object> tuple = new HashMap<>();
-                        tuple.put("component", uic);
-                        tuple.put("value", (((UIInput) uic).getSubmittedValue() != null) ? ((UIInput) uic).getSubmittedValue() : ((UIInput) uic).getLocalValue());                        
+                        tuple.put("component", component);
+                        tuple.put("value", getComponentValue(component));
+                        
                         candidate.put(valueReference.getProperty(), tuple);
                     }
                 }
             }
+            
             return ACCEPT;
+        }
+        
+        private static Object getComponentValue(UIComponent component) {
+            UIInput inputComponent = (UIInput) component;
+            
+            return inputComponent.getSubmittedValue() != null ? inputComponent.getSubmittedValue() : inputComponent.getLocalValue();
         }
     }
 

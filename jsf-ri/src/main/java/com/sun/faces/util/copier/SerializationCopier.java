@@ -59,7 +59,7 @@ import java.util.Queue;
  * As per the platform serialization rules, the object and all its non transient
  * dependencies have to implement the {@link Serializable} interface.
  *
- * @since 2.0
+ * @since 2.3
  * @author Arjan Tijms
  *
  */

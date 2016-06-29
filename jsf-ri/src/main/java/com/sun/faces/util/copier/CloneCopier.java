@@ -66,7 +66,7 @@ import java.lang.reflect.Method;
 /**
  * Copier that copies an object using the {@link Cloneable} facility.
  *
- * @since 2.0
+ * @since 2.3
  * @author Arjan Tijms
  *
  */

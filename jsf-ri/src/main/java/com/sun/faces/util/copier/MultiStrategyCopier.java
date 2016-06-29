@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -65,21 +65,20 @@ import java.util.List;
  * <p>
  * The strategies that will be attempted in order are:
  * <ol>
- * <li> Cloning
  * <li> Serialization
+ * <li> Cloning
  * <li> Copy constructor
  * <li> New instance
  * </ol>
  *
- *
- * @since 2.0
+ * @since 2.3
  * @author Arjan Tijms
  *
  */
 public class MultiStrategyCopier implements Copier {
 
     private static final List<Copier> COPIERS = asList( // Note: copier instances used here must be thread-safe!
-            new CloneCopier(), new SerializationCopier(), new CopyCtorCopier(), new NewInstanceCopier()
+        new SerializationCopier(), new CloneCopier(), new CopyCtorCopier(), new NewInstanceCopier()
     );
 
     @Override

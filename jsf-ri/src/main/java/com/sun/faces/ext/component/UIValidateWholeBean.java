@@ -39,6 +39,7 @@
  */
 package com.sun.faces.ext.component;
 
+import static java.lang.Boolean.TRUE;
 import static javax.faces.validator.BeanValidator.EMPTY_VALIDATION_GROUPS_PATTERN;
 import static javax.faces.validator.BeanValidator.ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME;
 import static javax.faces.validator.BeanValidator.VALIDATION_GROUPS_DELIMITER;
@@ -46,7 +47,6 @@ import static javax.faces.validator.BeanValidator.VALIDATION_GROUPS_DELIMITER;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.component.EditableValueHolder;
@@ -208,10 +208,7 @@ public class UIValidateWholeBean extends UIInput implements PartialStateHolder {
     }
 
     private boolean wholeBeanValidationEnabled(FacesContext context) {
-        Map<Object, Object> attributes = context.getAttributes();
-        return 
-            attributes.containsKey(ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME) && 
-            (Boolean) attributes.get(ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME);
+        return TRUE.equals(context.getAttributes().get(ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME));
     }
 
     @Override

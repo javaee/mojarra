@@ -64,7 +64,7 @@ package com.sun.faces.util.copier;
  * It generally depends on the exact purpose of the copied object what level of copying is needed, and
  * different implementations of this interface can facilitate for this difference.
  * 
- * @since 2.0
+ * @since 2.3
  * @author Arjan Tijms
  *
  */

@@ -66,7 +66,7 @@ import java.lang.reflect.InvocationTargetException;
  * A copy constructor is a constructor that takes an object of the same type as the object that's
  * to be constructed. This constructor then initializes itself using the values of this other instance.
  * 
- * @since 2.0
+ * @since 2.3
  * @author Arjan Tijms
  *
  */

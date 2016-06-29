@@ -62,7 +62,7 @@ package com.sun.faces.util.copier;
  * <p>
  * The object that is to be copied has to implement a public default constructor.
  * 
- * @since 2.0
+ * @since 2.3
  * @author Arjan Tijms
  *
  */
