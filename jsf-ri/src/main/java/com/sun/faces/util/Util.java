@@ -428,6 +428,20 @@ public class Util {
         }
         
     }
+    
+    public static void notNullAttribute(String attributeName, Object attribute) {
+        if (attribute == null) {
+            throw new FacesException("The \"" + attributeName + "\" attribute is required");
+        }
+    }
+    
+    public static ValueExpression getValueExpressionNullSafe(UIComponent component, String name) {
+        ValueExpression valueExpression = component.getValueExpression(name);
+        
+        notNullAttribute(name, valueExpression);
+        
+        return valueExpression;
+    }
 
 
     /**
