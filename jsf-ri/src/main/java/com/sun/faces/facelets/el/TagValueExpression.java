@@ -58,12 +58,17 @@
 
 package com.sun.faces.facelets.el;
 
-import javax.el.*;
-import javax.faces.view.facelets.TagAttribute;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+
+import javax.el.ELContext;
+import javax.el.ELException;
+import javax.el.PropertyNotFoundException;
+import javax.el.PropertyNotWritableException;
+import javax.el.ValueExpression;
+import javax.faces.view.facelets.TagAttribute;
 
 /**
  * 
@@ -71,77 +76,70 @@ import java.io.ObjectOutput;
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class TagValueExpression extends ValueExpression implements
-        Externalizable {
+public final class TagValueExpression extends ValueExpression implements Externalizable {
 
     private static final long serialVersionUID = 1L;
 
-    private ValueExpression orig;
-
-    private String attr;
+    private ValueExpression wrapped;
+    private String tagAttribute;
 
     public TagValueExpression() {
         super();
     }
 
-    public TagValueExpression(TagAttribute attr, ValueExpression orig) {
-        this.attr = attr.toString();
-        this.orig = orig;
+    public TagValueExpression(TagAttribute tagAttribute, ValueExpression wrapped) {
+        this.tagAttribute = tagAttribute.toString();
+        this.wrapped = wrapped;
     }
 
     @Override
-    public Class getExpectedType() {
-        return this.orig.getExpectedType();
+    public Class<?> getExpectedType() {
+        return wrapped.getExpectedType();
     }
 
     @Override
-    public Class getType(ELContext context) {
+    public Class<?> getType(ELContext context) {
         try {
-            return this.orig.getType(context);
+            return wrapped.getType(context);
         } catch (PropertyNotFoundException pnfe) {
-            throw new PropertyNotFoundException(this.attr + ": "
-                    + pnfe.getMessage(), pnfe);
+            throw new PropertyNotFoundException(tagAttribute + ": " + pnfe.getMessage(), pnfe);
         } catch (ELException e) {
-            throw new ELException(this.attr + ": " + e.getMessage(), e);
+            throw new ELException(tagAttribute + ": " + e.getMessage(), e);
         }
     }
 
     @Override
     public Object getValue(ELContext context) {
         try {
-            return this.orig.getValue(context);
+            return wrapped.getValue(context);
         } catch (PropertyNotFoundException pnfe) {
-            throw new PropertyNotFoundException(this.attr + ": "
-                    + pnfe.getMessage(), pnfe);
+            throw new PropertyNotFoundException(tagAttribute + ": " + pnfe.getMessage(), pnfe);
         } catch (ELException e) {
-            throw new ELException(this.attr + ": " + e.getMessage(), e);
+            throw new ELException(this.tagAttribute + ": " + e.getMessage(), e);
         }
     }
 
     @Override
     public boolean isReadOnly(ELContext context) {
         try {
-            return this.orig.isReadOnly(context);
+            return wrapped.isReadOnly(context);
         } catch (PropertyNotFoundException pnfe) {
-            throw new PropertyNotFoundException(this.attr + ": "
-                    + pnfe.getMessage(), pnfe);
+            throw new PropertyNotFoundException(this.tagAttribute + ": " + pnfe.getMessage(), pnfe);
         } catch (ELException e) {
-            throw new ELException(this.attr + ": " + e.getMessage(), e);
+            throw new ELException(this.tagAttribute + ": " + e.getMessage(), e);
         }
     }
 
     @Override
     public void setValue(ELContext context, Object value) {
         try {
-            this.orig.setValue(context, value);
+            wrapped.setValue(context, value);
         } catch (PropertyNotFoundException pnfe) {
-            throw new PropertyNotFoundException(this.attr + ": "
-                    + pnfe.getMessage(), pnfe);
+            throw new PropertyNotFoundException(tagAttribute + ": " + pnfe.getMessage(), pnfe);
         } catch (PropertyNotWritableException pnwe) {
-            throw new PropertyNotWritableException(this.attr + ": "
-                    + pnwe.getMessage(), pnwe);
+            throw new PropertyNotWritableException(tagAttribute + ": " + pnwe.getMessage(), pnwe);
         } catch (ELException e) {
-            throw new ELException(this.attr + ": " + e.getMessage(), e);
+            throw new ELException(tagAttribute + ": " + e.getMessage(), e);
         }
     }
 
@@ -156,10 +154,10 @@ public final class TagValueExpression extends ValueExpression implements
 
         TagValueExpression that = (TagValueExpression) o;
 
-        if (attr != null ? !attr.equals(that.attr) : that.attr != null) {
+        if (tagAttribute != null ? !tagAttribute.equals(that.tagAttribute) : that.tagAttribute != null) {
             return false;
         }
-        if (orig != null ? !orig.equals(that.orig) : that.orig != null) {
+        if (wrapped != null ? !wrapped.equals(that.wrapped) : that.wrapped != null) {
             return false;
         }
 
@@ -168,40 +166,39 @@ public final class TagValueExpression extends ValueExpression implements
 
     @Override
     public int hashCode() {
-        int result = orig != null ? orig.hashCode() : 0;
-        result = 31 * result + (attr != null ? attr.hashCode() : 0);
+        int result = wrapped != null ? wrapped.hashCode() : 0;
+        result = 31 * result + (tagAttribute != null ? tagAttribute.hashCode() : 0);
         return result;
     }
 
     @Override
     public String getExpressionString() {
-        return this.orig.getExpressionString();
+        return wrapped.getExpressionString();
     }
 
     @Override
     public boolean isLiteralText() {
-        return this.orig.isLiteralText();
+        return wrapped.isLiteralText();
     }
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException,
-            ClassNotFoundException {
-        this.orig = (ValueExpression) in.readObject();
-        this.attr = in.readUTF();
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        wrapped = (ValueExpression) in.readObject();
+        tagAttribute = in.readUTF();
     }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(this.orig);
-        out.writeUTF(this.attr);
+        out.writeObject(wrapped);
+        out.writeUTF(tagAttribute);
     }
 
     public ValueExpression getWrapped() {
-        return orig;
+        return wrapped;
     }
 
     @Override
     public String toString() {
-        return this.attr;
+        return tagAttribute;
     }
 }
