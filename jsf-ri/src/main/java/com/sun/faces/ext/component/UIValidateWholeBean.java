@@ -145,8 +145,8 @@ public class UIValidateWholeBean extends UIInput implements PartialStateHolder {
     public void encodeBegin(FacesContext context) throws IOException {
 
         // Check if the parent of this f:validateWholeBean is a form                   
-        UIComponent parent = getParent();
-        if (!(parent instanceof UIForm)) {
+        UIForm parent = getClosestParent(this, UIForm.class);
+        if (parent == null) {
             throw new IllegalArgumentException(ERROR_MISSING_FORM);
         }
 
@@ -171,6 +171,16 @@ public class UIValidateWholeBean extends UIInput implements PartialStateHolder {
         } catch (BreakException be) {
             // STOP
         }
+    }
+    
+    public static <C extends UIComponent> C getClosestParent(UIComponent component, Class<C> parentType) {
+        UIComponent parent = component.getParent();
+
+        while (parent != null && !parentType.isInstance(parent)) {
+            parent = parent.getParent();
+        }
+
+        return parentType.cast(parent);
     }
 
     private boolean isValidatorInstalled() {
