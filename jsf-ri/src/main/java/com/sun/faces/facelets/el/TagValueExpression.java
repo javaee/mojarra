@@ -68,6 +68,7 @@ import javax.el.ELException;
 import javax.el.PropertyNotFoundException;
 import javax.el.PropertyNotWritableException;
 import javax.el.ValueExpression;
+import javax.el.ValueReference;
 import javax.faces.view.facelets.TagAttribute;
 
 /**
@@ -179,6 +180,11 @@ public final class TagValueExpression extends ValueExpression implements Externa
     @Override
     public boolean isLiteralText() {
         return wrapped.isLiteralText();
+    }
+    
+    @Override
+    public ValueReference getValueReference(ELContext context) {
+        return wrapped.getValueReference(context);
     }
 
     @Override
