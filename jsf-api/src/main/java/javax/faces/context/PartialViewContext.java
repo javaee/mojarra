@@ -66,6 +66,15 @@ import javax.faces.event.PhaseId;
 
 public abstract class PartialViewContext {
 
+    
+    /**
+     * <p class="changed_added_2_3">
+     * The request parameter name whose request parameter value identifies the type of partial event.</p>
+     *
+     * @since 2.3
+     */
+    public static final String PARTIAL_EVENT_PARAM_NAME = 
+          "javax.faces.partial.event";
 
     /**
      * <p class="changed_added_2_0">
