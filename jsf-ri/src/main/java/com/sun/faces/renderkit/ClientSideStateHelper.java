@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -61,6 +61,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateTimeout;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateWriteBufferSize;
 import static com.sun.faces.config.WebConfiguration.WebEnvironmentEntry.ClientStateSavingPassword;
 import com.sun.faces.io.Base64InputStream;
@@ -396,8 +397,14 @@ public class ClientSideStateHelper extends StateHelper {
 
         String pass = webConfig.getEnvironmentEntry(
               ClientStateSavingPassword);
-        if (pass != null) {
+        if (webConfig.canProcessJndiEntries() &&
+            !webConfig.isSet(BooleanWebContextInitParameter.DisableClientStateEncryption)) {
             guard = new ByteArrayGuard();
+        } else {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                           "jsf.config.webconfig.enventry.clientencrypt");
+            }
         }
 
         stateTimeoutEnabled = webConfig.isSet(ClientStateTimeout);
