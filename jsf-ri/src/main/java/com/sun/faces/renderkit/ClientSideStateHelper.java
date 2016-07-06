@@ -44,8 +44,7 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateTimeout;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateWriteBufferSize;
-import static com.sun.faces.renderkit.RenderKitUtils.getParameterName;
-import static javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.VIEW_STATE_PARAM;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -183,7 +182,7 @@ public class ClientSideStateHelper extends StateHelper {
 
             writer.startElement("input", null);
             writer.writeAttribute("type", "hidden", null);
-            writer.writeAttribute("name", getParameterName(ctx, VIEW_STATE_PARAM), null);
+            writer.writeAttribute("name", VIEW_STATE_PARAM.getName(ctx), null);
             if (webConfig.isOptionEnabled(EnableViewStateIdRendering)) {
                 String viewStateId = Util.getViewStateId(ctx);
                 writer.writeAttribute("id", viewStateId, null);

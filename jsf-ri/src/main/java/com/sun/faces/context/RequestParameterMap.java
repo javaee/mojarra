@@ -79,9 +79,10 @@ public class RequestParameterMap extends BaseContextMap<String> {
             inspectedParameterNames = true;
             request.getParameterNames();
         }
-    	String mapKey = key.toString();
+        String mapKey = key.toString();
         String mapValue = request.getParameter(mapKey);
         if (mapValue == null && !mapKey.startsWith(getNamingContainerPrefix())) {
+            // Support cases where enduser manually obtains a request parameter while in a namespaced view.
             mapValue = request.getParameter(getNamingContainerPrefix() + mapKey);
         }
         return mapValue;
@@ -126,7 +127,7 @@ public class RequestParameterMap extends BaseContextMap<String> {
 
 
     @Override
-    public boolean containsKey(Object key) {    	
+    public boolean containsKey(Object key) {
         return (key != null && get(key) != null);
     }
 

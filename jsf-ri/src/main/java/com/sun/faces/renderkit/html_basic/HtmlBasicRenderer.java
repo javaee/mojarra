@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,6 +42,9 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_EVENT_PARAM;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_SOURCE_PARAM;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,10 +61,9 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
-import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.behavior.ClientBehaviorHolder;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -200,15 +202,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
             return null;
         }
 
-        ExternalContext external = context.getExternalContext();
-        Map<String, String> params = external.getRequestParameterMap();
-        String behaviorEvent = params.get("javax.faces.behavior.event");
+        String behaviorEvent = BEHAVIOR_EVENT_PARAM.getValue(context);
 
         if (null != behaviorEvent) {
             List<ClientBehavior> behaviorsForEvent = behaviors.get(behaviorEvent);
 
             if (behaviorsForEvent != null && behaviorsForEvent.size() > 0) {
-               String behaviorSource = params.get("javax.faces.source");
+               String behaviorSource = BEHAVIOR_SOURCE_PARAM.getValue(context);
                String clientId = component.getClientId();
                if (isBehaviorSource(context, behaviorSource, clientId)) {
                    for (ClientBehavior behavior: behaviorsForEvent) {

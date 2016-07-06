@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,14 +42,16 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import com.sun.faces.io.FastStringWriter;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.RequestStateManager;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.RENDER_KIT_ID_PARAM;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.net.MalformedURLException;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -61,21 +63,19 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
-
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.net.MalformedURLException;
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.io.FastStringWriter;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
 
 /**
  * <p>
@@ -88,6 +88,7 @@ import java.net.MalformedURLException;
  *
  * @deprecated Refer to {@link com.sun.faces.application.view.MultiViewHandler}
  */
+@Deprecated
 public class ViewHandlerImpl extends ViewHandler {
 
     // Log instance for this class
@@ -551,10 +552,7 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(message);
         }
 
-        Map<String,String> requestParamMap = context.getExternalContext()
-            .getRequestParameterMap();
-        String result = requestParamMap.get(
-            ResponseStateManager.RENDER_KIT_ID_PARAM);
+        String result = RENDER_KIT_ID_PARAM.getValue(context);
 
         if (result == null) {
             result = context.getApplication().getDefaultRenderKitId();

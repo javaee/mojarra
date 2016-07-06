@@ -43,9 +43,9 @@ package com.sun.faces.renderkit;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CompressViewState;
-import static com.sun.faces.renderkit.RenderKitUtils.getParameterName;
-import static javax.faces.render.ResponseStateManager.CLIENT_WINDOW_PARAM;
-import static javax.faces.render.ResponseStateManager.RENDER_KIT_ID_PARAM;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.CLIENT_WINDOW_PARAM;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.RENDER_KIT_ID_PARAM;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.VIEW_STATE_PARAM;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -75,42 +75,6 @@ import com.sun.faces.util.Util;
 public abstract class StateHelper {
     
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
-
-    /**
-     * <p>
-     * The first portion of the hidden state field.
-     * </p>
-     *
-     */
-    protected static final char[] STATE_FIELD_START =
-          ("<input type=\"hidden\" name=\""
-           + ResponseStateManager.VIEW_STATE_PARAM
-           + "\" id=\"").toCharArray();
-
-    /**
-     * <p>
-     * The second portion of the hidden state field.
-     * </p>
-     *
-     */
-    protected static final char[] FIELD_MIDDLE =
-          ("\" value=\"").toCharArray();
-
-    /**
-     * <p>
-     * The end of the hidden state field.
-     * </p>
-     */
-    protected static final char[] FIELD_END =
-          "\" />".toCharArray();
-
-    /**
-     * <p>
-     * The end of the hidden state field.
-     * </p>
-     */
-    protected static final char[] STATE_FIELD_AUTOCOMPLETE_END =
-          "\" autocomplete=\"off\" />".toCharArray();
 
     /**
      * <p>
@@ -173,12 +137,6 @@ public abstract class StateHelper {
               .createInstance(ctx.getExternalContext());
         webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         compressViewState = webConfig.isOptionEnabled(CompressViewState);
-        stateFieldStart = STATE_FIELD_START;
-        fieldMiddle = FIELD_MIDDLE;
-        fieldEnd = (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)
-                           ? STATE_FIELD_AUTOCOMPLETE_END
-                           : FIELD_END);
-
 
         if (serialProvider == null) {
             serialProvider = SerializationProviderFactory
@@ -259,8 +217,7 @@ public abstract class StateHelper {
      */
     protected static String getStateParamValue(FacesContext context) {
 
-        String pValue = context.getExternalContext().getRequestParameterMap().
-              get(ResponseStateManager.VIEW_STATE_PARAM);
+        String pValue = VIEW_STATE_PARAM.getValue(context);
         if (pValue != null && pValue.length() == 0) {
             pValue = null;
         }
@@ -293,7 +250,7 @@ public abstract class StateHelper {
             && !defaultRkit.equals(result)) {
             writer.startElement("input", context.getViewRoot());
             writer.writeAttribute("type", "hidden", "type");
-            writer.writeAttribute("name", getParameterName(context, RENDER_KIT_ID_PARAM), "name");
+            writer.writeAttribute("name", RENDER_KIT_ID_PARAM.getName(context), "name");
             writer.writeAttribute("value", result, "value");
             writer.endElement("input");
         }
@@ -312,7 +269,7 @@ public abstract class StateHelper {
         if (null != window) {       
             writer.startElement("input", null);
             writer.writeAttribute("type", "hidden", null);
-            writer.writeAttribute("name", getParameterName(context, CLIENT_WINDOW_PARAM), null);
+            writer.writeAttribute("name", CLIENT_WINDOW_PARAM.getName(context), null);
             writer.writeAttribute("id", Util.getClientWindowId(context), null);
             writer.writeAttribute("value", window.getId(), null);
             if (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)) {

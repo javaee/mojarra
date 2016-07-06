@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,16 +40,38 @@
 
 package com.sun.faces.application.view;
 
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.RENDER_KIT_ID_PARAM;
+
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewParameter;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguageFactory;
+import javax.faces.view.ViewMetadata;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.RIConstants;
@@ -58,18 +80,6 @@ import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.text.MessageFormat;
-import java.util.*;
-
-import java.util.concurrent.CopyOnWriteArraySet;
-import javax.faces.FactoryFinder;
-import javax.faces.component.UIViewParameter;
-import javax.faces.component.UIViewRoot;
-import javax.faces.view.ViewDeclarationLanguage;
-import javax.faces.view.ViewDeclarationLanguageFactory;
-import javax.faces.view.ViewMetadata;
 
 /**
  * This {@link ViewHandler} implementation handles both JSP-based and
@@ -223,10 +233,7 @@ public class MultiViewHandler extends ViewHandler {
 
         Util.notNull("context", context);
 
-        Map<String,String> requestParamMap = context.getExternalContext()
-            .getRequestParameterMap();
-        String result = requestParamMap.get(
-            ResponseStateManager.RENDER_KIT_ID_PARAM);
+        String result = RENDER_KIT_ID_PARAM.getValue(context);
 
         if (result == null) {
             if (null ==

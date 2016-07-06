@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,6 +42,8 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_SOURCE_PARAM;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -50,8 +52,8 @@ import java.util.logging.Level;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
@@ -216,12 +218,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (clientId == null) {
             clientId = component.getClientId(context);
         }
-            
-        if (context.getPartialViewContext().isAjaxRequest()){
-            Map<String, String> requestParameterMap = context.getExternalContext()
-                  .getRequestParameterMap();
 
-            return requestParameterMap.get("javax.faces.source").contains(clientId);
+        if (context.getPartialViewContext().isAjaxRequest()){
+            return BEHAVIOR_SOURCE_PARAM.getValue(context).contains(clientId);
         } else {
             Map<String, String> requestParameterMap = context.getExternalContext()
                   .getRequestParameterMap();
