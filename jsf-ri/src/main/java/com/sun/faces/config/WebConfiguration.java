@@ -1099,10 +1099,6 @@ public class WebConfiguration {
               true,
               null
         ),
-        DisableClientStateEncryption(
-              "com.sun.faces.disableClientStateEncryption",
-              false
-        ),
         EnableClientStateDebugging(
               "com.sun.faces.enableClientStateDebugging",
               false
