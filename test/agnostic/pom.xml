@@ -78,6 +78,8 @@
         <module>resource</module>
         <module>resourceExposure</module>
         <module>scope</module>
+        <module>client-encrypt-by-default</module>
+        <module>client-encrypt-by-default-disabled</module>
         <module>shared</module>
         <module>stateSaving</module>
         <module>vdl</module>
