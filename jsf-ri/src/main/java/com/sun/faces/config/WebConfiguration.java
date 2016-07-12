@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -663,7 +663,7 @@ public class WebConfiguration {
     }
 
 
-    private boolean canProcessJndiEntries() {
+    public boolean canProcessJndiEntries() {
 
         try {
             Util.getCurrentLoader(this).loadClass("javax.naming.InitialContext");
@@ -1151,8 +1151,17 @@ public class WebConfiguration {
               false
         ),
         EnableAgressiveSessionDirtying(
-                "com.sun.faces.enableAgressiveSessionDirtying",
-                false);
+              "com.sun.faces.enableAgressiveSessionDirtying",
+              false
+        ),
+        DisableClientStateEncryption(
+              "com.sun.faces.disableClientStateEncryption",
+              false
+        ),
+        EnableMissingResourceLibraryDetection(
+              "com.sun.faces.enableMissingResourceLibraryDetection",
+              false
+        );
 
         private BooleanWebContextInitParameter alternate;
 
