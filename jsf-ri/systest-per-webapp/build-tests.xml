@@ -1,11 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
-
- Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
-
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+    Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,7 +37,6 @@
     and therefore, elected the GPL Version 2 license, then the option applies
     only if the new code is made subject to such option by the copyright
     holder.
-
 -->
 
 <!-- ********** JSF System Integration Test File ************************** -->
@@ -124,6 +120,10 @@
                value="com/sun/faces/systest/InjectionTestCase.class" />
     <property  name="replace-vdl"
                value="com/sun/faces/systest/replacevdl/ReplaceViewDeclarationLanguageTestCase.class" />
+    <property  name="client-encrypt-by-default"
+               value="com/sun/faces/systest/ClientEncryptByDefaultTestCase.class" />
+    <property  name="client-encrypt-by-default-disabled"
+               value="com/sun/faces/systest/ClientEncryptByDefaultDisabledTestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:
