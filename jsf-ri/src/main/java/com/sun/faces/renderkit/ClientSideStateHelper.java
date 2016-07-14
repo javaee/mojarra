@@ -70,7 +70,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.ResponseStateManager;
 
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
 import com.sun.faces.util.DebugObjectOutputStream;
@@ -490,10 +490,14 @@ public class ClientSideStateHelper extends StateHelper {
      */
     protected void init() {
 
-        String pass = webConfig.getEnvironmentEntry(
-              ClientStateSavingPassword);
-        if (pass != null) {
+        if (webConfig.canProcessJndiEntries() &&
+            !webConfig.isSet(BooleanWebContextInitParameter.DisableClientStateEncryption)) {
             guard = new ByteArrayGuard();
+        } else {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                           "jsf.config.webconfig.enventry.clientencrypt");
+            }
         }
 
         stateTimeoutEnabled = webConfig.isSet(ClientStateTimeout);

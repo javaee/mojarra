@@ -78,6 +78,8 @@
         <module>renderKit</module>
         <module>resource</module>
         <module>scope</module>
+        <module>client-encrypt-by-default</module>
+        <module>client-encrypt-by-default-disabled</module>
         <module>stateSaving</module>
         <module>vdl</module>
     </modules>
