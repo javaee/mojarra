@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -59,6 +59,7 @@
 package com.sun.faces.facelets.component;
 
 import static com.sun.faces.cdi.CdiUtils.createDataModel;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_SOURCE_PARAM;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -818,7 +819,7 @@ public class UIRepeat extends UINamingContainer {
         boolean shouldIterate = !ctx.getHints().contains(VisitHint.SKIP_ITERATION); 
         if (!shouldIterate) {
             FacesContext faces = ctx.getFacesContext();  
-            String sourceId = faces.getExternalContext().getRequestParameterMap().get("javax.faces.source");  
+            String sourceId = BEHAVIOR_SOURCE_PARAM.getValue(faces);  
             boolean containsSource = sourceId != null ? sourceId.startsWith(super.getClientId(faces) + getSeparatorChar(faces)): false;  
             return containsSource;
         } else {

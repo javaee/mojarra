@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,6 +43,9 @@ package javax.faces.context;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.application.StateManager;
+import javax.faces.component.UINamingContainer;
+import javax.faces.component.UIViewRoot;
 import javax.faces.event.PhaseId;
 
 /**
@@ -63,6 +66,15 @@ import javax.faces.event.PhaseId;
 
 public abstract class PartialViewContext {
 
+    
+    /**
+     * <p class="changed_added_2_3">
+     * The request parameter name whose request parameter value identifies the type of partial event.</p>
+     *
+     * @since 2.3
+     */
+    public static final String PARTIAL_EVENT_PARAM_NAME = 
+          "javax.faces.partial.event";
 
     /**
      * <p class="changed_added_2_0">
@@ -313,6 +325,17 @@ public abstract class PartialViewContext {
      * those components with identifiers existing in the 
      * <code>Collection</code> returned from {@link #getExecuteIds} 
      * and {@link #getRenderIds} will be processed.</p>  
+     *
+     * <p class="changed_added_2_3">When the indicated <code>phaseId</code>
+     * equals {@link PhaseId#RENDER_RESPONSE}, then obtain the state by calling
+     * {@link StateManager#getViewState} and write out it as an update element
+     * with an identifier of
+     * <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.ViewState</code>
+     * where <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;</code> is the return
+     * from {@link UIViewRoot#getContainerClientId(FacesContext)} on the view
+     * from whence this state originated, and <code>&lt;SEP&gt;</code> is the
+     * currently configured
+     * {@link UINamingContainer#getSeparatorChar(FacesContext)}.</p>
      *
      * @param phaseId the {@link javax.faces.event.PhaseId} that indicates
      * the lifecycle phase the components will be processed in. 

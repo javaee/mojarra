@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,6 +40,10 @@
 
 package com.sun.faces.renderkit;
 
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_EVENT_PARAM;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_SOURCE_PARAM;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.PARTIAL_EVENT_PARAM;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.math.BigDecimal;
@@ -65,7 +69,6 @@ import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.ActionSource;
 import javax.faces.component.ActionSource2;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIForm;
@@ -79,6 +82,7 @@ import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.component.html.HtmlMessages;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
@@ -88,7 +92,6 @@ import javax.faces.render.ResponseStateManager;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.util.FacesLogger;
@@ -175,6 +178,33 @@ public class RenderKitUtils {
     protected static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
     
 
+    public enum PredefinedPostbackParameter {
+
+        VIEW_STATE_PARAM(ResponseStateManager.VIEW_STATE_PARAM),
+        CLIENT_WINDOW_PARAM(ResponseStateManager.CLIENT_WINDOW_PARAM),
+        RENDER_KIT_ID_PARAM(ResponseStateManager.RENDER_KIT_ID_PARAM),
+        BEHAVIOR_SOURCE_PARAM(ClientBehaviorContext.BEHAVIOR_SOURCE_PARAM_NAME),
+        BEHAVIOR_EVENT_PARAM(ClientBehaviorContext.BEHAVIOR_EVENT_PARAM_NAME),
+        PARTIAL_EVENT_PARAM(PartialViewContext.PARTIAL_EVENT_PARAM_NAME),
+        PARTIAL_EXECUTE_PARAM(PartialViewContext.PARTIAL_EXECUTE_PARAM_NAME),
+        PARTIAL_RENDER_PARAM(PartialViewContext.PARTIAL_RENDER_PARAM_NAME),
+        PARTIAL_RESET_VALUES_PARAM(PartialViewContext.RESET_VALUES_PARAM_NAME);
+
+        private String name;
+
+        private PredefinedPostbackParameter(String name) {
+            this.name = name;
+        }
+
+        public String getValue(FacesContext context) {
+            return context.getExternalContext().getRequestParameterMap().get(getName(context));
+        }
+
+        public String getName(FacesContext context) {
+            return getParameterName(context, name);
+        }
+    }
+    
     // ------------------------------------------------------------ Constructors
 
 
@@ -1330,23 +1360,20 @@ public class RenderKitUtils {
             return false;
         }
 
-        ExternalContext external = context.getExternalContext();
-        Map<String, String> params = external.getRequestParameterMap();
-
-        String source = params.get("javax.faces.source");
+        String source = BEHAVIOR_SOURCE_PARAM.getValue(context);
         if (!clientId.equals(source)) {
             return false;
         }
 
         // First check for a Behavior action event.
-        String behaviorEvent = params.get("javax.faces.behavior.event");
+        String behaviorEvent = BEHAVIOR_EVENT_PARAM.getValue(context);
         if (null != behaviorEvent) {
             return ("action".equals(behaviorEvent));
         }
 
         // Not a Behavior-related request.  Check for jsf.ajax.request()
         // request params.
-        String partialEvent = params.get("javax.faces.partial.event");
+        String partialEvent = PARTIAL_EVENT_PARAM.getValue(context);
 
         return ("click".equals(partialEvent));
     }
@@ -1499,6 +1526,17 @@ public class RenderKitUtils {
             }
         }
 
+    }
+
+
+    /**
+     * If view root is instance of naming container, prepend its container client id to namespace given parameter name.
+     * @param context Involved faces context.
+     * @param name Request parameter name.
+     * @return The request parameter name, if necessary namespaced.
+     */
+    public static String getParameterName(FacesContext context, String name) {
+        return Util.getNamingContainerPrefix(context) + name;
     }
 
 
@@ -1702,21 +1740,8 @@ public class RenderKitUtils {
         appendProperty(builder, componentClientId, componentClientId);
 
         if ((null != params) && (!params.isEmpty())) {
-
-            String namingContainerId = "";
-
-            WebConfiguration webConfig = WebConfiguration.getInstance();
-            boolean namespaceParameters = webConfig.isOptionEnabled(BooleanWebContextInitParameter.NamespaceParameters);
-
-            if (namespaceParameters) {
-                UIViewRoot viewRoot = context.getViewRoot();
-                if (viewRoot instanceof NamingContainer) {
-                    namingContainerId = viewRoot.getContainerClientId(context);
-                }
-            }
-
             for (ClientBehaviorContext.Parameter param : params) {
-                appendProperty(builder, namingContainerId + param.getName(), param.getValue());
+                appendProperty(builder, getParameterName(context, param.getName()), param.getValue());
             }
         }
 

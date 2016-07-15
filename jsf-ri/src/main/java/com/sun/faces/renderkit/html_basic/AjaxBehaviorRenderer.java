@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -48,10 +48,8 @@ import java.util.logging.Logger;
 
 import javax.faces.component.ActionSource;
 import javax.faces.component.EditableValueHolder;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
-import javax.faces.component.UIViewRoot;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorContext;
@@ -61,8 +59,6 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.ClientBehaviorRenderer;
 
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
 
@@ -76,17 +72,6 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     // Log instance for this class
     protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
 
-    /**
-     * Flag determining whether or not javax.faces.ViewState should be namespaced.
-     */
-    protected transient boolean namespaceParameters;
-
-    public AjaxBehaviorRenderer() {
-        WebConfiguration webConfig = WebConfiguration.getInstance();
-        namespaceParameters =
-             webConfig.isOptionEnabled(
-                  BooleanWebContextInitParameter.NamespaceParameters);
-    }
 
     // ------------------------------------------------------ Rendering Methods
 
@@ -102,7 +87,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         if (((AjaxBehavior)behavior).isDisabled()) {
             return null;
         }
-        return buildAjaxCommand(behaviorContext, (AjaxBehavior)behavior, namespaceParameters);
+        return buildAjaxCommand(behaviorContext, (AjaxBehavior)behavior);
     }
 
 
@@ -175,8 +160,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     }
 
     private static String buildAjaxCommand(ClientBehaviorContext behaviorContext,
-                                           AjaxBehavior ajaxBehavior,
-                                           boolean namespaceParameters) {
+                                           AjaxBehavior ajaxBehavior) {
 
         // First things first - if AjaxBehavior is disabled, we are done.
         if (ajaxBehavior.isDisabled()) {
@@ -273,25 +257,10 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         ajaxCommand.append(",");
         appendIds(component, ajaxCommand, render);
         
-        String namingContainerId = null;
-        if (namespaceParameters) {
-            FacesContext context = behaviorContext.getFacesContext();
-            UIViewRoot viewRoot = context.getViewRoot();
-            if (viewRoot instanceof NamingContainer) {
-                namingContainerId = viewRoot.getContainerClientId(context);
-            }
-        }
-
-        if ((namingContainerId != null) || (onevent != null) || (onerror != null) || (delay != null) || 
+        if ((onevent != null) || (onerror != null) || (delay != null) ||
                 (resetValues != null) || !params.isEmpty())  {
 
             ajaxCommand.append(",{");
-
-            if (namingContainerId != null) {
-                // the literal string must exactly match the corresponding value 
-                // in jsf.js.
-                RenderKitUtils.appendProperty(ajaxCommand, "com.sun.faces.namingContainerId", namingContainerId, true);
-            }
 
             if (onevent != null) {
                 RenderKitUtils.appendProperty(ajaxCommand, "onevent", onevent, false);

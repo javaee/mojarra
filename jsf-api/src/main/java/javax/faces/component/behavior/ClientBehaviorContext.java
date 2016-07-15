@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -56,7 +56,23 @@ import javax.faces.context.FacesContext;
  * @since 2.0
  */
 public abstract class ClientBehaviorContext {
-	
+
+    /**
+     * <p class="changed_added_2_3">
+     * The request parameter name whose request parameter value identifies the source component of behavior event.</p>
+     *
+     * @since 2.3
+     */
+    public static final String BEHAVIOR_SOURCE_PARAM_NAME = "javax.faces.source";
+
+    /**
+     * <p class="changed_added_2_3">
+     * The request parameter name whose request parameter value identifies the type of behavior event.</p>
+     *
+     * @since 2.3
+     */
+    public static final String BEHAVIOR_EVENT_PARAM_NAME = "javax.faces.behavior.event";
+
     /**
      * <p class="changed_added_2_0">Creates a ClientBehaviorContext instance.</p>
      *

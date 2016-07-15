@@ -58,6 +58,7 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import javax.faces.component.UIImportConstants;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
@@ -120,6 +121,8 @@ public final class CoreLibrary extends AbstractTagLibrary {
         this.addTagHandler("facet", FacetHandler.class);
 
         this.addTagHandler("metadata", MetadataHandler.class);
+
+        this.addComponent("importConstants", UIImportConstants.COMPONENT_TYPE, null);
 
         this.addTagHandler("loadBundle", LoadBundleHandler.class);
 

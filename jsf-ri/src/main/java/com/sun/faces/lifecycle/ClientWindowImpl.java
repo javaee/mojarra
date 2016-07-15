@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,7 +40,10 @@
  */
 package com.sun.faces.lifecycle;
 
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.CLIENT_WINDOW_PARAM;
+
 import java.util.Map;
+
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -68,8 +71,9 @@ public class ClientWindowImpl extends ClientWindow {
             id = requestParamMap.get(ResponseStateManager.CLIENT_WINDOW_URL_PARAM);
         }
         // The hidden field always takes precedence, if present.
-        if (requestParamMap.containsKey(ResponseStateManager.CLIENT_WINDOW_PARAM)) {
-            id = requestParamMap.get(ResponseStateManager.CLIENT_WINDOW_PARAM);
+        String paramName = CLIENT_WINDOW_PARAM.getName(context);
+        if (requestParamMap.containsKey(paramName)) {
+            id = requestParamMap.get(paramName);
         }
         if (null == id) {
             id = calculateClientWindow(context);

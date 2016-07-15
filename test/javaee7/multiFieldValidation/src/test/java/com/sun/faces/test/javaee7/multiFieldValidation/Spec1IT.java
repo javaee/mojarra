@@ -39,15 +39,20 @@
  */
 package com.sun.faces.test.javaee7.multiFieldValidation;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import static org.junit.Assert.assertTrue;
 
 public class Spec1IT {
 
@@ -177,57 +182,15 @@ public class Spec1IT {
     }
     
     @Test
-    public void testFailingPreconditionsInvalidField() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/failingDevTimePreconditions.xhtml");
-        
-        HtmlTextInput password1 = page.getHtmlElementById("password1");
-        password1.setValueAttribute("foofoofoo");
-
-        HtmlTextInput password2 = page.getHtmlElementById("password2");
-        password2.setValueAttribute("bar");
-        
-        HtmlSubmitInput button = page.getHtmlElementById("submit");
-        
-        page = button.click();
-        
-        String pageText = page.asXml();
-        
-        assertTrue(pageText.contains("Password fields must match: password1 [foofoofoo] password2 []"));
-        
-        HtmlParagraph password1Value = page.getHtmlElementById("password1Value");
-        assertTrue(password1Value.asText().isEmpty());
-        
-        HtmlParagraph password2Value = page.getHtmlElementById("password2Value");
-        assertTrue(password2Value.asText().isEmpty());
-    }
-    
-    @Test
-    public void testFailingPreconditionsValidFieldValidBean() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "faces/failingDevTimePreconditions.xhtml");
-        
-        
-        // Even though we are submitting values, the <f:validateWholeBean >
-        // is misplaced, so the whole bean validator cannot have access to the 
-        // valid property for password2.
-        HtmlTextInput password1 = page.getHtmlElementById("password1");
-        password1.setValueAttribute("foofoofoo");
-
-        HtmlTextInput password2 = page.getHtmlElementById("password2");
-        password2.setValueAttribute("foofoofoo");
-        
-        HtmlSubmitInput button = page.getHtmlElementById("submit");
-        
-        page = button.click();
-        
-        String pageText = page.asXml();
-        
-        assertTrue(pageText.contains("Password fields must match: password1 [foofoofoo] password2 []"));
-        
-        HtmlParagraph password1Value = page.getHtmlElementById("password1Value");
-        assertTrue(!password1Value.asText().contains("foofoofoo"));
-        
-        HtmlParagraph password2Value = page.getHtmlElementById("password2Value");
-        assertTrue(!password2Value.asText().contains("foofoofoo"));
+    public void testFailingPreconditionsNotAfterAllInputComponents() throws Exception {
+    	try {
+    		// In this test f:validateWholeBean is misplaced (does not appear after
+    		// all input components), which should result in an exception    		
+    		webClient.getPage(webUrl + "faces/failingDevTimePreconditions.xhtml");
+    		fail("Exception should have been thrown resulting in a 500 http status code");
+    	} catch (FailingHttpStatusCodeException e) {
+    		assertEquals(500, e.getStatusCode());
+    	}
     }
     
     

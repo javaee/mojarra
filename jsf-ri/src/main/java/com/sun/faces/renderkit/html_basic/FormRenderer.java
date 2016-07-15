@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,12 +42,13 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import static com.sun.faces.renderkit.RenderKitUtils.getParameterName;
+
 import java.io.IOException;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.logging.Level;
 
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIViewRoot;
@@ -68,11 +69,6 @@ public class FormRenderer extends HtmlBasicRenderer {
     private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.FORMFORM);
 
-    /**
-     * Flag determining whether or not javax.faces.ViewState should be namespaced.
-     */
-    protected transient boolean namespaceParameters;
-
     private boolean writeStateAtEnd;
 
     // ------------------------------------------------------------ Constructors
@@ -83,9 +79,6 @@ public class FormRenderer extends HtmlBasicRenderer {
         writeStateAtEnd =
              webConfig.isOptionEnabled(
                   BooleanWebContextInitParameter.WriteStateAtFormEnd);
-        namespaceParameters =
-                webConfig.isOptionEnabled(
-                     BooleanWebContextInitParameter.NamespaceParameters);
     }
 
     // ---------------------------------------------------------- Public Methods
@@ -182,15 +175,7 @@ public class FormRenderer extends HtmlBasicRenderer {
             (!encodedPartialActionURL.equals(encodedActionURL))) {
             writer.startElement("input", null);
             writer.writeAttribute("type", "hidden", "type");
-            String attributeName = "javax.faces.encodedURL";
-            
-            if (namespaceParameters && (viewRoot instanceof NamingContainer)) {
-                String namingContainerId = viewRoot.getContainerClientId(context);
-                if (namingContainerId != null) {
-                    attributeName = namingContainerId + attributeName;
-                }
-            }
-            writer.writeAttribute("name", attributeName, null);
+            writer.writeAttribute("name", getParameterName(context, "javax.faces.encodedURL"), null);
             writer.writeAttribute("value", encodedPartialActionURL, "value");
             writer.endElement("input");
             writer.write('\n');

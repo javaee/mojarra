@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,6 +42,9 @@ package javax.faces.context;
 
 import java.io.IOException;
 import java.util.Map;
+
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIViewRoot;
 import javax.faces.render.ResponseStateManager;
 
 /**
@@ -113,6 +116,10 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
 
     /**
      * <p class="changed_added_2_0">Write the start of a partial response.</p>
+     * <p class="changed_added_2_3">If {@link UIViewRoot} is an instance of
+     * {@link NamingContainer}, then write
+     * {@link UIViewRoot#getContainerClientId(FacesContext)} as value of the
+     * <code>id</code> attribute of the root element.</p>
      *
      * @throws IOException if an input/output error occurs
      * @since 2.0
@@ -127,7 +134,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         writer.writePreamble("<?xml version='1.0' encoding='" + encoding + "'?>\n");
         writer.startElement("partial-response", null);
         FacesContext ctx = FacesContext.getCurrentInstance();
-        if (null != ctx && null != ctx.getViewRoot()) {
+        if (null != ctx && ctx.getViewRoot() instanceof NamingContainer) {
             String id = ctx.getViewRoot().getContainerClientId(ctx);
             writer.writeAttribute("id", id, "id");
         }

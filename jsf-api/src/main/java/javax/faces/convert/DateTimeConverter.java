@@ -599,28 +599,57 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         } else if (type.equals("time")) {
             df = DateFormat.getTimeInstance(getStyle(timeStyle), locale);
         } else if (type.equals("localDate")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
-                    DateTimeFormatter.ofLocalizedDate(getFormatStyle(dateStyle));
+            if (null != pattern){
+                dtf = DateTimeFormatter.ofPattern(pattern, locale);
+            } else {
+                dtf = DateTimeFormatter.ofLocalizedDate(getFormatStyle(dateStyle));
+                dtf.withLocale(locale);
+            }
             from = LocalDate::from;
         } else if (type.equals("localDateTime")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
-                    DateTimeFormatter.ofLocalizedDateTime(getFormatStyle(dateStyle), getFormatStyle(timeStyle));
+            if (null != pattern){
+                dtf = DateTimeFormatter.ofPattern(pattern, locale);
+            } else {
+                dtf = DateTimeFormatter.ofLocalizedDateTime(getFormatStyle(dateStyle), getFormatStyle(timeStyle));
+                dtf.withLocale(locale);
+                
+            }
             from = LocalDateTime::from;
         } else if (type.equals("localTime")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
-                    DateTimeFormatter.ofLocalizedTime(getFormatStyle(timeStyle));
+            if (null != pattern){
+                dtf = DateTimeFormatter.ofPattern(pattern, locale);
+            } else {
+                dtf = DateTimeFormatter.ofLocalizedTime(getFormatStyle(timeStyle));
+                dtf.withLocale(locale);
+            }
+           
             from = LocalTime::from;
         } else if (type.equals("offsetTime")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
-                    DateTimeFormatter.ISO_OFFSET_TIME;
+            if (null != pattern){
+                dtf = DateTimeFormatter.ofPattern(pattern, locale);
+            } else {
+                dtf = DateTimeFormatter.ISO_OFFSET_TIME;
+                dtf.withLocale(locale);
+            }
+           
             from = OffsetTime::from;
         } else if (type.equals("offsetDateTime")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
-                    DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+            if (null != pattern){
+                dtf = DateTimeFormatter.ofPattern(pattern, locale);
+            } else {
+                dtf = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+                dtf.withLocale(locale);
+            }
+           
             from = OffsetDateTime::from;
         } else if (type.equals("zonedDateTime")) { 
-            dtf = (null != pattern) ? DateTimeFormatter.ofPattern(pattern, locale) : 
-                    DateTimeFormatter.ISO_ZONED_DATE_TIME;
+            if (null != pattern){
+                dtf = DateTimeFormatter.ofPattern(pattern, locale);
+            } else {
+                dtf = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+                dtf.withLocale(locale);
+            }
+            
             from = ZonedDateTime::from;
         } else {
             // PENDING(craigmcc) - i18n

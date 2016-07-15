@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,23 +42,21 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import static com.sun.faces.renderkit.RenderKitUtils.getParameterName;
+
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.logging.Level;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
-
-import java.net.URLEncoder;
 
 
 /**
@@ -74,15 +72,9 @@ public class OutputLinkRenderer extends LinkRenderer {
     private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.OUTPUTLINK);
 
-    protected boolean namespaceParameters;
 
     // ---------------------------------------------------------- Public Methods
 
-
-    public OutputLinkRenderer() {
-        WebConfiguration webConfig = WebConfiguration.getInstance();
-        namespaceParameters = webConfig.isOptionEnabled(BooleanWebContextInitParameter.NamespaceParameters);
-    }
 
     @Override
     public void decode(FacesContext context, UIComponent component) {
@@ -231,20 +223,13 @@ public class OutputLinkRenderer extends LinkRenderer {
         StringBuffer sb = new StringBuffer();
         sb.append(hrefVal);
         boolean paramWritten = (hrefVal.indexOf('?') > 0);
-        String namingContainerId = null;
-        if (namespaceParameters) {
-            UIViewRoot viewRoot = context.getViewRoot();
-            namingContainerId = viewRoot.getContainerClientId(context);
-        }
+
         for (int i = 0, len = paramList.length; i < len; i++) {
             String pn = paramList[i].name;
             if (pn != null && pn.length() != 0) {
-            	if (namingContainerId != null) {
-            		pn = namingContainerId + pn;
-            	}
                 String pv = paramList[i].value;
                 sb.append((paramWritten) ? '&' : '?');
-                sb.append(URLEncoder.encode(pn,"UTF-8"));
+                sb.append(URLEncoder.encode(getParameterName(context, pn), "UTF-8"));
                 sb.append('=');
                 if (pv != null && pv.length() != 0) {
                     sb.append(URLEncoder.encode(pv, "UTF-8"));

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,44 +40,42 @@
 
 package com.sun.faces.renderkit;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.GZIPInputStream;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.GenerateUniqueServerStateIds;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SerializeServerState;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SerializeServerStateDeprecated;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfLogicalViews;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfViews;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.VIEW_STATE_PARAM;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.IOException;
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
-import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SerializeServerStateDeprecated;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SerializeServerState;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.GenerateUniqueServerStateIds;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.TypedCollections;
-import com.sun.faces.util.LRUMap;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.RequestStateManager;
-
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.NamespaceParameters;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfLogicalViews;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfViews;
 import com.sun.faces.config.WebConfiguration;
-import java.util.Collections;
-import javax.faces.render.ResponseStateManager;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.LRUMap;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.TypedCollections;
+import com.sun.faces.util.Util;
 
 /**
  * <p>
@@ -122,12 +120,6 @@ public class ServerSideStateHelper extends StateHelper {
 
 
     /**
-     * Flag determining whether or not javax.faces.ViewState should be namespaced.
-     */
-    protected boolean namespaceParameters;
-
-
-    /**
      * Used to generate unique server state IDs.
      */
     protected final Random random;
@@ -151,7 +143,6 @@ public class ServerSideStateHelper extends StateHelper {
         } else {
             random = null;
         }
-        namespaceParameters = webConfig.isOptionEnabled(NamespaceParameters);
 
     }
 
@@ -261,16 +252,7 @@ public class ServerSideStateHelper extends StateHelper {
 
             writer.startElement("input", null);
             writer.writeAttribute("type", "hidden", null);
-
-            String viewStateParam = ResponseStateManager.VIEW_STATE_PARAM;
-            
-            if ((namespaceParameters) && (viewRoot instanceof NamingContainer)) {
-                String namingContainerId = viewRoot.getContainerClientId(ctx);
-                if (namingContainerId != null) {
-            	    viewStateParam = namingContainerId + viewStateParam;
-                }
-            }
-            writer.writeAttribute("name", viewStateParam, null);
+            writer.writeAttribute("name", VIEW_STATE_PARAM.getName(ctx), null);
             if (webConfig.isOptionEnabled(EnableViewStateIdRendering)) {
                 String viewStateId = Util.getViewStateId(ctx);
                 writer.writeAttribute("id", viewStateId, null);

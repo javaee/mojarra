@@ -191,7 +191,7 @@
     <h:selectManyListbox id="escape01" value="#{select05.initialCollectionValues}">
        <f:selectItems value="#{select05.hobbitCollection}"
                       var="n"
-                      itemValue="#{n}"
+                      itemValue="#{n.name}"
                       itemLabel="#{n.bio}"
                       itemLabelEscaped="true"/>
     </h:selectManyListbox>
@@ -204,7 +204,7 @@
     <h:selectManyListbox id="escape02" value="#{select05.initialCollectionValues}">
        <f:selectItems value="#{select05.hobbitCollection}"
                       var="n"
-                      itemValue="#{n}"
+                      itemValue="#{n.name}"
                       itemLabel="#{n.bio}"
                       itemLabelEscaped="false"/>
     </h:selectManyListbox>

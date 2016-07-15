@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,6 +40,8 @@
 
 package com.sun.faces.renderkit;
 
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
+
 import java.io.IOException;
 
 import javax.faces.FacesException;
@@ -48,7 +50,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 
 import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
+import com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter;
 import com.sun.faces.util.RequestStateManager;
 
 
@@ -82,7 +84,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     public boolean isPostback(FacesContext context) {
 
         return context.getExternalContext().getRequestParameterMap().
-              containsKey(ResponseStateManager.VIEW_STATE_PARAM);
+              containsKey(PredefinedPostbackParameter.VIEW_STATE_PARAM.getName(context));
 
     }
 

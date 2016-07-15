@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,34 +41,32 @@
 package com.sun.faces.renderkit;
 
 
-import javax.faces.lifecycle.ClientWindow;
-
-import com.sun.faces.RIConstants;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CompressViewState;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.CLIENT_WINDOW_PARAM;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.RENDER_KIT_ID_PARAM;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.VIEW_STATE_PARAM;
 
 import java.io.IOException;
-
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.ResponseStateManager;
-import javax.faces.render.RenderKitFactory;
-
-import com.sun.faces.spi.SerializationProviderFactory;
-import com.sun.faces.spi.SerializationProvider;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.util.Util;
-
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CompressViewState;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
-import com.sun.faces.util.ByteArrayGuardAESCTR;
-import com.sun.faces.util.FacesLogger;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.lifecycle.ClientWindow;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.ResponseStateManager;
 import javax.servlet.http.HttpSession;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.spi.SerializationProvider;
+import com.sun.faces.spi.SerializationProviderFactory;
+import com.sun.faces.util.ByteArrayGuardAESCTR;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -77,42 +75,6 @@ import javax.servlet.http.HttpSession;
 public abstract class StateHelper {
     
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
-
-    /**
-     * <p>
-     * The first portion of the hidden state field.
-     * </p>
-     *
-     */
-    protected static final char[] STATE_FIELD_START =
-          ("<input type=\"hidden\" name=\""
-           + ResponseStateManager.VIEW_STATE_PARAM
-           + "\" id=\"").toCharArray();
-
-    /**
-     * <p>
-     * The second portion of the hidden state field.
-     * </p>
-     *
-     */
-    protected static final char[] FIELD_MIDDLE =
-          ("\" value=\"").toCharArray();
-
-    /**
-     * <p>
-     * The end of the hidden state field.
-     * </p>
-     */
-    protected static final char[] FIELD_END =
-          "\" />".toCharArray();
-
-    /**
-     * <p>
-     * The end of the hidden state field.
-     * </p>
-     */
-    protected static final char[] STATE_FIELD_AUTOCOMPLETE_END =
-          "\" autocomplete=\"off\" />".toCharArray();
 
     /**
      * <p>
@@ -161,11 +123,6 @@ public abstract class StateHelper {
      */
     protected char[] fieldEnd;
 
-    
-    /**
-     * Flag determining whether or not javax.faces.ViewState should be namespaced.
-     */
-    protected boolean namespaceParameters;
 
     // ------------------------------------------------------------ Constructors
 
@@ -180,22 +137,12 @@ public abstract class StateHelper {
               .createInstance(ctx.getExternalContext());
         webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         compressViewState = webConfig.isOptionEnabled(CompressViewState);
-        stateFieldStart = STATE_FIELD_START;
-        fieldMiddle = FIELD_MIDDLE;
-        fieldEnd = (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)
-                           ? STATE_FIELD_AUTOCOMPLETE_END
-                           : FIELD_END);
-
 
         if (serialProvider == null) {
             serialProvider = SerializationProviderFactory
                   .createInstance(FacesContext
                         .getCurrentInstance().getExternalContext());
         }
-        namespaceParameters =
-                webConfig.isOptionEnabled(
-                     BooleanWebContextInitParameter.NamespaceParameters);
-
     }
     
     public static void createAndStoreCryptographicallyStrongTokenInSession(HttpSession session) {
@@ -270,8 +217,7 @@ public abstract class StateHelper {
      */
     protected static String getStateParamValue(FacesContext context) {
 
-        String pValue = context.getExternalContext().getRequestParameterMap().
-              get(ResponseStateManager.VIEW_STATE_PARAM);
+        String pValue = VIEW_STATE_PARAM.getValue(context);
         if (pValue != null && pValue.length() == 0) {
             pValue = null;
         }
@@ -304,20 +250,8 @@ public abstract class StateHelper {
             && !defaultRkit.equals(result)) {
             writer.startElement("input", context.getViewRoot());
             writer.writeAttribute("type", "hidden", "type");
-            String renderKitIdParam = ResponseStateManager.RENDER_KIT_ID_PARAM;
-            UIViewRoot viewRoot = context.getViewRoot();
-            if ((namespaceParameters) && (viewRoot instanceof NamingContainer)) {
-                String namingContainerId = viewRoot.getContainerClientId(context);
-                if (namingContainerId != null) {
-                	renderKitIdParam = namingContainerId + renderKitIdParam;
-                }
-            }
-            writer.writeAttribute("name",
-                                  renderKitIdParam,
-                                  "name");
-            writer.writeAttribute("value",
-                                  result,
-                                  "value");
+            writer.writeAttribute("name", RENDER_KIT_ID_PARAM.getName(context), "name");
+            writer.writeAttribute("value", result, "value");
             writer.endElement("input");
         }
 
@@ -335,15 +269,7 @@ public abstract class StateHelper {
         if (null != window) {       
             writer.startElement("input", null);
             writer.writeAttribute("type", "hidden", null);
-            String clientWindowParam = ResponseStateManager.CLIENT_WINDOW_PARAM;
-            UIViewRoot viewRoot = context.getViewRoot();
-            if ((namespaceParameters) && (viewRoot instanceof NamingContainer)) {
-                String namingContainerId = viewRoot.getContainerClientId(context);
-                if (namingContainerId != null) {
-                	clientWindowParam = namingContainerId + clientWindowParam;
-                }
-            }
-            writer.writeAttribute("name", clientWindowParam, null);
+            writer.writeAttribute("name", CLIENT_WINDOW_PARAM.getName(context), null);
             writer.writeAttribute("id", Util.getClientWindowId(context), null);
             writer.writeAttribute("value", window.getId(), null);
             if (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)) {

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,366 +40,202 @@
  
 package com.sun.faces.ext.component;
 
+import static com.sun.faces.ext.component.MessageFactory.getLabel;
+import static com.sun.faces.ext.component.MessageFactory.getMessage;
 import static com.sun.faces.ext.component.MultiFieldValidationUtils.FAILED_FIELD_LEVEL_VALIDATION;
-import com.sun.faces.util.ReflectionUtils;
-import com.sun.faces.util.copier.CloneCopier;
-import com.sun.faces.util.copier.CopyCtorCopier;
-import com.sun.faces.util.copier.NewInstanceCopier;
-import com.sun.faces.util.copier.SerializationCopier;
-import java.io.Serializable;
+import static com.sun.faces.ext.component.MultiFieldValidationUtils.getMultiFieldValidationCandidates;
+import static com.sun.faces.util.BeanValidation.getBeanValidator;
+import static com.sun.faces.util.ReflectionUtils.setProperties;
+import static com.sun.faces.util.Util.getValueExpressionNullSafe;
+import static com.sun.faces.util.copier.CopierUtils.getCopier;
+import static javax.faces.component.visit.VisitContext.createVisitContext;
+import static javax.faces.component.visit.VisitResult.ACCEPT;
+import static javax.faces.validator.BeanValidator.MESSAGE_ID;
+
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
+
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.BeanValidator;
-import javax.faces.validator.Validator;
-import javax.faces.validator.ValidatorException;
-import javax.validation.ConstraintViolation;
-import javax.validation.MessageInterpolator;
-import javax.validation.Validation;
-import javax.validation.ValidationException;
-import javax.validation.ValidatorContext;
-import javax.validation.ValidatorFactory;
-
-import static com.sun.faces.util.ReflectionUtils.instance;
-import com.sun.faces.util.copier.Copier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import javax.faces.component.EditableValueHolder;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
-import static javax.faces.component.visit.VisitResult.ACCEPT;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
+import javax.validation.ConstraintViolation;
 
-class WholeBeanValidator implements Validator {
+class WholeBeanValidator implements Validator<Object> {
 
     private static final Logger LOGGER
             = Logger.getLogger("javax.faces.validator", "javax.faces.LogStrings");    
     
     private static final String ERROR_MISSING_FORM
             = "f:validateWholeBean must be nested directly in an UIForm.";
-
-    private static final String ERROR_COPIER_NAME = "The copier name should be a Java valid simple/qualified name.";
-
-    private static final String COPIER_PREFIX = "com.sun.faces.util.copier.";
-
-    private Class cc = null;
-
+    
     @Override
-    public void validate(FacesContext context, UIComponent c, Object value) throws ValidatorException {        
+    public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+        validate(context, (UIValidateWholeBean) component, value);
+    }
 
-        // check if the parent of this f:validateWholeBean is a form                  
-        UIComponent parent = c.getParent();
-        if (!(parent instanceof UIForm)) {
-            throw new IllegalArgumentException(ERROR_MISSING_FORM);
-        }
+    public void validate(FacesContext context, UIValidateWholeBean component, Object value) throws ValidatorException {        
 
-        UIForm form = (UIForm) parent;
+        // Get parent and check if the parent of this f:validateWholeBean is a form                  
+        UIForm form = getParentForm(component);
 
-        ValueExpression beanVE = c.getValueExpression("value");
-        if (null == beanVE) {
-            throw new FacesException("The \"value\" attribute is required");
-        }
-		
-        Object val = beanVE.getValue(context.getELContext());
-        String copierType = (String) c.getAttributes().get("copierType");
+        ValueExpression wholeBeanVE = getValueExpressionNullSafe(component, "value");
+
+        // The "whole" bean that we're going to validate at the class level
+        Object wholeBean = wholeBeanVE.getValue(context.getELContext());
+        
+        // A shortened or fully qualified class name, or EL expression pointing
+        // to a type that copies the target bean for validation
+        String copierType = (String) component.getAttributes().get("copierType");
         
         // Inspect the status of field level validation
-        Map<Object, Map<String, Map<String, Object>>> candidates = MultiFieldValidationUtils.getMultiFieldValidationCandidates(context, false);
-        
-        /* this should be removed or commented
-         if (candidates.isEmpty() || !candidates.containsKey(val)) {
-         return;
-         }
-         */        
-
-        if (context.isValidationFailed()) {
+        if (hasAnyBeanPropertyFailedValidation(context, wholeBean)) {
             return;
         }
 
-        Map<String, Map<String, Object>> candidate = null;
-        if ((!candidates.isEmpty()) && (candidates.containsKey(val))) {
-            candidate = candidates.get(val);
-            // Verify that none of the field level properties failed validation
-            for (Map.Entry<String, Map<String, Object>> cur : candidate.entrySet()) {
-                if (FAILED_FIELD_LEVEL_VALIDATION.equals(cur.getValue().get("value"))) { // NOPMD
-                    return;
-                }
-            }
-        }
+        AddRemainingCandidateFieldsCallback addRemainingCandidateFieldsCallback = new AddRemainingCandidateFieldsCallback(context, wholeBean);
+        
+        form.visitTree(
+            createVisitContext(context), 
+            addRemainingCandidateFieldsCallback);
+        
+        Map<String, Map<String, Object>> validationCandidate = addRemainingCandidateFieldsCallback.getCandidate();
 
-        AddRemainingCandidateFieldsCallback addRemainingCandidateFieldsCallback = new AddRemainingCandidateFieldsCallback(context, val);
-        form.visitTree(VisitContext.createVisitContext(context), addRemainingCandidateFieldsCallback);
-        candidate = addRemainingCandidateFieldsCallback.getCandidate();
-
-        if (candidate.isEmpty()) {
+        if (validationCandidate.isEmpty()) {
             return;
         }
         
-        Object valCopy = copyObjectAndPopulateWithCandidateValues(context, beanVE, val, copierType, candidate);
-        javax.validation.Validator beanValidator = getBeanValidator(context);
-        UIValidateWholeBean component = (UIValidateWholeBean) c;
-
-        Class[] validationGroupArray = component.getValidationGroupsArray();
-        Set result = null;
-        try {            
-            result = beanValidator.validate(valCopy, validationGroupArray);            
-        } catch (IllegalArgumentException iae) {
-            String failureMessage = "Unable to validate expression " + beanVE.getExpressionString() + " using Bean Validation.  Unable to get value of expression. " + " Message from Bean Validation: " + iae.getMessage();
-            LOGGER.fine(failureMessage);
-        }
-        Set<ConstraintViolation<?>> violations = result;
+        // Perform the actual bean validation on a copy of the whole bean
+        Set<ConstraintViolation<?>> violations = doBeanValidation(
+            getBeanValidator(context), 
+            copyBeanAndPopulateWithCandidateValues(
+                context, wholeBeanVE, wholeBean, copierType, validationCandidate), 
+            component.getValidationGroupsArray(), 
+            wholeBeanVE);
+        
+        // If there are any violations, transform them into a JSF validator exception
         if (violations != null && !violations.isEmpty()) {
             ValidatorException toThrow;
-            if (1 == violations.size()) {
-                ConstraintViolation violation = violations.iterator().next();
-                toThrow = new ValidatorException(MessageFactory.getMessage(context, BeanValidator.MESSAGE_ID, violation.getMessage(), MessageFactory.getLabel(context, component)));
+            
+            if (violations.size() == 1) {
+                ConstraintViolation<?> violation = violations.iterator().next();
+                toThrow = new ValidatorException(getMessage(context, MESSAGE_ID, violation.getMessage(), getLabel(context, component)));
             } else {
                 Set<FacesMessage> messages = new LinkedHashSet<>(violations.size());
-                for (ConstraintViolation violation : violations) {
-                    messages.add(MessageFactory.getMessage(context, BeanValidator.MESSAGE_ID, violation.getMessage(), MessageFactory.getLabel(context, component)));
+                for (ConstraintViolation<?> violation : violations) {
+                    messages.add(getMessage(context, MESSAGE_ID, violation.getMessage(), getLabel(context, component)));
                 }
                 toThrow = new ValidatorException(messages);
             }
+            
             // Mark the components as invalid to prevent them from receiving
             // values during updateModelValues
-            for (Map.Entry<String, Map<String, Object>> cur : candidate.entrySet()) {
-                ((EditableValueHolder) cur.getValue().get("component")).setValid(false);
+            for (Entry<String, Map<String, Object>> validationCandidateEntry : validationCandidate.entrySet()) {
+                invalidateComponent(validationCandidateEntry);
             }
+            
             throw toThrow;
         }
     }
+    
+    private UIForm getParentForm(UIComponent component) {
+        UIComponent parent = component.getParent();
+        if (!(parent instanceof UIForm)) {
+            throw new IllegalArgumentException(ERROR_MISSING_FORM);
+        }
+        
+        return (UIForm) parent;
+    }
+    
+    private boolean isFailedFieldLevelValidation(Entry<String, Map<String, Object>> wholeBeanPropertyEntry) {
+        return FAILED_FIELD_LEVEL_VALIDATION.equals(wholeBeanPropertyEntry.getValue().get("value"));
+    }
+    
+    private void invalidateComponent(Entry<String, Map<String, Object>> wholeBeanPropertyEntry) {
+        ((EditableValueHolder) wholeBeanPropertyEntry.getValue().get("component")).setValid(false);
+    }
+    
+    private boolean hasAnyBeanPropertyFailedValidation(FacesContext context, Object wholeBean) {
+        Map<Object, Map<String, Map<String, Object>>> validationCandidates = getMultiFieldValidationCandidates(context, false);
 
-    private Object copyObjectAndPopulateWithCandidateValues(FacesContext context, ValueExpression beanVE,
-            Object val, String copierType, Map<String, Map<String, Object>> candidate) {
-        // <editor-fold defaultstate="collapsed">
-
-        // Populate the value copy with the validated values from the candidate
-        Map<String, Object> propertiesToSet = new HashMap<>();
-        for (Map.Entry<String, Map<String, Object>> cur : candidate.entrySet()) {
-            propertiesToSet.put(cur.getKey(), cur.getValue().get("value"));
+        if (context.isValidationFailed()) {
+            return true;
         }
 
-        // Copy the value so that class-level validation can be performed
-        // without corrupting the real value
-		
-        // Check if the user has specified a copy strategy         
-        Object valCopy = null;
-        Copier copier = getCopier(context, copierType);
-        
-        if (copier != null) {
-            valCopy = copier.copy(val);
-        } else {
-            try {
-                NewInstanceCopier nic = new NewInstanceCopier();
-                valCopy = nic.copy(val);                
-            } catch (IllegalStateException ise2) {
-            }
-            if (null == valCopy) {
-                if (val instanceof Serializable) {
-                    try {
-                        SerializationCopier sc = new SerializationCopier();
-                        valCopy = sc.copy(val);                        
-                    } catch (IllegalStateException ise) {
-                    }
-                } else if (val instanceof Cloneable) {
-                    try {
-                        CloneCopier cc = new CloneCopier();
-                        valCopy = cc.copy(val);                        
-                    } catch (IllegalStateException ise) {
-                    }
-                } else {
-                    try {
-                        CopyCtorCopier ccc = new CopyCtorCopier();
-                        valCopy = ccc.copy(val);                        
-                    } catch (IllegalStateException ise) {
-                    }
+        if (!validationCandidates.isEmpty() && validationCandidates.containsKey(wholeBean)) {
+            // Verify that none of the field level properties failed validation
+            for (Entry<String, Map<String, Object>> wholeBeanPropertyEntry : validationCandidates.get(wholeBean).entrySet()) {
+                if (isFailedFieldLevelValidation(wholeBeanPropertyEntry)) {
+                    return true;
                 }
             }
         }
-
-        if (null == valCopy) {
-            throw new FacesException("Unable to copy value from " + beanVE.getExpressionString());
-        }
-
-        ReflectionUtils.setProperties(valCopy, propertiesToSet);
-        return valCopy;
-
-        // </editor-fold>
+        
+        return false;
     }
 
-    private javax.validation.Validator getBeanValidator(FacesContext context) {
-        // <editor-fold defaultstate="collapsed">
-        ValidatorFactory validatorFactory;
-        Object cachedObject = context.getExternalContext().getApplicationMap().get(BeanValidator.VALIDATOR_FACTORY_KEY);
-        if (cachedObject instanceof ValidatorFactory) {
-            validatorFactory = (ValidatorFactory) cachedObject;
-        } else {
-            try {
-                validatorFactory = Validation.buildDefaultValidatorFactory();
-            } catch (ValidationException e) {
-                throw new FacesException("Could not build a default Bean Validator factory", e);
-            }
-            context.getExternalContext().getApplicationMap().put(BeanValidator.VALIDATOR_FACTORY_KEY, validatorFactory);
+    private Object copyBeanAndPopulateWithCandidateValues(FacesContext context, ValueExpression wholeBeanVE,
+            Object wholeBean, String copierType, Map<String, Map<String, Object>> candidate) {
+
+        // Populate the bean copy with the validated values from the candidate
+        Map<String, Object> propertiesToSet = new HashMap<>();
+        for (Entry<String, Map<String, Object>> propertyEntry : candidate.entrySet()) {
+            propertiesToSet.put(propertyEntry.getKey(), propertyEntry.getValue().get("value"));
         }
-        ValidatorContext validatorContext = validatorFactory.usingContext();
-        MessageInterpolator jsfMessageInterpolator = new JsfAwareMessageInterpolator(context, validatorFactory.getMessageInterpolator());
-        validatorContext.messageInterpolator(jsfMessageInterpolator);
-        return validatorContext.getValidator();
-        // </editor-fold>
+
+        // Copy the whole bean so that class-level validation can be performed
+        // without corrupting the real whole bean
+        
+        Object wholeBeanCopy = getCopier(context, copierType)
+                                    .copy(wholeBean);
+
+        if (wholeBeanCopy == null) {
+            throw new FacesException("Unable to copy bean from " + wholeBeanVE.getExpressionString());
+        }
+
+        setProperties(wholeBeanCopy, propertiesToSet);
+        
+        return wholeBeanCopy;
     }
-
-    // <editor-fold defaultstate="collapsed">
-    private static class JsfAwareMessageInterpolator implements MessageInterpolator {
-
-        private final FacesContext context;
-        private final MessageInterpolator delegate;
-
-        public JsfAwareMessageInterpolator(FacesContext context, MessageInterpolator delegate) {
-            this.context = context;
-            this.delegate = delegate;
+    
+    private Set<ConstraintViolation<?>> doBeanValidation(javax.validation.Validator beanValidator, Object wholeBeanCopy, Class<?>[] validationGroupArray, ValueExpression wholeBeanVE) {
+        
+        @SuppressWarnings("rawtypes")
+        Set violationsRaw = null;
+        
+        try {            
+            violationsRaw = beanValidator.validate(wholeBeanCopy, validationGroupArray);            
+        } catch (IllegalArgumentException iae) {
+            LOGGER.fine(
+                "Unable to validate expression " + wholeBeanVE.getExpressionString() + 
+                " using Bean Validation.  Unable to get value of expression. " + 
+                " Message from Bean Validation: " + iae.getMessage());
         }
-
-        @Override
-        public String interpolate(String message, MessageInterpolator.Context context) {
-            Locale locale = this.context.getViewRoot().getLocale();
-            if (locale == null) {
-                locale = Locale.getDefault();
-            }
-            return delegate.interpolate(message, context, locale);
-        }
-
-        @Override
-        public String interpolate(String message, MessageInterpolator.Context context, Locale locale) {
-            return delegate.interpolate(message, context, locale);
-        }
+        
+        @SuppressWarnings("unchecked")
+        Set<ConstraintViolation<?>> violations = violationsRaw;
+        
+        return violations;
     }
-
-    private Copier getCopier(FacesContext context, String copierType) {
-        Copier copier = null;
-
-        if (!isEmpty(copierType)) {
-
-            // or should validate only against {"MultiStrategyCopier", "SerializationCopier",
-            // "NewInstanceCopier", "CopyCtorCopier", "CloneCopier"} strings?
-            if (isCopierTypeSimpleName(copierType)) {                
-                copierType = COPIER_PREFIX.concat(copierType);
-            } else if (!isName(copierType)) {
-                throw new IllegalArgumentException(ERROR_COPIER_NAME);
-            }
-
-            Object expressionResult = evaluateExpressionGet(context, copierType);
-
-            if (expressionResult instanceof Copier) {
-                copier = (Copier) expressionResult;
-            } else if (expressionResult instanceof String) {
-                copier = instance((String) expressionResult);
-            }
-        }
-
-        // default to the hard-coded copy strategy and let MultiStrategyCopier
-		// as an user option
-        // if (copier == null) {
-        //     copier = new MultiStrategyCopier();
-        // }
-        return copier;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T> T evaluateExpressionGet(FacesContext context, String expression) {
-        if (expression == null) {
-            return null;
-        }
-
-        return (T) context.getApplication().evaluateExpressionGet(context, expression, Object.class);
-    }
-
-    private static boolean isCopierTypeSimpleName(String copierType) {
-        return (isIdentifier(copierType) && !(isKeyword(copierType)));
-    }
-
-    // maybe the following four methods should be moved in com.sun.faces.util   
-    private static boolean isEmpty(String string) {
-        return string == null || string.isEmpty();
-    }
-
-    private static boolean isName(CharSequence name) {
-        String id = name.toString();
-
-        for (String s : id.split("\\.", -1)) {
-            if (!isIdentifier(s) || isKeyword(s)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean isIdentifier(CharSequence name) {
-        String id = name.toString();
-
-        if (id.length() == 0) {
-            return false;
-        }
-        int cp = id.codePointAt(0);
-        if (!Character.isJavaIdentifierStart(cp)) {
-            return false;
-        }
-        for (int i = Character.charCount(cp);
-                i < id.length();
-                i += Character.charCount(cp)) {
-            cp = id.codePointAt(i);
-            if (!Character.isJavaIdentifierPart(cp)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean isKeyword(CharSequence s) {
-        String keywordOrLiteral = s.toString();
-        return keywords.contains(keywordOrLiteral);
-    }
-
-    private final static Set<String> keywords;
-
-    static {
-        Set<String> s = new HashSet<String>();
-        String[] kws = {
-            "abstract", "continue", "for", "new", "switch",
-            "assert", "default", "if", "package", "synchronized",
-            "boolean", "do", "goto", "private", "this",
-            "break", "double", "implements", "protected", "throw",
-            "byte", "else", "import", "public", "throws",
-            "case", "enum", "instanceof", "return", "transient",
-            "catch", "extends", "int", "short", "try",
-            "char", "final", "interface", "static", "void",
-            "class", "finally", "long", "strictfp", "volatile",
-            "const", "float", "native", "super", "while",
-            // literals
-            "null", "true", "false"
-        };
-        for (String kw : kws) {
-            s.add(kw);
-        }
-        keywords = Collections.unmodifiableSet(s);
-    }    
 
     private static class AddRemainingCandidateFieldsCallback implements VisitCallback {
 
         private final FacesContext context;
         private final Object base;
-        private final Map<String, Map<String, Object>> candidate = new HashMap();
+        private final Map<String, Map<String, Object>> candidate = new HashMap<>();
 
         public AddRemainingCandidateFieldsCallback(final FacesContext context, final Object base) {
             this.context = context;
@@ -411,25 +247,33 @@ class WholeBeanValidator implements Validator {
         }
 
         @Override
-        public VisitResult visit(VisitContext vc, UIComponent uic) {            
-            if ((uic instanceof EditableValueHolder) && (uic.isRendered()) && (!(uic instanceof UIValidateWholeBean))) {
-                ValueExpression valueExpression = uic.getValueExpression("value");                
+        public VisitResult visit(VisitContext visitContext, UIComponent component) {            
+            if (component instanceof EditableValueHolder && component.isRendered() && !(component instanceof UIValidateWholeBean)) {
+                ValueExpression valueExpression = component.getValueExpression("value");                
+                
                 if (valueExpression != null) {
 
-                    ValueExpressionAnalyzer expressionAnalyzer = new ValueExpressionAnalyzer(valueExpression);
-                    ValueReference valueReference = expressionAnalyzer.getReference(context.getELContext());                    
+                    ValueReference valueReference = new ValueExpressionAnalyzer(valueExpression)
+                                                            .getReference(context.getELContext());                
 
-                    if ((valueReference != null) && (valueReference.getBase().equals(base))) {
+                    if (valueReference != null && valueReference.getBase().equals(base)) {
                         Map<String, Object> tuple = new HashMap<>();
-                        tuple.put("component", uic);
-                        tuple.put("value", (((UIInput) uic).getSubmittedValue() != null) ? ((UIInput) uic).getSubmittedValue() : ((UIInput) uic).getLocalValue());                        
+                        tuple.put("component", component);
+                        tuple.put("value", getComponentValue(component));
+                        
                         candidate.put(valueReference.getProperty(), tuple);
                     }
                 }
             }
+            
             return ACCEPT;
+        }
+        
+        private static Object getComponentValue(UIComponent component) {
+            UIInput inputComponent = (UIInput) component;
+            
+            return inputComponent.getSubmittedValue() != null ? inputComponent.getSubmittedValue() : inputComponent.getLocalValue();
         }
     }
 
-    // </editor-fold>
 }

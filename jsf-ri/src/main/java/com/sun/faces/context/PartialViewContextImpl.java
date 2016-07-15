@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,6 +40,9 @@
 
 package com.sun.faces.context;
 
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.PARTIAL_EXECUTE_PARAM;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.PARTIAL_RENDER_PARAM;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.PARTIAL_RESET_VALUES_PARAM;
 import static javax.faces.FactoryFinder.VISIT_CONTEXT_FACTORY;
 
 import java.io.IOException;
@@ -74,6 +77,7 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
 import com.sun.faces.component.visit.PartialVisitContext;
+import com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.Util;
@@ -94,7 +98,6 @@ import com.sun.faces.util.Util;
     private Boolean partialRequest;
     private Boolean renderAll;
     private FacesContext ctx;
-    private boolean processingPhases = false;
 
     private static final String ORIGINAL_WRITER = "com.sun.faces.ORIGINAL_WRITER";
 
@@ -152,9 +155,7 @@ import com.sun.faces.util.Util;
     public boolean isExecuteAll() {
 
         assertNotReleased();
-        String execute = ctx.
-            getExternalContext().getRequestParameterMap()
-                .get(PARTIAL_EXECUTE_PARAM_NAME);
+        String execute = PARTIAL_EXECUTE_PARAM.getValue(ctx);
         return (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
 
     }
@@ -167,9 +168,7 @@ import com.sun.faces.util.Util;
 
         assertNotReleased();
         if (renderAll == null) {
-            String render = ctx.
-                getExternalContext().getRequestParameterMap()
-                    .get(PARTIAL_RENDER_PARAM_NAME);
+            String render = PARTIAL_RENDER_PARAM.getValue(ctx);
             renderAll = (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(render));
         }
 
@@ -189,7 +188,7 @@ import com.sun.faces.util.Util;
 
     @Override
     public boolean isResetValues() {
-        Object value = ctx.getExternalContext().getRequestParameterMap().get(RESET_VALUES_PARAM_NAME);
+        Object value = PARTIAL_RESET_VALUES_PARAM.getValue(ctx);
         return (null != value && "true".equals(value)) ? true : false;
     }
 
@@ -209,7 +208,7 @@ import com.sun.faces.util.Util;
         if (executeIds != null) {
             return executeIds;
         }
-        executeIds = populatePhaseClientIds(PARTIAL_EXECUTE_PARAM_NAME);
+        executeIds = populatePhaseClientIds(PARTIAL_EXECUTE_PARAM);
 
         // include the view parameter facet ID if there are other execute IDs
         // to process
@@ -235,7 +234,7 @@ import com.sun.faces.util.Util;
         if (renderIds != null) {
             return renderIds;
         }
-        renderIds = populatePhaseClientIds(PARTIAL_RENDER_PARAM_NAME);
+        renderIds = populatePhaseClientIds(PARTIAL_RENDER_PARAM);
         return renderIds;
 
     }
@@ -387,12 +386,9 @@ import com.sun.faces.util.Util;
 
 
 
-    private List<String> populatePhaseClientIds(String parameterName) {
+    private List<String> populatePhaseClientIds(PredefinedPostbackParameter parameterName) {
 
-        Map<String,String> requestParamMap =
-              ctx.getExternalContext().getRequestParameterMap();
-
-        String param = requestParamMap.get(parameterName);
+        String param = parameterName.getValue(ctx);
         if (param == null) {
             return new ArrayList<>();
         } else {

@@ -49,7 +49,7 @@ class ValueReference {
         this.property = property;
     }
 
-    public Class getBaseClass() {
+    public Class<?> getBaseClass() {
         return base.getClass();
     }
 

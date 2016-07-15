@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,20 +40,15 @@
 
 package com.sun.faces.context;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Collections;
-import java.util.Collection;
-import java.util.Iterator;
 
-import javax.faces.application.Application;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletRequest;
 
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.Util;
 
 /**
@@ -61,8 +56,7 @@ import com.sun.faces.util.Util;
  */
 public class RequestParameterMap extends BaseContextMap<String> {
 
-    private String namingContainerId;
-    private boolean namespaceParameters;
+    private String namingContainerPrefix;
     private final ServletRequest request;
     private boolean inspectedParameterNames = false;
 
@@ -72,15 +66,7 @@ public class RequestParameterMap extends BaseContextMap<String> {
 
     public RequestParameterMap(ServletRequest request) {
         this.request = request;
-            try {
-                WebConfiguration webConfig = WebConfiguration.getInstance(request.getServletContext());
-                namespaceParameters = webConfig.isOptionEnabled(
-                    BooleanWebContextInitParameter.NamespaceParameters);
-            } catch(AbstractMethodError ame) {
-                // FIXME Remove the catch when all Cactus tests are migrated
-                namespaceParameters = false;
-            }
-        }
+    }
 
 
     // -------------------------------------------------------- Methods from Map
@@ -93,13 +79,11 @@ public class RequestParameterMap extends BaseContextMap<String> {
             inspectedParameterNames = true;
             request.getParameterNames();
         }
-    	String mapKey = key.toString();
-        String mapValue = null;
-        if (namespaceParameters) {
-            mapValue = request.getParameter(getNamingContainerId() + mapKey);
-        }
-        if (mapValue == null) {
-        	mapValue = request.getParameter(mapKey);
+        String mapKey = key.toString();
+        String mapValue = request.getParameter(mapKey);
+        if (mapValue == null && !mapKey.startsWith(getNamingContainerPrefix())) {
+            // Support cases where enduser manually obtains a request parameter while in a namespaced view.
+            mapValue = request.getParameter(getNamingContainerPrefix() + mapKey);
         }
         return mapValue;
     }
@@ -117,21 +101,22 @@ public class RequestParameterMap extends BaseContextMap<String> {
     }
 
 
-    protected String getNamingContainerId() {
-        if (null == namingContainerId) {
+    /**
+     * If view root is instance of naming container, return its container client id, suffixed with separator character.
+     * @return The naming container prefix, or an empty string if the view root is not an instance of naming container.
+     */
+    protected String getNamingContainerPrefix() {
+        if (null == namingContainerPrefix) {
             FacesContext context = FacesContext.getCurrentInstance();
-            UIViewRoot viewRoot = context.getViewRoot();
-            if (viewRoot == null) {
-                Application application = context.getApplication();
-                viewRoot = (UIViewRoot) application.createComponent(UIViewRoot.COMPONENT_TYPE);
+
+            if (context == null) {
+                return "";
             }
-            if (viewRoot instanceof NamingContainer) {
-                namingContainerId = viewRoot.getContainerClientId(context);
-            } else {
-                namingContainerId = "";
-            }
+
+            namingContainerPrefix = Util.getNamingContainerPrefix(context);
         }
-        return namingContainerId;
+
+        return namingContainerPrefix;
     }
 
 
@@ -142,16 +127,8 @@ public class RequestParameterMap extends BaseContextMap<String> {
 
 
     @Override
-    public boolean containsKey(Object key) {    	
-    	boolean containsKey = false;
-    	String mapKey = key.toString();
-        if (namespaceParameters) {
-            containsKey = (request.getParameter(getNamingContainerId() + mapKey) != null);
-        }
-        if (!containsKey) {
-        	containsKey = (request.getParameter(mapKey) != null);
-        }
-        return containsKey;
+    public boolean containsKey(Object key) {
+        return (key != null && get(key) != null);
     }
 
 

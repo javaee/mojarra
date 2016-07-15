@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,12 +40,11 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.RIConstants;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.NamespaceParameters;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateTimeout;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ClientStateWriteBufferSize;
+import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.VIEW_STATE_PARAM;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -64,12 +63,10 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.ResponseStateManager;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
@@ -141,12 +138,6 @@ public class ClientSideStateHelper extends StateHelper {
     private boolean debugSerializedState;
 
 
-    /**
-     * Flag determining whether or not javax.faces.ViewState should be namespaced.
-     */
-    protected boolean namespaceParameters;
-
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -191,18 +182,7 @@ public class ClientSideStateHelper extends StateHelper {
 
             writer.startElement("input", null);
             writer.writeAttribute("type", "hidden", null);
-            String viewStateParam = ResponseStateManager.VIEW_STATE_PARAM;
-            
-            if (namespaceParameters) {
-                UIViewRoot viewRoot = ctx.getViewRoot();
-                if (viewRoot instanceof NamingContainer) {
-                    String namingContainerId = viewRoot.getContainerClientId(ctx);
-                    if (namingContainerId != null) {
-                        viewStateParam = namingContainerId + viewStateParam;
-                    }
-                }
-            }
-            writer.writeAttribute("name", viewStateParam, null);
+            writer.writeAttribute("name", VIEW_STATE_PARAM.getName(ctx), null);
             if (webConfig.isOptionEnabled(EnableViewStateIdRendering)) {
                 String viewStateId = Util.getViewStateId(ctx);
                 writer.writeAttribute("id", viewStateId, null);
@@ -315,14 +295,14 @@ public class ClientSideStateHelper extends StateHelper {
             return new Object[] { structure, state };
 
         } catch (java.io.OptionalDataException ode) {
-        	if (LOGGER.isLoggable(Level.SEVERE)) {
-        		LOGGER.log(Level.SEVERE, ode.getMessage(), ode);
-        	}
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, ode.getMessage(), ode);
+            }
             throw new FacesException(ode);
         } catch (ClassNotFoundException cnfe) {
-        	if (LOGGER.isLoggable(Level.SEVERE)) {
-        		LOGGER.log(Level.SEVERE, cnfe.getMessage(), cnfe);
-        	}
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, cnfe.getMessage(), cnfe);
+            }
             throw new FacesException(cnfe);
         } catch (InvalidClassException ice) {
             /*
@@ -332,9 +312,9 @@ public class ClientSideStateHelper extends StateHelper {
              */
             return null;
         } catch (IOException iox) {
-        	if (LOGGER.isLoggable(Level.SEVERE)) {
-        		LOGGER.log(Level.SEVERE, iox.getMessage(), iox);
-        	}
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, iox.getMessage(), iox);
+            }
             throw new FacesException(iox);
         } finally {
             if (ois != null) {
@@ -494,7 +474,7 @@ public class ClientSideStateHelper extends StateHelper {
     protected void init() {
 
         if (webConfig.canProcessJndiEntries() &&
-        		!webConfig.isSet(BooleanWebContextInitParameter.DisableClientStateEncryption)) {
+                !webConfig.isSet(BooleanWebContextInitParameter.DisableClientStateEncryption)) {
             guard = new ByteArrayGuard();
         } else {
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -551,8 +531,6 @@ public class ClientSideStateHelper extends StateHelper {
 
         debugSerializedState = webConfig.isOptionEnabled(BooleanWebContextInitParameter.EnableClientStateDebugging);
 
-        namespaceParameters = webConfig.isOptionEnabled(NamespaceParameters);
-
     }
 
     /**
@@ -573,7 +551,7 @@ public class ClientSideStateHelper extends StateHelper {
             } catch(IOException ioe) {
                 throw new IllegalStateException("Cannot determine whether or not the request is stateless", ioe);
             }
-            if (stateObject instanceof String && "stateless".equals((String) stateObject)) {
+            if (stateObject instanceof String && "stateless".equals(stateObject)) {
                 return true;
             }
 

@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 2009-2015 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 2009-2016 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -791,6 +791,43 @@ for <code>@NamedEvent</code>.</p>
             <type>java.lang.String</type>
         </attribute>
     </tag>
+
+    <tag>
+        <description><![CDATA[
+            <p class="changed_added_2_3">
+                Used inside of the metadata facet of a view, this tag will import a mapping of all constant field values of the given type in the current view.
+                Constant field values are all <code>public static final</code> fields of the given type.
+                The map key represents the constant field name as <code>String</code>.
+                The map value represents the actual constant field value.
+                This works for classes, interfaces and enums. 
+            </p>
+        ]]></description>
+        <tag-name>viewAction</tag-name>
+        <component>
+            <component-type>javax.faces.ImportConstants</component-type>
+        </component>
+        <attribute>
+            <description><![CDATA[
+                <p>
+                    The fully qualified name of the type to import the constant field values for.
+                </p>
+            ]]></description>
+            <name>type</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[
+                <p>
+                    Name of request scope attribute under which constants will be exposed as a Map.
+                    Defaults to the simple name of the given type.
+                </p>
+            ]]></description>
+            <name>var</name>
+            <required>false</required>
+        </attribute>
+    </tag>
+
     <tag>
         <description><![CDATA[
             <p>Load a resource bundle localized for the Locale of the current

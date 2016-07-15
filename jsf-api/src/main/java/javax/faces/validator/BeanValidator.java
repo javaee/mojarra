@@ -40,24 +40,37 @@
 
 package javax.faces.validator;
 
+import static javax.faces.validator.MessageFactory.getLabel;
+import static javax.faces.validator.MessageFactory.getMessage;
+import static javax.faces.validator.MultiFieldValidationUtils.FAILED_FIELD_LEVEL_VALIDATION;
+import static javax.faces.validator.MultiFieldValidationUtils.getMultiFieldValidationCandidates;
+import static javax.faces.validator.MultiFieldValidationUtils.wholeBeanValidationEnabled;
+
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
+
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
 import javax.faces.component.PartialStateHolder;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
-import javax.validation.ValidatorContext;
 import javax.validation.ValidationException;
+import javax.validation.ValidatorContext;
 import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 
-import static javax.faces.validator.MultiFieldValidationUtils.FAILED_FIELD_LEVEL_VALIDATION;
 
 /**
  * <p class="changed_added_2_0"><span
@@ -72,7 +85,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
 
     private String validationGroups;
 
-    private transient Class[] cachedValidationGroups;
+    private transient Class<?>[] cachedValidationGroups;
 
     /**
      * <p class="changed_added_2_0">The standard validator id for this
@@ -297,43 +310,24 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * @throws ValidatorException   {@inheritDoc}
      */
     @Override
-    public void validate(FacesContext context,
-                         UIComponent component,
-                         Object value) {
+    public void validate(FacesContext context, UIComponent component, Object value) {
 
         if (context == null) {
             throw new NullPointerException();
         }
+        
         if (component == null) {
             throw new NullPointerException();
         }
+        
         ValueExpression valueExpression = component.getValueExpression("value");
         if (valueExpression == null) {
             return;
         }
 
-        ValidatorFactory validatorFactory;
-        Object cachedObject = context.getExternalContext().getApplicationMap().get(VALIDATOR_FACTORY_KEY);
-        if (cachedObject instanceof ValidatorFactory) {
-            validatorFactory = (ValidatorFactory) cachedObject;
-        }
-        else {
-            try {
-                validatorFactory = Validation.buildDefaultValidatorFactory();
-            }
-            catch (ValidationException e) {
-                throw new FacesException("Could not build a default Bean Validator factory", e);
-            }
-            context.getExternalContext().getApplicationMap().put(VALIDATOR_FACTORY_KEY, validatorFactory);
-        }
-
-        ValidatorContext validatorContext = validatorFactory.usingContext();
-        MessageInterpolator jsfMessageInterpolator = 
-                new JsfAwareMessageInterpolator(context, 
-                           validatorFactory.getMessageInterpolator());
-        validatorContext.messageInterpolator(jsfMessageInterpolator);
-        javax.validation.Validator beanValidator = validatorContext.getValidator();
-        Class[] validationGroupsArray = parseValidationGroups(getValidationGroups());
+        javax.validation.Validator beanValidator = getBeanValidator(context);
+        
+        Class<?>[] validationGroupsArray = parseValidationGroups(getValidationGroups());
         
         // PENDING(rlubke, driscoll): When EL 1.3 is present, we won't need
         // this.
@@ -345,58 +339,46 @@ public class BeanValidator implements Validator, PartialStateHolder {
         if (valueReference == null) {
             return;
         }
+        
         if (isResolvable(valueReference, valueExpression)) {
-            Set<ConstraintViolation<?>> violations = null;
+           
+            @SuppressWarnings("rawtypes")
+            Set violationsRaw = null;
+            
             try {
-                //noinspection unchecked
-                violations =
-                        beanValidator.validateValue(valueReference.getBaseClass(),
-                                                    valueReference.getProperty(),
-                                                    value,
-                                                    validationGroupsArray);
+                violationsRaw = beanValidator.validateValue(
+                                            valueReference.getBaseClass(),
+                                            valueReference.getProperty(),
+                                            value,
+                                            validationGroupsArray);
+                
             } catch (IllegalArgumentException iae) {
-                String failureMessage = "Unable to validate expression " +
-                        valueExpression.getExpressionString() +
-               " using Bean Validation.  Unable to get value of expression. "+
-                        " Message from Bean Validation: " + iae.getMessage();
-                LOGGER.fine(failureMessage);
+                LOGGER.fine(
+                    "Unable to validate expression " + valueExpression.getExpressionString() +
+                    " using Bean Validation.  Unable to get value of expression. " +
+                    " Message from Bean Validation: " + iae.getMessage());
             }
+            
+            @SuppressWarnings("unchecked")
+            Set<ConstraintViolation<?>> violations = violationsRaw;
 
             if (violations != null && !violations.isEmpty()) {
                 ValidatorException toThrow;
-                if (1 == violations.size()) {
-                    ConstraintViolation violation = violations.iterator().next();
-                    toThrow = new ValidatorException(MessageFactory.getMessage(
-                          context,
-                          MESSAGE_ID,
-                          violation.getMessage(),
-                          MessageFactory.getLabel(context, component)));
+                if (violations.size() == 1) {
+                    ConstraintViolation<?> violation = violations.iterator().next();
+                    toThrow = new ValidatorException(getMessage(context, MESSAGE_ID, violation.getMessage(), getLabel(context, component)));
                 } else {
-                    Set<FacesMessage> messages = new LinkedHashSet<>(
-                          violations.size());
-                    for (ConstraintViolation violation : violations) {
-                        messages.add(MessageFactory.getMessage(context,
-                                                               MESSAGE_ID,
-                                                               violation.getMessage(),
-                                                               MessageFactory.getLabel(
-                                                                     context,
-                                                                     component)));
+                    Set<FacesMessage> messages = new LinkedHashSet<>(violations.size());
+                    for (ConstraintViolation<?> violation : violations) {
+                        messages.add(getMessage(context, MESSAGE_ID, violation.getMessage(), getLabel(context, component)));
                     }
                     toThrow = new ValidatorException(messages);
                 }
                 
-                
                 // Record the fact that this field failed validation, so that multi-field
                 // validation is not attempted.
-                if (MultiFieldValidationUtils.wholeBeanValidationEnabled(context, validationGroupsArray)) {
-                    Map<Object, Map<String, Map<String, Object>>> multiFieldCandidates = MultiFieldValidationUtils.getMultiFieldValidationCandidates(context, true);
-                    Object val = valueReference.getBase();
-                    Map<String, Map<String, Object>> candidate = multiFieldCandidates.getOrDefault(val, new HashMap<>());
-                    Map<String, Object> tuple = new HashMap<>();
-                    tuple.put("component", component);
-                    tuple.put("value", FAILED_FIELD_LEVEL_VALIDATION);
-                    candidate.put(valueReference.getProperty(), tuple);
-                    multiFieldCandidates.putIfAbsent(val, candidate);
+                if (wholeBeanValidationEnabled(context, validationGroupsArray)) {
+                    recordValidationResult(context, component, valueReference.getBase(), valueReference.getProperty(), FAILED_FIELD_LEVEL_VALIDATION);
                 }
                 
                 throw toThrow;
@@ -405,57 +387,50 @@ public class BeanValidator implements Validator, PartialStateHolder {
         
         // Record the fact that this field passed validation, so that multi-field
         // validation can be performed if desired
-        if (MultiFieldValidationUtils.wholeBeanValidationEnabled(context, validationGroupsArray)) {
-            Map<Object, Map<String, Map<String, Object>>> multiFieldCandidates = MultiFieldValidationUtils.getMultiFieldValidationCandidates(context, true);
-            Object val = valueReference.getBase();
-            Map<String, Map<String, Object>> candidate = multiFieldCandidates.getOrDefault(val, new HashMap<>());
-            Map<String, Object> tuple = new HashMap<>();//new ComponentValueTuple((EditableValueHolder) component, value);
-            tuple.put("component", component);
-            tuple.put("value", value);
-            candidate.put(valueReference.getProperty(), tuple);
-            multiFieldCandidates.putIfAbsent(val, candidate);
+        if (wholeBeanValidationEnabled(context, validationGroupsArray)) {
+            recordValidationResult(context, component, valueReference.getBase(), valueReference.getProperty(), value);
         }
     }
     
-    private boolean isResolvable(ValueReference ref, 
-            ValueExpression valueExpression) {
-        Boolean result = null;
+    private boolean isResolvable(ValueReference valueReference, ValueExpression valueExpression) {
+        Boolean resolvable = null;
         String failureMessage = null;
         
-        if (null == valueExpression) {
-            failureMessage = "Unable to validate expression using Bean "+ 
-                    "Validation.  Expression must not be null.";
-            result = false;
-        } else if (null == ref) {
-            failureMessage = "Unable to validate expression " + 
-                    valueExpression.getExpressionString() +
-                    " using Bean Validation.  Unable to get value of expression.";
-            result = false;
+        if (valueExpression == null) {
+            failureMessage = 
+                "Unable to validate expression using Bean " + 
+                "Validation.  Expression must not be null.";
+            resolvable = false;
+        } else if (valueReference == null) {
+            failureMessage = 
+                "Unable to validate expression " + valueExpression.getExpressionString() +
+                " using Bean Validation.  Unable to get value of expression.";
+            resolvable = false;
         } else {
-            Class baseClass = ref.getBaseClass();
+            Class<?> baseClass = valueReference.getBaseClass();
 
             // case 1, base classes of Map, List, or Array are not resolvable
-            if (null != baseClass) {
-                if (Map.class.isAssignableFrom(baseClass) ||
-                        Collection.class.isAssignableFrom(baseClass) ||
-                        Array.class.isAssignableFrom(baseClass)) {
-                    failureMessage = "Unable to validate expression " + valueExpression.getExpressionString() +
-                            " using Bean Validation.  Expression evaluates to a Map, List or array.";
-                    result = false;
+            if (baseClass != null) {
+                if (Map.class.isAssignableFrom(baseClass) || Collection.class.isAssignableFrom(baseClass) || Array.class.isAssignableFrom(baseClass)) {
+                    failureMessage = 
+                        "Unable to validate expression " + valueExpression.getExpressionString() +
+                        " using Bean Validation.  Expression evaluates to a Map, List or array.";
+                    resolvable = false;
                 }
             }
         }
 
-        result = ((null != result) ? result : true);
-        if (!result) {
+        resolvable = ((null != resolvable) ? resolvable : true);
+        
+        if (!resolvable) {
             LOGGER.fine(failureMessage);
         }
 
-        return result;
+        return resolvable;
     }
     
 
-    private Class[] parseValidationGroups(String validationGroupsStr) {
+    private Class<?>[] parseValidationGroups(String validationGroupsStr) {
         if (cachedValidationGroups != null) {
             return cachedValidationGroups;
         }
@@ -465,7 +440,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
             return cachedValidationGroups;
         }
 
-        List<Class> validationGroupsList = new ArrayList<>();
+        List<Class<?>> validationGroupsList = new ArrayList<>();
         String[] classNames = validationGroupsStr.split(VALIDATION_GROUPS_DELIMITER);
         for (String className : classNames) {
             className = className.trim();
@@ -520,6 +495,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
     }
 
     private boolean initialState;
+    
     @Override
     public void markInitialState() {
         initialState = true;
@@ -546,6 +522,45 @@ public class BeanValidator implements Validator, PartialStateHolder {
     public void setTransient(boolean transientValue) {
         this.transientValue = transientValue;
     }
+    
+    // ----------------------------------------------------- Private helper methods for bean validation
+    
+    // MOJARRA IMPLEMENTATION NOTE: identical code exists in JSF-RI's com.sun.faces.util.BeanValidation
+    
+    private static javax.validation.Validator getBeanValidator(FacesContext context) {
+        ValidatorFactory validatorFactory = getValidatorFactory(context);
+        
+        ValidatorContext validatorContext = validatorFactory.usingContext();
+        MessageInterpolator jsfMessageInterpolator = new JsfAwareMessageInterpolator(context, validatorFactory.getMessageInterpolator());
+        validatorContext.messageInterpolator(jsfMessageInterpolator);
+        
+        return validatorContext.getValidator();
+    }
+    
+    private static ValidatorFactory getValidatorFactory(FacesContext context) {
+        ValidatorFactory validatorFactory = null;
+        
+        Object cachedObject = context.getExternalContext()
+                                     .getApplicationMap()
+                                     .get(VALIDATOR_FACTORY_KEY);
+        
+        
+        if (cachedObject instanceof ValidatorFactory) {
+            validatorFactory = (ValidatorFactory) cachedObject;
+        } else {
+            try {
+                validatorFactory = Validation.buildDefaultValidatorFactory();
+            } catch (ValidationException e) {
+                throw new FacesException("Could not build a default Bean Validator factory", e);
+            }
+            
+            context.getExternalContext()
+                   .getApplicationMap()
+                   .put(VALIDATOR_FACTORY_KEY, validatorFactory);
+        }
+        
+        return validatorFactory;
+    }
 
     private static class JsfAwareMessageInterpolator implements MessageInterpolator {
 
@@ -571,6 +586,20 @@ public class BeanValidator implements Validator, PartialStateHolder {
             return delegate.interpolate(message, context, locale);
         }
 
+    }
+    
+    // ----------------------------------------------------- Private helper methods for whole bean validation
+    
+    private void recordValidationResult(FacesContext context, UIComponent component, Object wholeBean, String propertyName, Object propertyValue) {
+        Map<Object, Map<String, Map<String, Object>>> multiFieldCandidates = getMultiFieldValidationCandidates(context, true);
+        Map<String, Map<String, Object>> candidate = multiFieldCandidates.getOrDefault(wholeBean, new HashMap<>());
+        
+        Map<String, Object> tuple = new HashMap<>(); // new ComponentValueTuple((EditableValueHolder) component, value);
+        tuple.put("component", component);
+        tuple.put("value", propertyValue);
+        candidate.put(propertyName, tuple);
+        
+        multiFieldCandidates.putIfAbsent(wholeBean, candidate);
     }
 
 }

@@ -49,25 +49,33 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import static com.sun.faces.util.MessageUtils.CONVERSION_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessage;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
+
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Queue;
-import java.util.LinkedList;
 import java.util.logging.Level;
 
 import javax.el.ELException;
-import javax.el.ValueExpression;
 import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
@@ -78,7 +86,6 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
-import javax.faces.FacesException;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.io.FastStringWriter;
@@ -86,11 +93,9 @@ import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.SelectItemsIterator;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.ReflectionUtils;
-import java.lang.reflect.InvocationTargetException;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
 
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of
@@ -118,7 +123,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
               uiSelectMany.getValueExpression("value");
 
         Object result = newValues; // default case, set local value
-        boolean throwException = false;
 
         // If we have a ValueExpression
         if (null != valueExpression) {
@@ -144,32 +148,18 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 }
             }
             if(result == null) {
-                throwException = true;
+                Object[] params = {
+                    (newValues == null) ? "" : stream(newValues).collect(joining("")),
+                    valueExpression.getExpressionString()
+                };
+                throw new ConverterException(getExceptionMessage(CONVERSION_ERROR_MESSAGE_ID, params));
             }
         } else {
             // No ValueExpression, just use Object array.
-            result = convertSelectManyValues(context, uiSelectMany,
-                                             Object[].class,
-                                             newValues);
-        }
-        if (throwException) {
-            StringBuffer values = new StringBuffer();
-            if (null != newValues) {
-                for (int i = 0; i < newValues.length; i++) {
-                    if (i == 0) {
-                        values.append(newValues[i]);
-                    } else {
-                        values.append(' ').append(newValues[i]);
-                    }
-                }
-            }
-            Object[] params = {
-                  values.toString(),
-                  valueExpression.getExpressionString()
-            };
-            throw new ConverterException
-                  (MessageUtils.getExceptionMessage(MessageUtils.CONVERSION_ERROR_MESSAGE_ID,
-                                                    params));
+            result = convertSelectManyValuesForArray(context,
+                                                     uiSelectMany,
+                                                     Object.class,
+                                                     newValues);
         }
 
         // At this point, result is ready to be set as the value
@@ -335,191 +325,171 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                                      String[] newValues) {
 
         if (modelType.isArray()) {
-            return convertSelectManyValues(context,
-                                           uiSelectMany,
-                                           modelType,
-                                           newValues);
+            return convertSelectManyValuesForArray(context,
+                                                   uiSelectMany,
+                                                   modelType.getComponentType(),
+                                                   newValues);
         } else if (Collection.class.isAssignableFrom(modelType)) {
-            Object[] values = (Object[]) convertSelectManyValues(context,
-                                                                 uiSelectMany,
-                                                                 Object[].class,
-                                                                 newValues);
-
-            Collection targetCollection = null;
-
-            // see if the collectionType hint is available, if so, use that
-            Object collectionTypeHint = uiSelectMany.getAttributes().get("collectionType");
-            if (collectionTypeHint != null) {
-                targetCollection = createCollectionFromHint(collectionTypeHint);
-            } else {
-                // try to get a new Collection to store the values based
-                // by trying to create a clone
-                Collection currentValue = (Collection) uiSelectMany.getValue();
-                if (currentValue != null) {
-                    targetCollection = cloneValue(currentValue);
-                }
-
-                // No cloned instance so if the modelType happens to represent a
-                // concrete type (probably not the norm) try to reflect a
-                // no-argument constructor and invoke if available.
-                if (targetCollection == null) {
-                    //noinspection unchecked
-                    targetCollection =
-                          createCollection(currentValue, modelType);
-                }
-
-                // No suitable instance to work with, make our best guess
-                // based on the type.
-                if (targetCollection == null) {
-                    //noinspection unchecked
-                    targetCollection = bestGuess(modelType, values.length);
-                }
-            }
-
-            //noinspection ManualArrayToCollectionCopy
-            for (Object v : values) {
-                //noinspection unchecked
-                targetCollection.add(v);
-            }
-
-            return targetCollection;
+            return convertSelectManyValuesForCollection(context,
+                                                        uiSelectMany,
+                                                        modelType,
+                                                        newValues);
         } else if (Object.class.equals(modelType)) {
-            return convertSelectManyValues(context,
-                                           uiSelectMany,
-                                           Object[].class,
-                                           newValues);
+            return convertSelectManyValuesForArray(context,
+                                                   uiSelectMany,
+                                                   modelType,
+                                                   newValues);
         } else {
             throw new FacesException("Target model Type is no a Collection or Array");
         }
-        
+
     }
 
 
 
 
-    protected Object convertSelectManyValues(FacesContext context,
-                                             UISelectMany uiSelectMany,
-                                             Class arrayClass,
-                                             String[] newValues)
-          throws ConverterException {
+    protected Object convertSelectManyValuesForArray(FacesContext context,
+                                                     UISelectMany uiSelectMany,
+                                                     Class elementType,
+                                                     String[] newValues) throws ConverterException {
 
-        Object result;
+        Object array;
         Converter converter;
-        int len = (null != newValues ? newValues.length : 0);
+        int length = (newValues != null) ? newValues.length : 0;
 
-        Class elementType = arrayClass.getComponentType();
-
-        // Optimization: If the elementType is String, we don't need
-        // conversion.  Just return newValues.
+        // Optimization: If the elementType is String, we don't need conversion. Just return newValues.
         if (elementType.equals(String.class)) {
             return newValues;
         }
 
         try {
-            result = Array.newInstance(elementType, len);
+            array = Array.newInstance(elementType, length);
         } catch (Exception e) {
             throw new ConverterException(e);
         }
 
-        // bail out now if we have no new values, returning our
-        // oh-so-useful zero-length array.
-        if (null == newValues) {
-            return result;
+        // Bail out now if we have no new values, returning our oh-so-useful zero-length array.
+        if (newValues == null) {
+            return array;
         }
 
-        // obtain a converter.
+        // Obtain a converter.
+        converter = uiSelectMany.getConverter();
 
-        // attached converter takes priority
-        if (null == (converter = uiSelectMany.getConverter())) {
-            // Otherwise, look for a by-type converter
-            if (null == (converter = Util.getConverterForClass(elementType,
-                                                               context))) {
-                // if that fails, and the attached values are of Object type,
-                // we don't need conversion.
+        if (converter == null) {
+
+            // Look for a by-type converter based on model value.
+            converter = Util.getConverterForClass(elementType, context);
+
+            if (converter == null) {
+
+                // If that also fails, and the attached values are of Object type, we don't need conversion.
                 if (elementType.equals(Object.class)) {
                     return newValues;
                 }
-                StringBuffer valueStr = new StringBuffer();
-                for (int i = 0; i < len; i++) {
-                    if (i == 0) {
-                        valueStr.append(newValues[i]);
-                    } else {
-                        valueStr.append(' ').append(newValues[i]);
-                    }
-                }
+
                 Object[] params = {
-                      valueStr.toString(),
-                      "null Converter"
+                    stream(newValues).collect(joining(" ")),
+                    "null Converter"
                 };
-
-                throw new ConverterException(MessageUtils.getExceptionMessage(
-                      MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
+                throw new ConverterException(getExceptionMessage(CONVERSION_ERROR_MESSAGE_ID, params));
             }
         }
 
-        assert(null != result);
-        if (elementType.isPrimitive()) {
-            for (int i = 0; i < len; i++) {
-                if (elementType.equals(Boolean.TYPE)) {
-                    Array.setBoolean(result, i,
-                                     ((Boolean) converter.getAsObject(context,
-                                                                      uiSelectMany,
-                                                                      newValues[i])));
-                } else if (elementType.equals(Byte.TYPE)) {
-                    Array.setByte(result, i,
-                                  ((Byte) converter.getAsObject(context,
-                                                                uiSelectMany,
-                                                                newValues[i])));
-                } else if (elementType.equals(Double.TYPE)) {
-                    Array.setDouble(result, i,
-                                    ((Double) converter.getAsObject(context,
-                                                                    uiSelectMany,
-                                                                    newValues[i])));
-                } else if (elementType.equals(Float.TYPE)) {
-                    Array.setFloat(result, i,
-                                   ((Float) converter.getAsObject(context,
-                                                                  uiSelectMany,
-                                                                  newValues[i])));
-                } else if (elementType.equals(Integer.TYPE)) {
-                    Array.setInt(result, i,
-                                 ((Integer) converter.getAsObject(context,
-                                                                  uiSelectMany,
-                                                                  newValues[i])));
-                } else if (elementType.equals(Character.TYPE)) {
-                    Array.setChar(result, i,
-                                  ((Character) converter.getAsObject(context,
-                                                                     uiSelectMany,
-                                                                     newValues[i])));
-                } else if (elementType.equals(Short.TYPE)) {
-                    Array.setShort(result, i,
-                                   ((Short) converter.getAsObject(context,
-                                                                  uiSelectMany,
-                                                                  newValues[i])));
-                } else if (elementType.equals(Long.TYPE)) {
-                    Array.setLong(result, i,
-                                  ((Long) converter.getAsObject(context,
-                                                                uiSelectMany,
-                                                                newValues[i])));
-                }
-            }
-        } else {
-            for (int i = 0; i < len; i++) {
-                if (logger.isLoggable(Level.FINE)) {
-                    Object converted = converter.getAsObject(context,
-                                                             uiSelectMany,
-                                                             newValues[i]);
-                    logger.fine("String value: " + newValues[i] +
-                                " converts to : " + converted);
-                }
-                Array.set(result, i, converter.getAsObject(context,
-                                                           uiSelectMany,
-                                                           newValues[i]));
+        assert (null != array);
+
+        for (int i = 0; i < length; i++) {
+            Object converted = converter.getAsObject(context, uiSelectMany, newValues[i]);
+            Array.set(array, i, converted);
+
+            if (!elementType.isPrimitive() && logger.isLoggable(Level.FINE)) {
+                logger.fine("String value: " + newValues[i] + " converts to : " + converted);
             }
         }
-        return result;
+
+        return array;
 
     }
 
+    protected Collection convertSelectManyValuesForCollection(FacesContext context,
+                                                              UISelectMany uiSelectMany,
+                                                              Class collectionType,
+                                                              String[] newValues) {
+
+        Collection collection = null;
+        Converter converter;
+        int length = (null != newValues) ? newValues.length : 0;
+
+        // See if the collectionType hint is available, if so, use that.
+        Object collectionTypeHint = uiSelectMany.getAttributes().get("collectionType");
+        if (collectionTypeHint != null) {
+            collection = createCollectionFromHint(collectionTypeHint);
+        } else {
+            // Try to get a new Collection to store the values based by trying to create a clone.
+            Collection currentValue = (Collection) uiSelectMany.getValue();
+            if (currentValue != null) {
+                collection = cloneValue(currentValue);
+            }
+
+            // No cloned instance so if the modelType happens to represent a concrete type (probably not the norm).
+            // Try to reflect a no-argument constructor and invoke if available.
+            if (collection == null) {
+                collection = createCollection(currentValue, collectionType);
+            }
+
+            // No suitable instance to work with, make our best guess based on the type.
+            if (collection == null) {
+                collection = bestGuess(collectionType, length);
+            }
+        }
+
+        // Bail out now if we have no new values, returning our oh-so-useful empty collection.
+        if (newValues == null) {
+            return collection;
+        }
+
+        // Obtain a converter.
+        converter =  uiSelectMany.getConverter();
+
+        if (converter != null) {
+            // Convert the usual way.
+            for (String newValue : newValues) {
+                Object converted = converter.getAsObject(context, uiSelectMany, newValue);
+
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("String value: " + newValue + " converts to : " + converted);
+                }
+
+                collection.add(converted);
+            }
+        } else {
+            // First collect all available object items as string.
+            SelectItemsIterator<SelectItem> iterator = new SelectItemsIterator<>(context, uiSelectMany);
+            Map<String, Object> availableItems = new HashMap<>();
+
+            while (iterator.hasNext()) {
+                SelectItem item = iterator.next();
+
+                if (item instanceof SelectItemGroup) {
+                    for (SelectItem groupItem : ((SelectItemGroup) item).getSelectItems()) {
+                        String asString = getFormattedValue(context, uiSelectMany, groupItem.getValue());
+                        availableItems.put(asString, groupItem.getValue());
+                    }
+                } else {
+                    String asString = getFormattedValue(context, uiSelectMany, item.getValue());
+                    availableItems.put(asString, item.getValue());
+                }
+            }
+
+            // Then "convert" submitted value to object based on collected available object items.
+            for (String newValue : newValues) {
+                collection.add(availableItems.containsKey(newValue) ? availableItems.get(newValue) : newValue);
+            }
+        }
+
+        return collection;
+
+    }
 
     protected boolean renderOption(FacesContext context,
                                    UIComponent component,
@@ -866,7 +836,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         // Now, write the buffered option content
         writer.write(bufferedWriter.toString());
-        
+
         writer.endElement("select");
 
     }
@@ -983,7 +953,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         if (SortedSet.class.isAssignableFrom(type)) {
             return new TreeSet();
         } else if (Queue.class.isAssignableFrom(type)) {
-           return new LinkedList(); 
+           return new LinkedList();
         } else if (Set.class.isAssignableFrom(type)) {
             return new HashSet(initialSize);
         } else {

@@ -47,7 +47,7 @@
     <parent>
         <groupId>com.sun.faces.test</groupId>
         <artifactId>pom</artifactId>
-        <version>2.3.0-m06-SNAPSHOT</version>
+        <version>2.3.0-m07-SNAPSHOT</version>
     </parent>
     <groupId>com.sun.faces.test.javaee8</groupId>
     <artifactId>pom</artifactId>
@@ -82,8 +82,10 @@
         <module>facelets</module>
         <module>xhtmlMappingToFaceletByDefault</module>
         <module>ajax</module>
+        <module>namespacedView</module>
         <module>websocket</module>
         <module>commandScript</module>
         <module>uiinput</module>
+        <module>importConstants</module>
     </modules>
 </project>

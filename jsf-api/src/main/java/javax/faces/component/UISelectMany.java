@@ -45,11 +45,12 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
 import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
 
 
 /**
@@ -95,7 +96,10 @@ import javax.faces.convert.Converter;
  * type.</p></li> 
 
  * <li class="changed_added_2_0"><p>A <code>java.util.Collection</code>.
- * Do not convert the values.</p></li>
+ * Do not convert the values. <span class="changed_modified_2_3">Instead,
+ * convert the provided set of available options to string, exactly as done
+ * during render response, and for any match with the submitted values, add
+ * the available option as object to the collection.</span></p></li>
  * </ul>
  * </blockquote>
  *
