@@ -298,6 +298,9 @@ public class RestoreViewPhase extends Phase {
      */
     private void notifyAfter(FacesContext context, Lifecycle lifecycle) {
         UIViewRoot viewRoot = context.getViewRoot();
+        if (null == viewRoot) {
+            return;
+        }
         MethodExpression afterPhase = viewRoot.getAfterPhaseListener();
         if (null != afterPhase) {
             try {
