@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -64,9 +64,9 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * This class is used to lookup {@link ResourceInfo} instances
- * and cache any that are successfully looked up to reduce the
- * computational overhead with the scanning/version checking.
+ * This class is used to lookup {@link ResourceInfo} instances and cache any
+ * that are successfully looked up to reduce the computational overhead with the
+ * scanning/version checking.
  *
  * @since 2.0
  */
@@ -77,9 +77,9 @@ public class ResourceManager {
     /**
      * {@link Pattern} for valid mime types to configure compression.
      */
-    private static final Pattern CONFIG_MIMETYPE_PATTERN =
-          Pattern.compile("[a-z-]*/[a-z0-9.\\*-]*");
-    
+    private static final Pattern CONFIG_MIMETYPE_PATTERN
+            = Pattern.compile("[a-z-]*/[a-z0-9.\\*-]*");
+
     private ResourceHelper faceletResourceHelper = new FaceletWebappResourceHelper();
 
     /**
@@ -93,8 +93,8 @@ public class ResourceManager {
     private ClasspathResourceHelper classpathHelper = new ClasspathResourceHelper();
 
     /**
-     * Cache for storing {@link ResourceInfo} instances to reduce the cost
-     * of the resource lookups.
+     * Cache for storing {@link ResourceInfo} instances to reduce the cost of
+     * the resource lookups.
      */
     private ResourceCache cache;
 
@@ -105,19 +105,17 @@ public class ResourceManager {
     private List<Pattern> compressableTypes;
 
     /**
-     * This lock is used to ensure the lookup of compressable {@link ResourceInfo}
-     * instances are atomic to prevent theading issues when writing the compressed
-     * content during a lookup.
+     * This lock is used to ensure the lookup of compressable
+     * {@link ResourceInfo} instances are atomic to prevent theading issues when
+     * writing the compressed content during a lookup.
      */
     private ReentrantLock lock = new ReentrantLock();
-
 
     // ------------------------------------------------------------ Constructors
 
     /*
      * This ctor is only ever called by test code.
      */
-
     public ResourceManager(ResourceCache cache) {
 
         this.cache = cache;
@@ -127,7 +125,7 @@ public class ResourceManager {
     }
 
     /**
-     * Constructs a new <code>ResourceManager</code>.  Note:  if the current
+     * Constructs a new <code>ResourceManager</code>. Note: if the current
      * {@link ProjectStage} is {@link ProjectStage#Development} caching or
      * {@link ResourceInfo} instances will not occur.
      */
@@ -138,10 +136,7 @@ public class ResourceManager {
 
     }
 
-
     // ------------------------------------------------------ Public Methods
-
-
     /**
      * <p>
      * Attempt to lookup a {@link ResourceInfo} based on the specified
@@ -149,46 +144,52 @@ public class ResourceManager {
      * </p>
      *
      * <p>
-     * Implementation Note:  Synchronization is necessary when looking up
-     * compressed resources.  This ensures the atomicity of the content
-     * being compressed.  As such, the cost of doing this is low as once
-     * the resource is in the cache, the lookup won't be performed again
-     * until the cache is cleared.  That said, it's not a good idea
-     * to have caching disabled in a production environment if leveraging
-     * compression.
+     * Implementation Note: Synchronization is necessary when looking up
+     * compressed resources. This ensures the atomicity of the content being
+     * compressed. As such, the cost of doing this is low as once the resource
+     * is in the cache, the lookup won't be performed again until the cache is
+     * cleared. That said, it's not a good idea to have caching disabled in a
+     * production environment if leveraging compression.
      *
-     * If the resource isn't compressable, then we don't worry about creating
-     * a few extra copies of ResourceInfo until the cache is populated.
+     * If the resource isn't compressable, then we don't worry about creating a
+     * few extra copies of ResourceInfo until the cache is populated.
      * </p>
      *
      * @param libraryName the name of the library (if any)
      * @param resourceName the name of the resource
-     * @param contentType the content type of the resource.  This will be
-     *  used to determine if the resource is compressable
+     * @param contentType the content type of the resource. This will be used to
+     * determine if the resource is compressable
      * @param ctx the {@link javax.faces.context.FacesContext} for the current
-     *  request
-     *  
+     * request
+     *
      * @return a {@link ResourceInfo} if a resource if found matching the
-     *  provided arguments, otherwise, return <code>null</code>
+     * provided arguments, otherwise, return <code>null</code>
      */
     public ResourceInfo findResource(String libraryName,
-                                     String resourceName,
-                                     String contentType,
-                                     FacesContext ctx) {
-
+            String resourceName,
+            String contentType,
+            FacesContext ctx) {
+        
         return findResource(libraryName, resourceName, contentType, false, ctx);
     }
-    
+
     public ResourceInfo findResource(String libraryName,
-                                     String resourceName,
-                                     String contentType,
-                                     boolean isViewResource,
-                                     FacesContext ctx) {
+            String resourceName,
+            String contentType,
+            boolean isViewResource,
+            FacesContext ctx) {
+
+        String localePrefix = null;
+        localePrefix = ctx.getExternalContext().getRequestParameterMap().get("loc");
+
+        if (localePrefix == null) {
+            localePrefix = getLocalePrefix(ctx);
+        }        
+
+        List<String> contracts = getResourceLibraryContracts(ctx);        
+        ResourceInfo info
+                = getFromCache(resourceName, libraryName, localePrefix, contracts);
         
-        String localePrefix = getLocalePrefix(ctx);
-        List<String> contracts = getResourceLibraryContracts(ctx);
-        ResourceInfo info =
-              getFromCache(resourceName, libraryName, localePrefix, contracts);
         if (info == null) {
             boolean compressable = isCompressable(contentType, ctx);
             if (compressable) {
@@ -197,12 +198,12 @@ public class ResourceManager {
                     info = getFromCache(resourceName, libraryName, localePrefix, contracts);
                     if (info == null) {
                         info = doLookup(libraryName,
-                                        resourceName,
-                                        localePrefix,
-                                        compressable,
-                                        isViewResource,
-                                        contracts,
-                                        ctx);
+                                resourceName,
+                                localePrefix,
+                                compressable,
+                                isViewResource,
+                                contracts,
+                                ctx);
                         if (info != null) {
                             addToCache(info, contracts);
                         }
@@ -212,13 +213,12 @@ public class ResourceManager {
                 }
             } else {
                 info = doLookup(libraryName,
-                                resourceName,
-                                localePrefix,
-                                compressable,
-                                isViewResource,
-                                contracts,
-                                ctx);
-                
+                        resourceName,
+                        localePrefix,
+                        compressable,
+                        isViewResource,
+                        contracts,
+                        ctx);                
                 if (null == info && null != contracts) {
                     // If the library name is equal to one of the contracts,
                     // assume the resource to be found is within that contract
@@ -242,16 +242,12 @@ public class ResourceManager {
                 }
             }
 
-        }
-
+        }       
         return info;
 
     }
 
-
     // ----------------------------------------------------- Private Methods
-
-
     /**
      * Attempt to look up the Resource based on the provided details.
      *
@@ -259,26 +255,26 @@ public class ResourceManager {
      * @param resourceName the name of the resource
      * @param localePrefix the locale prefix for this resource (if any)
      * @param compressable if this resource can be compressed
-     * @param isViewResource 
+     * @param isViewResource
      * @param contracts the contracts to consider
      * @param ctx the {@link javax.faces.context.FacesContext} for the current
-*  request
+     * request
      *
      * @return a {@link ResourceInfo} if a resource if found matching the
-     *  provided arguments, otherwise, return <code>null</code>
+     * provided arguments, otherwise, return <code>null</code>
      */
     private ResourceInfo doLookup(String libraryName,
-                                  String resourceName,
-                                  String localePrefix,
-                                  boolean compressable,
-                                  boolean isViewResource,
-                                  List<String> contracts,
-                                  FacesContext ctx) {
+            String resourceName,
+            String localePrefix,
+            boolean compressable,
+            boolean isViewResource,
+            List<String> contracts,
+            FacesContext ctx) {
         // loop over the contracts as described in deriveResourceIdConsideringLocalePrefixAndContracts in the spec
         LibraryInfo library = null;
         for (String contract : contracts) {
             ResourceInfo info = getResourceInfo(libraryName, resourceName, localePrefix, contract, compressable, isViewResource, ctx, library);
-            if(info != null) {
+            if (info != null) {
                 return info;
             }
         }
@@ -316,8 +312,8 @@ public class ResourceManager {
             return null;
         }
 
-        ResourceInfo info =
-              findResource(library, resourceName, localePrefix, compressable, isViewResource,ctx);
+        ResourceInfo info
+                = findResource(library, resourceName, localePrefix, compressable, isViewResource, ctx);
         if (info == null && localePrefix != null) {
             // no localized resource found, try to find a
             // resource that isn't localized
@@ -373,36 +369,31 @@ public class ResourceManager {
         }
 
     }
-    
+
     private static boolean nameContainsForbiddenSequence(String name) {
         boolean result = false;
         if (name != null) {
-        name = name.toLowerCase();
+            name = name.toLowerCase();
 
-        result = name.startsWith(".") ||
-                 name.contains("../") ||
-                 name.contains("..\\") ||
-                 name.startsWith("/") ||
-                 name.startsWith("\\") ||
-                 name.endsWith("/") ||
-
-                 name.contains("..%2f") ||
-                 name.contains("..%5c") ||
-                 name.startsWith("%2f") ||
-                 name.startsWith("%5c") ||
-                 name.endsWith("%2f") ||
-
-                 name.contains("..\\u002f") ||
-                 name.contains("..\\u005c") ||
-                 name.startsWith("\\u002f") ||
-                 name.startsWith("\\u005c") ||
-                 name.endsWith("\\u002f")
-
-                ;
+            result = name.startsWith(".")
+                    || name.contains("../")
+                    || name.contains("..\\")
+                    || name.startsWith("/")
+                    || name.startsWith("\\")
+                    || name.endsWith("/")
+                    || name.contains("..%2f")
+                    || name.contains("..%5c")
+                    || name.startsWith("%2f")
+                    || name.startsWith("%5c")
+                    || name.endsWith("%2f")
+                    || name.contains("..\\u002f")
+                    || name.contains("..\\u005c")
+                    || name.startsWith("\\u002f")
+                    || name.startsWith("\\u005c")
+                    || name.endsWith("\\u002f");
         }
         return result;
     }
-
 
     /**
      *
@@ -410,12 +401,12 @@ public class ResourceManager {
      * @param library the library name
      * @param localePrefix the Locale prefix
      * @param contracts
-     * @return the {@link ResourceInfo} from the cache or <code>null</code>
-     *  if no cached entry is found
+     * @return the {@link ResourceInfo} from the cache or <code>null</code> if
+     * no cached entry is found
      */
     private ResourceInfo getFromCache(String name,
-                                      String library,
-                                      String localePrefix, List<String> contracts) {
+            String library,
+            String localePrefix, List<String> contracts) {
 
         if (cache == null) {
             return null;
@@ -424,9 +415,9 @@ public class ResourceManager {
 
     }
 
-
     /**
      * Adds the the specified {@link ResourceInfo} to the cache.
+     *
      * @param info the @{link ResourceInfo} to add.
      * @param contracts the contracts
      */
@@ -440,16 +431,18 @@ public class ResourceManager {
     }
 
     /**
-     * <p> Attempt to lookup and return a {@link LibraryInfo} based on the
-     * specified <code>arguments</code>.
+     * <p>
+     * Attempt to lookup and return a {@link LibraryInfo} based on the specified
+     * <code>arguments</code>.
      * <p/>
-     * <p> The lookup process will first search the file system of the web
-     * application *within the resources directory*.  
-     * If the library is not found, then it processed to
-     * searching the classpath, if not found there, search from the webapp root
-     * *excluding* the resources directory.</p>
+     * <p>
+     * The lookup process will first search the file system of the web
+     * application *within the resources directory*. If the library is not
+     * found, then it processed to searching the classpath, if not found there,
+     * search from the webapp root *excluding* the resources directory.</p>
      * <p/>
-     * <p> If a library is found, this method will return a {@link
+     * <p>
+     * If a library is found, this method will return a {@link
      * LibraryInfo} instance that contains the name, version, and {@link
      * ResourceHelper}.</p>
      *
@@ -457,19 +450,20 @@ public class ResourceManager {
      * @param libraryName the library to find
      * @param localePrefix the prefix for the desired locale
      * @param contract the contract to use
-     *@param ctx         the {@link javax.faces.context.FacesContext} for the current request
-     *  @return the Library instance for the specified library
+     * @param ctx the {@link javax.faces.context.FacesContext} for the current
+     * request
+     * @return the Library instance for the specified library
      */
-     LibraryInfo findLibrary(String libraryName,
-                             String localePrefix,
-                             String contract, FacesContext ctx) {
+    LibraryInfo findLibrary(String libraryName,
+            String localePrefix,
+            String contract, FacesContext ctx) {
 
         LibraryInfo library = webappHelper.findLibrary(libraryName, localePrefix, contract, ctx);
-        
+
         if (library == null) {
             library = classpathHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         }
-        
+
         if (library == null && contract == null) {
             // FCAPUTO facelets in contracts should have been found by the webapphelper already
             library = faceletResourceHelper.findLibrary(libraryName, localePrefix, contract, ctx);
@@ -479,21 +473,24 @@ public class ResourceManager {
         return library;
     }
 
-     LibraryInfo findLibraryOnClasspathWithZipDirectoryEntryScan(String libraryName,
-                                                                 String localePrefix,
-                                                                 String contract, FacesContext ctx, boolean forceScan) {
-         return classpathHelper.findLibraryWithZipDirectoryEntryScan(libraryName, localePrefix, contract, ctx, forceScan);
-     }
+    LibraryInfo findLibraryOnClasspathWithZipDirectoryEntryScan(String libraryName,
+            String localePrefix,
+            String contract, FacesContext ctx, boolean forceScan) {
+        return classpathHelper.findLibraryWithZipDirectoryEntryScan(libraryName, localePrefix, contract, ctx, forceScan);
+    }
 
-   /**
-     * <p> Attempt to lookup and return a {@link ResourceInfo} based on the
+    /**
+     * <p>
+     * Attempt to lookup and return a {@link ResourceInfo} based on the
      * specified <code>arguments</code>.
      * <p/>
-     * <p> The lookup process will first search the file system of the web
-     * application.  If the library is not found, then it processed to
-     * searching the classpath.</p>
+     * <p>
+     * The lookup process will first search the file system of the web
+     * application. If the library is not found, then it processed to searching
+     * the classpath.</p>
      * <p/>
-     * <p> If a library is found, this method will return a {@link
+     * <p>
+     * If a library is found, this method will return a {@link
      * LibraryInfo} instance that contains the name, version, and {@link
      * ResourceHelper}.</p>
      *
@@ -501,26 +498,27 @@ public class ResourceManager {
      * @param resourceName the name of the resource
      * @param localePrefix the prefix for the desired locale
      * @param compressable <code>true</code> if the resource can be compressed
-     * @param ctx the {@link javax.faces.context.FacesContext} for the current request
+     * @param ctx the {@link javax.faces.context.FacesContext} for the current
+     * request
      *
      * @return the Library instance for the specified library
      */
     private ResourceInfo findResource(LibraryInfo library,
-                                      String resourceName,
-                                      String localePrefix,
-                                      boolean compressable,
-                                      boolean skipToFaceletResourceHelper,
-                                      FacesContext ctx) {
+            String resourceName,
+            String localePrefix,
+            boolean compressable,
+            boolean skipToFaceletResourceHelper,
+            FacesContext ctx) {
 
         if (library != null) {
             return library.getHelper().findResource(library,
-                                                    resourceName,
-                                                    localePrefix,
-                                                    compressable,
-                                                    ctx);
+                    resourceName,
+                    localePrefix,
+                    compressable,
+                    ctx);
         } else {
             ResourceInfo resource = null;
-            
+
             if (!skipToFaceletResourceHelper) {
                 resource = webappHelper.findResource(null,
                         resourceName,
@@ -530,32 +528,32 @@ public class ResourceManager {
             }
             if (resource == null && !skipToFaceletResourceHelper) {
                 resource = classpathHelper.findResource(null,
-                                                        resourceName,
-                                                        localePrefix,
-                                                        compressable, 
-                                                        ctx);
+                        resourceName,
+                        localePrefix,
+                        compressable,
+                        ctx);
             }
             if (resource == null) {
-                resource = faceletResourceHelper.findResource(library, 
-                    resourceName, 
-                    localePrefix, 
-                    compressable, 
-                    ctx);
+                resource = faceletResourceHelper.findResource(library,
+                        resourceName,
+                        localePrefix,
+                        compressable,
+                        ctx);
             }
             return resource;
         }
 
     }
-    
+
     ResourceInfo findResource(String resourceId) {
         // PENDING(fcaputo) do we need to handle contracts here?
         String libraryName = null;
         String resourceName = null;
         int end = 0, start = 0;
         if (-1 != (end = resourceId.lastIndexOf("/"))) {
-            resourceName = resourceId.substring(end+1);
+            resourceName = resourceId.substring(end + 1);
             if (-1 != (start = resourceId.lastIndexOf("/", end - 1))) {
-                libraryName = resourceId.substring(start+1, end);
+                libraryName = resourceId.substring(start + 1, end);
             } else {
                 libraryName = resourceId.substring(0, end);
             }
@@ -563,15 +561,14 @@ public class ResourceManager {
         FacesContext context = FacesContext.getCurrentInstance();
         LibraryInfo info = this.findLibrary(libraryName, null, null, context);
         ResourceInfo resourceInfo = this.findResource(info, resourceName, libraryName, true, false, context);
-        
+
         return resourceInfo;
     }
-
 
     /**
      * <p>
      * Obtains the application configured message resources for the current
-     * request locale.  If a ResourceBundle is found and contains the key
+     * request locale. If a ResourceBundle is found and contains the key
      * <code>javax.faces.resource.localePrefix</code>, use the value associated
      * with that key as the prefix for locale specific resources.
      * </p>
@@ -584,35 +581,35 @@ public class ResourceManager {
      * </p>
      *
      * @param context the {@link FacesContext} for the current request
-     * @return the localePrefix based on the current request, or <code>null</code>
-     *  if no prefix can be determined
+     * @return the localePrefix based on the current request, or
+     * <code>null</code> if no prefix can be determined
      */
     private String getLocalePrefix(FacesContext context) {
 
         String localePrefix = null;
-        String appBundleName = context.getApplication().getMessageBundle();
+        String appBundleName = context.getApplication().getMessageBundle();        
         if (null != appBundleName) {
-        	
+
             Locale locale = null;
             if (context.getViewRoot() != null) {
-                locale = context.getViewRoot().getLocale();
+                locale = context.getViewRoot().getLocale();                
             } else {
-                locale = context.getApplication().getViewHandler().calculateLocale(context);
+                locale = context.getApplication().getViewHandler().calculateLocale(context);               
             }
-            
-                try {
-                    ResourceBundle appBundle =
-                          ResourceBundle.getBundle(appBundleName,
-                                                   locale,
-                                                   Util.getCurrentLoader(ResourceManager.class));
-                    localePrefix =
-                          appBundle
-                                .getString(ResourceHandler.LOCALE_PREFIX);
-                } catch (MissingResourceException mre) { 
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST, "Ignoring missing resource", mre);
-                    }
+
+            try {
+                ResourceBundle appBundle
+                        = ResourceBundle.getBundle(appBundleName,
+                                locale,
+                                Util.getCurrentLoader(ResourceManager.class));
+                localePrefix
+                        = appBundle
+                        .getString(ResourceHandler.LOCALE_PREFIX);
+            } catch (MissingResourceException mre) {
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST, "Ignoring missing resource", mre);
                 }
+            }
         }
         return localePrefix;
 
@@ -620,13 +617,13 @@ public class ResourceManager {
 
     private List<String> getResourceLibraryContracts(FacesContext context) {
         UIViewRoot viewRoot = context.getViewRoot();
-        if(viewRoot == null) {
+        if (viewRoot == null) {
 
-            if(context.getApplication().getResourceHandler().isResourceRequest(context)) {
+            if (context.getApplication().getResourceHandler().isResourceRequest(context)) {
                 // it is a resource request. look at the parameter con=.
 
                 String param = context.getExternalContext().getRequestParameterMap().get("con");
-                if(!nameContainsForbiddenSequence(param) && param != null && param.trim().length() > 0) {
+                if (!nameContainsForbiddenSequence(param) && param != null && param.trim().length() > 0) {
                     return Arrays.asList(param);
                 }
             }
@@ -636,25 +633,22 @@ public class ResourceManager {
         return context.getResourceLibraryContracts();
     }
 
-
     /**
      * @param contentType content-type in question
      * @param ctx the @{link FacesContext} for the current request
      * @return <code>true</code> if this resource can be compressed, otherwise
-     *  <code>false</code>
+     * <code>false</code>
      */
     private boolean isCompressable(String contentType, FacesContext ctx) {
 
         // No compression when developing.
         if (contentType == null || ctx.isProjectStage(ProjectStage.Development)) {
             return false;
-        } else {
-            if (compressableTypes != null && !compressableTypes.isEmpty()) {
-                for (Pattern p : compressableTypes) {
-                    boolean matches = p.matcher(contentType).matches();
-                    if (matches) {
-                        return true;
-                    }
+        } else if (compressableTypes != null && !compressableTypes.isEmpty()) {
+            for (Pattern p : compressableTypes) {
+                boolean matches = p.matcher(contentType).matches();
+                if (matches) {
+                    return true;
                 }
             }
         }
@@ -662,7 +656,6 @@ public class ResourceManager {
         return false;
 
     }
-
 
     /**
      * Init <code>compressableTypes</code> from the configuration.
@@ -692,8 +685,8 @@ public class ResourceManager {
                         if (LOGGER.isLoggable(Level.WARNING)) {
                             // PENDING i18n
                             LOGGER.log(Level.WARNING,
-                                       "jsf.resource.mime.type.configration.invalid",
-                                       new Object[] { pattern, pse.getPattern()});
+                                    "jsf.resource.mime.type.configration.invalid",
+                                    new Object[]{pattern, pse.getPattern()});
                         }
                     }
                 }
@@ -702,17 +695,15 @@ public class ResourceManager {
 
     }
 
-
     /**
      * @param input input mime-type pattern from the configuration
      * @return <code>true</code> if the input matches the expected pattern,
-     *  otherwise <code>false</code>
+     * otherwise <code>false</code>
      */
     private boolean isPatternValid(String input) {
 
         return (CONFIG_MIMETYPE_PATTERN.matcher(input).matches());
 
     }
-
 
 }
