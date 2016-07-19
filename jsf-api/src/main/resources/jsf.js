@@ -60,7 +60,7 @@
  */
 
 // Detect if this is already loaded, and if loaded, if it's a higher version
-if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
+if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
       (jsf.implversion && jsf.implversion >= 3))) {
 
     /**
@@ -2075,8 +2075,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * <li>If the DOM element could not be determined, throw an error.</li>
              * <li class="changed_added_2_3">If the <code>javax.faces.ViewState</code> 
              * element could not be found, throw an error.</li>
-             * <li class="changed_added_2_3">If the <code>javax.faces.ViewState</code> 
-             * element has a <code>&lt;update id="&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;</code>
+             * <li class="changed_added_2_3">If the ID of the <code>javax.faces.ViewState</code> 
+             * element has a <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;</code>
              * prefix, where &lt;SEP&gt; is the currently configured
              * <code>UINamingContainer.getSeparatorChar()</code> and
              * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; is the return from
@@ -3059,7 +3059,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
      * @throws an error if more than one unique WindowId is found.
 
-     * @function jsf.getViewState
+     * @function jsf.getClientWindow
      */
     jsf.getClientWindow = function(node) {
         var FORM = "form";
@@ -3071,7 +3071,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
          * @ignore
          */
         var getWindowIdElement = function getWindowIdElement(form) {
-            var windowIdElement = form['javax.faces.ClientWindow'];
+            var windowIdElement = form[WIN_ID];
 
             if (windowIdElement) {
                 return windowIdElement;
@@ -3079,7 +3079,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var formElements = form.elements;
                 for (var i = 0, length = formElements.length; i < length; i++) {
                     var formElement = formElements[i];
-                    if (formElement.name && (formElement.name.indexOf('javax.faces.ClientWindow') >= 0)) {
+                    if (formElement.name && (formElement.name.indexOf(WIN_ID) >= 0)) {
                         return formElement;
                     }
                 }
