@@ -162,9 +162,7 @@ public class WebsocketSessionManager {
 
             for (Session session : sessions) {
                 if (session.isOpen()) {
-                    synchronized(session) { // JAVASERVERFACES-4132
-                        results.add(session.getAsyncRemote().sendText(json));
-                    }
+                    send(session, json, results);
                 }
             }
 
@@ -172,6 +170,26 @@ public class WebsocketSessionManager {
         }
 
         return emptySet();
+    }
+
+    private void send(Session session, String text, Set<Future<Void>> results) {
+        if (session.isOpen()) {
+            try {
+                results.add(session.getAsyncRemote().sendText(text));
+            }
+            catch (IllegalStateException e) {
+                // Awkward workaround for Tomcat not willing to queue/synchronize asyncRemote().
+                // https://bz.apache.org/bugzilla/show_bug.cgi?id=56026
+                if (session.getClass().getName().startsWith("org.apache.tomcat.websocket.") && e.getMessage().contains("[TEXT_FULL_WRITING]")) {
+                    synchronized (session) {
+                        send(session, text, results);
+                    }
+                }
+                else {
+                    throw e;
+                }
+            }
+        }
     }
 
     /**
