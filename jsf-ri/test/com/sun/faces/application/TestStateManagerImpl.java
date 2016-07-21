@@ -284,6 +284,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         webConfig.overrideContextInitParameter(StateSavingMethod,
                                                StateManager.STATE_SAVING_METHOD_CLIENT);
         webConfig.overrideContextInitParameter(AutoCompleteOffOnViewState, false);
+        webConfig.overrideContextInitParameter(DisableClientStateEncryption, true);
 
         // recreate the RenderKit so the change is picked up.
         RenderKit rk = new RenderKitImpl();
