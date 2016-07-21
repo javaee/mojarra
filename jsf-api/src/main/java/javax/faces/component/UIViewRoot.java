@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,15 +39,6 @@
  */
 package javax.faces.component;
 
-import javax.el.MethodExpression;
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.application.ProjectStage;
-import javax.faces.component.visit.VisitResult;
-import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.webapp.FacesServlet;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,17 +46,40 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.el.MethodExpression;
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.ProjectStage;
+import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
-import javax.faces.event.*;
+import javax.faces.component.visit.VisitResult;
+import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
+import javax.faces.event.PostConstructViewMapEvent;
+import javax.faces.event.PreDestroyViewMapEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.render.ResponseStateManager;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewMetadata;
+import javax.faces.webapp.FacesServlet;
 
 /**
  * <p><strong class="changed_modified_2_0"><span
@@ -186,7 +200,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     private static final String LOCATION_IDENTIFIER_PREFIX = "javax_faces_location_";
     private static final Map<String,String> LOCATION_IDENTIFIER_MAP =
-          new HashMap<String,String>(6, 1.0f);
+          new HashMap<>(6, 1.0f);
     static {
         LOCATION_IDENTIFIER_MAP.put("head", LOCATION_IDENTIFIER_PREFIX + "HEAD");
         LOCATION_IDENTIFIER_MAP.put("form", LOCATION_IDENTIFIER_PREFIX + "FORM");
@@ -1023,6 +1037,21 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * <code>false</code>, delegate to the parent {@link
      * javax.faces.component.UIComponentBase#encodeChildren} method.</p>
      *
+     * <p class="changed_added_2_3">If this {@link UIViewRoot} is an instance of {@link NamingContainer}, then the JSF
+     * implementation must ensure that all encoded POST request parameter names are prefixed with
+     * {@link UIViewRoot#getContainerClientId(FacesContext)} as per rules of {@link UIComponent#getClientId(FacesContext)}.
+     * This also covers all predefined POST request parameters which are listed below:</p>
+     * <ul class="changed_added_2_3">
+     * <li>{@link ResponseStateManager#VIEW_STATE_PARAM}</li>
+     * <li>{@link ResponseStateManager.CLIENT_WINDOW_PARAM}</li>
+     * <li>{@link ResponseStateManager.RENDER_KIT_ID_PARAM}</li>
+     * <li>{@link ClientBehaviorContext.BEHAVIOR_SOURCE_PARAM_NAME}</li>
+     * <li>{@link ClientBehaviorContext.BEHAVIOR_EVENT_PARAM_NAME}</li>
+     * <li>{@link PartialViewContext.PARTIAL_EVENT_PARAM_NAME}</li>
+     * <li>{@link PartialViewContext.PARTIAL_EXECUTE_PARAM_NAME}</li>
+     * <li>{@link PartialViewContext.PARTIAL_RENDER_PARAM_NAME}</li>
+     * <li>{@link PartialViewContext.RESET_VALUES_PARAM_NAME}</li>
+     * </ul>
      * @since 2.0
      */
     @Override

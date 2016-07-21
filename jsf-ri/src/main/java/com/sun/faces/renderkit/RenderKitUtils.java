@@ -178,6 +178,9 @@ public class RenderKitUtils {
     protected static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
     
 
+    /**
+     * @see UIViewRoot#encodeChildren(FacesContext)
+     */
     public enum PredefinedPostbackParameter {
 
         VIEW_STATE_PARAM(ResponseStateManager.VIEW_STATE_PARAM),
