@@ -74,7 +74,7 @@ public class Spec1424IT {
     }
 
     public void testImportConstants() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "importConstants.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "spec1424.xhtml");
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.getHtmlElementById("result").asText().equals(System.getProperty("webapp.partialStateSaving")));
         assertTrue(page.getHtmlElementById("results").asText().equals("{ACCEPT=ACCEPT, COMPLETE=COMPLETE, REJECT=REJECT}"));

@@ -66,7 +66,7 @@ public class Spec1412IT {
     public void testSpec1412() throws Exception {
         webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
 
-        HtmlPage page = webClient.getPage(webUrl + "evalScripts.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "spec1412.xhtml");
         assertTrue(!page.asText().contains("Success!"));
 
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:button");

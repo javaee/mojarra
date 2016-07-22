@@ -3,7 +3,7 @@ package com.sun.faces.test.javaee8.commandScript;
 import javax.enterprise.inject.Model;
 
 @Model
-public class CommandScriptBean {
+public class Spec613 {
 
     private String result;
     

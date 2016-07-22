@@ -9,9 +9,9 @@
     </h:head>
     <h:body>
         <h:form>
-            <h:commandScript name="foo" autorun="true" action="#{commandScriptBean.setResult('foo')}" render=":result" />
-            <h:commandScript name="bar" action="#{commandScriptBean.setResult('bar')}" render=":result" />
+            <h:commandScript name="foo" autorun="true" action="#{spec613.setResult('foo')}" render=":result" />
+            <h:commandScript name="bar" action="#{spec613.setResult('bar')}" render=":result" />
         </h:form>
-        <h:outputText id="result" value="#{commandScriptBean.result}" />
+        <h:outputText id="result" value="#{spec613.result}" />
     </h:body>
 </html>

@@ -70,10 +70,10 @@ public class Issue4167IT {
     public void test() throws Exception {
         webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
 
-        testImportConstants();
+        testIssue4167();
     }
 
-    public void testImportConstants() throws Exception {
+    public void testIssue4167() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "issue4167.xhtml");
 
         assertTrue(page.getHtmlElementById("result1").asText().isEmpty());

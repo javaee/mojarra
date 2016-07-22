@@ -74,7 +74,7 @@ public class Spec613IT {
     }
 
     public void testCommandScript() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "commandScript.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "spec613.xhtml");
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.getWebResponse().getContentAsString().contains(">var foo=function(o){"));
         assertTrue(page.getHtmlElementById("result").asText().equals("foo"));

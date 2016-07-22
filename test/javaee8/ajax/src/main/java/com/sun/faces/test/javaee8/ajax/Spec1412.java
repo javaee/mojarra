@@ -45,7 +45,7 @@ import javax.enterprise.inject.Model;
 import javax.faces.context.FacesContext;
 
 @Model
-public class EvalScriptsBean {
+public class Spec1412 {
 
     public void addEvalScripts() {
         List<String> evalScripts = FacesContext.getCurrentInstance().getPartialViewContext().getEvalScripts();
