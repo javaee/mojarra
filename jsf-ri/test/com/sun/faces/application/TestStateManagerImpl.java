@@ -62,6 +62,7 @@ import com.sun.faces.util.Util;
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableClientStateEncryption;
 import com.sun.faces.context.FacesContextImpl;
 import org.apache.cactus.WebRequest;
 
