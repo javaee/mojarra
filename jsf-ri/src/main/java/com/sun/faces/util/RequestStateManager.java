@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,20 +40,21 @@
 
 package com.sun.faces.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
 import com.sun.faces.RIConstants;
-
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * <p>
  * This helper class is used a central location for per-request state
  * that is needed by Mojarra.  This class leverages FacesContext.getAttributes()
  * which as added in 2.0 instead of the request scope to prevent the unecessary
- * triggering of ServletREquestAttributeListeners.
+ * triggering of ServletRequestAttributeListeners.
  * </p>
  */
 public class RequestStateManager {
@@ -63,42 +64,42 @@ public class RequestStateManager {
      * after the closing f:view.
      */
     public static final String AFTER_VIEW_CONTENT =
-          RIConstants.FACES_PREFIX + "AFTER_VIEW_CONTENT";
+        RIConstants.FACES_PREFIX + "AFTER_VIEW_CONTENT";
 
     /**
      * Attribute describing the current ELResolver chain type (either JSP
      * or Faces)
      */
     public static final String EL_RESOLVER_CHAIN_TYPE_NAME =
-          RIConstants.FACES_PREFIX + "ELResolverChainType";
+        RIConstants.FACES_PREFIX + "ELResolverChainType";
 
     /**
      * Attribute indicating the current component being processed.
      * This will be used when generating bytecode for custom converters.
      */
     public static final String TARGET_COMPONENT_ATTRIBUTE_NAME =
-          RIConstants.FACES_PREFIX + "ComponentForValue";    
+        RIConstants.FACES_PREFIX + "ComponentForValue";    
 
     /**
      * Attribute defining the {@link javax.faces.render.RenderKit} being used
      * for this request.
      */
     public static final String RENDER_KIT_IMPL_REQ =
-          RIConstants.FACES_PREFIX + "renderKitImplForRequest";
+        RIConstants.FACES_PREFIX + "renderKitImplForRequest";
 
     /**
      * This attribute is used by the StateMangaer during restore view.
      * The values are stored in the request for later use.
      */
     public static final String LOGICAL_VIEW_MAP =
-          RIConstants.FACES_PREFIX + "logicalViewMap";
+        RIConstants.FACES_PREFIX + "logicalViewMap";
 
     /**
      * This attribute is used by the StateMangaer during restore view.
      * The values are stored in the request for later use.
      */
     public static final String ACTUAL_VIEW_MAP =
-          RIConstants.FACES_PREFIX + "actualViewMap";
+        RIConstants.FACES_PREFIX + "actualViewMap";
 
     /**
      * This attribute is used by the loadBundle tag for tracking views/subviews
@@ -106,14 +107,14 @@ public class RequestStateManager {
      * enabled).
      */
     public static final String VIEWTAG_STACK_ATTR_NAME =
-          RIConstants.FACES_PREFIX + "taglib.jsf_core.VIEWTAG_STACK";
+        RIConstants.FACES_PREFIX + "taglib.jsf_core.VIEWTAG_STACK";
 
     /**
      * Attribute to store the {@link javax.faces.webapp.FacesServlet} path of
      * the original request.
      */
     public static final String INVOCATION_PATH =
-          RIConstants.FACES_PREFIX + "INVOCATION_PATH";
+        RIConstants.FACES_PREFIX + "INVOCATION_PATH";
 
     /**
      * This attribute protects against infinite loops on expressions that
@@ -121,14 +122,14 @@ public class RequestStateManager {
      * VariableResolver.
      */
     public static final String REENTRANT_GUARD =
-          RIConstants.FACES_PREFIX + "LegacyVariableResolver";
+        RIConstants.FACES_PREFIX + "LegacyVariableResolver";
 
     /**
      * Leveraged by the RequestStateManager to allow deprecated ResponseStateManager
      * methods to continue to work if called.
      */
     public static final String FACES_VIEW_STATE =
-          "com.sun.faces.FACES_VIEW_STATE";
+        "com.sun.faces.FACES_VIEW_STATE";
 
 
     /**
@@ -137,41 +138,45 @@ public class RequestStateManager {
      * with this key.
      */
     public static final String RESOURCE_REQUEST =
-          "com.sun.faces.RESOURCE_REQUEST";
+        "com.sun.faces.RESOURCE_REQUEST";
 
     /**
      * Used to store the FaceletFactory as other components may need to
      * use it during their processing. 
      */
     public static final String FACELET_FACTORY =
-          "com.sun.faces.FACELET_FACTORY";
+        "com.sun.faces.FACELET_FACTORY";
 
     /**
-     * Used to indicate whether or not jsf.js has already be rendered.
+     * Used to indicate whether or not jsf.js has already been installed.
      */
     public static final String SCRIPT_STATE =
-          "com.sun.faces.SCRIPT_STATE";
-
+        "com.sun.faces.SCRIPT_STATE";
 
     /**
      * Used to communicate which validators have been disabled for a particular
      * nesting level within a view.
      */
     public static final String DISABLED_VALIDATORS =
-          "com.sun.faces.DISABLED_VALIDATORS";
-
+        "com.sun.faces.DISABLED_VALIDATORS";
 
     /**
      * Used to store the Set of ResourceDependency annotations that have
      * been processed.
      */
     public static final String PROCESSED_RESOURCE_DEPENDENCIES =
-          "com.sun.faces.PROCESSED_RESOURCE_DEPENDENCIES";
+        "com.sun.faces.PROCESSED_RESOURCE_DEPENDENCIES";
 
+    /**
+     * Used to store the Set of resource dependencies that have been rendered.
+     */
+    public static final String RENDERED_RESOURCE_DEPENDENCIES =
+        ResourceHandler.RESOURCE_IDENTIFIER;
 
     private static final String[] RENDER_RESPONSE = {
-          SCRIPT_STATE,
-          PROCESSED_RESOURCE_DEPENDENCIES
+        SCRIPT_STATE,
+        PROCESSED_RESOURCE_DEPENDENCIES,
+        RENDERED_RESOURCE_DEPENDENCIES
     };
 
     /**
@@ -294,11 +299,11 @@ public class RequestStateManager {
      * @return the Map from the request containing the implementation specific
      *  attributes needed for processing
      */
+    @SuppressWarnings("unchecked")
     public static Map<String,Object> getStateMap(FacesContext ctx) {
 
         assert (ctx != null); // all callers guard against a null context
         Map<Object,Object> contextMap = ctx.getAttributes();
-        //noinspection unchecked
         Map<String,Object> reqState = (Map<String,Object>) contextMap.get(KEY);
         if (reqState == null) {
             reqState = new HashMap<>();

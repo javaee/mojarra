@@ -110,7 +110,7 @@ public class CommandScriptRenderer extends HtmlBasicRenderer {
             throw new IllegalArgumentException("commandScript ID " + clientId + " has an illegal name: '" + name + "'");
         }
 
-        RenderKitUtils.renderJsfJs(context);
+        RenderKitUtils.renderJsfJsIfNecessary(context);
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);

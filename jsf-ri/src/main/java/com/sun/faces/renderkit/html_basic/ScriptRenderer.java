@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,114 +40,36 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.config.WebConfiguration;
 import java.io.IOException;
-import java.util.Map;
-import javax.faces.application.FacesMessage;
-import javax.faces.application.ProjectStage;
-import javax.faces.application.Resource;
+
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 /**
- * <p>This <code>Renderer</code> handles the rendering of external <code>script</code>
- * references.</p>
+ * <p>This <code>Renderer</code> handles the rendering of <code>script</code> references.</p>
  */
 public class ScriptRenderer extends ScriptStyleBaseRenderer {
-    
-    
+
     @Override
-    protected void startElement(ResponseWriter writer, UIComponent component) throws IOException {
+    protected void startInlineElement(ResponseWriter writer, UIComponent component) throws IOException {
         writer.startElement("script", component);
         writer.writeAttribute("type", "text/javascript", "type");
     }
-    
+
     @Override
-    protected void endElement(ResponseWriter writer) throws IOException {
+    protected void endInlineElement(ResponseWriter writer, UIComponent component) throws IOException {
         writer.endElement("script");
     }
 
     @Override
-    public void encodeEnd(FacesContext context, UIComponent component)
-          throws IOException {
-
-        Map<String,Object> attributes = component.getAttributes();
-        Map<Object, Object> contextMap = context.getAttributes();
-
-        String name = (String) attributes.get("name");
-        String library = (String) attributes.get("library");
-
-        String key = name + library;
-        
-        if (null == name) {
-            return;
-        }
-        
-        // Ensure this script is not rendered more than once per request
-        if (contextMap.containsKey(key)) {
-            return;
-        }
-        contextMap.put(key, Boolean.TRUE);
-
-        // Special case of scripts that have query strings
-        // These scripts actually use their query strings internally, not externally
-        // so we don't need the resource to know about them
-        int queryPos = name.indexOf("?");
-        String query = null;
-        if (queryPos > -1 && name.length() > queryPos) {
-            query = name.substring(queryPos+1);
-            name = name.substring(0,queryPos);
-        }
-
-
-        Resource resource = context.getApplication().getResourceHandler()
-              .createResource(name, library);
-
-        ResponseWriter writer = context.getResponseWriter();
-        this.startElement(writer, component);
-
-        String resourceSrc = "RES_NOT_FOUND";
-        
-        WebConfiguration webConfig = WebConfiguration.getInstance();
-        
-        if (library == null && name != null && 
-                name.startsWith(webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppContractsDirectory))) {
-            
-            if (context.isProjectStage(ProjectStage.Development)) {
-            
-            String msg = "Illegal path, direct contract references are not allowed: " + name;
-            context.addMessage(component.getClientId(context),
-                               new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                msg,
-                                                msg));  
-            }
-            resource = null;
-        } 
-        
-        if (resource == null) {
-            
-            if (context.isProjectStage(ProjectStage.Development)) {
-                String msg = "Unable to find resource " + (library == null ? "" : library + ", ") + name;
-                context.addMessage(component.getClientId(context),
-                               new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                msg,
-                                                msg));
-            }
-            
-        } else {
-            resourceSrc = resource.getRequestPath();
-            if (query != null) {
-                resourceSrc = resourceSrc +
-                        ((resourceSrc.indexOf("?") > -1) ? "&amp;" : "?") +
-                        query;
-            }
-            resourceSrc = context.getExternalContext().encodeResourceURL(resourceSrc);
-        }
-        
-        writer.writeURIAttribute("src", resourceSrc, "src");
-        this.endElement(writer);
-        super.encodeEnd(context, component);
+    protected void startExternalElement(ResponseWriter writer, UIComponent component) throws IOException {
+        startInlineElement(writer, component);
     }
-    
+
+    @Override
+    protected void endExternalElement(ResponseWriter writer, UIComponent component, String resourceUrl) throws IOException {
+        writer.writeURIAttribute("src", resourceUrl, "src");
+        endInlineElement(writer, component);
+    }
+
 }

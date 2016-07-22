@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -50,20 +50,19 @@ import java.util.logging.Level;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 
 
 /**
- * <B>CommandLinkRenderer</B> is a class that renders the current value of
+ * <b>CommandLinkRenderer</b> is a class that renders the current value of
  * <code>UICommand<code> as a HyperLink that acts like a Button.
  */
 
@@ -72,9 +71,6 @@ public class CommandLinkRenderer extends LinkRenderer {
     private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.COMMANDLINK);
 
-
-    private static final String SCRIPT_STATE = RIConstants.FACES_PREFIX +
-                                               "scriptState";
 
     // ---------------------------------------------------------- Public Methods
 
@@ -118,7 +114,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         if (componentDisabled) {
             renderAsDisabled(context, component);
         } else {
-            RenderKitUtils.renderJsfJs(context);
+            RenderKitUtils.renderJsfJsIfNecessary(context);
             renderAsActive(context, component);
         }
 

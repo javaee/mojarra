@@ -132,7 +132,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
         Collection<ClientBehaviorContext.Parameter> params = getBehaviorParameters(component);
         if ( !params.isEmpty() && (type.equals("submit") || type.equals("button"))) {
-           RenderKitUtils.renderJsfJs(context);
+           RenderKitUtils.renderJsfJsIfNecessary(context);
         }
 
 

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,26 +40,29 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.FacesLogger;
-
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ListenerFor;
+import javax.faces.event.PostAddToViewEvent;
+import javax.faces.render.Renderer;
+
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>Base class for shared behavior between Script and Stylesheet renderers.
@@ -107,7 +110,7 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
 
         }
     }
-    
+
     @Override
     public final void decode(FacesContext context, UIComponent component) {
         // no-op
@@ -118,36 +121,8 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
         return true;
     }
 
-
-    /**
-     * If overridden, this method (i.e. super.encodeEnd) should be called
-     * <em>last</em> within the overridding implementation.
-     */
     @Override
-    public void encodeEnd(FacesContext context, UIComponent component)
-          throws IOException {
-
-        // Remove the key to prevent issues with state saving...
-        String ccID = (String) component.getAttributes().get(COMP_KEY);
-        if (ccID != null) {
-            // the first pop maps to the component we're rendering.
-            // the second pop maps to the composite component that was pushed
-            // in this renderer's encodeBegin implementation.
-            // re-push the current component to reset the original context
-            component.popComponentFromEL(context);
-            component.popComponentFromEL(context);
-            component.pushComponentToEL(context, component);
-        }
-    }
-
-
-    /**
-     * If overridden, this method (i.e. super.encodeBegin) should be called
-     * <em>first</em> within the overridding implementation.
-     */
-    @Override
-    public void encodeBegin(FacesContext context, UIComponent component)
-          throws IOException {
+    public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
 
         String ccID = (String) component.getAttributes().get(COMP_KEY);
         if (null != ccID) {
@@ -174,7 +149,120 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
         }
 
     }
-    
+
+    @Override
+    public final void encodeChildren(FacesContext context, UIComponent component) throws IOException {
+        Map<String,Object> attributes = component.getAttributes();
+
+        String name = (String) attributes.get("name");
+        int childCount = component.getChildCount();
+        boolean renderChildren = (0 < childCount);
+
+        // If we have no "name" attribute...
+        if (null == name) {
+            // and no child content...
+            if (0 == childCount) {
+                // this is user error, so put up a message if desired
+                if (context.isProjectStage(ProjectStage.Development)) {
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                            "outputScript or outputStylesheet with no library, no name, and no body content",
+                            "Is body content intended?");
+                    context.addMessage(component.getClientId(context), message);
+                }
+                // We have no children, but don't bother with the method 
+                // invocation anyway.
+                renderChildren = false;
+            }            
+        } else if (0 < childCount) {
+            // If we have a "name" and also have child content, ignore
+            // the child content and log a message.
+            if (logger.isLoggable(Level.INFO)) {
+                logger.info("outputScript or outputStylesheet with name attribute and nested content. Ignoring nested content.");
+            }
+            renderChildren = false;
+        }
+
+        if (renderChildren) {
+            ResponseWriter writer = context.getResponseWriter();
+            startInlineElement(writer, component);
+            super.encodeChildren(context, component);
+            endInlineElement(writer, component);
+        }
+        
+    }
+
+    @Override
+    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
+        Map<String,Object> attributes = component.getAttributes();
+        String name = (String) attributes.get("name");
+
+        if (null == name) {
+            return;
+        }
+
+        // Special case of resource names that have query strings.
+        // These resources actually use their query strings internally, not externally, so we don't need the resource to know about them.
+        int queryPos = name.indexOf("?");
+        String query = null;
+        if (queryPos > -1 && name.length() > queryPos) {
+            query = name.substring(queryPos + 1);
+            name = name.substring(0, queryPos);
+        }
+
+        String library = (String) attributes.get("library");
+
+        // Ensure this resource is not rendered more than once per request.
+        ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
+        if (resourceHandler.isResourceRendered(context, name, library)) {
+            return;
+        }
+
+        Resource resource = resourceHandler.createResource(name, library);
+        String resourceUrl = "RES_NOT_FOUND";
+
+        ResponseWriter writer = context.getResponseWriter();
+        this.startExternalElement(writer, component);
+
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+
+        if (library == null && name != null && name.startsWith(webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppContractsDirectory))) {
+            if (context.isProjectStage(ProjectStage.Development)) {
+                String msg = "Illegal path, direct contract references are not allowed: " + name;
+                context.addMessage(component.getClientId(context), new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));  
+            }
+            resource = null;
+        } 
+        
+        if (resource == null) {
+            if (context.isProjectStage(ProjectStage.Development)) {
+                String msg = "Unable to find resource " + (library == null ? "" : library + ", ") + name;
+                context.addMessage(component.getClientId(context), new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+            }
+        } else {
+            resourceUrl = resource.getRequestPath();
+            if (query != null) {
+                resourceUrl = resourceUrl + ((resourceUrl.indexOf("?") > -1) ? "&amp;" : "?") + query;
+            }
+            resourceUrl = context.getExternalContext().encodeResourceURL(resourceUrl);
+        }
+        
+        this.endExternalElement(writer, component, resourceUrl);
+        resourceHandler.markResourceRendered(context, name, library);
+
+        // Remove the key to prevent issues with state saving.
+        String ccID = (String) component.getAttributes().get(COMP_KEY);
+        if (ccID != null) {
+            // the first pop maps to the component we're rendering.
+            // the second pop maps to the composite component that was pushed
+            // in this renderer's encodeBegin implementation.
+            // re-push the current component to reset the original context
+            component.popComponentFromEL(context);
+            component.popComponentFromEL(context);
+            component.pushComponentToEL(context, component);
+        }
+    }
+
+
     private static UIComponent findComponentIgnoringNamingContainers(UIComponent base,
                                              String id,
                                              boolean checkId) {
@@ -183,8 +271,8 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
         }
         // Search through our facets and children
         UIComponent result = null;
-        for (Iterator i = base.getFacetsAndChildren(); i.hasNext();) {
-            UIComponent kid = (UIComponent) i.next();
+        for (Iterator<UIComponent> i = base.getFacetsAndChildren(); i.hasNext();) {
+            UIComponent kid = i.next();
             if (checkId && id.equals(kid.getId())) {
                 result = kid;
                 break;
@@ -200,65 +288,30 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
         return (result);
 
     }
-    
-    
-    
-        
-    @Override
-    public final void encodeChildren(FacesContext context, UIComponent component)
-          throws IOException {
-        Map<String,Object> attributes = component.getAttributes();
-
-        String name = (String) attributes.get("name");
-        int childCount = component.getChildCount();
-        boolean renderChildren = (0 < childCount);
-        
-        // If we have no "name" attribute...
-        if (null == name) {
-            // and no child content...
-            if (0 == childCount) {
-                // this is user error, so put up a message if desired
-                if (context.isProjectStage(ProjectStage.Development)) {
-                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
-                            "outputScript with no library, no name, and no body content",
-                            "Is body content intended?");
-                    context.addMessage(component.getClientId(context), message);
-                }
-                // We have no children, but don't bother with the method 
-                // invocation anyway.
-                renderChildren = false;
-            }            
-        } else if (0 < childCount) {
-            // If we have a "name" and also have child content, ignore
-            // the child content and log a message.
-        	if (logger.isLoggable(Level.INFO)) {
-        		logger.info("outputScript with \"name\" attribute and nested content.  Ignoring nested content.");
-        	}
-            renderChildren = false;
-        }
-        if (renderChildren) {
-            ResponseWriter writer = context.getResponseWriter();
-            startElement(writer, component);
-            super.encodeChildren(context, component);
-            endElement(writer);
-        }
-        
-    }
 
 
     // ------------------------------------------------------- Protected Methods
 
 
     /**
-     * <p>Allow the subclass to customize the start element content</p>
+     * <p>Allow the subclass to customize the start inline element content.</p>
      */
-    protected abstract void startElement(ResponseWriter writer, 
-                                         UIComponent component) throws IOException;
+    protected abstract void startInlineElement(ResponseWriter writer, UIComponent component) throws IOException;
     
     /**
-     * <p>Allow the subclass to customize the start element content</p>
+     * <p>Allow the subclass to customize the end inline element content.</p>
      */
-    protected abstract void endElement(ResponseWriter writer) throws IOException;
+    protected abstract void endInlineElement(ResponseWriter writer, UIComponent component) throws IOException;
+    
+    /**
+     * <p>Allow the subclass to customize the start external element content.</p>
+     */
+    protected abstract void startExternalElement(ResponseWriter writer, UIComponent component) throws IOException;
+    
+    /**
+     * <p>Allow the subclass to customize the end external element content.</p>
+     */
+    protected abstract void endExternalElement(ResponseWriter writer, UIComponent component, String resourceUrl) throws IOException;
     
     /**
      * <p>Allow a subclass to control what's a valid value for "target".

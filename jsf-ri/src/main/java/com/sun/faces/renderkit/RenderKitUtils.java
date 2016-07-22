@@ -54,7 +54,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -315,7 +314,7 @@ public class RenderKitUtils {
         Util.notNull("context", context);
         Util.notNull("component", component);
 
-        return new SelectItemsIterator(context, component);
+        return new SelectItemsIterator<>(context, component);
         
     }
 
@@ -375,6 +374,7 @@ public class RenderKitUtils {
      *   component is not a ClientBehaviorHolder
      * @throws IOException if an error occurs writing the attributes
      */
+    @SuppressWarnings("unchecked")
     public static void renderPassThruAttributes(FacesContext context,
                                                 ResponseWriter writer,
                                                 UIComponent component,
@@ -390,7 +390,6 @@ public class RenderKitUtils {
         }
 
         if (canBeOptimized(component, behaviors)) {
-            //noinspection unchecked
             List<String> setAttributes = (List<String>)
               component.getAttributes().get(ATTRIBUTES_THAT_ARE_SET_KEY);
             if (setAttributes != null) {
@@ -425,7 +424,7 @@ public class RenderKitUtils {
         final Object userHandler = component.getAttributes().get(handlerName);
         String behaviorEventName = "valueChange";
         if (component instanceof ClientBehaviorHolder) {
-            Map behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
+            Map<?, ?> behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
             if (null != behaviors && behaviors.containsKey("change")) {
                 behaviorEventName = "change";
             }
@@ -458,7 +457,7 @@ public class RenderKitUtils {
         final Object userHandler = component.getAttributes().get(handlerName);
         String behaviorEventName = "valueChange";
         if (component instanceof ClientBehaviorHolder) {
-            Map behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
+            Map<?, ?> behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
             if (null != behaviors && behaviors.containsKey("click")) {
                 behaviorEventName = "click";
             }
@@ -607,13 +606,13 @@ public class RenderKitUtils {
      */
     public static void renderXHTMLStyleBooleanAttributes(ResponseWriter writer,
                                                          UIComponent component,
-                                                         List excludedAttributes)
+                                                         List<String> excludedAttributes)
         throws IOException {
 
         assert (writer != null);
         assert (component != null);
 
-        Map attrMap = component.getAttributes();
+        Map<?, ?> attrMap = component.getAttributes();
         for (String attrName : BOOLEAN_ATTRIBUTES) {
             if (isExcludedAttribute(attrName, excludedAttributes)) {
                 continue;
@@ -908,7 +907,7 @@ public class RenderKitUtils {
      * @param excludedAttributes the list of attribute names that are to be excluded from rendering
      * @return <code>true</code> if the attribute name is not in the exclude list.
      */
-    private static boolean isExcludedAttribute(String attributeName, List excludedAttributes) {
+    private static boolean isExcludedAttribute(String attributeName, List<String> excludedAttributes) {
         if (null == excludedAttributes) {
             return false;
         }
@@ -1153,6 +1152,9 @@ public class RenderKitUtils {
         return origIdentifier.replace("-", "$_");
     }
 
+    private static final String JSF_SCRIPT_RESOURCE_NAME = "jsf.js";
+    private static final String JSF_SCRIPT_LIBRARY_NAME = "javax.faces";
+    
     /**
      * <p>Only install the jsf.js resource if it doesn't exist.
      * The resource component will be installed with the target "head".
@@ -1160,27 +1162,20 @@ public class RenderKitUtils {
      */
     public static void installJsfJsIfNecessary(FacesContext context) {
 
-        if (hasScriptBeenRendered(context)) {
-            // Already included, return
+        if (isJsfJsInstalled(context)) {
             return;
         }
 
-        final String name = "jsf.js";
-        final String library = "javax.faces";
-
-        if (hasResourceBeenInstalled(context, name, library)) {
-            setScriptAsRendered(context);
+        ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
+        if (resourceHandler.isResourceRendered(context, JSF_SCRIPT_RESOURCE_NAME, JSF_SCRIPT_LIBRARY_NAME)) {
             return;
         }
 
         UIOutput output = new UIOutput();
         output.setRendererType("javax.faces.resource.Script");
-        output.getAttributes().put("name", name);
-        output.getAttributes().put("library", library);
+        output.getAttributes().put("name", JSF_SCRIPT_RESOURCE_NAME);
+        output.getAttributes().put("library", JSF_SCRIPT_LIBRARY_NAME);
         context.getViewRoot().addComponentResource(context, output, "head");
-
-        // Set the context to record script as included
-        setScriptAsRendered(context);
     }
 
     /**
@@ -1189,25 +1184,19 @@ public class RenderKitUtils {
      * @param context the <code>FacesContext</code> for the current request
      * @throws java.io.IOException if an error occurs writing to the response
      */
-    public static void renderJsfJs(FacesContext context) throws IOException {
+    public static void renderJsfJsIfNecessary(FacesContext context) throws IOException {
 
-
-        if (hasScriptBeenRendered(context)) {
-            // Already included, return
+        if (isJsfJsInstalled(context)) {
             return;
         }
 
-        final String name = "jsf.js";
-        final String library = "javax.faces";
-
-        if (hasResourceBeenInstalled(context, name, library)) {
-            setScriptAsRendered(context);
+        ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
+        if (resourceHandler.isResourceRendered(context, JSF_SCRIPT_RESOURCE_NAME, JSF_SCRIPT_LIBRARY_NAME)) {
             return;
         }
-        // Since we've now determined that it's not in the page, we need to add it.
 
-        ResourceHandler handler = context.getApplication().getResourceHandler();
-        Resource resource = handler.createResource(name, library);
+        // Since we've now determined that it's not in the page, we need to manually render it.
+        Resource resource = resourceHandler.createResource(JSF_SCRIPT_RESOURCE_NAME, JSF_SCRIPT_LIBRARY_NAME);
         ResponseWriter writer = context.getResponseWriter();
         writer.write('\n');
         writer.startElement("script", null);
@@ -1217,49 +1206,31 @@ public class RenderKitUtils {
         writer.append('\r');
         writer.append('\n');
 
-        // Set the context to record script as included
-        setScriptAsRendered(context);
+        resourceHandler.markResourceRendered(context, JSF_SCRIPT_RESOURCE_NAME, JSF_SCRIPT_LIBRARY_NAME);
     }
 
 
-    public static boolean hasResourceBeenInstalled(FacesContext ctx,
-                                                   String name,
-                                                   String library) {
+    public static boolean isJsfJsInstalled(FacesContext context) {
 
-        UIViewRoot viewRoot = ctx.getViewRoot();
-        ListIterator iter = (viewRoot.getComponentResources(ctx, "head")).listIterator();
-        while (iter.hasNext()) {
-            UIComponent resource = (UIComponent)iter.next();
-            String rname = (String)resource.getAttributes().get("name");
-            String rlibrary = (String)resource.getAttributes().get("library");
-            if (name.equals(rname) && library.equals(rlibrary)) {
-                // Set the context to record script as included
-                return true;
-            }
+        if (RequestStateManager.containsKey(context, RequestStateManager.SCRIPT_STATE)) {
+            return true;
         }
-        iter = (viewRoot.getComponentResources(ctx, "body")).listIterator();
-        while (iter.hasNext()) {
-            UIComponent resource = (UIComponent)iter.next();
-            String rname = (String)resource.getAttributes().get("name");
-            String rlibrary = (String)resource.getAttributes().get("library");
-            if (name.equals(rname) && library.equals(rlibrary)) {
-                // Set the context to record script as included
-                return true;
-            }
-        }
-        iter = (viewRoot.getComponentResources(ctx, "form")).listIterator();
-        while (iter.hasNext()) {
-            UIComponent resource = (UIComponent)iter.next();
-            String rname = (String)resource.getAttributes().get("name");
-            String rlibrary = (String)resource.getAttributes().get("library");
-            if (name.equals(rname) && library.equals(rlibrary)) {
-                // Set the context to record script as included
-                return true;
+
+        UIViewRoot viewRoot = context.getViewRoot();
+
+        for (String target : new String[] { "head", "body", "form" }) {
+            for (UIComponent resource : viewRoot.getComponentResources(context, target)) {
+                Object name = resource.getAttributes().get("name");
+                Object library = resource.getAttributes().get("library");
+
+                if (JSF_SCRIPT_RESOURCE_NAME.equals(name) && JSF_SCRIPT_LIBRARY_NAME.equals(library)) {
+                    RequestStateManager.set(context, RequestStateManager.SCRIPT_STATE, true);
+                    return true;
+                }
             }
         }
 
         return false;
-
     }
 
 
@@ -1426,33 +1397,6 @@ public class RenderKitUtils {
         }
 
         return null;
-    }
-    
-    /**
-     * @param context the <code>FacesContext</code> for the current request
-     *
-     * @return <code>true</code> If the <code>add/remove</code> javascript
-     *         has been rendered, otherwise <code>false</code>
-     */
-    public static boolean hasScriptBeenRendered(FacesContext context) {
-
-        return RequestStateManager.containsKey(context, RequestStateManager.SCRIPT_STATE);
-
-    }
-
-
-    /**
-     * <p>Set a flag to indicate that the <code>add/remove</code> javascript
-     * has been rendered for the current form.
-     *
-     * @param context the <code>FacesContext</code> of the current request
-     */
-    public static void setScriptAsRendered(FacesContext context) {
-
-        RequestStateManager.set(context,
-                                RequestStateManager.SCRIPT_STATE,
-                                Boolean.TRUE);
-
     }
 
 
