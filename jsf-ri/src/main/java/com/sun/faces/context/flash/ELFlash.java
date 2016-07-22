@@ -40,13 +40,9 @@
 
 package com.sun.faces.context.flash;
 
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceAlwaysWriteFlashCookie;
-import com.sun.faces.facelets.tag.ui.UIDebug;
-import com.sun.faces.util.ByteArrayGuardAESCTR;
-import com.sun.faces.util.FacesLogger;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -64,6 +60,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -76,6 +73,12 @@ import javax.faces.event.PreClearFlashEvent;
 import javax.faces.event.PreRemoveFlashValueEvent;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.facelets.tag.ui.UIDebug;
+import com.sun.faces.util.ByteArrayGuardAESCTR;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>How this implementation works</p>
@@ -596,7 +599,7 @@ public class ELFlash extends Flash {
             if (null == (toKeep = requestMap.remove(key))) {
                 FlashInfo flashInfo = null;
                 if (null != (flashInfo = flashManager.getPreviousRequestFlashInfo())) {
-                    toKeep = flashInfo.getFlashMap().remove(key);
+                    toKeep = flashInfo.getFlashMap().get(key);
                 }
             }
 
@@ -1294,12 +1297,10 @@ public class ELFlash extends Flash {
             PreviousNextFlashInfoManager result = new PreviousNextFlashInfoManager(guard);
             result.innerMap = Collections.emptyMap();
             if (null != previousRequestFlashInfo) {
-                result.previousRequestFlashInfo = (FlashInfo)
-                     this.previousRequestFlashInfo.copyWithoutInnerMap();
+                result.previousRequestFlashInfo = this.previousRequestFlashInfo.copyWithoutInnerMap();
             }
             if (null != nextRequestFlashInfo) {
-                result.nextRequestFlashInfo = (FlashInfo)
-                     this.nextRequestFlashInfo.copyWithoutInnerMap();
+                result.nextRequestFlashInfo = this.nextRequestFlashInfo.copyWithoutInnerMap();
             }
             result.incomingCookieCameFromRedirect = this.incomingCookieCameFromRedirect;
 
