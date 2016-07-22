@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,8 @@
 package javax.faces.application;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.faces.context.FacesContext;
 
@@ -622,7 +624,7 @@ public abstract class ResourceHandler {
         if (null == url) {
             throw new NullPointerException("null url");
         }
-        result = url.contains(ResourceHandler.RESOURCE_IDENTIFIER);
+        result = url.contains(RESOURCE_IDENTIFIER);
         
         return result;
         
@@ -669,6 +671,42 @@ public abstract class ResourceHandler {
      */
     
     public abstract String getRendererTypeForResourceName(String resourceName);
-    
+
+    /**
+     * <p class="changed_added_2_3">
+     * Mark the resource as identified by given resource and library name as rendered. The default implementation must
+     * ensure that {@link #isResourceRendered(FacesContext, String, String)} will return <code>true</code> when the 
+     * resource has already been rendered during the render response phase of the current view.
+     * </p>
+     * @param context The {@link FacesContext} for this request.
+     * @param resourceName The name of the resource.
+     * @param libraryName The name of the library in which the resource resides, may be <code>null</code>.
+     * @since 2.3
+     */
+    @SuppressWarnings("unchecked")
+    public void markResourceRendered(FacesContext context, String resourceName, String libraryName) {
+        String resourceIdentifier = libraryName + ":" + resourceName;
+        Set<String> resourceIdentifiers = (Set<String>) context.getAttributes().computeIfAbsent(RESOURCE_IDENTIFIER, k -> new HashSet<>());
+        resourceIdentifiers.add(resourceIdentifier);
+    }
+
+    /**
+     * <p class="changed_added_2_3">
+     * Returns whether the resource as identified by given resource and library name has been rendered. The default
+     * implementation must return <code>true</code> when the resource has been marked as rendered via
+     * {@link #markResourceRendered(FacesContext, String, String)} during the render response phase of the current view.
+     * </p>
+     * @param context The {@link FacesContext} for this request.
+     * @param resourceName The name of the resource.
+     * @param libraryName The name of the library in which this resource resides, may be <code>null</code>.
+     * @return Whether the resource as identified by given resource and library name has been rendered.
+     * @since 2.3
+     */
+    @SuppressWarnings("unchecked")
+    public boolean isResourceRendered(FacesContext context, String resourceName, String libraryName) {
+        String resourceIdentifier = libraryName + ":" + resourceName;
+        Set<String> resourceIdentifiers = (Set<String>) context.getAttributes().get(RESOURCE_IDENTIFIER);
+        return resourceIdentifiers != null && resourceIdentifiers.contains(resourceIdentifier);
+    }
 
 }

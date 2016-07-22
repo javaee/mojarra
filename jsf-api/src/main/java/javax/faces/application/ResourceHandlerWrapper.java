@@ -204,5 +204,29 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
         return getWrapped().getRendererTypeForResourceName(resourceName);
 
     }
-    
+
+    /**
+     * <p class="changed_added_2_3">The default behavior of this method
+     * is to call {@link ResourceHandler#markResourceRendered(FacesContext, String, String)} on the
+     * wrapped {@link ResourceHandler} object.</p>
+     * 
+     * @since 2.3
+     */
+    @Override
+    public void markResourceRendered(FacesContext context, String resourceName, String libraryName) {
+        getWrapped().markResourceRendered(context, resourceName, libraryName);
+    }
+
+    /**
+     * <p class="changed_added_2_3">The default behavior of this method
+     * is to call {@link ResourceHandler#isResourceRendered(FacesContext, String, String)} on the
+     * wrapped {@link ResourceHandler} object.</p>
+     * 
+     * @since 2.3
+     */
+    @Override
+    public boolean isResourceRendered(FacesContext context, String resourceName, String libraryName) {
+        return getWrapped().isResourceRendered(context, resourceName, libraryName);
+    }
+
 }
