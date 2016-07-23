@@ -2823,7 +2823,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
 
                 var partialResponse = xml.getElementsByTagName("partial-response")[0];
                 var namingContainerId = partialResponse.getAttribute("id");
-                var namingContainerPrefix = namingContainerId ? (namingContainerId + jsf.separatorchar) : "";
+                var namingContainerPrefix = namingContainerId ? namingContainerId : "";
                 var responseType = partialResponse.firstChild;
 
                 for (var i = 0; i < partialResponse.childNodes.length; i++) {

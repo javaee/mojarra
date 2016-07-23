@@ -330,12 +330,10 @@ public abstract class PartialViewContext {
      * equals {@link PhaseId#RENDER_RESPONSE}, then obtain the state by calling
      * {@link StateManager#getViewState} and write out it as an update element
      * with an identifier of
-     * <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.ViewState</code>
+     * <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;javax.faces.ViewState</code>
      * where <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;</code> is the return
      * from {@link UIViewRoot#getContainerClientId(FacesContext)} on the view
-     * from whence this state originated, and <code>&lt;SEP&gt;</code> is the
-     * currently configured
-     * {@link UINamingContainer#getSeparatorChar(FacesContext)}.</p>
+     * from whence this state originated.
      *
      * @param phaseId the {@link javax.faces.event.PhaseId} that indicates
      * the lifecycle phase the components will be processed in. 
