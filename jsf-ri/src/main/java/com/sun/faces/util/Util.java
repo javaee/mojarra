@@ -1046,7 +1046,7 @@ public class Util {
         }
 
         if (viewRoot instanceof NamingContainer) {
-            return viewRoot.getContainerClientId(context) + UINamingContainer.getSeparatorChar(context);
+            return viewRoot.getContainerClientId(context);
         } else {
             return "";
         }
@@ -1063,7 +1063,7 @@ public class Util {
         
         char sep = UINamingContainer.getSeparatorChar(context);
         UIViewRoot root = context.getViewRoot();
-        result = root.getContainerClientId(context) + sep + 
+        result = root.getContainerClientId(context) +
                 ResponseStateManager.VIEW_STATE_PARAM + sep +
                 + counter;
         contextAttrs.put(viewStateCounterKey, ++counter);
