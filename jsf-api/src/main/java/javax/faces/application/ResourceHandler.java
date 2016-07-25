@@ -168,6 +168,26 @@ public abstract class ResourceHandler {
 
 
     /**
+     * <p class="changed_added_2_3">
+     * Resource name of JSF script resource.
+     * </p>
+     * 
+     * @since 2.3
+     */
+    public static final String JSF_SCRIPT_RESOURCE_NAME = "jsf.js";
+
+
+    /**
+     * <p class="changed_added_2_3">
+     * Library name of JSF script resource.
+     * </p>
+     * 
+     * @since 2.3
+     */
+    public static final String JSF_SCRIPT_LIBRARY_NAME = "javax.faces";
+
+
+    /**
      * <p class="changed_added_2_2 changed_modified_2_3">This file must
      * be located in
      * <code>META-INF/contracts/&lt;contractName&gt;/</code> in a jar
