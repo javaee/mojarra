@@ -40,35 +40,37 @@
 
 package com.sun.faces.application.resource;
 
+import static javax.faces.application.ResourceHandler.JSF_SCRIPT_LIBRARY_NAME;
+import static javax.faces.application.ResourceHandler.JSF_SCRIPT_RESOURCE_NAME;
+
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Externalizable;
-import java.io.ObjectOutput;
 import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.Collections;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.faces.application.ProjectStage;
 import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
-import com.sun.faces.util.Util;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.util.FacesLogger;
-import java.util.logging.Level;
-
-import javax.faces.application.ResourceHandler;
-import javax.faces.application.ProjectStage;
-import javax.servlet.http.HttpServletRequest;
+import com.sun.faces.util.Util;
 
 /**
  * Default implementation of {@link javax.faces.application.Resource}.
@@ -314,7 +316,7 @@ public class ResourceImpl extends Resource implements Externalizable {
             queryStarted = true;
         }
         
-        if ("jsf.js".equals(getResourceName()) && "javax.faces".equals(getLibraryName())) {
+        if (JSF_SCRIPT_RESOURCE_NAME.equals(getResourceName()) && JSF_SCRIPT_LIBRARY_NAME.equals(getLibraryName())) {
             ProjectStage stage = context.getApplication().getProjectStage();
             switch (stage) {
                 case Development:

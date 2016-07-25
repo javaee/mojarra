@@ -71,6 +71,7 @@ import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
 import javax.faces.application.Application;
+import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehaviorHolder;
@@ -124,8 +125,8 @@ import com.sun.faces.renderkit.RenderKitUtils;
  * the Ajax resource does not exist, create a <code>UIOutput</code> component
  * instance and set the renderer type to <code>javax.faces.resource.Script</code>.
  * Set the the following attributes in the component's attribute <code>Map</code>:
- * <code>library</code> with the value <code>javax.faces</code> and 
- * <code>name</code> with the value <code>jsf.js</code>.  Install the component
+ * <code>library</code> with the value {@value ResourceHandler#JSF_SCRIPT_LIBRARY_NAME} and 
+ * <code>name</code> with the value {@value ResourceHandler#JSF_SCRIPT_RESOURCE_NAME}. Install the component
  * resource using <code>UIViewRoot.addComponentResource()</code> and specifying
  * <code>head</code> as the <code>target</code> argument.</p> 
  *

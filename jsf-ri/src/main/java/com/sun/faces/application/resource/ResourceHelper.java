@@ -40,15 +40,18 @@
 
 package com.sun.faces.application.resource;
 
+import static javax.faces.application.ResourceHandler.JSF_SCRIPT_LIBRARY_NAME;
+import static javax.faces.application.ResourceHandler.JSF_SCRIPT_RESOURCE_NAME;
+
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -59,20 +62,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
+import javax.el.ELContext;
+import javax.el.ELException;
+import javax.el.ValueExpression;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.el.ELContext;
 
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <p>
@@ -568,7 +571,7 @@ public abstract class ResourceHelper {
         boolean result = (contentType != null
                    && (Arrays.binarySearch(EL_CONTENT_TYPES, contentType) >= 0)) ||
                 (null != resourceName && null != libraryName && 
-                "javax.faces".equals(libraryName) && "jsf.js".equals(resourceName));
+                    JSF_SCRIPT_LIBRARY_NAME.equals(libraryName) && JSF_SCRIPT_RESOURCE_NAME.equals(resourceName));
         return result;
 
     }
@@ -721,10 +724,10 @@ public abstract class ResourceHelper {
                         i = this.read();
                     } else {
                         // It's not an expression, we need to return '#',
-                        i = (int) '#';
+                        i = '#';
                         // then return whatever we just read, on the
                         // *next* read;
-                        nextRead = (int) c;
+                        nextRead = c;
                         failedExpressionTest = true;
                     }
                 }

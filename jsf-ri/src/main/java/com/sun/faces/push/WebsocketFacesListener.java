@@ -113,7 +113,7 @@ public class WebsocketFacesListener implements SystemEventListener {
     }
 
     /**
-     * If event is an instance of {@link PostAddToViewEvent}, then add the main <code>javax.faces:jsf.js</code> script
+     * If event is an instance of {@link PostAddToViewEvent}, then add the JSF script
      * resource. Else if event is an instance of {@link PreRenderViewEvent}, and the socket is new, then render the
      * <code>init()</code> script, or if it has just switched the <code>connected</code> attribute, then render either
      * the <code>open()</code> script or the <code>close()</code> script. During an ajax request with partial rendering,

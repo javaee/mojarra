@@ -40,9 +40,12 @@
 
 package com.sun.faces.application.resource;
 
+import static javax.faces.application.ResourceHandler.JSF_SCRIPT_LIBRARY_NAME;
+import static javax.faces.application.ResourceHandler.JSF_SCRIPT_RESOURCE_NAME;
+
 import java.io.File;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 
@@ -257,8 +260,8 @@ public class ClientResourceInfo extends ResourceInfo {
         if (library == null && localePrefix != null) {
             sb.append('/').append(localePrefix);
         }
-        // Specialcasing for handling jsf.js in uncompressed state
-        if (isDevStage && "javax.faces".equals(libraryName) && "jsf.js".equals(name)) {
+        // Specialcasing for handling JSF script in uncompressed state
+        if (isDevStage && JSF_SCRIPT_LIBRARY_NAME.equals(libraryName) && JSF_SCRIPT_RESOURCE_NAME.equals(name)) {
             sb.append('/').append("jsf-uncompressed.js");
         } else {
             sb.append('/').append(name);

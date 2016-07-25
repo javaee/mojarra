@@ -43,6 +43,8 @@ package com.sun.faces.renderkit;
 import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_EVENT_PARAM;
 import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_SOURCE_PARAM;
 import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.PARTIAL_EVENT_PARAM;
+import static javax.faces.application.ResourceHandler.JSF_SCRIPT_LIBRARY_NAME;
+import static javax.faces.application.ResourceHandler.JSF_SCRIPT_RESOURCE_NAME;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -1152,11 +1154,8 @@ public class RenderKitUtils {
         return origIdentifier.replace("-", "$_");
     }
 
-    private static final String JSF_SCRIPT_RESOURCE_NAME = "jsf.js";
-    private static final String JSF_SCRIPT_LIBRARY_NAME = "javax.faces";
-    
     /**
-     * <p>Only install the jsf.js resource if it doesn't exist.
+     * <p>Only install the JSF script resource if it doesn't exist.
      * The resource component will be installed with the target "head".
      * @param context the <code>FacesContext</code> for the current request
      */
