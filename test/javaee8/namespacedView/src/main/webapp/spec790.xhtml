@@ -52,14 +52,14 @@
         <h:panelGroup id="panel1" layout="block">
             <h:form id="form1">
                 <h:commandButton id="button" value="submit form1 and render panel2">
-                    <f:ajax execute="@form" render=":panel2" />
+                    <f:ajax execute=":form1" render=":panel2" />
                 </h:commandButton>
             </h:form>
         </h:panelGroup>
         <h:panelGroup id="panel2" layout="block">
             <h:form id="form2">
                 <h:commandButton id="button" value="submit form2 and render panel1">
-                    <f:ajax execute="@form" render=":panel1" />
+                    <f:ajax execute=":form2" render=":panel1" />
                 </h:commandButton>
             </h:form>
         </h:panelGroup>
