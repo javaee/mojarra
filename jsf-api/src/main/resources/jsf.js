@@ -604,6 +604,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
             var scriptStr = scripts[index];
             var src = scriptStr[1].match(findsrc);
+            var scriptLoadedViaUrl = false;
 
             if (!!src && src[1]) {
                 // if this is a file, load it
@@ -619,10 +620,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         if (abort || !scriptNode.readyState || /loaded|complete/.test(scriptNode.readyState)) {
                             scriptNode.onload = scriptNode.onreadystatechange = null; // IE memory leak fix.
                             scriptNode = null;
-                            runScript(loadedScriptUrls, scripts, index + 1); // Run next script.
+                            runScript(head, loadedScriptUrls, scripts, index + 1); // Run next script.
                         }
                     }
                     head.insertBefore(scriptNode, null); // add it to end of the head (and don't remove it)
+                    scriptLoadedViaUrl = true;
                 }
             } else if (!!scriptStr && scriptStr[2]) {
                 // else get content of tag, without leading CDATA and such
@@ -635,10 +637,72 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     scriptNode.text = script; // add the code to the script node
                     head.appendChild(scriptNode); // add it to the head
                     head.removeChild(scriptNode); // then remove it
-                    runScript(loadedScriptUrls, scripts, index + 1); // Run next script.
                 }
             }
+
+            if (!scriptLoadedViaUrl) {
+                runScript(head, loadedScriptUrls, scripts, index + 1); // Run next script.
+            }
         };
+
+        /**
+         * Get all stylesheets from supplied string and run them all.
+         * @param str
+         * @ignore
+         */
+        var stripAndRunStylesheets = function stripAndRunStylesheets(str) {
+            // Regex to find all links in a string
+            var findlinks = /<link[^>]*\/>/igm;
+            // Regex to find one link, to isolate its attributes [1]
+            var findlink = /<link([^>]*)\/>/im;
+            // Regex to find type attribute
+            var findtype = /type="([\S]*?)"/im;
+            var findhref = /href="([\S]*?)"/im;
+
+            var stylesheets = [];
+            var loadedStylesheetUrls = null;
+            var head = document.head || document.getElementsByTagName('head')[0] || document.documentElement;
+
+            var initialnodes = str.match(findlinks);
+            while (!!initialnodes && initialnodes.length > 0) {
+                var linkStr = initialnodes.shift().match(findlink);
+                // check the type - skip if it not css type
+                var type = linkStr[1].match(findtype);
+                if (!type || type[1] !== "text/css") {
+                    continue;
+                }
+                var href = linkStr[1].match(findhref);
+                if (!!href && href[1]) {
+                    if (loadedStylesheetUrls == null) {
+                        var loadedLinks = document.getElementsByTagName("link");
+                        loadedStylesheetUrls = [];
+
+                        for (var i = 0; i < loadedLinks.length; i++) {
+                            var linkNode = loadedLinks[i];
+                            
+                            if (linkNode.getAttribute("type") === "text/css") {
+                                var url = linkNode.getAttribute("href");
+
+                                if (url) {
+                                    loadedStylesheetUrls.push(url);
+                                }
+                            }
+                        }
+                    }
+
+                    var url = href[1];
+
+                    if (loadedStylesheetUrls.indexOf(url) < 0) {
+                        // create stylesheet node
+                        var linkNode = document.createElement('link');
+                        linkNode.type = 'text/css';
+                        linkNode.rel = 'stylesheet';
+                        linkNode.href = url;
+                        head.insertBefore(linkNode, null); // add it to end of the head (and don't remove it)
+                    }
+                }
+            }
+        }
 
         /**
          * Replace DOM element with a new tagname and supplied innerHTML
@@ -1425,6 +1489,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 }
             } else if (id === "javax.faces.ViewHead") {
                 throw new Error("javax.faces.ViewHead not supported - browsers cannot reliably replace the head's contents");
+            } else if (id === "javax.faces.Resource") {
+                stripAndRunStylesheets(src);
+                scripts = stripScripts(src);
+                runScripts(scripts);
             } else {
                 var d = $(id);
                 if (!d) {
@@ -2671,6 +2739,14 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * forms specified in the <code>render</code> target
              * list.</li>
 
+             * <li class="changed_added_2_3">If an <code>update</code> element is found in the response with the
+             * identifier <code>javax.faces.Resource</code>:
+             * <pre><code>&lt;update id="javax.faces.Resource"&gt;
+             *    &lt;![CDATA[...]]&gt;
+             * &lt;/update&gt;</code></pre>
+             * append any element found in the <code>CDATA</code> contents which is absent in the document to the
+             * document's <code>head</code> section.
+             * </li>
 
              * <li>If an <code>update</code> element is found in the response with the identifier
              * <code>javax.faces.ViewHead</code>:
