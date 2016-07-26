@@ -612,8 +612,16 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 // it's never necessary, and can make debugging difficult
                 if (loadedScriptUrls.indexOf(url) < 0) {
                     // create script node
-                    var scriptNode = createRunScriptNode(loadedScriptUrls, scripts, index);
+                    var scriptNode = document.createElement('script');
+                    scriptNode.type = 'text/javascript';
                     scriptNode.src = url; // add the src to the script node
+                    scriptNode.onload = scriptNode.onreadystatechange = function(_, abort) {
+                        if (abort || !scriptNode.readyState || /loaded|complete/.test(scriptNode.readyState)) {
+                            scriptNode.onload = scriptNode.onreadystatechange = null; // IE memory leak fix.
+                            scriptNode = null;
+                            runScript(loadedScriptUrls, scripts, index + 1); // Run next script.
+                        }
+                    }
                     head.insertBefore(scriptNode, null); // add it to end of the head (and don't remove it)
                 }
             } else if (!!scriptStr && scriptStr[2]) {
@@ -622,28 +630,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
                 if (!!script) {
                     // create script node
-                    var scriptNode = createRunScriptNode(loadedScriptUrls, scripts, index);
+                    var scriptNode = document.createElement('script');
+                    scriptNode.type = 'text/javascript';
                     scriptNode.text = script; // add the code to the script node
                     head.appendChild(scriptNode); // add it to the head
                     head.removeChild(scriptNode); // then remove it
-                }
-            }
-        };
-
-        /**
-         * Create script node which invokes runScript() on next script when loaded/complete.
-         * @param loadedScriptUrls URLs of scripts which are already loaded.
-         * @param scripts Array of script nodes.
-         * @param index Index of currently invoked script, used to calculate the next.
-         * @ignore
-         */
-        var createRunScriptNode = function createRunScriptNode(loadedScriptUrls, scripts, index) {
-            var scriptNode = document.createElement('script');
-            scriptNode.type = 'text/javascript';
-            scriptNode.onload = scriptNode.onreadystatechange = function(_, abort) {
-                if (abort || !scriptNode.readyState || /loaded|complete/.test(scriptNode.readyState)) {
-                    scriptNode.onload = scriptNode.onreadystatechange = null; // IE memory leak fix.
-                    scriptNode = null;
                     runScript(loadedScriptUrls, scripts, index + 1); // Run next script.
                 }
             }
