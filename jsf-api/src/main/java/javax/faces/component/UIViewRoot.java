@@ -57,6 +57,7 @@ import javax.el.MethodExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
+import javax.faces.application.ResourceHandler;
 import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
@@ -538,6 +539,14 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
      * </div>
      *  
+     * <div class="changed_added_2_3"><p>The resource <code>Renderer</code> must ensure of the following:
+     * <ul>
+     * <li>Do not render when {@link ResourceHandler#isResourceRendered(FacesContext, String, String)}
+     * returns <code>true</code>.</li>
+     * <li>After rendering, call {@link ResourceHandler#markResourceRendered(FacesContext, String, String)}.</li>
+     * </ul>
+     * </div>
+     * 
      * @param context {@link FacesContext} for the current request
      * @param componentResource The {@link UIComponent} representing a 
      * {@link javax.faces.application.Resource} instance 
