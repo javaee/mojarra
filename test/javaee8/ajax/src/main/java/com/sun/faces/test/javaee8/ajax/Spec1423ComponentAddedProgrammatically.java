@@ -39,12 +39,16 @@
  */
 package com.sun.faces.test.javaee8.ajax;
 
+import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UIOutput;
 
 @FacesComponent(Spec1423ComponentAddedProgrammatically.COMPONENT_TYPE)
-@ResourceDependency(library="spec1423", name="addedProgrammatically.js")
+@ResourceDependencies({
+    @ResourceDependency(library="spec1423", name="addedProgrammatically.js"),
+    @ResourceDependency(library="spec1423", name="addedProgrammatically.css")
+})
 public class Spec1423ComponentAddedProgrammatically extends UIOutput {
     public static final String COMPONENT_TYPE = "Spec1423ComponentAddedProgrammatically";
 }

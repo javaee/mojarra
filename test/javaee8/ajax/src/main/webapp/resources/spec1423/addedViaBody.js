@@ -1,1 +1,1 @@
-document.getElementById("result").innerHTML = "addedViaBody";
+document.getElementById("scriptResult").innerHTML = "addedViaBody";

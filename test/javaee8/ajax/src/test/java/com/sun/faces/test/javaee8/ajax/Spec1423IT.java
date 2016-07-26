@@ -40,7 +40,6 @@
 package com.sun.faces.test.javaee8.ajax;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.test.htmlunit.IgnoringIncorrectnessListener;
@@ -66,11 +65,61 @@ public class Spec1423IT {
     @Test
     public void testSpec1423() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "spec1423.xhtml");
-/*
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:button");
+        HtmlSubmitInput button;
+        
+        /*
+        assertTrue(page.getHtmlElementById("scriptResult").asText().isEmpty());
+        assertTrue(page.getHtmlElementById("stylesheetResult").asText().isEmpty());
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("form1:addViaHead");
         page = button.click();
-*/
-    }
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.getHtmlElementById("scriptResult").asText().equals("addedViaHead"));
+        assertTrue(page.getHtmlElementById("stylesheetResult").asText().isEmpty());
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("form2:addViaInclude");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.getHtmlElementById("scriptResult").asText().equals("addedViaInclude"));
+        assertTrue(page.getHtmlElementById("stylesheetResult").asText().equals("rgb(255, 0, 0)"));
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("form1:addViaBody");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.getHtmlElementById("scriptResult").asText().equals("addedViaBody"));
+        assertTrue(page.getHtmlElementById("stylesheetResult").asText().equals("rgb(255, 0, 0)"));
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("form2:addViaInclude");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.getHtmlElementById("scriptResult").asText().equals("addedViaBody"));
+        assertTrue(page.getHtmlElementById("stylesheetResult").asText().equals("rgb(255, 0, 0)"));
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("form1:addProgrammatically");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.getHtmlElementById("scriptResult").asText().equals("addedProgrammatically"));
+        assertTrue(page.getHtmlElementById("stylesheetResult").asText().equals("rgb(0, 255, 0)"));
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("form1:addViaHead");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.getHtmlElementById("scriptResult").asText().equals("addedProgrammatically"));
+        assertTrue(page.getHtmlElementById("stylesheetResult").asText().equals("rgb(0, 255, 0)"));
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("form1:addViaBody");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.getHtmlElementById("scriptResult").asText().equals("addedProgrammatically"));
+        assertTrue(page.getHtmlElementById("stylesheetResult").asText().equals("rgb(0, 255, 0)"));
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("form2:addViaInclude");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.getHtmlElementById("scriptResult").asText().equals("addedProgrammatically"));
+        assertTrue(page.getHtmlElementById("stylesheetResult").asText().equals("rgb(0, 255, 0)"));
+        */
+   }
 
     @After
     public void tearDown() {

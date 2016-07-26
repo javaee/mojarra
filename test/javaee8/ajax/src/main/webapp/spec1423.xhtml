@@ -54,20 +54,21 @@
     <h:body>
         <h:form id="form1">
             <f:ajax render="@form">
-                <h:commandButton id="button1" value="add component resource to head" action="#{spec1423.addComponentResourceToHead}" />
-                <h:commandButton id="button2" value="add component resource to body" action="#{spec1423.addComponentResourceToBody}" />
-                <h:commandButton id="button3" value="add component programmatically" action="#{spec1423.addComponentProgrammatically}" />
+                <h:commandButton id="addViaHead" value="add component resource to head" action="#{spec1423.addComponentResourceToHead}" />
+                <h:commandButton id="addViaBody" value="add component resource to body" action="#{spec1423.addComponentResourceToBody}" />
+                <h:commandButton id="addProgrammatically" value="add component programmatically" action="#{spec1423.addComponentProgrammatically}" />
             </f:ajax>
             <h:panelGroup id="parent" />
         </h:form>
 
         <h:form id="form2">
-            <h:commandButton id="button" value="add component via include" action="#{spec1423.addComponentViaInclude}">
+            <h:commandButton id="addViaInclude" value="add component via include" action="#{spec1423.addComponentViaInclude}">
                 <f:ajax execute="@form" render="@form" />
             </h:commandButton>
             <ui:include src="#{spec1423.include}" />
         </h:form>
 
-        <h:outputText id="result" />
+        <div id="scriptResult" />
+        <div id="stylesheetResult" />
     </h:body>
 </html>

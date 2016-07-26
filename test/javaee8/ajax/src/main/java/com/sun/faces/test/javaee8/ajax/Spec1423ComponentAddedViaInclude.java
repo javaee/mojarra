@@ -39,12 +39,16 @@
  */
 package com.sun.faces.test.javaee8.ajax;
 
+import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UIOutput;
 
 @FacesComponent(createTag=true)
-@ResourceDependency(library="spec1423", name="addedViaInclude.js")
+@ResourceDependencies({
+    @ResourceDependency(library="spec1423", name="addedViaInclude.js"),
+    @ResourceDependency(library="spec1423", name="addedViaInclude.css")
+})
 public class Spec1423ComponentAddedViaInclude extends UIOutput {
     //
 }

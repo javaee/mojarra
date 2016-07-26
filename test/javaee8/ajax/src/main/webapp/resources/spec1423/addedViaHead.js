@@ -1,1 +1,1 @@
-document.getElementById("result").innerHTML = "addedViaHead";
+document.getElementById("scriptResult").innerHTML = "addedViaHead";
