@@ -559,8 +559,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
         };
 
         /**
-         * Run an array of script nodes
-         * @param scripts array of script nodes
+         * Run an array of script nodes,
+         * @param scripts Array of script nodes.
          * @ignore
          */
         var runScripts = function runScripts(scripts) {
@@ -568,44 +568,83 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 return;
             }
 
+            var loadedScripts = document.getElementsByTagName("script");
+            var loadedScriptUrls = [];
+
+            for (var i = 0; i < loadedScripts.length; i++) {
+                var scriptNode = loadedScripts[i];
+                var url = scriptNode.getAttribute("src");
+
+                if (url) {
+                    loadedScriptUrls.push(url);
+                }
+            }
+
+            var head = document.head || document.getElementsByTagName('head')[0] || document.documentElement;
+            runScript(head, loadedScriptUrls, scripts, 0);
+        };
+
+        /**
+         * Run script at given index.
+         * @param head Document's head.
+         * @param loadedScriptUrls URLs of scripts which are already loaded.
+         * @param scripts Array of script nodes.
+         * @param index Index of script to be loaded.
+         * @ignore
+         */
+        var runScript = function runScript(head, loadedScriptUrls, scripts, index) {
+            if (index >= scripts.length) {
+                return;
+            }
+
             // Regex to find src attribute
             var findsrc = /src="([\S]*?)"/im;
-            // Regex to match current script
-            var jsfjs = /\/javax.faces.resource\/jsf.js(\.[^?]+)?\?ln=javax\.faces/;
             // Regex to remove leading cruft
             var stripStart = /^\s*(<!--)*\s*(\/\/)*\s*(\/\*)*\s*\n*\**\n*\s*\*.*\n*\s*\*\/(<!\[CDATA\[)*/;
 
-            var head = document.getElementsByTagName('head')[0] || document.documentElement;
+            var scriptStr = scripts[index];
+            var src = scriptStr[1].match(findsrc);
 
-            while (scripts.length) {
-            	var scriptStr = scripts.shift();
-                var src = scriptStr[1].match(findsrc);
+            if (!!src && src[1]) {
+                // if this is a file, load it
+                var url = src[1];
+                // if this is already loaded, don't load it
+                // it's never necessary, and can make debugging difficult
+                if (loadedScriptUrls.indexOf(url) < 0) {
+                    // create script node
+                    var scriptNode = createRunScriptNode(loadedScriptUrls, scripts, index);
+                    scriptNode.src = url; // add the src to the script node
+                    head.insertBefore(scriptNode, null); // add it to end of the head (and don't remove it)
+                }
+            } else if (!!scriptStr && scriptStr[2]) {
+                // else get content of tag, without leading CDATA and such
+                var script = scriptStr[2].replace(stripStart,"");
 
-                if (!!src && src[1]) {
-                    // if this is a file, load it
-                    var url = src[1];
-                    // if this is another copy of jsf.js, don't load it
-                    // it's never necessary, and can make debugging difficult
-                    if (!jsfjs.test(url)) {
-                        // create script node
-                        var scriptNode = document.createElement('script');
-                        scriptNode.type = 'text/javascript';
-                        scriptNode.src = url; // add the src to the script node
-                        head.appendChild(scriptNode); // add it to the page
-                        head.removeChild(scriptNode); // then remove it
-                    }
-                } else if (!!scriptStr && scriptStr[2]) {
-                    // else get content of tag, without leading CDATA and such
-                    var script = scriptStr[2].replace(stripStart,"");
+                if (!!script) {
+                    // create script node
+                    var scriptNode = createRunScriptNode(loadedScriptUrls, scripts, index);
+                    scriptNode.text = script; // add the code to the script node
+                    head.appendChild(scriptNode); // add it to the head
+                    head.removeChild(scriptNode); // then remove it
+                }
+            }
+        };
 
-                    if (!!script) {
-                        // create script node
-                        var scriptNode = document.createElement('script');
-                        scriptNode.type = 'text/javascript';
-                        scriptNode.text = script; // add the code to the script node
-                        head.appendChild(scriptNode); // add it to the page
-                        head.removeChild(scriptNode); // then remove it
-                    }
+        /**
+         * Create script node which invokes runScript() on next script when loaded/complete.
+         * @param loadedScriptUrls URLs of scripts which are already loaded.
+         * @param scripts Array of script nodes.
+         * @param index Index of currently invoked script, used to calculate the next.
+         * @ignore
+         */
+        var createRunScriptNode = function createRunScriptNode(loadedScriptUrls, scripts, index) {
+            var scriptNode = document.createElement('script');
+            scriptNode.type = 'text/javascript';
+            scriptNode.onload = scriptNode.onreadystatechange = function(_, abort) {
+                if (abort || !scriptNode.readyState || /loaded|complete/.test(scriptNode.readyState)) {
+                    scriptNode.onload = scriptNode.onreadystatechange = null; // IE memory leak fix.
+                    scriptNode = null;
+                    runScript(loadedScriptUrls, scripts, index + 1); // Run next script.
                 }
             }
         };
