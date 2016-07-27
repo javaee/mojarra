@@ -74,8 +74,6 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
     //
     private boolean inUpdate = false;
 
-    ResponseWriter writer;
-
     /**
      * <p class="changed_added_2_0">Reserved ID value to indicate
      * entire ViewRoot.</p>
@@ -99,19 +97,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public PartialResponseWriter(ResponseWriter writer) {
-        this.writer = writer;
-    }
-
-    /**
-     * <p class="changed_added_2_0">Return the wrapped
-     * {@link ResponseWriter} instance.</p>
-     *
-     * @see ResponseWriterWrapper#getWrapped()
-     * @since 2.0
-     */
-    @Override
-    public ResponseWriter getWrapped() {
-        return writer;
+        super(writer);
     }
 
     /**

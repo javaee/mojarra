@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,18 +41,46 @@
 package javax.faces.lifecycle;
 
 import java.util.Map;
+
 import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_2">Wrapper for {@link ClientWindow}</p>
  * 
+ * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
+ * 
  * @since 2.2
  */
 public abstract class ClientWindowWrapper extends ClientWindow implements FacesWrapper<ClientWindow> {
 
+    private ClientWindow wrapped;
+    
+    /**
+     * @deprecated Use the other constructor taking the implementation being wrapped.
+     */
+    @Deprecated
+    public ClientWindowWrapper() {
+
+    }
+
+    /**
+     * <p class="changed_added_2_3">If this client window has been decorated, 
+     * the implementation doing the decorating should push the implementation being wrapped to this constructor.
+     * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
+     * 
+     * @param wrapped The implementation being wrapped.
+     * @since 2.3
+     */
+    public ClientWindowWrapper(ClientWindow wrapped) {
+        this.wrapped = wrapped;
+    }
+    
     @Override
-    public abstract ClientWindow getWrapped();
+    public ClientWindow getWrapped() {
+        return wrapped;
+    }
 
     @Override
     public String getId() {

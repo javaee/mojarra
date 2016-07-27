@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -52,20 +52,40 @@ import javax.faces.event.PhaseListener;
  * instance.  The default implementation of all methods is to call
  * through to the wrapped {@link Lifecycle}.</p>
 
- * <div class="changed_added_2_2"> 
-
- * <p>Usage: extend this class and override getWrapped() to return the
- * instance we are wrapping.</p>
-
- * </div>
+ * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
 
  * @since 2.2
  */
 
 public abstract class LifecycleWrapper extends Lifecycle implements FacesWrapper<Lifecycle> {
 
+    private Lifecycle wrapped;
+    
+    /**
+     * @deprecated Use the other constructor taking the implementation being wrapped.
+     */
+    @Deprecated
+    public LifecycleWrapper() {
+
+    }
+
+    /**
+     * <p class="changed_added_2_3">If this lifecycle has been decorated, 
+     * the implementation doing the decorating should push the implementation being wrapped to this constructor.
+     * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
+     * 
+     * @param wrapped The implementation being wrapped.
+     * @since 2.3
+     */
+    public LifecycleWrapper(Lifecycle wrapped) {
+        this.wrapped = wrapped;
+    }
+    
     @Override
-    public abstract Lifecycle getWrapped();
+    public Lifecycle getWrapped() {
+        return wrapped;
+    }
 
     @Override
     public void addPhaseListener(PhaseListener listener) {

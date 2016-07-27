@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,16 +40,16 @@
 
 package javax.faces.application;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Set;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIViewRoot;
-import javax.faces.FacesException;
-
 import java.util.Locale;
 import java.util.Map;
-import java.io.IOException;
+import java.util.Set;
+
+import javax.faces.FacesException;
 import javax.faces.FacesWrapper;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewDeclarationLanguage;
 
 /**
@@ -59,19 +59,40 @@ import javax.faces.view.ViewDeclarationLanguage;
  * implementation of all methods is to call through to the wrapped
  * {@link ViewHandler}.</p>
  *
- * <p>Usage: extend this class and override {@link #getWrapped} to
- * return the instance we are wrapping.</p>
+ * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
  * @since 1.2
  */
 public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWrapper<ViewHandler> {
 
 
+    private ViewHandler wrapped;
+    
     /**
-     * @return the instance that we are wrapping.
-     */ 
+     * @deprecated Use the other constructor taking the implementation being wrapped.
+     */
+    @Deprecated
+    public ViewHandlerWrapper() {
+
+    }
+
+    /**
+     * <p class="changed_added_2_3">If this view handler has been decorated, 
+     * the implementation doing the decorating should push the implementation being wrapped to this constructor.
+     * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
+     * 
+     * @param wrapped The implementation being wrapped.
+     * @since 2.3
+     */
+    public ViewHandlerWrapper(ViewHandler wrapped) {
+        this.wrapped = wrapped;
+    }
+    
     @Override
-    public abstract ViewHandler getWrapped();
+    public ViewHandler getWrapped() {
+        return wrapped;
+    }
 
 
     // ------------------------ Methods from javax.faces.application.ViewHandler

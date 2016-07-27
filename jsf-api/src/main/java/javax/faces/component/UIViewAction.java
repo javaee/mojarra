@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -58,6 +58,7 @@
 package javax.faces.component;
 
 import java.util.Map;
+
 import javax.el.MethodExpression;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationHandler;
@@ -193,9 +194,9 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
         Map<Object, Object> attrs = context.getAttributes();
         Integer count = (Integer) attrs.get(UIVIEWACTION_EVENT_COUNT);
         if (null == count) {
-            attrs.put(UIVIEWACTION_EVENT_COUNT, (Integer)1);
+            attrs.put(UIVIEWACTION_EVENT_COUNT, 1);
         } else {
-            attrs.put(UIVIEWACTION_EVENT_COUNT, (Integer)(count + 1));
+            attrs.put(UIVIEWACTION_EVENT_COUNT, count + 1);
         }
     }
     
@@ -204,7 +205,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
         Map<Object, Object> attrs = context.getAttributes();
         Integer count = (Integer) attrs.get(UIVIEWACTION_EVENT_COUNT);
         if (null != count) {
-            count = (Integer)(count - 1);
+            count = count - 1;
             if (count < 1) {
                 attrs.remove(UIVIEWACTION_EVENT_COUNT);
                 result = true;
@@ -702,18 +703,12 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
      */
     private class InstrumentedFacesContext extends FacesContextWrapper {
 
-        private final FacesContext wrapped;
         private boolean viewRootCleared = false;
         private boolean renderedResponseControlDisabled = false;
         private Boolean postback = null;
 
         public InstrumentedFacesContext(final FacesContext wrapped) {
-            this.wrapped = wrapped;
-        }
-
-        @Override
-        public FacesContext getWrapped() {
-            return wrapped;
+            super(wrapped);
         }
 
         @Override
@@ -722,24 +717,24 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
                 return null;
             }
 
-            return wrapped.getViewRoot();
+            return super.getViewRoot();
         }
 
         @Override
         public void setViewRoot(final UIViewRoot viewRoot) {
             viewRootCleared = false;
-            wrapped.setViewRoot(viewRoot);
+            super.setViewRoot(viewRoot);
         }
-
+ 
         @Override
         public boolean isPostback() {
-            return postback == null ? wrapped.isPostback() : postback;
+            return postback == null ? super.isPostback() : postback;
         }
 
         @Override
         public void renderResponse() {
             if (!renderedResponseControlDisabled) {
-                wrapped.renderResponse();
+                super.renderResponse();
             }
         }
 
@@ -747,7 +742,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
          * Make it look like we have dispatched a request using the include method.
          */
         public InstrumentedFacesContext pushViewIntoRequestMap() {
-            getExternalContext().getRequestMap().put("javax.servlet.include.servlet_path", wrapped.getViewRoot().getViewId());
+            getExternalContext().getRequestMap().put("javax.servlet.include.servlet_path", super.getViewRoot().getViewId());
             return this;
         }
 
@@ -771,7 +766,7 @@ public class UIViewAction extends UIComponentBase implements ActionSource2 {
         }
 
         public void restore() {
-            setCurrentInstance(wrapped);
+            setCurrentInstance(getWrapped());
         }
     }
 }

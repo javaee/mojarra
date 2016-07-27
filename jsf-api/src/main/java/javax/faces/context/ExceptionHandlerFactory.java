@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -61,26 +61,45 @@ import javax.faces.FacesWrapper;
 
  * </div>
  *
+ * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
+ * 
  * @since 2.0
  */
 
 public abstract class ExceptionHandlerFactory implements FacesWrapper<ExceptionHandlerFactory> {
 
-    public ExceptionHandlerFactory() {
-    }
-    
+    private ExceptionHandlerFactory wrapped;
+
     /**
-     * <p class="changed_added_2_0">If this factory has been decorated, the 
+     * @deprecated Use the other constructor taking the implementation being wrapped.
+     */
+    @Deprecated
+    public ExceptionHandlerFactory() {
+        
+    }
+
+    /**
+     * <p class="changed_added_2_3">If this factory has been decorated, 
+     * the implementation doing the decorating should push the implementation being wrapped to this constructor.
+     * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
+     * 
+     * @param wrapped The implementation being wrapped.
+     */
+    public ExceptionHandlerFactory(ExceptionHandlerFactory wrapped) {
+        this.wrapped = wrapped;
+    }
+
+    /**
+     * <p class="changed_modified_2_3">If this factory has been decorated, the 
      * implementation doing the decorating may override this method to provide
-     * access to the implementation being wrapped.  A default implementation
-     * is provided that returns <code>null</code>.</p>
+     * access to the implementation being wrapped.</p>
      */
     @Override
     public ExceptionHandlerFactory getWrapped() {
-        return null;
+        return wrapped;
     }
 
-    
     /**
      * <p class="changed_added_2_0">Create and return a A new
      * <code>ExceptionHandler</code> instance.  The implementation must return

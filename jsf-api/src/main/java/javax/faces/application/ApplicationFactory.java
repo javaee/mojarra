@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -57,28 +57,46 @@ import javax.faces.FacesWrapper;
  *   ApplicationFactory factory = (ApplicationFactory)
  *    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
  * </pre>
+ * 
+ * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  */
 
 public abstract class ApplicationFactory implements FacesWrapper<ApplicationFactory> {
     
+    private ApplicationFactory wrapped;
+
+    /**
+     * @deprecated Use the other constructor taking the implementation being wrapped.
+     */
+    @Deprecated
     public ApplicationFactory() {
         
     }
 
+    /**
+     * <p class="changed_added_2_3">If this factory has been decorated, 
+     * the implementation doing the decorating should push the implementation being wrapped to this constructor.
+     * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
+     * 
+     * @param wrapped The implementation being wrapped.
+     */
+    public ApplicationFactory(ApplicationFactory wrapped) {
+        this.wrapped = wrapped;
+    }
 
     /**
-     * <p class="changed_added_2_0">If this factory has been decorated, the 
+     * <p class="changed_modified_2_3">If this factory has been decorated, the 
      * implementation doing the decorating may override this method to provide
-     * access to the implementation being wrapped.  A default implementation
-     * is provided that returns <code>null</code>.</p>
+     * access to the implementation being wrapped.</p>
      * 
      * @since 2.0
      */
     @Override
     public ApplicationFactory getWrapped() {
-        return null;
+        return wrapped;
     }
-    
+
     /**
      * <p>Create (if needed) and return an {@link Application} instance
      * for this web application.</p>

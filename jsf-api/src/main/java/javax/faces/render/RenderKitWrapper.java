@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,6 +43,7 @@ package javax.faces.render;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Iterator;
+
 import javax.faces.FacesWrapper;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
@@ -58,16 +59,39 @@ import javax.faces.context.ResponseWriter;
  * <p class="changed_added_2_0">Usage: extend this class and override {@link #getWrapped} to
  * return the instance we are wrapping.</p>
  *
+ * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
+ * 
  * @since 2.0
  */
 public abstract class RenderKitWrapper extends RenderKit implements FacesWrapper<RenderKit> {
 
+    private RenderKit wrapped;
+    
     /**
-     * @return the wrapped {@link RenderKit} instance
-     * @see javax.faces.FacesWrapper#getWrapped()
+     * @deprecated Use the other constructor taking the implementation being wrapped.
      */
+    @Deprecated
+    public RenderKitWrapper() {
+
+    }
+
+    /**
+     * <p class="changed_added_2_3">If this render kit has been decorated, 
+     * the implementation doing the decorating should push the implementation being wrapped to this constructor.
+     * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
+     * 
+     * @param wrapped The implementation being wrapped.
+     * @since 2.3
+     */
+    public RenderKitWrapper(RenderKit wrapped) {
+        this.wrapped = wrapped;
+    }
+    
     @Override
-    public abstract RenderKit getWrapped();
+    public RenderKit getWrapped() {
+        return wrapped;
+    }
 
 
     /**

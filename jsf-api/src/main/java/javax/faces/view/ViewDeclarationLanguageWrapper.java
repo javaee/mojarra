@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -45,6 +45,7 @@ import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
 import javax.faces.FacesWrapper;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
@@ -59,24 +60,41 @@ import javax.faces.context.FacesContext;
  * implementation of all methods is to call through to the wrapped
  * {@link ViewDeclarationLanguage} instance.</p>
  *
- * <p class="changed_added_2_2">Usage: extend this class and override 
- * {@link #getWrapped} to
- * return the instance being wrapping.</p>
+ * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
  * @since 2.2
  */
 public abstract class ViewDeclarationLanguageWrapper extends ViewDeclarationLanguage implements FacesWrapper<ViewDeclarationLanguage> {
 
 
-    // ----------------------------------------------- Methods from FacesWrapper
+    private ViewDeclarationLanguage wrapped;
+    
+    /**
+     * @deprecated Use the other constructor taking the implementation being wrapped.
+     */
+    @Deprecated
+    public ViewDeclarationLanguageWrapper() {
 
+    }
 
     /**
-     * @return the wrapped {@link ViewDeclarationLanguage} instance
-     * @see javax.faces.FacesWrapper#getWrapped()
+     * <p class="changed_added_2_3">If this view declaration language has been decorated, 
+     * the implementation doing the decorating should push the implementation being wrapped to this constructor.
+     * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
+     * 
+     * @param wrapped The implementation being wrapped.
+     * @since 2.3
      */
+    public ViewDeclarationLanguageWrapper(ViewDeclarationLanguage wrapped) {
+        this.wrapped = wrapped;
+    }
+    
     @Override
-    public abstract ViewDeclarationLanguage getWrapped();
+    public ViewDeclarationLanguage getWrapped() {
+        return wrapped;
+    }
+
 
     // ----------------------------------------------- Methods from ViewDeclarationLanguage
 

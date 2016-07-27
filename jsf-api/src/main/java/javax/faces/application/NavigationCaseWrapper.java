@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -44,6 +44,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+
 import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
 
@@ -54,17 +55,40 @@ import javax.faces.context.FacesContext;
  * instance.  The default implementation of all methods is to call
  * through to the wrapped {@link NavigationCase} instance.</p>
  *
- * <p class="changed_added_2_2">Usage: extend this class and override 
- * {@link #getWrapped} to
- * return the instance being wrapping.</p>
+ * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
  * @since 2.2
  */
 public abstract class NavigationCaseWrapper extends NavigationCase implements FacesWrapper<NavigationCase> {
 
+    private NavigationCase wrapped;
+    
+    /**
+     * @deprecated Use the other constructor taking the implementation being wrapped.
+     */
+    @Deprecated
     public NavigationCaseWrapper() {
-		super((String) null, (String) null, (String) null, (String) null, (String) null,
-                        (Map<String, List<String>>) null, false, false);
+        this(null);
+    }
+
+    /**
+     * <p class="changed_added_2_3">If this navigation case has been decorated, 
+     * the implementation doing the decorating should push the implementation being wrapped to this constructor.
+     * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
+     * 
+     * @param wrapped The implementation being wrapped.
+     * @since 2.3
+     */
+    public NavigationCaseWrapper(NavigationCase wrapped) {
+        super((String) null, (String) null, (String) null, (String) null, (String) null,
+                (Map<String, List<String>>) null, false, false);
+        this.wrapped = wrapped;
+    }
+
+    @Override
+    public NavigationCase getWrapped() {
+        return wrapped;
     }
     
     @Override
@@ -81,9 +105,6 @@ public abstract class NavigationCaseWrapper extends NavigationCase implements Fa
     public String toString() {
         return getWrapped().toString();
     }
-
-    @Override
-    public abstract NavigationCase getWrapped();
 
     @Override
     public URL getActionURL(FacesContext context) throws MalformedURLException {
