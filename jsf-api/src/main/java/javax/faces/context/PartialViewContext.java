@@ -43,7 +43,9 @@ package javax.faces.context;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIViewRoot;
 import javax.faces.event.PhaseId;
@@ -320,22 +322,30 @@ public abstract class PartialViewContext {
     public abstract void release();
 
     /**
-     * <p class="changed_added_2_0">Perform lifecycle processing on 
-     * components during the indicated <code>phaseId</code>.  Only 
-     * those components with identifiers existing in the 
-     * <code>Collection</code> returned from {@link #getExecuteIds} 
-     * and {@link #getRenderIds} will be processed.</p>  
+     * <p class="changed_added_2_0">Perform lifecycle processing on components during the indicated
+     * <code>phaseId</code>.  Only those components with identifiers existing in the <code>Collection</code> returned
+     * from {@link #getExecuteIds} and {@link #getRenderIds} will be processed.</p>
      *
-     * <p class="changed_added_2_3">When the indicated <code>phaseId</code>
-     * equals {@link PhaseId#RENDER_RESPONSE}, then obtain the state by calling
-     * {@link StateManager#getViewState} and write out it as an update element
-     * with an identifier of
-     * <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.ViewState</code>
-     * where <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;</code> is the return
-     * from {@link UIViewRoot#getContainerClientId(FacesContext)} on the view
-     * from whence this state originated, and <code>&lt;SEP&gt;</code> is the
-     * currently configured
-     * {@link UINamingContainer#getSeparatorChar(FacesContext)}.</p>
+     * <div class="changed_added_2_3">
+     * <p>When the indicated <code>phaseId</code> equals {@link PhaseId#RENDER_RESPONSE}, then perform the following
+     * tasks in sequence:
+     * <ol><li>If {@link #isResetValues()} returns <code>true</code>, then call 
+     * {@link UIViewRoot#resetValues(FacesContext, Collection)}, passing {@link #getRenderIds()}.</li>
+     * <li>If {@link #isRenderAll()} returns <code>false</code>, then render any component resource of
+     * {@link UIViewRoot} whose {@link ResourceHandler#getRendererTypeForResourceName(String)} does not return 
+     * <code>null</code>, and whose {@link UIComponent#getChildCount()} is zero, and whose
+     * {@link ResourceHandler#isResourceRendered(FacesContext, String, String)} returns <code>false</code>, in an
+     * <code>update</code> element with an identifier of <code>javax.faces.Resource</code>.</li>
+     * <li>Process the components.</li>
+     * <li>Obtain the state by calling {@link StateManager#getViewState} and write out it as an <code>update</code>
+     * element with an identifier of <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;&lt;SEP&gt;javax.faces.ViewState</code>
+     * where <code>&lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt;</code> is the return from
+     * {@link UIViewRoot#getContainerClientId(FacesContext)} on the view from whence this state originated, and
+     * <code>&lt;SEP&gt;</code> is the currently configured {@link UINamingContainer#getSeparatorChar(FacesContext)}.
+     * </li>
+     * <li>If {@link #isRenderAll()} returns <code>false</code>, then write out each script of {@link #getEvalScripts()}
+     * as an <code>eval</code> element.</li>
+     * </ol></div>
      *
      * @param phaseId the {@link javax.faces.event.PhaseId} that indicates
      * the lifecycle phase the components will be processed in. 

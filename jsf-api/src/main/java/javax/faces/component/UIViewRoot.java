@@ -39,6 +39,8 @@
  */
 package javax.faces.component;
 
+import static java.util.Collections.unmodifiableList;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -65,6 +67,7 @@ import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.FacesEvent;
@@ -72,6 +75,7 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.event.PostConstructViewMapEvent;
+import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
@@ -201,7 +205,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     private static final String LOCATION_IDENTIFIER_PREFIX = "javax_faces_location_";
     private static final Map<String,String> LOCATION_IDENTIFIER_MAP =
-          new HashMap<>(6, 1.0f);
+          new HashMap<>(3, 1.0f);
     static {
         LOCATION_IDENTIFIER_MAP.put("head", LOCATION_IDENTIFIER_PREFIX + "HEAD");
         LOCATION_IDENTIFIER_MAP.put("form", LOCATION_IDENTIFIER_PREFIX + "FORM");
@@ -468,9 +472,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @return the list of phase listeners.
      * @since 2.0
      */
+    @SuppressWarnings("unchecked")
     public List<PhaseListener> getPhaseListeners() {
 
-        //noinspection unchecked
         List<PhaseListener> result = (List<PhaseListener>)
               getStateHelper().get(PropertyKeys.phaseListeners);
 
@@ -643,7 +647,32 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                 : Collections.<UIComponent>emptyList());
 
     }
-    
+
+    /**
+     * <p class="changed_added_2_3">
+     * Return</span> an unmodifiable <code>List</code> of all {@link UIComponent} resources of all supported targets.
+     * Each <code>component</code> in the <code>List</code> is assumed to represent a resource instance.
+     * </p>
+     * 
+     * @param context The Faces context.
+     * 
+     * @return A <code>List</code> of all {@link UIComponent} resources of all supported targets. If no resources are
+     * found, return an empty <code>List</code>.
+     * 
+     * @throws NullPointerException If <code>context</code> is <code>null</code>.
+     * 
+     * @since 2.3
+     */
+    public List<UIComponent> getComponentResources(FacesContext context) {
+        List<UIComponent> resources = new ArrayList<>();
+
+        for (String target : LOCATION_IDENTIFIER_MAP.keySet()) {
+            resources.addAll(getComponentResources(context, target));
+        }
+
+        return unmodifiableList(resources);
+    }
+
     /**
      * <p class="changed_added_2_0">Remove argument <code>component</code>,
      * which is assumed to represent a resource instance, as a resource
@@ -873,10 +902,10 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     // ------------------------------------------------ Lifecycle Phase Handlers
 
 
+    @SuppressWarnings("unchecked")
     private void initState() {
         skipPhase = false;
         beforeMethodException = false;
-        //noinspection unchecked
         List<PhaseListener> listeners =
               (List<PhaseListener>) getStateHelper().get(PropertyKeys.phaseListeners);
         phaseListenerIterator =
@@ -925,6 +954,30 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     }
     
+    /**
+     * <p class="changed_added_2_3">
+     * If the argument <code>event</code> is an instance of {@link PostRestoreStateEvent} and 
+     * {@link PartialViewContext#isPartialRequest()} returns <code>true</code>, then loop over all component resources
+     * and call {@link ResourceHandler#markResourceRendered(FacesContext, String, String)} for each of them.
+     * Finally, delegate to super.
+     * </p>
+     */
+    @Override
+    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
+        FacesContext context = event.getFacesContext();
+
+        if (event instanceof PostRestoreStateEvent && context.getPartialViewContext().isPartialRequest()) {
+            ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
+
+            for (UIComponent resource : getComponentResources(context)) {
+                String name = (String) resource.getAttributes().get("name"); 
+                String library = (String) resource.getAttributes().get("library"); 
+                resourceHandler.markResourceRendered(context, name, library);
+            }
+        }
+
+        super.processEvent(event);
+    }
 
     /**
      * <div class="changed_added_2_0">
@@ -1636,6 +1689,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @return the view map, or <code>null</code>.
      * @since 2.0
      */
+    @SuppressWarnings("unchecked")
     public Map<String, Object> getViewMap(boolean create) {
         Map<String, Object> viewMap = (Map<String, Object>) 
                 getTransientStateHelper().getTransient("com.sun.faces.application.view.viewMap");
@@ -1849,6 +1903,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void restoreState(FacesContext context, Object state) {
 
         if (context == null) {
@@ -1894,7 +1949,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
 
-    @SuppressWarnings({"UnusedDeclaration"})
     private List<UIComponent> getComponentResources(FacesContext context,
                                                     String target,
                                                     boolean create) {
