@@ -1105,14 +1105,14 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * This also covers all predefined POST request parameters which are listed below:</p>
      * <ul class="changed_added_2_3">
      * <li>{@link ResponseStateManager#VIEW_STATE_PARAM}</li>
-     * <li>{@link ResponseStateManager.CLIENT_WINDOW_PARAM}</li>
-     * <li>{@link ResponseStateManager.RENDER_KIT_ID_PARAM}</li>
-     * <li>{@link ClientBehaviorContext.BEHAVIOR_SOURCE_PARAM_NAME}</li>
-     * <li>{@link ClientBehaviorContext.BEHAVIOR_EVENT_PARAM_NAME}</li>
-     * <li>{@link PartialViewContext.PARTIAL_EVENT_PARAM_NAME}</li>
-     * <li>{@link PartialViewContext.PARTIAL_EXECUTE_PARAM_NAME}</li>
-     * <li>{@link PartialViewContext.PARTIAL_RENDER_PARAM_NAME}</li>
-     * <li>{@link PartialViewContext.RESET_VALUES_PARAM_NAME}</li>
+     * <li>{@link ResponseStateManager#CLIENT_WINDOW_PARAM}</li>
+     * <li>{@link ResponseStateManager#RENDER_KIT_ID_PARAM}</li>
+     * <li>{@link ClientBehaviorContext#BEHAVIOR_SOURCE_PARAM_NAME}</li>
+     * <li>{@link ClientBehaviorContext#BEHAVIOR_EVENT_PARAM_NAME}</li>
+     * <li>{@link PartialViewContext#PARTIAL_EVENT_PARAM_NAME}</li>
+     * <li>{@link PartialViewContext#PARTIAL_EXECUTE_PARAM_NAME}</li>
+     * <li>{@link PartialViewContext#PARTIAL_RENDER_PARAM_NAME}</li>
+     * <li>{@link PartialViewContext#RESET_VALUES_PARAM_NAME}</li>
      * </ul>
      * @since 2.0
      */
