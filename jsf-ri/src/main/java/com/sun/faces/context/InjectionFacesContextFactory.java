@@ -65,7 +65,6 @@ import com.sun.faces.util.Util;
 public class InjectionFacesContextFactory extends FacesContextFactory {
 
     private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
-    private FacesContextFactory delegate;
     private Field defaultFacesContext;
     private Field defaultExternalContext;
 
@@ -75,10 +74,10 @@ public class InjectionFacesContextFactory extends FacesContextFactory {
 
 
     public InjectionFacesContextFactory(FacesContextFactory delegate) {
-        super(null);
+        super(delegate);
 
         Util.notNull("facesContextFactory", delegate);
-        this.delegate = delegate;
+
          try {
             defaultFacesContext = FacesContext.class.getDeclaredField("defaultFacesContext");
             defaultFacesContext.setAccessible(true);
@@ -119,7 +118,7 @@ public class InjectionFacesContextFactory extends FacesContextFactory {
                                         Lifecycle lifecycle)
     throws FacesException {
 
-        FacesContext ctx = delegate.getFacesContext(context,
+        FacesContext ctx = getWrapped().getFacesContext(context,
                                                     request,
                                                     response,
                                                     lifecycle);
@@ -127,23 +126,12 @@ public class InjectionFacesContextFactory extends FacesContextFactory {
             // No i18n here
             String message = MessageFormat
                   .format("Delegate FacesContextFactory, {0}, returned null when calling getFacesContext().",
-                          delegate.getClass().getName());
+                          getWrapped().getClass().getName());
             throw new IllegalStateException(message);
         }
         injectDefaults(ctx, request);
         return ctx;
 
-    }
-
-
-    // ----------------------------------------------- Methods from FacesWrapper
-
-
-    @Override
-    public FacesContextFactory getWrapped() {
-
-        return delegate;
-        
     }
 
 
