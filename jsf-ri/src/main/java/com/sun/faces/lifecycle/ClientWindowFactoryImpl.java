@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,7 +40,6 @@
  */
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.config.WebConfiguration;
 import javax.faces.application.Application;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -51,18 +50,22 @@ import javax.faces.event.SystemEventListener;
 import javax.faces.lifecycle.ClientWindow;
 import javax.faces.lifecycle.ClientWindowFactory;
 
+import com.sun.faces.config.WebConfiguration;
+
 public class ClientWindowFactoryImpl extends ClientWindowFactory {
     
     private boolean isClientWindowEnabled = false;
     private WebConfiguration config = null;
 
     public ClientWindowFactoryImpl() {
+        super(null);
         FacesContext context = FacesContext.getCurrentInstance();
         context.getApplication().subscribeToEvent(PostConstructApplicationEvent.class,
                          Application.class, new PostConstructApplicationListener());
     }
     
     public ClientWindowFactoryImpl(boolean ignored) {
+        super(null);
         isClientWindowEnabled = false;
     }
     

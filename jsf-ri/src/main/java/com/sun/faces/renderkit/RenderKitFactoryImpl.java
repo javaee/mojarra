@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,12 +40,12 @@
 
 package com.sun.faces.renderkit;
 
+import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-
-import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.sun.faces.util.MessageUtils;
 
@@ -74,7 +74,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
      * Constructor registers default Render kit.
      */
     public RenderKitFactoryImpl() {
-        super();
+        super(null);
         renderKits = new ConcurrentHashMap<>();
         addRenderKit(HTML_BASIC_RENDER_KIT, new RenderKitImpl());
     }

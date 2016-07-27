@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,6 +42,7 @@ package com.sun.faces.component.visit;
 
 import java.util.Collection;
 import java.util.Set;
+
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitContextFactory;
 import javax.faces.component.visit.VisitHint;
@@ -55,6 +56,7 @@ import javax.faces.context.FacesContext;
 public class VisitContextFactoryImpl extends VisitContextFactory {
 
     public VisitContextFactoryImpl() {
+        super(null);
     }
 
     @Override

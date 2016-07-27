@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,16 +41,13 @@
 package com.sun.faces.context;
 
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableValidateWholeBean;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceAlwaysWriteFlashCookie;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ViewRootPhaseListenerQueuesException;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableValidateWholeBean;
-import com.sun.faces.facelets.impl.DefaultResourceResolver;
-import com.sun.faces.util.Util;
 
 import java.util.Map;
+
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
@@ -60,6 +57,11 @@ import javax.faces.context.ExternalContextFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.facelets.impl.DefaultResourceResolver;
+import com.sun.faces.util.Util;
 
 public class FacesContextFactoryImpl extends FacesContextFactory {
 
@@ -73,6 +75,7 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
 
 
     public FacesContextFactoryImpl() {
+        super(null);
 
         exceptionHandlerFactory = (ExceptionHandlerFactory)
               FactoryFinder.getFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY);

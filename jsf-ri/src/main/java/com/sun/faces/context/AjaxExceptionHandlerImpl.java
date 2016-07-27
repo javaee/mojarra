@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,13 +41,16 @@
 package com.sun.faces.context;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.logging.Logger;
+import java.util.LinkedList;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.FacesException;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
@@ -56,14 +59,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.PartialResponseWriter;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ExceptionQueuedEvent;
-import javax.faces.event.SystemEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.PhaseId;
+import javax.faces.event.SystemEvent;
 
 import com.sun.faces.util.FacesLogger;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import javax.faces.application.ProjectStage;
 
 
 /**
@@ -88,16 +88,10 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
     private LinkedList<ExceptionQueuedEvent> unhandledExceptions;
     private LinkedList<ExceptionQueuedEvent> handledExceptions;
     private ExceptionQueuedEvent handled;
-    private ExceptionHandler exceptionHandler = null;
 
 
     public AjaxExceptionHandlerImpl(ExceptionHandler handler) {
-        this.exceptionHandler = handler;
-    }
-
-    @Override
-    public ExceptionHandler getWrapped() {
-        return this.exceptionHandler;
+        super(handler);
     }
 
     /**

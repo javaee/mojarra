@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,8 +41,6 @@
 package com.sun.faces.context;
 
 
-import com.sun.faces.util.Util;
-
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ExternalContextFactory;
@@ -50,12 +48,15 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import com.sun.faces.util.Util;
+
 public class ExternalContextFactoryImpl extends ExternalContextFactory {
 
     public static final String DEFAULT_EXTERNAL_CONTEXT_KEY =
           ExternalContextFactoryImpl.class.getName() + "_KEY";
 
     public ExternalContextFactoryImpl() {
+        super(null);
     }
 
     // ---------------------------------------- Methods from ExternalContextFactory

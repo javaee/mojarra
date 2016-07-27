@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,18 +41,17 @@
 package com.sun.faces.application;
 
 import java.lang.reflect.Field;
+import java.text.MessageFormat;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
 
-import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import java.util.Map;
-import javax.faces.FacesWrapper;
 
 /**
  * This {@link javax.faces.application.ApplicationFactory} is responsible for injecting the
@@ -61,11 +60,10 @@ import javax.faces.FacesWrapper;
  * compatibility as the API evolves without having the API rely on implementation
  * specific details.
  */
-public class InjectionApplicationFactory extends ApplicationFactory implements FacesWrapper<ApplicationFactory> {
+public class InjectionApplicationFactory extends ApplicationFactory {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
-    private ApplicationFactory delegate;
     private Application defaultApplication;
     private Field defaultApplicationField;
     private volatile Application application;
@@ -73,14 +71,10 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
 
     // ------------------------------------------------------------ Constructors
 
-    public InjectionApplicationFactory() {
-    }
 
     public InjectionApplicationFactory(ApplicationFactory delegate) {
-
+        super(delegate);
         Util.notNull("applicationFactory", delegate);
-        this.delegate = delegate;
-
     }
 
 
@@ -91,12 +85,12 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     public Application getApplication() {
 
         if (application == null) {
-            application = delegate.getApplication();
+            application = getWrapped().getApplication();
             if (application == null) {
                 // No i18n here
                 String message = MessageFormat
                       .format("Delegate ApplicationContextFactory, {0}, returned null when calling getApplication().",
-                              delegate.getClass().getName());
+                              getWrapped().getClass().getName());
                 throw new IllegalStateException(message);
             }
             injectDefaultApplication();
@@ -110,19 +104,8 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     public synchronized void setApplication(Application application) {
 
         this.application = application;
-        delegate.setApplication(application);
+        getWrapped().setApplication(application);
         injectDefaultApplication();
-        
-    }
-
-
-    // ----------------------------------------------- Methods from FacesWrapper
-
-
-    @Override
-    public ApplicationFactory getWrapped() {
-
-        return delegate;
         
     }
 

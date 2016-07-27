@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -47,11 +47,10 @@ import javax.faces.context.FacesContext;
 public class AjaxNoAjaxExceptionHandler extends ExceptionHandlerWrapper {
     
     private AjaxExceptionHandlerImpl ajaxExceptionHandlerImpl;
-    private ExceptionHandlerImpl exceptionHandlerImpl;
 
     public AjaxNoAjaxExceptionHandler(AjaxExceptionHandlerImpl ajaxExceptionHandlerImpl, ExceptionHandlerImpl exceptionHandlerImpl) {
+        super(exceptionHandlerImpl);
         this.ajaxExceptionHandlerImpl = ajaxExceptionHandlerImpl;
-        this.exceptionHandlerImpl = exceptionHandlerImpl;
     }
 
     @Override
@@ -60,7 +59,7 @@ public class AjaxNoAjaxExceptionHandler extends ExceptionHandlerWrapper {
         if (null != fc && fc.getPartialViewContext().isAjaxRequest()) {
             return ajaxExceptionHandlerImpl;
         }
-        return exceptionHandlerImpl;
+        return super.getWrapped();
         
     }
     

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,16 +42,18 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
-import javax.faces.FacesException;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.LifecycleFactory;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
+
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
@@ -73,7 +75,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
 
 
     public LifecycleFactoryImpl() {
-        super();
+        super(null);
         lifecycleMap = new ConcurrentHashMap<>();
 
         // We must have an implementation under this key.

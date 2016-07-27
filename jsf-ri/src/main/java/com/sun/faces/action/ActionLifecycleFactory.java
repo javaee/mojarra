@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,36 +40,22 @@
 package com.sun.faces.action;
 
 import java.util.Iterator;
+
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 
 public class ActionLifecycleFactory extends LifecycleFactory {
 
     /**
-     * Stores the wrapped instance.
-     */
-    private final LifecycleFactory wrapped;
-    
-    /**
      * Constructor.
      * 
      * @param wrapped the wrapped lifecycle factory.
      */
     public ActionLifecycleFactory(LifecycleFactory wrapped) {
-        this.wrapped = wrapped;
-        wrapped.addLifecycle(ActionLifecycle.ACTION_LIFECYCLE, new ActionLifecycle());
+        super(wrapped);
+        addLifecycle(ActionLifecycle.ACTION_LIFECYCLE, new ActionLifecycle());
     }
-    
-    /**
-     * Get the wrapped lifecycle factory.
-     * 
-     * @return the lifecycle factory. 
-     */
-    @Override
-    public LifecycleFactory getWrapped() {
-        return wrapped;
-    }
-    
+
     /**
      * Add the lifecycle.
      * 
@@ -78,7 +64,7 @@ public class ActionLifecycleFactory extends LifecycleFactory {
      */
     @Override
     public void addLifecycle(String lifecycleId, Lifecycle lifecycle) {
-        wrapped.addLifecycle(lifecycleId, lifecycle);
+        getWrapped().addLifecycle(lifecycleId, lifecycle);
     }
 
     /**
@@ -89,7 +75,7 @@ public class ActionLifecycleFactory extends LifecycleFactory {
      */
     @Override
     public Lifecycle getLifecycle(String lifecycleId) {
-        return wrapped.getLifecycle(lifecycleId);
+        return getWrapped().getLifecycle(lifecycleId);
     }
 
     /**
@@ -99,6 +85,6 @@ public class ActionLifecycleFactory extends LifecycleFactory {
      */
     @Override
     public Iterator<String> getLifecycleIds() {
-        return wrapped.getLifecycleIds();
+        return getWrapped().getLifecycleIds();
     }
 }

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,20 +41,19 @@
 package com.sun.faces.context;
 
 import java.lang.reflect.Field;
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
 
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContextFactory;
-import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Lifecycle;
 import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.context.FacesContextFactory;
+import javax.faces.lifecycle.Lifecycle;
+import javax.servlet.ServletRequest;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import javax.faces.FacesWrapper;
-import javax.servlet.ServletRequest;
 
 /**
  * This {@link FacesContextFactory} is responsible for injecting the
@@ -63,7 +62,7 @@ import javax.servlet.ServletRequest;
  * compatibility as the API evolves without having the API rely on implementation
  * specific details.  
  */
-public class InjectionFacesContextFactory extends FacesContextFactory implements FacesWrapper<FacesContextFactory> {
+public class InjectionFacesContextFactory extends FacesContextFactory {
 
     private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
     private FacesContextFactory delegate;
@@ -74,10 +73,9 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
 
     // ------------------------------------------------------------ Constructors
 
-    public InjectionFacesContextFactory() {
-    }
 
     public InjectionFacesContextFactory(FacesContextFactory delegate) {
+        super(null);
 
         Util.notNull("facesContextFactory", delegate);
         this.delegate = delegate;

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,16 +40,26 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import javax.faces.view.facelets.BehaviorHandler;
+import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.ConverterHandler;
+import javax.faces.view.facelets.TagHandlerDelegate;
+import javax.faces.view.facelets.TagHandlerDelegateFactory;
+import javax.faces.view.facelets.ValidatorHandler;
+
 import com.sun.faces.facelets.tag.jsf.html.ScriptResourceDelegate;
 import com.sun.faces.facelets.tag.jsf.html.ScriptResourceHandler;
 import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceDelegate;
 import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceHandler;
 
-import javax.faces.view.facelets.*;
-
+/**
+ * Default implementation of {@link TagHandlerDelegateFactory}.
+ *
+ */
 public class TagHandlerDelegateFactoryImpl extends TagHandlerDelegateFactory {
 
     public TagHandlerDelegateFactoryImpl() {
+        super(null);
     }
 
     @Override

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,27 +40,18 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.FacesLogger;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.text.MessageFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+
 /**
- * <p><strong>ApplicationFactory</strong> is a factory object that creates
- * (if needed) and returns {@link Application} instances.</p>
- * <p/>
- * <p>There must be one {@link ApplicationFactory} instance per web
- * application that is utilizing JavaServer Faces.  This instance can be
- * acquired, in a portable manner, by calling:</p>
- * <pre>
- *   ApplicationFactory factory = (ApplicationFactory)
- *    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
- * </pre>
+ * Default implementation of {@link ApplicationFactory}.
  */
 public class ApplicationFactoryImpl extends ApplicationFactory {
 
@@ -89,7 +80,7 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
      * Constructor
      */
     public ApplicationFactoryImpl() {
-        super();
+        super(null);
         application = null;
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, "Created ApplicationFactory ");
