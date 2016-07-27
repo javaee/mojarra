@@ -67,7 +67,6 @@ public class Spec1423IT {
         HtmlPage page = webClient.getPage(webUrl + "spec1423.xhtml");
         HtmlSubmitInput button;
         
-        /*
         assertTrue(page.getHtmlElementById("scriptResult").asText().isEmpty());
         assertTrue(page.getHtmlElementById("stylesheetResult").asText().isEmpty());
 
@@ -118,8 +117,7 @@ public class Spec1423IT {
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.getHtmlElementById("scriptResult").asText().equals("addedProgrammatically"));
         assertTrue(page.getHtmlElementById("stylesheetResult").asText().equals("rgb(0, 255, 0)"));
-        */
-   }
+    }
 
     @After
     public void tearDown() {

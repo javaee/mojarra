@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,42 +40,46 @@
 
 package com.sun.faces.context;
 
-import javax.el.ELContext;
-import javax.el.ELContextListener;
-import javax.el.ELContextEvent;
-import javax.faces.FactoryFinder;
-import javax.faces.context.ExceptionHandler;
-import javax.faces.event.PhaseId;
-import javax.faces.application.*;
-import javax.faces.application.FacesMessage.Severity;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.context.PartialViewContext;
-import javax.faces.context.ResponseStream;
-import javax.faces.context.ResponseWriter;
-import javax.faces.context.PartialViewContextFactory;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
-
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.el.ELContext;
+import javax.el.ELContextEvent;
+import javax.el.ELContextListener;
+import javax.el.ExpressionFactory;
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
+import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExceptionHandler;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
+import javax.faces.context.PartialViewContextFactory;
+import javax.faces.context.ResponseStream;
+import javax.faces.context.ResponseWriter;
+import javax.faces.event.PhaseId;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+
 import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.el.ELUtils;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 import com.sun.faces.renderkit.RenderKitUtils;
-import javax.el.ExpressionFactory;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
 
 public class FacesContextImpl extends FacesContext {
 
@@ -477,6 +481,7 @@ public class FacesContextImpl extends FacesContext {
             if (viewMap != null) {
                 viewRoot.getViewMap().clear();
             }
+            RequestStateManager.clearAttributesOnChangeOfView(this);
         }
 
         viewRoot = root;
@@ -657,7 +662,7 @@ public class FacesContextImpl extends FacesContext {
     @Override
     public List<String> getResourceLibraryContracts() {
         assertNotReleased();
-        return (null == resourceLibraryContracts) ? Collections.EMPTY_LIST : resourceLibraryContracts;
+        return (null == resourceLibraryContracts) ? Collections.emptyList() : resourceLibraryContracts;
     }
 
     @Override
@@ -706,8 +711,7 @@ public class FacesContextImpl extends FacesContext {
     // -------------------------------------------------------- Private Methods
 
 
-    @SuppressWarnings({"FinalPrivateMethod"})
-    private final void assertNotReleased() {
+    private void assertNotReleased() {
         if (released) {
             throw new IllegalStateException();
         }

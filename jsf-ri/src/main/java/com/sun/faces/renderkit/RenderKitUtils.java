@@ -1217,15 +1217,13 @@ public class RenderKitUtils {
 
         UIViewRoot viewRoot = context.getViewRoot();
 
-        for (String target : new String[] { "head", "body", "form" }) {
-            for (UIComponent resource : viewRoot.getComponentResources(context, target)) {
-                Object name = resource.getAttributes().get("name");
-                Object library = resource.getAttributes().get("library");
+        for (UIComponent resource : viewRoot.getComponentResources(context)) {
+            Object name = resource.getAttributes().get("name");
+            Object library = resource.getAttributes().get("library");
 
-                if (JSF_SCRIPT_RESOURCE_NAME.equals(name) && JSF_SCRIPT_LIBRARY_NAME.equals(library)) {
-                    RequestStateManager.set(context, RequestStateManager.SCRIPT_STATE, true);
-                    return true;
-                }
+            if (JSF_SCRIPT_RESOURCE_NAME.equals(name) && JSF_SCRIPT_LIBRARY_NAME.equals(library)) {
+                RequestStateManager.set(context, RequestStateManager.SCRIPT_STATE, true);
+                return true;
             }
         }
 

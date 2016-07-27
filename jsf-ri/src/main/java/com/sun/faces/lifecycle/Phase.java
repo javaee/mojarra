@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -47,16 +47,15 @@ import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
+import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-import javax.faces.event.ExceptionQueuedEventContext;
-import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.lifecycle.Lifecycle;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
-import com.sun.faces.util.RequestStateManager;
 
 
 /**
@@ -218,8 +217,6 @@ public abstract class Phase {
                  LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
              }
          }
-         RequestStateManager.clearAttributesForPhase(context,
-                                                     context.getCurrentPhaseId());
          while (listenersIterator.hasNext()) {
              PhaseListener listener = listenersIterator.next();
              if (this.getId().equals(listener.getPhaseId()) ||

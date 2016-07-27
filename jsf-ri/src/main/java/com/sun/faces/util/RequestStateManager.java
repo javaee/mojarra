@@ -45,7 +45,6 @@ import java.util.Map;
 
 import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 
 import com.sun.faces.RIConstants;
 
@@ -173,7 +172,7 @@ public class RequestStateManager {
     public static final String RENDERED_RESOURCE_DEPENDENCIES =
         ResourceHandler.RESOURCE_IDENTIFIER;
 
-    private static final String[] RENDER_RESPONSE = {
+    private static final String[] ATTRIBUTES_TO_CLEAR_ON_CHANGE_OF_VIEW = {
         SCRIPT_STATE,
         PROCESSED_RESOURCE_DEPENDENCIES,
         RENDERED_RESOURCE_DEPENDENCIES
@@ -185,14 +184,6 @@ public class RequestStateManager {
      */
     private static final String KEY =
           RequestStateManager.class.getName();
-
-
-    private static final Map<PhaseId,String[]> PHASE_ATTRIBUTES =
-        new HashMap<>(2, 1.0f);
-
-    static {
-        PHASE_ATTRIBUTES.put(PhaseId.RENDER_RESPONSE, RENDER_RESPONSE);
-    }
 
 
     // ---------------------------------------------------------- Public Methods
@@ -260,23 +251,19 @@ public class RequestStateManager {
     /**
      * <p>
      * Remove all request state attributes associated that need to be cleared
-     * before the execution of a particular lifecycle phase.
+     * on change of view.
      * </p>
      * @param ctx the <code>FacesContext</code> for the current request
-     * @param phaseId the phase used to obtain the associated attributes
      */
-    public static void clearAttributesForPhase(FacesContext ctx,
-                                               PhaseId phaseId) {
+    public static void clearAttributesOnChangeOfView(FacesContext ctx) {
 
-        if (ctx == null || phaseId == null) {
+        if (ctx == null) {
             return;
         }
-        String[] phaseAttributes = PHASE_ATTRIBUTES.get(phaseId);
-        if (phaseAttributes != null) {
-            Map<Object,Object> attrs = ctx.getAttributes();
-            for (String key : phaseAttributes) {
-                attrs.remove(key);
-            }
+
+        Map<Object,Object> attrs = ctx.getAttributes();
+        for (String key : ATTRIBUTES_TO_CLEAR_ON_CHANGE_OF_VIEW) {
+            attrs.remove(key);
         }
 
     }

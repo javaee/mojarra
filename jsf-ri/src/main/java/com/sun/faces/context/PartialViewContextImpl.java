@@ -58,6 +58,7 @@ import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitCallback;
@@ -332,6 +333,8 @@ import com.sun.faces.util.Util;
                     return;
                 }
 
+                renderComponentResources(ctx, viewRoot);
+
                 // Skip this processing if "none" is specified in the render list,
                 // or there were no render phase client ids.
                 if (myRenderIds != null && !myRenderIds.isEmpty()) {
@@ -422,7 +425,6 @@ import com.sun.faces.util.Util;
         if (partialVisitContext != null) {
             if (LOGGER.isLoggable(Level.FINER) && !partialVisitContext.getUnvisitedClientIds().isEmpty()) {
                 Collection<String> unvisitedClientIds = partialVisitContext.getUnvisitedClientIds();
-                String message;
                 StringBuilder builder = new StringBuilder();
                 for (String cur : unvisitedClientIds) {
                     builder.append(cur).append(" ");
@@ -489,6 +491,33 @@ import com.sun.faces.util.Util;
         }
     }
 
+    private void renderComponentResources(FacesContext context, UIViewRoot viewRoot) throws IOException {
+        ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
+        PartialResponseWriter writer = context.getPartialViewContext().getPartialResponseWriter();
+        boolean updateStarted = false;
+
+        for (UIComponent resource : viewRoot.getComponentResources(context)) {
+            String name = (String) resource.getAttributes().get("name");
+            String library = (String) resource.getAttributes().get("library");
+
+            if (resource.getChildCount() == 0 
+              && resourceHandler.getRendererTypeForResourceName(name) != null 
+              && !resourceHandler.isResourceRendered(context, name, library)) 
+            {
+                if (!updateStarted) {
+                    writer.startUpdate("javax.faces.Resource");
+                    updateStarted = true;
+                }
+
+                resource.encodeAll(context);
+            }
+        }
+
+        if (updateStarted) {
+            writer.endUpdate();
+        }
+    }
+    
     private void renderState(FacesContext context) throws IOException {
         // Get the view state and write it to the response..
         PartialViewContext pvc = context.getPartialViewContext();
@@ -566,9 +595,7 @@ import com.sun.faces.util.Util;
         ctx.setResponseWriter(orig);
     }
 
-
-    @SuppressWarnings({"FinalPrivateMethod"})
-    private final void assertNotReleased() {
+    private void assertNotReleased() {
         if (released) {
             throw new IllegalStateException();
         }
