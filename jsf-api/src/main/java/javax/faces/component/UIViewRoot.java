@@ -650,7 +650,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     /**
      * <p class="changed_added_2_3">
-     * Return</span> an unmodifiable <code>List</code> of all {@link UIComponent} resources of all supported targets.
+     * Return an unmodifiable <code>List</code> of all {@link UIComponent} resources of all supported targets.
      * Each <code>component</code> in the <code>List</code> is assumed to represent a resource instance.
      * </p>
      * 
