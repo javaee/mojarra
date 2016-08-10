@@ -1,0 +1,4 @@
+body {
+    background-image: url('#{resource["default:img/bk.png"]}');
+    background-repeat:repeat-y;
+}

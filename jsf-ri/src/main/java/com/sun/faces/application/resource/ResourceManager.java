@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -590,6 +590,13 @@ public class ResourceManager {
     private String getLocalePrefix(FacesContext context) {
 
         String localePrefix = null;
+        
+        localePrefix = context.getExternalContext().getRequestParameterMap().get("loc");
+        
+        if(localePrefix != null){
+            return localePrefix;
+        }
+        
         String appBundleName = context.getApplication().getMessageBundle();
         if (null != appBundleName) {
         	
