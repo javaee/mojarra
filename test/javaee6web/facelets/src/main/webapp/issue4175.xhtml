@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:jsf="http://xmlns.jcp.org/jsf"
+	  xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+
+
+<h:body>
+	<h:form id="form">
+		<button jsf:action="#{testBean.update()}" class="btn btn-default">Update</button>
+		<div class="form-group">
+			<select name="cars">
+				<option value="volvo">Volvo</option>
+				<option value="saab">Saab</option>
+				<option value="fiat">Fiat</option>
+				<option value="audi">Audi</option>
+			</select>
+		</div>
+	</h:form>
+</h:body>
+</html>
