@@ -306,6 +306,18 @@ public class RestoreViewPhase extends Phase {
             ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, rkId);
             String incomingSecretKeyValue = extContext.getRequestParameterMap().
                 get(ResponseStateManager.NON_POSTBACK_VIEW_TOKEN_PARAM);
+            if (null != incomingSecretKeyValue) {
+                try {
+                    incomingSecretKeyValue = URLEncoder.encode(incomingSecretKeyValue, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, "Unable to re-encode value of request parameter " + 
+                               ResponseStateManager.NON_POSTBACK_VIEW_TOKEN_PARAM + ":" + 
+                                incomingSecretKeyValue, e);
+                    }
+                  incomingSecretKeyValue = null;
+                }
+           }
             
             String correctSecretKeyValue = rsm.getCryptographicallyStrongTokenFromSession(context);
             if (null == incomingSecretKeyValue || 
