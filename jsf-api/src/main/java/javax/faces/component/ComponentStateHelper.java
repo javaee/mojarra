@@ -295,9 +295,6 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
         int length = (savedState.length-1)/2;
         for (int i = 0; i < length; i++) {
            Object value = savedState[i * 2 + 1];
-           if (Void.TYPE.equals(value)) {
-               value = null;
-           }
             Serializable serializable = (Serializable) savedState[i * 2];
             if (value != null) {
                 if (value instanceof Collection) {
@@ -367,9 +364,6 @@ class ComponentStateHelper implements StateHelper , TransientStateHelper {
 
         for(Map.Entry<Serializable, Object> entry : map.entrySet()) {
             Object value = entry.getValue();
-            if (value == null) {
-                value = Void.TYPE;
-            }
             savedState[i * 2] = entry.getKey();
             if (value instanceof Collection
                   || value instanceof StateHolder
