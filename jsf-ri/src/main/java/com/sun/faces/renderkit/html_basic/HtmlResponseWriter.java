@@ -1258,6 +1258,9 @@ public class HtmlResponseWriter extends ResponseWriter {
     }
 
     private String popElementName(String original) {
+        if (original.equals("option")) {
+            return original;
+        }
         if(elementNames == null || elementNames.isEmpty()) {
             return original;
         }

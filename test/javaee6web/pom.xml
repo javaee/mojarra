@@ -66,6 +66,7 @@
     <modules>
         <module>ajax</module>        
         <module>faceletDefaultSuffix</module>
+	<module>facelets</module>
         <module>el</module>
         <module>flowTraversalCombinations</module>
         <module>servletMappingForADF</module>

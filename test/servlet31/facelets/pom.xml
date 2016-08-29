@@ -53,6 +53,6 @@
     <modules>
         <module>coreEmptyAsNull</module>
         <module>html</module>
-    <module>ui</module>
+        <module>ui</module>
   </modules>
 </project>
