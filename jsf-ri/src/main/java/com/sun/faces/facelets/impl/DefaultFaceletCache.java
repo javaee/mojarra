@@ -206,7 +206,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
 
         long getAndUpdateNextRefreshTime() {
             // There is no point in calculating the next refresh time if we are refreshing always/never
-            return (_refreshInterval > 0) ? _nextRefreshTime.getAndAdd(_refreshInterval) : 0;
+            return (_refreshInterval > 0) ? _nextRefreshTime.getAndSet(System.currentTimeMillis() + _refreshInterval) : 0;
         }
         
         private final long _lastModified;
