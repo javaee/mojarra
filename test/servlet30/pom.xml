@@ -76,5 +76,6 @@
         <module>navigation</module>
         <module>resourceExposure</module>
         <module>systest</module>
+	<module>viewScopeFailover</module>
   </modules>
 </project>
