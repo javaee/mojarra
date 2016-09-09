@@ -41,8 +41,10 @@
 package com.sun.faces.application;
 
 import com.sun.faces.application.view.ViewScopeManager;
+import static com.sun.faces.application.view.ViewScopeManager.ACTIVE_VIEW_MAPS;
 import com.sun.faces.config.InitFacesContext;
 import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.List;
@@ -66,6 +68,7 @@ import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.renderkit.StateHelper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import java.util.Map;
 import javax.faces.application.Application;
 import javax.faces.application.ViewHandler;
 import javax.faces.context.FacesContext;
@@ -120,6 +123,19 @@ public class WebappLifecycleListener {
             WebConfiguration config = WebConfiguration.getInstance(event.getServletContext());
             if (config.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.EnableAgressiveSessionDirtying)) {
                 syncSessionScopedBeans(request);
+            }
+
+            /*
+             * If we are distributable and we have an active view map force the
+             * ACTIVE_VIEW_MAPS session entry to be replicated.
+             */
+            boolean distributable = config.isOptionEnabled(EnableDistributable);
+
+            if (distributable) {
+                HttpSession session = ((HttpServletRequest) request).getSession(false);
+                if (session != null && session.getAttribute(ACTIVE_VIEW_MAPS) != null) {
+                    session.setAttribute(ACTIVE_VIEW_MAPS, session.getAttribute(ACTIVE_VIEW_MAPS));
+                }
             }
         } catch (Throwable t) {
             FacesContext context = new InitFacesContext(event.getServletContext());

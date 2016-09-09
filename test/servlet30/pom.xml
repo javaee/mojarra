@@ -77,5 +77,6 @@
         <module>resourceExposure</module>
         <module>systest</module>
         <module>stateSaving</module>
+        <module>viewScopeFailover</module>
   </modules>
 </project>
