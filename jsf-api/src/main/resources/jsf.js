@@ -457,7 +457,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
         };
 
         /**
-         * Get an array of all POST form elements covered in the render target list whose ID starts with the same 
+         * Get an array of all JSF form elements covered in the render target list whose ID starts with the same 
          * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; value as the submitting form.
          * This array does not contain the submitting form itself.
          */
@@ -1389,7 +1389,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                 field.value = state;
 
                 // Now set the view state from the server into the DOM
-                // for any POST form that is covered in the render target list.
+                // for any JSF form that is covered in the render target list.
 
                 var renderForms = getRenderForms(context, namingContainerPrefix);
 
@@ -1428,7 +1428,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                 field.value = windowId;
 
                 // Now set the windowId from the server into the DOM
-                // for any POST form that is covered in the render target list.
+                // for any JSF form that is covered in the render target list.
 
                 var renderForms = getRenderForms(context, namingContainerPrefix);
 
@@ -2737,7 +2737,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
              * correctness in parity with what is done in the
              * corresponding non-partial JSF view.  Locate and update
              * the <code>javax.faces.ViewState</code> value for all
-             * POST forms covered in the <code>render</code> target
+             * JSF forms covered in the <code>render</code> target
              * list whose ID starts with the same 
              * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; value.</li>
 
@@ -2764,7 +2764,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
              * correctness in parity with what is done in the
              * corresponding non-partial JSF view.  Locate and update
              * the <code>javax.faces.ClientWindow</code> value for all
-             * POST forms covered in the <code>render</code> target
+             * JSF forms covered in the <code>render</code> target
              * list whose ID starts with the same 
              * &lt;VIEW_ROOT_CONTAINER_CLIENT_ID&gt; value.</li>
 
