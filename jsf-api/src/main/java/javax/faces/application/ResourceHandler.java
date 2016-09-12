@@ -171,7 +171,7 @@ public abstract class ResourceHandler {
      * <p class="changed_added_2_3">
      * Resource name of JSF script resource.
      * </p>
-     * 
+     *
      * @since 2.3
      */
     public static final String JSF_SCRIPT_RESOURCE_NAME = "jsf.js";
@@ -181,7 +181,7 @@ public abstract class ResourceHandler {
      * <p class="changed_added_2_3">
      * Library name of JSF script resource.
      * </p>
-     * 
+     *
      * @since 2.3
      */
     public static final String JSF_SCRIPT_LIBRARY_NAME = "javax.faces";
@@ -218,7 +218,7 @@ public abstract class ResourceHandler {
      * @since 2.2
      */
 
-    public static final String WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME = 
+    public static final String WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME =
         "javax.faces.WEBAPP_RESOURCES_DIRECTORY";
 
     /**
@@ -236,7 +236,7 @@ public abstract class ResourceHandler {
      * @since 2.2
      */
 
-    public static final String WEBAPP_CONTRACTS_DIRECTORY_PARAM_NAME = 
+    public static final String WEBAPP_CONTRACTS_DIRECTORY_PARAM_NAME =
         "javax.faces.WEBAPP_CONTRACTS_DIRECTORY";
 
     /**
@@ -247,7 +247,7 @@ public abstract class ResourceHandler {
      * #createResource} (or one of its variants).
      */
 
-    public static final String LOCALE_PREFIX = 
+    public static final String LOCALE_PREFIX =
 	"javax.faces.resource.localePrefix";
 
 
@@ -277,7 +277,7 @@ public abstract class ResourceHandler {
 
 
     // ---------------------------------------------------------- Public Methods
-    
+
 
     /**
      * <p class="changed_added_2_0"><span
@@ -311,15 +311,15 @@ public abstract class ResourceHandler {
      * for use in encoding or decoding the named resource.
      */
     public abstract Resource createResource(String resourceName);
-    
+
     /**
      * <p class="changed_added_2_2">Create an instance of <code>Resource</code>
-     * given the argument <code>resourceName</code>, which may contain "/" 
+     * given the argument <code>resourceName</code>, which may contain "/"
      * characters.  The {@link javax.faces.view.ViewDeclarationLanguage} calls
      * this method when it needs to load a view from a persistent store, such as
-     * a filesystem.  This method is functionality equivalent to 
+     * a filesystem.  This method is functionality equivalent to
      * {@link #createResource(java.lang.String)}, but all callsites that need
-     * to load VDL views must use this method so that classes that want to 
+     * to load VDL views must use this method so that classes that want to
      * decorate the <code>ResourceHandler</code> in order to only affect the
      * loading of views may do so without affecting the processing of other
      * kinds of resources, such as scripts and stylesheets.
@@ -347,7 +347,7 @@ public abstract class ResourceHandler {
      * <em>Using JSF in Web Applications</em> chapter).</p></li>
 
      * </ul>
-     
+
      * <p>Call {@link FacesContext#getResourceLibraryContracts}.  If the
      * result is non-{@code null} and not empty, for each value in the
      * list, treat the value as the name of a resource library contract.
@@ -368,11 +368,11 @@ public abstract class ResourceHandler {
 
      * @return a newly created {@link ViewResource} instance, suitable
      * for use by the {@link javax.faces.view.ViewDeclarationLanguage}.
-     * 
+     *
      * @since 2.2
 
      */
-    
+
     public ViewResource createViewResource(FacesContext context, String resourceName) {
         return context.getApplication().getResourceHandler().createResource(resourceName);
     }
@@ -401,7 +401,7 @@ public abstract class ResourceHandler {
      *
      * @return a newly created <code>Resource</code> instance, suitable
      * for use in encoding or decoding the named resource.
-     * 
+     *
      * @since 2.2
      */
 
@@ -495,7 +495,7 @@ public abstract class ResourceHandler {
     public abstract Resource createResource(String resourceName,
                                             String libraryName,
                                             String contentType);
-    
+
     /**
      * <p class="changed_added_2_0"><span
      * class="changed_modified_2_2">Return</span> <code>true</code> if
@@ -515,9 +515,9 @@ public abstract class ResourceHandler {
      * @param libraryName the library name.
      * @return <code>true</code> if the library exists, <code>false</code> otherwise.
      * @since 2.0
-     * 
+     *
      */
-    
+
     public abstract boolean libraryExists(String libraryName);
 
 
@@ -628,74 +628,74 @@ public abstract class ResourceHandler {
      * request, <code>false</code> otherwise.
      */
     public abstract boolean isResourceRequest(FacesContext context);
-    
+
     /**
      * <p class="changed_added_2_2">Return {@code true} if the argument {@code url}
      * contains the string given by the value of the constant
      * {@link ResourceHandler#RESOURCE_IDENTIFIER}, false otherwise.</p>
-     * 
+     *
      * @param url the url to inspect for the presence of {@link ResourceHandler#RESOURCE_IDENTIFIER}.
      * @return <code>true</code> if this is a resource URL, <code>false</code> otherwise.
      * @throws NullPointerException if the argument url is {@code null}.
      */
-    
+
     public boolean isResourceURL(String url) {
         boolean result = false;
         if (null == url) {
             throw new NullPointerException("null url");
         }
         result = url.contains(RESOURCE_IDENTIFIER);
-        
+
         return result;
-        
+
     }
-    
+
     /**
-     * <p class="changed_added_2_0">Return the <code>renderer-type</code> for a 
-     * {@link javax.faces.render.Renderer} that is capable of rendering this 
+     * <p class="changed_added_2_0">Return the <code>renderer-type</code> for a
+     * {@link javax.faces.render.Renderer} that is capable of rendering this
      * resource. The default implementation must return values according to the
      * following table.  If no <code>renderer-type</code> can be determined,
-     * <code>null</code> must be returned.</p> 
-     * 
+     * <code>null</code> must be returned.</p>
+     *
      * <table border="1">
      *  <caption>resource name to renderer-type mapping</caption>
-     * 
+     *
      * <tr>
-     * 
+     *
      * <th>example resource name</th>
-     * 
+     *
      * <th>renderer-type</th>
-     * 
+     *
      * </tr>
-     * 
+     *
      * <tr>
-     * 
+     *
      * <td>mycomponent.js</td>
-     * 
+     *
      * <td><code>javax.faces.resource.Script</code></td>
-     * 
+     *
      * </tr>
-     * 
+     *
      * <tr>
-     * 
+     *
      * <td>mystyle.css</td>
-     * 
+     *
      * <td><code>javax.faces.resource.Stylesheet</code></td>
-     * 
+     *
      * </tr>
-     * 
+     *
      * </table>
-     * 
+     *
      * @param resourceName the resource name.
      * @return the renderer type.
      */
-    
+
     public abstract String getRendererTypeForResourceName(String resourceName);
 
     /**
      * <p class="changed_added_2_3">
      * Mark the resource as identified by given resource and library name as rendered. The default implementation must
-     * ensure that {@link #isResourceRendered(FacesContext, String, String)} will return <code>true</code> when the 
+     * ensure that {@link #isResourceRendered(FacesContext, String, String)} will return <code>true</code> when the
      * resource has already been rendered during the render response phase of the current view.
      * </p>
      * @param context The {@link FacesContext} for this request.
@@ -713,8 +713,8 @@ public abstract class ResourceHandler {
     /**
      * <p class="changed_added_2_3">
      * Returns whether the resource as identified by given resource and library name has been rendered. The default
-     * implementation must return <code>true</code> when the resource has been marked as rendered via
-     * {@link #markResourceRendered(FacesContext, String, String)} during the render response phase of the current view.
+     * implementation must during the render response phase of the current view return <code>true</code> when the
+     * resource has been marked as rendered via {@link #markResourceRendered(FacesContext, String, String)}.
      * </p>
      * @param context The {@link FacesContext} for this request.
      * @param resourceName The name of the resource.
