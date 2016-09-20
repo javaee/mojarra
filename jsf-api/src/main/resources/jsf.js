@@ -2910,6 +2910,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         responseType = partialResponse.childNodes[i];
                         break;
                     }
+
+                    if (partialResponse.childNodes[i].nodeName === "redirect") {
+                        responseType = partialResponse.childNodes[i];
+                    }
                 }
 
                 if (responseType.nodeName === "error") { // it's an error
