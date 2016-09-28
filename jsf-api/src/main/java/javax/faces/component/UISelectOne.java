@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -88,6 +88,19 @@ public class UISelectOne extends UIInput {
         "javax.faces.component.UISelectOne.INVALID";
 
 
+    enum PropertyKeys {
+
+        /**
+         * <p>
+         * Specifies the name of the radio button group.
+         *
+         * @since 2.3
+         */
+        group
+
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -110,6 +123,39 @@ public class UISelectOne extends UIInput {
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_3">
+     * Returns the name of the radio button group.
+     * <p>
+     * Radio button components having the same group within a <code>UIForm</code> parent will uncheck all others when
+     * being checked. If the <code>value</code> attribute is absent then the one from first component of the group will
+     * be used. If the <code>UISelectItem</code> child is absent then the one from first component of the group will be
+     * used.
+     *
+     * @return The name of the radio button group.
+     * @since 2.3
+     */
+    public String getGroup() {
+
+        return (String) getStateHelper().eval(PropertyKeys.group);
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_3">
+     * Sets the name of the radio button group.
+     *
+     * @param group The name of the radio button group.
+     * @since 2.3
+     */
+    public void setGroup(String group) {
+
+        getStateHelper().put(PropertyKeys.group, group);
 
     }
 
@@ -165,7 +211,7 @@ public class UISelectOne extends UIInput {
                                                getConverter());
 
         // Enqueue an error message if an invalid value was specified
-        if ((!found) || 
+        if ((!found) ||
             (isRequired() && isNoSelection)) {
             FacesMessage message =
                 MessageFactory.getMessage(context, INVALID_MESSAGE_ID,
@@ -173,7 +219,7 @@ public class UISelectOne extends UIInput {
             context.addMessage(getClientId(context), message);
             setValid(false);
         }
-        
+
     }
 
 }
