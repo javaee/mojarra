@@ -49,6 +49,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import static com.sun.faces.renderkit.RenderKitUtils.getParameterName;
 import static com.sun.faces.util.MessageUtils.CONVERSION_ERROR_MESSAGE_ID;
 import static com.sun.faces.util.MessageUtils.getExceptionMessage;
 import static java.util.Arrays.stream;
@@ -719,14 +720,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         int count = 0;
         Object currentSelections = getCurrentSelectedValues(component);
         Object[] submittedValues = getSubmittedSelectedValues(component);
-        Map<String,Object> attributes = component.getAttributes();
-        boolean componentDisabled = Util.componentIsDisabled(component);
 
-        OptionComponentInfo optionInfo =
-              new OptionComponentInfo((String) attributes.get("disabledClass"),
-                                      (String) attributes.get("enabledClass"),
-                                      componentDisabled,
-                                      isHideNoSelection(component));
+        OptionComponentInfo optionInfo = new OptionComponentInfo(component);
         RequestStateManager.set(context,
                                 RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
                                 component);
@@ -741,19 +736,19 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
                 // if the component is disabled, "disabled" attribute would be rendered
                 // on "select" tag, so don't render "disabled" on every option.
-                if ((!componentDisabled) && item.isDisabled()) {
+                if ((!optionInfo.isDisabled()) && item.isDisabled()) {
                     writer.writeAttribute("disabled", true, "disabled");
                 }
                 count++;
                 // render options of this group.
                 SelectItem[] itemsArray =
                       ((SelectItemGroup) item).getSelectItems();
-                for (int i = 0; i < itemsArray.length; ++i) {
+                for (SelectItem element : itemsArray) {
                     if (renderOption(context,
                                      component,
                                      selectComponent,
                                      converter,
-                                     itemsArray[i],
+                                     element,
                                      currentSelections,
                                      submittedValues,
                                      optionInfo)) {
@@ -1001,7 +996,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    protected boolean isHideNoSelection(UIComponent component) {
+    protected static boolean isHideNoSelection(UIComponent component) {
 
         Object result = component.getAttributes().get("hideNoSelectionOption");
         return ((result != null) ? (Boolean) result : false);

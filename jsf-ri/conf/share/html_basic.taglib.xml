@@ -10654,61 +10654,66 @@
         </attribute>
     </tag>
     <tag>
-        <description>
-            &lt;p&gt;&lt;span
-            class="changed_modified_2_0"&gt;Render&lt;/span&gt; a set of html
-            "input" elements of type "radio".&lt;/p&gt;
-            &lt;p&gt;&lt;a name="decode"&gt;Decode Behavior&lt;/a&gt;&lt;/p&gt;
-            &lt;ul&gt;
-            &lt;p&gt;See the &lt;a
-            href="SelectManyListbox.html"&gt;"Decode
-            Behavior for UISelectOne Components"&lt;/a&gt; section.&lt;/p&gt;
-            &lt;/ul&gt;
-            &lt;p&gt;Encode Behavior&lt;/p&gt;
-            &lt;ul&gt;
-            &lt;p&gt;Render a "table" element. If the "styleClass" is specified,
-            render the value of the "styleClass" attribute as the value of the
-            "class" attribute on the "table" element. If the "style", "border"
-            attributes are specified, pass them thru &lt;span
-            class="changed_added_2_0"&gt;and render their values as the "style"
-            and "border" attributes on the "table", respectively.&lt;/span&gt;.
-            If
-            the "layout" attribute is specified, and its value is
-            "pageDirection", render the children elements vertically,
-            otherwise horizontally, in the table. If any of the children are
-            an instance of SelectItemGroup, render them as a nested table.
-            Each of the children are ultimately rendered as follows. Render
-            an "input" element of "type" "radio" for each child component.
-            Render the "name" attribute on the "input" element with the value
-            of the &lt;code&gt;clientId&lt;/code&gt; of the component. Render an
-            "id"
-            attribute on the "input" element. Each "id" value must be unique.
-            If the current SelectItem.isDisabled() returns true, render
-            "disabled" as the value of the "disabled" attribute. Close out
-            the "input" element. Render a "label" element. Render the "for"
-            attribute of the "label" element whose value is the corresponding
-            "input" element's "id" value. Render any "style" as the "class"
-            attribute on the "label" element. Close out the starting "label"
-            element and render the label value from SelectItem.getLabel().
-            Close out the "label" element. As an exception to the general
-            rules about how to handle the "id" attribute, render it as an
-            attribute on the outer "table" element, the value of which is the
-            &lt;code&gt;clientId&lt;/code&gt; of the component per the rules at
-            the
-            beginning of this specification. Coerce the value of the
-            currently rendered child to the type of the parent UISelectOne
-            value using the Expression Language coercion rules before
-            comparing the values. If the value of the currently rendered
-            child is equal to the value of the parent UISelectOne, render an
-            appropriate HTML boolean value indicating "checked" for the
-            enclosing "input". See the &lt;a
-            href="SelectManyListbox.html"&gt;"Rendering
-            the option elements" &lt;/a&gt; specification for
-            &lt;code&gt;ListboxRenderer&lt;/code&gt; for more detail on how to
-            render the
-            "option" elements in this renderer.&lt;/p&gt;
-            &lt;/ul&gt;
-        </description>
+        <description><![CDATA[
+            <p><span class="changed_modified_2_0">Render</span> a set of html "input" elements of type "radio".</p>
+
+            <p><a name="decode">Decode Behavior</a></p>
+            <ul>
+                <li>See the "<a href="selectManyListbox.html">Decode Behavior for UISelectOne Components</a>" section.</li>
+            </ul>
+
+            <p><a name="encode">Encode Behavior</a></p>
+            <ul>
+                <li><span class="changed_modified_2_3">If the "group" attribute is not specified,</span> render as follows.
+                    <ul>
+                        <li>Render a "table" element.</li>
+                        <li>As an exception to the general rules about how to handle the "id" attribute, render it as an attribute on the outer "table" element, the value of which is the <code>clientId</code> of the component per the rules at the beginning of this specification.</li>
+                        <li>If the "styleClass" attribute is specified, render the value of the "styleClass" attribute as the value of the "class" attribute on the "table" element.</li>
+                        <li>If the "style", "border" attributes are specified, pass them thru <span class="changed_added_2_0">and render their values as the "style" and "border" attributes on the "table", respectively.</span>.</li>
+                        <li>If the "layout" attribute is specified, and its value is "pageDirection", render the children elements vertically, otherwise horizontally, in the table.</li>
+                        <li>If any of the children are an instance of <code>SelectItemGroup</code>, render them as a nested table.</li>
+                    </ul>
+                </li>
+                <li>Each of the <code>SelectItem</code> children are ultimately rendered as follows.
+                    <ul>
+                        <li class="changed_added_2_3">If the <code>SelectItem.getLabel()</code> is specified, and the <code>group</code> attribute is specified, render as follows.
+                            <ul>
+                                <li>Render a "label" element.</li>
+                                <li>Render the "for" attribute of the "label" element whose value is the corresponding "input" element's "id" value.</li>
+                                <li>Render any "class" attribute as the "class" attribute on the "label" element.</li>
+                                <li>Render the label value from <code>SelectItem.getLabel()</code>.</li>
+                                <li>Close out the "label" element.</li>
+                            </ul>
+                        </li>
+                        <li>Render an "input" element of "type" "radio" for each child component.</li>
+                        <li>Render an "id" attribute on the "input" element. Each "id" value must be unique.</li>
+                        <li>If the "group" attribute is not specified, render the "name" attribute on the "input" element with the value of the <code>clientId</code> of the component.</li>
+                        <li class="changed_added_2_3">If the "group" attribute is specified, render as follows.
+                            <ul>
+                                <li>Render the "name" attribute on the "input" element with the value of the "group" attribute.</li>
+                                <li>If the "styleClass" attribute is specified, render the value of the "styleClass" attribute as the value of the "class" attribute on the "input" element.</li>
+                                <li>If the "style" attribute is specified, pass it thru and render its value as the "style" attribute on the "input" element.</li>
+                            </ul>
+                        </li>
+                        <li>Render the input value from <code>SelectItem.getValue()</code>.</li>
+                        <li>Coerce the select item value to the type of the parent <code>UISelectOne</code> value using the Expression Language coercion rules before comparing the values. 
+                            If the select item value is equal to the value of the parent <code>UISelectOne</code>, render an appropriate HTML boolean value indicating "checked" for the enclosing "input".</li>
+                        <li>If the current <code>SelectItem.isDisabled()</code> returns true, render "disabled" as the value of the "disabled" attribute.</li>
+                        <li>Close out the "input" element.</li>
+                        <li>If the <code>SelectItem.getLabel()</code> is specified, <span class="changed_modified_2_3">and the <code>group</code> attribute is not specified,</span> render as follows.
+                            <ul>
+                                <li>Render a "label" element.</li>
+                                <li>Render the "for" attribute of the "label" element whose value is the corresponding "input" element's "id" value.</li>
+                                <li>Render any "class" attribute as the "class" attribute on the "label" element.</li>
+                                <li>Render the label value from <code>SelectItem.getLabel()</code>.</li>
+                                <li>Close out the "label" element.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>See the "<a href="selectManyListbox.html">Rendering the option elements</a>" specification for <code>ListboxRenderer</code> for more detail on how to render the "option" elements in this renderer.</li>
+            </ul>
+        ]]></description>
         <tag-name>selectOneRadio</tag-name>
         <component>
             <component-type>javax.faces.HtmlSelectOneRadio</component-type>

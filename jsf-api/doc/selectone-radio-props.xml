@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -61,6 +61,7 @@
         <description>
           Width (in pixels) of the border to be drawn
           around the table containing the options list.
+          This attribute is ignored when "group" attribute is specified.
         </description>
         <display-name>Table Border</display-name>
         <icon></icon>
@@ -75,6 +76,7 @@
         <description>
           CSS style class to apply to the rendered label
           on disabled options.
+          This attribute is ignored when "group" attribute is specified.
         </description>
         <display-name>Disabled Label Class</display-name>
         <icon></icon>
@@ -86,6 +88,7 @@
         <description>
           CSS style class to apply to the rendered label
           on enabled options.
+          This attribute is ignored when "group" attribute is specified.
         </description>
         <display-name>Enabled Label Class</display-name>
         <icon></icon>
@@ -100,10 +103,28 @@
           out vertically), or "lineDirection" (list is
           laid out horizontally).  If not specified, the
           default value is "lineDirection".
+          This attribute is ignored when "group" attribute is specified.
         </description>
         <display-name>Layout</display-name>
         <icon></icon>
         <property-name>layout</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+        <description>
+          Specifies the name of the radio button group. Radio button components
+          having the same group within a <code>UIForm</code> parent will uncheck
+          all others when being checked. If the <code>value</code> attribute is
+          absent then the one from first component of the group will be used. If
+          the <code>UISelectItem</code> child is absent then the one from first
+          component of the group will be used. When specified, the
+          <code>group</code> attribute disables the default rendering of the
+          "table" element and any attribute related to the rendering of the
+          "table" element, such as "border", is ignored.
+        </description>
+        <display-name>Group</display-name>
+        <icon></icon>
+        <property-name>group</property-name>
         <property-class>java.lang.String</property-class>
     </property>
 </root>
