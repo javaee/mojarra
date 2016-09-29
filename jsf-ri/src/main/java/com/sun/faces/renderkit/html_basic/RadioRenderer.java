@@ -299,13 +299,10 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
         assert (writer != null);
 
         if (alignVertical) {
-            writer.writeText("\t", component, null);
             writer.startElement("tr", component);
-            writer.writeText("\n", component, null);
         }
 
         writer.startElement("td", component);
-        writer.writeText("\n", component, null);
 
         String name = component.getClientId(context);
         String clientId = name + UINamingContainer.getSeparatorChar(context) + Integer.toString(itemNumber);
@@ -314,12 +311,9 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
         renderLabel(context, writer, component, clientId, currentItem, optionInfo);
 
         writer.endElement("td");
-        writer.writeText("\n", component, null);
 
         if (alignVertical) {
-            writer.writeText("\t", component, null);
             writer.endElement("tr");
-            writer.writeText("\n", component, null);
         }
     }
 

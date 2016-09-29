@@ -135,7 +135,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                 }
 
                 writer.startElement("td", component);
-                writer.writeText("\n", component, null);
                 renderBeginText(component, 0, alignVertical, context, false);
 
                 // Render options of this group.
@@ -150,7 +149,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
                 if (alignVertical) {
                     writer.endElement("tr");
-                    writer.writeText("\n", component, null);
                 }
             } else {
                 renderOption(context, component, converter, currentItem, currentSelections, submittedValues, alignVertical, index, optionInfo);
@@ -211,12 +209,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             renderStyleAndClassAttributes(writer, component);
         }
 
-        writer.writeText("\n", component, null);
-
         if (!alignVertical) {
-            writer.writeText("\t", component, null);
             writer.startElement("tr", component);
-            writer.writeText("\n", component, null);
         }
     }
 
@@ -239,9 +233,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         assert(writer != null);
 
         if (!alignVertical) {
-            writer.writeText("\t", component, null);
             writer.endElement("tr");
-            writer.writeText("\n", component, null);
         }
 
         writer.endElement("table");
@@ -275,13 +267,10 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         assert (writer != null);
 
         if (alignVertical) {
-            writer.writeText("\t", component, null);
             writer.startElement("tr", component);
-            writer.writeText("\n", component, null);
         }
 
         writer.startElement("td", component);
-        writer.writeText("\n", component, null);
 
         String name = component.getClientId(context);
         String clientId = name + getSeparatorChar(context) + Integer.toString(itemNumber);
@@ -359,12 +348,9 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
         writer.endElement("label");
         writer.endElement("td");
-        writer.writeText("\n", component, null);
 
         if (alignVertical) {
-            writer.writeText("\t", component, null);
             writer.endElement("tr");
-            writer.writeText("\n", component, null);
         }
     }
 
