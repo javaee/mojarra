@@ -77,7 +77,7 @@ public class RequestStateManager {
      * This will be used when generating bytecode for custom converters.
      */
     public static final String TARGET_COMPONENT_ATTRIBUTE_NAME =
-        RIConstants.FACES_PREFIX + "ComponentForValue";
+        RIConstants.FACES_PREFIX + "ComponentForValue";    
 
     /**
      * Attribute defining the {@link javax.faces.render.RenderKit} being used
@@ -141,7 +141,7 @@ public class RequestStateManager {
 
     /**
      * Used to store the FaceletFactory as other components may need to
-     * use it during their processing.
+     * use it during their processing. 
      */
     public static final String FACELET_FACTORY =
         "com.sun.faces.FACELET_FACTORY";
@@ -167,24 +167,15 @@ public class RequestStateManager {
         "com.sun.faces.PROCESSED_RESOURCE_DEPENDENCIES";
 
     /**
-     * Used to store the Set of ResourceDependency annotations that have
-     * been processed.
-     */
-    public static final String PROCESSED_RADIO_BUTTON_GROUPS =
-        "com.sun.faces.PROCESSED_RADIO_BUTTON_GROUPS";
-
-    /**
      * Used to store the Set of resource dependencies that have been rendered.
      */
     public static final String RENDERED_RESOURCE_DEPENDENCIES =
         ResourceHandler.RESOURCE_IDENTIFIER;
 
-    // TODO: refactor this thing to common map.
     private static final String[] ATTRIBUTES_TO_CLEAR_ON_CHANGE_OF_VIEW = {
         SCRIPT_STATE,
         PROCESSED_RESOURCE_DEPENDENCIES,
-        RENDERED_RESOURCE_DEPENDENCIES,
-        PROCESSED_RADIO_BUTTON_GROUPS
+        RENDERED_RESOURCE_DEPENDENCIES
     };
 
     /**
@@ -203,13 +194,12 @@ public class RequestStateManager {
      * @param key the key for the value
      * @return the value associated with the specified key.
      */
-    @SuppressWarnings("unchecked")
-    public static <T> T get(FacesContext ctx, String key) {
+    public static Object get(FacesContext ctx, String key) {
 
         if (ctx == null || key == null) {
             return null;
         }
-        return (T) ctx.getAttributes().get(key);
+        return ctx.getAttributes().get(key);
 
     }
 

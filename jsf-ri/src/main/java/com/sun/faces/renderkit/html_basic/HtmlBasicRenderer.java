@@ -44,7 +44,6 @@ package com.sun.faces.renderkit.html_basic;
 
 import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_EVENT_PARAM;
 import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_SOURCE_PARAM;
-import static com.sun.faces.util.Util.componentIsDisabled;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,7 +79,7 @@ import com.sun.faces.util.Util;
  * for HtmlBasicRenderKit.
  */
 
-public abstract class HtmlBasicRenderer extends Renderer {
+public abstract class HtmlBasicRenderer extends Renderer {   
 
 
     // Log instance for this class
@@ -188,9 +187,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
     // Decodes Behaviors if any match the behavior source/event.
     // As a convenience, returns component id, but only if it
     // was retrieved.  This allows us to avoid duplicating
-    // calls to getClientId(), which can be expensive for
+    // calls to getClientId(), which can be expensive for 
     // deep component trees.
-    protected final String decodeBehaviors(FacesContext context,
+    protected final String decodeBehaviors(FacesContext context, 
                                            UIComponent component)  {
 
         if (!(component instanceof ClientBehaviorHolder)) {
@@ -424,7 +423,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         UIComponent result = null;
         UIComponent currentParent = component;
         try {
-            // Check the naming container of the current
+            // Check the naming container of the current 
             // component for component identified by
             // 'forComponent'
             while (currentParent != null) {
@@ -439,7 +438,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             }
 
             // no hit from above, scan for a NamingContainer
-            // that contains the component we're looking for from the root.
+            // that contains the component we're looking for from the root.    
             if (result == null) {
                 result =
                       findUIComponentBelow(context.getViewRoot(), forComponent);
@@ -548,7 +547,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
                                       UIComponent component) {
 
         Iterator messageIter;
-        // Attempt to use the "for" attribute to locate
+        // Attempt to use the "for" attribute to locate 
         // messages.  Three possible scenarios here:
         // 1. valid "for" attribute - messages returned
         //    for valid component identified by "for" expression.
@@ -608,7 +607,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     /**
      * Collections parameters for use with Behavior script rendering.
-     * Similar to getParamList(), but returns a collection of
+     * Similar to getParamList(), but returns a collection of 
      * ClientBehaviorContext.Parameter instances.
      *
      * @param command the command which may have parameters
@@ -648,7 +647,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     protected Object getValue(UIComponent component) {
 
-        // Make sure this method isn't being called except
+        // Make sure this method isn't being called except 
         // from subclasses that override getValue()!
         throw new UnsupportedOperationException();
 
@@ -720,7 +719,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
         Util.notNull("context", context);
         Util.notNull("component", component);
-
+        
     }
 
 
@@ -776,14 +775,14 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * attached Behaviors into account.  The presence of a non-empty
      * Behaviors map can cause us to switch from optimized pass thru
      * attribute rendering to the unoptimized code path.  However,
-     * in two very common cases - attaching action behaviors to
+     * in two very common cases - attaching action behaviors to 
      * commands and attaching value change behaviors to editable value
      * holders - the behaviors map is populated with behaviors that
      * are not handled by the pass thru attribute code - ie. the
      * behaviors are handled locally by the renderer.
      *
      * In order to optimize such cases, we check to see whether the
-     * component's behaviors map actually contains behaviors only
+     * component's behaviors map actually contains behaviors only 
      * for these non-pass thru attributes.  If so, we can pass a
      * null behavior map into renderPassThruAttributes(), thus ensuring
      * that we can take advantage of the optimized pass thru rendering
@@ -887,7 +886,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         public String name;
         public String value;
 
-
+        
         // -------------------------------------------------------- Constructors
 
 
@@ -908,21 +907,37 @@ public abstract class HtmlBasicRenderer extends Renderer {
      */
     public static class OptionComponentInfo {
 
-        private String disabledClass;
-        private String enabledClass;
-        private String selectedClass;
-        private String unselectedClass;
-        private boolean disabled;
-        private boolean hideNoSelection;
+        String disabledClass;
+        String enabledClass;
+        String selectedClass;
+        String unselectedClass;
+        boolean disabled;
+        boolean hideNoSelection;
 
-        public OptionComponentInfo(UIComponent component) {
-            Map<String,Object> attributes = component.getAttributes();
-            this.disabledClass = (String) attributes.get("disabledClass");
-            this.enabledClass = (String) attributes.get("enabledClass");
-            this.unselectedClass = (String) attributes.get("unselectedClass");
-            this.selectedClass = (String) attributes.get("selectedClass");
-            this.disabled = componentIsDisabled(component);
-            this.hideNoSelection = MenuRenderer.isHideNoSelection(component);
+        public OptionComponentInfo(String disabledClass,
+                                   String enabledClass,
+                                   boolean disabled,
+                                   boolean hideNoSelection) {
+
+            this(disabledClass, enabledClass, null, null, disabled, hideNoSelection);
+
+        }
+
+
+        public OptionComponentInfo(String disabledClass,
+                                   String enabledClass,
+                                   String unselectedClass,
+                                   String selectedClass,
+                                   boolean disabled,
+                                   boolean hideNoSelection) {
+
+            this.disabledClass = disabledClass;
+            this.enabledClass = enabledClass;
+            this.unselectedClass = unselectedClass;
+            this.selectedClass = selectedClass;
+            this.disabled = disabled;
+            this.hideNoSelection = hideNoSelection;
+            
         }
 
         public String getDisabledClass() {
@@ -948,8 +963,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         public String getUnselectedClass() {
             return unselectedClass;
         }
-
+        
     }
-
+    
 
 } // end of class HtmlBasicRenderer
