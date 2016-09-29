@@ -43,7 +43,7 @@
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
  * divested of its trade secrets, irrespective of what has been
- * deposited with the U. S. Copyright Office.   
+ * deposited with the U. S. Copyright Office.
  */
 
 // SelectManyCheckboxListRenderer.java
@@ -52,11 +52,10 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Map;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -66,7 +65,6 @@ import javax.faces.model.SelectItemGroup;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 
 /**
@@ -121,21 +119,15 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
         Object currentSelections = getCurrentSelectedValues(component);
         Object[] submittedValues = getSubmittedSelectedValues(component);
-        Map<String,Object> attributes = component.getAttributes();
         OptionComponentInfo optionInfo =
-              new OptionComponentInfo((String) attributes.get("disabledClass"),
-                                      (String) attributes.get("enabledClass"),
-                                      (String) attributes.get("unselectedClass"),
-                                      (String) attributes.get("selectedClass"),
-                                      Util.componentIsDisabled(component),
-                                      isHideNoSelection(component));
+              new OptionComponentInfo(component);
         int idx = -1;
         while (items.hasNext()) {
             SelectItem curItem = items.next();
             idx++;
             // If we come across a group of options, render them as a nested
             // table.
-            if (curItem instanceof SelectItemGroup) {                
+            if (curItem instanceof SelectItemGroup) {
                 // write out the label for the group.
                 if (curItem.getLabel() != null) {
                     if (alignVertical) {
@@ -159,11 +151,11 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                 // render options of this group.
                 SelectItem[] itemsArray =
                       ((SelectItemGroup) curItem).getSelectItems();
-                for (int i = 0; i < itemsArray.length; ++i) {
+                for (SelectItem element : itemsArray) {
                     renderOption(context,
                                  component,
                                  converter,
-                                 itemsArray[i],
+                                 element,
                                  currentSelections,
                                  submittedValues,
                                  alignVertical,
@@ -212,12 +204,12 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         }
         char sepChar = UINamingContainer.getSeparatorChar(ctx);
         String actualBehaviorId;
-        if (behaviorSourceId.lastIndexOf(sepChar) != -1) { 
+        if (behaviorSourceId.lastIndexOf(sepChar) != -1) {
             actualBehaviorId = behaviorSourceId.substring(0, behaviorSourceId.lastIndexOf(sepChar));
         } else {
             actualBehaviorId = behaviorSourceId;
         }
-        
+
         return (actualBehaviorId.equals(componentClientId));
 
     }
@@ -236,7 +228,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             writer.writeAttribute("border", border, "border");
         }
 
-        // render style and styleclass attribute on the outer table instead of 
+        // render style and styleclass attribute on the outer table instead of
         // rendering it as pass through attribute on every option in the list.
         if (outerTable) {
             // render "id" only for outerTable.
@@ -362,7 +354,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                                 getNonOnClickSelectBehaviors(component));
 
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
-        
+
         RenderKitUtils.renderSelectOnclick(context, component, false);
 
         writer.endElement("input");
@@ -409,9 +401,9 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             writer.writeText(itemLabel, component, "label");
         }
 //        if (isSelected(context, component, itemValue, valuesArray, converter)) {
-//            
+//
 //        } else { // not selected
-//            
+//
 //        }
         writer.endElement("label");
         writer.endElement("td");
