@@ -292,7 +292,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
              * and submits the form.
              * @ignore
              */
-            send:function(data) {
+            send:function(data,namingContainerId) {
                 var evt = {};
                 this.context.form.target = this.frame.name;
                 this.context.form.method = this.method;
@@ -310,12 +310,12 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 this.requestParams = new Array();
                 for (var i=0; i<dataArray.length; i++) {
                     var nameValue = dataArray[i].split("=");
-                    if (nameValue[0] === "javax.faces.source" ||
-                        nameValue[0] === "javax.faces.partial.event" ||
-                        nameValue[0] === "javax.faces.partial.execute" ||
-                        nameValue[0] === "javax.faces.partial.render" ||
-                        nameValue[0] === "javax.faces.partial.ajax" ||
-                        nameValue[0] === "javax.faces.behavior.event") {
+                    if (nameValue[0] === namingContainerId+"javax.faces.source" ||
+                        nameValue[0] === namingContainerId+"javax.faces.partial.event" ||
+                        nameValue[0] === namingContainerId+"javax.faces.partial.execute" ||
+                        nameValue[0] === namingContainerId+"javax.faces.partial.render" ||
+                        nameValue[0] === namingContainerId+"javax.faces.partial.ajax" ||
+                        nameValue[0] === namingContainerId+"javax.faces.behavior.event") {
                         input = document.createElement("input");
                         input.setAttribute("type", "hidden");
                         input.setAttribute("id", nameValue[0]);
@@ -1725,6 +1725,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
             req.method = null;             // GET or POST
             req.status = null;             // Response Status Code From Server
             req.fromQueue = false;         // Indicates if the request was taken off the queue
+            req.namingContainerId = null;
             // before being sent.  This prevents the request from
             // entering the queue redundantly.
 
@@ -1878,7 +1879,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         req.xmlReq.onreadystatechange = null; // no need for readystate change listening
                     }
                     sendEvent(req.xmlReq, req.context, "begin");
-                    req.xmlReq.send(content);
+                    req.xmlReq.send(content,req.namingContainerId);
                     if(!req.async){
                         req.onComplete();
                 }
@@ -2416,7 +2417,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 var namingContainerId = options["com.sun.faces.namingContainerId"];
                 
                 if (typeof(namingContainerId) === 'undefined' || options === null) {
-                	namingContainerId = "";
+                    namingContainerId = "";
                 }                
 
                 args[namingContainerId + "javax.faces.source"] = element.id;
@@ -2519,6 +2520,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     ajaxEngine.context.onerror = onerror;
                     ajaxEngine.context.sourceid = element.id;
                     ajaxEngine.context.render = args[namingContainerId + "javax.faces.partial.render"];
+                    ajaxEngine.namingContainerId = namingContainerId;
                     ajaxEngine.sendRequest();
 
                     // null out element variables to protect against IE memory leak
