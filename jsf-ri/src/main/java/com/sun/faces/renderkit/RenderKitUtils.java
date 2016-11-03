@@ -1194,13 +1194,15 @@ public class RenderKitUtils {
             return;
         }
 
+        ExternalContext extContext = context.getExternalContext();
+
         // Since we've now determined that it's not in the page, we need to manually render it.
         Resource resource = resourceHandler.createResource(JSF_SCRIPT_RESOURCE_NAME, JSF_SCRIPT_LIBRARY_NAME);
         ResponseWriter writer = context.getResponseWriter();
         writer.write('\n');
         writer.startElement("script", null);
         writer.writeAttribute("type", "text/javascript", null);
-        writer.writeAttribute("src", ((resource != null) ? resource.getRequestPath() : ""), null);
+        writer.writeAttribute("src", ((resource != null) ? extContext.encodeResourceURL(resource.getRequestPath()) : ""), null);
         writer.endElement("script");
         writer.append('\r');
         writer.append('\n');
