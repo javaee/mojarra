@@ -434,6 +434,10 @@ public final class DevTools {
                         if (LOGGER.isLoggable(Level.FINEST)) {
                             LOGGER.log(Level.FINEST, "Error writing out attribute", e);
                         }
+                    } catch (Exception e) {
+                        if (LOGGER.isLoggable(Level.FINEST)) {
+                            LOGGER.log(Level.FINEST, "Error writing out attribute", e);
+                        }
                     }
                 }
             }
