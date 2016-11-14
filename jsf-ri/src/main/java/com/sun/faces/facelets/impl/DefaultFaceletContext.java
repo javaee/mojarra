@@ -58,21 +58,22 @@
 
 package com.sun.faces.facelets.impl;
 
+import javax.faces.view.facelets.Facelet;
 import com.sun.faces.facelets.FaceletContextImplBase;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.el.DefaultVariableMapper;
 
-import javax.faces.view.facelets.Facelet;
+import javax.el.ELContext;
+import javax.el.ELException;
+import javax.el.ELResolver;
+import javax.el.ExpressionFactory;
+import javax.el.FunctionMapper;
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.FaceletContext;
-
-import javax.el.ImportHandler;
-import javax.el.ELContext;
-import javax.el.VariableMapper;
-import javax.el.FunctionMapper;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -341,11 +342,6 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     @Override
     public ELResolver getELResolver() {
         return this.ctx.getELResolver();
-    }
-
-
-    public ImportHandler getImportHandler() {
-        return this.ctx.getImportHandler();
     }
 
     private final List<TemplateManager> clients;
