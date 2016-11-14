@@ -91,6 +91,7 @@
     <property name="DocName" value="Mojarra Implementation Javadoc"/>
 
     <path id="impl.compile.classpath">
+        <path refid="cdi.classpath"/>
         <pathelement location="${jsf-api-intermediate.jar}"/>
         <path refid="apache.commons.classpath"/>
         <path refid="compile.classpath"/>
