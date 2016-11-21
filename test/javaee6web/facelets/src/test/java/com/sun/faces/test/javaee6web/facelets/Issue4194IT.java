@@ -70,7 +70,7 @@ public class Issue4194IT {
         expectedAlerts.add("static onSubmit triggered");
         expectedAlerts.add("static onSubmit triggered");
         expectedAlerts.add("dynamic onSubmit triggered");
-        expectedAlerts.add("dynamic onSubmit triggered...");
+        expectedAlerts.add("dynamic onSubmit triggered");
     }
 
     @Test
