@@ -140,14 +140,13 @@ mojarra.jsfcljs = function jsfcljs(f, pvp, t) {
     if (t) {
         f.target = t;
     }
-    if (f.onsubmit) {
-        var result = f.onsubmit();
-        if ((typeof result == 'undefined') || result) {
-            f.submit();
-        }
-    } else {
-        f.submit();
-    }    
+
+    var input = document.createElement('input');
+    input.type = 'submit';
+    f.appendChild(input);
+    input.click();
+    f.removeChild(input);
+
     f.target = ft;
     mojarra.dpf(f);
 };
