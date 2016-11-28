@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
@@ -205,7 +206,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     private static final String LOCATION_IDENTIFIER_PREFIX = "javax_faces_location_";
     private static final Map<String,String> LOCATION_IDENTIFIER_MAP =
-          new HashMap<>(3, 1.0f);
+          new LinkedHashMap<>(3, 1.0f);
     static {
         LOCATION_IDENTIFIER_MAP.put("head", LOCATION_IDENTIFIER_PREFIX + "HEAD");
         LOCATION_IDENTIFIER_MAP.put("form", LOCATION_IDENTIFIER_PREFIX + "FORM");
@@ -650,8 +651,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     /**
      * <p class="changed_added_2_3">
-     * Return an unmodifiable <code>List</code> of all {@link UIComponent} resources of all supported targets.
-     * Each <code>component</code> in the <code>List</code> is assumed to represent a resource instance.
+     * Return an unmodifiable ordered <code>List</code> of all {@link UIComponent} resources of all supported targets.
+     * Each <code>component</code> in the <code>List</code> is assumed to represent a resource instance. The ordering
+     * is the same as the resources would appear in the component tree.
      * </p>
      * 
      * @param context The Faces context.
