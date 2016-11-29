@@ -186,7 +186,7 @@
                 </not>
             </and>
             <then>
-                <get src="http://downloads.sourceforge.net/htmlunit/htmlunit-${htmlunit.version}.zip"
+                <get src="http://pilotfiber.dl.sourceforge.net/project/htmlunit/htmlunit/${htmlunit.version}/htmlunit-${htmlunit.version}.zip"
                      dest="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
                      usetimestamp="true"/>
                 <unzip
@@ -303,7 +303,7 @@
                 </not>
             </and>
             <then>
-                <get src="http://vdldoc.googlecode.com/files/vdldoc-${vdldoc.version}.jar"
+                <get src="http://vdldoc.omnifaces.org/downloads/vdldoc-${vdldoc.version}.jar"
                      dest="${vdldoc.jar}"
                      usetimestamp="true"/>
 
@@ -322,7 +322,7 @@
                 </not>
             </and>
             <then>
-                <get src="http://jsdoc-toolkit.googlecode.com/files/jsdoc_toolkit-${jsdoc.version}.zip"
+                <get src="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jsdoc-toolkit/jsdoc_toolkit-${jsdoc.version}.zip"
                      dest="${dependency.base.dir}/downloads/jsdoc_toolkit-${jsdoc.version}.zip"
                      usetimestamp="true"/>
                 <unzip
