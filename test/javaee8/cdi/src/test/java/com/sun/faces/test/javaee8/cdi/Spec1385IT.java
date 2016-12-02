@@ -40,7 +40,6 @@
 package com.sun.faces.test.javaee8.cdi;
 
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
-import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M03;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -79,7 +78,7 @@ public class Spec1385IT {
     }
 
     @Test
-    @JsfTest(value = JSF_2_3_0_M03, excludes = { WEBLOGIC_12_2_1, WEBLOGIC_12_1_4 })
+    @JsfTest(value = JSF_2_3_0_M03, excludes = { WEBLOGIC_12_1_4 })
     public void testCompositeComponentFacelets() throws Exception {
         
         // Renders nothing of interest, should cause cookie to be set

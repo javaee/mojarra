@@ -40,7 +40,6 @@
 package com.sun.faces.test.javaee8.el;
 
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
-import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M07;
 import static org.junit.Assert.assertTrue;
 
@@ -76,7 +75,7 @@ public class Issue4159IT {
     }
 
     @Test
-    @JsfTest(value = JSF_2_3_0_M07, excludes = { WEBLOGIC_12_2_1, WEBLOGIC_12_1_4 })
+    @JsfTest(value = JSF_2_3_0_M07, excludes = { WEBLOGIC_12_1_4 })
     public void testResourceHandler() throws Exception {
         
         HtmlPage page = webClient.getPage(webUrl + "valueReference.xhtml");

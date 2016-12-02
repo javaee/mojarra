@@ -40,7 +40,6 @@
 package com.sun.faces.test.javaee8.cdi;
 
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
-import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M06;
 import static org.junit.Assert.assertTrue;
 
@@ -78,7 +77,7 @@ public class Spec1418IT {
     }
 
     @Test
-    @JsfTest(value = JSF_2_3_0_M06, excludes = { WEBLOGIC_12_2_1, WEBLOGIC_12_1_4 })
+    @JsfTest(value = JSF_2_3_0_M06, excludes = { WEBLOGIC_12_1_4 })
     public void testManagedPropertyInteger() throws Exception {
         
         HtmlPage page = webClient.getPage(webUrl + "injectManagedProperty.xhtml");
@@ -89,7 +88,7 @@ public class Spec1418IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M06, excludes = { WEBLOGIC_12_2_1, WEBLOGIC_12_1_4 })
+    @JsfTest(value = JSF_2_3_0_M06, excludes = { WEBLOGIC_12_1_4 })
     public void testManagedPropertyString() throws Exception {
         
         HtmlPage page = webClient.getPage(webUrl + "injectManagedProperty.xhtml?test=foo");
@@ -98,7 +97,7 @@ public class Spec1418IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M06, excludes = { WEBLOGIC_12_2_1, WEBLOGIC_12_1_4 })
+    @JsfTest(value = JSF_2_3_0_M06, excludes = { WEBLOGIC_12_1_4 })
     public void testManagedPropertyGenericMap() throws Exception {
         
         HtmlPage page = webClient.getPage(webUrl + "injectManagedProperty.xhtml");
