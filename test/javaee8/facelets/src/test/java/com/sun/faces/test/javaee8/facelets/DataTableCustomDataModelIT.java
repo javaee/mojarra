@@ -41,7 +41,6 @@ package com.sun.faces.test.javaee8.facelets;
 
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M03;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
-import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import static java.util.regex.Pattern.matches;
 import static org.junit.Assert.assertTrue;
 
@@ -74,7 +73,7 @@ public class DataTableCustomDataModelIT {
 
     @Test
     @JsfTest(value = JSF_2_3_0_M03,
-            excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
+            excludes = {WEBLOGIC_12_1_4})
     public void testExactClassMatch() throws Exception {
     	
     	// In this test a backing bean will return an object of type Child11.
@@ -92,7 +91,7 @@ public class DataTableCustomDataModelIT {
     
     @Test
     @JsfTest(value = JSF_2_3_0_M03,
-            excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
+            excludes = {WEBLOGIC_12_1_4})
     public void testClosestSuperClassMatch() throws Exception {
     	
     	// In this test a backing bean will return an object of type Child111.

@@ -43,7 +43,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
-import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import com.sun.faces.test.junit.JsfVersion;
@@ -72,7 +71,7 @@ public class Spec1349IT {
 
     @Test
     @JsfTest(value = JsfVersion.JSF_2_3_0_M02,
-            excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
+            excludes = {WEBLOGIC_12_1_4})
     public void testInjectConverter() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/injectConverter.xhtml");
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
@@ -84,7 +83,7 @@ public class Spec1349IT {
 
     @Test
     @JsfTest(value = JsfVersion.JSF_2_3_0_M02,
-            excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
+            excludes = {WEBLOGIC_12_1_4})
     public void testInjectConverter2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/injectConverter2.xhtml");
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
@@ -96,7 +95,7 @@ public class Spec1349IT {
 
     @Test
     @JsfTest(value = JsfVersion.JSF_2_3_0_M02,
-            excludes = {WEBLOGIC_12_2_1, WEBLOGIC_12_1_4})
+            excludes = {WEBLOGIC_12_1_4})
     public void testInjectConverter3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/injectConverter3.xhtml");
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
