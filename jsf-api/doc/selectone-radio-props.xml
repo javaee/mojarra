@@ -112,6 +112,7 @@
     </property>
     <property>
         <description>
+            <![CDATA[
           Specifies the name of the radio button group. Radio button components
           having the same group within a <code>UIForm</code> parent will uncheck
           all others when being checked. If the <code>value</code> attribute is
@@ -121,6 +122,7 @@
           <code>group</code> attribute disables the default rendering of the
           "table" element and any attribute related to the rendering of the
           "table" element, such as "border", is ignored.
+            ]]>
         </description>
         <display-name>Group</display-name>
         <icon></icon>

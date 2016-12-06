@@ -42,6 +42,7 @@ package com.sun.faces.push;
 import static com.sun.faces.cdi.CdiUtils.getBeanInstance;
 import static com.sun.faces.push.WebsocketUserManager.getUserChannels;
 import static java.util.Collections.emptyMap;
+import static javax.faces.push.PushContext.URI_PREFIX;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -131,7 +132,7 @@ public class WebsocketChannelManager implements Serializable {
      * <code>view</code>, case insensitive. If <code>null</code>, the default is <code>application</code>.
      * @param user The user object representing the owner of the given channel. If not <code>null</code>, then scope
      * may not be <code>application</code>.
-     * @return The web socket channel identifier. This can be used as web socket URI.
+     * @return The web socket URI.
      * @throws IllegalArgumentException When the scope is invalid or when channel already exists on a different scope.
      */
     @SuppressWarnings("unchecked")
@@ -168,7 +169,7 @@ public class WebsocketChannelManager implements Serializable {
         }
 
         socketSessions.register(channelId);
-        return channelId;
+        return URI_PREFIX + "/" + channelId;
     }
 
     /**

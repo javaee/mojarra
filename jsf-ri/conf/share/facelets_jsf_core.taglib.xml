@@ -802,7 +802,7 @@ for <code>@NamedEvent</code>.</p>
                 This works for classes, interfaces and enums. 
             </p>
         ]]></description>
-        <tag-name>viewAction</tag-name>
+        <tag-name>importConstants</tag-name>
         <component>
             <component-type>javax.faces.ImportConstants</component-type>
         </component>
@@ -1508,18 +1508,42 @@ of POJOs.
     <tag>
         <description><![CDATA[
             <p class="changed_added_2_3">
-                Registers a web socket push connection in client side.
+                Registers a websocket push connection in client side by rendering the necessary scripts.
                 Push messages can be sent from server side via <code>javax.faces.push.PushContext</code> interface.
                 See also <code>javax.faces.push.Push</code> API documentation for an elaborate instruction on how to use <code>&lt;f:websocket&gt;</code>.
             </p>
         ]]></description>
         <tag-name>websocket</tag-name>
-        <handler-class>com.sun.faces.facelets.tag.jsf.core.WebsocketHandler</handler-class>
+        <component>
+        	<component-type>javax.faces.Websocket</component-type>
+        </component>
 
         <attribute>
             <description><![CDATA[
                 <p class="changed_added_2_3">
-                    The port number of the web socket host, in case it is different from the port number in the request URI.
+                	Value binding expression to a backing bean property bound to the component instance for the <code>UIComponent</code> created by this tag.
+                </p>
+            ]]></description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                	Component identifier of the <code>UIWebsocket</code> component to be created.
+                </p>
+            ]]></description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    The port number of the websocket host, in case it is different from the port number in the request URI.
                     Defaults to the port number of the request URI.
                 </p>
             ]]></description>
@@ -1531,9 +1555,9 @@ of POJOs.
         <attribute>
             <description><![CDATA[
                 <p class="changed_added_2_3">
-                    The name of the web socket channel.
+                    The name of the websocket channel.
                     It may not be an EL expression and it may only contain alphanumeric characters, hyphens, underscores and periods.
-                    All open web sockets on the same channel name will receive the same push notification from the server.
+                    All open websockets on the same channel name will receive the same push notification from the server.
                 </p>
             ]]></description>
             <name>channel</name>
@@ -1544,7 +1568,7 @@ of POJOs.
         <attribute>
             <description><![CDATA[
                 <p class="changed_added_2_3">
-                    The scope of the web socket channel.
+                    The scope of the websocket channel.
                     It may not be an EL expression and allowed values are <code>application</code>, <code>session</code> and <code>view</code>, case insensitive.
                     When the value is <code>application</code>, then all channels with the same name throughout the application will receive the same push message.
                     When the value is <code>session</code>, then only the channels with the same name in the current user session will receive the same push message.
@@ -1559,14 +1583,14 @@ of POJOs.
         </attribute>
 
         <attribute>
-            <description>
-                <![CDATA[
-                    The user identifier of the web socket channel, so that user-targeted push messages can be sent.
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    The user identifier of the websocket channel, so that user-targeted push messages can be sent.
                     It must implement <code>Serializable</code> and preferably have low memory footprint.
                     Suggestion: use <code>#{request.remoteUser}</code> or <code>#{someLoggedInUser.id}</code>.
-                    All open web sockets on the same channel and user will receive the same push message from the server.
-                ]]>
-            </description>
+                    All open websockets on the same channel and user will receive the same push message from the server.
+                </p>
+            ]]></description>
             <name>user</name>
             <required>false</required>
             <type>java.io.Serializable</type>
@@ -1575,7 +1599,7 @@ of POJOs.
         <attribute>
             <description><![CDATA[
                 <p class="changed_added_2_3">
-                    The JavaScript event handler function that is invoked when the web socket is opened.
+                    The JavaScript event handler function that is invoked when the websocket is opened.
                     The function will be invoked with one argument: the channel name.
                 </p>
             ]]></description>
@@ -1599,7 +1623,7 @@ of POJOs.
         <attribute>
             <description><![CDATA[
                 <p class="changed_added_2_3">
-                    The JavaScript event handler function that is invoked when the web socket is closed.
+                    The JavaScript event handler function that is invoked when the websocket is closed.
                     The function will be invoked with three arguments: the close reason code, the channel name and the raw <code>CloseEvent</code> itself.
                     Note that this will also be invoked on errors and that you can inspect the close reason code if an error occurred and which one (i.e. when the code is not 1000).
                     See also 
@@ -1617,12 +1641,11 @@ of POJOs.
         <attribute>
             <description><![CDATA[
                 <p class="changed_added_2_3">
-                    Whether to (auto)connect the web socket or not.
+                    Whether to (auto)connect the websocket or not.
                     Defaults to <code>true</code>.
-                    It's interpreted as a JavaScript instruction whether to open or close the web socket push connection.
-                    Note that this attribute is re-evaluated on every ajax request.
-                    You can also explicitly set it to <code>false</code> and then manually control in JavaScript by
-                    <code>jsf.push.open("channelName")</code> and <code>jsf.push.close("channelName")</code>.
+                    It's interpreted as a JavaScript instruction whether to open or close the websocket push connection.
+                    This attribute is implicitly re-evaluated on every ajax request by a <code>PreRenderViewEvent</code> listener on the <code>UIViewRoot</code>.
+                    You can also explicitly set it to <code>false</code> and then manually control in JavaScript by <code>jsf.push.open("channelName")</code> and <code>jsf.push.close("channelName")</code>.
                 </p>
             ]]></description>
             <name>connected</name>
@@ -1630,6 +1653,19 @@ of POJOs.
             <type>java.lang.Boolean</type>
         </attribute>
 
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    Whether to render the websocket scripts or not.
+                    Defaults to <code>true</code>.
+                    This attribute is implicitly re-evaluated on every ajax request by a <code>PreRenderViewEvent</code> listener on the <code>UIViewRoot</code>.
+                    If the value changes to <code>false</code> while the websocket is already opened, then the websocket will implicitly be closed.
+                </p>
+            ]]></description>
+            <name>rendered</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
     </tag>
 
     <tag>

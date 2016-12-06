@@ -39,18 +39,18 @@
  */
 package com.sun.faces.push;
 
-import static com.sun.faces.renderkit.RenderKitUtils.installJsfJsIfNecessary;
-import static java.lang.Boolean.TRUE;
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import javax.el.ValueExpression;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIWebsocket;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PreRenderViewEvent;
 import javax.faces.event.SystemEvent;
@@ -59,8 +59,8 @@ import javax.faces.push.Push;
 
 /**
  * <p class="changed_added_2_3">
- * This JSF listener for {@link UIViewRoot} ensures that the necessary JavaScript code to initialize, open or close
- * the <code>WebSocket</code> is properly rendered.
+ * This JSF listener for {@link UIViewRoot} ensures that the necessary JavaScript code to open or close the
+ * <code>WebSocket</code> is properly rendered depending on <code>rendered</code> and <code>connected</code> attributes.
  *
  * @author Bauke Scholtz
  * @see Push
@@ -70,36 +70,22 @@ public class WebsocketFacesListener implements SystemEventListener {
 
     // Constants ------------------------------------------------------------------------------------------------------
 
-    private static final String SCRIPT_INIT = "jsf.push.init(%s,'%s',%s,%s);";
     private static final String SCRIPT_OPEN = "jsf.push.open('%s');";
     private static final String SCRIPT_CLOSE = "jsf.push.close('%s');";
 
-    // Variables ------------------------------------------------------------------------------------------------------
+    // Initialization -------------------------------------------------------------------------------------------------
 
-    private Integer port;
-    private String channel;
-    private String uri;
-    private String functions;
-    private ValueExpression connectedExpression;
+    public static void subscribeIfNecessary(FacesContext context) {
+        UIViewRoot view = context.getViewRoot();
+        List<SystemEventListener> listeners = view.getListenersForEventClass(PostAddToViewEvent.class);
 
-    // Constructors ---------------------------------------------------------------------------------------------------
+        if (listeners == null || !listeners.stream().anyMatch(l -> l instanceof WebsocketFacesListener)) {
+            view.subscribeToViewEvent(PreRenderViewEvent.class, new WebsocketFacesListener());
+        }
+    }
 
-    /**
-     * Construct an instance of websocket event listener based on the given port, channel, uri, functions and connected
-     * expression.
-     * @param port The port number.
-     * @param channel The channel name.
-     * @param uri The uri of the web socket representing the channel identifier, which is composed of channel name and
-     * scope identifier, separated by a question mark.
-     * @param functions The onopen, onmessage and onclose functions.
-     * @param connectedExpression The connected expression.
-     */
-    public WebsocketFacesListener(Integer port, String channel, String uri, String functions, ValueExpression connectedExpression) {
-        this.port = port;
-        this.channel = channel;
-        this.uri = uri;
-        this.functions = functions;
-        this.connectedExpression = connectedExpression;
+    public static boolean isNew(FacesContext context, UIWebsocket websocket) {
+        return getInitializedWebsockets(context).putIfAbsent(websocket.getClientId(context), websocket.isConnected()) == null;
     }
 
     // Actions --------------------------------------------------------------------------------------------------------
@@ -113,33 +99,27 @@ public class WebsocketFacesListener implements SystemEventListener {
     }
 
     /**
-     * If event is an instance of {@link PostAddToViewEvent}, then add the JSF script
-     * resource. Else if event is an instance of {@link PreRenderViewEvent}, and the socket is new, then render the
-     * <code>init()</code> script, or if it has just switched the <code>connected</code> attribute, then render either
-     * the <code>open()</code> script or the <code>close()</code> script. During an ajax request with partial rendering,
-     * it's added as <code>&lt;eval&gt;</code> by partial response writer, else it's just added as a script component
-     * with <code>target="body"</code>.
+     * If the websocket has just switched its <code>rendered</code> or <code>connected</code> attribute, then
+     * render either the <code>open()</code> script or the <code>close()</code> script. During an ajax request with
+     * partial rendering, it's added as <code>&lt;eval&gt;</code> by partial response writer, else it's just added
+     * as a script component with <code>target="body"</code>.
      */
     @Override
     public void processEvent(SystemEvent event) throws AbortProcessingException {
-        FacesContext context = FacesContext.getCurrentInstance();
-
-        if (event instanceof PostAddToViewEvent) {
-            installJsfJsIfNecessary(context);
+        if (!(event instanceof PreRenderViewEvent)) {
+            return;
         }
-        else if (event instanceof PreRenderViewEvent) {
-            boolean connected = connectedExpression == null || TRUE.equals(connectedExpression.getValue(context.getELContext()));
-            Boolean switched = hasSwitched(context, channel, connected);
-            String script = null;
 
-            if (switched == null) {
-                script = String.format(SCRIPT_INIT, port, uri, functions, connected);
-            }
-            else if (switched) {
-                script = String.format(connected ? SCRIPT_OPEN : SCRIPT_CLOSE, channel);
-            }
+        FacesContext context = ((ComponentSystemEvent) event).getFacesContext();
 
-            if (script != null) {
+        for (Entry<String, Boolean> initializedWebsocket : getInitializedWebsockets(context).entrySet()) {
+            String clientId = initializedWebsocket.getKey();
+            UIWebsocket websocket = (UIWebsocket) context.getViewRoot().findComponent(clientId);
+            boolean connected = websocket.isRendered() && websocket.isConnected();
+            boolean previouslyConnected = initializedWebsocket.setValue(connected);
+
+            if (previouslyConnected != connected) {
+                String script = String.format(connected ? SCRIPT_OPEN : SCRIPT_CLOSE, clientId);
                 PartialViewContext pvc = context.getPartialViewContext();
 
                 if (pvc.isAjaxRequest() && !pvc.isRenderAll()) {
@@ -159,22 +139,17 @@ public class WebsocketFacesListener implements SystemEventListener {
 
     // Helpers --------------------------------------------------------------------------------------------------------
 
-    /**
-     * Helper to remember which channels are opened on the view and returns <code>null</code> if it is new, or
-     * <code>true</code> or <code>false</code> if it has switched its <code>connected</code> attribute.
-     */
     @SuppressWarnings("unchecked")
-    private static Boolean hasSwitched(FacesContext context, String channel, boolean connected) {
+    private static Map<String, Boolean> getInitializedWebsockets(FacesContext context) {
         Map<String, Object> viewScope = context.getViewRoot().getViewMap();
-        Map<String, Boolean> channels = (Map<String, Boolean>) viewScope.get(WebsocketFacesListener.class.getName());
+        Map<String, Boolean> initializedWebsockets = (Map<String, Boolean>) viewScope.get(WebsocketFacesListener.class.getName());
 
-        if (channels == null) {
-            channels = new HashMap<>();
-            viewScope.put(WebsocketFacesListener.class.getName(), channels);
+        if (initializedWebsockets == null) {
+            initializedWebsockets = new HashMap<>();
+            viewScope.put(WebsocketFacesListener.class.getName(), initializedWebsockets);
         }
 
-        Boolean previouslyConnected = channels.put(channel, connected);
-        return (previouslyConnected == null) ? null : (previouslyConnected != connected);
+        return initializedWebsockets;
     }
 
 }

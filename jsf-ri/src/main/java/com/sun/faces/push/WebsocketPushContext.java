@@ -94,7 +94,7 @@ public class WebsocketPushContext implements PushContext {
         this.channel = channel;
         boolean hasSession = CdiUtils.isScopeActive(SessionScoped.class);
         sessionScope = hasSession ? getSessionScope() : EMPTY_SCOPE;
-        viewScope = hasSession && FacesContext.getCurrentInstance() != null ? getViewScope(false) : EMPTY_SCOPE;
+        viewScope = hasSession && FacesContext.getCurrentInstance() != null ? getViewScope(true) : EMPTY_SCOPE;
         this.socketSessions = socketSessions;
         this.socketUsers = socketUsers;
     }

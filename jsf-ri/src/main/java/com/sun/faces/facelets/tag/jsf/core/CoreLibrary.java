@@ -64,6 +64,7 @@ import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UIViewAction;
 import javax.faces.component.UIViewParameter;
+import javax.faces.component.UIWebsocket;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.convert.NumberConverter;
 import javax.faces.validator.BeanValidator;
@@ -75,6 +76,7 @@ import javax.faces.validator.RequiredValidator;
 
 import com.sun.faces.ext.component.UIValidateWholeBean;
 import com.sun.faces.facelets.tag.AbstractTagLibrary;
+import com.sun.faces.renderkit.html_basic.WebsocketRenderer;
 
 /**
  * For Tag details, see JSF Core <a target="_new"
@@ -168,6 +170,6 @@ public final class CoreLibrary extends AbstractTagLibrary {
         this.addComponent("verbatim", "javax.faces.HtmlOutputText",
                           "javax.faces.Text", VerbatimHandler.class);       
 
-        this.addTagHandler("websocket", WebsocketHandler.class);
+        this.addComponent("websocket", UIWebsocket.COMPONENT_TYPE, WebsocketRenderer.RENDERER_TYPE);
     }
 }
