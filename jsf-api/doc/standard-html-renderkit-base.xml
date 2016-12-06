@@ -365,7 +365,7 @@
         <xi:include href="uiwebsocket-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
-            <component-family>javax.faces.Output</component-family>
+            <component-family>javax.faces.Script</component-family>
             <renderer-type>javax.faces.Websocket</renderer-type>
         </component-extension>
 
@@ -4246,7 +4246,7 @@ unmodified to the rendered output.</p>
                     </p>
                 ]]>
             </description>
-            <component-family>javax.faces.Output</component-family>
+            <component-family>javax.faces.Script</component-family>
             <renderer-type>javax.faces.Websocket</renderer-type>
             <renderer-class>
                 <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-websocket-renderer-class/text())"/>

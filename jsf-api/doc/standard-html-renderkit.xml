@@ -5492,7 +5492,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
 
     <component-extension>
-      <component-family>javax.faces.Output</component-family>
+      <component-family>javax.faces.Script</component-family>
       <renderer-type>javax.faces.Websocket</renderer-type>
     </component-extension>
   </component>
@@ -36123,7 +36123,7 @@ unmodified to the rendered output.</p>
                         arguments, if any. 
                     </p>
                 ]]></description>
-      <component-family>javax.faces.Output</component-family>
+      <component-family>javax.faces.Script</component-family>
       <renderer-type>javax.faces.Websocket</renderer-type>
       <renderer-class>
         com.sun.faces.renderkit.html_basic.WebsocketRenderer

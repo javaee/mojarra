@@ -36,7 +36,7 @@ import javax.websocket.CloseReason.CloseCodes;
  * @see Push
  * @since 2.3
  */
-public class UIWebsocket extends UIOutput implements ClientBehaviorHolder {
+public class UIWebsocket extends UIComponentBase implements ClientBehaviorHolder {
 
     // ---------------------------------------------------------------------------------------------- Manifest Constants
 
@@ -52,7 +52,7 @@ public class UIWebsocket extends UIOutput implements ClientBehaviorHolder {
      * The standard component family for this component.
      * </p>
      */
-    public static final String COMPONENT_FAMILY = "javax.faces.Output";
+    public static final String COMPONENT_FAMILY = "javax.faces.Script";
 
     /**
      * <p>
