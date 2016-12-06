@@ -100,13 +100,13 @@ public final class Resource {
      *         called to get the resource
      * @throws MalformedURLException
      */
-    static URL getResourceUrl(FacesContext ctx, String path)
-            throws MalformedURLException {
+    static URL getResourceUrl(FacesContext ctx, String path) throws MalformedURLException {
         final ExternalContext externalContext = ctx.getExternalContext();
         URL url = externalContext.getResource(path);
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Resource-Url from external context: " + url);
         }
+        
         // This might happen on Servlet container which doesnot return
         // anything
         // for getResource() (like weblogic 8.1 for packaged wars) we
@@ -123,12 +123,12 @@ public final class Resource {
     // This method could be used above to provide a 'fail fast' if a
     // resource
     // doesnt exist. Otherwise, the URL will fail on the first access.
-    private static boolean resourceExist(ExternalContext externalContext,
-            String path) {
+    private static boolean resourceExist(ExternalContext externalContext, String path) {
         if ("/".equals(path)) {
             // The root context exists always
             return true;
         }
+        
         Object ctx = externalContext.getContext();
         if (ctx instanceof ServletContext) {
             ServletContext servletContext = (ServletContext) ctx;
@@ -149,9 +149,7 @@ public final class Resource {
 
     // Construct URL with special URLStreamHandler for proxying
     // ServletContext.getResourceAsStream()
-    private static URL getUrlForResourceAsStream(
-            final ExternalContext externalContext, String path)
-            throws MalformedURLException {
+    private static URL getUrlForResourceAsStream(final ExternalContext externalContext, String path) throws MalformedURLException {
         URLStreamHandler handler = new URLStreamHandler() {
             @Override
             protected URLConnection openConnection(URL u) throws IOException {
@@ -190,6 +188,7 @@ public final class Resource {
                 };
             }
         };
+        
         return new URL("internal", null, 0, path, handler);
     }
 }

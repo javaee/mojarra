@@ -43,6 +43,11 @@ package com.sun.faces.application.resource;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.*;
+import static com.sun.faces.util.RequestStateManager.RESOURCE_REQUEST;
+import static com.sun.faces.util.Util.notNull;
+import static java.lang.Boolean.FALSE;
+import static javax.faces.application.ProjectStage.Development;
+
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
@@ -62,6 +67,7 @@ import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -106,96 +112,27 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     @Override
     public Resource createResource(String resourceName) {
-
-        Util.notNull("resourceName", resourceName);
-
         return createResource(resourceName, null, null);
-
-    }
-
-    @Override
-    public Resource createViewResource(FacesContext facesContext, String resourceName) {
-
-        Util.notNull("resourceName", resourceName);
-
-        boolean development = facesContext.isProjectStage(ProjectStage.Development);
-
-        String ctype = getContentType(facesContext, resourceName);
-        ResourceInfo info = manager.findResource(null,
-                                                 resourceName,
-                                                 ctype,
-                                                 true,
-                                                 facesContext);
-        if (info == null) {
-            // prevent message from being when we're dealing with
-            // groovy is present and Application.createComponent()
-            // tries to resolve a .groovy file as backing UIComponent.
-            if (!development && "application/x-groovy".equals(ctype)) {
-                return null;
-            }
-            return null;
-        } else {
-            return new ResourceImpl(info, ctype, creationTime, maxAge);
-        }
     }
     
-    
-
-    /**
-     * @see ResourceHandler#createResourceFromId(String)
-     */
-    @Override
-    public Resource createResourceFromId(String resourceId) {
-        Util.notNull("resourceId", resourceId);
-        FacesContext ctx = FacesContext.getCurrentInstance();
-
-        boolean development = ctx.isProjectStage(ProjectStage.Development);
-        
-        ResourceInfo info = manager.findResource(resourceId);
-        String ctype = getContentType(ctx, resourceId);
-        if (info == null) {
-            // prevent message from being when we're dealing with
-            // groovy is present and Application.createComponent()
-            // tries to resolve a .groovy file as backing UIComponent.
-            if (!development && "application/x-groovy".equals(ctype)) {
-                return null;
-            }
-            logMissingResource(ctx, resourceId, null);
-            return null;
-        } else {
-            return new ResourceImpl(info, ctype, creationTime, maxAge);
-        }
-        
-    }
-    
-    
-
-
     /**
      * @see ResourceHandler#createResource(String, String)
      */
     @Override
     public Resource createResource(String resourceName, String libraryName) {
-
-        Util.notNull("resourceName", resourceName);
-
         return createResource(resourceName, libraryName, null);
-
     }
-
-
+    
     /**
      * @see ResourceHandler#createResource(String, String, String)
      */
     @Override
-    public Resource createResource(String resourceName,
-                                   String libraryName,
-                                   String contentType) {
+    public Resource createResource(String resourceName, String libraryName, String contentType) {
 
-        Util.notNull("resourceName", resourceName);
+        notNull("resourceName", resourceName);
         FacesContext ctx = FacesContext.getCurrentInstance();
 
-        boolean development = ctx.isProjectStage(ProjectStage.Development);
+        boolean development = ctx.isProjectStage(Development);
 
         String ctype = ((contentType != null)
                         ? contentType
@@ -219,11 +156,71 @@ public class ResourceHandlerImpl extends ResourceHandler {
     }
 
     @Override
+    public Resource createViewResource(FacesContext facesContext, String resourceName) {
+
+        notNull("resourceName", resourceName);
+
+        boolean development = facesContext.isProjectStage(Development);
+
+        String ctype = getContentType(facesContext, resourceName);
+        ResourceInfo info = manager.findResource(null,
+                                                 resourceName,
+                                                 ctype,
+                                                 true,
+                                                 facesContext);
+        if (info == null) {
+            // prevent message from being when we're dealing with
+            // groovy is present and Application.createComponent()
+            // tries to resolve a .groovy file as backing UIComponent.
+            if (!development && "application/x-groovy".equals(ctype)) {
+                return null;
+            }
+            return null;
+        } else {
+            return new ResourceImpl(info, ctype, creationTime, maxAge);
+        }
+    }
+    
+    public Set<String> getViewResourcePaths(String path) {
+        
+        return null;
+    }
+    
+
+    /**
+     * @see ResourceHandler#createResourceFromId(String)
+     */
+    @Override
+    public Resource createResourceFromId(String resourceId) {
+        notNull("resourceId", resourceId);
+        FacesContext ctx = FacesContext.getCurrentInstance();
+
+        boolean development = ctx.isProjectStage(Development);
+        
+        ResourceInfo info = manager.findResource(resourceId);
+        String ctype = getContentType(ctx, resourceId);
+        if (info == null) {
+            // prevent message from being when we're dealing with
+            // groovy is present and Application.createComponent()
+            // tries to resolve a .groovy file as backing UIComponent.
+            if (!development && "application/x-groovy".equals(ctype)) {
+                return null;
+            }
+            logMissingResource(ctx, resourceId, null);
+            return null;
+        } else {
+            return new ResourceImpl(info, ctype, creationTime, maxAge);
+        }
+        
+    }
+
+    @Override
     public boolean libraryExists(String libraryName) {
 
         if (libraryName.contains("../")) {
             return false;
         }
+        
         FacesContext context = FacesContext.getCurrentInstance();
         // PENDING(fcaputo) do we need to iterate over the contracts here? I don't think so.
         LibraryInfo info = manager.findLibrary(libraryName, null, null, context);
@@ -231,8 +228,8 @@ public class ResourceHandlerImpl extends ResourceHandler {
             info = manager.findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, null, null, context, true);
 
         }
-        return (info != null);
-
+        
+        return info != null;
     }
     
     /**
@@ -241,21 +238,16 @@ public class ResourceHandlerImpl extends ResourceHandler {
     @Override
     public boolean isResourceRequest(FacesContext context) {
 
-        Boolean isResourceRequest = (Boolean)
-              RequestStateManager.get(context,
-                                      RequestStateManager.RESOURCE_REQUEST);
+        Boolean isResourceRequest = (Boolean) RequestStateManager.get(context, RESOURCE_REQUEST);
         if (isResourceRequest == null) {
             String resourceId = normalizeResourceRequest(context);
             isResourceRequest = (resourceId != null
                                  ? resourceId.startsWith(RESOURCE_IDENTIFIER)
-                                 : Boolean.FALSE);
-            RequestStateManager.set(context,
-                                    RequestStateManager.RESOURCE_REQUEST,
-                                    isResourceRequest);
+                                 : FALSE);
+            RequestStateManager.set(context, RESOURCE_REQUEST, isResourceRequest);
         }
 
-        return (isResourceRequest);
-
+        return isResourceRequest;
     }
 
     @Override
@@ -275,9 +267,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
         }
         return rendererType;
     }
-    
-    
-
 
 
     /**

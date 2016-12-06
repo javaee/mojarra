@@ -40,17 +40,8 @@
  */
 package com.sun.faces.application.resource;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.util.Util;
+import static com.sun.faces.RIConstants.FLOW_IN_JAR_PREFIX;
 
-import javax.faces.FacesException;
-import javax.faces.application.Application;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.flow.Flow;
-import javax.faces.flow.FlowHandler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -58,6 +49,15 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.flow.Flow;
+
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.Util;
 
 public class FaceletWebappResourceHelper extends ResourceHelper {
     
@@ -78,8 +78,6 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
     public int hashCode() {
         return 3;
     }
-    
-    
 
     @Override
     public LibraryInfo findLibrary(String libraryName, String localePrefix, String contract, FacesContext ctx) {
@@ -89,79 +87,36 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
 
     @Override
     public ResourceInfo findResource(LibraryInfo library, String resourceName, String localePrefix, boolean compressable, FacesContext ctx) {
-        if(localePrefix != null) {
+        if (localePrefix != null) {
             // FCAPUTO localized facelets are not yet allowed
             return null;
         }
+        
         FaceletResourceInfo result = null;
         try {
-            String path = resourceName;
-            if (null != library) {
-                path = library.getPath() + "/" + resourceName;
-            } else {
-                // prepend the leading '/' if necessary.
-                if ('/' != path.charAt(0)) {
-                    path = "/" + path;
-                }
-            }
             
             List<String> contracts = ctx.getResourceLibraryContracts();
             ContractInfo [] outContract = new ContractInfo[1];
-            outContract[0] = null;
-            boolean doNotCache = false;
+            boolean[] outDoNotCache = new boolean[1];
 
             URL url = null;
+            
             // if the library is not null, we must not consider contracts here!
             if (library == null && !contracts.isEmpty()) {
-                url = findResourceInfoConsideringContracts(ctx, resourceName,
-                        outContract,
-                        contracts);
-            }
-            if (null == url) {
-                url = Resource.getResourceUrl(ctx, path);
+                url = findResourceInfoConsideringContracts(ctx, resourceName, outContract, contracts);
             }
             
-            if (null == url) {
-                ClassLoader cl = Util.getCurrentLoader(this);
-                Enumeration<URL> matches = cl.getResources(RIConstants.FLOW_IN_JAR_PREFIX + resourceName);
-                try {
-                    url = matches.nextElement();
-                } catch (NoSuchElementException nsee) {
-                    url = null;
-                }
-                if (null != url && matches.hasMoreElements()) {
-                    boolean keepGoing = true;
-                    FacesContext context = FacesContext.getCurrentInstance();
-                    Application application = context.getApplication();
-                    FlowHandler fh = application.getFlowHandler();
-                    Flow currentFlow = fh.getCurrentFlow(context);
-                    do {
-                        if (null != currentFlow && 0 < currentFlow.getDefiningDocumentId().length()) {
-                            String definingDocumentId = currentFlow.getDefiningDocumentId();
-                            ExternalContext extContext = context.getExternalContext();
-                            ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
-                            if (associate.urlIsRelatedToDefiningDocumentInJar(url, definingDocumentId)) {
-                                keepGoing = false;
-                                doNotCache = true;
-                            } else {
-                                if (matches.hasMoreElements()) {
-                                    url = matches.nextElement();
-                                } else {
-                                    keepGoing = false;
-                                }
-                            }
-                        } else {
-                            keepGoing = false;
-                        }
-                    } while (keepGoing);
-                }
+            if (url == null) {
+                url = Resource.getResourceUrl(ctx, createPath(library, resourceName));
             }
             
-            if (null != url) {
+            if (url == null) {
+                url = findResourceUrlConsideringFlows(resourceName, outDoNotCache);
+            }
+            
+            if (url != null) {
                 result = new FaceletResourceInfo(outContract[0], resourceName, null, this, url);
-                if (doNotCache) {
-                    result.setDoNotCache(doNotCache);
-                }
+                result.setDoNotCache(outDoNotCache[0]);
             }
         } catch (IOException ex) {
             throw new FacesException(ex);
@@ -170,32 +125,45 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
         return result;
     }
     
-    private URL findResourceInfoConsideringContracts(FacesContext ctx,
-            String baseResourceName,
-            ContractInfo [] outContract,
-            List<String> contracts) throws MalformedURLException {
+    private String createPath(LibraryInfo library, String resourceName) {
+        String path = resourceName;
+        if (library != null) {
+            path = library.getPath() + "/" + resourceName;
+        } else {
+            // prepend the leading '/' if necessary.
+            if ('/' != path.charAt(0)) {
+                path = "/" + path;
+            }
+        }
+        
+        return path;
+    }
+    
+    private URL findResourceInfoConsideringContracts(FacesContext ctx, String baseResourceName, ContractInfo [] outContract, List<String> contracts) throws MalformedURLException {
         URL url = null;
         String resourceName;
         
-        for (String curContract : contracts) {
+        for (String contract : contracts) {
             if (baseResourceName.startsWith("/")) {
-                resourceName = webAppContractsDirectory + "/" + curContract + baseResourceName;
+                resourceName = webAppContractsDirectory + "/" + contract + baseResourceName;
             } else {
-                resourceName = webAppContractsDirectory + "/" + curContract + "/" + baseResourceName;
+                resourceName = webAppContractsDirectory + "/" + contract + "/" + baseResourceName;
             }
+            
             url = Resource.getResourceUrl(ctx, resourceName);
-            if (null != url) {
-                outContract[0] = new ContractInfo(curContract);
+            
+            if (url != null) {
+                outContract[0] = new ContractInfo(contract);
                 break;
             } else {
                 if (baseResourceName.startsWith("/")) {
-                    resourceName = META_INF_CONTRACTS_DIR + "/" + curContract + baseResourceName;
+                    resourceName = META_INF_CONTRACTS_DIR + "/" + contract + baseResourceName;
                 } else {
-                    resourceName = META_INF_CONTRACTS_DIR + "/" + curContract + "/" + baseResourceName;
+                    resourceName = META_INF_CONTRACTS_DIR + "/" + contract + "/" + baseResourceName;
                 }
                 url = Util.getCurrentLoader(this).getResource(resourceName);
-                if (null != url) {
-                    outContract[0] = new ContractInfo(curContract);
+                if (url != null) {
+                    outContract[0] = new ContractInfo(contract);
                     break;
                 }                
             }
@@ -205,8 +173,46 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
         return url;
     }
     
-    
+    private URL findResourceUrlConsideringFlows(String resourceName, boolean[] outDoNotCache) throws IOException {
+        
+        URL url = null;
+        
+        ClassLoader cl = Util.getCurrentLoader(this);
+        Enumeration<URL> matches = cl.getResources(FLOW_IN_JAR_PREFIX + resourceName);
+        try {
+            url = matches.nextElement();
+        } catch (NoSuchElementException nsee) {
+            url = null;
+        }
+        
+        if (url != null && matches.hasMoreElements()) {
+            boolean keepGoing = true;
+            FacesContext context = FacesContext.getCurrentInstance();
+            Flow currentFlow = context.getApplication().getFlowHandler().getCurrentFlow(context);
 
+            do {
+                if (currentFlow != null && 0 < currentFlow.getDefiningDocumentId().length()) {
+                    String definingDocumentId = currentFlow.getDefiningDocumentId();
+                    ExternalContext extContext = context.getExternalContext();
+                    ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
+                    if (associate.urlIsRelatedToDefiningDocumentInJar(url, definingDocumentId)) {
+                        keepGoing = false;
+                        outDoNotCache[0] = true;
+                    } else {
+                        if (matches.hasMoreElements()) {
+                            url = matches.nextElement();
+                        } else {
+                            keepGoing = false;
+                        }
+                    }
+                } else {
+                    keepGoing = false;
+                }
+            } while (keepGoing);
+        }
+        
+        return url;
+    }
     
 
     @Override
@@ -228,7 +234,5 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
     public URL getURL(ResourceInfo resource, FacesContext ctx) {
         return ((FaceletResourceInfo)resource).getUrl();
     }
-
-
     
 }
