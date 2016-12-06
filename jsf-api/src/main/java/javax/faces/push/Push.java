@@ -50,6 +50,7 @@ import java.lang.annotation.Target;
 import java.util.Collection;
 
 import javax.enterprise.util.Nonbinding;
+import javax.faces.component.UIWebsocket;
 import javax.faces.event.WebsocketEvent;
 import javax.faces.event.WebsocketEvent.Closed;
 import javax.faces.event.WebsocketEvent.Opened;
@@ -231,22 +232,22 @@ import javax.websocket.CloseReason.CloseCodes;
  * ajax request, then the push connection will explicitly be closed during oncomplete of that ajax request.
  * <p>
  * You can also explicitly set it to <code>false</code> and manually open the push connection in client side by
- * invoking <strong><code>jsf.push.open(channel)</code></strong>, passing the channel name.
+ * invoking <strong><code>jsf.push.open(clientId)</code></strong>, passing the component's client ID.
  * <pre>
  * &lt;h:commandButton ... onclick="jsf.push.open('foo')"&gt;
  *     &lt;f:ajax ... /&gt;
  * &lt;/h:commandButton&gt;
- * &lt;f:websocket channel="foo" scope="view" ... connected="false" /&gt;
+ * &lt;f:websocket id="foo" channel="bar" scope="view" ... connected="false" /&gt;
  * </pre>
  * <p>
  * In case you intend to have an one-time push and don't expect more messages,
  * you can optionally explicitly close the push connection from client side by invoking
- * <strong><code>jsf.push.close(channel)</code></strong>, passing the channel name. For example, in the
+ * <strong><code>jsf.push.close(clientId)</code></strong>, passing the component's client ID. For example, in the
  * <code>onmessage</code> JavaScript listener function as below:
  * <pre>
- * function someWebsocketListener(message, channel) {
+ * function someWebsocketListener(message) {
  *     // ...
- *     jsf.push.close(channel);
+ *     jsf.push.close('foo');
  * }
  * </pre>
  *
@@ -304,7 +305,7 @@ import javax.websocket.CloseReason.CloseCodes;
  * </ul>
  * <p>
  * When a session or view scoped socket is automatically closed with close reason code <code>1000</code> by the server
- * (and thus not manually by the client via <code>jsf.push.close(channel)</code>), then it means that the session
+ * (and thus not manually by the client via <code>jsf.push.close(clientId)</code>), then it means that the session
  * or view has expired.
  *
  *
@@ -380,10 +381,49 @@ import javax.websocket.CloseReason.CloseCodes;
  * view scoped channels which are still open will explicitly be closed from server side with close reason code
  * {@link CloseCodes#NORMAL_CLOSURE} (<code>1000</code>). Only application scoped sockets remain open and are still
  * reachable from server end even when the session or view associated with the page in client side is expired.
+ * 
+ * 
+ * <h3 id="ui"><a href="#ui">Ajax support</a></h3>
+ * <p>
+ * In case you'd like to perform complex UI updates depending on the received push message, then you can nest 
+ * <code>&lt;f:ajax&gt;</code> inside <code>&lt;f:websocket&gt;</code>. Here's an example:
+ * <pre>
+ * &lt;h:panelGroup id="foo"&gt;
+ *     ... (some complex UI here) ...
+ * &lt;/h:panelGroup&gt;
+ *
+ * &lt;h:form&gt;
+ *     &lt;f:websocket channel="someChannel" scope="view"&gt;
+ *         &lt;f:ajax event="someEvent" listener="#{bean.pushed}" render=":foo" /&gt;
+ *     &lt;/f:websocket&gt;
+ * &lt;/h:form&gt;
+ * </pre>
+ * <p>
+ * Here, the push message simply represents the ajax event name. You can use any custom event name.
+ * <pre>
+ * someChannel.send("someEvent");
+ * </pre>
+ * <p>
+ * An alternative is to combine <code>&lt;w:websocket&gt;</code> with <code>&lt;h:commandScript&gt;</code>. E.g.
+ * <pre>
+ * &lt;h:panelGroup id="foo"&gt;
+ *     ... (some complex UI here) ...
+ * &lt;/h:panelGroup&gt;
+ *
+ * &lt;f:websocket channel="someChannel" scope="view" onmessage="someCommandScript" /&gt;
+ * &lt;h:form&gt;
+ *     &lt;h:commandScript name="someCommandScript" action="#{bean.pushed}" render=":foo" /&gt;
+ * &lt;/h:form&gt;
+ * </pre>
+ * <p>
+ * If you pass a <code>Map&lt;String,V&gt;</code> or a JavaBean as push message object, then all entries/properties will
+ * transparently be available as request parameters in the command script method <code>#{bean.pushed}</code>.
  *
  *
  * @author Bauke Scholtz
  * @see PushContext
+ * @see UIWebsocket
+ * @see WebsocketEvent
  * @since 2.3
  */
 @Qualifier

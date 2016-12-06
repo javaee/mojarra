@@ -75,13 +75,17 @@ public class Spec1396IT {
     }
 
     public void testEnableWebsocketEndpoint() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "enableWebsocketEndpoint.xhtml");
+        HtmlPage page = webClient.getPage(webUrl + "spec1396EnableWebsocketEndpoint.xhtml");
         assertTrue(page.getHtmlElementById("param").asText().equals("true"));
     }
 
     public void testWebsocket() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "websocket.xhtml");
-        assertTrue(page.getWebResponse().getContentAsString().contains(">jsf.push.init(null,'push?"));
+        HtmlPage page = webClient.getPage(webUrl + "spec1396.xhtml");
+        String pageSource = page.getWebResponse().getContentAsString();
+        assertTrue(pageSource.contains(">jsf.push.init("));
+        assertTrue(pageSource.contains("/javax.faces.push/push?"));
+        assertTrue(pageSource.contains("/javax.faces.push/user?"));
+        assertTrue(pageSource.contains("/javax.faces.push/view?"));
 
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:button");
         assertTrue(button.asText().equals("push"));
@@ -92,7 +96,7 @@ public class Spec1396IT {
 
         assertTrue(page.getHtmlElementById("form:button").asText().equals("pushed!"));
         assertTrue(page.getHtmlElementById("user").asText().equals("pushed!"));
-        assertTrue(page.getHtmlElementById("view").asText().equals("pushed!"));
+        assertTrue(page.getHtmlElementById("ajaxOutput").asText().equals("pushed!"));
     }
 
     @After

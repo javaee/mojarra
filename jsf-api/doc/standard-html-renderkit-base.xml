@@ -357,6 +357,20 @@
 
     </component>
 
+    <component>
+
+        <component-type>javax.faces.Websocket</component-type>
+        <component-class>javax.faces.component.UIWebsocket</component-class>
+
+        <xi:include href="uiwebsocket-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Websocket</renderer-type>
+        </component-extension>
+
+    </component>
+
 
     <!-- Concrete HTML Components -->
 
@@ -4216,6 +4230,31 @@ unmodified to the rendered output.</p>
             </renderer-extension>
         </renderer>
 
+        <renderer>
+            <description>
+                <![CDATA[
+                    <p class="changed_added_2_3">
+                        Render a JavaScript function that invokes <code>jsf.push.init()</code> function.
+                    </p>
+
+                    <h3>Encode Behavior</h3>
+                    <p>
+                        Render an HTML <code>script</code> element with an "id" attribute.
+                        Render JavaScript function which invokes <code>jsf.push.init()</code> function with data provided by
+                        <code>port</code>, <code>onopen</code>, <code>onmessage</code>, <code>onclose</code> and <code>connected</code>
+                        arguments, if any. 
+                    </p>
+                ]]>
+            </description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Websocket</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-websocket-renderer-class/text())"/>
+            </renderer-class>
+            <renderer-extension>
+                <renders-children>false</renders-children>
+            </renderer-extension>
+        </renderer>
 
     </render-kit>
 

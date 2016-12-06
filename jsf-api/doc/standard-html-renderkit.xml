@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- DO NOT EDIT     DO NOT EDIT    DO NOT EDIT    DO NOT EDIT    DO NOT EDIT -->
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -5258,6 +5256,244 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
     <component-extension>
       <component-family>javax.faces.ViewRoot</component-family>
+    </component-extension>
+  </component>
+  <component>
+    <component-type>javax.faces.Websocket</component-type>
+    <component-class>javax.faces.component.UIWebsocket</component-class>
+
+    <property>
+      <description><![CDATA[
+          A mutable Map of the attributes associated with
+          this component, keyed by attribute name.
+        ]]></description>
+      <display-name>Attributes Map</display-name>
+      <icon/>
+      <property-name>attributes</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The number of child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component Count</display-name>
+      <icon/>
+      <property-name>childCount</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable List of the child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component List</display-name>
+      <icon/>
+      <property-name>children</property-name>
+      <property-class>java.util.List</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable Map of the facets associated with
+          this component, keyed by facet name.
+        ]]></description>
+      <display-name>Facets Map</display-name>
+      <icon/>
+      <property-name>facets</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component family to which this component belongs.  This property
+          is used to select an appropriate Renderer.
+        ]]></description>
+      <display-name>Component Family</display-name>
+      <icon/>
+      <property-name>family</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+        ]]></description>
+      <display-name>Component Identifier</display-name>
+      <icon/>
+      <property-name>id</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+          The parent component for this component.  On the root component
+          in the component tree (which must be of type UIViewRoot), this
+          property is null.
+        ]]></description>
+      <display-name>Parent Component</display-name>
+      <icon/>
+      <property-name>parent</property-name>
+      <property-class>javax.faces.component.UIComponent</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.  The default value for this property is true.
+        ]]></description>
+      <display-name>Rendered Flag</display-name>
+      <icon/>
+      <property-name>rendered</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Identifier used (in conjunction with the "family" property) to
+          select an appropriate Renderer to encode and decode this component.
+        ]]></description>
+      <display-name>Renderer Type</display-name>
+      <icon/>
+      <property-name>rendererType</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component takes responsibility
+          for rendering its own children.  This decision is normally delegated
+          to the associated Renderer, if there is one.
+        ]]></description>
+      <display-name>Renders Children</display-name>
+      <icon/>
+      <property-name>rendersChildren</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+            The port number of the websocket host, in case it is different from the port number in the request URI.
+            Defaults to the port number of the request URI.
+        ]]></description>
+      <icon/>
+      <property-name>port</property-name>
+      <property-class>java.lang.Integer</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+            The name of the websocket channel.
+            It may not be an EL expression and it may only contain alphanumeric characters, hyphens, underscores and periods.
+            All open websockets on the same channel name will receive the same push notification from the server.
+        ]]></description>
+      <icon/>
+      <property-name>channel</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+            The scope of the websocket channel.
+            It may not be an EL expression and allowed values are <code>application</code>, <code>session</code> and <code>view</code>, case insensitive.
+            When the value is <code>application</code>, then all channels with the same name throughout the application will receive the same push message.
+            When the value is <code>session</code>, then only the channels with the same name in the current user session will receive the same push message.
+            When the value is <code>view</code>, then only the channel in the current view will receive the push message.
+            The default scope is <code>application</code>.
+            When the <code>user</code> attribute is specified, then the default scope is <code>session</code>.
+        ]]></description>
+      <icon/>
+      <property-name>scope</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+            The user identifier of the websocket channel, so that user-targeted push messages can be sent.
+            It must implement <code>Serializable</code> and preferably have low memory footprint.
+            Suggestion: use <code>#{request.remoteUser}</code> or <code>#{someLoggedInUser.id}</code>.
+            All open websockets on the same channel and user will receive the same push message from the server.
+        ]]></description>
+      <icon/>
+      <property-name>user</property-name>
+      <property-class>java.io.Serializable</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+            The JavaScript event handler function that is invoked when the websocket is opened.
+            The function will be invoked with one argument: the channel name.
+        ]]></description>
+      <icon/>
+      <property-name>onopen</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+            The JavaScript event handler function that is invoked when a push message is received from the server.
+            The function will be invoked with three arguments: the push message, the channel name and the raw <code>MessageEvent</code> itself.
+        ]]></description>
+      <icon/>
+      <property-name>onmessage</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+            The JavaScript event handler function that is invoked when the websocket is closed.
+            The function will be invoked with three arguments: the close reason code, the channel name and the raw <code>CloseEvent</code> itself.
+            Note that this will also be invoked on errors and that you can inspect the close reason code if an error occurred and which one (i.e. when the code is not 1000).
+            See also 
+            <a href="http://tools.ietf.org/html/rfc6455#section-7.4.1">RFC 6455 section 7.4.1</a> 
+            and
+            <a href="http://docs.oracle.com/javaee/7/api/javax/websocket/CloseReason.CloseCodes.html">CloseCodes</a>
+            API for an elaborate list of all close codes.
+        ]]></description>
+      <icon/>
+      <property-name>onclose</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+            Whether to (auto)connect the websocket or not.
+            Defaults to <code>true</code>.
+            It's interpreted as a JavaScript instruction whether to open or close the websocket push connection.
+            The <code>connected</code> and <code>rendered</code> attributes are implicitly re-evaluated on every ajax request by a <code>PreRenderViewEvent</code> listener on the <code>UIViewRoot</code>.
+            If the value of <code>connected</code> or <code>rendered</code> attribute changes to <code>false</code> while the websocket is already opened, then the websocket will implicitly be closed.
+            You can also explicitly set <code>connected</code> attribute to <code>false</code> and then manually control in JavaScript by <code>jsf.push.open("channelName")</code> and <code>jsf.push.close("channelName")</code>.
+        ]]></description>
+      <icon/>
+      <property-name>connected</property-name>
+      <property-class>java.lang.Boolean</property-class>
+    </property>
+
+    <component-extension>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>javax.faces.Websocket</renderer-type>
     </component-extension>
   </component>
   <!-- Concrete HTML Components -->
@@ -22385,6 +22621,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           Width (in pixels) of the border to be drawn
           around the table containing the options list.
+          This attribute is ignored when "group" attribute is specified.
         </description>
       <display-name>Table Border</display-name>
       <icon/>
@@ -22398,6 +22635,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           CSS style class to apply to the rendered label
           on disabled options.
+          This attribute is ignored when "group" attribute is specified.
         </description>
       <display-name>Disabled Label Class</display-name>
       <icon/>
@@ -22408,6 +22646,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <description>
           CSS style class to apply to the rendered label
           on enabled options.
+          This attribute is ignored when "group" attribute is specified.
         </description>
       <display-name>Enabled Label Class</display-name>
       <icon/>
@@ -22421,10 +22660,28 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           out vertically), or "lineDirection" (list is
           laid out horizontally).  If not specified, the
           default value is "lineDirection".
+          This attribute is ignored when "group" attribute is specified.
         </description>
       <display-name>Layout</display-name>
       <icon/>
       <property-name>layout</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+          Specifies the name of the radio button group. Radio button components
+          having the same group within a <code>UIForm</code> parent will uncheck
+          all others when being checked. If the <code>value</code> attribute is
+          absent then the one from first component of the group will be used. If
+          the <code>UISelectItem</code> child is absent then the one from first
+          component of the group will be used. When specified, the
+          <code>group</code> attribute disables the default rendering of the
+          "table" element and any attribute related to the rendering of the
+          "table" element, such as "border", is ignored.
+            ]]></description>
+      <display-name>Group</display-name>
+      <icon/>
+      <property-name>group</property-name>
       <property-class>java.lang.String</property-class>
     </property>
 
@@ -30034,25 +30291,25 @@ this application, and passing the result through the
 
   <ul>
 
-      <li><p>Let <em>params</em> be the <code>Map&lt;String,
-      List&lt;String&gt;&gt;</code> to be passed to
-      <code>ViewHandler.getBookmarkableURL()</code>.  Build this map up first
-      from any child <code>UIParameter</code> components.  These children must
-      be processed in the order in which they appear as children.  If multiple
-      children with the same name are encountered, their values must appear in
-      the <code>List&lt;String&gt;</code> in the <code>Map</code> entry with
-      the same name, and appear in the list in the same order as their child
-      order.</p></li>
+	  <li><p>Let <em>params</em> be the <code>Map&lt;String,
+	  List&lt;String&gt;&gt;</code> to be passed to
+	  <code>ViewHandler.getBookmarkableURL()</code>.  Build this map up first
+	  from any child <code>UIParameter</code> components.  These children must
+	  be processed in the order in which they appear as children.  If multiple
+	  children with the same name are encountered, their values must appear in
+	  the <code>List&lt;String&gt;</code> in the <code>Map</code> entry with
+	  the same name, and appear in the list in the same order as their child
+	  order.</p></li>
 
-      <li><p>Obtain any parameters included within the
-      navigation case.  Call <code>getParameters()</code> on
-      <em>navCase</em>.  The result will be a <code>Map&lt;String,
-      List&lt;String&gt;&gt;</code>.  If the result is
-      non-<code>null</code> and non-empty, iterate over the entries
-      from the result <code>Map</code> and, if no entry with the
-      same name exists in <em>params</em>, set the value from the
-      current entry as the value in the <em>params</em>
-      <code>Map</code>.</p></li>
+	  <li><p>Obtain any parameters included within the
+	  navigation case.  Call <code>getParameters()</code> on
+	  <em>navCase</em>.  The result will be a <code>Map&lt;String,
+	  List&lt;String&gt;&gt;</code>.  If the result is
+	  non-<code>null</code> and non-empty, iterate over the entries
+	  from the result <code>Map</code> and, if no entry with the
+	  same name exists in <em>params</em>, set the value from the
+	  current entry as the value in the <em>params</em>
+	  <code>Map</code>.</p></li>
 
           <li class="changed_added_2_2"><p>If the navigation case has a
           non-null <code>toFlowDocumentId</code> property, add two
@@ -30083,19 +30340,19 @@ this application, and passing the result through the
 
           </li>
 
-      <li><p>Let <em>includeViewParams</em> be the result of a
-      logical OR of the results from calling
-      <code>isIncludeViewParams()</code> on the argument
-      <code>UIOutcomeTarget</code> component and calling
-      <code>isIncludeViewParams</code> on <em>navCase</em>.</p></li>
+	  <li><p>Let <em>includeViewParams</em> be the result of a
+	  logical OR of the results from calling
+	  <code>isIncludeViewParams()</code> on the argument
+	  <code>UIOutcomeTarget</code> component and calling
+	  <code>isIncludeViewParams</code> on <em>navCase</em>.</p></li>
 
 
-      <li><p>Call <code>getBookmarkableURL()</code> on the
-      <code>ViewHandler</code>, passing the current
-      <code>FacesContext</code> as the first argument, the return
-      from calling <code>getToViewId()</code> as the second
-      argument, <em>params</em> as the third argument, and
-      <em>includeViewParams</em> as the last argument.</p></li>
+	  <li><p>Call <code>getBookmarkableURL()</code> on the
+	  <code>ViewHandler</code>, passing the current
+	  <code>FacesContext</code> as the first argument, the return
+	  from calling <code>getToViewId()</code> as the second
+	  argument, <em>params</em> as the third argument, and
+	  <em>includeViewParams</em> as the last argument.</p></li>
 
   </ul>
 
@@ -34823,6 +35080,7 @@ this application, and passing the result through the
         <description>
           Width (in pixels) of the border to be drawn
           around the table containing the options list.
+          This attribute is ignored when "group" attribute is specified.
         </description>
         <display-name>Table Border</display-name>
         <icon/>
@@ -34836,6 +35094,7 @@ this application, and passing the result through the
         <description>
           CSS style class to apply to the rendered label
           on disabled options.
+          This attribute is ignored when "group" attribute is specified.
         </description>
         <display-name>Disabled Label Class</display-name>
         <icon/>
@@ -34846,6 +35105,7 @@ this application, and passing the result through the
         <description>
           CSS style class to apply to the rendered label
           on enabled options.
+          This attribute is ignored when "group" attribute is specified.
         </description>
         <display-name>Enabled Label Class</display-name>
         <icon/>
@@ -34859,10 +35119,28 @@ this application, and passing the result through the
           out vertically), or "lineDirection" (list is
           laid out horizontally).  If not specified, the
           default value is "lineDirection".
+          This attribute is ignored when "group" attribute is specified.
         </description>
         <display-name>Layout</display-name>
         <icon/>
         <attribute-name>layout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description><![CDATA[
+          Specifies the name of the radio button group. Radio button components
+          having the same group within a <code>UIForm</code> parent will uncheck
+          all others when being checked. If the <code>value</code> attribute is
+          absent then the one from first component of the group will be used. If
+          the <code>UISelectItem</code> child is absent then the one from first
+          component of the group will be used. When specified, the
+          <code>group</code> attribute disables the default rendering of the
+          "table" element and any attribute related to the rendering of the
+          "table" element, such as "border", is ignored.
+            ]]></description>
+        <display-name>Group</display-name>
+        <icon/>
+        <attribute-name>group</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -34885,14 +35163,14 @@ this application, and passing the result through the
 
       <p>Encode Behavior</p>
 
-    <ul>
+	<ul>
 
            <p>Ask the argument <code>UIComponent</code> for its facet
            under the key <code>UIComponent.COMPOSITE_FACET_NAME</code>.
            Such a facet must exist.  Call the <code>encodeAll()</code>
            method on this facet.</p>
 
-    </ul>
+	</ul>
 
 
 
@@ -35002,19 +35280,19 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
 
           <ul>
 
-      <li><p>Look in the component attribute <code>Map</code> for a
-      value under the key <em>name</em>.</p></li>
+	  <li><p>Look in the component attribute <code>Map</code> for a
+	  value under the key <em>name</em>.</p></li>
 
-      <li><p>Look in the component attribute <code>Map</code> for a
-      value under the key <em>library</em>.  This attribute is
-      optional, therefore, <em>library</em> may be
-      <code>null</code>.</p></li>
+	  <li><p>Look in the component attribute <code>Map</code> for a
+	  value under the key <em>library</em>.  This attribute is
+	  optional, therefore, <em>library</em> may be
+	  <code>null</code>.</p></li>
 
-      <li><p>Create the resource by calling
-      <code>Application.getResourceHandler.createResource(<em>name</em>,
-      <em>library</em>);</code>.</p></li>
+	  <li><p>Create the resource by calling
+	  <code>Application.getResourceHandler.createResource(<em>name</em>,
+	  <em>library</em>);</code>.</p></li>
 
-      </p></li>
+	  </p></li>
 
           </ul>
 
@@ -35033,35 +35311,35 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
         <code>getRendersChildren()</code>, the <code>encodeChildren()
         method must take the following action.</code></p>
 
-            <ul>
+        	<ul>
 
-      <li><p>If there is no <em>name</em> attribute, and the
-      argument <code>component</code> has no children, and
-      <code>ProjectStage</code> is not
-      <code>ProjectStage.Production</code>, add a
-      <code>FacesMessage</code> for this component's clientId to the
-      <code>FacesContext</code> stating that if no name attribute is
-      present, and no body content is present either, then the user
-      should take action to correct this problem.  In this case,
-      <code>encodeChildren()</code> must take no further
-      action.</p></li>
+	  <li><p>If there is no <em>name</em> attribute, and the
+	  argument <code>component</code> has no children, and
+	  <code>ProjectStage</code> is not
+	  <code>ProjectStage.Production</code>, add a
+	  <code>FacesMessage</code> for this component's clientId to the
+	  <code>FacesContext</code> stating that if no name attribute is
+	  present, and no body content is present either, then the user
+	  should take action to correct this problem.  In this case,
+	  <code>encodeChildren()</code> must take no further
+	  action.</p></li>
 
-      <li><p>If there is no <em>name</em> attribute and the argument
-      <code>component</code> <b>does</b> have children, the renderer
-      must ensure that those children are encoded as usual.</p></li>
+	  <li><p>If there is no <em>name</em> attribute and the argument
+	  <code>component</code> <b>does</b> have children, the renderer
+	  must ensure that those children are encoded as usual.</p></li>
 
-      <li><p>If there <b>is</b> a <em>name</em> attribute and the
-      argument <code>component</code> <b>does</b> have children, the
-      renderer must log a descriptive localized message stating that
-      the child content will be ignored.  The resource referenced by
-      the <em>name</em> attribute will be rendered in
-      <code>encodeEnd()</code>.</p></li>
+	  <li><p>If there <b>is</b> a <em>name</em> attribute and the
+	  argument <code>component</code> <b>does</b> have children, the
+	  renderer must log a descriptive localized message stating that
+	  the child content will be ignored.  The resource referenced by
+	  the <em>name</em> attribute will be rendered in
+	  <code>encodeEnd()</code>.</p></li>
 
-      <li><p>If there <b>is</b> a <em>name attribute</em> and the
-      argument <code>component</code> <b>does not</b> have children,
-      <code>encodeChildren()</code> must take no action.</p></li>
+	  <li><p>If there <b>is</b> a <em>name attribute</em> and the
+	  argument <code>component</code> <b>does not</b> have children,
+	  <code>encodeChildren()</code> must take no action.</p></li>
 
-    </ul>
+	</ul>
 
        <p><code>encodeEnd()</code> must take specific action based on
        the specific kind of resource being rendered.</p>
@@ -35829,6 +36107,29 @@ unmodified to the rendered output.</p>
       <renderer-extension>
         <jsp-ignore>true</jsp-ignore>
         <tag-name>body</tag-name>
+      </renderer-extension>
+    </renderer>
+    <renderer>
+      <description><![CDATA[
+                    <p class="changed_added_2_3">
+                        Render a JavaScript function that invokes <code>jsf.push.init()</code> function.
+                    </p>
+
+                    <h3>Encode Behavior</h3>
+                    <p>
+                        Render an HTML <code>script</code> element with an "id" attribute.
+                        Render JavaScript function which invokes <code>jsf.push.init()</code> function with data provided by
+                        <code>port</code>, <code>onopen</code>, <code>onmessage</code>, <code>onclose</code> and <code>connected</code>
+                        arguments, if any. 
+                    </p>
+                ]]></description>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>javax.faces.Websocket</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.WebsocketRenderer
+    </renderer-class>
+      <renderer-extension>
+        <renders-children>false</renders-children>
       </renderer-extension>
     </renderer>
   </render-kit>

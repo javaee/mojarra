@@ -113,6 +113,9 @@
     <output-script-renderer-class>
         com.sun.faces.renderkit.html_basic.ScriptRenderer
     </output-script-renderer-class>
+    <output-websocket-renderer-class>
+        com.sun.faces.renderkit.html_basic.WebsocketRenderer
+    </output-websocket-renderer-class>
     <naming-container-composite-renderer-class>
         com.sun.faces.renderkit.html_basic.CompositeRenderer
     </naming-container-composite-renderer-class>
