@@ -215,6 +215,16 @@
         <property-name>rowClasses</property-name>
         <property-class>java.lang.String</property-class>
     </property>
+    
+      <property>
+        <description>
+          Assigns one or more space-separated CSS class names to each "tr"
+        </description>
+        <display-name>Row CSS Class</display-name>
+        <icon></icon>
+        <property-name>rowClass</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
 
     <property>
         <description>

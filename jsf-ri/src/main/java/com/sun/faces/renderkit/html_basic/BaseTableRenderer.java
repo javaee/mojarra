@@ -245,10 +245,24 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
 
         TableMetaInfo info = getMetaInfo(context, table);
         writer.startElement("tr", table);
-        if (info.rowClasses.length > 0) {
-            writer.writeAttribute("class", info.getCurrentRowClass(),
-                                  "rowClasses");
+
+        final String tableRowClass = info.rowClasses.length > 0 ? info.getCurrentRowClass() : null;
+        final String rowClass = (String) table.getAttributes().get("rowClass");
+        
+        if(tableRowClass != null) {
+            if(rowClass != null) {
+                throw new IOException("Cannot define both rowClasses on a table and rowClass");
+            }
+            writer.writeAttribute("class", tableRowClass, "rowClasses");
         }
+        
+        if(rowClass != null){
+            if(tableRowClass != null) {
+                throw new IOException("Cannot define both rowClasses on a table and rowClass");
+            }
+            writer.writeAttribute("class", rowClass, "rowClass");
+        }
+        
         writer.writeText("\n", table, null);
 
     }
