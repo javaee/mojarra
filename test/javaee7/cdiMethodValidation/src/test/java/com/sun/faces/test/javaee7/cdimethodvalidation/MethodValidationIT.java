@@ -71,7 +71,7 @@ public class MethodValidationIT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value = JSF_2_2_0)
+    @JsfTest(value = JSF_2_2_0, excludes = {GLASSFISH_5_0})
     @Test
     public void testIncorrectUsage() throws Exception {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
@@ -88,7 +88,7 @@ public class MethodValidationIT {
         assertEquals(500, page.getWebResponse().getStatusCode());
     }
 
-    @JsfTest(value = JSF_2_2_0, excludes = {GLASSFISH_5_0})
+    @JsfTest(value = JSF_2_2_0)
     @Test
     public void testCorrectUsage1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
