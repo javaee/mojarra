@@ -24663,7 +24663,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       Otherwise, do not render a "tbody" element.</p>
 
       <p>Output a "tr" element.  Output the value of the "rowClasses"
-      per the attribute description below.  For each
+      per the attribute description below or rowClass.  For each
       <code>UIColumn</code> child, if the column component has a
       "rowHeader" attribute with a value of "true", output a "th"
       element with a "scope" attribute with the value of "row".
@@ -25082,6 +25082,16 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <display-name>Row CSS Classes</display-name>
         <icon/>
         <attribute-name>rowClasses</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description>
+          Space seperated list of CSS style classes that will be applied
+          to each row of the table.
+        </description>
+        <display-name>Row CSS Class</display-name>
+        <icon/>
+        <attribute-name>rowClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
       <attribute>
