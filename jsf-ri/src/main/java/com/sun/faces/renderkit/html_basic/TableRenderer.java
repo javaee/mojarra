@@ -374,11 +374,21 @@ public class TableRenderer extends BaseTableRenderer {
                 writer.startElement("td", column);
             }
 
-            String columnClass = info.getCurrentColumnClass();
-            if (columnClass != null) {
-                writer.writeAttribute("class",
-                                      columnClass,
-                                      "columnClasses");
+            final String tableColumnStyleClass = info.getCurrentColumnClass();
+            final String columnStyleClass = (String) column.getAttributes().get("styleClass");
+            
+            if(tableColumnStyleClass != null) {
+                if(columnStyleClass != null) {
+                    throw new IOException("Cannot define both columnClasses on a table and styleClass on a column");
+                }
+                writer.writeAttribute("class", tableColumnStyleClass, "columnClasses");
+            }
+            
+            if(columnStyleClass != null){
+                if(tableColumnStyleClass != null) {
+                    throw new IOException("Cannot define both columnClasses on a table and styleClass on a column");
+                }
+                writer.writeAttribute("class", columnStyleClass, "styleClass");
             }
 
             // Render the contents of this cell by iterating over
