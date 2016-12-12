@@ -43,7 +43,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.GLASSFISH_5_0;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
@@ -78,7 +78,7 @@ public class MethodValidationIT {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlTextInput input = (HtmlTextInput) page.getElementById("firstName");
         input.setValueAttribute("notfoo");
-        
+
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
         page = button.click();
         String text = page.asText();
@@ -87,14 +87,14 @@ public class MethodValidationIT {
         assertTrue(text.contains("my message"));
         assertEquals(500, page.getWebResponse().getStatusCode());
     }
-    
-    @JsfTest(value = JSF_2_2_0)
+
+    @JsfTest(value = JSF_2_2_0, excludes = {GLASSFISH_5_0})
     @Test
     public void testCorrectUsage1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlTextInput input = (HtmlTextInput) page.getElementById("lastName");
         input.setValueAttribute("notfoo");
-        
+
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
         page = button.click();
         String text = page.asText();
@@ -103,14 +103,14 @@ public class MethodValidationIT {
         assertTrue(text.contains("my message"));
         assertEquals(200, page.getWebResponse().getStatusCode());
     }
-    
-    @JsfTest(value = JSF_2_2_0)
+
+    @JsfTest(value = JSF_2_2_0, excludes = {GLASSFISH_5_0})
     @Test
     public void testCorrectUsage2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         HtmlTextInput input = (HtmlTextInput) page.getElementById("requestValue");
         input.setValueAttribute("bar");
-        
+
         HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
         page = button.click();
         String text = page.asText();

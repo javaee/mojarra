@@ -41,6 +41,7 @@ package com.sun.faces.test.junit;
 
 public enum JsfServerExclude {
 
+    GLASSFISH_5_0("Glassfish", "5.0"),
     GLASSFISH_4_1("Glassfish", "4.1"),
     GLASSFISH_4_0("Glassfish", "4.0"),
     GLASSFISH_3_1_2_2("Glassfish", "3.1.2.2"),
