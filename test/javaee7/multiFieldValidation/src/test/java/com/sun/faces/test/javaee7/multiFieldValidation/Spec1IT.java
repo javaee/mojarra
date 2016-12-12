@@ -53,7 +53,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import static com.sun.faces.test.junit.JsfServerExclude.GLASSFISH_5_0;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Spec1IT {
 
     private String webUrl;
@@ -124,7 +131,7 @@ public class Spec1IT {
         assertTrue(password2Value.asText().isEmpty());
     }
     
-
+    @JsfTest(value = JsfVersion.JSF_2_3_0_M07, excludes = {GLASSFISH_5_0})
     @Test
     public void testSimpleValidFieldsInvalidBean() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
@@ -153,6 +160,7 @@ public class Spec1IT {
         
     }
     
+    @JsfTest(value = JsfVersion.JSF_2_3_0_M07, excludes = {GLASSFISH_5_0})
     @Test
     public void testSimpleValidFieldsValidBean() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);

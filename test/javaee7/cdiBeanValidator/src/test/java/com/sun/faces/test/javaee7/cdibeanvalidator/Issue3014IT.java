@@ -42,6 +42,7 @@ package com.sun.faces.test.javaee7.cdibeanvalidator;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import static com.sun.faces.test.junit.JsfServerExclude.GLASSFISH_5_0;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_2_0;
@@ -68,7 +69,7 @@ public class Issue3014IT {
         webClient.closeAllWindows();
     }
 
-    @JsfTest(value = JSF_2_2_0)
+    @JsfTest(value = JSF_2_2_0, excludes = GLASSFISH_5_0)
     @Test
     public void testValidatorInjection() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
