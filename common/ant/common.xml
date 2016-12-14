@@ -108,7 +108,7 @@
     <property name="spec.version" value="2.3"/>
     <property name="spec_version" value="2_3"/>
     <property name="spec.snapshot.version" value="2.3-SNAPSHOT"/>
-    <property name="patch.version" value="0-m07"/>
+    <property name="patch.version" value="0-m08"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}-${TSTAMP}"/>
     <property name="build.type" value="-SNAPSHOT"/>
@@ -222,9 +222,9 @@
 
     <!-- this is hard coded to match the values in ${basedir}/jsf-tools/pom.xml -->
     <property name="jsf-tools.jar" 
-            value="${maven.repo.local}/com/sun/faces/build/jsf-tools/${snapshot.version}/jsf-tools-${snapshot.version}.jar" />
- 
-    <!-- Test classpaths that are used in multiple places within the project -->
+        value="${maven.repo.local}/com/sun/faces/build/jsf-tools/${snapshot.version}/jsf-tools-${snapshot.version}.jar" /> 
+
+        <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">
         <pathelement location="${junit.jar}"/>
     </path>
