@@ -4249,7 +4249,7 @@ unmodified to the rendered output.</p>
             <component-family>javax.faces.Script</component-family>
             <renderer-type>javax.faces.Websocket</renderer-type>
             <renderer-class>
-                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-websocket-renderer-class/text())"/>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/script-websocket-renderer-class/text())"/>
             </renderer-class>
             <renderer-extension>
                 <renders-children>false</renders-children>
