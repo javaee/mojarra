@@ -9,9 +9,9 @@
     </parent>
     <artifactId>client-encrypt-by-default-disabled</artifactId>
     <packaging>war</packaging>
-    <name>Mojarra Test Agnostic - Test Client Encryption is Enabled By Default, but is disabled</name>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Client Encryption is Enabled By Default, but is disabled</name>
     <build>
-        <finalName>test-agnostic-client-encrypt-by-default-disabled</finalName>
+        <finalName>test-servlet30-client-encrypt-by-default-disabled</finalName>
     </build>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>

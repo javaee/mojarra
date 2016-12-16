@@ -11,6 +11,6 @@
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - Servlet 3.0 - Client Encryption is Enabled By Default</name>
     <build>
-        <finalName>test-agnostic-client-encrypt-by-default</finalName>
+        <finalName>test-servlet30-client-encrypt-by-default</finalName>
     </build>
 </project>
