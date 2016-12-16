@@ -68,6 +68,10 @@
         <module>bogusRenderKitId</module>
         <module>characterCombat</module>
         <module>clientsideStateSaving</module>
+<!--
+        <module>client-encrypt-by-default</module>
+        <module>client-encrypt-by-default-disabled</module>
+-->
         <module>component</module>
         <module>composite</module>
         <module>composite2</module>
