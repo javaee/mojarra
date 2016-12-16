@@ -57,6 +57,5 @@
     <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts - extended</name>
     <modules>
         <module>extended_base</module>
-        <module>extended_blue</module>
     </modules>
 </project>

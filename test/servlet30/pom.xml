@@ -83,6 +83,8 @@
 	<module>contractBasicInJar</module>
 	<module>contractBasicJar</module>
 	<module>contractExtended</module>
+	<module>contractExtendedBlue</module>
+	<module>contractExtendedRed</module>
 	<module>contractSample</module>
 	<module>contractSimple</module>
         <module>contractUsingHostHeader</module>
