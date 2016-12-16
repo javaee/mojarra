@@ -83,6 +83,7 @@
 	<module>contractBasicInJar</module>
 	<module>contractBasicJar</module>
 	<module>contractExtended</module>
+	<module>contractExtendedBase</module>
 	<module>contractExtendedBlue</module>
 	<module>contractExtendedRed</module>
 	<module>contractSample</module>
