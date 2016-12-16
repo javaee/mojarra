@@ -13,7 +13,6 @@
         <maven>3.1.1</maven>
     </prerequisites>
     <modules>
-        <module>agnostic</module>
         <module>cluster</module>
         <module>glassfish</module>
         <module>groovy</module>
