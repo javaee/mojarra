@@ -45,17 +45,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts</groupId>
-        <artifactId>extended</artifactId>
+        <groupId>com.sun.faces.test.servlet30</groupId>
+        <artifactId>pom</artifactId>
         <version>2.3.0-m08-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts.extended</groupId>
-    <artifactId>extended_blue</artifactId>
-    <name>Mojarra ${project.version} - Test - Agnostic - VDL - Facelets - Contracts - extended - extended_blue</name>
+    <artifactId>contractExtendedBlue</artifactId>
+    <packaging>jar</packaging>
+    <name>Mojarra ${project.version} - Test - Servlet 3.0 - Contract Extended (Blue)</name>
     <build>
-        <finalName>test-agnostic-vdl-facelets-contracts-extended-extended_blue</finalName>
+        <finalName>test-servlet30-contract-extended-blue</finalName>
     </build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
+
