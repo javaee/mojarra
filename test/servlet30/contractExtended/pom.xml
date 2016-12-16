@@ -68,8 +68,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <artifactId>extended_red</artifactId>
-            <groupId>com.sun.faces.test.agnostic.vdl.facelets.contracts.extended</groupId>
+            <groupId>com.sun.faces.test.servlet30</groupId>
+            <artifactId>contractExtendedRed</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

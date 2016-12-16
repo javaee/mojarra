@@ -58,6 +58,5 @@
     <modules>
         <module>extended_base</module>
         <module>extended_blue</module>
-        <module>extended_red</module>
     </modules>
 </project>
