@@ -38,7 +38,7 @@
  * holder.
 
  */
-package com.sun.faces.test.agnostic.vdl.facelets.contracts.extended;
+package com.sun.faces.test.servlet30.contractExtended;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
