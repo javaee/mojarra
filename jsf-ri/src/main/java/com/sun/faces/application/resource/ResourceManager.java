@@ -77,8 +77,7 @@ public class ResourceManager {
     /**
      * {@link Pattern} for valid mime types to configure compression.
      */
-    private static final Pattern CONFIG_MIMETYPE_PATTERN =
-          Pattern.compile("[a-z-]*/[a-z0-9.\\*-]*");
+    private static final Pattern CONFIG_MIMETYPE_PATTERN = Pattern.compile("[a-z-]*/[a-z0-9.\\*-]*");
     
     private ResourceHelper faceletResourceHelper = new FaceletWebappResourceHelper();
 
@@ -119,11 +118,9 @@ public class ResourceManager {
      */
 
     public ResourceManager(ResourceCache cache) {
-
         this.cache = cache;
         Map<String, Object> throwAwayMap = new HashMap<>();
         initCompressableTypes(throwAwayMap);
-
     }
 
     /**
@@ -132,10 +129,8 @@ public class ResourceManager {
      * {@link ResourceInfo} instances will not occur.
      */
     public ResourceManager(Map<String, Object> appMap, ResourceCache cache) {
-
         this.cache = cache;
         initCompressableTypes(appMap);
-
     }
 
 
@@ -171,86 +166,77 @@ public class ResourceManager {
      * @return a {@link ResourceInfo} if a resource if found matching the
      *  provided arguments, otherwise, return <code>null</code>
      */
-    public ResourceInfo findResource(String libraryName,
-                                     String resourceName,
-                                     String contentType,
-                                     FacesContext ctx) {
-
+    public ResourceInfo findResource(String libraryName, String resourceName, String contentType, FacesContext ctx) {
         return findResource(libraryName, resourceName, contentType, false, ctx);
     }
     
-    public ResourceInfo findResource(String libraryName,
-                                     String resourceName,
-                                     String contentType,
-                                     boolean isViewResource,
-                                     FacesContext ctx) {
+    public ResourceInfo findResource(String libraryName, String resourceName, String contentType, boolean isViewResource, FacesContext ctx) {
         
         String localePrefix = getLocalePrefix(ctx);
         List<String> contracts = getResourceLibraryContracts(ctx);
-        ResourceInfo info =
-              getFromCache(resourceName, libraryName, localePrefix, contracts);
+        
+        ResourceInfo info = getFromCache(resourceName, libraryName, localePrefix, contracts);
+        
         if (info == null) {
-            boolean compressable = isCompressable(contentType, ctx);
-            if (compressable) {
-                lock.lock();
-                try {
-                    info = getFromCache(resourceName, libraryName, localePrefix, contracts);
-                    if (info == null) {
-                        info = doLookup(libraryName,
-                                        resourceName,
-                                        localePrefix,
-                                        compressable,
-                                        isViewResource,
-                                        contracts,
-                                        ctx);
-                        if (info != null) {
-                            addToCache(info, contracts);
-                        }
-                    }
-                } finally {
-                    lock.unlock();
-                }
+            if (isCompressable(contentType, ctx)) {
+                info = findResourceCompressed(libraryName, resourceName, isViewResource, localePrefix, contracts, ctx);
             } else {
-                info = doLookup(libraryName,
-                                resourceName,
-                                localePrefix,
-                                compressable,
-                                isViewResource,
-                                contracts,
-                                ctx);
-                
-                if (null == info && null != contracts) {
-                    // If the library name is equal to one of the contracts,
-                    // assume the resource to be found is within that contract
-                    for (String cur : contracts) {
-                        if (cur.equals(libraryName)) {
-                            libraryName = null;
-                            break;
-                        }
-                    }
-                    info = doLookup(libraryName,
-                            resourceName,
-                            localePrefix,
-                            compressable,
-                            isViewResource,
-                            contracts,
-                            ctx);
-                }
-
-                if (info != null && (!info.isDoNotCache())) {
-                    addToCache(info, contracts);
-                }
+               info = findResourceNonCompressed(libraryName, resourceName, isViewResource, localePrefix, contracts, ctx);
             }
-
         }
 
         return info;
-
     }
 
 
     // ----------------------------------------------------- Private Methods
 
+    private ResourceInfo findResourceCompressed(String libraryName, String resourceName, boolean isViewResource, String localePrefix, List<String> contracts, FacesContext ctx) {
+        
+        ResourceInfo info = null;
+        
+        lock.lock();
+        try {
+            info = getFromCache(resourceName, libraryName, localePrefix, contracts);
+            if (info == null) {
+                info = doLookup(libraryName, resourceName, localePrefix, true, isViewResource, contracts, ctx);
+                if (info != null) {
+                    addToCache(info, contracts);
+                }
+            }
+        } finally {
+            lock.unlock();
+        }
+        
+        return info;
+    }
+    
+    private ResourceInfo findResourceNonCompressed(String libraryName, String resourceName, boolean isViewResource, String localePrefix, List<String> contracts, FacesContext ctx) {
+        ResourceInfo info = doLookup(libraryName, resourceName, localePrefix, false, isViewResource, contracts, ctx);
+
+        if (info == null && contracts != null) {
+            info = doLookup(libraryNameFromContracts(libraryName, contracts), resourceName, localePrefix, false, isViewResource, contracts, ctx);
+        }
+        
+        if (info != null && !info.isDoNotCache()) {
+            addToCache(info, contracts);
+        }
+        
+        return info;
+    }
+    
+    private String libraryNameFromContracts(String libraryName, List<String> contracts) {
+        // If the library name is equal to one of the contracts,
+        // assume the resource to be found is within that contract
+        for (String contract : contracts) {
+            if (contract.equals(libraryName)) {
+                return null;
+            }
+        }
+        
+        return libraryName;
+    }
+    
 
     /**
      * Attempt to look up the Resource based on the provided details.
@@ -262,48 +248,44 @@ public class ResourceManager {
      * @param isViewResource 
      * @param contracts the contracts to consider
      * @param ctx the {@link javax.faces.context.FacesContext} for the current
-*  request
+     *  request
      *
      * @return a {@link ResourceInfo} if a resource if found matching the
      *  provided arguments, otherwise, return <code>null</code>
      */
-    private ResourceInfo doLookup(String libraryName,
-                                  String resourceName,
-                                  String localePrefix,
-                                  boolean compressable,
-                                  boolean isViewResource,
-                                  List<String> contracts,
-                                  FacesContext ctx) {
-        // loop over the contracts as described in deriveResourceIdConsideringLocalePrefixAndContracts in the spec
-        LibraryInfo library = null;
+    private ResourceInfo doLookup(String libraryName, String resourceName, String localePrefix, boolean compressable, boolean isViewResource, List<String> contracts, FacesContext ctx) {
+        
+        // Loop over the contracts as described in deriveResourceIdConsideringLocalePrefixAndContracts in the spec
         for (String contract : contracts) {
-            ResourceInfo info = getResourceInfo(libraryName, resourceName, localePrefix, contract, compressable, isViewResource, ctx, library);
-            if(info != null) {
+            ResourceInfo info = getResourceInfo(libraryName, resourceName, localePrefix, contract, compressable, isViewResource, ctx, null);
+            if (info != null) {
                 return info;
             }
         }
-        return getResourceInfo(libraryName, resourceName, localePrefix, null, compressable, isViewResource, ctx, library);
-
+        
+        return getResourceInfo(libraryName, resourceName, localePrefix, null, compressable, isViewResource, ctx, null);
     }
 
     private ResourceInfo getResourceInfo(String libraryName, String resourceName, String localePrefix, String contract, boolean compressable, boolean isViewResource, FacesContext ctx, LibraryInfo library) {
         if (libraryName != null && !nameContainsForbiddenSequence(libraryName)) {
             library = findLibrary(libraryName, localePrefix, contract, ctx);
+            
             if (library == null && localePrefix != null) {
-                // no localized library found.  Try to find
-                // a library that isn't localized.
+                // no localized library found.  Try to find a library that isn't localized.
                 library = findLibrary(libraryName, null, contract, ctx);
             }
+            
             if (library == null) {
-                // If we don't have one by now, perhaps it's time to
-                // consider scanning directories.
+                // If we don't have one by now, perhaps it's time to consider scanning directories.
                 library = findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, localePrefix, contract, ctx, false);
+                
                 if (library == null && localePrefix != null) {
                     // no localized library found.  Try to find
                     // a library that isn't localized.
                     library = findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, null, contract, ctx, false);
                 }
-                if (null == library) {
+                
+                if (library == null) {
                     return null;
                 }
             }
@@ -316,8 +298,7 @@ public class ResourceManager {
             return null;
         }
 
-        ResourceInfo info =
-              findResource(library, resourceName, localePrefix, compressable, isViewResource,ctx);
+        ResourceInfo info = findResource(library, resourceName, localePrefix, compressable, isViewResource,ctx);
         if (info == null && localePrefix != null) {
             // no localized resource found, try to find a
             // resource that isn't localized
@@ -328,9 +309,7 @@ public class ResourceManager {
         // was found in the webapp filesystem, see if there is a matching
         // library on the classpath.  If one is found, try to find a matching
         // resource in that library.
-        if (info == null
-                && library != null
-                && library.getHelper() instanceof WebappResourceHelper) {
+        if (info == null && library != null && library.getHelper() instanceof WebappResourceHelper) {
             LibraryInfo altLibrary = classpathHelper.findLibrary(libraryName, localePrefix, contract, ctx);
             if (altLibrary != null) {
                 VersionInfo originalVersion = library.getVersion();
@@ -355,8 +334,8 @@ public class ResourceManager {
                     info = findResource(library, resourceName, null, compressable, isViewResource, ctx);
                 }
             }
-
         }
+        
         return info;
     }
 
@@ -365,41 +344,40 @@ public class ResourceManager {
      * @return the String without a leading slash if it has one.
      */
     private String trimLeadingSlash(String s) {
-
         if (s.charAt(0) == '/') {
             return s.substring(1);
         } else {
             return s;
         }
-
     }
     
     private static boolean nameContainsForbiddenSequence(String name) {
         boolean result = false;
         if (name != null) {
-        name = name.toLowerCase();
-
-        result = name.startsWith(".") ||
-                 name.contains("../") ||
-                 name.contains("..\\") ||
-                 name.startsWith("/") ||
-                 name.startsWith("\\") ||
-                 name.endsWith("/") ||
-
-                 name.contains("..%2f") ||
-                 name.contains("..%5c") ||
-                 name.startsWith("%2f") ||
-                 name.startsWith("%5c") ||
-                 name.endsWith("%2f") ||
-
-                 name.contains("..\\u002f") ||
-                 name.contains("..\\u005c") ||
-                 name.startsWith("\\u002f") ||
-                 name.startsWith("\\u005c") ||
-                 name.endsWith("\\u002f")
-
-                ;
+            name = name.toLowerCase();
+    
+            result = name.startsWith(".") ||
+                     name.contains("../") ||
+                     name.contains("..\\") ||
+                     name.startsWith("/") ||
+                     name.startsWith("\\") ||
+                     name.endsWith("/") ||
+    
+                     name.contains("..%2f") ||
+                     name.contains("..%5c") ||
+                     name.startsWith("%2f") ||
+                     name.startsWith("%5c") ||
+                     name.endsWith("%2f") ||
+    
+                     name.contains("..\\u002f") ||
+                     name.contains("..\\u005c") ||
+                     name.startsWith("\\u002f") ||
+                     name.startsWith("\\u005c") ||
+                     name.endsWith("\\u002f")
+    
+                    ;
         }
+        
         return result;
     }
 
@@ -413,15 +391,12 @@ public class ResourceManager {
      * @return the {@link ResourceInfo} from the cache or <code>null</code>
      *  if no cached entry is found
      */
-    private ResourceInfo getFromCache(String name,
-                                      String library,
-                                      String localePrefix, List<String> contracts) {
-
+    private ResourceInfo getFromCache(String name, String library, String localePrefix, List<String> contracts) {
         if (cache == null) {
             return null;
         }
+        
         return cache.get(name, library, localePrefix, contracts);
-
     }
 
 
@@ -431,12 +406,11 @@ public class ResourceManager {
      * @param contracts the contracts
      */
     private void addToCache(ResourceInfo info, List<String> contracts) {
-
         if (cache == null) {
             return;
         }
+        
         cache.add(info, contracts);
-
     }
 
     /**
@@ -460,9 +434,7 @@ public class ResourceManager {
      *@param ctx         the {@link javax.faces.context.FacesContext} for the current request
      *  @return the Library instance for the specified library
      */
-     LibraryInfo findLibrary(String libraryName,
-                             String localePrefix,
-                             String contract, FacesContext ctx) {
+     LibraryInfo findLibrary(String libraryName, String localePrefix, String contract, FacesContext ctx) {
 
         LibraryInfo library = webappHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         
