@@ -68,10 +68,8 @@
         <module>bogusRenderKitId</module>
         <module>characterCombat</module>
         <module>clientsideStateSaving</module>
-<!--
         <module>client-encrypt-by-default</module>
         <module>client-encrypt-by-default-disabled</module>
--->
         <module>component</module>
         <module>composite</module>
         <module>composite2</module>
@@ -87,9 +85,7 @@
 	<module>contractBasic</module>
 	<module>contractBasicInJar</module>
 	<module>contractBasicJar</module>
-    <!-- 
 	<module>contractExtended</module>
-     -->
 	<module>contractExtendedBase</module>
 	<module>contractExtendedBlue</module>
 	<module>contractExtendedRed</module>

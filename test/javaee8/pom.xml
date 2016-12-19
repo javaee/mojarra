@@ -73,20 +73,22 @@
         </dependency>
     </dependencies>    
     <modules>
+        <module>ajax</module>
         <module>cdi</module>
+        <module>commandScript</module>
         <module>converter</module>
         <module>disableFaceletToXhtmlMapping</module>
         <module>disableFaceletsViewHandler</module>
         <module>disableFaceletsViewHandlerDeprecated</module>
         <module>el</module>
         <module>facelets</module>
-        <module>xhtmlMappingToFaceletByDefault</module>
-        <module>ajax</module>
-        <module>namespacedView</module>
-        <module>websocket</module>
-        <module>commandScript</module>
-        <module>uiinput</module>
-        <module>importConstants</module>
         <module>flash</module>
+        <module>importConstants</module>
+	<module>localizedResources</module>
+        <module>namespacedView</module>
+        <module>uiinput</module>
+        <module>validateWholeBean</module>
+        <module>websocket</module>
+        <module>xhtmlMappingToFaceletByDefault</module>
     </modules>
 </project>
