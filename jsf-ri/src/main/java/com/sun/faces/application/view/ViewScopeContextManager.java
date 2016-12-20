@@ -242,11 +242,11 @@ public class ViewScopeContextManager {
         ExternalContext externalContext = facesContext.getExternalContext();
         if (externalContext != null) {
             Map<String, Object> sessionMap = externalContext.getSessionMap();
-            HttpSession session = (HttpSession) externalContext.getSession(create);
+            Object session = externalContext.getSession(create);
 
             if (session != null) {
                 Map<Object, Map<String, ViewScopeContextObject>> activeViewScopeContexts =
-                        (Map<Object, Map<String, ViewScopeContextObject>>) session.getAttribute(ACTIVE_VIEW_CONTEXTS);
+                        (Map<Object, Map<String, ViewScopeContextObject>>) sessionMap.get(ACTIVE_VIEW_CONTEXTS);
                 Map<String, Object> viewMap = facesContext.getViewRoot().getViewMap(false);
 
                 if (activeViewScopeContexts == null && create) {
