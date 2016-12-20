@@ -41,6 +41,7 @@
 package com.sun.faces.context;
 
 
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AlwaysPerformValidationWhenRequiredTrue;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableValidateWholeBean;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceAlwaysWriteFlashCookie;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
@@ -62,10 +63,11 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.impl.DefaultResourceResolver;
 import com.sun.faces.util.Util;
+import javax.faces.component.UIInput;
 
 public class FacesContextFactoryImpl extends FacesContextFactory {
 
-    
+
 
     private final ExceptionHandlerFactory exceptionHandlerFactory;
     private final ExternalContextFactory externalContextFactory;
@@ -100,7 +102,7 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
         Util.notNull("response", response);
         Util.notNull("lifecycle", lifecycle);
         ExternalContext extContext;
-        
+
         FacesContext ctx =
               new FacesContextImpl(
                   extContext = externalContextFactory.getExternalContext(sc, request, response),
@@ -111,12 +113,12 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
 
         savePerRequestInitParams(ctx, webConfig);
         return ctx;
-        
+
     }
-    
+
     /*
      * Copy the value of any init params that must be checked during
-     * this request to our FacesContext attribute map.  
+     * this request to our FacesContext attribute map.
      */
     private void savePerRequestInitParams(FacesContext context, WebConfiguration webConfig) {
         ExternalContext extContext = context.getExternalContext();
@@ -124,19 +126,22 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
         String val = extContext.getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
         boolean setCurrentComponent = Boolean.valueOf(val);
         Map<Object, Object> attrs = context.getAttributes();
-        attrs.put(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME, 
+        attrs.put(UIInput.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE,
+                webConfig.isOptionEnabled(AlwaysPerformValidationWhenRequiredTrue) ?
+                Boolean.TRUE : Boolean.FALSE);
+        attrs.put(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME,
                 setCurrentComponent ? Boolean.TRUE : Boolean.FALSE);
         attrs.put(PartialStateSaving, webConfig.isOptionEnabled(PartialStateSaving) ?
                 Boolean.TRUE : Boolean.FALSE);
         attrs.put(ForceAlwaysWriteFlashCookie, webConfig.isOptionEnabled(ForceAlwaysWriteFlashCookie) ?
                 Boolean.TRUE : Boolean.FALSE);
-        // We must use getQualifiedName here because the consumer is in jsf-api 
+        // We must use getQualifiedName here because the consumer is in jsf-api
         // and thus cannot import the enum.
         attrs.put(ViewRootPhaseListenerQueuesException.getQualifiedName(), webConfig.isOptionEnabled(ViewRootPhaseListenerQueuesException) ?
                 Boolean.TRUE : Boolean.FALSE);
         attrs.put(EnableValidateWholeBean.getQualifiedName(), webConfig.isOptionEnabled(EnableValidateWholeBean) ?
-                Boolean.TRUE : Boolean.FALSE);        
-        
+                Boolean.TRUE : Boolean.FALSE);
+
         Object nonDefaultResourceResolver = extContext.getApplicationMap().get(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME);
         if (null != nonDefaultResourceResolver) {
             attrs.put(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME, nonDefaultResourceResolver);

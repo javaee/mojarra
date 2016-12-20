@@ -39,9 +39,6 @@
  */
 
 import javax.enterprise.inject.Model;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 
 @Model
 public class Spec1433Bean {
@@ -54,12 +51,6 @@ public class Spec1433Bean {
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public void inputValidator(FacesContext context, UIComponent component, Object val) {
-        context.addMessage(component.getClientId(),
-                new FacesMessage("Spec1433Bean Validator Message"));
-
     }
 
 }

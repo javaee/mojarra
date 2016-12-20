@@ -8,8 +8,7 @@
     <h:body>
         <h:form prependId="false">
             
-            <p><h:inputText required="true" id="input"
-                            validator="#{spec1433Bean.inputValidator}"
+            <p><h:inputText required="true" id="input" requiredMessage="Spec1433Bean Validator Message"
                             value="#{spec1433Bean.value}"/></p>
             
             <p><h:commandButton value="submit" id="submit" /></p>

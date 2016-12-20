@@ -197,6 +197,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     private transient Boolean validateEmptyFields;
 
+    private transient Boolean isSetAlwaysValidateRequired;
+
     enum PropertyKeys {
         /**
      * <p>The "localValueSet" state for this component.
@@ -1005,7 +1007,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         // at all".
         Object submittedValue = getSubmittedValue();
         if (submittedValue == null) {
-            return;
+            if (isRequired() && isSetAlwaysValidateRequired(context)) {
+                // continue as below
+            } else {
+                return;
+            }
         }
 
         // If non-null, an instanceof String, and we're configured to treat
@@ -1042,6 +1048,30 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
 
     }
+
+    /*
+     * Respecting the fact that someone may have decorated FacesContextFactory
+     * and thus skipped our saving of this init param, look for the init
+     * param and return its value.  The return is saved in a transient ivar
+     * to provide performance while not perturbing state saving.
+     */
+
+    private boolean isSetAlwaysValidateRequired(FacesContext context) {
+        if (null != isSetAlwaysValidateRequired) {
+            return isSetAlwaysValidateRequired;
+        }
+
+        Boolean bool = (Boolean) context.getAttributes().get(ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE);
+        if (null != bool) {
+            isSetAlwaysValidateRequired = bool;
+        } else {
+            String val = context.getExternalContext().getInitParameter(ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE);
+            isSetAlwaysValidateRequired = Boolean.valueOf(val);
+        }
+
+        return isSetAlwaysValidateRequired;
+    }
+
 
     /**
      * <p>Convert the submitted value into a "local value" of the

@@ -103,14 +103,14 @@ public class WebConfiguration {
     // Key under which we store our WebConfiguration instance.
     private static final String WEB_CONFIG_KEY =
           "com.sun.faces.config.WebConfiguration";
-    
-    public static final String META_INF_CONTRACTS_DIR = "META-INF" + 
+
+    public static final String META_INF_CONTRACTS_DIR = "META-INF" +
             WebContextInitParameter.WebAppContractsDirectory.getDefaultValue();
-    
+
     private static final int META_INF_CONTRACTS_DIR_LEN = META_INF_CONTRACTS_DIR.length();
-    
+
     private static final String RESOURCE_CONTRACT_SUFFIX = "/" + ResourceHandler.RESOURCE_CONTRACT_XML;
-        
+
     // Logging level.  Defaults to FINE
     private Level loggingLevel = Level.FINE;
 
@@ -135,7 +135,7 @@ public class WebConfiguration {
     private ArrayList<DeferredLoggingAction> deferredLoggingActions;
 
     private FaceletsConfiguration faceletsConfig;
-    
+
     private boolean hasFlows;
 
 
@@ -154,7 +154,7 @@ public class WebConfiguration {
         if (canProcessJndiEntries()) {
             processJndiEntries(contextName);
         }
-        
+
         // build the cache of list type params
         cachedListParams = new HashMap<>(3);
         getOptionValue(WebContextInitParameter.ResourceExcludes, " ");
@@ -219,7 +219,7 @@ public class WebConfiguration {
         return webConfig;
 
     }
-    
+
     public static WebConfiguration getInstanceWithoutCreating(ServletContext servletContext) {
         WebConfiguration webConfig = (WebConfiguration)
               servletContext.getAttribute(WEB_CONFIG_KEY);
@@ -245,7 +245,7 @@ public class WebConfiguration {
     public void setHasFlows(boolean hasFlows) {
         this.hasFlows = hasFlows;
     }
-    
+
     /**
      * Obtain the value of the specified boolean parameter
      * @param param the parameter of interest
@@ -269,7 +269,7 @@ public class WebConfiguration {
      */
     public String getOptionValue(WebContextInitParameter param) {
         String result = contextParameters.get(param);
-        
+
         if (null == result) {
             WebContextInitParameter alternate = param.getAlternate();
             if (null != alternate) {
@@ -280,11 +280,11 @@ public class WebConfiguration {
         return result;
 
     }
-    
+
     public void setOptionValue(WebContextInitParameter param, String value) {
         contextParameters.put(param, value);
     }
-    
+
     public void setOptionEnabled(BooleanWebContextInitParameter param, boolean value) {
         booleanContextParameters.put(param, value);
     }
@@ -321,10 +321,10 @@ public class WebConfiguration {
         return getFacesConfigOptionValue(param, false);
     }
 
-    
+
     public String[] getOptionValue(WebContextInitParameter param, String sep) {
         String [] result;
-        
+
         assert(null != cachedListParams);
         if (null == (result = cachedListParams.get(param))) {
             String value = getOptionValue(param);
@@ -336,7 +336,7 @@ public class WebConfiguration {
             }
             cachedListParams.put(param, result);
         }
-        
+
         return result;
     }
 
@@ -407,16 +407,16 @@ public class WebConfiguration {
     }
       /**
        * To inlcude the facelets suffix into the supported suffixes.
-       * 
+       *
        * @return merged suffixes including both default suffixes and the facelet suffixes.
        */
       public String[] getConfiguredExtensions() {
           String[] defaultSuffix  = getOptionValue(WebContextInitParameter.DefaultSuffix, " ");
           String[] faceletsSuffix = getOptionValue(WebContextInitParameter.FaceletsSuffix, " ");
-          
+
           List<String> mergedList = new ArrayList<String>(Arrays.asList(defaultSuffix));
           mergedList.addAll(Arrays.asList(faceletsSuffix));
-          
+
           return mergedList.toArray(new String[0]);
     }
 
@@ -474,13 +474,13 @@ public class WebConfiguration {
         discoverResourceLibraryContracts();
 
     }
-    
+
     private void discoverResourceLibraryContracts() {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContex = context.getExternalContext();
         Set<String> foundContracts = new HashSet<>();
         Set<String> candidates;
-        
+
         // Scan for "contractMappings" in the web app root
         String contractsDirName = getOptionValue(WebContextInitParameter.WebAppContractsDirectory);
         assert(null != contractsDirName);
@@ -496,7 +496,7 @@ public class WebConfiguration {
                 foundContracts.add(cur.substring(contractsDirNameLen + 1, end));
             }
         }
-        
+
         // Scan for "META-INF" contractMappings in the classpath
         try {
             URL[] candidateURLs = Classpath.search(Util.getCurrentLoader(this),
@@ -505,31 +505,31 @@ public class WebConfiguration {
                     Classpath.SearchAdvice.AllMatches);
             for (URL curURL : candidateURLs) {
                 String cur = curURL.toExternalForm();
-                
+
                 int i = cur.indexOf(META_INF_CONTRACTS_DIR) + META_INF_CONTRACTS_DIR_LEN + 1;
                 int j = cur.indexOf(RESOURCE_CONTRACT_SUFFIX);
                 if (i < j) {
                     foundContracts.add(cur.substring(i,j));
                 }
-                
+
             }
         } catch (IOException ioe) {
             if (LOGGER.isLoggable(Level.FINEST)) {
                 LOGGER.log(Level.FINEST, "Unable to scan " + META_INF_CONTRACTS_DIR, ioe);
             }
         }
-        
-        
+
+
         if (foundContracts.isEmpty()) {
             return;
         }
-        
+
         Map<String, List<String>> contractMappings = new HashMap<>();
-        
+
         ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
         Map<String, List<String>> contractsFromConfig = associate.getResourceLibraryContracts();
         List<String> contractsToExpose;
-        
+
         if (null != contractsFromConfig && !contractsFromConfig.isEmpty()) {
             List<String> contractsFromMapping;
             for (Map.Entry<String, List<String>> cur : contractsFromConfig.entrySet()) {
@@ -547,7 +547,7 @@ public class WebConfiguration {
                             contractsToExpose.add(curContractFromMapping);
                         } else {
                             if (LOGGER.isLoggable(Level.CONFIG)) {
-                                LOGGER.log(Level.CONFIG, "resource library contract mapping for pattern {0} exposes contract {1}, but that contract is not available to the application.", 
+                                LOGGER.log(Level.CONFIG, "resource library contract mapping for pattern {0} exposes contract {1}, but that contract is not available to the application.",
                                         new String [] { cur.getKey(), curContractFromMapping });
                             }
                         }
@@ -562,9 +562,9 @@ public class WebConfiguration {
             contractsToExpose.addAll(foundContracts);
             contractMappings.put("*", contractsToExpose);
         }
-        extContex.getApplicationMap().put(FaceletViewHandlingStrategy.RESOURCE_LIBRARY_CONTRACT_DATA_STRUCTURE_KEY, 
+        extContex.getApplicationMap().put(FaceletViewHandlingStrategy.RESOURCE_LIBRARY_CONTRACT_DATA_STRUCTURE_KEY,
                 contractMappings);
-        
+
     }
 
 
@@ -832,7 +832,7 @@ public class WebConfiguration {
         try {
             initialContext = new InitialContext();
         } catch (NoClassDefFoundError nde) {
-          // on google app engine InitialContext is forbidden to use and GAE throws NoClassDefFoundError 
+          // on google app engine InitialContext is forbidden to use and GAE throws NoClassDefFoundError
           if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, nde.toString(), nde);
           }
@@ -1154,7 +1154,7 @@ public class WebConfiguration {
 
         }
 
-        
+
     // ------------------------------------------------- Package Private Methods
 
 
@@ -1222,6 +1222,9 @@ public class WebConfiguration {
         // *must* appear after the one that is taking
         // its place.  The reporting logic depends on this
 
+        AlwaysPerformValidationWhenRequiredTrue(
+            UIInput.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE,
+            false),
         DisplayConfiguration(
               "com.sun.faces.displayConfiguration",
               false
@@ -1368,7 +1371,7 @@ public class WebConfiguration {
         FaceletsSkipCommentsDeprecated(
               "facelets.SKIP_COMMENTS",
               false,
-              true, 
+              true,
               FaceletsSkipComments,
               new FaceletsConfigParamLoggingStrategy()
         ),
