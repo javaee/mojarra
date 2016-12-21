@@ -1387,6 +1387,10 @@ public class WebConfiguration {
               "com.sun.faces.generateUniqueServerStateIds",
               true
         ),
+        InterpretEmptyStringSubmittedValuesAsNull(
+            UIInput.EMPTY_STRING_AS_NULL_PARAM_NAME,
+            false
+        ),
         AutoCompleteOffOnViewState(
               "com.sun.faces.autoCompleteOffOnViewState",
               true
