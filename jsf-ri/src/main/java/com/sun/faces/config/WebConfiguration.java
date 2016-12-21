@@ -1251,6 +1251,10 @@ public class WebConfiguration {
               "com.sun.faces.disableClientStateEncryption",
               false
         ),
+        DisableFacesServletAutomaticMapping(
+                FacesServlet.DISABLE_FACESSERVLET_TO_XHTML_PARAM_NAME,
+                false
+        ),
         EnableClientStateDebugging(
               "com.sun.faces.enableClientStateDebugging",
               false
