@@ -53,11 +53,13 @@ import org.junit.runner.RunWith;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 
 /**
- * Tests the availability of The Flash via injection of a {@link Flash} instance.
+ * Tests the availability of The Flash via injection of a {@link Flash}
+ * instance.
  *
  */
 @RunWith(JsfTestRunner.class)
@@ -78,20 +80,20 @@ public class Spec1385IT {
     }
 
     @Test
-    @JsfTest(value = JSF_2_3_0_M03, excludes = { WEBLOGIC_12_1_4 })
-    public void testCompositeComponentFacelets() throws Exception {
-        
+    @JsfTest(value = JSF_2_3_0_M03, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
+    public void testInjectFlash() throws Exception {
+
         // Renders nothing of interest, should cause cookie to be set
         webClient.getPage(webUrl + "faces/injectFlash.xhtml?setFlash=true");
-        
+
         // Next request processes cookie, should render value put in Flash and set "deletion" cookie
         HtmlPage page = webClient.getPage(webUrl + "faces/injectFlash.xhtml?getFlash=true");
-        
+
         assertTrue(page.asXml().contains("foo:bar"));
-        
+
         // No cookie anymore and the value put in Flash previously should not be rendered anymore
         page = webClient.getPage(webUrl + "faces/injectFlash.xhtml?getFlash=true");
-        
+
         assertFalse(page.asXml().contains("foo:bar"));
     }
 

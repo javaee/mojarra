@@ -50,6 +50,7 @@ import org.junit.runner.RunWith;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 
@@ -75,39 +76,39 @@ public class Spec1386IT {
     }
 
     @Test
-    @JsfTest(value = JSF_2_3_0_M03, excludes = { WEBLOGIC_12_1_4 })
-    public void testFlowMap() throws Exception {
-        
+    @JsfTest(value = JSF_2_3_0_M03, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
+    public void testInjectFlowMap() throws Exception {
+
         // Start on initial (non-flow) view
         HtmlPage page = webClient.getPage(webUrl + "injectFlowMap.xhtml");
-        
+
         // Enter main flow
         page = page.getHtmlElementById("form:enter").click();
-        
+
         // Put value in flow scope map
         page = page.getHtmlElementById("form:init").click();
-        
+
         // Navigate to next page in flow
         page = page.getHtmlElementById("form:next").click();
-        
+
         // Value should be available from flow map now
         assertTrue(page.asXml().contains("foo:bar"));
-        
+
         // Enter nested flow
         page = page.getHtmlElementById("form:nested").click();
-        
+
         // Put (different) value in flow map using same key
         page = page.getHtmlElementById("form:init").click();
-        
+
         // Navigate to next page in nested flow
         page = page.getHtmlElementById("form:next").click();
-        
+
         // Different value should be available from flow map now
         assertTrue(page.asXml().contains("foo:barx"));
-        
+
         // Exit nested flow
         page = page.getHtmlElementById("form:exit").click();
-        
+
         // Original value should be available from flow map again
         assertTrue(page.asXml().contains("foo:bar"));
     }
