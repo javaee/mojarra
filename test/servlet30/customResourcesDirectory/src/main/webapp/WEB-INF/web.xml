@@ -20,7 +20,7 @@
         <param-value>${webapp.serializeServerState}</param-value>
     </context-param>
     <context-param>
-        <param-name>javax.faces.WebAppResourcesDirectory</param-name>
+        <param-name>javax.faces.WEBAPP_RESOURCES_DIRECTORY</param-name>
         <param-value>/WEB-INF/myresources</param-value>
     </context-param>
     <servlet>
