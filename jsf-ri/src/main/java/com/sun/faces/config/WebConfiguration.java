@@ -304,12 +304,10 @@ public class WebConfiguration {
         if (booleanContextParameters.get(param) != null) {
             ValueWithDefaultIndicator val = booleanContextParameters.get(param);
 
-            if (val.isDefault) {
-                if (hasWebInfFacesConfig) {
-                    if (webInfFacesConfigVersion >= param.getIntroducedInVersion()) {
-                        return true;
-                    }
-                }
+            if (val.isDefault
+                && hasWebInfFacesConfig
+                && param.isOnByDefaultInVersion(webInfFacesConfigVersion)) {
+                return true;
             }
 
             return val.value;
@@ -1514,8 +1512,7 @@ public class WebConfiguration {
             2.3),
         EnableWebsocketEndpoint(
             PushContext.ENABLE_WEBSOCKET_ENDPOINT_PARAM_NAME,
-            false,
-            2.3),
+            false), // enable this by default in 2.3 once programmatic endpoint is fixed
         DisallowDoctypeDecl(
             "com.sun.faces.disallowDoctypeDecl",
             false);
@@ -1545,8 +1542,14 @@ public class WebConfiguration {
 
         }
 
-        public double getIntroducedInVersion() {
-            return introducedInVersion;
+        public boolean isOnByDefaultInVersion(double testVersion) {
+            boolean result = false;
+            // If an introducedInVersion has been specified for this value
+            if (-1 != introducedInVersion) {
+                result = testVersion >= introducedInVersion;
+            }
+
+            return result;
         }
 
         DeprecationLoggingStrategy getDeprecationLoggingStrategy() {
