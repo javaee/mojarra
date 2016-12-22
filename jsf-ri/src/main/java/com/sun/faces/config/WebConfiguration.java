@@ -138,6 +138,10 @@ public class WebConfiguration {
 
     private boolean hasFlows;
 
+    private boolean hasWebInfFacesConfig;
+
+    private double webInfFacesConfigVersion;
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -244,6 +248,22 @@ public class WebConfiguration {
 
     public void setHasFlows(boolean hasFlows) {
         this.hasFlows = hasFlows;
+    }
+
+    public boolean isHasWebInfFacesConfig() {
+        return hasWebInfFacesConfig;
+    }
+
+    public void setHasWebInfFacesConfig(boolean hasWebInfFacesConfig) {
+        this.hasWebInfFacesConfig = hasWebInfFacesConfig;
+    }
+
+    public double getWebInfFacesConfigVersion() {
+        return webInfFacesConfigVersion;
+    }
+
+    public void setWebInfFacesConfigVersion(double webInfFacesConfigVersion) {
+        this.webInfFacesConfigVersion = webInfFacesConfigVersion;
     }
 
     /**

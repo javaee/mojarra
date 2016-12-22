@@ -309,22 +309,22 @@ public class ConfigManager {
     public static ConfigManager getInstance(ServletContext sc) {
         return (ConfigManager) sc.getAttribute(CONFIG_MANAGER_INSTANCE_KEY);
     }
-    
+
     public static ConfigManager createInstance(ServletContext sc) {
         ConfigManager result = new ConfigManager();
         sc.setAttribute(CONFIG_MANAGER_INSTANCE_KEY, result);
         return result;
     }
-    
+
     public static void removeInstance(ServletContext sc) {
         sc.removeAttribute(CONFIG_MANAGER_INSTANCE_KEY);
     }
-    
+
     private void initializeConfigProcessers(ServletContext sc) {
         ConfigProcessor p = FACES_CONFIG_PROCESSOR_CHAIN;
         do {
             p.initializeClassMetadataMap(sc);
-            
+
         } while (null != (p = p.getNext()));
 
     }
@@ -368,11 +368,19 @@ public class ConfigManager {
                 context.getAttributes().put(INJECTION_PROVIDER_KEY, containerConnector);
 
                 boolean isFaceletsDisabled;
-                
+                boolean isWebInfFacesConfig = lastFacesConfigInfo.isWebInfFacesConfig();
+                double webInfFacesConfigVersion = -1;
+
+                webConfig.setHasWebInfFacesConfig(isWebInfFacesConfig);
+                if (isWebInfFacesConfig) {
+                    webInfFacesConfigVersion = lastFacesConfigInfo.getVersion();
+                    webConfig.setWebInfFacesConfigVersion(webInfFacesConfigVersion);
+                }
+
                 // Don't perform the check unless lastFacesConfigInfo is indeed
                 // *the* WEB-INF/faces-config.xml
-                if (lastFacesConfigInfo.isWebInfFacesConfig()) {
-                    isFaceletsDisabled = 
+                if (isWebInfFacesConfig) {
+                    isFaceletsDisabled =
                             isFaceletsDisabled(webConfig, lastFacesConfigInfo);
                 } else {
                     isFaceletsDisabled = webConfig.isOptionEnabled(DisableFaceletJSFViewHandler) ||
@@ -393,12 +401,12 @@ public class ConfigManager {
                     pushTaskToContext(sc, annotationScan);
                 }
 
-                //see if the app is running in a HA enabled env               
-                if (containerConnector instanceof HighAvailabilityEnabler) {                   
+                //see if the app is running in a HA enabled env
+                if (containerConnector instanceof HighAvailabilityEnabler) {
                     ((HighAvailabilityEnabler)containerConnector).enableHighAvailability(sc);
                 }
 
-                ServiceLoader<ApplicationConfigurationPopulator> populators = 
+                ServiceLoader<ApplicationConfigurationPopulator> populators =
                         ServiceLoader.load(ApplicationConfigurationPopulator.class);
                 Document newDoc;
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -412,14 +420,14 @@ public class ConfigManager {
                     Attr versionAttribute = newDoc.createAttribute("version");
                     versionAttribute.setValue("2.2");
                     newDoc.getDocumentElement().getAttributes().setNamedItem(versionAttribute);
-                    
+
                     try {
                         pop.populateApplicationConfiguration(newDoc);
                         newDocInfo = new DocumentInfo(newDoc, null);
                         programmaticDocuments.add(newDocInfo);
                     } catch (Throwable e) {
                         if (LOGGER.isLoggable(Level.INFO)) {
-                            LOGGER.log(Level.INFO, "{0} thrown when invoking {1}.populateApplicationConfigurationResources: {2}", 
+                            LOGGER.log(Level.INFO, "{0} thrown when invoking {1}.populateApplicationConfigurationResources: {2}",
                                     new String [] {
                                         e.getClass().getName(),
                                         pop.getClass().getName(),
@@ -438,7 +446,7 @@ public class ConfigManager {
                     }
                     facesDocuments = newDocumentInfo;
                 }
-                
+
                 // process the ordered documents
                 FACES_CONFIG_PROCESSOR_CHAIN.process(sc, facesDocuments);
                 if (!isFaceletsDisabled) {
@@ -467,7 +475,7 @@ public class ConfigManager {
 
         DbfFactory.removeSchemaMap(sc);
     }
-    
+
 
 
 
@@ -480,11 +488,11 @@ public class ConfigManager {
      */
     public void destroy(ServletContext sc) {
 
-        // Do not call releaseFactories() here because that is done by the 
+        // Do not call releaseFactories() here because that is done by the
         // caller.
-        
+
         FACES_CONFIG_PROCESSOR_CHAIN.destroy(sc);
-        
+
         initializedContexts.remove(sc);
 
     }
@@ -705,7 +713,7 @@ public class ConfigManager {
             }
             ((InitFacesContext)ctx).setELContext(elContext);
         }
-        
+
         app.publishEvent(ctx,
                          PostConstructApplicationEvent.class,
                          Application.class,
@@ -867,7 +875,7 @@ public class ConfigManager {
                             jarNames.add(jarName);
                         } else {
                             /*
-                             * Because the container annotation scanning does not 
+                             * Because the container annotation scanning does not
                              * know anything about faces-config.xml metadata-complete
                              * the annotatedSet of classes will include classes that
                              * are not supposed to be included.
@@ -1005,7 +1013,7 @@ public class ConfigManager {
         private URI documentURI;
         private DocumentBuilderFactory factory;
         private boolean validating;
-        
+
         // -------------------------------------------------------- Constructors
 
 
@@ -1094,7 +1102,7 @@ public class ConfigManager {
                     ClassLoader loader = this.getClass().getClassLoader();
                     is = new InputSource(getInputStream(loader.getResource(EMPTY_FACES_CONFIG)));
                     doc = db.parse(is);
-                } 
+                }
 
             }
 
@@ -1108,23 +1116,23 @@ public class ConfigManager {
                 Element documentElement = doc.getDocumentElement();
                 documentNS = documentElement.getNamespaceURI();
                 String rootElementTagName = documentElement.getTagName();
-                
+
                 boolean isNonFacesConfigDocument = !FACES_CONFIG_TAGNAME.equals(rootElementTagName) &&
                         !FACELET_TAGLIB_TAGNAME.equals(rootElementTagName);
-                
+
                 if (isNonFacesConfigDocument) {
                     ClassLoader loader = this.getClass().getClassLoader();
                     is = new InputSource(getInputStream(loader.getResource(EMPTY_FACES_CONFIG)));
                     doc = db.parse(is);
                     if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING, MessageFormat.format("Config document {0} with namespace URI {1} is not a faces-config or facelet-taglib file.  Ignoring.", 
+                        LOGGER.log(Level.WARNING, MessageFormat.format("Config document {0} with namespace URI {1} is not a faces-config or facelet-taglib file.  Ignoring.",
                                 documentURI.toURL().toExternalForm(),
                                 documentNS));
                     }
                     return doc;
                 }
             }
-            
+
             if (validating && documentNS != null) {
                 DOMSource domSource
                      = new DOMSource(doc, documentURL.toExternalForm());
@@ -1383,7 +1391,7 @@ public class ConfigManager {
         /**
          * @return zero or more <code>URL</code> instances
          * @throws Exception if an Exception is thrown by the underlying
-         *  <code>ConfigurationResourceProvider</code> 
+         *  <code>ConfigurationResourceProvider</code>
          */
         @Override
         public Collection<URI> call() throws Exception {

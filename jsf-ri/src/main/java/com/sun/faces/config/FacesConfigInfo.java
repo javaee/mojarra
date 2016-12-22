@@ -112,6 +112,10 @@ public class FacesConfigInfo {
 
     }
 
+    public double getVersion() {
+        return this.version;
+    }
+
 
     /**
      * @return <code>true</code> if the <code>Document</code> provided at
@@ -217,7 +221,7 @@ public class FacesConfigInfo {
                 LOGGER.warning("jsf.configuration.web.faces.config.contains.ordering");
             }
         }
-        
+
         NodeList absoluteOrderingElements =
               documentElement.getElementsByTagNameNS(namespace, ABSOLUTE_ORDERING);
 
@@ -231,7 +235,7 @@ public class FacesConfigInfo {
             absoluteOrdering = new ArrayList<>(children.getLength());
             for (int i = 0, len = children.getLength(); i < len; i++) {
                 Node n = children.item(i);
-                if (null != n.getLocalName()) { 
+                if (null != n.getLocalName()) {
                     switch (n.getLocalName()) {
                         case NAME:
                             absoluteOrdering.add(getNodeText(n));
@@ -239,7 +243,7 @@ public class FacesConfigInfo {
                         case OTHERS:
                             if (absoluteOrdering.contains("others")) {
                                 throw new IllegalStateException("'absolute-ordering' element defined with multiple 'others' child elements found within WEB-INF/faces-config.xml");
-                            }   
+                            }
                             absoluteOrdering.add("others");
                             break;
                     }
