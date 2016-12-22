@@ -306,7 +306,7 @@ public class WebConfiguration {
 
             if (val.isDefault) {
                 if (hasWebInfFacesConfig) {
-                    if (webInfFacesConfigVersion <= param.getIntroducedInVersion()) {
+                    if (webInfFacesConfigVersion >= param.getIntroducedInVersion()) {
                         return true;
                     }
                 }
