@@ -941,7 +941,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <ul>
 
      * <li>Retrieve the submitted value with {@link #getSubmittedValue}.
-     * If this returns <code>null</code>, <span class="changed_modified_2_3>and
+     * If this returns <code>null</code>, <span class="changed_modified_2_3">and
      * the value of the {@link #ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE}
      * context-param is true (ignoring case), examine the value of the "required"
      * property.  If the value of "required" is true, continue as below.  If
