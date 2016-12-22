@@ -305,8 +305,10 @@ public class WebConfiguration {
             ValueWithDefaultIndicator val = booleanContextParameters.get(param);
 
             if (val.isDefault) {
-                if (webInfFacesConfigVersion <= param.getIntroducedInVersion()) {
-                    return true;
+                if (hasWebInfFacesConfig) {
+                    if (webInfFacesConfigVersion <= param.getIntroducedInVersion()) {
+                        return true;
+                    }
                 }
             }
 
