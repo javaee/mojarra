@@ -1504,13 +1504,16 @@ public class WebConfiguration {
             2.3),
         ViewRootPhaseListenerQueuesException(
             UIViewRoot.VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME,
-            false),
+            false,
+            2.3),
         EnableValidateWholeBean(
             BeanValidator.ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME,
-            false),
+            false,
+            2.3),
         EnableWebsocketEndpoint(
             PushContext.ENABLE_WEBSOCKET_ENDPOINT_PARAM_NAME,
-            false),
+            false,
+            2.3),
         DisallowDoctypeDecl(
             "com.sun.faces.disallowDoctypeDecl",
             false);
