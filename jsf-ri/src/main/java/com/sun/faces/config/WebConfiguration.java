@@ -1432,9 +1432,6 @@ public class WebConfiguration {
         ForceAlwaysWriteFlashCookie(
             "com.sun.faces.forceAlwaysWriteFlashCookie",
             false),
-        EnableCdiResolverChain(
-            "javax.faces.ENABLE_CDI_RESOLVER_CHAIN",
-            false),
         ViewRootPhaseListenerQueuesException(
             UIViewRoot.VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME,
             false),

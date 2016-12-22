@@ -40,44 +40,53 @@
 
 package com.sun.faces.el;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.context.flash.FlashELResolver;
-import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.util.MessageUtils;
+import static com.sun.faces.RIConstants.EMPTY_CLASS_ARGS;
+import static com.sun.faces.cdi.CdiUtils.getBeanReference;
+import static com.sun.faces.el.FacesCompositeELResolver.ELResolverChainType.Faces;
+import static com.sun.faces.el.FacesCompositeELResolver.ELResolverChainType.JSP;
+import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
+import static com.sun.faces.util.ReflectionUtils.lookupMethod;
+import static com.sun.faces.util.ReflectionUtils.newInstance;
+import static com.sun.faces.util.Util.getCdiBeanManager;
+import static com.sun.faces.util.Util.getFacesConfigXmlVersion;
+import static com.sun.faces.util.Util.getWebXmlVersion;
 
-import com.sun.faces.util.ReflectionUtils;
-import com.sun.faces.util.Util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 import javax.el.ArrayELResolver;
 import javax.el.BeanELResolver;
 import javax.el.CompositeELResolver;
 import javax.el.ELContext;
 import javax.el.ELResolver;
+import javax.el.ExpressionFactory;
 import javax.el.ListELResolver;
 import javax.el.MapELResolver;
 import javax.el.ResourceBundleELResolver;
 import javax.el.ValueExpression;
+import javax.faces.FacesException;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.VariableResolver;
-import javax.faces.component.UIViewRoot;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.el.ExpressionFactory;
-import javax.faces.FacesException;
 import javax.servlet.ServletContext;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
+
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.cdi.CdiExtension;
+import com.sun.faces.context.flash.FlashELResolver;
+import com.sun.faces.mgbean.BeanManager;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <p>Utility class for EL related methods.</p>
@@ -189,9 +198,7 @@ public class ELUtils {
 
 
     private ELUtils() {
-
         throw new IllegalStateException();
-
     }
 
 
@@ -199,119 +206,138 @@ public class ELUtils {
 
 
     public static boolean isCompositeComponentExpr(String expression) {
-
         // TODO we should be trying to re-use the Matcher by calling
         // m.reset(expression);
-        Matcher m = COMPOSITE_COMPONENT_EXPRESSION.matcher(expression);
-        return m.find();
-
+        return COMPOSITE_COMPONENT_EXPRESSION
+                .matcher(expression)
+                .find();
     }
 
 
     public static boolean isCompositeComponentMethodExprLookup(String expression) {
-
-        Matcher m = METHOD_EXPRESSION_LOOKUP.matcher(expression);
-        return m.matches();
-
+        return METHOD_EXPRESSION_LOOKUP
+                .matcher(expression)
+                .matches();
     }
 
 
     public static boolean isCompositeComponentLookupWithArgs(String expression) {
-
         // TODO we should be trying to re-use the Matcher by calling
         // m.reset(expression);
-        Matcher m = COMPOSITE_COMPONENT_LOOKUP_WITH_ARGS.matcher(expression);
-        return m.find();
-        
+        return COMPOSITE_COMPONENT_LOOKUP_WITH_ARGS
+                .matcher(expression)
+                .find();
     }
-
 
     /**
      * <p>Create the <code>ELResolver</code> chain for programmatic EL calls.</p>
+     * 
      * @param composite a <code>CompositeELResolver</code>
      * @param associate our ApplicationAssociate
      */
-    public static void buildFacesResolver(FacesCompositeELResolver composite,
-                                          ApplicationAssociate associate) {
+    public static void buildFacesResolver(FacesCompositeELResolver composite, ApplicationAssociate associate) {
 
+        checkNotNull(composite, associate);
+        
+        if (!tryAddCDIELResolver(composite)) {
+            // The CDI ELResolver that among others takes care of handling the implicit objects 
+            // was not added. Add the old native implicit resolver.
+            composite.addRootELResolver(IMPLICIT_RESOLVER); 
+        }
+        
+        composite.add(FLASH_RESOLVER);
+        composite.addPropertyELResolver(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
+        addELResolvers(composite, associate.getELResolversFromFacesConfig());
+        addVariableResolvers(composite, Faces, associate);
+        addPropertyResolvers(composite, associate);
+        composite.add(associate.getApplicationELResolvers());
+        composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
+        composite.addPropertyELResolver(RESOURCE_RESOLVER);
+        composite.addPropertyELResolver(BUNDLE_RESOLVER);
+        composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
+        addEL3_0_Resolvers(composite, associate);
+        composite.addPropertyELResolver(MAP_RESOLVER);
+        composite.addPropertyELResolver(LIST_RESOLVER);
+        composite.addPropertyELResolver(ARRAY_RESOLVER);
+        composite.addPropertyELResolver(BEAN_RESOLVER);
+        composite.addRootELResolver(SCOPED_RESOLVER);
+    }
+    
+    /**
+     * <p>Create the <code>ELResolver</code> chain for JSP.</p>
+     * 
+     * @param composite a <code>CompositeELResolver</code>
+     * @param associate our ApplicationAssociate
+     */
+    public static void buildJSPResolver(FacesCompositeELResolver composite, ApplicationAssociate associate) {
+
+        checkNotNull(composite, associate);
+        
+        if (!tryAddCDIELResolver(composite)) {
+            // The CDI ELResolver that among others takes care of handling the implicit objects 
+            // was not added. Add the old native implicit JSP resolver.
+            composite.addRootELResolver(IMPLICIT_JSP_RESOLVER);
+        }
+        
+        composite.add(FLASH_RESOLVER);
+        composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
+        composite.addPropertyELResolver(RESOURCE_RESOLVER);
+        composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
+        addELResolvers(composite, associate.getELResolversFromFacesConfig());
+        addVariableResolvers(composite, JSP, associate);
+        addPropertyResolvers(composite, associate);
+        composite.add(associate.getApplicationELResolvers());
+    }
+    
+    private static void checkNotNull(FacesCompositeELResolver composite, ApplicationAssociate associate) {
         if (associate == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "associate");
-            throw new NullPointerException(message);
+            throw new NullPointerException(
+                getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID, "associate"));
         }
 
         if (composite == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "composite");
-            throw new NullPointerException(message);
-        }
-        
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
-                Util.getWebXmlVersion(facesContext).equals("4.0")) {
-            
-            javax.enterprise.inject.spi.BeanManager beanManager = 
-                 Util.getCdiBeanManager(facesContext);
-            
-            if (beanManager != null) {
-                composite.add(beanManager.getELResolver());
-            } else {
-                throw new FacesException("Unable to find CDI BeanManager");
-            }
-            
-            composite.add(FLASH_RESOLVER);
-            composite.addPropertyELResolver(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
-            addELResolvers(composite, associate.getELResolversFromFacesConfig());
-            addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.Faces,
-                    associate);
-            addPropertyResolvers(composite, associate);
-            composite.add(associate.getApplicationELResolvers());
-            composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
-            composite.addPropertyELResolver(RESOURCE_RESOLVER);
-            composite.addPropertyELResolver(BUNDLE_RESOLVER);
-            composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
-            addEL3_0_Resolvers(composite, associate);
-            composite.addPropertyELResolver(MAP_RESOLVER);
-            composite.addPropertyELResolver(LIST_RESOLVER);
-            composite.addPropertyELResolver(ARRAY_RESOLVER);
-            composite.addPropertyELResolver(BEAN_RESOLVER);
-            composite.addRootELResolver(SCOPED_RESOLVER);
-        } else {        
-            composite.addRootELResolver(IMPLICIT_RESOLVER);
-            composite.add(FLASH_RESOLVER);
-            composite.addPropertyELResolver(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
-            addELResolvers(composite, associate.getELResolversFromFacesConfig());
-            addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.Faces,
-                    associate);
-            addPropertyResolvers(composite, associate);
-            composite.add(associate.getApplicationELResolvers());
-            composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
-            composite.addPropertyELResolver(RESOURCE_RESOLVER);
-            composite.addPropertyELResolver(BUNDLE_RESOLVER);
-            composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
-            addEL3_0_Resolvers(composite, associate);
-            composite.addPropertyELResolver(MAP_RESOLVER);
-            composite.addPropertyELResolver(LIST_RESOLVER);
-            composite.addPropertyELResolver(ARRAY_RESOLVER);
-            composite.addPropertyELResolver(BEAN_RESOLVER);
-            composite.addRootELResolver(SCOPED_RESOLVER);
+            throw new NullPointerException(
+                getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID, "composite"));
         }
     }
     
-    private static void addEL3_0_Resolvers(FacesCompositeELResolver composite, 
-            ApplicationAssociate associate) {
-        ExpressionFactory ef = associate.getExpressionFactory();
-        Method getStreamELResolverMethod = ReflectionUtils.lookupMethod(ExpressionFactory.class, 
-                "getStreamELResolver", RIConstants.EMPTY_CLASS_ARGS);
-        if (null != getStreamELResolverMethod) {
+    private static boolean tryAddCDIELResolver(FacesCompositeELResolver composite) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        
+        javax.enterprise.inject.spi.BeanManager beanManager = getCdiBeanManager(facesContext);
+        
+        if (beanManager == null) {
+            // TODO: use version enum and >=
+            if (getFacesConfigXmlVersion(facesContext).equals("2.3") || getWebXmlVersion(facesContext).equals("4.0")) {
+                throw new FacesException("Unable to find CDI BeanManager");
+            }
+        } else {
+            CdiExtension cdiExtension = getBeanReference(beanManager, CdiExtension.class);
+            if (cdiExtension.isAddBeansForJSFImplicitObjects()) {
+                composite.add(beanManager.getELResolver());
+                return true;
+            }
+        }
+        
+        return false;        
+    }
+    
+    private static void addEL3_0_Resolvers(FacesCompositeELResolver composite, ApplicationAssociate associate) {
+        ExpressionFactory expressionFactory = associate.getExpressionFactory();
+        
+        Method getStreamELResolverMethod = lookupMethod(
+            ExpressionFactory.class, 
+            "getStreamELResolver", EMPTY_CLASS_ARGS);
+        
+        if (getStreamELResolverMethod != null) {
             try {
-                ELResolver streamELResolver = (ELResolver) 
-                        getStreamELResolverMethod.invoke(ef, (Object[]) null);
+                ELResolver streamELResolver = (ELResolver) getStreamELResolverMethod.invoke(
+                    expressionFactory, (Object[]) null);
                 composite.addRootELResolver(streamELResolver);
+                
                 // Assume that if we have getStreamELResolver, then we must have
                 // javax.el.staticFieldELResolver
-                composite.addRootELResolver((ELResolver)
-                        ReflectionUtils.newInstance("javax.el.StaticFieldELResolver"));
+                composite.addRootELResolver((ELResolver) newInstance("javax.el.StaticFieldELResolver"));
                 
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException t) {
                 // This is normal on containers that do not have these ELResolvers
@@ -319,75 +345,13 @@ public class ELUtils {
         }
     }
 
-
-    /**
-     * <p>Create the <code>ELResolver</code> chain for JSP.</p>
-     * @param composite a <code>CompositeELResolver</code>
-     * @param associate our ApplicationAssociate
-     */
-    public static void buildJSPResolver(FacesCompositeELResolver composite,
-                                        ApplicationAssociate associate) {
-
-        if (associate == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "associate");
-            throw new NullPointerException(message);
-        }
-
-        if (composite == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "composite");
-            throw new NullPointerException(message);
-        }
-
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
-                Util.getWebXmlVersion(facesContext).equals("4.0")) {
-            
-            javax.enterprise.inject.spi.BeanManager beanManager = 
-                 Util.getCdiBeanManager(facesContext);
-            
-            if (beanManager != null) {
-                composite.add(beanManager.getELResolver());
-            } else {
-                throw new FacesException("Unable to find CDI BeanManager");
-            }
-            
-            composite.add(FLASH_RESOLVER);
-            composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
-            composite.addPropertyELResolver(RESOURCE_RESOLVER);
-            composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
-            addELResolvers(composite, associate.getELResolversFromFacesConfig());
-            addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.JSP,
-                            associate);
-            addPropertyResolvers(composite, associate);
-            composite.add(associate.getApplicationELResolvers());
+    public static Object evaluateValueExpression(ValueExpression expression, ELContext elContext) {
+        if (expression.isLiteralText()) {
+            return expression.getExpressionString();
         } else {
-            composite.addRootELResolver(IMPLICIT_JSP_RESOLVER);
-            composite.add(FLASH_RESOLVER);
-            composite.addRootELResolver(MANAGED_BEAN_RESOLVER);
-            composite.addPropertyELResolver(RESOURCE_RESOLVER);
-            composite.addRootELResolver(FACES_BUNDLE_RESOLVER);
-            addELResolvers(composite, associate.getELResolversFromFacesConfig());
-            addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.JSP,
-                            associate);
-            addPropertyResolvers(composite, associate);
-            composite.add(associate.getApplicationELResolvers());
+            return expression.getValue(elContext);
         }
     }
-
-
-    public static Object evaluateValueExpression(ValueExpression expression,
-                                                 ELContext elContext) {
-
-           if (expression.isLiteralText()) {
-               return expression.getExpressionString();
-           } else {
-               return expression.getValue(elContext);
-           }
-
-       }
-
 
     /**
      * @param associate the <code>ApplicationAssociate</code>

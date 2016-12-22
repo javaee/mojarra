@@ -72,7 +72,6 @@ public class ManagedPropertyProducer extends CdiProducer<Object> {
              .types(type)
              .qualifiers(new ManagedPropertyLiteral())
              .addToId(type)
-             .active(true)
              .create(creationalContext -> {
                  
                  // TODO: handle no InjectionPoint available

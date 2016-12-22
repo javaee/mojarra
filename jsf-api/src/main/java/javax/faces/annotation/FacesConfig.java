@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,48 +37,41 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.cdi;
 
-import java.util.Map;
+package javax.faces.annotation;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.spi.CDI;
-import javax.faces.model.DataModel;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static javax.faces.annotation.FacesConfig.Version.JSF_2_2;
 
-/**
- * <p class="changed_added_2_3">
- * The DataModelClassesMapProducer is the CDI producer that allows UIData, UIRepeat and
- * possible other components that need a DataModel wrapper for a given type to obtain
- * a Map of types to DataModel implementations capable of wrapping that type.
- * </p>
- * 
- * <p>
- * Components can obtain this Map by querying the bean manager for beans named "comSunFacesDataModelClassesMap".
- * </p>
- *
- * @since 2.3
- *
- */
-public class DataModelClassesMapProducer extends CdiProducer<Map<Class<?>, Class<? extends DataModel<?>>>> {
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-    /**
-     * Serialization version
-     */
-    private static final long serialVersionUID = 1L;
+import javax.inject.Qualifier;
+
+@Qualifier
+@Target(TYPE)
+@Retention(RUNTIME)
+public @interface FacesConfig {
     
-    public DataModelClassesMapProducer() {
-        super.name("comSunFacesDataModelClassesMap")
-             .scope(ApplicationScoped.class)
-             .qualifiers(new DataModelClassesAnnotationLiteral())
-             .types(
-                 Map.class, 
-                 Object.class)
-             .beanClass(Map.class)
-             .create(e -> CDI
-                 .current()
-                 .select(CdiExtension.class)
-                 .get()
-                 .getForClassToDataModelClass());
+    public static enum Version { 
+        
+        /**
+         * Activates all features for JSF 2.2 and earlier, as long as JSF 2.2 doesn't provide newer versions 
+         */
+        JSF_2_2,
+        
+        /**
+         * Activates all features for JSF 2.3 and earlier, as long as JSF 2.3 doesn't provide newer versions 
+         */
+        JSF_2_3,
+        
+        /**
+         * Activates all features for the JSF version the implementation code corresponds with.
+         */
+        CURRENT  
     }
+    
+    Version version() default JSF_2_2;
 
 }
