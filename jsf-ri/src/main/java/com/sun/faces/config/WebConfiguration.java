@@ -114,7 +114,18 @@ public class WebConfiguration {
     // Logging level.  Defaults to FINE
     private Level loggingLevel = Level.FINE;
 
-    private Map<BooleanWebContextInitParameter, Boolean> booleanContextParameters =
+    private class ValueWithDefaultIndicator {
+        private Boolean value;
+        private boolean isDefault;
+
+        public ValueWithDefaultIndicator(Boolean value, boolean isDefault) {
+            this.value = value;
+            this.isDefault = isDefault;
+        }
+
+    }
+
+    private Map<BooleanWebContextInitParameter, ValueWithDefaultIndicator> booleanContextParameters =
           new EnumMap<>(BooleanWebContextInitParameter.class);
 
     private Map<WebContextInitParameter, String> contextParameters =
@@ -138,7 +149,7 @@ public class WebConfiguration {
 
     private boolean hasFlows;
 
-    private boolean hasWebInfFacesConfig;
+    private boolean hasWebInfFacesConfig = false;
 
     private double webInfFacesConfigVersion;
 
@@ -273,8 +284,33 @@ public class WebConfiguration {
      */
     public boolean isOptionEnabled(BooleanWebContextInitParameter param) {
 
+        // If the parameter is in booleanContextParameters only by
+        // virtue of being the default value, perform the extra
+        // step of possibly enabling it due to the version level
+        // of THE WEB-INF/faces-config.xml.
+        /**
+        System.out.println("debug: edburns: map: " + booleanContextParametersWithDefaultValues
+        + " param: " + param);
+        boolean isDefault = null != booleanContextParametersWithDefaultValues &&
+                booleanContextParametersWithDefaultValues.get(param);
+        if (isDefault) {
+            if (hasWebInfFacesConfig) {
+                if (webInfFacesConfigVersion <= param.getIntroducedInVersion()) {
+                    return true;
+                }
+            }
+        }
+**/
         if (booleanContextParameters.get(param) != null) {
-            return booleanContextParameters.get(param);
+            ValueWithDefaultIndicator val = booleanContextParameters.get(param);
+
+            if (val.isDefault) {
+                if (webInfFacesConfigVersion <= param.getIntroducedInVersion()) {
+                    return true;
+                }
+            }
+
+            return val.value;
         } else {
             return param.getDefaultValue();
         }
@@ -306,7 +342,8 @@ public class WebConfiguration {
     }
 
     public void setOptionEnabled(BooleanWebContextInitParameter param, boolean value) {
-        booleanContextParameters.put(param, value);
+        ValueWithDefaultIndicator val = new ValueWithDefaultIndicator(value, false);
+        booleanContextParameters.put(param, val);
     }
 
     public FaceletsConfiguration getFaceletsConfiguration() {
@@ -417,7 +454,9 @@ public class WebConfiguration {
         if (param == null) {
             return;
         }
-        boolean oldVal = booleanContextParameters.put(param, value);
+        ValueWithDefaultIndicator val = new ValueWithDefaultIndicator(value, false);
+        ValueWithDefaultIndicator oldValWithIndicator = booleanContextParameters.put(param, val);
+        boolean oldVal = oldValWithIndicator.value;
         if (LOGGER.isLoggable(Level.FINE) && oldVal != value) {
             LOGGER.log(Level.FINE,
                        "Overriding init parameter {0}.  Changing from {1} to {2}.",
@@ -642,6 +681,8 @@ public class WebConfiguration {
         // process boolean contxt parameters
         for (BooleanWebContextInitParameter param : BooleanWebContextInitParameter
               .values()) {
+            boolean usedDefaultValue = false;
+
             String strValue =
                   servletContext.getInitParameter(param.getQualifiedName());
             boolean value;
@@ -676,6 +717,7 @@ public class WebConfiguration {
                         value = Boolean.valueOf(strValue);
                     } else {
                         value = param.getDefaultValue();
+                        usedDefaultValue = true;
                     }
 
                     if (LOGGER.isLoggable(Level.INFO) && alternate != null) {
@@ -690,7 +732,8 @@ public class WebConfiguration {
                                     alternate.getQualifiedName()}));
                     }
 
-                    booleanContextParameters.put(alternate, value);
+                    ValueWithDefaultIndicator valWithIndicator = new ValueWithDefaultIndicator(value, usedDefaultValue);
+                    booleanContextParameters.put(alternate, valWithIndicator);
                 }
                 continue;
             }
@@ -698,11 +741,13 @@ public class WebConfiguration {
             if (!param.isDeprecated()) {
                 if (strValue == null) {
                     value = param.getDefaultValue();
+                    usedDefaultValue = true;
                 } else {
                     if (isValueValid(param, strValue)) {
                         value = Boolean.valueOf(strValue);
                     } else {
                         value = param.getDefaultValue();
+                        usedDefaultValue = true;
                     }
                 }
 
@@ -721,13 +766,13 @@ public class WebConfiguration {
                                             param.getQualifiedName()});
                 }
 
-                booleanContextParameters.put(param, value);
+                ValueWithDefaultIndicator valWithIndicator = new ValueWithDefaultIndicator(value, usedDefaultValue);
+                booleanContextParameters.put(param, valWithIndicator);
             }
 
         }
 
     }
-
 
     /**
      * Adds all com.sun.faces init parameter names to a list.  This allows
@@ -1244,7 +1289,8 @@ public class WebConfiguration {
 
         AlwaysPerformValidationWhenRequiredTrue(
             UIInput.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE,
-            false),
+            false,
+            2.3),
         DisplayConfiguration(
               "com.sun.faces.displayConfiguration",
               false
@@ -1454,7 +1500,8 @@ public class WebConfiguration {
             false),
         EnableCdiResolverChain(
             "javax.faces.ENABLE_CDI_RESOLVER_CHAIN",
-            false),
+            false,
+            2.3),
         ViewRootPhaseListenerQueuesException(
             UIViewRoot.VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME,
             false),
@@ -1474,6 +1521,7 @@ public class WebConfiguration {
         private boolean defaultValue;
         private boolean deprecated;
         private DeprecationLoggingStrategy loggingStrategy;
+        private double introducedInVersion;
 
 
     // ---------------------------------------------------------- Public Methods
@@ -1492,6 +1540,9 @@ public class WebConfiguration {
 
         }
 
+        public double getIntroducedInVersion() {
+            return introducedInVersion;
+        }
 
         DeprecationLoggingStrategy getDeprecationLoggingStrategy() {
 
@@ -1506,23 +1557,39 @@ public class WebConfiguration {
         BooleanWebContextInitParameter(String qualifiedName,
                                        boolean defaultValue) {
 
-            this(qualifiedName, defaultValue, false, null);
+            this(qualifiedName, defaultValue, false, null, -1);
 
         }
 
+        BooleanWebContextInitParameter(String qualifiedName,
+                                       boolean defaultValue, double introducedInVersion) {
+
+            this(qualifiedName, defaultValue, false, null, introducedInVersion);
+
+        }
 
         BooleanWebContextInitParameter(String qualifiedName,
                                        boolean defaultValue,
                                        boolean deprecated,
                                        BooleanWebContextInitParameter alternate) {
 
+            this(qualifiedName, defaultValue, deprecated, alternate, -1);
+
+        }
+
+        BooleanWebContextInitParameter(String qualifiedName,
+                                       boolean defaultValue,
+                                       boolean deprecated,
+                                       BooleanWebContextInitParameter alternate,
+                                       double introducedInVersion) {
+
             this.qualifiedName = qualifiedName;
             this.defaultValue = defaultValue;
             this.deprecated = deprecated;
             this.alternate = alternate;
+            this.introducedInVersion = introducedInVersion;
 
         }
-
 
         BooleanWebContextInitParameter(String qualifiedName,
                                       boolean defaultValue,
@@ -1530,7 +1597,7 @@ public class WebConfiguration {
                                       BooleanWebContextInitParameter alternate,
                                       DeprecationLoggingStrategy loggingStrategy) {
 
-            this(qualifiedName, defaultValue, deprecated, alternate);
+            this(qualifiedName, defaultValue, deprecated, alternate, -1);
             this.loggingStrategy = loggingStrategy;
 
         }
