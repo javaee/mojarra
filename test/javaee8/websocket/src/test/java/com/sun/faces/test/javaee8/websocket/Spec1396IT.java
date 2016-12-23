@@ -69,7 +69,6 @@ public class Spec1396IT {
         webClient.setJavaScriptTimeout(120000);
     }
 
-    @JsfTest(value = JSF_2_3_0_M07, excludes = {WEBLOGIC_12_2_1})
     @Test
     public void test() throws Exception {
         webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
