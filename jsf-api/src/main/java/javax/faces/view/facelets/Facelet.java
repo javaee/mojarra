@@ -68,7 +68,6 @@ import java.io.IOException;
  * populating the passed UIComponent parent in relation to the
  * create/restore lifecycle of JSF.</p>
  * 
- * @author Jacob Hookom
  */
 public abstract class Facelet {
 
