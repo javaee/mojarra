@@ -1867,7 +1867,7 @@
       Otherwise, do not render a "tbody" element.</p>
 
       <p>Output a "tr" element.  Output the value of the "rowClasses"
-      per the attribute description below.  For each
+      per the attribute description below, or rowClass.  For each
       <code>UIColumn</code> child, if the column component has a
       "rowHeader" attribute with a value of "true", output a "th"
       element with a "scope" attribute with the value of "row".
