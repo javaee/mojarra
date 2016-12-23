@@ -108,7 +108,6 @@ public class StoreServletContext extends Object {
             return null;
         }
         
-        @Override
         public String encodeWebsocketURL(String url) {
             return null;
         }

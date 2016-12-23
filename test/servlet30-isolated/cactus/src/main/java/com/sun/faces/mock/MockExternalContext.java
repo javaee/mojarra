@@ -291,9 +291,8 @@ public class MockExternalContext extends ExternalContext {
     }
 
 
-    @Override
     public String encodeWebsocketURL(String url) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
 
