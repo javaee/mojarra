@@ -61,16 +61,6 @@
 
     <property>
         <description><![CDATA[
-            The port number of the websocket host, in case it is different from the port number in the request URI.
-            Defaults to the port number of the request URI.
-        ]]></description>
-        <icon></icon>
-        <property-name>port</property-name>
-        <property-class>java.lang.Integer</property-class>
-    </property>
-
-    <property>
-        <description><![CDATA[
             The name of the websocket channel.
             It may not be an EL expression and it may only contain alphanumeric characters, hyphens, underscores and periods.
             All open websockets on the same channel name will receive the same push notification from the server.

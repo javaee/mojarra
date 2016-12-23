@@ -5402,15 +5402,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description><![CDATA[
-            The port number of the websocket host, in case it is different from the port number in the request URI.
-            Defaults to the port number of the request URI.
-        ]]></description>
-      <icon/>
-      <property-name>port</property-name>
-      <property-class>java.lang.Integer</property-class>
-    </property>
-    <property>
-      <description><![CDATA[
             The name of the websocket channel.
             It may not be an EL expression and it may only contain alphanumeric characters, hyphens, underscores and periods.
             All open websockets on the same channel name will receive the same push notification from the server.
@@ -36129,7 +36120,7 @@ unmodified to the rendered output.</p>
                     <p>
                         Render an HTML <code>script</code> element with an "id" attribute.
                         Render JavaScript function which invokes <code>jsf.push.init()</code> function with data provided by
-                        <code>port</code>, <code>onopen</code>, <code>onmessage</code>, <code>onclose</code> and <code>connected</code>
+                        <code>onopen</code>, <code>onmessage</code>, <code>onclose</code> and <code>connected</code>
                         arguments, if any. 
                     </p>
                 ]]></description>

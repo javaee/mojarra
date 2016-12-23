@@ -4241,7 +4241,7 @@ unmodified to the rendered output.</p>
                     <p>
                         Render an HTML <code>script</code> element with an "id" attribute.
                         Render JavaScript function which invokes <code>jsf.push.init()</code> function with data provided by
-                        <code>port</code>, <code>onopen</code>, <code>onmessage</code>, <code>onclose</code> and <code>connected</code>
+                        <code>onopen</code>, <code>onmessage</code>, <code>onclose</code> and <code>connected</code>
                         arguments, if any. 
                     </p>
                 ]]>

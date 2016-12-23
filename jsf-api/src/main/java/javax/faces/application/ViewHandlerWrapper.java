@@ -312,6 +312,22 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
         return getWrapped().getResourceURL(context, path);
     }
 
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#getWebsocketURL(FacesContext, String)}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#getWebsocketURL(FacesContext, String)
+     * @since 2.3
+     */
+    @Override
+    public String getWebsocketURL(FacesContext context, String channel) {
+
+        return getWrapped().getWebsocketURL(context, channel);
+    }
+
+
     /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#getViewDeclarationLanguage}

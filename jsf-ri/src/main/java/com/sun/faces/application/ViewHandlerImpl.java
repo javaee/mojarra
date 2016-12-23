@@ -714,6 +714,12 @@ public class ViewHandlerImpl extends ViewHandler {
 
     }
 
+    
+    @Override
+    public String getWebsocketURL(FacesContext context, String channel) {
+        throw new UnsupportedOperationException();
+    }
+    
 
     /**
      * <p>if the specified mapping is a prefix mapping, and the provided

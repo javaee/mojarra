@@ -55,6 +55,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.push.PushContext;
 import javax.faces.view.ViewDeclarationLanguage;
 
 
@@ -479,7 +480,30 @@ public abstract class ViewHandler {
      * @return the resource URL.
      */
     public abstract String getResourceURL(FacesContext context, String path);
-    
+
+
+    /**
+     * <p class="changed_added_2_3">If the value returned from this
+     * method is used as the <code>file</code> argument to the
+     * four-argument constructor for <code>java.net.URL</code> (assuming
+     * appropriate values are used for the first three arguments), then
+     * a client making a push handshake request to the <code>toExternalForm()</code> of
+     * that <code>URL</code> will select the argument <code>channel</code>
+     * for connecting the websocket push channel in the current view.
+     * It must match the {@link PushContext#URI_PREFIX} of the endpoint.</p>
+     *
+     * @param context {@link FacesContext} for the current request.
+     * @param channel The channel name of the websocket.
+     * 
+     * @throws NullPointerException if <code>context</code> or
+     *  <code>channel</code> is <code>null</code>.
+     * 
+     * @return the websocket URL.
+     * @see PushContext#URI_PREFIX
+     */
+    public abstract String getWebsocketURL(FacesContext context, String channel);
+
+
     /**
      * <p class="changed_added_2_2">Return an unmodifiable
      * <code>Set</code> of the protected views currently known to this

@@ -3385,8 +3385,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          * long as URL is valid and <code>jsf.push.close()</code> hasn't explicitly been called on the same client
          * identifier.
          * @param {string} clientId The client identifier of the websocket.
-         * @param {number} port The port of the web socket host. If undefined, then it defaults to window location port.
-         * @param {string} uri The URI of the websocket. All open websockets on the same URI will receive the
+         * @param {string} url The URL of the websocket. All open websockets on the same URL will receive the
          * same push notification from the server.
          * @param {string} channel The channel name of the websocket.
          * @param {function} onopen The JavaScript event handler function that is invoked when the websocket is opened.
@@ -3403,8 +3402,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          * for an elaborate list.
          * @param {Object} behaviors Client behavior functions to be invoked when specific message is received.
          * @param {boolean} autoconnect Whether or not to automatically connect the socket. Defaults to <code>false</code>.
+         * @member jsf.push
+         * @function jsf.push.init
          */
-        self.init = function(clientId, port, uri, channel, onopen, onmessage, onclose, behaviors, autoconnect) {
+        self.init = function(clientId, url, channel, onopen, onmessage, onclose, behaviors, autoconnect) {
             onclose = resolveFunction(onclose);
 
             if (!window.WebSocket) { // IE6-9.
@@ -3413,7 +3414,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
             }
 
             if (!sockets[clientId]) {
-                sockets[clientId] = new ReconnectingWebsocket(getBaseURL(port) + uri, channel, resolveFunction(onopen), resolveFunction(onmessage), onclose, behaviors);
+                sockets[clientId] = new ReconnectingWebsocket(url, channel, resolveFunction(onopen), resolveFunction(onmessage), onclose, behaviors);
             }
 
             if (autoconnect) {
@@ -3425,6 +3426,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          * Open the websocket on the given client identifier.
          * @param {string} clientId The client identifier of the websocket.
          * @throws {Error} When client identifier is unknown. You may need to initialize it first via <code>init()</code> function.
+         * @member jsf.push
+         * @function jsf.push.open
          */
         self.open = function(clientId) {
             getSocket(clientId).open();
@@ -3434,6 +3437,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          * Close the websocket on the given client identifier.
          * @param {string} clientId The client identifier of the websocket.
          * @throws {Error} When client identifier is unknown. You may need to initialize it first via <code>init()</code> function.
+         * @member jsf.push
+         * @function jsf.push.close
          */
         self.close = function(clientId) {
             getSocket(clientId).close();
@@ -3449,16 +3454,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          */
         function resolveFunction(fn) {
             return (typeof fn !== "function") && (fn = window[fn] || function(){}), fn;
-        }
-
-        /**
-         * Get base URL based on given port, window location host(name) and JSF context path.
-         * @param {number} port The port of the web socket host. If undefined, then it defaults to window location port.
-         * @return {string} Base URL of web socket endpoint.
-         */
-        function getBaseURL(port) {
-            var host = port ? (window.location.hostname + ":" + port) : window.location.host;
-            return URL_PROTOCOL + host + jsf.contextpath;
         }
 
         /**

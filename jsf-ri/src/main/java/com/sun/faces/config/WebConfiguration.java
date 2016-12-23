@@ -1120,6 +1120,10 @@ public class WebConfiguration {
         WebAppContractsDirectory(
               ResourceHandler.WEBAPP_CONTRACTS_DIRECTORY_PARAM_NAME,
               "/contracts"
+        ),
+        WebsocketEndpointPort(
+            PushContext.WEBSOCKET_ENDPOINT_PORT_PARAM_NAME,
+            ""
         );
 
 

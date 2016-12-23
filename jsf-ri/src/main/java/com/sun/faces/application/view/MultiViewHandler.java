@@ -41,6 +41,7 @@
 package com.sun.faces.application.view;
 
 import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.RENDER_KIT_ID_PARAM;
+import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -67,6 +68,7 @@ import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.push.PushContext;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
 import javax.faces.view.ViewDeclarationLanguage;
@@ -404,6 +406,17 @@ public class MultiViewHandler extends ViewHandler {
             return path;
         }
 
+    }
+
+
+    @Override
+    public String getWebsocketURL(FacesContext context, String channel) {
+        requireNonNull(context, "context");
+        requireNonNull(channel, "channel");
+
+        ExternalContext externalContext = context.getExternalContext();
+        String contextPath = externalContext.getRequestContextPath();
+        return externalContext.encodeWebsocketURL(contextPath + PushContext.URI_PREFIX + "/" + channel);
     }
 
 

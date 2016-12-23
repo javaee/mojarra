@@ -1543,18 +1543,6 @@ of POJOs.
         <attribute>
             <description><![CDATA[
                 <p class="changed_added_2_3">
-                    The port number of the websocket host, in case it is different from the port number in the request URI.
-                    Defaults to the port number of the request URI.
-                </p>
-            ]]></description>
-            <name>port</name>
-            <required>false</required>
-            <type>java.lang.Integer</type>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_3">
                     The name of the websocket channel.
                     It may not be an EL expression and it may only contain alphanumeric characters, hyphens, underscores and periods.
                     All open websockets on the same channel name will receive the same push notification from the server.

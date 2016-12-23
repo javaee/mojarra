@@ -40,40 +40,47 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.RIConstants;
-import java.util.Map.Entry;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.Flash;
-import javax.faces.context.ResponseStream;
-import javax.faces.context.ResponseWriter;
-import javax.faces.component.UIViewRoot;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.FacesMessage;
-import javax.faces.application.ProjectStage;
-import javax.faces.FactoryFinder;
-import javax.faces.render.RenderKit;
-import javax.servlet.ServletContext;
-import javax.el.ELContext;
-import javax.el.ELResolver;
-import javax.el.FunctionMapper;
-import javax.el.VariableMapper;
-import java.util.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.el.ELContext;
+import javax.el.ELResolver;
+import javax.el.FunctionMapper;
+import javax.el.VariableMapper;
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.ProjectStage;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
+import javax.faces.context.ResponseStream;
+import javax.faces.context.ResponseWriter;
+import javax.faces.render.RenderKit;
+import javax.servlet.ServletContext;
+
+import com.sun.faces.RIConstants;
 import com.sun.faces.context.ApplicationMap;
 import com.sun.faces.context.InitParameterMap;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A special, minimal implementation of FacesContext used at application initialization time.
@@ -386,9 +393,13 @@ public class InitFacesContext extends FacesContext {
             return null;
         }
 
-
         @Override
         public String encodeResourceURL(String url) {
+            return null;
+        }
+
+        @Override
+        public String encodeWebsocketURL(String url) {
             return null;
         }
 

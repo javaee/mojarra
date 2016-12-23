@@ -42,7 +42,6 @@ package com.sun.faces.push;
 import static com.sun.faces.cdi.CdiUtils.getBeanInstance;
 import static com.sun.faces.push.WebsocketUserManager.getUserChannels;
 import static java.util.Collections.emptyMap;
-import static javax.faces.push.PushContext.URI_PREFIX;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -58,6 +57,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.push.Push;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -127,26 +127,29 @@ public class WebsocketChannelManager implements Serializable {
 
     /**
      * Register given channel on given scope and returns the web socket channel identifier.
+     * @param context The involved faces context.
      * @param channel The web socket channel.
      * @param scope The web socket scope. Supported values are <code>application</code>, <code>session</code> and
      * <code>view</code>, case insensitive. If <code>null</code>, the default is <code>application</code>.
      * @param user The user object representing the owner of the given channel. If not <code>null</code>, then scope
      * may not be <code>application</code>.
-     * @return The web socket URI.
+     * @return The web socket URL.
      * @throws IllegalArgumentException When the scope is invalid or when channel already exists on a different scope.
      */
     @SuppressWarnings("unchecked")
-    public String register(String channel, String scope, Serializable user) {
+    public String register(FacesContext context, String channel, String scope, Serializable user) {
         switch (Scope.of(scope, user)) {
-            case APPLICATION: return register(null, channel, APPLICATION_SCOPE, sessionScope, getViewScope(false));
-            case SESSION: return register(user, channel, sessionScope, APPLICATION_SCOPE, getViewScope(false));
-            case VIEW: return register(user, channel, getViewScope(true), APPLICATION_SCOPE, sessionScope);
+            case APPLICATION: return register(context, null, channel, APPLICATION_SCOPE, sessionScope, getViewScope(false));
+            case SESSION: return register(context, user, channel, sessionScope, APPLICATION_SCOPE, getViewScope(false));
+            case VIEW: return register(context, user, channel, getViewScope(true), APPLICATION_SCOPE, sessionScope);
             default: throw new UnsupportedOperationException();
         }
     }
 
     @SuppressWarnings("unchecked")
-    private String register(Serializable user, String channel, Map<String, String> targetScope, Map<String, String>... otherScopes) {
+    private String register(FacesContext context, Serializable user, String channel, Map<String, String> targetScope, Map<String, String>... otherScopes) {
+        String url = context.getApplication().getViewHandler().getWebsocketURL(context, channel);
+
         if (!targetScope.containsKey(channel)) {
             for (Map<String, String> otherScope : otherScopes) {
                 if (otherScope.containsKey(channel)) {
@@ -154,7 +157,8 @@ public class WebsocketChannelManager implements Serializable {
                 }
             }
 
-            ((ConcurrentMap<String, String>) targetScope).putIfAbsent(channel, channel + "?" + UUID.randomUUID().toString());
+            String channelId = UUID.randomUUID().toString();
+            ((ConcurrentMap<String, String>) targetScope).putIfAbsent(channel, channelId);
         }
 
         String channelId = targetScope.get(channel);
@@ -169,7 +173,7 @@ public class WebsocketChannelManager implements Serializable {
         }
 
         socketSessions.register(channelId);
-        return URI_PREFIX + "/" + channelId;
+        return url + "?" + channelId; 
     }
 
     /**
