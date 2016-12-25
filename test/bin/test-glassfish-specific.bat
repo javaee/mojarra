@@ -4,7 +4,7 @@
 @echo *
 @echo *************************************************************************
 
-call mvn -N -Pglassfish-prepare validate
+call mvn -N -Pglassfish-patch validate
 if not "%ERRORLEVEL%" == "0" exit /b
 
 call mvn -Dwebapp.projectStage=%1 -Dwebapp.partialStateSaving=%2 -Dwebapp.stateSavingMethod=%3 clean install

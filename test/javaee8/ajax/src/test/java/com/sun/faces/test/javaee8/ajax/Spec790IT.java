@@ -47,6 +47,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.test.htmlunit.IgnoringIncorrectnessListener;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -92,6 +93,27 @@ public class Spec790IT {
         form1ViewState = (HtmlInput) form1.getInputByName("javax.faces.ViewState");
         form2 = (HtmlForm) page.getHtmlElementById("form2");
         form2ViewState = (HtmlInput) form2.getInputByName("javax.faces.ViewState");
+        assertTrue(!form1ViewState.getValueAttribute().isEmpty());
+        assertTrue(!form2ViewState.getValueAttribute().isEmpty());
+    }
+
+    @Test
+    @Ignore // fails due to https://sourceforge.net/p/htmlunit/bugs/1815 TODO enable when HtmlUnit 2.24 is final
+    public void testSpec790AjaxNavigation() throws Exception {
+        webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
+
+        HtmlPage page = webClient.getPage(webUrl + "spec790AjaxNavigation.xhtml");
+        HtmlForm form = (HtmlForm) page.getHtmlElementById("form");
+        HtmlInput formViewState = (HtmlInput) form.getInputByName("javax.faces.ViewState");
+        assertTrue(!formViewState.getValueAttribute().isEmpty());
+
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:button");
+        page = button.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        HtmlForm form1 = (HtmlForm) page.getHtmlElementById("form1");
+        HtmlInput form1ViewState = (HtmlInput) form1.getInputByName("javax.faces.ViewState");
+        HtmlForm form2 = (HtmlForm) page.getHtmlElementById("form2");
+        HtmlInput form2ViewState = (HtmlInput) form2.getInputByName("javax.faces.ViewState");
         assertTrue(!form1ViewState.getValueAttribute().isEmpty());
         assertTrue(!form2ViewState.getValueAttribute().isEmpty());
     }
