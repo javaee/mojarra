@@ -44,7 +44,6 @@ package javax.faces.convert;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -467,14 +466,14 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
                     case "localDate":
                         throw new ConverterException(MessageFactory.getMessage(
                                 context, DATE_ID, value,
-                                parser.format(LocalDate.now()),
+                                parser.formatNow(),
                                 MessageFactory.getLabel(context, component)), e);
                     case "time":
                     case "localTime":
                     case "offsetTime":
                         throw new ConverterException(MessageFactory.getMessage(
                                 context, TIME_ID, value,
-                                parser.format(OffsetTime.now()),
+                                parser.formatNow(),
                                 MessageFactory.getLabel(context, component)), e);
                     case "both":
                     case "localDateTime":
@@ -482,7 +481,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
                     case "zonedDateTime":
                         throw new ConverterException(MessageFactory.getMessage(
                                 context, DATETIME_ID, value,
-                                parser.format(ZonedDateTime.now()),
+                                parser.formatNow(),
                                 MessageFactory.getLabel(context, component)), e);
                 }
             }
@@ -517,20 +516,11 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         }
         
         private String format(Object obj) {
-            if (df != null) {
-                Date date;
-
-                if (obj instanceof TemporalAccessor) {
-                    date = Date.from(Instant.from((TemporalAccessor) obj));
-                }
-                else {
-                    date = (Date) obj;
-                }
-                
-                return df.format(date);
-            }
-
-            return dtf.format((TemporalAccessor) obj);
+            return (null != df) ? df.format(obj) : dtf.format((TemporalAccessor) obj);
+        }
+        
+        private String formatNow() {
+            return (null != df) ? df.format(new Date()) : dtf.format(ZonedDateTime.now());
         }
         
         private void setTimeZone(TimeZone zone) {
