@@ -393,7 +393,10 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
 
                 if (isSeparator)  {
                     // lets add token inside buffer to our tokens
-                    tokens.add(buffer.toString());
+                    String bufferAsString = buffer.toString().trim();
+                    if (bufferAsString.length() > 0) {
+                        tokens.add(bufferAsString);
+                    }
                     // now we need to clear buffer
                     buffer.delete(0, buffer.length());
                 } else {

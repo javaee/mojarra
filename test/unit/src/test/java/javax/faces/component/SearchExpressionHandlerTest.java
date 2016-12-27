@@ -659,7 +659,7 @@ public class SearchExpressionHandlerTest extends JUnitFacesTestCaseBase {
 	    source.setId("source");
 	    innerContainer.getChildren().add(source);
 
-        List<UIComponent> resolvedComponents = resolveComponents(source, " other,@this:@parent ");
+        List<UIComponent> resolvedComponents = resolveComponents(source, " other,@this:@parent  @none ");
         assertTrue("Failed", resolvedComponents.contains(component));
         assertTrue("Failed", resolvedComponents.contains(innerContainer));
 	    assertEquals("Failed", 2, resolvedComponents.size());
