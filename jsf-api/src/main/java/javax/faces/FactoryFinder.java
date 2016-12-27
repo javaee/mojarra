@@ -227,6 +227,13 @@ public final class FactoryFinder {
     public final static String TAG_HANDLER_DELEGATE_FACTORY =
          "javax.faces.view.facelets.TagHandlerDelegateFactory";
 
+    /**
+     * <p class="changed_added_2_3">The property name for the {@link
+     * javax.faces.component.search.SearchExpressionContext} class name.</p>
+     */
+    public static final String SEARCH_EXPRESSION_CONTEXT_FACTORY = 
+         "javax.faces.component.search.SearchExpressionContextFactory";
+    
     // ------------------------------------------------------- Static Variables
 
     static final CurrentThreadToServletContext FACTORIES_CACHE;
