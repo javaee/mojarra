@@ -34,3 +34,9 @@ api/src/**
 /dependencies
 glassfish-8.0/
 nbactions.xml
+nbproject/genfiles.properties
+nbproject/jdk.xml
+nbproject/nbjdk.properties
+nbproject/nbjdk.xml
+nbproject/project.xml
+
