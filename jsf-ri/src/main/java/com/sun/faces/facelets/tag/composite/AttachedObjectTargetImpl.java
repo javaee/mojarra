@@ -66,8 +66,13 @@ import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.view.AttachedObjectTarget;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import javax.faces.component.ContextCallback;
+import javax.faces.component.search.SearchExpressionContext;
+import javax.faces.component.search.SearchExpressionHint;
 
 
 public class AttachedObjectTargetImpl implements AttachedObjectTarget {
@@ -83,22 +88,34 @@ public class AttachedObjectTargetImpl implements AttachedObjectTarget {
         this.name = name;
     }
 
+    private static final Set<SearchExpressionHint> EXPRESSION_HINTS =
+            EnumSet.of(SearchExpressionHint.SKIP_VIRTUAL_COMPONENTS);
+    
     @Override
     public List<UIComponent> getTargets(UIComponent topLevelComponent) {
         assert(null != name);
 
         List<UIComponent> result;
         FacesContext ctx = FacesContext.getCurrentInstance();
+
         if (null != targetsList) {
             String targetsListStr = (String) targetsList.getValue(ctx.getELContext());
             Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+            
             String[] targetArray = Util.split(appMap, targetsListStr, " ");
             result = new ArrayList<>(targetArray.length);
-            for (int i = 0, len = targetArray.length; i < len; i++) {
-                UIComponent comp = topLevelComponent.findComponent(
-                      augmentSearchId(ctx, topLevelComponent, targetArray[i]));
-                if (null != comp) {
-                    result.add(comp);
+            
+            if (targetArray.length > 0) {
+
+                SearchExpressionContext searchContext = SearchExpressionContext.createSearchExpressionContext(
+                                    ctx, topLevelComponent, EXPRESSION_HINTS, null);
+                
+                for (int i = 0, len = targetArray.length; i < len; i++) {
+                    UIComponent comp = topLevelComponent.findComponent(
+                          augmentSearchId(ctx, topLevelComponent, targetArray[i]));
+                    if (null != comp) {
+                        result.add(comp);
+                    }
                 }
             }
         }
@@ -137,4 +154,20 @@ public class AttachedObjectTargetImpl implements AttachedObjectTarget {
 
     }
 
+    private static class CollectComponentListCallback implements ContextCallback {
+        private List<UIComponent> list = null;
+
+        public CollectComponentListCallback(int size) {
+            list = new ArrayList<UIComponent>(size);
+        }
+
+        @Override
+        public void invokeContextCallback(FacesContext context, UIComponent target) {
+            getList().add(target);
+        }
+
+        public List<UIComponent> getList() {
+            return list;
+        }
+    }
 }

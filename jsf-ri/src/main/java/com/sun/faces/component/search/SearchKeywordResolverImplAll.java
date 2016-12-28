@@ -69,7 +69,7 @@ public class SearchKeywordResolverImplAll extends AbstractSearchKeywordResolverI
     
     @Override
     public boolean isPassthrough(SearchExpressionContext searchExpressionContext, String keyword) {
-        return isHintSet(searchExpressionContext, SearchExpressionHint.EXECUTE_CLIENT_SIDE);
+        return isHintSet(searchExpressionContext, SearchExpressionHint.RESOLVE_CLIENT_SIDE);
     }
     
     @Override

@@ -57,6 +57,13 @@ public enum SearchExpressionHint {
      * </p>
      *
      * @since 2.3
+     *//**
+     * <p class="changed_added_2_3">
+     * Hint that indicates that if a expression resolves to <code>null</code>, <code>null</code> will be returned.
+     * Otherwise a {@link ComponentNotFoundException} will be thrown.
+     * </p>
+     *
+     * @since 2.3
      */
     IGNORE_NO_RESULT,
 
@@ -102,7 +109,7 @@ public enum SearchExpressionHint {
 
     /**
      * <p class="changed_added_2_3">
-     * Hint that indicates that a keyword can be resolved lazy or later and will be returned unresolved if possible.
+     * Hint that indicates that a keyword can be resolved later and will just be returned as passthrough, if supported by the keyword.
      * For example:
      * The AJAX client- and server-side is able to handle @all or @form.
      * So it's not necessary at all to resolve them to their clientId's on the server side.
@@ -112,5 +119,5 @@ public enum SearchExpressionHint {
      *
      * @since 2.3
      */
-    EXECUTE_CLIENT_SIDE
+    RESOLVE_CLIENT_SIDE
 }

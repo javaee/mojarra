@@ -317,7 +317,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     }
 
     private static final Set<SearchExpressionHint> EXPRESSION_HINTS =
-            EnumSet.of(SearchExpressionHint.EXECUTE_CLIENT_SIDE, SearchExpressionHint.RESOLVE_SINGLE_COMPONENT);
+            EnumSet.of(SearchExpressionHint.RESOLVE_CLIENT_SIDE, SearchExpressionHint.RESOLVE_SINGLE_COMPONENT);
     
     // Appends an ids argument to the ajax command
     private static void appendIds(FacesContext facesContext,
