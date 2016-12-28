@@ -66,6 +66,7 @@ import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.view.AttachedObjectTarget;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -98,31 +99,34 @@ public class AttachedObjectTargetImpl implements AttachedObjectTarget {
         List<UIComponent> result;
         FacesContext ctx = FacesContext.getCurrentInstance();
 
+        UIComponent compositeRoot = topLevelComponent.getFacet(UIComponent.COMPOSITE_FACET_NAME);
+        
         if (null != targetsList) {
             String targetsListStr = (String) targetsList.getValue(ctx.getELContext());
             Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
             
             String[] targetArray = Util.split(appMap, targetsListStr, " ");
-            result = new ArrayList<>(targetArray.length);
             
             if (targetArray.length > 0) {
 
                 SearchExpressionContext searchContext = SearchExpressionContext.createSearchExpressionContext(
-                                    ctx, topLevelComponent, EXPRESSION_HINTS, null);
+                                    ctx, compositeRoot, EXPRESSION_HINTS, null);
                 
-                for (int i = 0, len = targetArray.length; i < len; i++) {
-                    UIComponent comp = topLevelComponent.findComponent(
-                          augmentSearchId(ctx, topLevelComponent, targetArray[i]));
-                    if (null != comp) {
-                        result.add(comp);
-                    }
+                CollectComponentListCallback callback = new CollectComponentListCallback(targetArray.length);
+                
+                for (String target : targetArray) {
+                    ctx.getApplication().getSearchExpressionHandler().resolveComponents(searchContext, target, callback);
                 }
+                
+                result = callback.getList();
+            }
+            else {
+                result = Collections.emptyList();
             }
         }
         else {
             result = new ArrayList<>(1);
-            UIComponent comp = topLevelComponent.findComponent(
-                  augmentSearchId(ctx, topLevelComponent, name));
+            UIComponent comp = compositeRoot.findComponent(name);
             if (null != comp) {
                 result.add(comp);
             }
@@ -137,28 +141,11 @@ public class AttachedObjectTargetImpl implements AttachedObjectTarget {
         this.targetsList = targetsList;
     }
 
-
-    // if the current composite component ID is the same as the target ID,
-    // we'll need to make the ID passed to findComponent be a combination
-    // of the two so we find the correct component.  If we don't do this,
-    // we end with a StackOverFlowException as 'c' will be what is found
-    // and not the child of 'c'.
-    private String augmentSearchId(FacesContext ctx,
-                                   UIComponent c,
-                                   String targetId) {
-
-        if (targetId.equals(c.getId())) {
-            return targetId + UINamingContainer.getSeparatorChar(ctx) + targetId;
-        }
-        return targetId;
-
-    }
-
     private static class CollectComponentListCallback implements ContextCallback {
         private List<UIComponent> list = null;
 
         public CollectComponentListCallback(int size) {
-            list = new ArrayList<UIComponent>(size);
+            list = new ArrayList<>(size);
         }
 
         @Override

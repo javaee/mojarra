@@ -896,7 +896,7 @@ public class SearchExpressionHandlerTest extends JUnitFacesTestCaseBase {
         
         
         Set<SearchExpressionHint> hints = new HashSet<>();
-        hints.add(SearchExpressionHint.EXECUTE_CLIENT_SIDE);
+        hints.add(SearchExpressionHint.RESOLVE_CLIENT_SIDE);
         searchExpressionContext = SearchExpressionContext.createSearchExpressionContext(facesContext, null, hints, null);
         
         Assert.assertTrue(handler.isPassthroughExpression(searchExpressionContext, "@form"));
