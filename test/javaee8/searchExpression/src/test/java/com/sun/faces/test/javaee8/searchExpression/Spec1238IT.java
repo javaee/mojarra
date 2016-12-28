@@ -39,7 +39,6 @@
  */
 package com.sun.faces.test.javaee8.searchExpression;
 
-import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -47,10 +46,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlLabel;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.test.htmlunit.IgnoringIncorrectnessListener;
 import com.sun.faces.test.junit.JsfTestRunner;
+import org.junit.Assert;
 
 @RunWith(JsfTestRunner.class)
 public class Spec1238IT {
@@ -70,18 +71,17 @@ public class Spec1238IT {
     public void test() throws Exception {
         webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
 
-        testCommandScript();
+        testSearchExpression();
     }
 
-    public void testCommandScript() throws Exception {
-        HtmlPage page = webClient.getPage(webUrl + "spec613.xhtml");
+    public void testSearchExpression() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "spec1238.xhtml");
         webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.getWebResponse().getContentAsString().contains(">var foo=function(o){"));
-        assertTrue(page.getHtmlElementById("result").asText().equals("foo"));
 
-        page.executeJavaScript("bar()");
-        webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.getHtmlElementById("result").asText().equals("bar"));
+        HtmlLabel label = (HtmlLabel) page.getHtmlElementById("label");
+        HtmlTextInput input = (HtmlTextInput) page.getHtmlElementById("input");
+        
+        Assert.assertEquals(label.getAttribute("for"), input.getId());
     }
 
     @After

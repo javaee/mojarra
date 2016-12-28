@@ -250,8 +250,10 @@ public class ApplicationImpl extends Application {
         elResolvers = new CompositeELResolver();
 
         searchKeywordResolvers = new CompositeSearchKeywordResolver();
-        for (SearchKeywordResolver resolver : associate.getSearchKeywordResolversFromFacesConfig()) {
-            searchKeywordResolvers.add(resolver);
+        if (associate.getSearchKeywordResolversFromFacesConfig() != null) {
+            for (SearchKeywordResolver resolver : associate.getSearchKeywordResolversFromFacesConfig()) {
+                searchKeywordResolvers.add(resolver);
+            }
         }
         searchKeywordResolvers.add(new SearchKeywordResolverImplThis());
         searchKeywordResolvers.add(new SearchKeywordResolverImplParent());

@@ -175,14 +175,15 @@ public abstract class SearchExpressionHandler {
     public abstract boolean isPassthroughExpression(SearchExpressionContext searchExpressionContext, String expression);
 
     /**
-     * <p class="changed_added_2_3">Checks if the given expression is a valid expression.
+     * <p class="changed_added_2_3">Checks if the given expression is a valid expression.</p>
      * 
+     * <div class="changed_added_2_3">
      * A expression is invalid if:
      *  <ul>
      *   <li>No {@link SearchKeywordResolver} matches the requested keyword</li>
      *   <li>A keyword or id is placed after a leaf keyword (@none:@form)</li>
      *  </ul>
-     * </p>
+     * </div>
      *
      * @param searchExpressionContext the {@link SearchExpressionContext}
      * @param expression the expression

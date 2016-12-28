@@ -54,6 +54,10 @@ import javax.faces.context.ResponseWriter;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
+import java.util.EnumSet;
+import java.util.Set;
+import javax.faces.component.search.SearchExpressionContext;
+import javax.faces.component.search.SearchExpressionHint;
 
 /** <p><B>LabelRenderer</B> renders Label element.<p>. */
 public class LabelRenderer extends HtmlBasicInputRenderer {
@@ -68,7 +72,9 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
 
     // ---------------------------------------------------------- Public Methods
 
-
+    private static final Set<SearchExpressionHint> EXPRESSION_HINTS =
+            EnumSet.of(SearchExpressionHint.RESOLVE_SINGLE_COMPONENT);
+    
     @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
@@ -85,6 +91,14 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         String forClientId = null;
         String forValue = (String) component.getAttributes().get("for");
         if (forValue != null) {
+            SearchExpressionContext searchExpressionContext =
+                    SearchExpressionContext.createSearchExpressionContext(context, component,
+                            EXPRESSION_HINTS, null);
+        
+            forClientId = context.getApplication().getSearchExpressionHandler().resolveClientId(
+                searchExpressionContext, forValue);
+
+            /*
             forValue = augmentIdReference(forValue, component);
             UIComponent forComponent = getForComponent(context, forValue, component);
             if (forComponent == null) {
@@ -95,6 +109,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             } else {
                 forClientId = forComponent.getClientId(context);
             }
+            */
         }
 
         // set a temporary attribute on the component to indicate that
