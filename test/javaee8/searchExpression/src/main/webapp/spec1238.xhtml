@@ -8,6 +8,11 @@
     </h:head>
     <h:body>
         <h:outputLabel id="label" for="@next" value="Test" />
-        <h:inputText id="input" />
+        <h:inputText id="input">
+            <f:ajax render="@this @next" />
+        </h:inputText>
+        <h:inputText id="input2">
+            
+        </h:inputText>
     </h:body>
 </html>

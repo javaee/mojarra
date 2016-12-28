@@ -82,6 +82,8 @@ public class Spec1238IT {
         HtmlTextInput input = (HtmlTextInput) page.getHtmlElementById("input");
         
         Assert.assertEquals(label.getAttribute("for"), input.getId());
+        
+        Assert.assertTrue(input.getAttribute("onchange").contains("@this input2"));
     }
 
     @After
