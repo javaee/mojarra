@@ -42,12 +42,19 @@ package javax.faces.component.search;
 import javax.faces.component.UIComponent;
 
 /**
- * <p class="changed_added_2_3">An {@link SearchKeywordResolver} is responsible for handling a keyword / command.
- * A command (e.g. @child(2)) is a "instance" of a keyword (e.g. @child).
+ * <div class="changed_added_2_3">A <strong>SearchKeywordResolver</strong> is responsible for
+ * resolving a single command. A command (e.g. <code>@child(2)</code>) is a "instance" of a keyword (e.g. <code>@child</code>).
  * 
- * TODO
- * </p>
- *
+ * New {@link SearchKeywordResolver} can be registered via
+ *   {@link javax.faces.application.Application#addSearchKeywordResolver(javax.faces.component.search.SearchKeywordResolver)}
+ * or via faces-config
+ * <code>
+ * &lt;application&gt;
+ *   &lt;search-keyword-resolver&gt;...&lt;/search-keyword-resolver&gt;
+ * &lt;/application&gt;
+ * </code>
+ * </div>
+ * 
  * @since 2.3
  */
 public abstract class SearchKeywordResolver {
