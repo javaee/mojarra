@@ -39,6 +39,7 @@
  */
 package com.sun.faces.test.javaee8.uiinput;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
@@ -78,37 +79,49 @@ public class Spec329IT {
         assertTrue(page.getHtmlElementById("multipleRadioButtonsWithSelectItemList:selectedItem").asText().isEmpty());
 
         page = ((HtmlSubmitInput) page.getHtmlElementById("inDataTableWithEntityList:button")).click();
-        assertTrue(page.getHtmlElementById("messages").asText().equals("required")); // It should appear only once!
+        assertEquals("required", page.getHtmlElementById("messages").asText()); // It should appear only once!
         
         HtmlRadioButtonInput inDataTableWithEntityListRadio = (HtmlRadioButtonInput) page.getHtmlElementById("inDataTableWithEntityList:table:1:radio");
         inDataTableWithEntityListRadio.setChecked(true);
         page = ((HtmlSubmitInput) page.getHtmlElementById("inDataTableWithEntityList:button")).click();
         assertTrue(page.getHtmlElementById("messages").asText().isEmpty());
-        assertTrue(page.getHtmlElementById("inDataTableWithEntityList:selectedItem").asText().equals("two"));
+        assertEquals("two", page.getHtmlElementById("inDataTableWithEntityList:selectedItem").asText());
+
+        page = ((HtmlSubmitInput) page.getHtmlElementById("inRepeatWithSelectItemList:button")).click();
+        assertEquals("required", page.getHtmlElementById("messages").asText()); // It should appear only once!
 
         HtmlRadioButtonInput inRepeatWithSelectItemListRadio = (HtmlRadioButtonInput) page.getHtmlElementById("inRepeatWithSelectItemList:repeat:1:radio");
         inRepeatWithSelectItemListRadio.setChecked(true);
         page = ((HtmlSubmitInput) page.getHtmlElementById("inRepeatWithSelectItemList:button")).click();
         assertTrue(page.getHtmlElementById("messages").asText().isEmpty());
-        assertTrue(page.getHtmlElementById("inRepeatWithSelectItemList:selectedItem").asText().equals("value2"));
+        assertEquals("value2", page.getHtmlElementById("inRepeatWithSelectItemList:selectedItem").asText());
+
+        page = ((HtmlSubmitInput) page.getHtmlElementById("multipleRadioButtonsWithStaticItemsInFirstRadio:button")).click();
+        assertEquals("required1", page.getHtmlElementById("messages").asText()); // It should appear only once for first component!
 
         HtmlRadioButtonInput multipleRadioButtonsWithStaticItemsInFirstRadio = (HtmlRadioButtonInput) page.getHtmlElementById("multipleRadioButtonsWithStaticItemsInFirstRadio:radio2");
         multipleRadioButtonsWithStaticItemsInFirstRadio.setChecked(true);
         page = ((HtmlSubmitInput) page.getHtmlElementById("multipleRadioButtonsWithStaticItemsInFirstRadio:button")).click();
         assertTrue(page.getHtmlElementById("messages").asText().isEmpty());
-        assertTrue(page.getHtmlElementById("multipleRadioButtonsWithStaticItemsInFirstRadio:selectedItem").asText().equals("two"));
+        assertEquals("two", page.getHtmlElementById("multipleRadioButtonsWithStaticItemsInFirstRadio:selectedItem").asText());
+
+        page = ((HtmlSubmitInput) page.getHtmlElementById("multipleRadioButtonsWithStaticItemsInEachRadio:button")).click();
+        assertEquals("required1", page.getHtmlElementById("messages").asText()); // It should appear only once for first component!
 
         HtmlRadioButtonInput multipleRadioButtonsWithStaticItemsInEachRadio = (HtmlRadioButtonInput) page.getHtmlElementById("multipleRadioButtonsWithStaticItemsInEachRadio:radio2");
         multipleRadioButtonsWithStaticItemsInEachRadio.setChecked(true);
         page = ((HtmlSubmitInput) page.getHtmlElementById("multipleRadioButtonsWithStaticItemsInEachRadio:button")).click();
         assertTrue(page.getHtmlElementById("messages").asText().isEmpty());
-        assertTrue(page.getHtmlElementById("multipleRadioButtonsWithStaticItemsInEachRadio:selectedItem").asText().equals("two"));
+        assertEquals("two", page.getHtmlElementById("multipleRadioButtonsWithStaticItemsInEachRadio:selectedItem").asText());
+
+        page = ((HtmlSubmitInput) page.getHtmlElementById("multipleRadioButtonsWithSelectItemList:button")).click();
+        assertEquals("required1", page.getHtmlElementById("messages").asText()); // It should appear only once for first component!
 
         HtmlRadioButtonInput multipleRadioButtonsWithSelectItemListRadio = (HtmlRadioButtonInput) page.getHtmlElementById("multipleRadioButtonsWithSelectItemList:radio2");
         multipleRadioButtonsWithSelectItemListRadio.setChecked(true);
         page = ((HtmlSubmitInput) page.getHtmlElementById("multipleRadioButtonsWithSelectItemList:button")).click();
         assertTrue(page.getHtmlElementById("messages").asText().isEmpty());
-        assertTrue(page.getHtmlElementById("multipleRadioButtonsWithSelectItemList:selectedItem").asText().equals("value2"));
+        assertEquals("value2", page.getHtmlElementById("multipleRadioButtonsWithSelectItemList:selectedItem").asText());
     }
 
     @After
