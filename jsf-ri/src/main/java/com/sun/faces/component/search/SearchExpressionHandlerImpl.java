@@ -329,7 +329,7 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
                 if (target != null) {
                     if (remainingExpression == null) {
                         callback.invokeContextCallback(facesContext, target);
-                    } else if (!isHintSet(searchExpressionContext, SearchExpressionHint.SKIP_VIRTUAL_COMPONENTS)) {
+                    } else {
                         handler.invokeOnComponent(searchExpressionContext, target, remainingExpression, callback);
                     }
                 }
