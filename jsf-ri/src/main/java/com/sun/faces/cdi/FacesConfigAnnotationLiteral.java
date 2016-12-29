@@ -37,42 +37,25 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.cdi;
 
-package javax.faces.annotation;
+import javax.enterprise.util.AnnotationLiteral;
+import javax.faces.annotation.FacesConfig;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static javax.faces.annotation.FacesConfig.Version.JSF_2_2;
+/**
+ * An annotation literal for <code>@FacesConfig.</code>
+ * 
+ * @since 2.3
+ * @see FacesConfig
+ */
+@SuppressWarnings("all")
+public class FacesConfigAnnotationLiteral extends AnnotationLiteral<FacesConfig> implements FacesConfig {
+    private static final long serialVersionUID = 1L;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import javax.enterprise.util.Nonbinding;
-import javax.inject.Qualifier;
-
-@Qualifier
-@Target(TYPE)
-@Retention(RUNTIME)
-public @interface FacesConfig {
+	@Override
+	public Version version() {
+		return FacesConfig.Version.JSF_2_2;
+	}
     
-    public static enum Version { 
-        
-        /**
-         * Activates all features for JSF 2.2 and earlier, as long as JSF 2.2 doesn't provide newer versions 
-         */
-        JSF_2_2,
-        
-        /**
-         * Activates all features for JSF 2.3 and earlier, as long as JSF 2.3 doesn't provide newer versions 
-         */
-        JSF_2_3,
-        
-        /**
-         * Activates all features for the JSF version the implementation code corresponds with.
-         */
-        CURRENT  
-    }
     
-    @Nonbinding Version version() default JSF_2_2;
-
 }
