@@ -42,6 +42,9 @@ package javax.faces.component;
 
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 
 
@@ -164,6 +167,65 @@ public class UISelectOne extends UIInput {
 
 
     /**
+     * <p class="changed_added_2_3">If {@link #getGroup()} is set, and {@link #getSubmittedValue()} is empty, and at
+     * least one other component having the same group within a <code>UIForm</code> parent has a non-empty 
+     * {@link #getSubmittedValue()} or returns <code>true</code> on {@link #isLocalValueSet()} or returns 
+     * <code>false</code> on {@link #isValid()}, then skip validation for current component.</p>
+     */
+    @Override
+    public void processValidators(FacesContext context) {
+
+        final String group = getGroup();
+
+        if (group != null && isEmpty(getSubmittedValue())) {
+            final String clientId = getClientId(context);
+            final UIComponent groupContainer = getGroupContainer(context, this);
+            final boolean[] alreadySubmittedOrValidatedAsGroup = new boolean[1];
+
+            groupContainer.visitTree(VisitContext.createVisitContext(context), new VisitCallback() {
+                @Override
+                public VisitResult visit(VisitContext visitContext, UIComponent target) {
+                    if (target instanceof UISelectOne) {
+                        UISelectOne radio = (UISelectOne) target;
+
+                        if (isOtherMemberOfSameGroup(context, group, clientId, radio) && isAlreadySubmittedOrValidated(radio)) {
+                            alreadySubmittedOrValidatedAsGroup[0] = true;
+                            return VisitResult.COMPLETE;
+                        }
+                    }
+
+                    return VisitResult.ACCEPT;
+                }
+            });
+
+            if (alreadySubmittedOrValidatedAsGroup[0]) {
+                return;
+            }
+        }
+
+        super.processValidators(context);
+    }
+
+    private static UIComponent getGroupContainer(FacesContext context, UISelectOne radio) {
+        UIComponent namingContainer = radio.getNamingContainer();
+
+        while (namingContainer != null && !(namingContainer instanceof UIForm) && namingContainer.getParent() != null) {
+            namingContainer = namingContainer.getParent().getNamingContainer();
+        }
+
+        return namingContainer != null ? namingContainer : context.getViewRoot();
+    }
+
+    private static boolean isOtherMemberOfSameGroup(FacesContext context, String group, String clientId, UISelectOne radio) {
+        return group.equals(radio.getGroup()) && !clientId.equals(radio.getClientId(context));
+    }
+
+    private static boolean isAlreadySubmittedOrValidated(EditableValueHolder input) {
+        return !isEmpty(input.getSubmittedValue()) || input.isLocalValueSet() || !input.isValid();
+    }
+
+
+    /**
      * <p><span class="changed_modified_2_0">In</span> addition to the
      * standard validation behavior inherited from {@link UIInput},
      * ensure that any specified value is equal to one of the available
@@ -189,10 +251,10 @@ public class UISelectOne extends UIInput {
      */
     @Override
     protected void validateValue(FacesContext context, Object value) {
-
-        // Skip validation if it is not necessary
+        
         super.validateValue(context, value);
 
+        // Skip validation if it is not necessary
         if (!isValid() || (value == null)) {
             return;
         }
