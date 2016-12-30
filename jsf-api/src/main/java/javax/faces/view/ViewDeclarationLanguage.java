@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -45,8 +45,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+
 import javax.faces.application.Resource;
-import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -54,7 +54,7 @@ import javax.faces.context.FacesContext;
 /**
  * <p class="changed_added_2_0"><span class="changed_modified_2_0_rev_a
  * changed_modified_2_1 changed_modified_2_2">The</span> contract that a view declaration
- * language must implement to interact with the JSF runtime.  An
+ * language must implement to interact with the JSF runtime. An
  * implementation of this class must be thread-safe.</p>
  *
  * <div class="changed_added_2_0">
@@ -159,8 +159,7 @@ public abstract class ViewDeclarationLanguage {
      * @return the {@link Resource} corresponding to the argument {@code
      * componentResource}
      */
-    public abstract Resource getScriptComponentResource(FacesContext context,
-                                                        Resource componentResource);
+    public abstract Resource getScriptComponentResource(FacesContext context, Resource componentResource);
     
     
     /**
@@ -180,9 +179,7 @@ public abstract class ViewDeclarationLanguage {
      *
      * @return the newly created view root
      */
-
-    public abstract UIViewRoot createView(FacesContext context,
-                                 String viewId);
+    public abstract UIViewRoot createView(FacesContext context, String viewId);
     
     /**
      * <p class="changed_added_2_2">Create a component given a 
@@ -212,10 +209,7 @@ public abstract class ViewDeclarationLanguage {
      *
      * @return the newly created component
      */
-    
-    public UIComponent createComponent(FacesContext context, 
-            String taglibURI, String tagName, 
-            Map<String, Object> attributes) {
+    public UIComponent createComponent(FacesContext context, String taglibURI, String tagName, Map<String, Object> attributes) {
         return null;
     }
     
@@ -361,18 +355,12 @@ public abstract class ViewDeclarationLanguage {
      *
      * @throws NullPointerException if any of the arguments are
      * <code>null</code>.
-
-     * @since 2.0
      *
+     * @since 2.0
      */
-    public void retargetAttachedObjects(FacesContext context,
-                                        UIComponent topLevelComponent,
-                                        List<AttachedObjectHandler> handlers)  {
-        
+    public void retargetAttachedObjects(FacesContext context, UIComponent topLevelComponent, List<AttachedObjectHandler> handlers)  {
         // no-op
-
     }
-
 
     /**
      * <p class="changed_added_2_0">Assuming the component metadata for
@@ -498,11 +486,8 @@ public abstract class ViewDeclarationLanguage {
      *
      * @since 2.0
      */
-    public void retargetMethodExpressions(FacesContext context,
-                                          UIComponent topLevelComponent) {
-
+    public void retargetMethodExpressions(FacesContext context, UIComponent topLevelComponent) {
         // no-op
-        
     }
     
     /**
@@ -526,12 +511,10 @@ public abstract class ViewDeclarationLanguage {
      * @return the calculated list of resource library contract names
      */
     
-    public List<String> calculateResourceLibraryContracts(FacesContext context,
-            String viewId) {
+    public List<String> calculateResourceLibraryContracts(FacesContext context, String viewId) {
         return null;
     }
     
-
     /**
      * <p class="changed_added_2_0"><span
      * class="changed_modified_1">Take</span> any actions specific to
@@ -581,9 +564,7 @@ public abstract class ViewDeclarationLanguage {
      *
      * @throws IOException if view cannot be built for any reason
      */
-    public abstract void buildView(FacesContext context, UIViewRoot root)
-    throws IOException;
-
+    public abstract void buildView(FacesContext context, UIViewRoot root) throws IOException;
     
     /**
      * <p class="changed_added_2_0">Render a view rooted at
@@ -599,9 +580,7 @@ public abstract class ViewDeclarationLanguage {
      *
      * @throws IOException if the view cannot be rendered for any reason
      */
-    public abstract void renderView(FacesContext context,
-                                    UIViewRoot view)
-    throws IOException;
+    public abstract void renderView(FacesContext context, UIViewRoot view) throws IOException;
     
     /**
      * <p class="changed_added_2_0">For implementations that want to
@@ -620,10 +599,7 @@ public abstract class ViewDeclarationLanguage {
      *
      * @since 2.0
      */ 
-
-    public abstract StateManagementStrategy getStateManagementStrategy(FacesContext context,
-            String viewId);
-
+    public abstract StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId);
 
     /**
      * <p class="changed_added_2_1"><span class="changed_modified_2_2">Tests</span>
@@ -640,16 +616,9 @@ public abstract class ViewDeclarationLanguage {
      * @return the result as specified above
      *
      * @since 2.1
-     *
-     * 
      */    
-    public boolean viewExists(FacesContext context, 
-                              String viewId) {
-        boolean result = false;
-        ResourceHandler rh = context.getApplication().getResourceHandler();
-        result = null != rh.createViewResource(context, viewId);
-
-        return result;
+    public boolean viewExists(FacesContext context, String viewId) {
+        return context.getApplication().getResourceHandler().createViewResource(context, viewId) != null;
     }
 
     /**

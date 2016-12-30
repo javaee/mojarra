@@ -57,6 +57,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -79,17 +80,17 @@ public class ResourceManager {
      */
     private static final Pattern CONFIG_MIMETYPE_PATTERN = Pattern.compile("[a-z-]*/[a-z0-9.\\*-]*");
     
-    private ResourceHelper faceletResourceHelper = new FaceletWebappResourceHelper();
+    private FaceletWebappResourceHelper faceletWebappResourceHelper = new FaceletWebappResourceHelper();
 
     /**
      * {@link ResourceHelper} used for looking up webapp-based resources.
      */
-    private ResourceHelper webappHelper = new WebappResourceHelper();
+    private ResourceHelper webappResourceHelper = new WebappResourceHelper();
 
     /**
      * {@link ResourceHelper} used for looking up classpath-based resources.
      */
-    private ClasspathResourceHelper classpathHelper = new ClasspathResourceHelper();
+    private ClasspathResourceHelper classpathResourceHelper = new ClasspathResourceHelper();
 
     /**
      * Cache for storing {@link ResourceInfo} instances to reduce the cost
@@ -170,6 +171,10 @@ public class ResourceManager {
         return findResource(libraryName, resourceName, contentType, false, ctx);
     }
     
+    public ResourceInfo findViewResource(String resourceName, String contentType, FacesContext facesContext) {
+        return findResource(null, resourceName, contentType, true, facesContext);
+    }
+    
     public ResourceInfo findResource(String libraryName, String resourceName, String contentType, boolean isViewResource, FacesContext ctx) {
         
         String localePrefix = getLocalePrefix(ctx);
@@ -186,6 +191,10 @@ public class ResourceManager {
         }
 
         return info;
+    }
+    
+    public Set<String> getViewResourcePaths(FacesContext ctx, String path) {
+        return faceletWebappResourceHelper.getViewResourcePaths(ctx, path);
     }
 
 
@@ -298,7 +307,7 @@ public class ResourceManager {
             return null;
         }
 
-        ResourceInfo info = findResource(library, resourceName, localePrefix, compressable, isViewResource,ctx);
+        ResourceInfo info = findResource(library, resourceName, localePrefix, compressable, isViewResource, ctx);
         if (info == null && localePrefix != null) {
             // no localized resource found, try to find a
             // resource that isn't localized
@@ -310,7 +319,7 @@ public class ResourceManager {
         // library on the classpath.  If one is found, try to find a matching
         // resource in that library.
         if (info == null && library != null && library.getHelper() instanceof WebappResourceHelper) {
-            LibraryInfo altLibrary = classpathHelper.findLibrary(libraryName, localePrefix, contract, ctx);
+            LibraryInfo altLibrary = classpathResourceHelper.findLibrary(libraryName, localePrefix, contract, ctx);
             if (altLibrary != null) {
                 VersionInfo originalVersion = library.getVersion();
                 VersionInfo altVersion = altLibrary.getVersion();
@@ -436,15 +445,15 @@ public class ResourceManager {
      */
      LibraryInfo findLibrary(String libraryName, String localePrefix, String contract, FacesContext ctx) {
 
-        LibraryInfo library = webappHelper.findLibrary(libraryName, localePrefix, contract, ctx);
+        LibraryInfo library = webappResourceHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         
         if (library == null) {
-            library = classpathHelper.findLibrary(libraryName, localePrefix, contract, ctx);
+            library = classpathResourceHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         }
         
         if (library == null && contract == null) {
             // FCAPUTO facelets in contracts should have been found by the webapphelper already
-            library = faceletResourceHelper.findLibrary(libraryName, localePrefix, contract, ctx);
+            library = faceletWebappResourceHelper.findLibrary(libraryName, localePrefix, contract, ctx);
         }
 
         // if not library is found at this point, let the caller deal with it
@@ -454,7 +463,7 @@ public class ResourceManager {
      LibraryInfo findLibraryOnClasspathWithZipDirectoryEntryScan(String libraryName,
                                                                  String localePrefix,
                                                                  String contract, FacesContext ctx, boolean forceScan) {
-         return classpathHelper.findLibraryWithZipDirectoryEntryScan(libraryName, localePrefix, contract, ctx, forceScan);
+         return classpathResourceHelper.findLibraryWithZipDirectoryEntryScan(libraryName, localePrefix, contract, ctx, forceScan);
      }
 
    /**
@@ -494,21 +503,21 @@ public class ResourceManager {
             ResourceInfo resource = null;
             
             if (!skipToFaceletResourceHelper) {
-                resource = webappHelper.findResource(null,
+                resource = webappResourceHelper.findResource(null,
                         resourceName,
                         localePrefix,
                         compressable,
                         ctx);
             }
             if (resource == null && !skipToFaceletResourceHelper) {
-                resource = classpathHelper.findResource(null,
+                resource = classpathResourceHelper.findResource(null,
                                                         resourceName,
                                                         localePrefix,
                                                         compressable, 
                                                         ctx);
             }
             if (resource == null) {
-                resource = faceletResourceHelper.findResource(library, 
+                resource = faceletWebappResourceHelper.findResource(library, 
                     resourceName, 
                     localePrefix, 
                     compressable, 

@@ -58,11 +58,9 @@
 
 package com.sun.faces.application.resource;
 
-import com.sun.faces.util.FacesLogger;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.FINEST;
 
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,8 +68,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
-import java.util.logging.Level;
+import java.util.Set;
 import java.util.logging.Logger;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+
+import com.sun.faces.util.FacesLogger;
 
 /**
  * @author Roland Huss
@@ -82,14 +86,18 @@ public final class Resource {
     protected final static Logger LOGGER = FacesLogger.FACELETS_FACTORY.getLogger();
 
     /**
-     * Get an URL of an internal resource. First,
-     * {@link javax.faces.context.ExternalContext#getResource(String)} is
+     * Get an URL of an internal resource. 
+     * 
+     * <p>
+     * First, {@link javax.faces.context.ExternalContext#getResource(String)} is
      * checked for an non-null URL return value. In the case of a null return
      * value (as it is the case for Weblogic 8.1 for a packed war), a URL with a
      * special URL handler is constructed, which can be used for
-     * <em>opening</em> a serlvet resource later. Internally, this special URL
-     * handler will call {@link ServletContext#getResourceAsStream(String)} when
-     * an inputstream is requested. This works even on Weblogic 8.1
+     * <em>opening</em> a servlet resource later. 
+     * 
+     * <p>
+     * Internally, this special URL handler will call {@link ServletContext#getResourceAsStream(String)} 
+     * when an inputstream is requested. This even works on Weblogic 8.1
      * 
      * @param ctx
      *            the faces context from which to retrieve the resource
@@ -101,28 +109,38 @@ public final class Resource {
      * @throws MalformedURLException
      */
     static URL getResourceUrl(FacesContext ctx, String path) throws MalformedURLException {
-        final ExternalContext externalContext = ctx.getExternalContext();
+        ExternalContext externalContext = ctx.getExternalContext();
         URL url = externalContext.getResource(path);
-        if (LOGGER.isLoggable(Level.FINE)) {
+        
+        if (LOGGER.isLoggable(FINE)) {
             LOGGER.fine("Resource-Url from external context: " + url);
         }
         
-        // This might happen on Servlet container which doesnot return
-        // anything
-        // for getResource() (like weblogic 8.1 for packaged wars) we
-        // are trying
-        // to use an own URL protocol in order to use
-        // ServletContext.getResourceAsStream()
+        // This might happen on a Servlet container which does not return anything
+        // for getResource() (like weblogic 8.1 for packaged wars) we are trying
+        // to use an own URL protocol in order to use ServletContext.getResourceAsStream()
         // when opening the url
         if (url == null && resourceExist(externalContext, path)) {
             url = getUrlForResourceAsStream(externalContext, path);
         }
+        
         return url;
     }
+    
+    /**
+     * Return the <code>Set</code> of resource paths for all application resources
+     * whose resource path starts with the specified argument.
+     * 
+     * @param ctx the faces context from which to retrieve the resources
+     * @param path Partial path used to match resources
+     * @return
+     */
+    static Set<String> getViewResourcePaths(FacesContext ctx, String path) {
+        return ctx.getExternalContext().getResourcePaths(path);
+    }
 
-    // This method could be used above to provide a 'fail fast' if a
-    // resource
-    // doesnt exist. Otherwise, the URL will fail on the first access.
+    // This method could be used above to provide a 'fail fast' if a resource
+    // doesn't exist. Otherwise, the URL will fail on the first access.
     private static boolean resourceExist(ExternalContext externalContext, String path) {
         if ("/".equals(path)) {
             // The root context exists always
@@ -137,13 +155,14 @@ public final class Resource {
                 try {
                     stream.close();
                 } catch (IOException e) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST, "Closing stream", e);
+                    if (LOGGER.isLoggable(FINEST)) {
+                        LOGGER.log(FINEST, "Closing stream", e);
                     }
                 }
                 return true;
             }
         }
+        
         return false;
     }
 
@@ -151,17 +170,19 @@ public final class Resource {
     // ServletContext.getResourceAsStream()
     private static URL getUrlForResourceAsStream(final ExternalContext externalContext, String path) throws MalformedURLException {
         URLStreamHandler handler = new URLStreamHandler() {
+           
             @Override
             protected URLConnection openConnection(URL u) throws IOException {
                 final String file = u.getFile();
                 return new URLConnection(u) {
+                    
                     @Override
                     public void connect() throws IOException {
                     }
 
                     @Override
                     public InputStream getInputStream() throws IOException {
-                        if (LOGGER.isLoggable(Level.FINE)) {
+                        if (LOGGER.isLoggable(FINE)) {
                             LOGGER.fine("Opening internal url to " + file);
                         }
                         Object ctx = externalContext.getContext();
@@ -171,11 +192,9 @@ public final class Resource {
 
                         if (ctx instanceof ServletContext) {
                             ServletContext servletContext = (ServletContext) ctx;
-                            InputStream stream = servletContext
-                                    .getResourceAsStream(file);
+                            InputStream stream = servletContext.getResourceAsStream(file);
                             if (stream == null) {
-                                throw new FileNotFoundException(
-                                        "Cannot open resource " + file);
+                                throw new FileNotFoundException("Cannot open resource " + file);
                             }
                             return stream;
                         } else {

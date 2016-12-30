@@ -40,24 +40,19 @@
 
 package com.sun.faces.application.resource;
 
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.*;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.DefaultResourceMaxAge;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceBufferSize;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceExcludes;
 import static com.sun.faces.util.RequestStateManager.RESOURCE_REQUEST;
 import static com.sun.faces.util.Util.notNull;
 import static java.lang.Boolean.FALSE;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.WARNING;
 import static javax.faces.application.ProjectStage.Development;
+import static javax.faces.application.ProjectStage.Production;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_MODIFIED;
 
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.util.Util;
-
-import javax.faces.application.ProjectStage;
-import javax.faces.application.Resource;
-import javax.faces.application.ResourceHandler;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -71,6 +66,17 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
 
 /**
  * This is the default implementation of {@link ResourceHandler}.
@@ -100,7 +106,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
         manager = ApplicationAssociate.getInstance(extContext).getResourceManager();
         initExclusions(extContext.getApplicationMap());
         initMaxAge();
-
     }
 
 
@@ -130,29 +135,17 @@ public class ResourceHandlerImpl extends ResourceHandler {
     public Resource createResource(String resourceName, String libraryName, String contentType) {
 
         notNull("resourceName", resourceName);
+        
         FacesContext ctx = FacesContext.getCurrentInstance();
 
-        boolean development = ctx.isProjectStage(Development);
-
-        String ctype = ((contentType != null)
-                        ? contentType
-                        : getContentType(ctx, resourceName));
-        ResourceInfo info = manager.findResource(libraryName,
-                                                 resourceName,
-                                                 ctype,
-                                                 ctx);
+        String ctype = contentType != null ? contentType : getContentType(ctx, resourceName);
+        ResourceInfo info = manager.findResource(libraryName, resourceName, ctype, ctx);
+        
         if (info == null) {
-            // prevent message from being when we're dealing with
-            // groovy is present and Application.createComponent()
-            // tries to resolve a .groovy file as backing UIComponent.
-            if (!development && "application/x-groovy".equals(ctype)) {
-                return null;
-            }
             return null;
-        } else {
-            return new ResourceImpl(info, ctype, creationTime, maxAge);
-        }
-
+        } 
+            
+        return new ResourceImpl(info, ctype, creationTime, maxAge);
     }
 
     @Override
@@ -160,32 +153,22 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         notNull("resourceName", resourceName);
 
-        boolean development = facesContext.isProjectStage(Development);
-
-        String ctype = getContentType(facesContext, resourceName);
-        ResourceInfo info = manager.findResource(null,
-                                                 resourceName,
-                                                 ctype,
-                                                 true,
-                                                 facesContext);
-        if (info == null) {
-            // prevent message from being when we're dealing with
-            // groovy is present and Application.createComponent()
-            // tries to resolve a .groovy file as backing UIComponent.
-            if (!development && "application/x-groovy".equals(ctype)) {
-                return null;
-            }
+        String contentType = getContentType(facesContext, resourceName);
+        ResourceInfo resourceInfo = manager.findViewResource(resourceName, contentType, facesContext);
+       
+        if (resourceInfo == null) {
             return null;
-        } else {
-            return new ResourceImpl(info, ctype, creationTime, maxAge);
-        }
-    }
-    
-    public Set<String> getViewResourcePaths(String path) {
+        } 
         
-        return null;
+        return new ResourceImpl(resourceInfo, contentType, creationTime, maxAge);
     }
     
+    public Set<String> getViewResourcePaths(FacesContext facesContext, String path) {
+        
+        notNull("path", path);
+        
+        return manager.getViewResourcePaths(facesContext, path);
+    }
 
     /**
      * @see ResourceHandler#createResourceFromId(String)
@@ -224,7 +207,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
         FacesContext context = FacesContext.getCurrentInstance();
         // PENDING(fcaputo) do we need to iterate over the contracts here? I don't think so.
         LibraryInfo info = manager.findLibrary(libraryName, null, null, context);
-        if (null == info) {
+        if (info == null) {
             info = manager.findLibraryOnClasspathWithZipDirectoryEntryScan(libraryName, null, null, context, true);
 
         }
@@ -265,6 +248,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
                 rendererType = "javax.faces.resource.Stylesheet";
             }
         }
+        
         return rendererType;
     }
 
@@ -276,8 +260,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     public void handleResourceRequest(FacesContext context) throws IOException {
 
         String resourceId = normalizeResourceRequest(context);
-        // handleResourceRequest called for a non-resource request,
-        // bail out.
+        // handleResourceRequest called for a non-resource request, bail out.
         if (resourceId == null) {
             return;
         }
@@ -285,7 +268,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
         ExternalContext extContext = context.getExternalContext();
 
         if (isExcluded(resourceId)) {
-            extContext.setResponseStatus(HttpServletResponse.SC_NOT_FOUND);
+            extContext.setResponseStatus(SC_NOT_FOUND);
             return;
         }
 
@@ -295,11 +278,10 @@ public class ResourceHandlerImpl extends ResourceHandler {
         Resource resource = null;
         String resourceName = null;
         String libraryName = null;
-        if (ResourceHandler.RESOURCE_IDENTIFIER.length() < resourceId.length()) {
+        if (RESOURCE_IDENTIFIER.length() < resourceId.length()) {
             resourceName = resourceId.substring(RESOURCE_IDENTIFIER.length() + 1);
             assert(resourceName != null);
-            libraryName = context.getExternalContext().getRequestParameterMap()
-                  .get("ln");
+            libraryName = context.getExternalContext().getRequestParameterMap().get("ln");
             
             boolean createResource;
             
@@ -328,8 +310,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
                         send404(context, resourceName, libraryName, true);
                         return;
                     }
-                    resourceChannel =
-                          Channels.newChannel(in);
+                    resourceChannel = Channels.newChannel(in);
                     out = Channels.newChannel(extContext.getResponseOutputStream());
                     extContext.setResponseBufferSize(buf.capacity());
                     String contentType = resource.getContentType();
@@ -412,35 +393,19 @@ public class ResourceHandlerImpl extends ResourceHandler {
         return result;
     }
 
-    private void send404(FacesContext ctx,
-                         String resourceName,
-                         String libraryName,
-                         boolean logMessage) {
-
+    private void send404(FacesContext ctx, String resourceName, String libraryName, boolean logMessage) {
         send404(ctx, resourceName, libraryName, null, logMessage);
-
     }
 
-
-    private void send404(FacesContext ctx,
-                         String resourceName,
-                         String libraryName,
-                         Throwable t,
-                         boolean logMessage) {
-
-        ctx.getExternalContext().setResponseStatus(HttpServletResponse.SC_NOT_FOUND);
+    private void send404(FacesContext ctx, String resourceName, String libraryName, Throwable t, boolean logMessage) {
+        ctx.getExternalContext().setResponseStatus(SC_NOT_FOUND);
         if (logMessage) {
             logMissingResource(ctx, resourceName, libraryName, t);
         }
-
-
     }
 
-
     private void send304(FacesContext ctx) {
-
-        ctx.getExternalContext().setResponseStatus(HttpServletResponse.SC_NOT_MODIFIED);
-
+        ctx.getExternalContext().setResponseStatus(SC_NOT_MODIFIED);
     }
 
 
@@ -456,11 +421,8 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     @SuppressWarnings({"UnusedDeclaration"})
     long getCreationTime() {
-
         return creationTime;
-
     }
-
 
     /**
      * This method is here soley for the purpose of unit testing and will
@@ -469,11 +431,8 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     @SuppressWarnings({"UnusedDeclaration"})
     void setCreationTime(long creationTime) {
-
         this.creationTime = creationTime;
-
     }
-
 
     /**
      * Utility method leveraged by ResourceImpl to reduce the cost of
@@ -482,9 +441,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     @SuppressWarnings({"UnusedDeclaration"})
     WebConfiguration getWebConfig() {
-
         return webconfig;
-        
     }
 
     
@@ -501,16 +458,13 @@ public class ResourceHandlerImpl extends ResourceHandler {
      * @param libraryName the resource library
      * @param t the exception caught when attempting to find the resource
      */
-    private void logMissingResource(FacesContext ctx,
-                                    String resourceName,
-                                    String libraryName,
-                                    Throwable t) {
+    private void logMissingResource(FacesContext ctx, String resourceName, String libraryName, Throwable t) {
 
         Level level;
-        if (!ctx.isProjectStage(ProjectStage.Production)) {
-            level = Level.WARNING;
+        if (!ctx.isProjectStage(Production)) {
+            level = WARNING;
         } else {
-            level = ((t != null) ? Level.WARNING : Level.FINE);
+            level = t != null ? WARNING : FINE;
         }
 
         if (libraryName != null) {
@@ -545,15 +499,13 @@ public class ResourceHandlerImpl extends ResourceHandler {
      * @param libraryName the resource library
      * @param t the exception caught when attempting to find the resource
      */
-    private void logMissingResource(FacesContext ctx,
-                                    String resourceId,
-                                    Throwable t) {
+    private void logMissingResource(FacesContext ctx, String resourceId, Throwable t) {
 
         Level level;
-        if (!ctx.isProjectStage(ProjectStage.Production)) {
-            level = Level.WARNING;
+        if (!ctx.isProjectStage(Production)) {
+            level = WARNING;
         } else {
-            level = ((t != null) ? Level.WARNING : Level.FINE);
+            level = t != null ? WARNING : FINE;
         }
 
         if (LOGGER.isLoggable(level)) {
@@ -567,7 +519,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     }
 
-
     /**
      * @param resourceName the resource of interest.  The resourceName in question
      *  may consist of zero or more path elements such that resourceName could
@@ -575,11 +526,8 @@ public class ResourceHandlerImpl extends ResourceHandler {
      * @return the content type for this resource
      */
     private String getContentType(FacesContext ctx, String resourceName) {
-
         return ctx.getExternalContext().getMimeType(resourceName);
-
     }
-
 
     /**
      * Normalize the request path to exclude JSF invocation information.
@@ -605,10 +553,9 @@ public class ResourceHandlerImpl extends ResourceHandler {
         } else {
             path = context.getExternalContext().getRequestPathInfo();
         }
+        
         return path;
-
     }
-
 
     /**
      * @param resourceId the normalized request path as returned by
@@ -625,7 +572,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
         return false;
     }
 
-
     /**
      * Initialize the exclusions for this application.
      * If no explicit exclusions are configured, the defaults of
@@ -640,32 +586,24 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     private void initExclusions(Map<String, Object> appMap) {
 
-        String excludesParam = webconfig
-              .getOptionValue(ResourceExcludes);
+        String excludesParam = webconfig.getOptionValue(ResourceExcludes);
         String[] patterns = Util.split(appMap, excludesParam, " ");
         excludePatterns = new ArrayList<>(patterns.length);
         for (String pattern : patterns) {
             excludePatterns.add(Pattern.compile(".*\\" + pattern));
         }
-        
     }
 
     private void initMaxAge() {
-
         maxAge = Long.parseLong(webconfig.getOptionValue(DefaultResourceMaxAge));
-
     }
 
-
-    private void handleHeaders(FacesContext ctx,
-                               Resource resource) {
+    private void handleHeaders(FacesContext ctx, Resource resource) {
 
         ExternalContext extContext = ctx.getExternalContext();
-        for (Map.Entry<String, String> cur :
-             resource.getResponseHeaders().entrySet()) {
-                extContext.setResponseHeader(cur.getKey(), cur.getValue());
+        for (Map.Entry<String, String> cur : resource.getResponseHeaders().entrySet()) {
+            extContext.setResponseHeader(cur.getKey(), cur.getValue());
         }
-
     }
 
     private ByteBuffer allocateByteBuffer() {
@@ -674,8 +612,8 @@ public class ResourceHandlerImpl extends ResourceHandler {
         try {
             size = Integer.parseInt(webconfig.getOptionValue(ResourceBufferSize));
         } catch (NumberFormatException nfe) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
+            if (LOGGER.isLoggable(WARNING)) {
+                LOGGER.log(WARNING,
                            "jsf.application.resource.invalid_resource_buffer_size",
                            new Object[] {
                                webconfig.getOptionValue(ResourceBufferSize),
@@ -685,7 +623,8 @@ public class ResourceHandlerImpl extends ResourceHandler {
             }
             size = Integer.parseInt(ResourceBufferSize.getDefaultValue());
         }
+        
         return ByteBuffer.allocate(size);
-
     }
+    
 }

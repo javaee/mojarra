@@ -49,6 +49,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -123,6 +124,10 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
         } 
         
         return result;
+    }
+    
+    public Set<String> getViewResourcePaths(FacesContext ctx, String path) {
+        return Resource.getViewResourcePaths(ctx, path);
     }
     
     private String createPath(LibraryInfo library, String resourceName) {
