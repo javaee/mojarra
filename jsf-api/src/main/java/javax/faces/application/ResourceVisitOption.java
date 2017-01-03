@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -36,61 +36,26 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
- *
- *
- * This file incorporates work covered by the following copyright and
- * permission notice:
- *
- * Copyright 2005-2007 The Apache Software Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
-package com.sun.faces.facelets.impl;
+package javax.faces.application;
 
-import java.net.URL;
+import com.sun.faces.application.resource.ResourceManager;
 
-import javax.faces.application.ResourceHandler;
-import javax.faces.application.ViewResource;
-import javax.faces.context.FacesContext;
-import javax.faces.view.facelets.ResourceResolver;
+/**
+ * <p class="changed_added_2_3">Defines the resource traversal options.</p>
+ * 
+ * @since 2.3
+ * 
+ * @see ResourceManager#getViewResources(javax.faces.context.FacesContext, String, int, ResourceVisitOption...)
+ *
+ */
+public enum ResourceVisitOption {
 
-import com.sun.faces.RIConstants;
-
-public class DefaultResourceResolver extends ResourceResolver {
+    /**
+     * Only visit resources that are top level views, i.e. views that can be used
+     * to serve a request as opposed to those that can only be used for includes.
+     */
+    TOP_LEVEL_VIEWS_ONLY
     
-    private ResourceHandler resourceHandler = null;
-    
-    public static final String NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME = RIConstants.FACES_PREFIX + "NDRRPN";
-
-    public DefaultResourceResolver(ResourceHandler resourceHandler) {
-        this.resourceHandler = resourceHandler;
-    }
-
-    @Override
-    public URL resolveUrl(String path) {
-        ViewResource faceletResource = resourceHandler.createViewResource(FacesContext.getCurrentInstance(), path);
-
-        if (faceletResource != null) {
-            return faceletResource.getURL();
-        }
-        
-        return null;
-    }
-
-    @Override
-    public String toString() {
-        return "DefaultResourceResolver";
-    }
-
 }

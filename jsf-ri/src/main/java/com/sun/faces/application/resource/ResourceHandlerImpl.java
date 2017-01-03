@@ -44,6 +44,7 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Defa
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceBufferSize;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceExcludes;
 import static com.sun.faces.util.RequestStateManager.RESOURCE_REQUEST;
+import static com.sun.faces.util.Util.notNegative;
 import static com.sun.faces.util.Util.notNull;
 import static java.lang.Boolean.FALSE;
 import static java.util.logging.Level.FINE;
@@ -62,13 +63,14 @@ import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.application.ResourceVisitOption;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -163,11 +165,27 @@ public class ResourceHandlerImpl extends ResourceHandler {
         return new ResourceImpl(resourceInfo, contentType, creationTime, maxAge);
     }
     
-    public Set<String> getViewResourcePaths(FacesContext facesContext, String path) {
+    /**
+     * @see ResourceHandler#getViewResources(FacesContext, String, ResourceVisitOption...)
+     */
+    @Override
+    public Stream<String> getViewResources(FacesContext facesContext, String path, ResourceVisitOption... options) {
         
         notNull("path", path);
         
-        return manager.getViewResourcePaths(facesContext, path);
+        return manager.getViewResources(facesContext, path, Integer.MAX_VALUE, options);
+    }
+    
+    /**
+     * @see ResourceHandler#getViewResources(FacesContext, String, int, ResourceVisitOption...)
+     */
+    @Override
+    public Stream<String> getViewResources(FacesContext facesContext, String path, int maxDepth, ResourceVisitOption... options) {
+        
+        notNull("path", path);
+        notNegative("maxDepth", maxDepth);
+        
+        return manager.getViewResources(facesContext, path, maxDepth, options);
     }
 
     /**

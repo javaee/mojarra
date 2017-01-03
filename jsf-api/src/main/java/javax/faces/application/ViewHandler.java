@@ -103,9 +103,7 @@ public abstract class ViewHandler {
      * response character encoding may be stored and retrieved.</p>
      *
      */
-    public static final String CHARACTER_ENCODING_KEY =
-	"javax.faces.request.charset";
-
+    public static final String CHARACTER_ENCODING_KEY =	"javax.faces.request.charset";
 
     /**
      * <p><span class="changed_modified_2_0">Allow</span> the web
@@ -119,9 +117,7 @@ public abstract class ViewHandler {
      * init parameter is not specified, the default value is taken from
      * the value of the constant {@link #DEFAULT_SUFFIX}.</p>
      */
-    public static final String DEFAULT_SUFFIX_PARAM_NAME = 
-	"javax.faces.DEFAULT_SUFFIX";
-
+    public static final String DEFAULT_SUFFIX_PARAM_NAME = "javax.faces.DEFAULT_SUFFIX";
 
     /**
      * <p class="changed_modified_2_1">The value to use for the default
@@ -141,7 +137,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_SKIP_COMMENTS_PARAM_NAME = 
             "javax.faces.FACELETS_SKIP_COMMENTS";
     
@@ -153,7 +148,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_SUFFIX_PARAM_NAME = 
             "javax.faces.FACELETS_SUFFIX";
     
@@ -183,7 +177,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_VIEW_MAPPINGS_PARAM_NAME = 
             "javax.faces.FACELETS_VIEW_MAPPINGS";
     
@@ -199,7 +192,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_BUFFER_SIZE_PARAM_NAME = 
             "javax.faces.FACELETS_BUFFER_SIZE";
     
@@ -238,7 +230,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_LIBRARIES_PARAM_NAME = 
             "javax.faces.FACELETS_LIBRARIES";
     
@@ -254,7 +245,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_DECORATORS_PARAM_NAME = 
             "javax.faces.FACELETS_DECORATORS";
     

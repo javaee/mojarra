@@ -127,14 +127,7 @@ public final class Resource {
         return url;
     }
     
-    /**
-     * Return the <code>Set</code> of resource paths for all application resources
-     * whose resource path starts with the specified argument.
-     * 
-     * @param ctx the faces context from which to retrieve the resources
-     * @param path Partial path used to match resources
-     * @return
-     */
+  
     static Set<String> getViewResourcePaths(FacesContext ctx, String path) {
         return ctx.getExternalContext().getResourcePaths(path);
     }

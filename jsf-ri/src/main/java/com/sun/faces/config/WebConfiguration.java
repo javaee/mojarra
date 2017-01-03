@@ -40,10 +40,16 @@
 
 package com.sun.faces.config;
 
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.DefaultSuffix;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsSuffix;
+import static java.util.Arrays.asList;
+import static java.util.logging.Level.FINE;
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import static java.util.regex.Pattern.compile;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Enumeration;
@@ -88,17 +94,14 @@ import com.sun.faces.lifecycle.HttpMethodRestrictionsPhaseListener;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
-
 /** Class Documentation */
 public class WebConfiguration {
-
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     // A Simple regular expression of allowable boolean values
-    private static final Pattern ALLOWABLE_BOOLEANS =
-          Pattern.compile("true|false", Pattern.CASE_INSENSITIVE);
+    private static final Pattern ALLOWABLE_BOOLEANS = compile("true|false", CASE_INSENSITIVE);
 
     // Key under which we store our WebConfiguration instance.
     private static final String WEB_CONFIG_KEY =
@@ -121,7 +124,7 @@ public class WebConfiguration {
           new EnumMap<>(WebContextInitParameter.class);
 
     private Map<WebContextInitParameter, Map<String, String>> facesConfigParameters =
-            new EnumMap<>(WebContextInitParameter.class);
+          new EnumMap<>(WebContextInitParameter.class);
 
     private Map<WebEnvironmentEntry, String> envEntries =
           new EnumMap<>(WebEnvironmentEntry.class);
@@ -161,7 +164,6 @@ public class WebConfiguration {
         getOptionValue(WebContextInitParameter.DefaultSuffix, " ");
         getOptionValue(WebContextInitParameter.FaceletsViewMappings, ";");
         getOptionValue(WebContextInitParameter.FaceletsSuffix, " ");
-
     }
 
 
@@ -176,12 +178,8 @@ public class WebConfiguration {
      *  if no FacesContext is available.
      */
     public static WebConfiguration getInstance() {
-
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        return getInstance(facesContext.getExternalContext());
-
+        return getInstance(FacesContext.getCurrentInstance().getExternalContext());
     }
-
 
     /**
      * Return the WebConfiguration instance for this application.
@@ -190,16 +188,13 @@ public class WebConfiguration {
      */
     public static WebConfiguration getInstance(ExternalContext extContext) {
 
-        WebConfiguration config = (WebConfiguration) extContext.getApplicationMap()
-              .get(WEB_CONFIG_KEY);
+        WebConfiguration config = (WebConfiguration) extContext.getApplicationMap().get(WEB_CONFIG_KEY);
         if (config == null) {
             return getInstance((ServletContext) extContext.getContext());
         } else {
             return config;
         }
-
     }
-
 
     /**
      * Return the WebConfiguration instance for this application.
@@ -209,33 +204,26 @@ public class WebConfiguration {
      */
     public static WebConfiguration getInstance(ServletContext servletContext) {
 
-        WebConfiguration webConfig = (WebConfiguration)
-              servletContext.getAttribute(WEB_CONFIG_KEY);
+        WebConfiguration webConfig = (WebConfiguration) servletContext.getAttribute(WEB_CONFIG_KEY);
 
         if (webConfig == null) {
             webConfig = new WebConfiguration(servletContext);
             servletContext.setAttribute(WEB_CONFIG_KEY, webConfig);
         }
+        
         return webConfig;
-
     }
 
     public static WebConfiguration getInstanceWithoutCreating(ServletContext servletContext) {
-        WebConfiguration webConfig = (WebConfiguration)
-              servletContext.getAttribute(WEB_CONFIG_KEY);
-
-        return webConfig;
+        return (WebConfiguration) servletContext.getAttribute(WEB_CONFIG_KEY);
     }
-
 
     /**
      * @return The <code>ServletContext</code> originally used to construct
      * this WebConfiguration instance
      */
     public ServletContext getServletContext() {
-
         return servletContext;
-
     }
 
     public boolean isHasFlows() {
@@ -258,9 +246,7 @@ public class WebConfiguration {
         } else {
             return param.getDefaultValue();
         }
-
     }
-
 
     /**
      * Obtain the value of the specified parameter
@@ -270,15 +256,14 @@ public class WebConfiguration {
     public String getOptionValue(WebContextInitParameter param) {
         String result = contextParameters.get(param);
 
-        if (null == result) {
+        if (result == null) {
             WebContextInitParameter alternate = param.getAlternate();
-            if (null != alternate) {
+            if (alternate != null) {
                 result = contextParameters.get(alternate);
             }
         }
 
         return result;
-
     }
 
     public void setOptionValue(WebContextInitParameter param, String value) {
@@ -291,20 +276,19 @@ public class WebConfiguration {
 
     public FaceletsConfiguration getFaceletsConfiguration() {
 
-        if (null == faceletsConfig) {
+        if (faceletsConfig == null) {
             faceletsConfig = new FaceletsConfiguration(this);
         }
+        
         return faceletsConfig;
-
     }
 
     public Map<String, String> getFacesConfigOptionValue(WebContextInitParameter param, boolean create) {
-        Map<String, String> result = null;
 
-        assert(null != facesConfigParameters);
+        assert(facesConfigParameters != null);
 
-        result = facesConfigParameters.get(param);
-        if (null == result) {
+        Map<String, String> result = facesConfigParameters.get(param);
+        if (result == null) {
             if (create) {
                 result = new ConcurrentHashMap<>(3);
                 facesConfigParameters.put(param, result);
@@ -314,21 +298,20 @@ public class WebConfiguration {
         }
 
         return result;
-
     }
 
     public Map<String, String> getFacesConfigOptionValue(WebContextInitParameter param) {
         return getFacesConfigOptionValue(param, false);
     }
 
-
     public String[] getOptionValue(WebContextInitParameter param, String sep) {
         String [] result;
 
-        assert(null != cachedListParams);
-        if (null == (result = cachedListParams.get(param))) {
+        assert(cachedListParams != null);
+        
+        if ((result = cachedListParams.get(param)) == null) {
             String value = getOptionValue(param);
-            if (null == value) {
+            if (value == null) {
                 result = new String[0];
             } else {
                 Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
@@ -340,18 +323,14 @@ public class WebConfiguration {
         return result;
     }
 
-
     /**
      * Obtain the value of the specified env-entry
      * @param entry the env-entry of interest
      * @return the value of the specified env-entry
      */
     public String getEnvironmentEntry(WebEnvironmentEntry entry) {
-
         return envEntries.get(entry);
-
     }
-
 
     /**
      * @param param the init parameter of interest
@@ -359,11 +338,8 @@ public class WebConfiguration {
      *  otherwise, <code>false</code>
      */
     public boolean isSet(WebContextInitParameter param) {
-
         return isSet(param.getQualifiedName());
-
     }
-
 
     /**
      * @param param the init parameter of interest
@@ -371,24 +347,19 @@ public class WebConfiguration {
      *  otherwise, <code>false</code>
      */
     public boolean isSet(BooleanWebContextInitParameter param) {
-
         return isSet(param.getQualifiedName());
-
     }
-
 
     /**
      * @return the name of this application
      */
     public String getServletContextName() {
 
-        if (servletContext.getMajorVersion() == 2
-            && servletContext.getMinorVersion() <= 4) {
+        if (servletContext.getMajorVersion() == 2 && servletContext.getMinorVersion() <= 4) {
             return servletContext.getServletContextName();
-        } else {
-            return servletContext.getContextPath();
-        }
-
+        } 
+            
+        return servletContext.getContextPath();
     }
 
 
@@ -397,25 +368,26 @@ public class WebConfiguration {
         if (param == null) {
             return;
         }
+        
         boolean oldVal = booleanContextParameters.put(param, value);
-        if (LOGGER.isLoggable(Level.FINE) && oldVal != value) {
-            LOGGER.log(Level.FINE,
+        if (LOGGER.isLoggable(FINE) && oldVal != value) {
+            LOGGER.log(FINE,
                        "Overriding init parameter {0}.  Changing from {1} to {2}.",
                        new Object[] { param.getQualifiedName(), oldVal, value});
         }
 
     }
       /**
-       * To inlcude the facelets suffix into the supported suffixes.
+       * To include the facelets suffix into the supported suffixes.
        *
        * @return merged suffixes including both default suffixes and the facelet suffixes.
        */
       public String[] getConfiguredExtensions() {
-          String[] defaultSuffix  = getOptionValue(WebContextInitParameter.DefaultSuffix, " ");
-          String[] faceletsSuffix = getOptionValue(WebContextInitParameter.FaceletsSuffix, " ");
+          String[] defaultSuffix  = getOptionValue(DefaultSuffix, " ");
+          String[] faceletsSuffix = getOptionValue(FaceletsSuffix, " ");
 
-          List<String> mergedList = new ArrayList<String>(Arrays.asList(defaultSuffix));
-          mergedList.addAll(Arrays.asList(faceletsSuffix));
+          List<String> mergedList = new ArrayList<>(asList(defaultSuffix));
+          mergedList.addAll(asList(faceletsSuffix));
 
           return mergedList.toArray(new String[0]);
     }
@@ -425,15 +397,14 @@ public class WebConfiguration {
         if (param == null || value == null || value.length() == 0) {
             return;
         }
+        
         value = value.trim();
         String oldVal = contextParameters.put(param, value);
         cachedListParams.remove(param);
-        if (oldVal != null && LOGGER.isLoggable(Level.FINE) && !(oldVal.equals(value))) {
-            LOGGER.log(Level.FINE,
+        if (oldVal != null && LOGGER.isLoggable(FINE) && !(oldVal.equals(value))) {
+            LOGGER.log(FINE,
                 "Overriding init parameter {0}.  Changing from {1} to {2}.",
-                new Object[]{param.getQualifiedName(),
-                             oldVal,
-                             value});
+                new Object[]{param.getQualifiedName(), oldVal, value});
         }
     }
 

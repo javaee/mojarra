@@ -40,14 +40,6 @@
 
 package com.sun.faces.application.resource;
 
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
-
-import javax.faces.application.ProjectStage;
-import javax.faces.application.ResourceHandler;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -57,12 +49,22 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Stream;
+
+import javax.faces.application.ProjectStage;
+import javax.faces.application.ResourceHandler;
+import javax.faces.application.ResourceVisitOption;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 /**
  * This class is used to lookup {@link ResourceInfo} instances
@@ -172,7 +174,20 @@ public class ResourceManager {
     }
     
     public ResourceInfo findViewResource(String resourceName, String contentType, FacesContext facesContext) {
-        return findResource(null, resourceName, contentType, true, facesContext);
+        String localePrefix = getLocalePrefix(facesContext);
+        List<String> contracts = getResourceLibraryContracts(facesContext);
+        
+        ResourceInfo info = getFromCache(resourceName, null, localePrefix, contracts);
+        
+        if (info == null) {
+            if (isCompressable(contentType, facesContext)) {
+                info = findResourceCompressed(null, resourceName, true, localePrefix, contracts, facesContext);
+            } else {
+               info = findResourceNonCompressed(null, resourceName, true, localePrefix, contracts, facesContext);
+            }
+        }
+
+        return info;
     }
     
     public ResourceInfo findResource(String libraryName, String resourceName, String contentType, boolean isViewResource, FacesContext ctx) {
@@ -193,8 +208,8 @@ public class ResourceManager {
         return info;
     }
     
-    public Set<String> getViewResourcePaths(FacesContext ctx, String path) {
-        return faceletWebappResourceHelper.getViewResourcePaths(ctx, path);
+    public Stream<String> getViewResources(FacesContext facesContext, String path, int maxDepth, ResourceVisitOption... options) {
+        return faceletWebappResourceHelper.getViewResources(facesContext, path, maxDepth, options);
     }
 
 

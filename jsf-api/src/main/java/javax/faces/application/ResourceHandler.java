@@ -43,6 +43,7 @@ package javax.faces.application;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.faces.context.FacesContext;
 
@@ -327,27 +328,27 @@ public abstract class ResourceHandler {
      * before calling this method.  To preserve compatibility with prior revisions of the
      * specification, a default implementation must be provided that calls
      * {@link #createResource(java.lang.String)}. </p>
-
+     *
      * <div class="changed_added_2_2">
-
+     *
      * <p>The default implementation must look for the resource in the
      * following places, in this order.</p>
-
+     *
      * <ul>
-
+     *
      * <li><p>Considering resource library contracts (at the locations
      * specified in the spec prose document section <em>Resource Library
      * Contracts</em> in the <em>Request Processing Lifecycle</em>
      * chapter).</p></li>
-
+     *
      * <li><p>Considering the web app root.</p></li>
-
+     *
      *  <li><p>Considering faces flows (at the locations specified in
      * the spec prose document section <em>Faces Flows</em> in the
      * <em>Using JSF in Web Applications</em> chapter).</p></li>
-
+     *
      * </ul>
-
+     *
      * <p>Call {@link FacesContext#getResourceLibraryContracts}.  If the
      * result is non-{@code null} and not empty, for each value in the
      * list, treat the value as the name of a resource library contract.
@@ -355,26 +356,56 @@ public abstract class ResourceHandler {
      * resource library contract, return it.  Otherwise, return the
      * resource (not in the resource library contract), if found.
      * Otherwise, return {@code null}.</p>
-
      * </div>
-
+     *
      * @param context the {@link FacesContext} for this request.
-
      * @param resourceName the name of the resource to be interpreted as a view
      * by the {@link javax.faces.view.ViewDeclarationLanguage}.
-
+     *
      * @throws NullPointerException if <code>resourceName</code> is
      *  {@code null}.
-
+     *
      * @return a newly created {@link ViewResource} instance, suitable
      * for use by the {@link javax.faces.view.ViewDeclarationLanguage}.
      *
      * @since 2.2
-
      */
-
     public ViewResource createViewResource(FacesContext context, String resourceName) {
         return context.getApplication().getResourceHandler().createResource(resourceName);
+    }
+    
+    /**
+     * <p class="changed_added_2_3">
+     *  TODO
+     * </p>
+     * 
+     * @param facesContext The {@link FacesContext} for this request.
+     * @param path The path from which to start looking for view resources
+     * @param maxDepth the maximum depth of nested directory to visit
+     *
+     * @return TODO
+     * 
+     * @since 2.3
+     */
+    public Stream<String> getViewResources(FacesContext facesContext, String path, int maxDepth, ResourceVisitOption... options) {
+        return Stream.empty();
+    }
+    
+    /**
+     * <p class="changed_added_2_3">
+     *  TODO
+     * </p>
+     * 
+     * @param facesContext The {@link FacesContext} for this request.
+     * @param path The path from which to start looking for view resources
+     * @param options The options
+     *
+     * @return TODO
+     * 
+     * @since 2.3
+     */
+    public Stream<String> getViewResources(FacesContext facesContext, String path, ResourceVisitOption... options) {
+        return Stream.empty();
     }
 
     /**
@@ -383,17 +414,17 @@ public abstract class ResourceHandler {
      * <code>resourceId</code>.  The content-type of the resource is
      * derived by passing the <em>resourceName</em> to {@link
      * javax.faces.context.ExternalContext#getMimeType}</p>
-
+     *
      * <div class="changed_added_2_2">
-
+     *
      * <p>The resource must be identified according to the specification
      * in JSF.2.6.1.3 of the spec prose document <a
      * href="../../../overview-summary.html#prose_document">linked in
      * the overview summary</a>.  New requirements were introduced in
      * version 2.2 of the specification.</p>
-
+     *
      * </div>
-
+     *
      * @param resourceId the resource identifier of the resource.
      *
      * @throws NullPointerException if <code>resourceId</code> is
@@ -404,7 +435,6 @@ public abstract class ResourceHandler {
      *
      * @since 2.2
      */
-
     public Resource createResourceFromId(String resourceId) {
         return null;
     }
@@ -420,7 +450,7 @@ public abstract class ResourceHandler {
      * javax.faces.context.ExternalContext#getMimeType}.</p>
      *
      * <div class="changed_added_2_0">
-
+     *
      * <p>The algorithm specified in section JSF.2.6.1.4 of the spec
      * prose document <a
      * href="../../../overview-summary.html#prose_document">linked in
@@ -428,9 +458,9 @@ public abstract class ResourceHandler {
      * <code>Resource</code>. <span class="changed_added_2_2">New
      * requirements were introduced in version 2.2 of the
      * specification.</span></p>
-
+     *
      * </div>
-
+     *
      * @param resourceName the name of the resource.
      *
      * @param libraryOrContractName <span class="changed_modified_2_2">the
@@ -447,9 +477,7 @@ public abstract class ResourceHandler {
      * @return a newly created <code>Resource</code> instance, suitable
      * for use in encoding or decoding the named resource.
      */
-    public abstract Resource createResource(String resourceName,
-                                            String libraryOrContractName);
-
+    public abstract Resource createResource(String resourceName, String libraryOrContractName);
 
     /**
      * <p class="changed_added_2_0"><span
@@ -461,7 +489,7 @@ public abstract class ResourceHandler {
      * <code>content-type</code>.</p>
      *
      * <div class="changed_added_2_0">
-
+     *
      * <p>The algorithm specified in section JSF.2.6.1.4 of the spec
      * prose document <a
      * href="../../../overview-summary.html#prose_document">linked in
@@ -469,9 +497,9 @@ public abstract class ResourceHandler {
      * <code>Resource</code>. <span class="changed_added_2_2">New
      * requirements were introduced in version 2.2 of the
      * specification.</span></p>
-
+     *
      * </div>
-
+     *
      * @param resourceName the name of the resource.
      *
      * @param libraryName the name of the library in which this resource
@@ -492,9 +520,7 @@ public abstract class ResourceHandler {
      * @return a newly created <code>Resource</code> instance, suitable
      * for use in encoding or decoding the named resource.
      */
-    public abstract Resource createResource(String resourceName,
-                                            String libraryName,
-                                            String contentType);
+    public abstract Resource createResource(String resourceName, String libraryName, String contentType);
 
     /**
      * <p class="changed_added_2_0"><span
@@ -517,9 +543,7 @@ public abstract class ResourceHandler {
      * @since 2.0
      *
      */
-
     public abstract boolean libraryExists(String libraryName);
-
 
     /**
      * <p class="changed_added_2_0">This method specifies the contract
@@ -611,9 +635,7 @@ public abstract class ResourceHandler {
      * request
      * @throws IOException when an I/O error occurs.
      */
-    public abstract void handleResourceRequest(FacesContext context)
-    throws IOException;
-
+    public abstract void handleResourceRequest(FacesContext context) throws IOException;
 
     /**
      * <p class="changed_added_2_0">Return <code>true</code> if the
@@ -638,7 +660,6 @@ public abstract class ResourceHandler {
      * @return <code>true</code> if this is a resource URL, <code>false</code> otherwise.
      * @throws NullPointerException if the argument url is {@code null}.
      */
-
     public boolean isResourceURL(String url) {
         boolean result = false;
         if (null == url) {
@@ -647,7 +668,6 @@ public abstract class ResourceHandler {
         result = url.contains(RESOURCE_IDENTIFIER);
 
         return result;
-
     }
 
     /**
@@ -689,7 +709,6 @@ public abstract class ResourceHandler {
      * @param resourceName the resource name.
      * @return the renderer type.
      */
-
     public abstract String getRendererTypeForResourceName(String resourceName);
 
     /**

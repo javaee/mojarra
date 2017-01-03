@@ -41,7 +41,12 @@
 package com.sun.faces.application.view;
 
 import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.RENDER_KIT_ID_PARAM;
+import static com.sun.faces.util.MessageUtils.ILLEGAL_VIEW_ID_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
+import static com.sun.faces.util.Util.notNull;
 import static java.util.Objects.requireNonNull;
+import static java.util.logging.Level.SEVERE;
+import static javax.faces.FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -80,7 +85,6 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
 /**
@@ -94,7 +98,7 @@ public class MultiViewHandler extends ViewHandler {
 
     private String[] configuredExtensions;
     private Set<String> protectedViews;
-    private boolean extensionsSet;
+    private boolean extensionsSet; // For legacy JSF 1.2 support
     
     private ViewDeclarationLanguageFactory vdlFactory;
 
@@ -103,15 +107,12 @@ public class MultiViewHandler extends ViewHandler {
 
 
     public MultiViewHandler() {
-
         WebConfiguration config = WebConfiguration.getInstance();
               
         configuredExtensions = config.getConfiguredExtensions();
         extensionsSet = config.isSet(WebConfiguration.WebContextInitParameter.DefaultSuffix);
-        vdlFactory = (ViewDeclarationLanguageFactory)
-                FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
+        vdlFactory = (ViewDeclarationLanguageFactory) FactoryFinder.getFactory(VIEW_DECLARATION_LANGUAGE_FACTORY);
         protectedViews = new CopyOnWriteArraySet<>();
-
     }
 
 
@@ -333,18 +334,15 @@ public class MultiViewHandler extends ViewHandler {
 
     private String getActionURLWithoutViewProtection(FacesContext context, String viewId) {
 
-        Util.notNull("context", context);
-        Util.notNull("viewId", viewId);
+        notNull("context", context);
+        notNull("viewId", viewId);
 
-        if (0 == viewId.length() || viewId.charAt(0) != '/') {
-            String message =
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.ILLEGAL_VIEW_ID_ID,
-                        viewId);
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "jsf.illegal_view_id_error", viewId);
+        if (viewId.length() == 0 || viewId.charAt(0) != '/') {
+            String message = getExceptionMessageString(ILLEGAL_VIEW_ID_ID, viewId);
+            if (LOGGER.isLoggable(SEVERE)) {
+                LOGGER.log(SEVERE, "jsf.illegal_view_id_error", viewId);
             }
-        throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(message);
         }
 
         // Acquire the context path, which we will prefix on all results
@@ -356,34 +354,34 @@ public class MultiViewHandler extends ViewHandler {
 
         // If no mapping can be identified, just return a server-relative path
         if (mapping == null) {
-            return (contextPath + viewId);
+            return contextPath + viewId;
         }
 
         // Deal with prefix mapping
         if (Util.isPrefixMapped(mapping)) {
             if (mapping.equals("/*")) {
-                return (contextPath + viewId);
+                return contextPath + viewId;
             } else {
-                return (contextPath + mapping + viewId);
+                return contextPath + mapping + viewId;
             }
         }
 
         // Deal with extension mapping
         int period = viewId.lastIndexOf('.');
         if (period < 0) {
-            return (contextPath + viewId + mapping);
+            return contextPath + viewId + mapping;
         } else if (!viewId.endsWith(mapping)) {
 
             for (String ext : configuredExtensions) {
                 if (viewId.endsWith(ext)) {
-                    return (contextPath + viewId.substring(0, viewId.indexOf(ext)) + mapping);
+                    return contextPath + viewId.substring(0, viewId.indexOf(ext)) + mapping;
                 }
             }
 
-            return (contextPath + viewId.substring(0, period) + mapping);
+            return contextPath + viewId.substring(0, period) + mapping;
          
         } else {
-            return (contextPath + viewId);
+            return contextPath + viewId;
         }
 
     }
