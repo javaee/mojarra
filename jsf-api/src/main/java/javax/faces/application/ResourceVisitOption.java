@@ -40,14 +40,12 @@
 
 package javax.faces.application;
 
-import com.sun.faces.application.resource.ResourceManager;
-
 /**
  * <p class="changed_added_2_3">Defines the resource traversal options.</p>
  * 
  * @since 2.3
  * 
- * @see ResourceManager#getViewResources(javax.faces.context.FacesContext, String, int, ResourceVisitOption...)
+ * @see ResourceHandler#getViewResources(javax.faces.context.FacesContext, String, int, ResourceVisitOption...)
  *
  */
 public enum ResourceVisitOption {
