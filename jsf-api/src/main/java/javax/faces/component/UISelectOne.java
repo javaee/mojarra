@@ -170,7 +170,8 @@ public class UISelectOne extends UIInput {
      * <p class="changed_added_2_3">If {@link #getGroup()} is set, and {@link #getSubmittedValue()} is empty, and at
      * least one other component having the same group within a <code>UIForm</code> parent has a non-empty 
      * {@link #getSubmittedValue()} or returns <code>true</code> on {@link #isLocalValueSet()} or returns 
-     * <code>false</code> on {@link #isValid()}, then skip validation for current component.</p>
+     * <code>false</code> on {@link #isValid()}, then skip validation for current component, else perform standard
+     * superclass processing by <code>super.processValidators(context</code>.</p>
      */
     @Override
     public void processValidators(FacesContext context) {
