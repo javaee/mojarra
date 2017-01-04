@@ -42,26 +42,50 @@
 
 package com.sun.faces.lifecycle;
 
+import static com.sun.faces.util.MessageUtils.NULL_CONTEXT_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
+import static com.sun.faces.util.Util.getViewHandler;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.SEVERE;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.EnumSet;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Set;
 
+import javax.el.MethodExpression;
 import javax.faces.FacesException;
+import javax.faces.application.ProtectedViewException;
 import javax.faces.application.ViewExpiredException;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitHint;
 import javax.faces.component.visit.VisitResult;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.el.MethodExpression;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.faces.event.PostRestoreStateEvent;
+import javax.faces.flow.FlowHandler;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.render.ResponseStateManager;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewMetadata;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
@@ -69,22 +93,6 @@ import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.util.Map;
-import javax.faces.application.ProtectedViewException;
-import javax.faces.component.visit.VisitCallback;
-import javax.faces.context.ExternalContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.PostRestoreStateEvent;
-import javax.faces.event.ExceptionQueuedEvent;
-import javax.faces.event.ExceptionQueuedEventContext;
-import javax.faces.flow.FlowHandler;
-import javax.faces.render.ResponseStateManager;
-import javax.faces.view.ViewDeclarationLanguage;
-import javax.faces.view.ViewMetadata;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
@@ -138,23 +146,21 @@ public class RestoreViewPhase extends Phase {
     @Override
     public void execute(FacesContext facesContext) throws FacesException {
 
-        if (LOGGER.isLoggable(Level.FINE)) {
+        if (LOGGER.isLoggable(FINE)) {
             LOGGER.fine("Entering RestoreViewPhase");
         }
-        if (null == facesContext) {
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_CONTEXT_ERROR_MESSAGE_ID));
+        if (facesContext == null) {
+            throw new FacesException(MessageUtils.getExceptionMessageString(NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         
         // If an app had explicitely set the tree in the context, use that;
-        //
+        
         UIViewRoot viewRoot = facesContext.getViewRoot();
         if (viewRoot != null) {
-            if (LOGGER.isLoggable(Level.FINE)) {
+            if (LOGGER.isLoggable(FINE)) {
                 LOGGER.fine("Found a pre created view in FacesContext");
             }
-            facesContext.getViewRoot().setLocale(
-                 facesContext.getExternalContext().getRequestLocale());
+            facesContext.getViewRoot().setLocale(facesContext.getExternalContext().getRequestLocale());
 
             // do per-component actions
             deliverPostRestoreStateEvent(facesContext);
@@ -169,19 +175,17 @@ public class RestoreViewPhase extends Phase {
         try {
 
             // Reconstitute or create the request tree
-            Map requestMap = facesContext.getExternalContext().getRequestMap();
-            String viewId = (String)
-              requestMap.get("javax.servlet.include.path_info");
+            Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
+            String viewId = (String) requestMap.get("javax.servlet.include.path_info");
+            
             if (viewId == null) {
                 viewId = facesContext.getExternalContext().getRequestPathInfo();
             }
 
-            // It could be that this request was mapped using
-            // a prefix mapping in which case there would be no
-            // path_info.  Query the servlet path.
+            // It could be that this request was mapped using a prefix mapping in which case there would be no
+            // path_info. Query the servlet path.
             if (viewId == null) {
-                viewId = (String)
-                  requestMap.get("javax.servlet.include.servlet_path");
+                viewId = (String) requestMap.get("javax.servlet.include.servlet_path");
             }
 
             if (viewId == null) {
@@ -189,14 +193,12 @@ public class RestoreViewPhase extends Phase {
             }
 
             if (viewId == null) {
-                throw new FacesException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
+                throw new FacesException(MessageUtils.getExceptionMessageString(NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
             }
 
-            ViewHandler viewHandler = Util.getViewHandler(facesContext);
+            ViewHandler viewHandler = getViewHandler(facesContext);
 
-            boolean isPostBack = (facesContext.isPostback() && !isErrorPage(facesContext));
-            if (isPostBack) {
+            if (facesContext.isPostback() && !isErrorPage(facesContext)) {
                 facesContext.setProcessingEvents(false);
                 // try to restore the view
                 viewRoot = viewHandler.restoreView(facesContext, viewId);
@@ -204,7 +206,7 @@ public class RestoreViewPhase extends Phase {
                     if (is11CompatEnabled(facesContext)) {
                         // 1.1 -> create a new view and flag that the response should
                         //        be immediately rendered
-                        if (LOGGER.isLoggable(Level.FINE)) {
+                        if (LOGGER.isLoggable(FINE)) {
                             LOGGER.fine("Postback: recreating a view for " + viewId);
                         }
                         viewRoot = viewHandler.createView(facesContext, viewId);
@@ -213,32 +215,31 @@ public class RestoreViewPhase extends Phase {
                     } else {
                         Object[] params = {viewId};
                         throw new ViewExpiredException(
-                                MessageUtils.getExceptionMessageString(
-                                MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID,
-                 params),
-                                viewId);
+                            getExceptionMessageString(RESTORE_VIEW_ERROR_MESSAGE_ID, params),
+                            viewId);
                     }
                 }
 
                 facesContext.setViewRoot(viewRoot);
                 facesContext.setProcessingEvents(true);
-                if (LOGGER.isLoggable(Level.FINE)) {
+                
+                if (LOGGER.isLoggable(FINE)) {
                     LOGGER.fine("Postback: restored view for " + viewId);
                 }
             } else {
-                if (LOGGER.isLoggable(Level.FINE)) {
+                if (LOGGER.isLoggable(FINE)) {
                     LOGGER.fine("New request: creating a view for " + viewId);
                 }
 
-                String derivedViewId = viewHandler.deriveLogicalViewId(facesContext, viewId);
-                ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(facesContext, derivedViewId);
+                String logicalViewId = viewHandler.deriveLogicalViewId(facesContext, viewId);
+                ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(facesContext, logicalViewId);
                 
-                maybeTakeProtectedViewAction(facesContext, viewHandler, vdl, derivedViewId);
+                maybeTakeProtectedViewAction(facesContext, viewHandler, vdl, logicalViewId);
                     
                 ViewMetadata metadata  = null;
                 if (vdl != null) {
                     // If we have one, get the ViewMetadata...
-                    metadata = vdl.getViewMetadata(facesContext, derivedViewId);
+                    metadata = vdl.getViewMetadata(facesContext, logicalViewId);
                     
                     if (metadata != null) { // perhaps it's not supported
                         // and use it to create the ViewRoot.  This will have, at most
@@ -250,17 +251,18 @@ public class RestoreViewPhase extends Phase {
                             facesContext.renderResponse();
                         }
                     }
-                } 
-                if (null == vdl || null == metadata) {
+                }
+                
+                if (vdl == null || metadata == null) {
                     facesContext.renderResponse();
                 }
 
-                if (null == viewRoot) {
-                    viewRoot = (Util.getViewHandler(facesContext)).
-                        createView(facesContext, derivedViewId);
+                if (viewRoot == null) {
+                    viewRoot = getViewHandler(facesContext).createView(facesContext, logicalViewId);
                 }
                 facesContext.setViewRoot(viewRoot);
-                assert (null != viewRoot);
+                
+                assert (viewRoot != null);
             }
         } catch (Throwable fe) {
             if (fe instanceof FacesException) {
@@ -269,9 +271,9 @@ public class RestoreViewPhase extends Phase {
               thrownException = new FacesException(fe);
             }
         } finally {
-            if (null == thrownException) {
+            if (thrownException == null) {
                 FlowHandler flowHandler = facesContext.getApplication().getFlowHandler();
-                if (null != flowHandler) {
+                if (flowHandler != null) {
                     flowHandler.clientWindowTransition(facesContext);
                 }
                 
@@ -281,15 +283,12 @@ public class RestoreViewPhase extends Phase {
             }
         }
 
-        if (LOGGER.isLoggable(Level.FINE)) {
+        if (LOGGER.isLoggable(FINE)) {
             LOGGER.fine("Exiting RestoreViewPhase");
         }
-
     }
     
-    private void maybeTakeProtectedViewAction(FacesContext context, 
-            ViewHandler viewHandler, 
-            ViewDeclarationLanguage vdl, String viewId) {
+    private void maybeTakeProtectedViewAction(FacesContext context, ViewHandler viewHandler, ViewDeclarationLanguage vdl, String viewId) {
         // http://java.net/jira/browse/JAVASERVERFACES-2204
         // PENDING: this code is optimized to be fast to write.
         // It must be optimized to be fast to run.
@@ -328,7 +327,7 @@ public class RestoreViewPhase extends Phase {
                 LOGGER.log(Level.SEVERE, "correctSecretKeyValue = {0} incomingSecretKeyValue = {1}", new Object[]{correctSecretKeyValue, incomingSecretKeyValue});
                 throw new ProtectedViewException();
             }
-            String sep = "/";
+
             // Check the referer header
             if (headers.containsKey("Referer")) {
                 String referer = headers.get("Referer");
@@ -343,8 +342,8 @@ public class RestoreViewPhase extends Phase {
                     if (!refererOriginatesInThisWebapp) {
                         String message = FacesLogger.LIFECYCLE.interpolateMessage(context, 
                             "jsf.lifecycle.invalid.referer", new String [] { referer, viewId });
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.log(Level.SEVERE, message);
+                        if (LOGGER.isLoggable(SEVERE)) {
+                            LOGGER.log(SEVERE, message);
                         }
                         throw new ProtectedViewException(message);                
                     }
@@ -364,7 +363,7 @@ public class RestoreViewPhase extends Phase {
                     if (!originOriginatesInThisWebapp) {
                         String message = FacesLogger.LIFECYCLE.interpolateMessage(context, 
                             "jsf.lifecycle.invalid.origin", new String [] { origin, viewId });
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                        if (LOGGER.isLoggable(SEVERE)) {
                             LOGGER.log(Level.SEVERE, message);
                         }
                         throw new ProtectedViewException(message);                
@@ -374,14 +373,15 @@ public class RestoreViewPhase extends Phase {
         }
     }
     
-    private boolean isProtectedView(String viewToCheck, Set<String>urlPatterns) {
+    private boolean isProtectedView(String viewToCheck, Set<String> urlPatterns) {
         boolean isProtected = false;
-        for (String cur : urlPatterns) {
-            if (cur.equals(viewToCheck)) {
+        for (String urlPattern : urlPatterns) {
+            if (urlPattern.equals(viewToCheck)) {
                 isProtected = true;
                 break;
             }
-        }       
+        }   
+        
         return isProtected;
     }
     
@@ -404,8 +404,7 @@ public class RestoreViewPhase extends Phase {
         }
         boolean hostsMatch = false,
             portsMatch = false,
-            contextPathsMatch = false,
-            originatesInThisWebapp = false;
+            contextPathsMatch = false;
             
         if (null == uri) {
             uri = new URI(view);
