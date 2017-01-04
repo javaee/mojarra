@@ -424,7 +424,6 @@ import javax.websocket.CloseReason.CloseCodes;
  * transparently be available as request parameters in the command script method <code>#{bean.pushed}</code>.
  *
  *
- * @author Bauke Scholtz
  * @see PushContext
  * @see UIWebsocket
  * @see WebsocketEvent

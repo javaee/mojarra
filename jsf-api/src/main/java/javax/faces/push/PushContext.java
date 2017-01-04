@@ -59,7 +59,6 @@ import javax.websocket.RemoteEndpoint.Async;
  * <p>
  * For detailed usage instructions, see <code>&#64;</code>{@link Push} javadoc.
  * 
- * @author Bauke Scholtz
  * @since 2.3
  * @see Push
  */

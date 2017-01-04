@@ -413,7 +413,6 @@ public class TestFactoryInjection extends ServletFacesTestCase {
             return null;
         }
         
-        @Override
         public String encodeWebsocketURL(String url) {
             return null;
         }

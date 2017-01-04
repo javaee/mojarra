@@ -418,11 +418,14 @@ public class Util {
         
         return result;
     }
-
     
+    public static void notNegative(String varname, long number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("\"" + varname + "\" is negative");
+        }
+    }
 
     public static void notNull(String varname, Object var) {
-
         if (var == null) {
             throw new NullPointerException(
                   MessageUtils.getExceptionMessageString(
@@ -455,7 +458,28 @@ public class Util {
 
         return result;
     }
+    
+    /**
+     * Returns <code>true</code> if the given string starts with one of the given prefixes.
+     * 
+     * @param string The object to be checked if it starts with one of the given prefixes.
+     * @param prefixes The argument list of prefixes to be checked
+     * 
+     * @return <code>true</code> if the given string starts with one of the given prefixes.
+     */
+    public static boolean startsWithOneOf(String string, String... prefixes) {
+        if (prefixes == null) {
+            return false;
+        }
+        
+        for (String prefix : prefixes) {
+            if (string.startsWith(prefix)) {
+                return true;
+            }
+        }
 
+        return false;
+    }
 
     /**
      * @param context the <code>FacesContext</code> for the current request
@@ -561,11 +585,8 @@ public class Util {
 
 
     public static boolean componentIsDisabled(UIComponent component) {
-
         return (Boolean.valueOf(String.valueOf(component.getAttributes().get("disabled"))));
-
     }
-
 
     public static boolean componentIsDisabledOrReadonly(UIComponent component) {
         return Boolean.valueOf(String.valueOf(component.getAttributes().get("disabled"))) || Boolean.valueOf(String.valueOf(component.getAttributes().get("readonly")));

@@ -41,19 +41,21 @@
 
 package com.sun.faces.application.resource;
 
-import com.sun.faces.util.FacesLogger;
+import static java.util.logging.Level.SEVERE;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import com.sun.faces.util.FacesLogger;
 
 
 class ZipDirectoryEntryScanner {
@@ -70,7 +72,7 @@ class ZipDirectoryEntryScanner {
         resourceLibraries = new ConcurrentHashMap<>();
         ZipEntry ze = null;
         String entryName = null;
-        if (null != webInfLibJars) {
+        if (webInfLibJars != null) {
             for (String cur : webInfLibJars) {
                 try (ZipInputStream zis = new ZipInputStream(extContext.getResourceAsStream(cur))) {
                     while (null != (ze = zis.getNextEntry())) {
@@ -91,8 +93,8 @@ class ZipDirectoryEntryScanner {
                         }
                     }
                 } catch (IOException ioe) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "Unable to inspect resource library " + cur, ioe);
+                    if (LOGGER.isLoggable(SEVERE)) {
+                        LOGGER.log(SEVERE, "Unable to inspect resource library " + cur, ioe);
                     }
                 }
             }
@@ -110,15 +112,10 @@ class ZipDirectoryEntryScanner {
     }
 
     boolean libraryExists(String libraryName, String localePrefix) {
-        boolean result;
-        if (null != localePrefix) {
-            result = resourceLibraries.containsKey(localePrefix + "/" + libraryName);
-        } else {
-            result = resourceLibraries.containsKey(libraryName);
-        }
-        return result;
+        String key = localePrefix != null? localePrefix + "/" + libraryName : libraryName;
+        
+        return resourceLibraries.containsKey(key);
     }
-
 
 
 }

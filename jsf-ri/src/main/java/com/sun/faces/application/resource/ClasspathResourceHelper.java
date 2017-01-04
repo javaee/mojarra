@@ -40,12 +40,11 @@
 
 package com.sun.faces.application.resource;
 
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.util.Util;
+import static com.sun.faces.config.WebConfiguration.META_INF_CONTRACTS_DIR;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableMissingResourceLibraryDetection;
+import static javax.faces.application.ProjectStage.Development;
 
-import javax.faces.application.ProjectStage;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -53,9 +52,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.*;
-import com.sun.faces.facelets.impl.DefaultResourceResolver;
+import javax.faces.application.ProjectStage;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.ResourceResolver;
+
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.facelets.impl.DefaultResourceResolver;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -124,14 +128,12 @@ public class ClasspathResourceHelper extends ResourceHelper {
      */
     @Override
     public String getBaseResourcePath() {
-
         return BASE_RESOURCE_PATH;
-
     }
 
     @Override
     public String getBaseContractsPath() {
-        return WebConfiguration.META_INF_CONTRACTS_DIR;
+        return META_INF_CONTRACTS_DIR;
     }
     
     /**
@@ -142,7 +144,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
         InputStream in = null;
         
-        if (ctx.isProjectStage(ProjectStage.Development)) {
+        if (ctx.isProjectStage(Development)) {
             ClassLoader loader = Util.getCurrentLoader(getClass());
             String path = resource.getPath();
             if (loader.getResource(path) != null) {
@@ -191,9 +193,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
      * @see ResourceHelper#findLibrary(String, String, String, javax.faces.context.FacesContext)
      */
     @Override
-    public LibraryInfo findLibrary(String libraryName,
-                                   String localePrefix,
-                                   String contract, FacesContext ctx) {
+    public LibraryInfo findLibrary(String libraryName, String localePrefix, String contract, FacesContext ctx) {
 
         ClassLoader loader = Util.getCurrentLoader(this);
         String basePath;
@@ -259,8 +259,6 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
         return new LibraryInfo(libraryName, null, localePrefix, contract, this);
     }
-
-
 
     /**
      * @see ResourceHelper#findResource(LibraryInfo, String, String, boolean, javax.faces.context.FacesContext)

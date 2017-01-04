@@ -41,6 +41,13 @@
 package com.sun.faces.application.resource;
 
 import static com.sun.faces.RIConstants.FLOW_IN_JAR_PREFIX;
+import static com.sun.faces.config.WebConfiguration.META_INF_CONTRACTS_DIR;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsSuffix;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.WebAppContractsDirectory;
+import static java.util.Spliterator.DISTINCT;
+import static java.util.Spliterators.spliteratorUnknownSize;
+import static java.util.stream.StreamSupport.stream;
+import static javax.faces.application.ResourceVisitOption.TOP_LEVEL_VIEWS_ONLY;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,8 +56,10 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 import javax.faces.FacesException;
+import javax.faces.application.ResourceVisitOption;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
@@ -61,12 +70,15 @@ import com.sun.faces.util.Util;
 
 public class FaceletWebappResourceHelper extends ResourceHelper {
     
+    private static final String[] RESTRICTED_DIRECTORIES = { "/WEB-INF/", "/META-INF/" };
+    
     private final String webAppContractsDirectory;
-    private static final String META_INF_CONTRACTS_DIR = WebConfiguration.META_INF_CONTRACTS_DIR;
+    private final String[] configuredExtensions;
 
     public FaceletWebappResourceHelper() {
         WebConfiguration webConfig = WebConfiguration.getInstance();
-        webAppContractsDirectory = webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.WebAppContractsDirectory);
+        webAppContractsDirectory = webConfig.getOptionValue(WebAppContractsDirectory);
+        configuredExtensions = webConfig.getOptionValue(FaceletsSuffix, " ");
     }
 
     @Override
@@ -124,6 +136,26 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
         
         return result;
     }
+ 
+    public Stream<String> getViewResources(FacesContext facesContext, String path, int maxDepth, ResourceVisitOption... options) {
+        return stream(
+            spliteratorUnknownSize(
+                new ResourcePathsIterator(path, maxDepth, configuredExtensions, getRestrictedDirectories(options), facesContext.getExternalContext()), 
+                DISTINCT
+            ), 
+            false
+        );
+    }
+    
+    private static String[] getRestrictedDirectories(final ResourceVisitOption... options) {
+        for (ResourceVisitOption option : options) {
+            if (option == TOP_LEVEL_VIEWS_ONLY) {
+                return RESTRICTED_DIRECTORIES;
+            }
+        }
+        
+        return null;
+    }
     
     private String createPath(LibraryInfo library, String resourceName) {
         String path = resourceName;
@@ -131,7 +163,7 @@ public class FaceletWebappResourceHelper extends ResourceHelper {
             path = library.getPath() + "/" + resourceName;
         } else {
             // prepend the leading '/' if necessary.
-            if ('/' != path.charAt(0)) {
+            if (path.charAt(0) != '/') {
                 path = "/" + path;
             }
         }

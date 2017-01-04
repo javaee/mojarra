@@ -40,9 +40,11 @@
 
 package javax.faces.application;
 
+import static java.util.Collections.emptySet;
+import static java.util.Collections.unmodifiableSet;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -76,7 +78,7 @@ import javax.faces.view.ViewDeclarationLanguage;
  *
  * <p>Please see {@link StateManager} for information on how the
  * <code>ViewHandler</code> interacts the {@link StateManager}. </p>
-
+ *
  * <p class="changed_added_2_0">Version 2 of the specification formally
  * introduced the concept of <em>View Declaration Language</em>.  A View
  * Declaration Language (VDL) is a syntax used to declare user
@@ -89,7 +91,6 @@ import javax.faces.view.ViewDeclarationLanguage;
  * to access the VDL implementation given a <code>viewId</code>.</p>
  *
  */
-
 public abstract class ViewHandler {
 
     private static final Logger log = Logger.getLogger("javax.faces.application");
@@ -103,9 +104,7 @@ public abstract class ViewHandler {
      * response character encoding may be stored and retrieved.</p>
      *
      */
-    public static final String CHARACTER_ENCODING_KEY =
-	"javax.faces.request.charset";
-
+    public static final String CHARACTER_ENCODING_KEY =	"javax.faces.request.charset";
 
     /**
      * <p><span class="changed_modified_2_0">Allow</span> the web
@@ -119,9 +118,7 @@ public abstract class ViewHandler {
      * init parameter is not specified, the default value is taken from
      * the value of the constant {@link #DEFAULT_SUFFIX}.</p>
      */
-    public static final String DEFAULT_SUFFIX_PARAM_NAME = 
-	"javax.faces.DEFAULT_SUFFIX";
-
+    public static final String DEFAULT_SUFFIX_PARAM_NAME = "javax.faces.DEFAULT_SUFFIX";
 
     /**
      * <p class="changed_modified_2_1">The value to use for the default
@@ -141,7 +138,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_SKIP_COMMENTS_PARAM_NAME = 
             "javax.faces.FACELETS_SKIP_COMMENTS";
     
@@ -153,7 +149,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_SUFFIX_PARAM_NAME = 
             "javax.faces.FACELETS_SUFFIX";
     
@@ -183,7 +178,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_VIEW_MAPPINGS_PARAM_NAME = 
             "javax.faces.FACELETS_VIEW_MAPPINGS";
     
@@ -199,7 +193,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_BUFFER_SIZE_PARAM_NAME = 
             "javax.faces.FACELETS_BUFFER_SIZE";
     
@@ -238,7 +231,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_LIBRARIES_PARAM_NAME = 
             "javax.faces.FACELETS_LIBRARIES";
     
@@ -254,7 +246,6 @@ public abstract class ViewHandler {
      * 
      * @since 2.0
      */
-    
     public static final String FACELETS_DECORATORS_PARAM_NAME = 
             "javax.faces.FACELETS_DECORATORS";
     
@@ -317,7 +308,6 @@ public abstract class ViewHandler {
       * @return the character encoding, or <code>null</code>
       * @since 1.2
       */ 
-     
      public String calculateCharacterEncoding(FacesContext context) {
          ExternalContext extContext = context.getExternalContext();
          Map<String,String> headerMap = extContext.getRequestHeaderMap();
@@ -325,7 +315,7 @@ public abstract class ViewHandler {
          String charEnc = null;
          
          // look for a charset in the Content-Type header first.
-         if (null != contentType) {
+         if (contentType != null) {
              // see if this header had a charset
              String charsetStr = "charset=";
              int len = charsetStr.length();
@@ -339,15 +329,14 @@ public abstract class ViewHandler {
          }
          
          // failing that, look in the session for a previously saved one
-         if (null == charEnc) {
-             if (null != extContext.getSession(false)) {
+         if (charEnc == null) {
+             if (extContext.getSession(false) != null) {
                  charEnc = (String) extContext.getSessionMap().get(CHARACTER_ENCODING_KEY);
              }
          }
          
          return charEnc;
      }
-
 
     /** 
      * <p>Return an appropriate <code>renderKitId</code> for this and
@@ -363,7 +352,6 @@ public abstract class ViewHandler {
      *  <code>null</code>
      */
     public abstract String calculateRenderKitId(FacesContext context);
-
 
     /**
      * <p><strong class="changed_modified_2_0">Create</strong> and
@@ -393,18 +381,16 @@ public abstract class ViewHandler {
      * algorithm defined in specification section JSF.7.6.2.</p>
      *
      * <p>The default implementation of this method simply returns
-     * rawViewId unchanged.</p>
+     * requestViewId unchanged.</p>
      *
      * @param context the <code>FacesContext</code> for this request
      *
-     * @param rawViewId the <code>viewId</code> to derive,
+     * @param requestViewId the <code>viewId</code> to derive,
      * @return the derived view id.
      * @since 2.0
      */
-    public String deriveViewId(FacesContext context, String rawViewId) {
-
-        return rawViewId;
-
+    public String deriveViewId(FacesContext context, String requestViewId) {
+        return requestViewId;
     }
 
     /**
@@ -415,20 +401,17 @@ public abstract class ViewHandler {
      * a physical view be present.</p>
      *
      * <p>The default implementation of this method simply returns
-     * rawViewId unchanged.</p>
+     * requestViewId unchanged.</p>
      *
      * @param context the <code>FacesContext</code> for this request
      *
-     * @param rawViewId the <code>viewId</code> to derive,
+     * @param requestViewId the <code>viewId</code> to derive,
      * @return the derived logical view id.
      * @since 2.1
      */
-    public String deriveLogicalViewId(FacesContext context, String rawViewId) {
-
-        return rawViewId;
-
+    public String deriveLogicalViewId(FacesContext context, String requestViewId) {
+        return requestViewId;
     }
-    
 
     /**
      * <p class="changed_modified_2_0"><span class="changed_modified_2_2">If</span>
@@ -457,7 +440,6 @@ public abstract class ViewHandler {
      */
     public abstract String getActionURL(FacesContext context, String viewId);
 
-
     /**
      * <p class="changed_modified_2_0">If the value returned from this
      * method is used as the <code>file</code> argument to the
@@ -481,7 +463,6 @@ public abstract class ViewHandler {
      */
     public abstract String getResourceURL(FacesContext context, String path);
 
-
     /**
      * <p class="changed_added_2_3">If the value returned from this
      * method is used as the <code>file</code> argument to the
@@ -503,7 +484,6 @@ public abstract class ViewHandler {
      */
     public abstract String getWebsocketURL(FacesContext context, String channel);
 
-
     /**
      * <p class="changed_added_2_2">Return an unmodifiable
      * <code>Set</code> of the protected views currently known to this
@@ -520,7 +500,7 @@ public abstract class ViewHandler {
      * @since 2.2 
      */
     public Set<String> getProtectedViewsUnmodifiable() {
-        return Collections.unmodifiableSet(Collections.EMPTY_SET);
+        return unmodifiableSet(emptySet());
     }
     
     /**
@@ -580,18 +560,11 @@ public abstract class ViewHandler {
      * @return the redirect URL.
      * @since 2.0
      */
-    public String getRedirectURL(FacesContext context,
-                                 String viewId,
-                                 Map<String,List<String>>parameters,
-                                 boolean includeViewParams) {
-        
+    public String getRedirectURL(FacesContext context, String viewId, Map<String,List<String>> parameters, boolean includeViewParams) {
         return getActionURL(context, viewId);
-
     }
 
-
     /**
-
      * <p class="changed_added_2_0"> Return a JSF action URL derived
      * from the viewId argument that is suitable to be used as the
      * target of a link in a JSF response. Compiliant implementations
@@ -607,15 +580,9 @@ public abstract class ViewHandler {
      * @return the bookmarkable URL.
      * @since 2.0
      */
-    public String getBookmarkableURL(FacesContext context,
-                                     String viewId,
-                                     Map<String,List<String>> parameters,
-                                     boolean includeViewParams) {
-
+    public String getBookmarkableURL(FacesContext context, String viewId, Map<String,List<String>> parameters, boolean includeViewParams) {
         return getActionURL(context, viewId);
-
     }
-
 
     /**
      * <p class="changed_added_2_0"><span class="changed_modified_2_1">Return</span>
@@ -643,13 +610,9 @@ public abstract class ViewHandler {
      * @return the ViewDeclarationLanguage, or <b>null</b>.
      * @since 2.0
      */
-    public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context,
-                                                              String viewId) {
-
+    public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context, String viewId) {
         return null;
-
     }
-
     
     /**
      *
@@ -680,11 +643,11 @@ public abstract class ViewHandler {
     
     public void initView(FacesContext context) throws FacesException {
         String encoding = context.getExternalContext().getRequestCharacterEncoding();
-        if (null != encoding) {
+        if (encoding != null) {
             return;
         }
         encoding = calculateCharacterEncoding(context);
-        if (null != encoding) {
+        if (encoding != null) {
             try {
                 context.getExternalContext().setRequestCharacterEncoding(encoding);
             } catch (UnsupportedEncodingException e) {
@@ -699,13 +662,12 @@ public abstract class ViewHandler {
             }
         }
     }
-    
 
     /**
      * <p><span class="changed_modified_2_0">Perform</span> whatever
      * actions are required to render the response view to the response
      * object associated with the current {@link FacesContext}.</p>
-
+     *
      * <p class="changed_added_2_0">Otherwise, the default
      * implementation must obtain a reference to the {@link
      * ViewDeclarationLanguage} for the <code>viewId</code> of the
@@ -721,9 +683,7 @@ public abstract class ViewHandler {
      * <code>viewToRender</code> is <code>null</code>
      * @throws FacesException if a servlet error occurs
      */
-    public abstract void renderView(FacesContext context, UIViewRoot viewToRender)
-        throws IOException, FacesException;
-
+    public abstract void renderView(FacesContext context, UIViewRoot viewToRender) throws IOException, FacesException;
 
     /**
      * <p><span class="changed_modified_2_0">Perform</span> whatever
@@ -733,13 +693,13 @@ public abstract class ViewHandler {
      * StateManager} to do the actual work of restoring the view.  If
      * there is no available state for the specified
      * <code>viewId</code>, return <code>null</code>.</p>
-
+     *
      * <p class="changed_added_2_0">Otherwise, the default implementation
      * must obtain a reference to the {@link ViewDeclarationLanguage}
      * for this <code>viewId</code> and call its {@link
      * ViewDeclarationLanguage#restoreView} method, returning the result
      * and not swallowing any exceptions thrown by that method.</p>
-
+     *
      * @param context {@link FacesContext} for the current request
      * @param viewId the view identifier for the current request
      * @return the restored view root, or <b>null</b>.
@@ -748,7 +708,6 @@ public abstract class ViewHandler {
      * @throws FacesException if a servlet error occurs
      */
     public abstract UIViewRoot restoreView(FacesContext context, String viewId);
-
     
     /**
      * <p>Take any appropriate action to either immediately
@@ -773,6 +732,5 @@ public abstract class ViewHandler {
      *  is <code>null</code>
      */
     public abstract void writeState(FacesContext context) throws IOException;
-
 
 }

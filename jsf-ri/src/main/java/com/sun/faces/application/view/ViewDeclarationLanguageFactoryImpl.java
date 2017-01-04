@@ -63,9 +63,7 @@ public class ViewDeclarationLanguageFactoryImpl extends ViewDeclarationLanguageF
      */
     @Override
     public ViewDeclarationLanguage getViewDeclarationLanguage(String viewId) {
-
         return getViewHandlingStrategyManager().getStrategy(viewId);
-
     }
 
 
@@ -75,16 +73,10 @@ public class ViewDeclarationLanguageFactoryImpl extends ViewDeclarationLanguageF
     private ViewHandlingStrategyManager getViewHandlingStrategyManager() {
 
         if (viewHandlingStrategy == null) {
-            viewHandlingStrategy =
-                  new ViewHandlingStrategyManager();
+            viewHandlingStrategy = new ViewHandlingStrategyManager();
         }
+        
         return viewHandlingStrategy;
-
     }
-    
-
-
-
-    
 
 }

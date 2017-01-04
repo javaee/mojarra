@@ -63,10 +63,7 @@ public class LibraryInfo {
      * @param contract
      * @param helper the helper class for this resource
      */
-    LibraryInfo(String name,
-                VersionInfo version,
-                String localePrefix,
-                String contract, ResourceHelper helper) {
+    LibraryInfo(String name, VersionInfo version, String localePrefix, String contract, ResourceHelper helper) {
         this.name = name;
         this.version = version;
         this.localePrefix = localePrefix;

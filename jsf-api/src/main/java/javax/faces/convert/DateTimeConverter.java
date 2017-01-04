@@ -41,9 +41,6 @@
 package javax.faces.convert;
 
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.PartialStateHolder;
-import javax.faces.context.FacesContext;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,12 +51,17 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQuery;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import javax.faces.component.PartialStateHolder;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -457,23 +459,29 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
 
             // Perform the requested parsing
             returnValue = parser.parse(value);
-        } catch (ParseException e) {
+        } catch (ParseException | DateTimeParseException e) {
             if (null != type) {
                 switch (type) {
                     case "date":
+                    case "localDate":
                         throw new ConverterException(MessageFactory.getMessage(
                                 context, DATE_ID, value,
-                                parser.format(new Date(System.currentTimeMillis())),
+                                parser.formatNow(),
                                 MessageFactory.getLabel(context, component)), e);
                     case "time":
+                    case "localTime":
+                    case "offsetTime":
                         throw new ConverterException(MessageFactory.getMessage(
                                 context, TIME_ID, value,
-                                parser.format(new Date(System.currentTimeMillis())),
+                                parser.formatNow(),
                                 MessageFactory.getLabel(context, component)), e);
                     case "both":
+                    case "localDateTime":
+                    case "offsetDateTime":
+                    case "zonedDateTime":
                         throw new ConverterException(MessageFactory.getMessage(
                                 context, DATETIME_ID, value,
-                                parser.format(new Date(System.currentTimeMillis())),
+                                parser.formatNow(),
                                 MessageFactory.getLabel(context, component)), e);
                 }
             }
@@ -509,6 +517,10 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
         
         private String format(Object obj) {
             return (null != df) ? df.format(obj) : dtf.format((TemporalAccessor) obj);
+        }
+        
+        private String formatNow() {
+            return (null != df) ? df.format(new Date()) : dtf.format(ZonedDateTime.now());
         }
         
         private void setTimeZone(TimeZone zone) {
@@ -602,54 +614,43 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
             if (null != pattern){
                 dtf = DateTimeFormatter.ofPattern(pattern, locale);
             } else {
-                dtf = DateTimeFormatter.ofLocalizedDate(getFormatStyle(dateStyle));
-                dtf.withLocale(locale);
+                dtf = DateTimeFormatter.ofLocalizedDate(getFormatStyle(dateStyle)).withLocale(locale);
             }
             from = LocalDate::from;
         } else if (type.equals("localDateTime")) { 
             if (null != pattern){
                 dtf = DateTimeFormatter.ofPattern(pattern, locale);
             } else {
-                dtf = DateTimeFormatter.ofLocalizedDateTime(getFormatStyle(dateStyle), getFormatStyle(timeStyle));
-                dtf.withLocale(locale);
-                
+                dtf = DateTimeFormatter.ofLocalizedDateTime(getFormatStyle(dateStyle), getFormatStyle(timeStyle)).withLocale(locale);
             }
             from = LocalDateTime::from;
         } else if (type.equals("localTime")) { 
             if (null != pattern){
                 dtf = DateTimeFormatter.ofPattern(pattern, locale);
             } else {
-                dtf = DateTimeFormatter.ofLocalizedTime(getFormatStyle(timeStyle));
-                dtf.withLocale(locale);
+                dtf = DateTimeFormatter.ofLocalizedTime(getFormatStyle(timeStyle)).withLocale(locale);
             }
-           
             from = LocalTime::from;
         } else if (type.equals("offsetTime")) { 
             if (null != pattern){
                 dtf = DateTimeFormatter.ofPattern(pattern, locale);
             } else {
-                dtf = DateTimeFormatter.ISO_OFFSET_TIME;
-                dtf.withLocale(locale);
+                dtf = DateTimeFormatter.ISO_OFFSET_TIME.withLocale(locale);
             }
-           
             from = OffsetTime::from;
         } else if (type.equals("offsetDateTime")) { 
             if (null != pattern){
                 dtf = DateTimeFormatter.ofPattern(pattern, locale);
             } else {
-                dtf = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-                dtf.withLocale(locale);
+                dtf = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withLocale(locale);
             }
-           
             from = OffsetDateTime::from;
         } else if (type.equals("zonedDateTime")) { 
             if (null != pattern){
                 dtf = DateTimeFormatter.ofPattern(pattern, locale);
             } else {
-                dtf = DateTimeFormatter.ISO_ZONED_DATE_TIME;
-                dtf.withLocale(locale);
+                dtf = DateTimeFormatter.ISO_ZONED_DATE_TIME.withLocale(locale);
             }
-            
             from = ZonedDateTime::from;
         } else {
             // PENDING(craigmcc) - i18n

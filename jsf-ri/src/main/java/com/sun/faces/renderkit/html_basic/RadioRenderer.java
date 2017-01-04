@@ -56,7 +56,6 @@ import java.util.logging.Level;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectOne;
@@ -147,7 +146,6 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
      * <li>Submitted value is obtained by group name.
      * <li>Submitted value is prefixed with client ID of radio button component, this need to be compared and trimmed.
      * <li>If any submitted value does not belong to current radio button component, reset its value.
-     * <li>Any null value (i.e. "component is not submitted at all") needs to be set on first component of the group only.
      */
     protected void decodeGroup(FacesContext context, UISelectOne radio, Group group) {
 
@@ -183,8 +181,8 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
                 radio.resetValue();
             }
         } else {
-            // There is no submitted value at all, but this is different from a null value. It should be set only on first component of the group.
-            group.setNoSubmittedValue(radio);
+            // There is no submitted value at all, but this is different from a null value.
+            radio.setSubmittedValue(RIConstants.NO_VALUE);
         }
     }
 
@@ -205,7 +203,6 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
         }
 
         SelectItem currentItem = RenderKitUtils.getSelectItems(context, radio).next();
-        String name = group.getClientName();
         String clientId = radio.getClientId(context);
         Object itemValue = currentItem.getValue();
         Converter<?> converter = radio.getConverter();
@@ -308,7 +305,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
         // Don't render the disabled attribute twice if the 'parent' component is already marked disabled.
         boolean disabled = !optionInfo.isDisabled() && curItem.isDisabled();
 
-        renderInput(context, writer, component, clientId, curItem.getValue(), converter, checked, disabled, null);
+        renderInput(context, writer, component, clientId, curValue, converter, checked, disabled, null);
         renderLabel(writer, component, clientId, curItem, optionInfo);
 
         writer.endElement("td");
@@ -320,7 +317,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
         }
     }
 
-    protected String renderInput(FacesContext context, ResponseWriter writer, UIComponent component, String clientId, Object itemValue,
+    protected void renderInput(FacesContext context, ResponseWriter writer, UIComponent component, String clientId, Object itemValue,
             Converter<?> converter, boolean checked, boolean disabled, Group group) throws IOException
     {
         writer.startElement("input", component);
@@ -360,7 +357,6 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
         RenderKitUtils.renderSelectOnclick(context, component, false);
 
         writer.endElement("input");
-        return clientId;
     }
 
     protected void renderLabel(ResponseWriter writer, UIComponent component, String forClientId, SelectItem curItem,
@@ -403,8 +399,13 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
             return null;
         }
 
-        UIForm form = RenderKitUtils.getForm(radio, context);
-        String clientName = (form != null) ? (form.getClientId(context) + UINamingContainer.getSeparatorChar(context) + groupName) : RenderKitUtils.getParameterName(context, groupName);
+        UIComponent groupContainer = RenderKitUtils.getForm(radio, context);
+
+        if (groupContainer == null) {
+            groupContainer = context.getViewRoot();
+        }
+
+        String clientName = groupContainer.getClientId(context) + UINamingContainer.getSeparatorChar(context) + groupName;
         Map<String, Group> radioButtonGroups = RequestStateManager.get(context, RequestStateManager.PROCESSED_RADIO_BUTTON_GROUPS);
 
         if (radioButtonGroups == null) {
@@ -430,7 +431,6 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
         private final String clientName;
         private final List<String> clientIds;
         private ValueExpression value;
-        private boolean noSubmittedValueSet;
 
         public Group(FacesContext context, String clientName) {
             this.clientName = clientName;
@@ -461,15 +461,6 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
             }
         }
 
-        public void setNoSubmittedValue(UISelectOne radio) {
-            if (!noSubmittedValueSet) {
-                // This shouldn't be set for other radios on the group to avoid those also being validated
-                // and thus end up showing duplicate faces messages for each radio.
-                radio.setSubmittedValue(RIConstants.NO_VALUE);
-                noSubmittedValueSet = true;
-            }
-        }
-
     }
 
     /**
@@ -485,7 +476,8 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer implements Com
                 FacesContext context = getFacesContext();
                 UISelectOne radio = (UISelectOne) getParent();
                 List<String> groupClientIds = (List<String>) radio.getAttributes().get(GroupSelectItem.class.getName());
-                SelectItemsIterator<SelectItem> iterator = RenderKitUtils.getSelectItems(context, context.getViewRoot().findComponent(groupClientIds.get(0)));
+                UIComponent firstRadioOfGroup = context.getViewRoot().findComponent(groupClientIds.get(0));
+                SelectItemsIterator<SelectItem> iterator = RenderKitUtils.getSelectItems(context, firstRadioOfGroup);
                 int index = groupClientIds.indexOf(radio.getClientId(context));
 
                 while (index-- > 0 && iterator.hasNext()) {

@@ -47,6 +47,7 @@ import static javax.faces.annotation.FacesConfig.Version.JSF_2_2;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 
 @Qualifier
@@ -72,6 +73,6 @@ public @interface FacesConfig {
         CURRENT  
     }
     
-    Version version() default JSF_2_2;
+    @Nonbinding Version version() default JSF_2_2;
 
 }

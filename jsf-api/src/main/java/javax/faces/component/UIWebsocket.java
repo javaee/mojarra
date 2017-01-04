@@ -32,7 +32,6 @@ import javax.websocket.CloseReason.CloseCodes;
  * For detailed usage instructions, see <code>&#64;</code>{@link Push} javadoc.
  * </p>
  *
- * @author Bauke Scholtz
  * @see Push
  * @since 2.3
  */
