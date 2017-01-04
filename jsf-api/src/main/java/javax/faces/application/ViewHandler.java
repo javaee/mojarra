@@ -42,6 +42,7 @@ package javax.faces.application;
 
 import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableSet;
+import static java.util.logging.Level.WARNING;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -49,7 +50,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FacesException;
@@ -267,7 +267,123 @@ public abstract class ViewHandler {
             "javax.faces.DISABLE_FACELET_JSF_VIEWHANDLER";
 
     // ---------------------------------------------------------- Public Methods
-
+    
+    /**
+    *
+    * <p><span class="changed_modified_2_0">Initialize</span> the view
+    * for the request processing lifecycle.</p>
+    *
+    * <p>This method must be called at the beginning of the <em>Restore
+    * View Phase</em> of the Request Processing Lifecycle.  It is responsible 
+    * for performing any per-request initialization necessary to the operation
+    * of the lifycecle.</p>
+    *
+    * <p class="changed_modified_2_0">The default implementation must
+    * perform the following actions.  If {@link
+    * ExternalContext#getRequestCharacterEncoding} returns
+    * <code>null</code>, call {@link #calculateCharacterEncoding} and
+    * pass the result, if non-<code>null</code>, into the {@link
+    * ExternalContext#setRequestCharacterEncoding} method.  If {@link
+    * ExternalContext#getRequestCharacterEncoding} returns
+    * non-<code>null</code> take no action.</p>
+    * 
+    * @param context the Faces context.
+    * @throws FacesException if a problem occurs setting the encoding,
+    * such as the <code>UnsupportedEncodingException</code> thrown 
+    * by the underlying Servlet or Portlet technology when the encoding is not
+    * supported.
+    *
+    */
+   
+   public void initView(FacesContext context) throws FacesException {
+       String encoding = context.getExternalContext().getRequestCharacterEncoding();
+       if (encoding != null) {
+           return;
+       }
+       
+       encoding = calculateCharacterEncoding(context);
+       if (encoding != null) {
+           try {
+               context.getExternalContext().setRequestCharacterEncoding(encoding);
+           } catch (UnsupportedEncodingException e) {
+               String message = "Can't set encoding to: " + encoding +
+                       " Exception:" + e.getMessage();
+               if (log.isLoggable(WARNING)) {
+                   log.fine(message);
+               }
+               
+               throw new FacesException(message, e);
+           }
+       }
+   }
+   
+   /**
+    * <p><span class="changed_modified_2_0">Perform</span> whatever
+    * actions are required to restore the view associated with the
+    * specified {@link FacesContext} and <code>viewId</code>.  It may
+    * delegate to the <code>restoreView</code> of the associated {@link
+    * StateManager} to do the actual work of restoring the view.  If
+    * there is no available state for the specified
+    * <code>viewId</code>, return <code>null</code>.</p>
+    *
+    * <p class="changed_added_2_0">Otherwise, the default implementation
+    * must obtain a reference to the {@link ViewDeclarationLanguage}
+    * for this <code>viewId</code> and call its {@link
+    * ViewDeclarationLanguage#restoreView} method, returning the result
+    * and not swallowing any exceptions thrown by that method.</p>
+    *
+    * @param context {@link FacesContext} for the current request
+    * @param viewId the view identifier for the current request
+    * @return the restored view root, or <b>null</b>.
+    * @throws NullPointerException if <code>context</code>
+    *  is <code>null</code>
+    * @throws FacesException if a servlet error occurs
+    */
+   public abstract UIViewRoot restoreView(FacesContext context, String viewId);
+   
+   /**
+    * <p><strong class="changed_modified_2_0">Create</strong> and
+    * return a new {@link UIViewRoot} instance initialized with
+    * information from the argument <code>FacesContext</code> and
+    * <code>viewId</code>.  <span class="changed_modified_2_0">Locate
+    * the {@link ViewDeclarationLanguage} implementation for the VDL
+    * used in the view.  The argument <code>viewId</code> must be
+    * converted to a physical <code>viewId</code> that can refer to an
+    * actual resource suitable for use by the
+    * <code>ViewDeclarationLanguage</code> {@link
+    * ViewDeclarationLanguage#createView}, which must be called by
+    * this method.</span>
+    * 
+    * @param context the Faces context.
+    * @param viewId the view id.
+    * @throws NullPointerException if <code>context</code>
+    *  is <code>null</code>
+    * 
+    * @return the viewroot.
+    */
+   public abstract UIViewRoot createView(FacesContext context, String viewId);
+   
+   /**
+    * <p><span class="changed_modified_2_0">Perform</span> whatever
+    * actions are required to render the response view to the response
+    * object associated with the current {@link FacesContext}.</p>
+    *
+    * <p class="changed_added_2_0">Otherwise, the default
+    * implementation must obtain a reference to the {@link
+    * ViewDeclarationLanguage} for the <code>viewId</code> of the
+    * argument <code>viewToRender</code> and call its {@link
+    * ViewDeclarationLanguage#renderView} method, returning the result
+    * and not swallowing any exceptions thrown by that method.</p>
+    *
+    * @param context {@link FacesContext} for the current request
+    * @param viewToRender the view to render
+    *
+    * @throws IOException if an input/output error occurs
+    * @throws NullPointerException if <code>context</code> or
+    * <code>viewToRender</code> is <code>null</code>
+    * @throws FacesException if a servlet error occurs
+    */
+   public abstract void renderView(FacesContext context, UIViewRoot viewToRender) throws IOException, FacesException;
 
     /** 
      * <p>Returns an appropriate {@link Locale} to use for this and
@@ -278,7 +394,7 @@ public abstract class ViewHandler {
      * @throws NullPointerException if <code>context</code> is 
      *  <code>null</code>
      */
-     public abstract Locale calculateLocale(FacesContext context);
+    public abstract Locale calculateLocale(FacesContext context);
      
      /**
       * <p>Returns the correct character encoding to be used for this request.</p>
@@ -354,28 +470,6 @@ public abstract class ViewHandler {
     public abstract String calculateRenderKitId(FacesContext context);
 
     /**
-     * <p><strong class="changed_modified_2_0">Create</strong> and
-     * return a new {@link UIViewRoot} instance initialized with
-     * information from the argument <code>FacesContext</code> and
-     * <code>viewId</code>.  <span class="changed_modified_2_0">Locate
-     * the {@link ViewDeclarationLanguage} implementation for the VDL
-     * used in the view.  The argument <code>viewId</code> must be
-     * converted to a physical <code>viewId</code> that can refer to an
-     * actual resource suitable for use by the
-     * <code>ViewDeclarationLanguage</code> {@link
-     * ViewDeclarationLanguage#createView}, which must be called by
-     * this method.</span>
-     * 
-     * @param context the Faces context.
-     * @param viewId the view id.
-     * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     * 
-     * @return the viewroot.
-     */
-    public abstract UIViewRoot createView(FacesContext context, String viewId);
-
-    /**
      * <p class="changed_added_2_0">Derive and return the viewId from
      * the current request, or the argument input by following the
      * algorithm defined in specification section JSF.7.6.2.</p>
@@ -439,7 +533,48 @@ public abstract class ViewHandler {
      * @return the action url.
      */
     public abstract String getActionURL(FacesContext context, String viewId);
+    
+    /**
+     * <p class="changed_added_2_0"> Return a JSF action URL derived
+     * from the <code>viewId</code> argument that is suitable to be used
+     * by the {@link NavigationHandler} to issue a redirect request to
+     * the URL using a NonFaces request.  Compliant implementations
+     * must implement this method as specified in section JSF.7.6.2.
+     * The default implementation simply calls through to {@link
+     * #getActionURL}, passing the arguments <code>context</code> and
+     * <code>viewId</code>.</p>
+     *
+     * @param context           The FacesContext processing this request
+     * @param viewId            The view identifier of the target page
+     * @param parameters        A mapping of parameter names to one or more values
+     * @param includeViewParams A flag indicating whether view parameters should be encoded into this URL
+     * @return the redirect URL.
+     * @since 2.0
+     */
+    public String getRedirectURL(FacesContext context, String viewId, Map<String,List<String>> parameters, boolean includeViewParams) {
+        return getActionURL(context, viewId);
+    }
 
+    /**
+     * <p class="changed_added_2_0"> Return a JSF action URL derived
+     * from the viewId argument that is suitable to be used as the
+     * target of a link in a JSF response. Compiliant implementations
+     * must implement this method as specified in section JSF.7.6.2.
+     * The default implementation simply calls through to {@link
+     * #getActionURL}, passing the arguments <code>context</code> and
+     * <code>viewId</code>.</p>
+     *
+     * @param context           The FacesContext processing this request
+     * @param viewId            The view identifier of the target page
+     * @param parameters        A mapping of parameter names to one or more values
+     * @param includeViewParams A flag indicating whether view parameters should be encoded into this URL
+     * @return the bookmarkable URL.
+     * @since 2.0
+     */
+    public String getBookmarkableURL(FacesContext context, String viewId, Map<String,List<String>> parameters, boolean includeViewParams) {
+        return getActionURL(context, viewId);
+    }
+    
     /**
      * <p class="changed_modified_2_0">If the value returned from this
      * method is used as the <code>file</code> argument to the
@@ -542,47 +677,6 @@ public abstract class ViewHandler {
     public boolean removeProtectedView(String urlPattern) {
         return false;
     }
-    
-    /**
-     * <p class="changed_added_2_0"> Return a JSF action URL derived
-     * from the <code>viewId</code> argument that is suitable to be used
-     * by the {@link NavigationHandler} to issue a redirect request to
-     * the URL using a NonFaces request.  Compliant implementations
-     * must implement this method as specified in section JSF.7.6.2.
-     * The default implementation simply calls through to {@link
-     * #getActionURL}, passing the arguments <code>context</code> and
-     * <code>viewId</code>.</p>
-     *
-     * @param context           The FacesContext processing this request
-     * @param viewId            The view identifier of the target page
-     * @param parameters        A mapping of parameter names to one or more values
-     * @param includeViewParams A flag indicating whether view parameters should be encoded into this URL
-     * @return the redirect URL.
-     * @since 2.0
-     */
-    public String getRedirectURL(FacesContext context, String viewId, Map<String,List<String>> parameters, boolean includeViewParams) {
-        return getActionURL(context, viewId);
-    }
-
-    /**
-     * <p class="changed_added_2_0"> Return a JSF action URL derived
-     * from the viewId argument that is suitable to be used as the
-     * target of a link in a JSF response. Compiliant implementations
-     * must implement this method as specified in section JSF.7.6.2.
-     * The default implementation simply calls through to {@link
-     * #getActionURL}, passing the arguments <code>context</code> and
-     * <code>viewId</code>.</p>
-     *
-     * @param context           The FacesContext processing this request
-     * @param viewId            The view identifier of the target page
-     * @param parameters        A mapping of parameter names to one or more values
-     * @param includeViewParams A flag indicating whether view parameters should be encoded into this URL
-     * @return the bookmarkable URL.
-     * @since 2.0
-     */
-    public String getBookmarkableURL(FacesContext context, String viewId, Map<String,List<String>> parameters, boolean includeViewParams) {
-        return getActionURL(context, viewId);
-    }
 
     /**
      * <p class="changed_added_2_0"><span class="changed_modified_2_1">Return</span>
@@ -613,101 +707,6 @@ public abstract class ViewHandler {
     public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context, String viewId) {
         return null;
     }
-    
-    /**
-     *
-     * <p><span class="changed_modified_2_0">Initialize</span> the view
-     * for the request processing lifecycle.</p>
-     *
-     * <p>This method must be called at the beginning of the <em>Restore
-     * View Phase</em> of the Request Processing Lifecycle.  It is responsible 
-     * for performing any per-request initialization necessary to the operation
-     * of the lifycecle.</p>
-     *
-     * <p class="changed_modified_2_0">The default implementation must
-     * perform the following actions.  If {@link
-     * ExternalContext#getRequestCharacterEncoding} returns
-     * <code>null</code>, call {@link #calculateCharacterEncoding} and
-     * pass the result, if non-<code>null</code>, into the {@link
-     * ExternalContext#setRequestCharacterEncoding} method.  If {@link
-     * ExternalContext#getRequestCharacterEncoding} returns
-     * non-<code>null</code> take no action.</p>
-     * 
-     * @param context the Faces context.
-     * @throws FacesException if a problem occurs setting the encoding,
-     * such as the <code>UnsupportedEncodingException</code> thrown 
-     * by the underlying Servlet or Portlet technology when the encoding is not
-     * supported.
-     *
-     */
-    
-    public void initView(FacesContext context) throws FacesException {
-        String encoding = context.getExternalContext().getRequestCharacterEncoding();
-        if (encoding != null) {
-            return;
-        }
-        encoding = calculateCharacterEncoding(context);
-        if (encoding != null) {
-            try {
-                context.getExternalContext().setRequestCharacterEncoding(encoding);
-            } catch (UnsupportedEncodingException e) {
-                // PENDING(edburns): I18N
-                String message = "Can't set encoding to: " + encoding +
-                        " Exception:" + e.getMessage();
-                if (log.isLoggable(Level.WARNING)) {
-                    log.fine(message);
-                }
-                throw new FacesException(message, e);
-                
-            }
-        }
-    }
-
-    /**
-     * <p><span class="changed_modified_2_0">Perform</span> whatever
-     * actions are required to render the response view to the response
-     * object associated with the current {@link FacesContext}.</p>
-     *
-     * <p class="changed_added_2_0">Otherwise, the default
-     * implementation must obtain a reference to the {@link
-     * ViewDeclarationLanguage} for the <code>viewId</code> of the
-     * argument <code>viewToRender</code> and call its {@link
-     * ViewDeclarationLanguage#renderView} method, returning the result
-     * and not swallowing any exceptions thrown by that method.</p>
-     *
-     * @param context {@link FacesContext} for the current request
-     * @param viewToRender the view to render
-     *
-     * @throws IOException if an input/output error occurs
-     * @throws NullPointerException if <code>context</code> or
-     * <code>viewToRender</code> is <code>null</code>
-     * @throws FacesException if a servlet error occurs
-     */
-    public abstract void renderView(FacesContext context, UIViewRoot viewToRender) throws IOException, FacesException;
-
-    /**
-     * <p><span class="changed_modified_2_0">Perform</span> whatever
-     * actions are required to restore the view associated with the
-     * specified {@link FacesContext} and <code>viewId</code>.  It may
-     * delegate to the <code>restoreView</code> of the associated {@link
-     * StateManager} to do the actual work of restoring the view.  If
-     * there is no available state for the specified
-     * <code>viewId</code>, return <code>null</code>.</p>
-     *
-     * <p class="changed_added_2_0">Otherwise, the default implementation
-     * must obtain a reference to the {@link ViewDeclarationLanguage}
-     * for this <code>viewId</code> and call its {@link
-     * ViewDeclarationLanguage#restoreView} method, returning the result
-     * and not swallowing any exceptions thrown by that method.</p>
-     *
-     * @param context {@link FacesContext} for the current request
-     * @param viewId the view identifier for the current request
-     * @return the restored view root, or <b>null</b>.
-     * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     * @throws FacesException if a servlet error occurs
-     */
-    public abstract UIViewRoot restoreView(FacesContext context, String viewId);
     
     /**
      * <p>Take any appropriate action to either immediately
