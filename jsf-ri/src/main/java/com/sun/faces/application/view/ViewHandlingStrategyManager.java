@@ -40,6 +40,9 @@
 
 package com.sun.faces.application.view;
 
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
+
 import com.sun.faces.config.WebConfiguration;
 
 /**
@@ -48,7 +51,7 @@ import com.sun.faces.config.WebConfiguration;
  */
 public class ViewHandlingStrategyManager {
 
-    // The strategies associate with this instance
+    // The strategies associated with this instance
     private volatile ViewHandlingStrategy[] strategies;
     
 
@@ -58,19 +61,18 @@ public class ViewHandlingStrategyManager {
     /**
      * Be default, if {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#DisableFaceletJSFViewHandler}
      * isn't enabled, the strategies available (in order) will be {@link FaceletViewHandlingStrategy}
-     * and {@link com.sun.faces.application.view.JspViewHandlingStrategy}.  Otherwise, only the
-     * {@link com.sun.faces.application.view.JspViewHandlingStrategy} will be available.
+     * and {@link com.sun.faces.application.view.JspViewHandlingStrategy}.  
+     * <p>
+     * Otherwise, only the {@link com.sun.faces.application.view.JspViewHandlingStrategy} will be available.
      */
     public ViewHandlingStrategyManager() {
 
         WebConfiguration webConfig = WebConfiguration.getInstance();
-        boolean pdlDisabled = webConfig
-              .isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler) ||
-                webConfig.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated);
-        strategies = ((pdlDisabled)
+        boolean pdlDisabled = webConfig.isOptionEnabled(DisableFaceletJSFViewHandler) || webConfig.isOptionEnabled(DisableFaceletJSFViewHandlerDeprecated);
+        
+        strategies = pdlDisabled
                       ? new ViewHandlingStrategy[] { new JspViewHandlingStrategy() }
-                      : new ViewHandlingStrategy[] { new FaceletViewHandlingStrategy(),
-                                                     new JspViewHandlingStrategy() });
+                      : new ViewHandlingStrategy[] { new FaceletViewHandlingStrategy(), new JspViewHandlingStrategy() };
 
     }
 

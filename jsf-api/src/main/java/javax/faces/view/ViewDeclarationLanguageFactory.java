@@ -40,6 +40,10 @@
 
 package javax.faces.view;
 
+import static java.util.Collections.emptyList;
+
+import java.util.List;
+
 import javax.faces.FacesWrapper;
 
 /**
@@ -126,5 +130,9 @@ public abstract class ViewDeclarationLanguageFactory implements FacesWrapper<Vie
      * 
      */
     public abstract ViewDeclarationLanguage getViewDeclarationLanguage(String viewId);
+    
+    public List<ViewDeclarationLanguage> getAllViewDeclarationLanguages() {
+        return emptyList();
+    }
     
 }

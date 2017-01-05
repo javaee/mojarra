@@ -40,22 +40,31 @@
 
 package com.sun.faces.application.view;
 
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResponseBufferSize;
+import static com.sun.faces.util.RequestStateManager.AFTER_VIEW_CONTENT;
+import static com.sun.faces.util.Util.isViewPopulated;
+import static com.sun.faces.util.Util.setViewPopulated;
+import static java.util.logging.Level.FINE;
+import static javax.faces.FactoryFinder.RENDER_KIT_FACTORY;
+
 import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.event.PostAddToViewEvent;
-import javax.faces.view.ViewMetadata;
 import javax.faces.application.Resource;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+import javax.faces.view.StateManagementStrategy;
+import javax.faces.view.ViewMetadata;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
@@ -64,11 +73,6 @@ import com.sun.faces.application.ViewHandlerResponseWrapper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.util.Util;
-
-import javax.faces.view.StateManagementStrategy;
-
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResponseBufferSize;
 
 /**
  * This {@link ViewHandlingStrategy} handles JSP-based views.
@@ -85,31 +89,15 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
     public JspViewHandlingStrategy() {
 
         try {
-            responseBufferSize =
-                  Integer.parseInt(webConfig.getOptionValue(ResponseBufferSize));
+            responseBufferSize = Integer.parseInt(webConfig.getOptionValue(ResponseBufferSize));
         } catch (NumberFormatException nfe) {
-            responseBufferSize = Integer
-                  .parseInt(ResponseBufferSize.getDefaultValue());
+            responseBufferSize = Integer.parseInt(ResponseBufferSize.getDefaultValue());
         }
-
     }
-
 
 
     // ------------------------------------ Methods from ViewDeclarationLanguage
-    
 
-    /**
-     * <p>
-     * Not supported in JSP-based views.
-     * </p>
-     *
-     * @see javax.faces.view.ViewDeclarationLanguage#getComponentMetadata(javax.faces.context.FacesContext, javax.faces.application.Resource)
-     */
-    @Override
-    public BeanInfo getComponentMetadata(FacesContext context, Resource componentResource) {
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * <p>
@@ -123,20 +111,6 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         return null;
     }
 
-    
-    /**
-     * <p>
-     * Not supported in JSP-based views.
-     * </p>
-     *
-     * @see javax.faces.view.ViewDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
-     */
-    @Override
-    public Resource getScriptComponentResource(FacesContext context, Resource componentResource) {
-        throw new UnsupportedOperationException();
-    }
-
-
     /**
      * @see javax.faces.view.ViewDeclarationLanguage#buildView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      * @param context
@@ -144,10 +118,9 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * @throws IOException
      */
     @Override
-    public void buildView(FacesContext context, UIViewRoot view)
-    throws IOException {
+    public void buildView(FacesContext context, UIViewRoot view) throws IOException {
 
-        if (Util.isViewPopulated(context, view)) {
+        if (isViewPopulated(context, view)) {
             return;
         }
         try {
@@ -163,44 +136,35 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
             throw new FacesException(e);
         }
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, "Completed building view for : \n" +
-                                   view.getViewId());
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, "Completed building view for : \n" + view.getViewId());
         }
-        context.getApplication().publishEvent(context,
-                                              PostAddToViewEvent.class,
-                                              UIViewRoot.class,
-                                              view);
-        Util.setViewPopulated(context, view);
-
+        
+        context.getApplication().publishEvent(context, PostAddToViewEvent.class, UIViewRoot.class, view);
+        setViewPopulated(context, view);
     }
 
     /**
      * @see javax.faces.view.ViewDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      */
     @Override
-    public void renderView(FacesContext context,
-                           UIViewRoot view)
-    throws IOException {
+    public void renderView(FacesContext context, UIViewRoot view) throws IOException {
 
-        // suppress rendering if "rendered" property on the component is
-        // false
+        // Suppress rendering if "rendered" property on the component is false
         if (!view.isRendered() || context.getResponseComplete()) {
             return;
         }
 
         ExternalContext extContext = context.getExternalContext();
 
-        if (!Util.isViewPopulated(context, view)) {
+        if (!isViewPopulated(context, view)) {
             buildView(context, view);
         }
 
-        // set up the ResponseWriter
+        // Set up the ResponseWriter
 
-        RenderKitFactory renderFactory = (RenderKitFactory)
-              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit renderKit =
-              renderFactory.getRenderKit(context, view.getRenderKitId());
+        RenderKitFactory renderFactory = (RenderKitFactory) FactoryFinder.getFactory(RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderFactory.getRenderKit(context, view.getRenderKitId());
 
         ResponseWriter oldWriter = context.getResponseWriter();
 
@@ -224,7 +188,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
             try {
                 extContext.getFlash().doPostPhaseActions(context);
             } catch (UnsupportedOperationException uoe) {
-                if (LOGGER.isLoggable(Level.FINE)) {
+                if (LOGGER.isLoggable(FINE)) {
                     LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
                 }
             }
@@ -235,7 +199,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
             try {
                 extContext.getFlash().doPostPhaseActions(context);
             } catch (UnsupportedOperationException uoe) {
-                if (LOGGER.isLoggable(Level.FINE)) {
+                if (LOGGER.isLoggable(FINE)) {
                     LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
                 }
             }
@@ -259,21 +223,71 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
         // write any AFTER_VIEW_CONTENT to the response
         // side effect: AFTER_VIEW_CONTENT removed
-        ViewHandlerResponseWrapper wrapper = (ViewHandlerResponseWrapper)
-              RequestStateManager.remove(context, RequestStateManager.AFTER_VIEW_CONTENT);
+        ViewHandlerResponseWrapper wrapper = (ViewHandlerResponseWrapper) RequestStateManager.remove(context, AFTER_VIEW_CONTENT);
+        
         if (null != wrapper) {
-            wrapper.flushToWriter(extContext.getResponseOutputWriter(),
-                                  extContext.getResponseCharacterEncoding());
+            wrapper.flushToWriter(
+                extContext.getResponseOutputWriter(),
+                extContext.getResponseCharacterEncoding());
         }
 
         extContext.responseFlushBuffer();
-
     }
 
     @Override
     public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
         return null;
     }
+    
+    /**
+     * <p>
+     * Not supported in JSP-based views.
+     * </p>
+     *
+     * @see javax.faces.view.ViewDeclarationLanguage#getComponentMetadata(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     */
+    @Override
+    public BeanInfo getComponentMetadata(FacesContext context, Resource componentResource) {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * <p>
+     * Not supported in JSP-based views.
+     * </p>
+     *
+     * @see javax.faces.view.ViewDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     */
+    @Override
+    public Resource getScriptComponentResource(FacesContext context, Resource componentResource) {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * <p>
+     * Not supported in JSP-based views.
+     * </p>
+     *
+     * @see javax.faces.view.ViewDeclarationLanguage#getViews(FacesContext, String)
+     */
+    @Override
+    public Stream<String> getViews(FacesContext context, String path) {
+        return Stream.empty();
+    }
+    
+    /**
+     * <p>
+     * Not supported in JSP-based views.
+     * </p>
+     *
+     * @see javax.faces.view.ViewDeclarationLanguage#getViews(FacesContext, String, int)
+     */
+    @Override
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
+        return Stream.empty();
+    }
+    
+    
 
     // --------------------------------------- Methods from ViewHandlingStrategy
 
@@ -286,9 +300,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      */
     @Override
     public boolean handlesViewId(String viewId) {
-
         return true;
-
     }
 
     @Override 
@@ -418,20 +430,17 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * @throws javax.faces.FacesException if some error occurs within the framework
      *  processing
      */
-    private void doRenderView(FacesContext context,
-                              UIViewRoot viewToRender)
-    throws IOException {
+    private void doRenderView(FacesContext context, UIViewRoot viewToRender) throws IOException {
 
         if (null != associate) {
             associate.responseRendered();
         }
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, "About to render view " + viewToRender.getViewId());
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, "About to render view " + viewToRender.getViewId());
         }
 
         viewToRender.encodeAll(context);
-
     }
 
 

@@ -40,6 +40,10 @@
 
 package com.sun.faces.application.view;
 
+import static java.util.Arrays.asList;
+
+import java.util.List;
+
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
 
@@ -52,10 +56,11 @@ public class ViewDeclarationLanguageFactoryImpl extends ViewDeclarationLanguageF
         super(null);
     }
 
-    private ViewHandlingStrategyManager viewHandlingStrategy;
+    private ViewHandlingStrategyManager viewHandlingStrategyManager;
+    private List<ViewDeclarationLanguage> allViewDeclarationLanguages;
 
 
-    // ------------------------------------ Methods from ViewDeclarationLanguage
+    // ------------------------------------ Methods from ViewDeclarationLanguageFactory
 
 
     /**
@@ -65,6 +70,19 @@ public class ViewDeclarationLanguageFactoryImpl extends ViewDeclarationLanguageF
     public ViewDeclarationLanguage getViewDeclarationLanguage(String viewId) {
         return getViewHandlingStrategyManager().getStrategy(viewId);
     }
+    
+    /**
+     * @see javax.faces.view.ViewDeclarationLanguageFactory#getAllViewDeclarationLanguages()
+     */
+    @Override
+    public List<ViewDeclarationLanguage> getAllViewDeclarationLanguages() {
+        
+        if (allViewDeclarationLanguages == null) {
+            allViewDeclarationLanguages = asList(getViewHandlingStrategyManager().getViewHandlingStrategies());
+        }
+
+        return allViewDeclarationLanguages;
+    }
 
 
     // --------------------------------------------------------- Private Methods
@@ -72,11 +90,11 @@ public class ViewDeclarationLanguageFactoryImpl extends ViewDeclarationLanguageF
 
     private ViewHandlingStrategyManager getViewHandlingStrategyManager() {
 
-        if (viewHandlingStrategy == null) {
-            viewHandlingStrategy = new ViewHandlingStrategyManager();
+        if (viewHandlingStrategyManager == null) {
+            viewHandlingStrategyManager = new ViewHandlingStrategyManager();
         }
         
-        return viewHandlingStrategy;
+        return viewHandlingStrategyManager;
     }
 
 }

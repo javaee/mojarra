@@ -71,6 +71,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -459,6 +460,19 @@ public class MultiViewHandler extends ViewHandler {
     @Override
     public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context, String viewId) {
         return vdlFactory.getViewDeclarationLanguage(viewId);
+    }
+    
+    @Override
+    public Stream<String> getViews(FacesContext context, String path) {
+        return
+            vdlFactory.getAllViewDeclarationLanguages()
+                      .stream()
+                      .flatMap(vdl -> vdl.getViews(context, path));
+    }
+    
+    @Override
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
+        return super.getViews(context, path, maxDepth);
     }
 
     @Override

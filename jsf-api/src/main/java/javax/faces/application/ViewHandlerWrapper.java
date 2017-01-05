@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.faces.FacesException;
 import javax.faces.FacesWrapper;
@@ -96,6 +97,58 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
 
     // ------------------------ Methods from javax.faces.application.ViewHandler
+    
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#initView}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#initView
+     * @since 1.2
+     */
+    @Override
+    public void initView(FacesContext context) throws FacesException {
+        getWrapped().initView(context);
+    }
+    
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#restoreView(javax.faces.context.FacesContext, String)}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)
+     * @since 1.2
+     */
+    @Override
+    public UIViewRoot restoreView(FacesContext context, String viewId) {
+        return getWrapped().restoreView(context, viewId);
+    }
+    
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#createView(javax.faces.context.FacesContext, String)}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#createView(javax.faces.context.FacesContext, String)
+     * @since 1.2
+     */
+    @Override
+    public UIViewRoot createView(FacesContext context, String viewId) {
+        return getWrapped().createView(context, viewId);
+    }
+    
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
+     * @since 1.2
+     */
+    @Override
+    public void renderView(FacesContext context, UIViewRoot viewToRender) throws IOException, FacesException {
+        getWrapped().renderView(context, viewToRender);
+    }
 
 
     /**
@@ -165,19 +218,6 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     @Override
     public String calculateRenderKitId(FacesContext context) {
         return getWrapped().calculateRenderKitId(context);
-    }
-
-    /**
-     * <p>The default behavior of this method is to
-     * call {@link ViewHandler#createView(javax.faces.context.FacesContext, String)}
-     * on the wrapped {@link ViewHandler} object.</p>
-     *
-     * @see ViewHandler#createView(javax.faces.context.FacesContext, String)
-     * @since 1.2
-     */
-    @Override
-    public UIViewRoot createView(FacesContext context, String viewId) {
-        return getWrapped().createView(context, viewId);
     }
 
     /**
@@ -301,42 +341,27 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     
     /**
      * <p>The default behavior of this method is to
-     * call {@link ViewHandler#initView}
+     * call {@link ViewHandler#getViews(FacesContext, String)}
      * on the wrapped {@link ViewHandler} object.</p>
      *
-     * @see ViewHandler#initView
-     * @since 1.2
+     * @since 2.3
      */
     @Override
-    public void initView(FacesContext context) throws FacesException {
-        getWrapped().initView(context);
+    public Stream<String> getViews(FacesContext context, String path) {
+        return getWrapped().getViews(context, path);
     }
     
     /**
      * <p>The default behavior of this method is to
-     * call {@link ViewHandler#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)}
+     * call {@link ViewHandler#getViews(FacesContext, String, int)}
      * on the wrapped {@link ViewHandler} object.</p>
      *
-     * @see ViewHandler#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
-     * @since 1.2
+     * @since 2.3
      */
     @Override
-    public void renderView(FacesContext context, UIViewRoot viewToRender) throws IOException, FacesException {
-        getWrapped().renderView(context, viewToRender);
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
+        return getWrapped().getViews(context, path, maxDepth);
     }
-
-    /**
-     * <p>The default behavior of this method is to
-     * call {@link ViewHandler#restoreView(javax.faces.context.FacesContext, String)}
-     * on the wrapped {@link ViewHandler} object.</p>
-     *
-     * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)
-     * @since 1.2
-     */
-    @Override
-    public UIViewRoot restoreView(FacesContext context, String viewId) {
-        return getWrapped().restoreView(context, viewId);
-    }    
 
     /**
      * <p>The default behavior of this method is to

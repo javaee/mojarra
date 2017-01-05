@@ -40,22 +40,27 @@
 
 package com.sun.faces.application.view;
 
+import static com.sun.faces.util.Util.getFacesMapping;
+import static com.sun.faces.util.Util.getStateManager;
+import static com.sun.faces.util.Util.isPrefixMapped;
+import static com.sun.faces.util.Util.notNull;
+import static java.util.logging.Level.FINE;
+import static javax.faces.component.UIViewRoot.COMPONENT_TYPE;
+
 import java.io.IOException;
 import java.util.Locale;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewDeclarationLanguage;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 
 /**
  * <p>
@@ -75,12 +80,11 @@ public abstract class ViewHandlingStrategy extends ViewDeclarationLanguage {
 
 
     public ViewHandlingStrategy() {
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
-
     }
+    
 
     // ---------------------------------------------------------- Public Methods
 
@@ -89,24 +93,21 @@ public abstract class ViewHandlingStrategy extends ViewDeclarationLanguage {
      * @see ViewDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)
      */
     @Override
-    public UIViewRoot restoreView(FacesContext ctx,
-                                  String viewId) {
+    public UIViewRoot restoreView(FacesContext ctx, String viewId) {
 
         ExternalContext extContext = ctx.getExternalContext();
 
-        String mapping = Util.getFacesMapping(ctx);
+        String mapping = getFacesMapping(ctx);
         UIViewRoot viewRoot = null;
 
-        // maping could be null if a non-faces request triggered
-        // this response.
-        if (extContext.getRequestPathInfo() == null && mapping != null &&
-            Util.isPrefixMapped(mapping)) {
-            // this was probably an initial request
-            // send them off to the root of the web application
+        // Mapping could be null if a non-faces request triggered this response.
+        if (extContext.getRequestPathInfo() == null && mapping != null && isPrefixMapped(mapping)) {
+            // This was probably an initial request.
+            // Send them off to the root of the web application.
             try {
                 ctx.responseComplete();
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE, "Response Complete for" + viewId);
+                if (logger.isLoggable(FINE)) {
+                    logger.log(FINE, "Response Complete for" + viewId);
                 }
                 if (!extContext.isResponseCommitted()) {
                     extContext.redirect(extContext.getRequestContextPath());
@@ -116,32 +117,24 @@ public abstract class ViewHandlingStrategy extends ViewDeclarationLanguage {
             }
         } else {
             // this is necessary to allow decorated impls.
-            ViewHandler outerViewHandler =
-                  ctx.getApplication().getViewHandler();
-            String renderKitId =
-                  outerViewHandler.calculateRenderKitId(ctx);
-            viewRoot = Util.getStateManager(ctx).restoreView(ctx,
-                                                             viewId,
-                                                             renderKitId);
+            ViewHandler outerViewHandler = ctx.getApplication().getViewHandler();
+            String renderKitId = outerViewHandler.calculateRenderKitId(ctx);
+            
+            viewRoot = getStateManager(ctx).restoreView(ctx, viewId, renderKitId);
         }
 
         return viewRoot;
-        
     }
-
     
     /**
      * @see ViewDeclarationLanguage#createView(javax.faces.context.FacesContext, String)
      */
     @Override
-    public UIViewRoot createView(FacesContext ctx,
-                                 String viewId) {
+    public UIViewRoot createView(FacesContext ctx, String viewId) {
 
-        Util.notNull("context", ctx);
+        notNull("context", ctx);
 
-        UIViewRoot result = (UIViewRoot)
-              ctx.getApplication()
-                    .createComponent(UIViewRoot.COMPONENT_TYPE);
+        UIViewRoot result = (UIViewRoot) ctx.getApplication().createComponent(COMPONENT_TYPE);
 
         Locale locale = null;
         String renderKitId = null;
@@ -154,41 +147,36 @@ public abstract class ViewHandlingStrategy extends ViewDeclarationLanguage {
             renderKitId = ctx.getViewRoot().getRenderKitId();
         }
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Created new view for " + viewId);
+        if (logger.isLoggable(FINE)) {
+            logger.log(FINE, "Created new view for " + viewId);
         }
+        
         // PENDING(): not sure if we should set the RenderKitId here.
         // The UIViewRoot ctor sets the renderKitId to the default
         // one.
-        // if there was no locale from the previous view, calculate the locale
-        // for this view.
+        // If there was no locale from the previous view, calculate the locale for this view.
         if (locale == null) {
             locale = ctx.getApplication().getViewHandler().calculateLocale(ctx);
-            if (logger.isLoggable(Level.FINE)) {
+            if (logger.isLoggable(FINE)) {
                 logger.fine(
-                      "Locale for this view as determined by calculateLocale "
-                      + locale.toString());
+                    "Locale for this view as determined by calculateLocale " + locale.toString());
             }
         } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Using locale from previous view "
-                            + locale.toString());
+            if (logger.isLoggable(FINE)) {
+                logger.fine("Using locale from previous view " + locale.toString());
             }
         }
 
         if (renderKitId == null) {
-            renderKitId =
-                  ctx.getApplication().getViewHandler()
-                        .calculateRenderKitId(ctx);
-            if (logger.isLoggable(Level.FINE)) {
+            renderKitId = ctx.getApplication().getViewHandler().calculateRenderKitId(ctx);
+            
+            if (logger.isLoggable(FINE)) {
                 logger.fine(
-                      "RenderKitId for this view as determined by calculateRenderKitId "
-                      + renderKitId);
+                    "RenderKitId for this view as determined by calculateRenderKitId " + renderKitId);
             }
         } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Using renderKitId from previous view "
-                            + renderKitId);
+            if (logger.isLoggable(FINE)) {
+                logger.fine("Using renderKitId from previous view " + renderKitId);
             }
         }
 
@@ -205,8 +193,6 @@ public abstract class ViewHandlingStrategy extends ViewDeclarationLanguage {
      * @return <code>true</code> if this <code>ViewHandlingStrategy</code>
      *  handles the the view type represented by <code>viewId</code>
      */
-    
     public abstract boolean handlesViewId(String viewId);
-
 
 }

@@ -51,6 +51,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -706,6 +707,14 @@ public abstract class ViewHandler {
      */
     public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context, String viewId) {
         return null;
+    }
+    
+    public Stream<String> getViews(FacesContext context, String path) {
+        return Stream.empty();
+    }
+    
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
+        return Stream.empty();
     }
     
     /**

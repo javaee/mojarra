@@ -40,24 +40,41 @@
 
 package com.sun.faces.application.view;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.context.StateContext;
-import javax.faces.view.facelets.Facelet;
-import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
-import com.sun.faces.facelets.el.VariableMapperWrapper;
-import com.sun.faces.facelets.impl.DefaultFaceletFactory;
-import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
-import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
-import com.sun.faces.facelets.tag.ui.UIDebug;
-import com.sun.faces.scripting.groovy.GroovyHelper;
-import com.sun.faces.util.Cache.Factory;
-import com.sun.faces.util.Cache;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.HtmlUtils;
-import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.util.Util;
+import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import static com.sun.faces.RIConstants.FACELETS_ENCODING_KEY;
+import static com.sun.faces.RIConstants.FLOW_DEFINITION_ID_SUFFIX;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsBufferSize;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsViewMappings;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
+import static com.sun.faces.util.RequestStateManager.FACELET_FACTORY;
+import static com.sun.faces.util.Util.getDOCTYPEFromFacesContextAttributes;
+import static com.sun.faces.util.Util.getXMLDECLFromFacesContextAttributes;
+import static com.sun.faces.util.Util.isViewPopulated;
+import static com.sun.faces.util.Util.notNull;
+import static com.sun.faces.util.Util.saveDOCTYPEToFacesContextAttributes;
+import static com.sun.faces.util.Util.saveXMLDECLToFacesContextAttributes;
+import static com.sun.faces.util.Util.setViewPopulated;
+import static java.lang.Boolean.TRUE;
+import static java.util.Collections.emptyList;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.FINEST;
+import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
+import static javax.faces.FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY;
+import static javax.faces.application.ProjectStage.Development;
+import static javax.faces.application.Resource.COMPONENT_RESOURCE_KEY;
+import static javax.faces.application.StateManager.IS_BUILDING_INITIAL_STATE;
+import static javax.faces.application.StateManager.STATE_SAVING_METHOD_SERVER;
+import static javax.faces.application.ViewHandler.CHARACTER_ENCODING_KEY;
+import static javax.faces.application.ViewHandler.DEFAULT_FACELETS_SUFFIX;
+import static javax.faces.component.UIComponent.BEANINFO_KEY;
+import static javax.faces.component.UIComponent.COMPOSITE_FACET_NAME;
+import static javax.faces.component.UIComponent.VIEW_LOCATION_KEY;
+import static javax.faces.component.UIViewRoot.COMPONENT_TYPE;
+import static javax.faces.view.AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY;
+import static javax.faces.view.facelets.FaceletContext.FACELET_CONTEXT_KEY;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
@@ -69,8 +86,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
+
+import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
@@ -82,10 +104,14 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.ActionSource2;
+import javax.faces.component.ContextCallback;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -95,6 +121,7 @@ import javax.faces.event.MethodExpressionValueChangeListener;
 import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.render.RenderKit;
+import javax.faces.render.ResponseStateManager;
 import javax.faces.validator.MethodExpressionValidator;
 import javax.faces.view.ActionSource2AttachedObjectHandler;
 import javax.faces.view.ActionSource2AttachedObjectTarget;
@@ -110,27 +137,29 @@ import javax.faces.view.ValueHolderAttachedObjectTarget;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
 import javax.faces.view.ViewMetadata;
+import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletContext;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsBufferSize;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsViewMappings;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
-import com.sun.faces.util.ComponentStruct;
-import static javax.faces.application.StateManager.IS_BUILDING_INITIAL_STATE;
-import javax.faces.component.ContextCallback;
-import javax.faces.component.visit.VisitCallback;
-import javax.faces.component.visit.VisitContext;
-import javax.faces.component.visit.VisitResult;
-import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.context.StateContext;
+import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
+import com.sun.faces.facelets.el.VariableMapperWrapper;
+import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import com.sun.faces.facelets.impl.XMLFrontMatterSaver;
+import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
+import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
+import com.sun.faces.facelets.tag.ui.UIDebug;
 import com.sun.faces.renderkit.RenderKitUtils;
-import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import javax.el.ELContext;
-import javax.faces.application.ProjectStage;
-import javax.faces.render.ResponseStateManager;
+import com.sun.faces.scripting.groovy.GroovyHelper;
+import com.sun.faces.util.Cache;
+import com.sun.faces.util.Cache.Factory;
+import com.sun.faces.util.ComponentStruct;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.HtmlUtils;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
 
 /**
  * This {@link ViewHandlingStrategy} handles Facelets/PDL-based views.
@@ -153,7 +182,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
           FaceletViewHandlingStrategy.class.getName() + ".IS_BUILDING_METADATA";
     
     public static final String RESOURCE_LIBRARY_CONTRACT_DATA_STRUCTURE_KEY = 
-              FaceletViewHandlingStrategy.class.getName() + ".RESOURCE_LIBRARY_CONTRACT_DATA_STRUCTURE";
+          FaceletViewHandlingStrategy.class.getName() + ".RESOURCE_LIBRARY_CONTRACT_DATA_STRUCTURE";
 
     private MethodRetargetHandlerManager retargetHandlerManager =
           new MethodRetargetHandlerManager();
@@ -167,357 +196,22 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     private Cache<Resource, BeanInfo> metadataCache;
     private Map<String, List<String>> contractMappings;
 
-    /**
-     * Stores the skip hint.
-     */
-    private static final String SKIP_ITERATION_HINT = "javax.faces.visit.SKIP_ITERATION";
 
     // ------------------------------------------------------------ Constructors
 
-
     public FaceletViewHandlingStrategy() {
-
         initialize();
-
     }
 
+    
     // ------------------------------------------------------------ Constructors
 
     public static boolean isBuildingMetadata(FacesContext context) {
-        return context.getAttributes().containsKey(FaceletViewHandlingStrategy.IS_BUILDING_METADATA);
+        return context.getAttributes().containsKey(IS_BUILDING_METADATA);
     }
 
+    
     // ------------------------------------ Methods from ViewDeclarationLanguage
-
-    @Override
-    public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
-        StateManagementStrategy result;
-        
-        StateContext stateCtx = StateContext.getStateContext(context);
-        if (stateCtx.isPartialStateSaving(context, viewId)) {
-            result = new FaceletPartialStateManagementStrategy(context);
-        } else {
-            // Spec for this method says:
-            
-            // Implementations that provide the VDL for Facelets for JSF 2.0 
-            // and later must return non-null from this method.
-            
-            // Limit the specification violating change to the case where
-            // we are running in Trinidad.
-            // 
-            result = isTrinidadStateManager ? null : new JspStateManagementStrategy(context);
-        }
-        
-        return result;
-    }
-    
-    /*
-     * Called by Application._createComponent(Resource).
-     * 
-     * This method creates two temporary UIComponent instances to aid in
-     * the creation of the compcomp metadata.  These instances no longer
-     * needed after the method returns and can be safely garbage
-     * collected.
-     *
-     * PENDING(): memory analysis should be done to verify there are no
-     * memory leaks as a result of this implementation.
-
-     * The instances are
-
-     * 1. tmp: a javax.faces.NamingContainer to serve as the temporary
-     * top level component
-
-     * 2. facetComponent: a javax.faces.Panel to serve as the parent
-     * UIComponent that is passed to Facelets so that the <cc:interface>
-     * section can be parsed and understood.
-
-     * Per the compcomp spec, tmp has the compcomp Resource stored in
-     * its attr set under the key Resource.COMPONENT_RESOURCE_KEY.  tmp
-     * has the facetComponent added as its
-     * UIComponent.COMPOSITE_FACET_NAME facet.
-
-     */
-
-    @Override
-    public BeanInfo getComponentMetadata(FacesContext context, 
-            Resource ccResource) {
-
-        DefaultFaceletFactory factory = (DefaultFaceletFactory)
-                RequestStateManager.get(context, RequestStateManager.FACELET_FACTORY);
-        DefaultFaceletFactory ourFactory = (DefaultFaceletFactory) factory;
-        if (ourFactory.needsToBeRefreshed(ccResource.getURL())) {
-            metadataCache.remove(ccResource);
-        }
-
-        return metadataCache.get(ccResource);
-    }
-    
-    public BeanInfo createComponentMetadata(FacesContext context,
-            Resource ccResource) {
-
-        // PENDING this implementation is terribly wasteful.
-        // Must find a better way.
-        CompositeComponentBeanInfo result;
-        FaceletContext ctx = (FaceletContext)
-                context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
-        DefaultFaceletFactory factory = (DefaultFaceletFactory)
-              RequestStateManager.get(context, RequestStateManager.FACELET_FACTORY);
-        VariableMapper orig = ctx.getVariableMapper();
-
-    // create tmp and facetComponent
-        UIComponent tmp = context.getApplication().createComponent("javax.faces.NamingContainer");
-        UIPanel facetComponent = (UIPanel)
-                context.getApplication().createComponent("javax.faces.Panel");
-
-    // PENDING I think this can be skipped because we don't render
-    // this component instance.
-        facetComponent.setRendererType("javax.faces.Group");
-
-    // PENDING This could possibly be skipped too.  However, I think
-    // this is important because other tag handlers, within
-    // <cc:interface> expect it will be there.
-        tmp.getFacets().put(UIComponent.COMPOSITE_FACET_NAME, facetComponent);
-        // We have to put the resource in here just so the classes that eventually
-        // get called by facelets have access to it.
-        tmp.getAttributes().put(Resource.COMPONENT_RESOURCE_KEY, 
-                ccResource);
-        
-        Facelet f;
-
-        try {
-            f = factory.getFacelet(context, ccResource.getURL());
-            VariableMapper wrapper = new VariableMapperWrapper(orig) {
-
-                @Override
-                public ValueExpression resolveVariable(String variable) {
-                    return super.resolveVariable(variable);
-                }
-                
-            };
-            ctx.setVariableMapper(wrapper);
-            context.getAttributes().put(IS_BUILDING_METADATA, Boolean.TRUE);
-
-        // Because mojarra currently requires a <cc:interface>
-        // element within the compcomp markup, we can rely on the
-        // fact that its tag handler, InterfaceHandler.apply(), is
-        // called.  In this method, we first imbue facetComponent
-        // with any config information present on the <cc:interface>
-        // element.
-
-        // Then we do the normal facelet thing:
-        // this.nextHandler.apply().  This causes any child tag
-        // handlers of the <cc:interface> to be called.  The
-        // compcomp spec says each such tag handler is responsible
-        // for adding to the compcomp metadata, referenced from the
-        // facetComponent parent.
-
-            f.apply(context, facetComponent);
-
-        // When f.apply() returns (and therefore
-        // InterfaceHandler.apply() returns), the compcomp metadata
-        // pointed to by facetComponent is fully populated.
-
-        } catch (Exception e) {
-            if (e instanceof FacesException) {
-                throw (FacesException) e;
-            } else {
-                throw new FacesException(e);
-            }
-        }
-        finally {
-            context.getAttributes().remove(IS_BUILDING_METADATA);
-            ctx.setVariableMapper(orig);
-        }
-    // we extract the compcomp metadata and return it, making sure
-    // to discard tmp and facetComponent.  The compcomp metadata
-    // should be cacheable and shareable across threads, but this is
-    // not yet implemented.
-        result = (CompositeComponentBeanInfo) 
-                tmp.getAttributes().get(UIComponent.BEANINFO_KEY);
-        
-        return result;
-    }
-
-    @Override
-    public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
-        Util.notNull("context", context);
-        Util.notNull("viewId", viewId);
-
-        return new ViewMetadataImpl(viewId);
-
-    }
-    
-    /**
-     * @see javax.faces.view.ViewDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
-     */
-    @Override
-    public Resource getScriptComponentResource(FacesContext context,
-            Resource componentResource) {
-        Util.notNull("context", context);
-        Util.notNull("componentResource", componentResource);
-
-        if (!groovyAvailable) {
-            return null;
-        }
-        Resource result = null;
-
-        String resourceName = componentResource.getResourceName();
-        if (resourceName.endsWith(".xhtml")) {
-            resourceName = resourceName.substring(0, 
-                    resourceName.length() - 6) + ".groovy";
-            ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
-            result = resourceHandler.createResource(resourceName, 
-                    componentResource.getLibraryName());
-        }
-        
-        return result;
-    }
-
-
-    /**
-     * @see javax.faces.view.ViewDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
-     */
-    @Override
-    public void renderView(FacesContext ctx,
-                           UIViewRoot viewToRender)
-    throws IOException {
-
-        // suppress rendering if "rendered" property on the component is
-        // false
-        if (!viewToRender.isRendered()) {
-            return;
-        }
-
-        // log request
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("Rendering View: " + viewToRender.getViewId());
-        }
-
-        WriteBehindStateWriter stateWriter = null;
-        try {
-            // Only build the view if this view has not yet been built.
-            if (!Util.isViewPopulated(ctx, viewToRender)) {
-                ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewToRender.getViewId());
-                vdl.buildView(ctx, viewToRender);
-            }
-
-            // setup writer and assign it to the ctx
-            ResponseWriter origWriter = ctx.getResponseWriter();
-            if (origWriter == null) {
-                origWriter = createResponseWriter(ctx);
-            }
-
-            ExternalContext extContext = ctx.getExternalContext();
-            
-            /*
-             * Make sure we have a session here if we are using server state
-             * saving. The WriteBehindStateWriter needs an active session when
-             * it writes out state to a server session.
-             * 
-             * Note if you flag a view as transient then we won't acquire the
-             * session as you are stating it does not need one.
-             */
-            if (isServerStateSaving() && !viewToRender.isTransient()) {
-                getSession(ctx);
-            }            
-            
-            Writer outputWriter = extContext.getResponseOutputWriter();
-            stateWriter = new WriteBehindStateWriter(outputWriter,
-                                                     ctx,
-                                                     responseBufferSize);
-
-            ResponseWriter writer = origWriter.cloneWithWriter(stateWriter);
-            ctx.setResponseWriter(writer);
-
-            //  Don't call startDoc and endDoc on a partial response
-            if (ctx.getPartialViewContext().isPartialRequest()) {
-                viewToRender.encodeAll(ctx);
-                try {
-                    ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);
-                } catch (UnsupportedOperationException uoe) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
-                    }
-                }
-            } else {
-                if (ctx.isProjectStage(ProjectStage.Development)) {
-                    FormOmittedChecker.check(ctx);
-                }
-                
-                // render the view to the response
-                String xmlDecl = Util.getXMLDECLFromFacesContextAttributes(ctx);
-                if (null != xmlDecl) {
-                    // Do not escape.
-                    writer.writePreamble(xmlDecl);
-                }
-
-                String docType = Util.getDOCTYPEFromFacesContextAttributes(ctx);
-                if (null != docType) {
-                    // Do not escape.
-                    writer.writeDoctype(docType);
-                }
-                writer.startDocument();
-                viewToRender.encodeAll(ctx);
-                try {
-                    ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);
-                } catch (UnsupportedOperationException uoe) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
-                    }
-                }
-                writer.endDocument();
-            }
-            // finish writing
-            writer.close();
-
-
-            boolean writtenState = stateWriter.stateWritten();
-            // flush to origWriter
-            if (writtenState) {
-                stateWriter.flushToWriter();
-            }
-
-        } catch (FileNotFoundException fnfe) {
-            this.handleFaceletNotFound(ctx,
-                                       viewToRender.getViewId(),
-                                       fnfe.getMessage());
-        } catch (Exception e) {
-            this.handleRenderException(ctx, e);
-        } finally {
-            if (stateWriter != null)
-                stateWriter.release();
-        }
-
-    }
-
-    /**
-     * Are we saving state server side?
-     * 
-     * @return true if we are, false otherwise.
-     */
-    private boolean isServerStateSaving() {
-        boolean result = false;
-        String stateMode = webConfig.getOptionValue(StateSavingMethod);
-        if (StateManager.STATE_SAVING_METHOD_SERVER.equals(stateMode)) {
-            result = true;
-        }
-        return result;
-    }
-
-    /**
-     * Get a session (if we are using server state saving).
-     * 
-     * @param context the Faces context.
-     * @return the session, or null if we are not using server state saving.
-     */
-    private HttpSession getSession(FacesContext context) {
-        HttpSession result = null;
-        Object sessionObj = context.getExternalContext().getSession(true);
-        if (sessionObj instanceof HttpSession) {
-            result = (HttpSession) sessionObj;
-        }
-        return result;
-    }
     
     /**
      * <p>
@@ -527,13 +221,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @see ViewDeclarationLanguage#restoreView(javax.faces.context.FacesContext, java.lang.String) 
      */
     @Override
-    public UIViewRoot restoreView(FacesContext context,
-                                  String viewId) {
-        Util.notNull("context", context);
-        Util.notNull("viewId", viewId);
+    public UIViewRoot restoreView(FacesContext context, String viewId) {
+        notNull("context", context);
+        notNull("viewId", viewId);
 
         if (UIDebug.debugRequest(context)) {
-            context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
+            context.getApplication().createComponent(COMPONENT_TYPE);
         }
                         
         UIViewRoot viewRoot;
@@ -601,38 +294,410 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         
         return root;
     }
+    
+    @Override
+    public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
+        notNull("context", context);
+        notNull("viewId", viewId);
 
+        return new ViewMetadataImpl(viewId);
+    }
+    
+    /**
+     * @see ViewDeclarationLanguage#createView(javax.faces.context.FacesContext, java.lang.String)
+     */
+    @Override
+    public UIViewRoot createView(FacesContext ctx, String viewId) {
+        notNull("context", ctx);
+        notNull("viewId", viewId);
+
+        if (UIDebug.debugRequest(ctx)) {
+            UIViewRoot root = (UIViewRoot) ctx.getApplication().createComponent(COMPONENT_TYPE);
+            root.setViewId(viewId);
+            return root;
+        }
+
+        UIViewRoot result = super.createView(ctx, viewId);
+        ViewHandler viewHandler = ctx.getApplication().getViewHandler();
+        ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(ctx, viewId);
+
+        ctx.setResourceLibraryContracts(vdl.calculateResourceLibraryContracts(ctx, viewId));
+        
+        return result;
+    }
+    
+    /**
+     * @see ViewDeclarationLanguage#buildView(FacesContext, UIViewRoot)
+     */
+    @Override
+    public void buildView(FacesContext ctx, UIViewRoot view) throws IOException {
+        StateContext stateCtx = StateContext.getStateContext(ctx);
+        
+        if (isViewPopulated(ctx, view)) {
+            Facelet facelet = faceletFactory.getFacelet(ctx, view.getViewId());
+            // Disable events from being intercepted by the StateContext by
+            // virute of re-applying the handlers. 
+            try {
+                stateCtx.setTrackViewModifications(false);
+                facelet.apply(ctx, view);
+                reapplyDynamicActions(ctx);
+                if (stateCtx.isPartialStateSaving(ctx, view.getViewId())) {
+                    markInitialStateIfNotMarked(view);
+                }
+            } finally {
+                stateCtx.setTrackViewModifications(true);
+            }
+            
+            return;
+        }
+
+        view.setViewId(view.getViewId());
+
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine("Building View: " + view.getViewId());
+        }
+        
+        if (faceletFactory == null) {
+            ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
+            faceletFactory = associate.getFaceletFactory();
+            assert (faceletFactory != null);
+        }
+        RequestStateManager.set(ctx, FACELET_FACTORY, faceletFactory);
+        Facelet facelet = faceletFactory.getFacelet(ctx, view.getViewId());
+
+        // populate UIViewRoot
+        try {
+            ctx.getAttributes().put(IS_BUILDING_INITIAL_STATE, Boolean.TRUE);
+            stateCtx.setTrackViewModifications(false);
+            facelet.apply(ctx, view);
+            
+            if (facelet instanceof XMLFrontMatterSaver) {
+                XMLFrontMatterSaver frontMatterSaver = (XMLFrontMatterSaver) facelet;
+                
+                String docType = frontMatterSaver.getSavedDoctype();
+                if (docType != null) {
+                    saveDOCTYPEToFacesContextAttributes(docType);
+                }
+                
+                String XMLDECL = frontMatterSaver.getSavedXMLDecl();
+                if (XMLDECL != null) {
+                    saveXMLDECLToFacesContextAttributes(XMLDECL);
+                }
+            }
+            
+            if (!stateCtx.isPartialStateSaving(ctx, view.getViewId())) {
+                reapplyDynamicActions(ctx);
+            }
+            
+            doPostBuildActions(ctx, view);
+        } finally {
+            ctx.getAttributes().remove(IS_BUILDING_INITIAL_STATE);
+        }
+        ctx.getApplication().publishEvent(ctx, PostAddToViewEvent.class, UIViewRoot.class, view);
+        markInitialState(ctx, view);
+        
+        setViewPopulated(ctx, view);
+    }
+    
+    /**
+     * @see javax.faces.view.ViewDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
+     */
+    @Override
+    public void renderView(FacesContext ctx, UIViewRoot viewToRender) throws IOException {
+
+        // Suppress rendering if "rendered" property on the component is false
+        if (!viewToRender.isRendered()) {
+            return;
+        }
+
+        // Log request
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine("Rendering View: " + viewToRender.getViewId());
+        }
+
+        WriteBehindStateWriter stateWriter = null;
+        try {
+            // Only build the view if this view has not yet been built.
+            if (!isViewPopulated(ctx, viewToRender)) {
+                ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewToRender.getViewId());
+                vdl.buildView(ctx, viewToRender);
+            }
+
+            // Setup writer and assign it to the ctx
+            ResponseWriter origWriter = ctx.getResponseWriter();
+            if (origWriter == null) {
+                origWriter = createResponseWriter(ctx);
+            }
+
+            ExternalContext extContext = ctx.getExternalContext();
+            
+            /*
+             * Make sure we have a session here if we are using server state
+             * saving. The WriteBehindStateWriter needs an active session when
+             * it writes out state to a server session.
+             * 
+             * Note if you flag a view as transient then we won't acquire the
+             * session as you are stating it does not need one.
+             */
+            if (isServerStateSaving() && !viewToRender.isTransient()) {
+                getSession(ctx);
+            }            
+            
+            Writer outputWriter = extContext.getResponseOutputWriter();
+            stateWriter = new WriteBehindStateWriter(outputWriter,
+                                                     ctx,
+                                                     responseBufferSize);
+
+            ResponseWriter writer = origWriter.cloneWithWriter(stateWriter);
+            ctx.setResponseWriter(writer);
+
+            //  Don't call startDoc and endDoc on a partial response
+            if (ctx.getPartialViewContext().isPartialRequest()) {
+                viewToRender.encodeAll(ctx);
+                try {
+                    ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);
+                } catch (UnsupportedOperationException uoe) {
+                    if (LOGGER.isLoggable(FINE)) {
+                        LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
+                    }
+                }
+            } else {
+                if (ctx.isProjectStage(Development)) {
+                    FormOmittedChecker.check(ctx);
+                }
+                
+                // render the view to the response
+                String xmlDecl = getXMLDECLFromFacesContextAttributes(ctx);
+                if (null != xmlDecl) {
+                    // Do not escape.
+                    writer.writePreamble(xmlDecl);
+                }
+
+                String docType = getDOCTYPEFromFacesContextAttributes(ctx);
+                if (null != docType) {
+                    // Do not escape.
+                    writer.writeDoctype(docType);
+                }
+                writer.startDocument();
+                viewToRender.encodeAll(ctx);
+                try {
+                    ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);
+                } catch (UnsupportedOperationException uoe) {
+                    if (LOGGER.isLoggable(FINE)) {
+                        LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
+                    }
+                }
+                writer.endDocument();
+            }
+            
+            // Finish writing
+            writer.close();
+            
+            // Flush to origWriter
+            if (stateWriter.stateWritten()) {
+                stateWriter.flushToWriter();
+            }
+
+        } catch (FileNotFoundException fnfe) {
+            handleFaceletNotFound(ctx, viewToRender.getViewId(), fnfe.getMessage());
+        } catch (Exception e) {
+            handleRenderException(ctx, e);
+        } finally {
+            if (stateWriter != null) {
+                stateWriter.release();
+            }
+        }
+    }
+
+    @Override
+    public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
+        StateManagementStrategy result;
+        
+        StateContext stateCtx = StateContext.getStateContext(context);
+        if (stateCtx.isPartialStateSaving(context, viewId)) {
+            result = new FaceletPartialStateManagementStrategy(context);
+        } else {
+            // Spec for this method says:
+            
+            // Implementations that provide the VDL for Facelets for JSF 2.0 
+            // and later must return non-null from this method.
+            
+            // Limit the specification violating change to the case where
+            // we are running in Trinidad.
+            // 
+            result = isTrinidadStateManager ? null : new JspStateManagementStrategy(context);
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Called by Application._createComponent(Resource).
+     * 
+     * This method creates two temporary UIComponent instances to aid in
+     * the creation of the compcomp metadata.  These instances no longer
+     * needed after the method returns and can be safely garbage
+     * collected.
+     *
+     * PENDING(): memory analysis should be done to verify there are no
+     * memory leaks as a result of this implementation.
+     *
+     * The instances are
+     *
+     * 1. tmp: a javax.faces.NamingContainer to serve as the temporary
+     * top level component
+     *
+     * 2. facetComponent: a javax.faces.Panel to serve as the parent
+     * UIComponent that is passed to Facelets so that the <cc:interface>
+     * section can be parsed and understood.
+     *
+     * Per the compcomp spec, tmp has the compcomp Resource stored in
+     * its attr set under the key Resource.COMPONENT_RESOURCE_KEY.  tmp
+     * has the facetComponent added as its
+     * UIComponent.COMPOSITE_FACET_NAME facet.
+     *
+     */
+    @Override
+    public BeanInfo getComponentMetadata(FacesContext context, Resource ccResource) {
+
+        DefaultFaceletFactory factory = (DefaultFaceletFactory) RequestStateManager.get(context, FACELET_FACTORY);
+        DefaultFaceletFactory ourFactory = (DefaultFaceletFactory) factory;
+        
+        if (ourFactory.needsToBeRefreshed(ccResource.getURL())) {
+            metadataCache.remove(ccResource);
+        }
+
+        return metadataCache.get(ccResource);
+    }
+    
+    public BeanInfo createComponentMetadata(FacesContext context, Resource ccResource) {
+
+        // PENDING this implementation is terribly wasteful.
+        // Must find a better way.
+        FaceletContext faceletContext = (FaceletContext) context.getAttributes().get(FACELET_CONTEXT_KEY);
+        DefaultFaceletFactory factory = (DefaultFaceletFactory) RequestStateManager.get(context, FACELET_FACTORY);
+        VariableMapper orig = faceletContext.getVariableMapper();
+
+        // Create tmp and facetComponent
+        UIComponent tmp = context.getApplication().createComponent("javax.faces.NamingContainer");
+        UIPanel facetComponent = (UIPanel) context.getApplication().createComponent("javax.faces.Panel");
+
+        // PENDING I think this can be skipped because we don't render
+        // this component instance.
+        facetComponent.setRendererType("javax.faces.Group");
+
+        // PENDING This could possibly be skipped too.  However, I think
+        // this is important because other tag handlers, within
+        // <cc:interface> expect it will be there.
+        tmp.getFacets().put(COMPOSITE_FACET_NAME, facetComponent);
+        
+        // We have to put the resource in here just so the classes that eventually
+        // get called by facelets have access to it.
+        tmp.getAttributes().put(COMPONENT_RESOURCE_KEY, ccResource);
+        
+        Facelet facelet;
+
+        try {
+            facelet = factory.getFacelet(context, ccResource.getURL());
+            VariableMapper wrapper = new VariableMapperWrapper(orig) {
+
+                @Override
+                public ValueExpression resolveVariable(String variable) {
+                    return super.resolveVariable(variable);
+                }
+                
+            };
+            
+            faceletContext.setVariableMapper(wrapper);
+            context.getAttributes().put(IS_BUILDING_METADATA, TRUE);
+
+            // Because mojarra currently requires a <cc:interface>
+            // element within the compcomp markup, we can rely on the
+            // fact that its tag handler, InterfaceHandler.apply(), is
+            // called.  In this method, we first imbue facetComponent
+            // with any config information present on the <cc:interface>
+            // element.
+    
+            // Then we do the normal facelet thing:
+            // this.nextHandler.apply().  This causes any child tag
+            // handlers of the <cc:interface> to be called.  The
+            // compcomp spec says each such tag handler is responsible
+            // for adding to the compcomp metadata, referenced from the
+            // facetComponent parent.
+
+            facelet.apply(context, facetComponent);
+
+            // When facelet.apply() returns (and therefore
+            // InterfaceHandler.apply() returns), the compcomp metadata
+            // pointed to by facetComponent is fully populated.
+
+        } catch (Exception e) {
+            if (e instanceof FacesException) {
+                throw (FacesException) e;
+            } else {
+                throw new FacesException(e);
+            }
+        }
+        finally {
+            context.getAttributes().remove(IS_BUILDING_METADATA);
+            faceletContext.setVariableMapper(orig);
+        }
+        
+        // we extract the compcomp metadata and return it, making sure
+        // to discard tmp and facetComponent.  The compcomp metadata
+        // should be cacheable and shareable across threads, but this is
+        // not yet implemented.
+        return (CompositeComponentBeanInfo) tmp.getAttributes().get(BEANINFO_KEY);
+    }
+    
+    /**
+     * @see javax.faces.view.ViewDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     */
+    @Override
+    public Resource getScriptComponentResource(FacesContext context, Resource componentResource) {
+        notNull("context", context);
+        notNull("componentResource", componentResource);
+
+        if (!groovyAvailable) {
+            return null;
+        }
+        Resource result = null;
+
+        String resourceName = componentResource.getResourceName();
+        if (resourceName.endsWith(".xhtml")) {
+            resourceName = resourceName.substring(0, resourceName.length() - 6) + ".groovy";
+            ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
+            result = resourceHandler.createResource(resourceName, componentResource.getLibraryName());
+        }
+        
+        return result;
+    }
 
     /**
      * @see ViewHandlingStrategy#retargetAttachedObjects(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.util.List)
      */
     @SuppressWarnings({"unchecked"})
     @Override
-    public void retargetAttachedObjects(FacesContext context,
-                                        UIComponent topLevelComponent,
-                                        List<AttachedObjectHandler> handlers) {
-        Util.notNull("context", context);
-        Util.notNull("topLevelComponent", topLevelComponent);
-        Util.notNull("handlers", handlers);
-
-        //List<AttachedObjectHandler> handlers =
-        //      getAttachedObjectHandlers(topLevelComponent, false);
+    public void retargetAttachedObjects(FacesContext context, UIComponent topLevelComponent, List<AttachedObjectHandler> handlers) {
+        notNull("context", context);
+        notNull("topLevelComponent", topLevelComponent);
+        notNull("handlers", handlers);
 
         if (handlers == null || handlers.isEmpty()) {
             return;
         }
         
-        BeanInfo componentBeanInfo = (BeanInfo) 
-                topLevelComponent.getAttributes().get(UIComponent.BEANINFO_KEY);
-        // PENDING(edburns): log error message if componentBeanInfo is null;
-        if (null == componentBeanInfo) {
+        BeanInfo componentBeanInfo = (BeanInfo) topLevelComponent.getAttributes().get(BEANINFO_KEY);
+        if (componentBeanInfo == null) {
             return;
         }
+        
         BeanDescriptor componentDescriptor = componentBeanInfo.getBeanDescriptor();
+        
         // There is an entry in targetList for each attached object in the 
         // <composite:interface> section of the composite component.
-        List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)
-                componentDescriptor.getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
+        List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>) componentDescriptor.getValue(ATTACHED_OBJECT_TARGETS_KEY);
+        
         // Each entry in targetList will vend one or more UIComponent instances
         // that is to serve as the target of an attached object in the consuming
         // page.
@@ -641,12 +706,15 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         // For each of the attached object handlers...
         for (AttachedObjectHandler curHandler : handlers) {
+            
             // Get the name given to this attached object by the page author
             // in the consuming page.
             forAttributeValue = curHandler.getFor();
+            
             // For each of the attached objects in the <composite:interface> section
             // of this composite component...
             for (AttachedObjectTarget curTarget : targetList) {
+                
                 // Get the name given to this attached object target by the
                 // composite component author
                 curTargetName = curTarget.getName();
@@ -695,20 +763,17 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
     }
 
-
     /**
      * @see ViewHandlingStrategy#retargetMethodExpressions(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
      */
     @Override
-    public void retargetMethodExpressions(FacesContext context,
-                                          UIComponent topLevelComponent) {
-        Util.notNull("context", context);
-        Util.notNull("topLevelComponent", topLevelComponent);
+    public void retargetMethodExpressions(FacesContext context, UIComponent topLevelComponent) {
+        notNull("context", context);
+        notNull("topLevelComponent", topLevelComponent);
 
-        BeanInfo componentBeanInfo = (BeanInfo) 
-                topLevelComponent.getAttributes().get(UIComponent.BEANINFO_KEY);
+        BeanInfo componentBeanInfo = (BeanInfo) topLevelComponent.getAttributes().get(BEANINFO_KEY);
         // PENDING(edburns): log error message if componentBeanInfo is null;
-        if (null == componentBeanInfo) {
+        if (componentBeanInfo == null) {
             return;
         }
 
@@ -726,24 +791,22 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // The only case when it will not be a ValueExpression is
             // the case when the attrName is an action, and even then, it'll be a
             // ValueExpression in all cases except when it's a literal string.
-            if (null == attrValue) {
+            if (attrValue == null) {
                 Map<String, Object> attrs = topLevelComponent.getAttributes();
-                attrValue = (attrs.containsKey(attrName)) ?
-                    attrs.get(attrName) : metadata.getDefault();
+                attrValue = attrs.containsKey(attrName) ? attrs.get(attrName) : metadata.getDefault();
                 if (attrValue == null) {
                     if (metadata.isRequired(context)) {
-                        Object location = attrs.get(UIComponent.VIEW_LOCATION_KEY);
+                        Object location = attrs.get(VIEW_LOCATION_KEY);
                         if (location == null) {
                             location = "";
                         }
                         throw new FacesException(
-                              // RELEASE_PENDING need a better message
-                              location.toString()
-                              + ": Unable to find attribute with name \""
-                              + attrName
-                              + "\" in top level component in consuming page, "
-                              + " or with default value in composite component.  "
-                              + "Page author or composite component author error.");
+                            location.toString() + 
+                            ": Unable to find attribute with name \"" + 
+                            attrName + 
+                            "\" in top level component in consuming page, " + 
+                            " or with default value in composite component.  " + 
+                            "Page author or composite component author error.");
                     } else {
                         continue;
                     }
@@ -752,46 +815,45 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
             String targetAttributeName = metadata.getTargetAttributeName(context);
             UIComponent targetComp = null;
-            if (null != targetAttributeName) {
+            if (targetAttributeName != null) {
                 attrName = targetAttributeName;
             }
+            
             if (targets != null) {
                 MethodRetargetHandler handler = retargetHandlerManager.getRetargetHandler(attrName);
                 if (handler != null) {
                     for (String curTarget : targets) {
                         targetComp = topLevelComponent.findComponent(curTarget);
-                        if (null == targetComp) {
-                            throw new FacesException(attrValue.toString()
-                                                     + " : Unable to re-target MethodExpression as inner component referenced by target id '"
-                                                     + curTarget
-                                                     + "' cannot be found.");
+                        if (targetComp == null) {
+                            throw new FacesException(
+                                attrValue.toString() + 
+                                " : Unable to re-target MethodExpression as inner component referenced by target id '" + 
+                                curTarget + 
+                                "' cannot be found."
+                            );
                         }
-                        handler.retarget(context,
-                                         metadata,
-                                         attrValue,
-                                         targetComp);
+                        handler.retarget(context, metadata, attrValue, targetComp);
                     }
                 } else {
                     // the developer has specified a target for a MethodExpression
                     // but the attribute name doesn't match one action, actionListener,
                     // validator, or valueChangeListener.  We can ignore the
                     // target(s) in this case
-                    if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING,
-                                   "jsf.compcomp.unecessary.targets.attribute",
-                                   new Object[] { getCompositeComponentName(topLevelComponent),
-                                                  attrName });
+                    if (LOGGER.isLoggable(WARNING)) {
+                        LOGGER.log(WARNING,
+                           "jsf.compcomp.unecessary.targets.attribute",
+                           new Object[] { getCompositeComponentName(topLevelComponent), attrName });
                     }
                     handler = retargetHandlerManager.getDefaultHandler();
                     handler.retarget(context, metadata, attrValue, topLevelComponent);
                 }
             } else {
                 MethodRetargetHandler handler = null;
-                if (null != targetAttributeName) {
+                if (targetAttributeName != null) {
                     targetComp = topLevelComponent.findComponent(metadata.getName());
                     handler = retargetHandlerManager.getRetargetHandler(attrName);
                 }
-                if (null == handler) {
+                if (handler == null) {
                     targetComp = topLevelComponent;
                     handler = retargetHandlerManager.getDefaultHandler();
                 }
@@ -801,57 +863,24 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // clear out the ValueExpression that we've retargeted as a
             // MethodExpression
             topLevelComponent.setValueExpression(attrName, null);
-
         }
-
-    }
-
-
-    /**
-     * @see ViewDeclarationLanguage#createView(javax.faces.context.FacesContext, java.lang.String)
-     */
-    @Override
-    public UIViewRoot createView(FacesContext ctx,
-                                 String viewId) {
-        Util.notNull("context", ctx);
-        Util.notNull("viewId", viewId);
-
-        if (UIDebug.debugRequest(ctx)) {
-            UIViewRoot root = (UIViewRoot)
-                  ctx.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
-            root.setViewId(viewId);
-            return root;
-        }
-
-        UIViewRoot result = super.createView(ctx, viewId);
-        ViewHandler viewHandler = ctx.getApplication().getViewHandler();
-        ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(ctx, viewId);
-
-        ctx.setResourceLibraryContracts(vdl.calculateResourceLibraryContracts(ctx, viewId));
-        
-        return result;
-        
     }
 
     @Override
     public UIComponent createComponent(FacesContext context, String taglibURI, String tagName, Map<String, Object> attributes) {
-        Util.notNull("context", context);
-        Util.notNull("taglibURI", taglibURI);
-        Util.notNull("tagName", tagName);
-        UIComponent result = null;
+        notNull("context", context);
+        notNull("taglibURI", taglibURI);
+        notNull("tagName", tagName);
         
-        DefaultFaceletFactory ff = associate.getFaceletFactory();
-        result = ff._createComponent(context, taglibURI, tagName, attributes);
-                
-        return result;
+        return associate.getFaceletFactory()._createComponent(context, taglibURI, tagName, attributes);
     }
     
     @Override
     public List<String> calculateResourceLibraryContracts(FacesContext context, String viewId) {
         List<String> result = null;
         String longestPattern = null;
-        if (null == contractMappings) {
-            return Collections.emptyList();
+        if (contractMappings == null) {
+            return emptyList();
         }
         
         String longestMatch = null;
@@ -885,6 +914,38 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         return result;
     }
     
+    @Override
+    public boolean viewExists(FacesContext context, String viewId) {
+        boolean result = false;
+        if (handlesViewId(viewId)) {
+            if (faceletFactory == null) {
+                faceletFactory = associate.getFaceletFactory();
+                assert (faceletFactory != null);
+            }
+            result = null != faceletFactory.getResourceResolver().resolveUrl(viewId);
+        }
+           
+        return result;
+    }
+    
+    /**
+     * @see javax.faces.view.ViewDeclarationLanguage#getViews(FacesContext, String)
+     */
+    @Override
+    public Stream<String> getViews(FacesContext context, String path) {
+        return super.getViews(context, path)
+                    .filter(viewId -> handlesViewId(viewId));
+    }
+    
+    /**
+     * @see javax.faces.view.ViewDeclarationLanguage#getViews(FacesContext, String, int)
+     */
+    @Override
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
+        return super.getViews(context, path, maxDepth)
+                    .filter(viewId -> handlesViewId(viewId));
+    }
+    
 
     // --------------------------------------- Methods from ViewHandlingStrategy
 
@@ -901,16 +962,16 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public boolean handlesViewId(String viewId) {
          if (viewId != null) {
              
-             if (viewId.endsWith(RIConstants.FLOW_DEFINITION_ID_SUFFIX)) {
+             if (viewId.endsWith(FLOW_DEFINITION_ID_SUFFIX)) {
                  return true;
              }
+             
             // If there's no extensions array or prefixes array, then
             // assume defaults.  .xhtml extension is handled by
             // the FaceletViewHandler and .jsp will be handled by
             // the JSP view handler
-            if ((extensionsArray == null) && (prefixesArray == null)) {
-                boolean matched = isMatchedWithFaceletsSuffix(viewId)? true:(viewId.endsWith(ViewHandler.DEFAULT_FACELETS_SUFFIX));
-                return matched;
+            if (extensionsArray == null && prefixesArray == null) {
+                return isMatchedWithFaceletsSuffix(viewId) ? true : viewId.endsWith(DEFAULT_FACELETS_SUFFIX);
             }
 
             if (extensionsArray != null) {
@@ -933,125 +994,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         return false;
     }
 
-    private boolean isMatchedWithFaceletsSuffix(String viewId) {
-        String[] defaultsuffixes = webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsSuffix, " ");
-        for ( String suffix :defaultsuffixes ) {
-            if (viewId.endsWith(suffix)) {
-                return true;
-            }                      
-        }
-        return false;
-    }
-
-    /**
-     * Mark the initial state if not already marked.
-     */
-    private void markInitialStateIfNotMarked(UIComponent component) {
-        if (!component.isTransient()) {
-            if (!component.getAttributes().containsKey(RIConstants.DYNAMIC_COMPONENT) && !component.initialStateMarked()) {
-                component.markInitialState();
-            }
-            for (Iterator<UIComponent> it = component.getFacetsAndChildren() ; it.hasNext() ; ) {
-                UIComponent child = it.next();
-                markInitialStateIfNotMarked(child);
-            }
-        }
-    }
-
-    /**
-     * Build the view.
-     * @param ctx the {@link FacesContext} for the current request
-     * @param view the {@link UIViewRoot} to populate based
-     *  of the Facelet template
-     * @throws IOException if an error occurs building the view.
-     */
-    @Override
-    public void buildView(FacesContext ctx, UIViewRoot view)
-    throws IOException {
-        StateContext stateCtx = StateContext.getStateContext(ctx);
-        if (Util.isViewPopulated(ctx, view)) {
-            Facelet f = faceletFactory.getFacelet(ctx, view.getViewId());
-            // Disable events from being intercepted by the StateContext by
-            // virute of re-applying the handlers. 
-            try {
-                stateCtx.setTrackViewModifications(false);
-                f.apply(ctx, view);
-                reapplyDynamicActions(ctx);
-                if (stateCtx.isPartialStateSaving(ctx, view.getViewId())) {
-                    markInitialStateIfNotMarked(view);
-                }
-            } finally {
-                stateCtx.setTrackViewModifications(true);
-            }
-            return;
-        }
-
-        view.setViewId(view.getViewId());
-
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("Building View: " + view.getViewId());
-        }
-        if (faceletFactory == null) {
-            ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
-            faceletFactory = associate.getFaceletFactory();
-            assert (faceletFactory != null);
-        }
-        RequestStateManager.set(ctx,
-                                RequestStateManager.FACELET_FACTORY,
-                                faceletFactory);
-        Facelet f = faceletFactory.getFacelet(ctx, view.getViewId());
-
-        // populate UIViewRoot
-        try {
-            ctx.getAttributes().put(IS_BUILDING_INITIAL_STATE, Boolean.TRUE);
-            stateCtx.setTrackViewModifications(false);
-            f.apply(ctx, view);
-            
-            if (f instanceof XMLFrontMatterSaver) {
-                XMLFrontMatterSaver frontMatterSaver = (XMLFrontMatterSaver) f;
-                String docType = frontMatterSaver.getSavedDoctype();
-                if (null != docType) {
-                    Util.saveDOCTYPEToFacesContextAttributes(docType);
-                }
-                String XMLDECL = frontMatterSaver.getSavedXMLDecl();
-                if (null != XMLDECL) {
-                    Util.saveXMLDECLToFacesContextAttributes(XMLDECL);
-                }
-            }
-            
-            if (!stateCtx.isPartialStateSaving(ctx, view.getViewId())) {
-                reapplyDynamicActions(ctx);
-            }
-            
-            doPostBuildActions(ctx, view);
-        } finally {
-            ctx.getAttributes().remove(IS_BUILDING_INITIAL_STATE);
-        }
-        ctx.getApplication().publishEvent(ctx,
-                                          PostAddToViewEvent.class,
-                                          UIViewRoot.class,
-                                          view);
-        markInitialState(ctx, view);
-        
-        Util.setViewPopulated(ctx, view);
-
-    }
-
-    @Override
-    public boolean viewExists(FacesContext context, 
-                              String viewId) {
-        boolean result = false;
-        if (handlesViewId(viewId)) {
-            if (faceletFactory == null) {
-                faceletFactory = associate.getFaceletFactory();
-                assert (faceletFactory != null);
-            }
-            result = null != faceletFactory.getResourceResolver().resolveUrl(viewId);
-        }
-           
-        return result;
-        }
-
     @Override 
     public String getId() {
         return FACELETS_VIEW_DECLARATION_LANGUAGE_ID;
@@ -1066,7 +1008,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      */
     protected void initialize() {
 
-        if (LOGGER.isLoggable(Level.FINE)) {
+        if (LOGGER.isLoggable(FINE)) {
             LOGGER.fine("Initializing FaceletViewHandlingStrategy");
         }
 
@@ -1092,11 +1034,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
 
-        if (LOGGER.isLoggable(Level.FINE)) {
+        if (LOGGER.isLoggable(FINE)) {
             LOGGER.fine("Initialization Successful");
         }
 
-        vdlFactory = (ViewDeclarationLanguageFactory) FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
+        vdlFactory = (ViewDeclarationLanguageFactory) FactoryFinder.getFactory(VIEW_DECLARATION_LANGUAGE_FACTORY);
 
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContext = context.getExternalContext();
@@ -1120,14 +1062,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }        
     }
 
-
     /**
      * Initialize mappings, during the first request.
      */
     protected void initializeMappings() {
 
         String viewMappings = webConfig.getOptionValue(FaceletsViewMappings);
-        if ((viewMappings != null) && (viewMappings.length() > 0)) {
+        if (viewMappings != null && viewMappings.length() > 0) {
             Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
 
             String[] mappingsArray = Util.split(appMap, viewMappings, ";");
@@ -1163,8 +1104,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @return a {@link ResponseWriter} for processing the request
      * @throws IOException if the writer cannot be created
      */
-    protected ResponseWriter createResponseWriter(FacesContext context)
-    throws IOException {
+    protected ResponseWriter createResponseWriter(FacesContext context) throws IOException {
 
         ExternalContext extContext = context.getExternalContext();
         RenderKit renderKit = context.getRenderKit();
@@ -1181,14 +1121,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             extContext.setResponseBufferSize(responseBufferSize);
         }
 
-
         // get our content type
-        String contentType =
-              (String) context.getAttributes().get("facelets.ContentType");
+        String contentType = (String) context.getAttributes().get("facelets.ContentType");
 
         // get the encoding
-        String encoding =
-              (String) context.getAttributes().get(RIConstants.FACELETS_ENCODING_KEY);
+        String encoding = (String) context.getAttributes().get(FACELETS_ENCODING_KEY);
 
         // Create a dummy ResponseWriter with a bogus writer,
         // so we can figure out what content type the ReponseWriter
@@ -1211,9 +1148,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         writer = writer.cloneWithWriter(extContext.getResponseOutputWriter());
 
         return writer;
-
     }
-
 
     /**
      * Handles the case where rendering throws an Exception.
@@ -1222,11 +1157,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @param e the caught Exception
      * @throws IOException if the custom debug content cannot be written
      */
-    protected void handleRenderException(FacesContext context, Exception e)
-    throws IOException {
+    protected void handleRenderException(FacesContext context, Exception e) throws IOException {
 
-        // always log
-        if (LOGGER.isLoggable(Level.SEVERE)) {
+        // Always log
+        if (LOGGER.isLoggable(SEVERE)) {
             UIViewRoot root = context.getViewRoot();
             StringBuffer sb = new StringBuffer(64);
             sb.append("Error Rendering View");
@@ -1235,7 +1169,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 sb.append(root.getViewId());
                 sb.append(']');
             }
-            LOGGER.log(Level.SEVERE, sb.toString(), e);
+            LOGGER.log(SEVERE, sb.toString(), e);
         }
 
         if (e instanceof RuntimeException) {
@@ -1245,9 +1179,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         } else {
             throw new FacesException(e.getMessage(), e);
         }
-
     }
-
 
     /**
      * Handles the case where a Facelet cannot be found.
@@ -1257,18 +1189,15 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @param message optional message to include in the 404
      * @throws IOException if an error occurs sending the 404 to the client
      */
-    protected void handleFaceletNotFound(FacesContext context,
-                                         String viewId,
-                                         String message)
-    throws IOException {
+    protected void handleFaceletNotFound(FacesContext context, String viewId, String message) throws IOException {
 
-        context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND,  ((message != null)
-                                                                  ? (viewId + ": " + message)
-                                                                  : viewId));
+        context.getExternalContext().responseSendError(
+            SC_NOT_FOUND, 
+            message != null ? viewId + ": " + message : viewId
+        );
+        
         context.responseComplete();
-
     }
-
 
     /**
      * @param context the {@link FacesContext} for the current request
@@ -1287,9 +1216,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         if (encoding == null) {
             if (null != context.getExternalContext().getSession(false)) {
                 Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
-                encoding = (String) sessionMap.get(ViewHandler.CHARACTER_ENCODING_KEY);
-                if (LOGGER.isLoggable(Level.FINEST)) {
-                    LOGGER.log(Level.FINEST,
+                encoding = (String) sessionMap.get(CHARACTER_ENCODING_KEY);
+                if (LOGGER.isLoggable(FINEST)) {
+                    LOGGER.log(FINEST,
                             "Session specified alternate encoding {0}",
                             encoding);
                 }
@@ -1301,16 +1230,16 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
 
         // 3. check the request attribute
-        if (ctxAttributes.containsKey(RIConstants.FACELETS_ENCODING_KEY)) {
-            encoding = (String) ctxAttributes.get(RIConstants.FACELETS_ENCODING_KEY);
-            if (LOGGER.isLoggable(Level.FINEST)) {
-                LOGGER.log(Level.FINEST,
+        if (ctxAttributes.containsKey(FACELETS_ENCODING_KEY)) {
+            encoding = (String) ctxAttributes.get(FACELETS_ENCODING_KEY);
+            if (LOGGER.isLoggable(FINEST)) {
+                LOGGER.log(FINEST,
                            "Facelet specified alternate encoding {0}",
                            encoding);
             }
             if (null != context.getExternalContext().getSession(false)) {
                 Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
-                sessionMap.put(ViewHandler.CHARACTER_ENCODING_KEY, encoding);
+                sessionMap.put(CHARACTER_ENCODING_KEY, encoding);
             }
         }
 
@@ -1321,15 +1250,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             } else {
                 encoding = "UTF-8";
             }
-            if (LOGGER.isLoggable(Level.FINEST)) {
-                LOGGER.log(Level.FINEST, "ResponseWriter created had a null CharacterEncoding, defaulting to {0}", orig);
+            if (LOGGER.isLoggable(FINEST)) {
+                LOGGER.log(FINEST, "ResponseWriter created had a null CharacterEncoding, defaulting to {0}", orig);
             }
         }
 
         return encoding;
-
     }
-
 
     /**
      * @param context the {@link FacesContext} for the current request
@@ -1340,26 +1267,25 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         String contentType = orig;
 
-        // see if we need to override the contentType
+        // See if we need to override the contentType
         Map<Object,Object> m = context.getAttributes();
         if (m.containsKey("facelets.ContentType")) {
             contentType = (String) m.get("facelets.ContentType");
-            if (LOGGER.isLoggable(Level.FINEST)) {
+            if (LOGGER.isLoggable(FINEST)) {
                 LOGGER.finest("Facelet specified alternate contentType '"
                         + contentType + "'");
             }
         }
 
-        // safety check
+        // Safety check
         if (contentType == null) {
             contentType = "text/html";
-            if (LOGGER.isLoggable(Level.FINEST)) {
+            if (LOGGER.isLoggable(FINEST)) {
                 LOGGER.finest("ResponseWriter created had a null ContentType, defaulting to text/html");
             }
         }
 
         return contentType;
-
     }
 
 
@@ -2218,6 +2144,60 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             stateContext.getDynamicComponents().put(struct.clientId, child);
             UIComponent parent = child.getParent();
             parent.getChildren().remove(child);
+        }
+    }
+    
+    /**
+     * Are we saving state server side?
+     * 
+     * @return true if we are, false otherwise.
+     */
+    private boolean isServerStateSaving() {
+        if (STATE_SAVING_METHOD_SERVER.equals(webConfig.getOptionValue(StateSavingMethod))) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Get a session (if we are using server state saving).
+     * 
+     * @param context the Faces context.
+     * @return the session, or null if we are not using server state saving.
+     */
+    private HttpSession getSession(FacesContext context) {
+        HttpSession result = null;
+        Object sessionObj = context.getExternalContext().getSession(true);
+        if (sessionObj instanceof HttpSession) {
+            result = (HttpSession) sessionObj;
+        }
+        return result;
+    }
+    
+    private boolean isMatchedWithFaceletsSuffix(String viewId) {
+        String[] defaultsuffixes = webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsSuffix, " ");
+        for (String suffix : defaultsuffixes) {
+            if (viewId.endsWith(suffix)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * Mark the initial state if not already marked.
+     */
+    private void markInitialStateIfNotMarked(UIComponent component) {
+        if (!component.isTransient()) {
+            if (!component.getAttributes().containsKey(DYNAMIC_COMPONENT) && !component.initialStateMarked()) {
+                component.markInitialState();
+            }
+            for (Iterator<UIComponent> it = component.getFacetsAndChildren() ; it.hasNext() ; ) {
+                UIComponent child = it.next();
+                markInitialStateIfNotMarked(child);
+            }
         }
     }
 }
