@@ -157,13 +157,11 @@ import javax.faces.context.FacesContext;
 public abstract class ResourceHandler {
 
     /**
-
      * <p class="changed_added_2_0">{@link Resource#getRequestPath} returns the
      * value of this constant as the prefix of the URI.  {@link
      * #handleResourceRequest(javax.faces.context.FacesContext)} looks for the value of this constant
      * within the request URI to determine if the request is a resource
      * request or a view request.</p>
-
      */
     public static final String RESOURCE_IDENTIFIER = "/javax.faces.resource";
 
@@ -197,15 +195,12 @@ public abstract class ResourceHandler {
      * the jar file contains multiple contracts, the marker file must be
      * present in each one. See &#8220;constant field values&#8221; for
      * the name of the file that must be placed at that location.</p>
-
      * @since 2.2
      */
-
     public static final String RESOURCE_CONTRACT_XML = "javax.faces.contract.xml";
 
 
     /**
-
      * <p class="changed_added_2_2">If a
      * <code>&lt;context-param&gt;</code> with the param name equal to
      * the value of {@link #WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME}
@@ -218,12 +213,10 @@ public abstract class ResourceHandler {
      *
      * @since 2.2
      */
-
     public static final String WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME =
         "javax.faces.WEBAPP_RESOURCES_DIRECTORY";
 
     /**
-
      * <p class="changed_added_2_2">If a
      * <code>&lt;context-param&gt;</code> with the param name equal to
      * the value of {@link #WEBAPP_CONTRACTS_DIRECTORY_PARAM_NAME}
@@ -236,7 +229,6 @@ public abstract class ResourceHandler {
      *
      * @since 2.2
      */
-
     public static final String WEBAPP_CONTRACTS_DIRECTORY_PARAM_NAME =
         "javax.faces.WEBAPP_CONTRACTS_DIRECTORY";
 
@@ -247,11 +239,8 @@ public abstract class ResourceHandler {
      * used to find a packaged resource to return from {@link
      * #createResource} (or one of its variants).
      */
-
-    public static final String LOCALE_PREFIX =
-	"javax.faces.resource.localePrefix";
-
-
+    public static final String LOCALE_PREFIX = 
+        "javax.faces.resource.localePrefix";
 
     /**
      * <p class="changed_added_2_0">The <code>ServletContext</code> init
@@ -266,14 +255,14 @@ public abstract class ResourceHandler {
      * does not supplement it.  </p>
      */
     public static final String RESOURCE_EXCLUDES_PARAM_NAME =
-          "javax.faces.RESOURCE_EXCLUDES";
+        "javax.faces.RESOURCE_EXCLUDES";
 
     /**
      * <p class="changed_added_2_0 changed_modified_2_1">The default value for the {@link
      * #RESOURCE_EXCLUDES_PARAM_NAME} init param.</p>
      */
     public static final String RESOURCE_EXCLUDES_DEFAULT_VALUE =
-          ".class .jsp .jspx .properties .xhtml .groovy";
+        ".class .jsp .jspx .properties .xhtml .groovy";
 
 
 

@@ -45,6 +45,7 @@ import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.faces.FacesWrapper;
 import javax.faces.application.Resource;
@@ -97,7 +98,32 @@ public abstract class ViewDeclarationLanguageWrapper extends ViewDeclarationLang
 
 
     // ----------------------------------------------- Methods from ViewDeclarationLanguage
+    
+   
+    @Override
+    public UIViewRoot restoreView(FacesContext context, String viewId) {
+        return getWrapped().restoreView(context, viewId);
+    }
+    
+    @Override
+    public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
+        return getWrapped().getViewMetadata(context, viewId);
+    }
 
+    @Override
+    public UIViewRoot createView(FacesContext context, String viewId) {
+        return getWrapped().createView(context, viewId);
+    }
+    
+    @Override
+    public void buildView(FacesContext context, UIViewRoot root) throws IOException {
+        getWrapped().buildView(context, root);
+    }
+    
+    @Override
+    public void renderView(FacesContext context, UIViewRoot view) throws IOException {
+        getWrapped().renderView(context, view);
+    }
 
     @Override
     public String getId() {
@@ -118,20 +144,20 @@ public abstract class ViewDeclarationLanguageWrapper extends ViewDeclarationLang
     public boolean viewExists(FacesContext context, String viewId) {
         return getWrapped().viewExists(context, viewId);
     }
-
+    
     @Override
-    public void buildView(FacesContext context, UIViewRoot root) throws IOException {
-        getWrapped().buildView(context, root);
+    public Stream<String> getViews(FacesContext context, String path) {
+        return getWrapped().getViews(context, path);
+    }
+    
+    @Override
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
+        return getWrapped().getViews(context, path, maxDepth);
     }
 
     @Override
     public List<String> calculateResourceLibraryContracts(FacesContext context, String viewId) {
         return getWrapped().calculateResourceLibraryContracts(context, viewId);
-    }
-
-    @Override
-    public UIViewRoot createView(FacesContext context, String viewId) {
-        return getWrapped().createView(context, viewId);
     }
 
     @Override
@@ -153,24 +179,5 @@ public abstract class ViewDeclarationLanguageWrapper extends ViewDeclarationLang
     public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
         return getWrapped().getStateManagementStrategy(context, viewId);
     }
-
-    @Override
-    public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
-        return getWrapped().getViewMetadata(context, viewId);
-    }
-
-    @Override
-    public void renderView(FacesContext context, UIViewRoot view) throws IOException {
-        getWrapped().renderView(context, view);
-    }
-
-    @Override
-    public UIViewRoot restoreView(FacesContext context, String viewId) {
-        return getWrapped().restoreView(context, viewId);
-    }
-
-
-
-
     
 }
