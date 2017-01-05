@@ -107,8 +107,12 @@ public class StoreServletContext extends Object {
         public String encodeResourceURL(String url) {
             return null;
         }
+        
+        public String encodeWebsocketURL(String url) {
+            return null;
+        }
 
-       public Map getApplicationMap() {
+        public Map getApplicationMap() {
             if (applicationMap == null) {
                 applicationMap = new ApplicationMap(servletContext);
             }

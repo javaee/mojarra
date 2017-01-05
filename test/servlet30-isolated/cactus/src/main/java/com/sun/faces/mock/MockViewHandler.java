@@ -98,6 +98,10 @@ public class MockViewHandler extends ViewHandler {
         }
     }
 
+    public String getWebsocketURL(FacesContext context, String channel) {
+        throw new UnsupportedOperationException();
+    }
+
     public Locale calculateLocale(FacesContext context) {
         return Locale.getDefault();
     }

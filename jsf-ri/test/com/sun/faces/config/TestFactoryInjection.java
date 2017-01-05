@@ -412,6 +412,11 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         public String encodeResourceURL(String url) {
             return null;
         }
+        
+        @Override
+        public String encodeWebsocketURL(String url) {
+            return null;
+        }
 
         public Map<String, Object> getApplicationMap() {
             return null;

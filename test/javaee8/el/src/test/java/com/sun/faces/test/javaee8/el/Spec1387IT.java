@@ -50,6 +50,7 @@ import org.junit.runner.RunWith;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 
@@ -75,14 +76,14 @@ public class Spec1387IT {
     }
 
     @Test
-    @JsfTest(value = JSF_2_3_0_M03, excludes = { WEBLOGIC_12_1_4 })
-    public void testFlowMap() throws Exception {
-        
+    @JsfTest(value = JSF_2_3_0_M03, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
+    public void testHeaderMap() throws Exception {
+
         // Add a custom header that the test code knows named "foo"
         webClient.addRequestHeader("foo", "bar");
-        
+
         HtmlPage page = webClient.getPage(webUrl + "headerMap.xhtml");
-        
+
         // Header value should be printed on the page
         assertTrue(page.asXml().contains("foo:bar"));
     }

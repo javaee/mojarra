@@ -80,8 +80,8 @@ public class WebsocketRenderer extends HtmlBasicRenderer implements ComponentSys
 
     public static final String RENDERER_TYPE = "javax.faces.Websocket";
 
-    private static final String SCRIPT_INIT = "jsf.push.init('%s',%s,'%s','%s',%s,%s,%s);";
-    
+    private static final String SCRIPT_INIT = "jsf.push.init('%s','%s','%s',%s,%s,%s);";
+
     // Actions --------------------------------------------------------------------------------------------------------
 
     /**
@@ -112,8 +112,7 @@ public class WebsocketRenderer extends HtmlBasicRenderer implements ComponentSys
 
             String clientId = websocket.getClientId(context);
             String channel = websocket.getChannel();
-            Integer port = websocket.getPort();
-            Object uri = websocketChannelManager.register(channel, websocket.getScope(), websocket.getUser());
+            String url = websocketChannelManager.register(context, channel, websocket.getScope(), websocket.getUser());
             String functions = websocket.getOnopen() + "," + websocket.getOnmessage() + "," + websocket.getOnclose();
             String behaviors = getBehaviorScripts(context, websocket);
             boolean connected = websocket.isConnected();
@@ -123,7 +122,7 @@ public class WebsocketRenderer extends HtmlBasicRenderer implements ComponentSys
             ResponseWriter writer = context.getResponseWriter();
             writer.startElement("script", component);
             writer.writeAttribute("id", clientId, "id");
-            writer.write(String.format(SCRIPT_INIT, clientId, port, uri, channel, functions, behaviors, connected));
+            writer.write(String.format(SCRIPT_INIT, clientId, url, channel, functions, behaviors, connected));
             writer.endElement("script");
         }
     }

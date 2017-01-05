@@ -37,57 +37,25 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.tyrus;
+package com.sun.faces.cdi;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.enterprise.util.AnnotationLiteral;
+import javax.faces.annotation.FacesConfig;
 
-import javax.servlet.ServletContainerInitializer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.HandlesTypes;
-import javax.websocket.Endpoint;
-import javax.websocket.server.ServerApplicationConfig;
-import javax.websocket.server.ServerContainer;
-import javax.websocket.server.ServerEndpoint;
+/**
+ * An annotation literal for <code>@FacesConfig.</code>
+ * 
+ * @since 2.3
+ * @see FacesConfig
+ */
+@SuppressWarnings("all")
+public class FacesConfigAnnotationLiteral extends AnnotationLiteral<FacesConfig> implements FacesConfig {
+    private static final long serialVersionUID = 1L;
 
-import org.glassfish.tyrus.servlet.TyrusServletContainerInitializer;
-
-
-@HandlesTypes({
-    ServerEndpoint.class, 
-    ServerApplicationConfig.class, 
-    Endpoint.class}
-)
-public class WebsocketInitializer implements ServletContainerInitializer {
+	@Override
+	public Version version() {
+		return FacesConfig.Version.JSF_2_2;
+	}
     
-    @Override
-    public void onStartup(Set<Class<?>> classes, ServletContext ctx) throws ServletException {
-        
-        if (classes != null && !classes.isEmpty()) {
-            // At least one of the classes that trigger Tyrus to initialize are 
-            // on the classpath, so Tyrus will initialize without our help
-            return;
-        }
-        
-        if (ctx.getAttribute(ServerContainer.class.getName()) != null) {
-            // Already initialized
-            return;
-        }
-        
-        if (!Boolean.valueOf(ctx.getInitParameter("javax.faces.ENABLE_WEBSOCKET_ENDPOINT"))) { 
-            // Register websocket endpoint is not enabled
-            return;
-        }
-        
-        ServletContainerInitializer tyrusInitializer = new TyrusServletContainerInitializer();
-        
-        // List of classes must be none empty. TyrusServerConfiguration is ignored, 
-        // so we add that as class to trigger Tyrus to initialize
-        HashSet<Class<?>> filteredClasses = new HashSet<>();
-        filteredClasses.add(org.glassfish.tyrus.server.TyrusServerConfiguration.class);
-        
-        tyrusInitializer.onStartup(filteredClasses, ctx);
-    }
-
+    
 }

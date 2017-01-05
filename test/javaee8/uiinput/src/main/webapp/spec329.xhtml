@@ -69,7 +69,7 @@
         <h:form id="inRepeatWithSelectItemList">
             <ui:repeat id="repeat" value="#{spec329.selectItemList}" var="item">
                 <h:outputLabel for="radio" value="#{item.label}" />
-                <h:selectOneRadio id="radio" group="foo" value="#{spec329.selectedItem1}">
+                <h:selectOneRadio id="radio" group="foo" value="#{spec329.selectedItem1}" required="true" requiredMessage="required">
                     <f:selectItem itemValue="#{item.value}" />
                 </h:selectOneRadio>
             </ui:repeat>
@@ -79,26 +79,26 @@
         </h:form>
 
         <h:form id="multipleRadioButtonsWithStaticItemsInFirstRadio">
-            <h:selectOneRadio id="radio1" group="foo" value="#{spec329.selectedItem2}">
+            <h:selectOneRadio id="radio1" group="foo" value="#{spec329.selectedItem2}" required="true" requiredMessage="required1">
                 <f:selectItem itemValue="one" />
                 <f:selectItem itemValue="two" />
                 <f:selectItem itemValue="three" />
             </h:selectOneRadio>
-            <h:selectOneRadio id="radio2" group="foo" />
-            <h:selectOneRadio id="radio3" group="foo" />
+            <h:selectOneRadio id="radio2" group="foo" required="true" requiredMessage="required2" />
+            <h:selectOneRadio id="radio3" group="foo" required="true" requiredMessage="required3" />
 
             <h:commandButton id="button" />
             <h:outputText id="selectedItem" value="#{spec329.selectedItem2}" />
         </h:form>
 
         <h:form id="multipleRadioButtonsWithStaticItemsInEachRadio">
-            <h:selectOneRadio id="radio1" group="foo" value="#{spec329.selectedItem3}">
+            <h:selectOneRadio id="radio1" group="foo" value="#{spec329.selectedItem3}" required="true" requiredMessage="required1">
                 <f:selectItem itemValue="one" />
             </h:selectOneRadio>
-            <h:selectOneRadio id="radio2" group="foo" value="#{spec329.selectedItem3}">
+            <h:selectOneRadio id="radio2" group="foo" value="#{spec329.selectedItem3}" required="true" requiredMessage="required2">
                 <f:selectItem itemValue="two" />
             </h:selectOneRadio>
-            <h:selectOneRadio id="radio3" group="foo" value="#{spec329.selectedItem3}">
+            <h:selectOneRadio id="radio3" group="foo" value="#{spec329.selectedItem3}" required="true" requiredMessage="required3">
                 <f:selectItem itemValue="three" />
             </h:selectOneRadio>
 
@@ -107,11 +107,11 @@
         </h:form>
 
         <h:form id="multipleRadioButtonsWithSelectItemList">
-            <h:selectOneRadio id="radio1" group="foo" value="#{spec329.selectedItem4}">
+            <h:selectOneRadio id="radio1" group="foo" value="#{spec329.selectedItem4}" required="true" requiredMessage="required1">
                 <f:selectItems value="#{spec329.selectItemList}" />
             </h:selectOneRadio>
-            <h:selectOneRadio id="radio2" group="foo" />
-            <h:selectOneRadio id="radio3" group="foo" />
+            <h:selectOneRadio id="radio2" group="foo" required="true" requiredMessage="required2" />
+            <h:selectOneRadio id="radio3" group="foo" required="true" requiredMessage="required3" />
 
             <h:commandButton id="button" />
             <h:outputText id="selectedItem" value="#{spec329.selectedItem4}" />

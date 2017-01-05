@@ -59,7 +59,6 @@ import javax.websocket.RemoteEndpoint.Async;
  * <p>
  * For detailed usage instructions, see <code>&#64;</code>{@link Push} javadoc.
  * 
- * @author Bauke Scholtz
  * @since 2.3
  * @see Push
  */
@@ -69,6 +68,9 @@ public interface PushContext extends Serializable {
 
     /** The boolean context parameter name to explicitly enable web socket endpoint during startup. */
     String ENABLE_WEBSOCKET_ENDPOINT_PARAM_NAME = "javax.faces.ENABLE_WEBSOCKET_ENDPOINT";
+
+    /** The integer context parameter name to specify the websocket endpoint port when it's different from HTTP port. */
+    String WEBSOCKET_ENDPOINT_PORT_PARAM_NAME = "javax.faces.WEBSOCKET_ENDPOINT_PORT";
 
     /** The context-relative web socket URI prefix where the endpoint should listen on. */
     String URI_PREFIX = "/javax.faces.push";

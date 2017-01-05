@@ -42,6 +42,7 @@ package com.sun.faces.test.javaee8.cdi;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
 import com.sun.faces.test.junit.JsfVersion;
@@ -70,7 +71,7 @@ public class Issue3731IT {
 
     @Test
     @JsfTest(value = JsfVersion.JSF_2_3_0_M02,
-            excludes = {WEBLOGIC_12_1_4})
+            excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testInjectViewMap2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/injectViewMap2.xhtml");
         assertTrue(page.asXml().contains("{}"));

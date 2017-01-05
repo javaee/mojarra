@@ -46,10 +46,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.FacesException;
-import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewDeclarationLanguage;
 
 /**
  * Proxy instance for a groovy-based ViewHandler.  This allows the ViewHandler
@@ -110,6 +110,11 @@ public class ViewHandlerProxy extends ViewHandler {
     @Override
     public String getResourceURL(FacesContext context, String path) {
         return getGroovyDelegate().getResourceURL(context, path);
+    }
+
+    @Override
+    public String getWebsocketURL(FacesContext context, String channel) {
+        return getGroovyDelegate().getWebsocketURL(context, channel);
     }
 
     @Override

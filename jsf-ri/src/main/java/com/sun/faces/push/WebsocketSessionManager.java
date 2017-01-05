@@ -250,7 +250,7 @@ public class WebsocketSessionManager {
     }
 
     private static String getChannelId(Session session) {
-        return getChannel(session) + "?" + session.getQueryString();
+        return session.getQueryString();
     }
 
     private static void fireEvent(Session session, CloseReason reason, AnnotationLiteral<?> qualifier) {

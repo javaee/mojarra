@@ -74,7 +74,6 @@ public class DataModelClassesMapProducer extends CdiProducer<Map<Class<?>, Class
                  Map.class, 
                  Object.class)
              .beanClass(Map.class)
-             .active(true) // internal producer, not affected by resolver chain setting
              .create(e -> CDI
                  .current()
                  .select(CdiExtension.class)

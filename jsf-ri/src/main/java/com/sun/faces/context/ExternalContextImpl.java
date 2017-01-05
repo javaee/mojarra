@@ -40,26 +40,15 @@
 
 package com.sun.faces.context;
 
-import java.io.OutputStream;
-import javax.faces.FacesException;
-import javax.faces.application.ProjectStage;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.context.Flash;
-import javax.faces.context.PartialResponseWriter;
-import javax.faces.context.ResponseWriter;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.Cookie;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SendPoweredByHeader;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.WebsocketEndpointPort;
+import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.MalformedURLException;
@@ -72,22 +61,37 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.ProjectStage;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
+import javax.faces.context.FlashFactory;
+import javax.faces.context.PartialResponseWriter;
+import javax.faces.context.ResponseWriter;
+import javax.faces.lifecycle.ClientWindow;
+import javax.faces.render.ResponseStateManager;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SendPoweredByHeader;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
-import com.sun.faces.util.TypedCollections;
-import com.sun.faces.util.Util;
+import com.sun.faces.context.flash.ELFlash;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.context.flash.ELFlash;
-import javax.faces.FactoryFinder;
-import javax.faces.context.FlashFactory;
-import javax.faces.lifecycle.ClientWindow;
-import javax.faces.render.ResponseStateManager;
+import com.sun.faces.util.TypedCollections;
+import com.sun.faces.util.Util;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
@@ -651,6 +655,40 @@ public class ExternalContextImpl extends ExternalContext {
         }
 
         return ((HttpServletResponse) response).encodeURL(url);
+    }
+    
+
+    /**
+     * @see ExternalContext#encodeWebsocketURL(String)
+     */
+    @Override
+    public String encodeWebsocketURL(String url) {
+        if (url == null) {
+            throw new NullPointerException(getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID, "url"));
+        }
+
+        HttpServletRequest request = (HttpServletRequest) getRequest();
+        int port = 0;
+
+        WebConfiguration webConfiguration = WebConfiguration.getInstance();
+
+        if (webConfiguration.isSet(WebsocketEndpointPort)) {
+            port = Integer.parseInt(webConfiguration.getOptionValue(WebsocketEndpointPort));
+        }
+
+        try {
+            URL requestURL = new URL(request.getRequestURL().toString());
+
+            if (port <= 0) {
+                port = requestURL.getPort();
+            }
+
+            String websocketURL = new URL(request.getScheme(), requestURL.getHost(), port, url).toExternalForm();
+            return encodeResourceURL(websocketURL.replaceFirst("http", "ws"));
+        }
+        catch (MalformedURLException e) {
+            return url;
+        }
     }
 
 

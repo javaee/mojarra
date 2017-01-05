@@ -61,7 +61,6 @@ import javax.websocket.CloseReason.CloseCode;
  * <p>
  * For detailed usage instructions, see <code>&#64;</code>{@link Push} javadoc.
  *
- * @author Bauke Scholtz
  * @see Push
  * @see Opened
  * @see Closed
@@ -134,7 +133,6 @@ public final class WebsocketEvent implements Serializable {
      * <p>
      * For detailed usage instructions, see <code>&#64;</code>{@link Push} javadoc.
      *
-     * @author Bauke Scholtz
      * @see Push
      * @since 2.3
      */
@@ -152,7 +150,6 @@ public final class WebsocketEvent implements Serializable {
      * <p>
      * For detailed usage instructions, see <code>&#64;</code>{@link Push} javadoc.
      *
-     * @author Bauke Scholtz
      * @see Push
      * @since 2.3
      */

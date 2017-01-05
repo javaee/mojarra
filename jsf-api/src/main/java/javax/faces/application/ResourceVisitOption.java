@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.java.net/public/CDDLGPL_1_1.html
+ * https://glassfish.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -37,17 +37,23 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.test.javaee8.websocket;
 
-import javax.websocket.Endpoint;
-import javax.websocket.EndpointConfig;
-import javax.websocket.Session;
+package javax.faces.application;
 
-public class FakeEndpoint extends Endpoint {
-    
-    @Override
-    public void onOpen(Session session, EndpointConfig config) {
-        // https://java.net/jira/browse/WEBSOCKET_SPEC-240
-    }
+/**
+ * <p class="changed_added_2_3">Defines the resource traversal options.</p>
+ * 
+ * @since 2.3
+ * 
+ * @see ResourceHandler#getViewResources(javax.faces.context.FacesContext, String, int, ResourceVisitOption...)
+ *
+ */
+public enum ResourceVisitOption {
+
+    /**
+     * Only visit resources that are top level views, i.e. views that can be used
+     * to serve a request as opposed to those that can only be used for includes.
+     */
+    TOP_LEVEL_VIEWS_ONLY
     
 }

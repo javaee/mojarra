@@ -164,6 +164,20 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
         return getWrapped().encodeResourceURL(url);
     }
 
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExternalContext#encodeWebsocketURL(String)}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#encodeWebsocketURL(String)
+     */
+    @Override
+    public String encodeWebsocketURL(String url) {
+        return getWrapped().encodeWebsocketURL(url);
+    }
+
+
     /**
      * <p>The default behavior of this method is to
      * call {@link ExternalContext#getApplicationMap}

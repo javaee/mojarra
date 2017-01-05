@@ -41,6 +41,7 @@
 package javax.faces.application;
 
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
@@ -98,9 +99,7 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
      */
     @Override
     public Resource createResource(String resourceName) {
-
         return getWrapped().createResource(resourceName);
-
     }
 
     /**
@@ -112,11 +111,8 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
      */
     @Override
     public Resource createResourceFromId(String resourceId) {
-
         return getWrapped().createResourceFromId(resourceId);
-
     }
-
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
@@ -125,9 +121,7 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
      */
     @Override
     public Resource createResource(String resourceName, String libraryName) {
-
         return getWrapped().createResource(resourceName, libraryName);
-
     }
 
     /**
@@ -135,10 +129,32 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
      * is to call {@link ResourceHandler#createViewResource} on the wrapped
      * {@link ResourceHandler} object.</p>
      */
-
     @Override
     public ViewResource createViewResource(FacesContext context, String resourceName) {
         return getWrapped().createViewResource(context, resourceName);
+    }
+    
+    /**
+     * <p class="changed_added_2_3">The default behavior of this method
+     * is to call {@link ResourceHandler#getViewResources(FacesContext, String, int, ResourceVisitOption...)} on the wrapped
+     * {@link ResourceHandler} object.</p>
+     * 
+     * @since 2.3
+     */
+    @Override
+    public Stream<String> getViewResources(FacesContext facesContext, String path, int maxDepth, ResourceVisitOption... options) {
+        return getWrapped().getViewResources(facesContext, path, maxDepth, options);
+    }
+    
+    /**
+     * <p class="changed_added_2_3">The default behavior of this method
+     * is to call {@link ResourceHandler#getViewResources(FacesContext, String, ResourceVisitOption...)} on the wrapped
+     * {@link ResourceHandler} object.</p>
+     * 
+     * @since 2.3
+     */
+    public Stream<String> getViewResources(FacesContext facesContext, String path, ResourceVisitOption... options) {
+        return getWrapped().getViewResources(facesContext, path, options);
     }
 
     /**
@@ -147,16 +163,9 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
      * String)} on the wrapped {@link ResourceHandler} object.</p>
      */
     @Override
-    public Resource createResource(String resourceName,
-                                   String libraryName,
-                                   String contentType) {
-
-        return getWrapped().createResource(resourceName,
-                                           libraryName,
-                                           contentType);
-
+    public Resource createResource(String resourceName, String libraryName, String contentType) {
+        return getWrapped().createResource(resourceName, libraryName, contentType);
     }
-
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
@@ -166,11 +175,8 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
      */
     @Override
     public void handleResourceRequest(FacesContext context) throws IOException {
-
         getWrapped().handleResourceRequest(context);
-
     }
-
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
@@ -179,9 +185,7 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
      */
     @Override
     public boolean isResourceRequest(FacesContext context) {
-
         return getWrapped().isResourceRequest(context);
-
     }
 
     /**
@@ -193,9 +197,6 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
     public boolean isResourceURL(String url) {
         return getWrapped().isResourceURL(url);
     }
-    
-    
-
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
@@ -204,11 +205,8 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
      */
     @Override
     public boolean libraryExists(String libraryName) {
-
         return getWrapped().libraryExists(libraryName);
-
     }
-
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
@@ -217,9 +215,7 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
      */
     @Override
     public String getRendererTypeForResourceName(String resourceName) {
-
         return getWrapped().getRendererTypeForResourceName(resourceName);
-
     }
 
     /**

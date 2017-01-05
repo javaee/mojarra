@@ -99,21 +99,17 @@ public class ViewHandlingStrategyManager {
                 return strategy;
             }
         }
-        throw new ViewHandlingStrategyNotFoundException();
         
+        throw new ViewHandlingStrategyNotFoundException();
     }
-
 
     /**
      * @return the currently registered {@link com.sun.faces.application.view.ViewHandlingStrategy}
      *  implementations.
      */
     public ViewHandlingStrategy[] getViewHandlingStrategies() {
-
         return strategies.clone();
-
     }
-
 
     /**
      * Update the {@link com.sun.faces.application.view.ViewHandlingStrategy} implementations
@@ -121,10 +117,7 @@ public class ViewHandlingStrategyManager {
      * @param stratagies the new view handling strategies
      */
     public synchronized void setViewHandlingStrategies(ViewHandlingStrategy[] stratagies) {
-
         this.strategies = stratagies.clone();
-        
     }
-
 
 }

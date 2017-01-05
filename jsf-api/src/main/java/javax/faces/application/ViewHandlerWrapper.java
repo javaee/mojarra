@@ -107,12 +107,9 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @see ViewHandler#calculateCharacterEncoding(javax.faces.context.FacesContext)
      * @since 1.2
      */
-
     @Override
     public String calculateCharacterEncoding(FacesContext context) {
-
         return getWrapped().calculateCharacterEncoding(context);
-
     }
         
     /**
@@ -126,11 +123,8 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      */
     @Override
     public Locale calculateLocale(FacesContext context) {
-
         return getWrapped().calculateLocale(context);
-
     }
-
 
     /**
      *
@@ -142,10 +136,8 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @since 2.0
      */
     @Override
-    public String deriveViewId(FacesContext context, String input) {
-
-        return getWrapped().deriveViewId(context, input);
-
+    public String deriveViewId(FacesContext context, String requestViewId) {
+        return getWrapped().deriveViewId(context, requestViewId);
     }
 
     /**
@@ -158,10 +150,8 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @since 2.1
      */
     @Override
-    public String deriveLogicalViewId(FacesContext context, String input) {
-
-        return getWrapped().deriveLogicalViewId(context, input);
-
+    public String deriveLogicalViewId(FacesContext context, String requestViewId) {
+        return getWrapped().deriveLogicalViewId(context, requestViewId);
     }
     
     /**
@@ -174,11 +164,8 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      */
     @Override
     public String calculateRenderKitId(FacesContext context) {
-
         return getWrapped().calculateRenderKitId(context);
-
     }
-
 
     /**
      * <p>The default behavior of this method is to
@@ -190,11 +177,8 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      */
     @Override
     public UIViewRoot createView(FacesContext context, String viewId) {
-
         return getWrapped().createView(context, viewId);
-
     }
-
 
     /**
      * <p>The default behavior of this method is to
@@ -206,9 +190,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      */
     @Override
     public String getActionURL(FacesContext context, String viewId) {
-
         return getWrapped().getActionURL(context, viewId);
-
     }
 
     /**
@@ -248,7 +230,6 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @see ViewHandler#removeProtectedView
      * @since 2.2
      */
-
     @Override
     public boolean removeProtectedView(String urlPattern) {
         return getWrapped().removeProtectedView(urlPattern);
@@ -263,18 +244,9 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @since 2.0
      */
     @Override
-    public String getRedirectURL(FacesContext context,
-                                 String viewId,
-                                 Map<String,List<String>> parameters,
-                                 boolean includeViewParams) {
-
-        return getWrapped().getRedirectURL(context,
-                                           viewId,
-                                           parameters,
-                                           includeViewParams);
-
+    public String getRedirectURL(FacesContext context, String viewId, Map<String,List<String>> parameters,  boolean includeViewParams) {
+        return getWrapped().getRedirectURL(context, viewId, parameters, includeViewParams);
     }
-
 
     /**
      * <p>The default behavior of this method is to
@@ -285,18 +257,9 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @since 2.0
      */
     @Override
-    public String getBookmarkableURL(FacesContext context,
-                                     String viewId,
-                                     Map<String,List<String>> parameters,
-                                     boolean includeViewParams) {
-
-        return getWrapped().getBookmarkableURL(context,
-                                               viewId,
-                                               parameters,
-                                               includeViewParams);
-
+    public String getBookmarkableURL(FacesContext context, String viewId, Map<String,List<String>> parameters, boolean includeViewParams) {
+        return getWrapped().getBookmarkableURL(context, viewId, parameters, includeViewParams);
     }
-
 
     /**
      * <p>The default behavior of this method is to
@@ -308,8 +271,20 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      */
     @Override
     public String getResourceURL(FacesContext context, String path) {
-
         return getWrapped().getResourceURL(context, path);
+    }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#getWebsocketURL(FacesContext, String)}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#getWebsocketURL(FacesContext, String)
+     * @since 2.3
+     */
+    @Override
+    public String getWebsocketURL(FacesContext context, String channel) {
+        return getWrapped().getWebsocketURL(context, channel);
     }
 
     /**
@@ -320,14 +295,9 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @since 2.0
      */
     @Override
-    public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context,
-                                                              String viewId) {
-
+    public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context, String viewId) {
         return getWrapped().getViewDeclarationLanguage(context, viewId);
-        
     }
-    
-    
     
     /**
      * <p>The default behavior of this method is to
@@ -339,7 +309,6 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      */
     @Override
     public void initView(FacesContext context) throws FacesException {
-        
         getWrapped().initView(context);
     }
     
@@ -352,13 +321,9 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @since 1.2
      */
     @Override
-    public void renderView(FacesContext context, UIViewRoot viewToRender)
-    throws IOException, FacesException {
-
+    public void renderView(FacesContext context, UIViewRoot viewToRender) throws IOException, FacesException {
         getWrapped().renderView(context, viewToRender);
-
     }
-
 
     /**
      * <p>The default behavior of this method is to
@@ -370,9 +335,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      */
     @Override
     public UIViewRoot restoreView(FacesContext context, String viewId) {
-
         return getWrapped().restoreView(context, viewId);
-
     }    
 
     /**
@@ -385,8 +348,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      */
     @Override
     public void writeState(FacesContext context) throws IOException {
-	getWrapped().writeState(context);
-
+        getWrapped().writeState(context);
     }
 
 }

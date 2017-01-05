@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- DO NOT EDIT     DO NOT EDIT    DO NOT EDIT    DO NOT EDIT    DO NOT EDIT -->
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -5402,15 +5404,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description><![CDATA[
-            The port number of the websocket host, in case it is different from the port number in the request URI.
-            Defaults to the port number of the request URI.
-        ]]></description>
-      <icon/>
-      <property-name>port</property-name>
-      <property-class>java.lang.Integer</property-class>
-    </property>
-    <property>
-      <description><![CDATA[
             The name of the websocket channel.
             It may not be an EL expression and it may only contain alphanumeric characters, hyphens, underscores and periods.
             All open websockets on the same channel name will receive the same push notification from the server.
@@ -5644,6 +5637,16 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
 
 
+    <property>
+      <description>
+          Space-separated list of CSS style class(es) that will be
+          applied to the "td" of this column
+        </description>
+      <display-name>CSS Classes</display-name>
+      <icon/>
+      <property-name>styleClass</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
     <property>
       <description>
           Space-separated list of CSS style class(es) that will be
@@ -7941,6 +7944,15 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <display-name>Row CSS Classes</display-name>
       <icon/>
       <property-name>rowClasses</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>
+          Assigns one or more space-separated CSS class names to each "tr"
+        </description>
+      <display-name>Row CSS Class</display-name>
+      <icon/>
+      <property-name>rowClass</property-name>
       <property-class>java.lang.String</property-class>
     </property>
     <property>
@@ -16960,6 +16972,15 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
+          Assigns one or more space-separated CSS class names to each "tr"
+        </description>
+      <display-name>Row CSS Class</display-name>
+      <icon/>
+      <property-name>rowClass</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>
           Code specifying which rules will appear between cells
           within this table.  Valid values are:  none (no rules,
           default value); groups (between row groups); rows
@@ -24663,7 +24684,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       Otherwise, do not render a "tbody" element.</p>
 
       <p>Output a "tr" element.  Output the value of the "rowClasses"
-      per the attribute description below or rowClass.  For each
+      per the attribute description below, or rowClass.  For each
       <code>UIColumn</code> child, if the column component has a
       "rowHeader" attribute with a value of "true", output a "th"
       element with a "scope" attribute with the value of "row".
@@ -25086,8 +25107,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </attribute>
       <attribute>
         <description>
-          Space seperated list of CSS style classes that will be applied
-          to each row of the table.
+          Assigns one or more space-separated CSS class names to each "tr"
         </description>
         <display-name>Row CSS Class</display-name>
         <icon/>
@@ -31369,6 +31389,15 @@ this application, and passing the result through the
       </attribute>
       <attribute>
         <description>
+          Assigns one or more space-separated CSS class names to each "tr"
+        </description>
+        <display-name>Row CSS Class</display-name>
+        <icon/>
+        <attribute-name>rowClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description>
           Code specifying which rules will appear between cells
           within this table.  Valid values are:  none (no rules,
           default value); groups (between row groups); rows
@@ -36129,7 +36158,7 @@ unmodified to the rendered output.</p>
                     <p>
                         Render an HTML <code>script</code> element with an "id" attribute.
                         Render JavaScript function which invokes <code>jsf.push.init()</code> function with data provided by
-                        <code>port</code>, <code>onopen</code>, <code>onmessage</code>, <code>onclose</code> and <code>connected</code>
+                        <code>onopen</code>, <code>onmessage</code>, <code>onclose</code> and <code>connected</code>
                         arguments, if any. 
                     </p>
                 ]]></description>

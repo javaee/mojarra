@@ -109,9 +109,13 @@ import javax.websocket.CloseReason.CloseCodes;
  * </ul>
  * <p>
  * In case your server is configured to run WS container on a different TCP port than the HTTP container, then you can
- * use the optional <strong><code>port</code></strong> attribute to explicitly specify the port.
+ * use the optional <strong><code>javax.faces.WEBSOCKET_ENDPOINT_PORT</code></strong> integer context parameter in
+ * <code>web.xml</code> to explicitly specify the port.
  * <pre>
- * &lt;f:websocket port="8000" ... /&gt;
+ * &lt;context-param&gt;
+ *     &lt;param-name&gt;javax.faces.WEBSOCKET_ENDPOINT_PORT&lt;/param-name&gt;
+ *     &lt;param-value&gt;8000&lt;/param-value&gt;
+ * &lt;/context-param&gt;
  * </pre>
  * <p>
  * When successfully connected, the web socket is by default open as long as the document is open, and it will
@@ -420,7 +424,6 @@ import javax.websocket.CloseReason.CloseCodes;
  * transparently be available as request parameters in the command script method <code>#{bean.pushed}</code>.
  *
  *
- * @author Bauke Scholtz
  * @see PushContext
  * @see UIWebsocket
  * @see WebsocketEvent

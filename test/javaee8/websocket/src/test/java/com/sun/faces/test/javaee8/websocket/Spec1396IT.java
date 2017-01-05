@@ -50,7 +50,10 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.test.htmlunit.IgnoringIncorrectnessListener;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
+import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M08;
 
 @RunWith(JsfTestRunner.class)
 public class Spec1396IT {
@@ -67,6 +70,7 @@ public class Spec1396IT {
     }
 
     @Test
+    @JsfTest(value=JSF_2_3_0_M08, excludes={WEBLOGIC_12_2_1})
     public void test() throws Exception {
         webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
 

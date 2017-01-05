@@ -49,13 +49,18 @@ package javax.faces.context;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
 import javax.faces.lifecycle.ClientWindow;
 
 
@@ -342,14 +347,38 @@ public abstract class ExternalContext {
      *
      * @param url The input URL to be encoded
      * 
-     *  @return the encoded resource URL.
+     * @return the encoded resource URL.
      * 
      * @throws NullPointerException if <code>url</code>
      *  is <code>null</code>
      */
     // PENDING(craigmcc) - Currently identical to encodeActionURL()
     public abstract String encodeResourceURL(String url);
-    
+
+
+    /**
+     * <p>
+     * Return the websocket URL, after performing any rewriting needed to
+     * ensure that it will correctly identify an addressable websocket in the
+     * current application.
+     * </p>
+     * 
+     * <p>
+     * <em>Servlet:</em> This must ensure that the input URL is prefixed 
+     * with the correct websocket scheme, domain and port and then
+     * encoded by {@link #encodeResourceURL(String)}.
+     * </p>
+     *
+     * @param url The input URL to be encoded.
+     * 
+     * @return the encoded websocket URL.
+     * 
+     * @throws NullPointerException if <code>url</code> is <code>null</code>.
+     * 
+     * @since 2.3
+     */
+    public abstract String encodeWebsocketURL(String url);
+
 
     /**
      * <p><span class="changed_modified_2_0">Return</span> a mutable

@@ -48,9 +48,11 @@ import org.junit.runner.RunWith;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.test.htmlunit.IgnoringIncorrectnessListener;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
+import com.sun.faces.test.junit.JsfTest;
 import com.sun.faces.test.junit.JsfTestRunner;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M07;
 
 @RunWith(JsfTestRunner.class)
 public class Spec1424IT {
@@ -66,6 +68,7 @@ public class Spec1424IT {
         webClient.setJavaScriptTimeout(120000);
     }
 
+    @JsfTest(value = JSF_2_3_0_M07, excludes = {WEBLOGIC_12_2_1})
     @Test
     public void test() throws Exception {
         webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
@@ -76,7 +79,11 @@ public class Spec1424IT {
     public void testImportConstants() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "spec1424.xhtml");
         webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.getHtmlElementById("result").asText().equals(System.getProperty("webapp.partialStateSaving")));
+        String pss = System.getProperty("webapp.partialStateSaving");
+        if (pss == null) {
+            pss = "true";
+        }
+        assertTrue(page.getHtmlElementById("result").asText().equals(pss));
         assertTrue(page.getHtmlElementById("results").asText().equals("{ACCEPT=ACCEPT, COMPLETE=COMPLETE, REJECT=REJECT}"));
     }
 
@@ -84,5 +91,4 @@ public class Spec1424IT {
     public void tearDown() {
         webClient.close();
     }
-
 }

@@ -291,6 +291,11 @@ public class MockExternalContext extends ExternalContext {
     }
 
 
+    public String encodeWebsocketURL(String url) {
+        throw new UnsupportedOperationException();
+    }
+
+
     public String encodeNamespace(String aValue) {
         throw new UnsupportedOperationException();
     }
