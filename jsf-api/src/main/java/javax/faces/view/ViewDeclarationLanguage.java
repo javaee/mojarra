@@ -49,6 +49,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import javax.faces.application.Resource;
+import javax.faces.application.ViewVisitOption;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -612,11 +613,11 @@ public abstract class ViewDeclarationLanguage {
         return context.getApplication().getResourceHandler().createViewResource(context, viewId) != null;
     }
     
-    public Stream<String> getViews(FacesContext context, String path) {
+    public Stream<String> getViews(FacesContext context, String path, ViewVisitOption... options) {
         return context.getApplication().getResourceHandler().getViewResources(context, path, TOP_LEVEL_VIEWS_ONLY);
     }
     
-    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth, ViewVisitOption... options) {
         return context.getApplication().getResourceHandler().getViewResources(context, path, maxDepth, TOP_LEVEL_VIEWS_ONLY);
     }
 

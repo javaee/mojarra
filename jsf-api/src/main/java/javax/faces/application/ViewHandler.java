@@ -569,7 +569,9 @@ public abstract class ViewHandler {
      * @param viewId            The view identifier of the target page
      * @param parameters        A mapping of parameter names to one or more values
      * @param includeViewParams A flag indicating whether view parameters should be encoded into this URL
+     * 
      * @return the bookmarkable URL.
+     * 
      * @since 2.0
      */
     public String getBookmarkableURL(FacesContext context, String viewId, Map<String,List<String>> parameters, boolean includeViewParams) {
@@ -708,12 +710,12 @@ public abstract class ViewHandler {
     public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context, String viewId) {
         return null;
     }
-    
-    public Stream<String> getViews(FacesContext context, String path) {
+  
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth, ViewVisitOption... options) {
         return Stream.empty();
     }
     
-    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
+    public Stream<String> getViews(FacesContext context, String path, ViewVisitOption... options) {
         return Stream.empty();
     }
     

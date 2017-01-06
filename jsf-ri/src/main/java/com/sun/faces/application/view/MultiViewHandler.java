@@ -76,6 +76,7 @@ import java.util.stream.Stream;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ViewHandler;
+import javax.faces.application.ViewVisitOption;
 import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -463,16 +464,19 @@ public class MultiViewHandler extends ViewHandler {
     }
     
     @Override
-    public Stream<String> getViews(FacesContext context, String path) {
+    public Stream<String> getViews(FacesContext context, String path, ViewVisitOption... options) {
         return
             vdlFactory.getAllViewDeclarationLanguages()
                       .stream()
-                      .flatMap(vdl -> vdl.getViews(context, path));
+                      .flatMap(vdl -> vdl.getViews(context, path, options));
     }
     
     @Override
-    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
-        return super.getViews(context, path, maxDepth);
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth, ViewVisitOption... options) {
+        return
+            vdlFactory.getAllViewDeclarationLanguages()
+                      .stream()
+                      .flatMap(vdl -> vdl.getViews(context, path, maxDepth, options));
     }
 
     @Override

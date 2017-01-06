@@ -44,6 +44,7 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Resp
 import static com.sun.faces.util.RequestStateManager.AFTER_VIEW_CONTENT;
 import static com.sun.faces.util.Util.isViewPopulated;
 import static com.sun.faces.util.Util.setViewPopulated;
+import static java.lang.Integer.parseInt;
 import static java.util.logging.Level.FINE;
 import static javax.faces.FactoryFinder.RENDER_KIT_FACTORY;
 
@@ -56,6 +57,7 @@ import java.util.stream.Stream;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Resource;
+import javax.faces.application.ViewVisitOption;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -89,9 +91,9 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
     public JspViewHandlingStrategy() {
 
         try {
-            responseBufferSize = Integer.parseInt(webConfig.getOptionValue(ResponseBufferSize));
+            responseBufferSize = parseInt(webConfig.getOptionValue(ResponseBufferSize));
         } catch (NumberFormatException nfe) {
-            responseBufferSize = Integer.parseInt(ResponseBufferSize.getDefaultValue());
+            responseBufferSize = parseInt(ResponseBufferSize.getDefaultValue());
         }
     }
 
@@ -123,6 +125,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         if (isViewPopulated(context, view)) {
             return;
         }
+        
         try {
             if (executePageToBuildView(context, view)) {
                 context.getExternalContext().responseFlushBuffer();
@@ -268,10 +271,10 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * Not supported in JSP-based views.
      * </p>
      *
-     * @see javax.faces.view.ViewDeclarationLanguage#getViews(FacesContext, String)
+     * @see javax.faces.view.ViewDeclarationLanguage#getViews(FacesContext, String, ViewVisitOption...)
      */
     @Override
-    public Stream<String> getViews(FacesContext context, String path) {
+    public Stream<String> getViews(FacesContext context, String path, ViewVisitOption... options) {
         return Stream.empty();
     }
     
@@ -280,10 +283,10 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * Not supported in JSP-based views.
      * </p>
      *
-     * @see javax.faces.view.ViewDeclarationLanguage#getViews(FacesContext, String, int)
+     * @see javax.faces.view.ViewDeclarationLanguage#getViews(FacesContext, String, int, ViewVisitOption...)
      */
     @Override
-    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth, ViewVisitOption... options) {
         return Stream.empty();
     }
     

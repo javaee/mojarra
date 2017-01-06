@@ -365,14 +365,28 @@ public abstract class ResourceHandler {
     
     /**
      * <p class="changed_added_2_3">
-     *  TODO
+     * Return a {@code Stream} possibly lazily populated by walking the resource tree 
+     * rooted at a given initial path. The resource tree is traversed <em>breadth-first</em>, 
+     * the elements in the stream are view resource names that would yield a {@code ViewResource} when
+     * passed into {@link ResourceHandler#createViewResource} as the {@code resourceName} parameter.
      * </p>
      * 
+     * <p>
+     * The {@code maxDepth} parameter is the maximum depth of directory levels to visit 
+     * <em>beyond the initial path</em>, which is always visited. The value is relative to the root
+     * ({@code /}), not to the given initial path. E.g. given {@code maxDepth} = {@code 3} and initial
+     * path {@code /foo/}, visiting will proceed up to {@code /foo/bar/}, where {@code /} counts as depth
+     * {@code 1}, {@code /foo/} as depth {@code 2} and {@code /foo/bar/} as depth {@code 3}.
+     * A value lower or equal to the depth of the initial path means that only the initial path
+     * is visited. A value of {@link Integer#MAX_VALUE MAX_VALUE} may be used to indicate that all
+     * levels should be visited.
+     * 
      * @param facesContext The {@link FacesContext} for this request.
-     * @param path The path from which to start looking for view resources
-     * @param maxDepth the maximum depth of nested directory to visit
+     * @param path The initial path from which to start looking for view resources
+     * @param maxDepth The absolute maximum depth of nested directories to visit counted from the root ({@code /}).
+     * @param options The options to influence the traversal. See {@link ResourceVisitOption} for details on those.
      *
-     * @return TODO
+     * @return the {@link Stream} of view resource names
      * 
      * @since 2.3
      */
@@ -382,14 +396,24 @@ public abstract class ResourceHandler {
     
     /**
      * <p class="changed_added_2_3">
-     *  TODO
+     * Return a {@code Stream} possibly lazily populated by walking the resource tree 
+     * rooted at a given initial path. The resource tree is traversed <em>breadth-first</em>, 
+     * the elements in the stream are view resource names that would yield a {@code ViewResource} when
+     * passed into {@link ResourceHandler#createViewResource} as the {@code resourceName} parameter.
      * </p>
      * 
+     * <p> 
+     * This method works as if invoking it were equivalent to evaluating the expression:
+     * <blockquote><pre>
+     * getViewResources(facesContext, start, Integer.MAX_VALUE, options)
+     * </pre></blockquote>
+     * Put differently, it visits all levels of the resource tree.
+     * 
      * @param facesContext The {@link FacesContext} for this request.
-     * @param path The path from which to start looking for view resources
-     * @param options The options
+     * @param path The initial path from which to start looking for view resources
+     * @param options The options to influence the traversal. See {@link ResourceVisitOption} for details on those.
      *
-     * @return TODO
+     * @return the {@link Stream} of view resource names
      * 
      * @since 2.3
      */

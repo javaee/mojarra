@@ -341,26 +341,26 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     
     /**
      * <p>The default behavior of this method is to
-     * call {@link ViewHandler#getViews(FacesContext, String)}
+     * call {@link ViewHandler#getViews(FacesContext, String, ViewVisitOption...)}
      * on the wrapped {@link ViewHandler} object.</p>
      *
      * @since 2.3
      */
     @Override
-    public Stream<String> getViews(FacesContext context, String path) {
-        return getWrapped().getViews(context, path);
+    public Stream<String> getViews(FacesContext context, String path, ViewVisitOption... options) {
+        return getWrapped().getViews(context, path, options);
     }
     
     /**
      * <p>The default behavior of this method is to
-     * call {@link ViewHandler#getViews(FacesContext, String, int)}
+     * call {@link ViewHandler#getViews(FacesContext, String, int, ViewVisitOption...)}
      * on the wrapped {@link ViewHandler} object.</p>
      *
      * @since 2.3
      */
     @Override
-    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
-        return getWrapped().getViews(context, path, maxDepth);
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth, ViewVisitOption... options) {
+        return getWrapped().getViews(context, path, maxDepth, options);
     }
 
     /**

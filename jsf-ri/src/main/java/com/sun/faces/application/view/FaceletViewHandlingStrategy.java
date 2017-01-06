@@ -46,6 +46,7 @@ import static com.sun.faces.RIConstants.FLOW_DEFINITION_ID_SUFFIX;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsBufferSize;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsViewMappings;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
+import static com.sun.faces.context.StateContext.getStateContext;
 import static com.sun.faces.util.RequestStateManager.FACELET_FACTORY;
 import static com.sun.faces.util.Util.getDOCTYPEFromFacesContextAttributes;
 import static com.sun.faces.util.Util.getXMLDECLFromFacesContextAttributes;
@@ -55,6 +56,7 @@ import static com.sun.faces.util.Util.saveDOCTYPEToFacesContextAttributes;
 import static com.sun.faces.util.Util.saveXMLDECLToFacesContextAttributes;
 import static com.sun.faces.util.Util.setViewPopulated;
 import static java.lang.Boolean.TRUE;
+import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.FINEST;
@@ -67,6 +69,7 @@ import static javax.faces.application.StateManager.IS_BUILDING_INITIAL_STATE;
 import static javax.faces.application.StateManager.STATE_SAVING_METHOD_SERVER;
 import static javax.faces.application.ViewHandler.CHARACTER_ENCODING_KEY;
 import static javax.faces.application.ViewHandler.DEFAULT_FACELETS_SUFFIX;
+import static javax.faces.application.ViewVisitOption.RETURN_AS_MINIMAL_IMPLICIT_OUTCOME;
 import static javax.faces.component.UIComponent.BEANINFO_KEY;
 import static javax.faces.component.UIComponent.COMPOSITE_FACET_NAME;
 import static javax.faces.component.UIComponent.VIEW_LOCATION_KEY;
@@ -103,6 +106,7 @@ import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
+import javax.faces.application.ViewVisitOption;
 import javax.faces.component.ActionSource2;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.EditableValueHolder;
@@ -245,16 +249,18 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 viewRoot = vdl.createView(context, viewId);                
                 context.setViewRoot(viewRoot);
                 vdl.buildView(context, viewRoot);
+                
                 if (!viewRoot.isTransient()) {
                     throw new FacesException("Unable to restore view " + viewId);
                 }
+                
                 return viewRoot;
             } catch (IOException ioe) {
                 throw new FacesException(ioe);
             }
         }
         
-        if (StateContext.getStateContext(context).isPartialStateSaving(context, viewId)) {
+        if (getStateContext(context).isPartialStateSaving(context, viewId)) {
             try {
                 context.setProcessingEvents(false);
                 ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewId);
@@ -264,6 +270,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 renderKitId = outerViewHandler.calculateRenderKitId(context);
                 rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
                 Object[] rawState = (Object[]) rsm.getState(context, viewId);
+                
                 if (rawState != null) {
                     Map<String, Object> state = (Map<String, Object>) rawState[1];
                     if (state != null) {
@@ -276,6 +283,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                         }
                     }
                 }
+                
                 context.setProcessingEvents(true);
                 vdl.buildView(context, viewRoot);
             } catch (IOException ioe) {
@@ -915,36 +923,40 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     }
     
     @Override
+    @SuppressWarnings("deprecation")
     public boolean viewExists(FacesContext context, String viewId) {
-        boolean result = false;
         if (handlesViewId(viewId)) {
-            if (faceletFactory == null) {
-                faceletFactory = associate.getFaceletFactory();
-                assert (faceletFactory != null);
-            }
-            result = null != faceletFactory.getResourceResolver().resolveUrl(viewId);
+            return getFaceletFactory().getResourceResolver().resolveUrl(viewId) != null;
         }
            
-        return result;
+        return false;
     }
     
     /**
      * @see javax.faces.view.ViewDeclarationLanguage#getViews(FacesContext, String)
      */
     @Override
-    public Stream<String> getViews(FacesContext context, String path) {
-        return super.getViews(context, path)
-                    .filter(viewId -> handlesViewId(viewId));
+    public Stream<String> getViews(FacesContext context, String path, ViewVisitOption... options) {
+        return mapIfNeeded(
+            super.getViews(context, path)
+                 .filter(viewId -> handlesViewId(viewId)), 
+            options
+        );
     }
     
     /**
      * @see javax.faces.view.ViewDeclarationLanguage#getViews(FacesContext, String, int)
      */
     @Override
-    public Stream<String> getViews(FacesContext context, String path, int maxDepth) {
-        return super.getViews(context, path, maxDepth)
-                    .filter(viewId -> handlesViewId(viewId));
+    public Stream<String> getViews(FacesContext context, String path, int maxDepth, ViewVisitOption... options) {
+        return mapIfNeeded(
+            super.getViews(context, path, maxDepth)
+                 .filter(viewId -> handlesViewId(viewId)), 
+            options
+        );
     }
+ 
+    
     
 
     // --------------------------------------- Methods from ViewHandlingStrategy
@@ -2167,12 +2179,26 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @return the session, or null if we are not using server state saving.
      */
     private HttpSession getSession(FacesContext context) {
-        HttpSession result = null;
         Object sessionObj = context.getExternalContext().getSession(true);
         if (sessionObj instanceof HttpSession) {
-            result = (HttpSession) sessionObj;
+            return (HttpSession) sessionObj;
         }
-        return result;
+        
+        return null;
+    }
+    
+    /**
+     * Gets and if needed initializes the faceletFactory
+     *   
+     * @return the default faceletFactorys
+     */
+    private DefaultFaceletFactory getFaceletFactory() {
+        if (faceletFactory == null) {
+            faceletFactory = associate.getFaceletFactory();
+            assert (faceletFactory != null);
+        }
+        
+        return faceletFactory;
     }
     
     private boolean isMatchedWithFaceletsSuffix(String viewId) {
@@ -2184,6 +2210,102 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
         
         return false;
+    }
+    
+    private String getMatchedWithFaceletsSuffix(String viewId) {
+        String[] defaultsuffixes = webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsSuffix, " ");
+        for (String suffix : defaultsuffixes) {
+            if (viewId.endsWith(suffix)) {
+                return suffix;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Maps the element in the passed in stream of views according to the given options.
+     * 
+     * @param views The stream of views to potentially map
+     * @param options Options telling if and if so how to map
+     * @return The stream with views, possibly mapped if needed
+     */
+    private Stream<String> mapIfNeeded(Stream<String> views, ViewVisitOption... options) {
+        if (!returnAsImplicitOutCome(options)) {
+            return views;
+        }
+        
+        return views.map(view -> toImplicitOutcome(view));
+    }
+    
+    private boolean returnAsImplicitOutCome(ViewVisitOption... options) {
+        return stream(options)
+          .filter(option -> option == RETURN_AS_MINIMAL_IMPLICIT_OUTCOME)
+          .findAny()
+          .isPresent();
+    }
+    
+    private String toImplicitOutcome(String viewId) {
+        String suffix = getConfiguredSuffix(viewId);
+        if (suffix != null) {
+            return viewId.substring(0, viewId.lastIndexOf(suffix));
+        }
+        
+        String prefix = getConfiguredPrefix(viewId);
+        if (prefix != null) {
+            return viewId.substring(prefix.length());
+        }
+        
+        // Would be rare to reach this, since when toImplicitOutcome() is called
+        // handlesViewId() should already have been called before that
+        // and then either suffix or prefix would have matched.
+        return viewId;
+    }
+    
+    private String getConfiguredSuffix(String viewId) {
+        if (viewId != null) {
+            
+            if (viewId.endsWith(FLOW_DEFINITION_ID_SUFFIX)) {
+                return FLOW_DEFINITION_ID_SUFFIX;
+            }
+            
+           // If there's no extensions array or prefixes array, then
+           // assume defaults.  .xhtml extension is handled by
+           // the FaceletViewHandler and .jsp will be handled by
+           // the JSP view handler
+           if (extensionsArray == null && prefixesArray == null) {
+               String suffix = getMatchedWithFaceletsSuffix(viewId);
+               if (suffix != null) {
+                   return suffix;
+               }
+               
+               if (viewId.endsWith(DEFAULT_FACELETS_SUFFIX)) {
+                   return DEFAULT_FACELETS_SUFFIX;
+               }
+           }
+
+           if (extensionsArray != null) {
+               for (String extension : extensionsArray) {
+                   if (viewId.endsWith(extension)) {
+                       return extension;
+                   }
+               }
+           }
+       }
+
+       return null;
+    }
+    
+    private String getConfiguredPrefix(String viewId) {
+        if (prefixesArray != null) {
+            for (String prefix : prefixesArray) {
+                if (viewId.startsWith(prefix)) {
+                    return prefix;
+                }
+            }
+        }
+        
+        return null;
     }
 
     /**
