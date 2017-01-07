@@ -711,10 +711,73 @@ public abstract class ViewHandler {
         return null;
     }
   
+    /**
+     * <p class="changed_added_2_3">
+     * Return a {@code Stream} possibly lazily populated by walking the view trees of every
+     * active {@link ViewDeclarationLanguage} rooted at a given initial path. The view tree of 
+     * every {@link ViewDeclarationLanguage} is individually traversed <em>breadth-first</em> as per
+     * the contract of {@link ViewDeclarationLanguage#getViews(FacesContext, String, int, ViewVisitOption...)}.
+     * The elements in the stream are <em>logical</em> view ids.
+     * </p>
+     * 
+     * <p>
+     * The {@code maxDepth} parameter is the maximum depth of directory levels to visit for each 
+     * {@code ViewDeclarationLanguage} <em>beyond the initial path</em>, which is always visited. 
+     * The value is relative to the root ({@code /}), not to the given initial path. 
+     * E.g. given {@code maxDepth} = {@code 3} and initial path {@code /foo/}, visiting will proceed up 
+     * to {@code /foo/bar/}, where {@code /} counts as depth {@code 1}, {@code /foo/} as depth {@code 2} and 
+     * {@code /foo/bar/} as depth {@code 3}.
+     * A value lower or equal to the depth of the initial path means that only the initial path
+     * is visited. A value of {@link Integer#MAX_VALUE MAX_VALUE} may be used to indicate that all
+     * levels should be visited.
+     * 
+     * <p>
+     * In case more than one active {@code ViewDeclarationLanguage} is present, the order in which view ids
+     * from each {@code ViewDeclarationLanguage} appear in the stream is undetermined, except for the guarantee
+     * that every individual {@code ViewDeclarationLanguage} is traversed <em>breadth-first</em>.
+     * 
+     * @param facesContext The {@link FacesContext} for this request.
+     * @param path The initial path from which to start looking for view ids.
+     * @param maxDepth The absolute maximum depth of nested directories to visit counted from the root ({@code /}).
+     * @param options The options to influence the traversal. See {@link ViewVisitOption} for details on those.
+     *
+     * @return the {@link Stream} of view ids
+     * 
+     * @since 2.3
+     */
     public Stream<String> getViews(FacesContext context, String path, int maxDepth, ViewVisitOption... options) {
         return Stream.empty();
     }
     
+    /**
+     * <p class="changed_added_2_3">
+     * Return a {@code Stream} possibly lazily populated by walking the view trees of every
+     * active {@link ViewDeclarationLanguage} rooted at a given initial path. The view tree of 
+     * every {@link ViewDeclarationLanguage} is individually traversed <em>breadth-first</em> as per
+     * the contract of {@link ViewDeclarationLanguage#getViews(FacesContext, String, int, ViewVisitOption...)}.
+     * The elements in the stream are <em>logical</em> view ids.
+     * </p>
+     * 
+     * <p> 
+     * This method works as if invoking it were equivalent to evaluating the expression:
+     * <blockquote><pre>
+     * getViews(facesContext, start, Integer.MAX_VALUE, options)
+     * </pre></blockquote>
+     * Put differently, it visits all levels of the view tree.
+     * 
+     * <p>
+     * In case more than one active {@code ViewDeclarationLanguage} is present, the order in which view ids
+     * from each {@code ViewDeclarationLanguage} appear in the stream is undetermined, except for the guarantee
+     * that every individual {@code ViewDeclarationLanguage} is traversed <em>breadth-first</em>.
+     * 
+     * @param facesContext The {@link FacesContext} for this request.
+     * @param path The initial path from which to start looking for view ids.
+     * @param options The options to influence the traversal. See {@link ViewVisitOption} for details on those.
+     *
+     * @return the {@link Stream} of view ids
+     * 
+     * @since 2.3
+     */
     public Stream<String> getViews(FacesContext context, String path, ViewVisitOption... options) {
         return Stream.empty();
     }

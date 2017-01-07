@@ -613,10 +613,58 @@ public abstract class ViewDeclarationLanguage {
         return context.getApplication().getResourceHandler().createViewResource(context, viewId) != null;
     }
     
+    /**
+     * <p class="changed_added_2_3">
+     * Return a {@code Stream} possibly lazily populated by walking the view tree 
+     * rooted at a given initial path. The view tree is traversed <em>breadth-first</em>, 
+     * the elements in the stream are <em>logical</em> view ids.
+     * </p>
+     * 
+     * <p> 
+     * This method works as if invoking it were equivalent to evaluating the expression:
+     * <blockquote><pre>
+     * getViewResources(facesContext, start, Integer.MAX_VALUE, options)
+     * </pre></blockquote>
+     * Put differently, it visits all levels of the resource tree.
+     * 
+     * @param facesContext The {@link FacesContext} for this request.
+     * @param path The initial path from which to start looking for views
+     * @param options The options to influence the traversal. See {@link ViewVisitOption} for details on those.
+     *
+     * @return the {@link Stream} of view ids
+     * 
+     * @since 2.3
+     */
     public Stream<String> getViews(FacesContext context, String path, ViewVisitOption... options) {
         return context.getApplication().getResourceHandler().getViewResources(context, path, TOP_LEVEL_VIEWS_ONLY);
     }
     
+    /**
+     * <p class="changed_added_2_3">
+     * Return a {@code Stream} possibly lazily populated by walking the view tree 
+     * rooted at a given initial path. The view tree is traversed <em>breadth-first</em>, 
+     * the elements in the stream are <em>logical</em> view ids.
+     * </p>
+     * 
+     * <p>
+     * The {@code maxDepth} parameter is the maximum depth of directory levels to visit 
+     * <em>beyond the initial path</em>, which is always visited. The value is relative to the root
+     * ({@code /}), not to the given initial path. E.g. given {@code maxDepth} = {@code 3} and initial
+     * path {@code /foo/}, visiting will proceed up to {@code /foo/bar/}, where {@code /} counts as depth
+     * {@code 1}, {@code /foo/} as depth {@code 2} and {@code /foo/bar/} as depth {@code 3}.
+     * A value lower or equal to the depth of the initial path means that only the initial path
+     * is visited. A value of {@link Integer#MAX_VALUE MAX_VALUE} may be used to indicate that all
+     * levels should be visited.
+     * 
+     * @param facesContext The {@link FacesContext} for this request.
+     * @param path The initial path from which to start looking for views
+     * @param maxDepth The absolute maximum depth of nested directories to visit counted from the root ({@code /}).
+     * @param options The options to influence the traversal. See {@link ViewVisitOption} for details on those.
+     *
+     * @return the {@link Stream} of view ids
+     * 
+     * @since 2.3
+     */
     public Stream<String> getViews(FacesContext context, String path, int maxDepth, ViewVisitOption... options) {
         return context.getApplication().getResourceHandler().getViewResources(context, path, maxDepth, TOP_LEVEL_VIEWS_ONLY);
     }
