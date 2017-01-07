@@ -745,7 +745,7 @@ public abstract class ViewHandler {
      * 
      * @since 2.3
      */
-    public Stream<String> getViews(FacesContext context, String path, int maxDepth, ViewVisitOption... options) {
+    public Stream<String> getViews(FacesContext facesContext, String path, int maxDepth, ViewVisitOption... options) {
         return Stream.empty();
     }
     
@@ -778,7 +778,7 @@ public abstract class ViewHandler {
      * 
      * @since 2.3
      */
-    public Stream<String> getViews(FacesContext context, String path, ViewVisitOption... options) {
+    public Stream<String> getViews(FacesContext facesContext, String path, ViewVisitOption... options) {
         return Stream.empty();
     }
     

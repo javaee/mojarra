@@ -635,8 +635,8 @@ public abstract class ViewDeclarationLanguage {
      * 
      * @since 2.3
      */
-    public Stream<String> getViews(FacesContext context, String path, ViewVisitOption... options) {
-        return context.getApplication().getResourceHandler().getViewResources(context, path, TOP_LEVEL_VIEWS_ONLY);
+    public Stream<String> getViews(FacesContext facesContext, String path, ViewVisitOption... options) {
+        return facesContext.getApplication().getResourceHandler().getViewResources(facesContext, path, TOP_LEVEL_VIEWS_ONLY);
     }
     
     /**
@@ -665,8 +665,8 @@ public abstract class ViewDeclarationLanguage {
      * 
      * @since 2.3
      */
-    public Stream<String> getViews(FacesContext context, String path, int maxDepth, ViewVisitOption... options) {
-        return context.getApplication().getResourceHandler().getViewResources(context, path, maxDepth, TOP_LEVEL_VIEWS_ONLY);
+    public Stream<String> getViews(FacesContext facesContext, String path, int maxDepth, ViewVisitOption... options) {
+        return facesContext.getApplication().getResourceHandler().getViewResources(facesContext, path, maxDepth, TOP_LEVEL_VIEWS_ONLY);
     }
 
     /**
