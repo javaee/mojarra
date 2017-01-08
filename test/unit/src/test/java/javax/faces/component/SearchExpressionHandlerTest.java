@@ -959,6 +959,11 @@ public class SearchExpressionHandlerTest extends JUnitFacesTestCaseBase {
         assertTrue(result.contains(innerContainer));
     }
     
+    /**
+     * The SearchExpression API was inspired by PrimeFaces.
+     * This tests only tests, if PFS (PrimeFaces Selectors -> jQuery like selectors; like @(#myId > .myStyle))
+     * can be correctly handled by the API+IMPL as a passthrough expression.
+     */
     public void test_PFS() {
         CompositeSearchKeywordResolver s = (CompositeSearchKeywordResolver) application.getSearchKeywordResolver();
         s.add(new SearchKeywordResolver() {
