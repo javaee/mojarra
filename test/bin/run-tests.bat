@@ -1,0 +1,124 @@
+@echo off
+
+::    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+::
+::    Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
+::
+::    The contents of this file are subject to the terms of either the GNU
+::    General Public License Version 2 only ("GPL") or the Common Development
+::    and Distribution License("CDDL") (collectively, the "License").  You
+::    may not use this file except in compliance with the License.  You can
+::    obtain a copy of the License at
+::    https://glassfish.java.net/public/CDDL+GPL_1_1.html
+::    or packager/legal/LICENSE.txt.  See the License for the specific
+::    language governing permissions and limitations under the License.
+::
+::    When distributing the software, include this License Header Notice in each
+::    file and include the License file at packager/legal/LICENSE.txt.
+::
+::    GPL Classpath Exception:
+::    Oracle designates this particular file as subject to the "Classpath"
+::    exception as provided by Oracle in the GPL Version 2 section of the License
+::    file that accompanied this code.
+::
+::    Modifications:
+::    If applicable, add the following below the License Header, with the fields
+::    enclosed by brackets [] replaced by your own identifying information:
+::    "Portions Copyright [year] [name of copyright owner]"
+::
+::    Contributor(s):
+::    If you wish your version of this file to be governed by only the CDDL or
+::    only the GPL Version 2, indicate your decision by adding "[Contributor]
+::    elects to include this software in this distribution under the [CDDL or GPL
+::    Version 2] license."  If you don't indicate a single choice of license, a
+::    recipient has the option to distribute your version of this file under
+::    either the CDDL, the GPL Version 2 or to extend the choice of license to
+::    its licensees as provided above.  However, if you add GPL Version 2 code
+::    and therefore, elected the GPL Version 2 license, then the option applies
+::    only if the new code is made subject to such option by the copyright
+::    holder.
+
+echo.
+echo Running tests 
+echo.
+echo.
+echo.
+echo Note that this should be run from the [mojarra home]\test folder as .\bin\run-tests.bat
+echo You can specify specific tests by passing it as argument eg .\bin\run-tests.bat javaee8
+echo.
+echo.
+
+if [%1] == [] (
+    set arr=unit servlet30 servlet31 servlet40 javaee6web javaee6 javaee7 javaee8
+    echo.
+    echo No tests specified as command arguments, using default set
+    echo.
+) else (
+    set arr=%*
+)
+
+echo.
+echo Running tests for:
+echo.
+echo.
+echo %arr%
+echo.
+
+set top_dir=%cd%
+
+echo.
+echo Running tests from %top_dir%
+
+for %%i in (%arr%) do (
+
+   echo.
+   echo.
+   echo.
+   echo.
+   echo.
+   echo **************************************
+   echo  Descending into %%i
+   echo **************************************
+   echo.
+   echo.
+   echo.
+   echo.
+   echo.
+
+   cd %%i
+   call %top_dir%\bin\test-glassfish-default.bat
+   set exit_code=%ERRORLEVEL%
+
+   echo.
+   echo.
+   echo.
+   echo.
+   echo.
+   echo **************************************
+   echo  Finished testing %%i
+   echo **************************************
+   echo.
+   echo.
+   echo.
+   echo.
+   echo.
+
+   cd %top_dir%
+
+   echo Back at %cd%
+   echo.
+
+   if %exit_code% neq 0 ( 
+       echo.
+       echo.
+       echo.
+       echo.
+       echo EXITING BECAUSE OF FAILURES. SEE ABOVE!
+       echo.
+       echo.
+       echo.
+       echo.
+       exit /b
+   )
+
+)
