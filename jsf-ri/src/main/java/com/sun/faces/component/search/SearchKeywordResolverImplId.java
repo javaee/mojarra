@@ -93,7 +93,7 @@ public class SearchKeywordResolverImplId extends AbstractSearchKeywordResolverIm
     @Override
     public boolean matchKeyword(SearchExpressionContext searchExpressionContext, String command) {
 
-        if (command.length() > 5 && command.substring(0, "id".length()).equalsIgnoreCase("id")) {
+        if (command.startsWith("id")) {
             try {
                 Matcher matcher = PATTERN.matcher(command);
                 return matcher.matches();
@@ -106,18 +106,12 @@ public class SearchKeywordResolverImplId extends AbstractSearchKeywordResolverIm
     }
 
     protected String extractId(String expression) {
-        try {
-            Matcher matcher = PATTERN.matcher(expression);
-            if (matcher.matches()) {
-                return matcher.group(1);
-            } else {
-                throw new FacesException("Expression does not match following pattern @id(id). Expression: \""
-                        + expression + "\"");
-            }
-
-        } catch (Exception e) {
+        Matcher matcher = PATTERN.matcher(expression);
+        if (matcher.matches()) {
+            return matcher.group(1);
+        } else {
             throw new FacesException("Expression does not match following pattern @id(id). Expression: \""
-                    + expression + "\"", e);
+                    + expression + "\"");
         }
     }
 

@@ -40,11 +40,11 @@
 package javax.faces.component.search;
 
 /**
- * <p class="changed_added_2_3">Components implementing this interface are ignored by the algorithm - 
+ * <div class="changed_added_2_3">Components implementing this interface are ignored by the algorithm - 
  * especially in the implementation of <code>@child(n)</code>, <code>@next</code> and <code>@previous</code>.
  * 
  * If you suppose this case, markup/literal components must implement {@link UntargetableComponent}:
- * <code>
+ * <pre>
  * &lt;table&gt;
  *      &lt;tr&gt;
  *          &lt;td&gt;
@@ -55,20 +55,20 @@ package javax.faces.component.search;
  *          &lt;/td&gt;
  *      &lt;/tr&gt;
  * &lt;/table&gt;
- * </code>
+ * </pre>
  * 
- * <code>@next</code> would actually target the markup:
+ * <code>@next</code> would otherwise actually target the markup:
  * 
- * <code>
+ * <pre>
  *  &lt;/td&gt;
  *  &lt;td&gt;
- * </code>
+ * </pre>
  * 
  * and not desired component: 
- * <code>
+ * <pre>
  *  &lt;h:inputText id="input" value="#{bean.name} /&gt;
- * </code>
- * </p>
+ * </pre>
+ * </div>
  *
  * @since 2.3
  */

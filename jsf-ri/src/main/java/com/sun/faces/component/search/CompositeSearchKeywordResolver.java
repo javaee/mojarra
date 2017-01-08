@@ -39,6 +39,7 @@
  */
 package com.sun.faces.component.search;
 
+import java.util.ArrayList;
 import javax.faces.component.UIComponent;
 import javax.faces.component.search.SearchExpressionContext;
 import javax.faces.component.search.SearchKeywordContext;
@@ -46,12 +47,10 @@ import javax.faces.component.search.SearchKeywordResolver;
 
 public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
 
-    private int size;
-    private SearchKeywordResolver[] resolvers;
+    private final ArrayList<SearchKeywordResolver> resolvers;
 
     public CompositeSearchKeywordResolver() {
-        this.size = 0;
-        this.resolvers = new SearchKeywordResolver[2];
+        this.resolvers = new ArrayList<>(12); // 12 -> all default implementations
     }
 
     public void add(SearchKeywordResolver searchKeywordResolver) {
@@ -59,22 +58,17 @@ public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
             throw new NullPointerException();
         }
 
-        if (this.size >= this.resolvers.length) {
-            SearchKeywordResolver[] resolvers = new SearchKeywordResolver[this.size * 2];
-            System.arraycopy(this.resolvers, 0, resolvers, 0, this.size);
-            this.resolvers = resolvers;
-        }
-
-        this.resolvers[this.size++] = searchKeywordResolver;
+        resolvers.add(searchKeywordResolver);
     }
 
     @Override
     public void resolve(SearchKeywordContext context, UIComponent previous, String command) {
         context.setCommandResolved(false);
 
-        for (int i = 0; i < size; i++) {
-            if (this.resolvers[i].matchKeyword(context.getSearchExpressionContext(), command)) {
-                this.resolvers[i].resolve(context, previous, command);
+        for (int i = 0; i < resolvers.size(); i++) {
+            SearchKeywordResolver resolver = resolvers.get(i);
+            if (resolver.matchKeyword(context.getSearchExpressionContext(), command)) {
+                resolver.resolve(context, previous, command);
                 if (context.isCommandResolved()) {
                     return;
                 }
@@ -84,8 +78,9 @@ public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
 
     @Override
     public boolean matchKeyword(SearchExpressionContext searchExpressionContext, String keyword) {
-        for (int i = 0; i < size; i++) {
-            if (this.resolvers[i].matchKeyword(searchExpressionContext, keyword)) {
+        for (int i = 0; i < resolvers.size(); i++) {
+            SearchKeywordResolver resolver = resolvers.get(i);
+            if (resolver.matchKeyword(searchExpressionContext, keyword)) {
                 return true;
             }
         }
@@ -95,9 +90,10 @@ public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
 
     @Override
     public boolean isPassthrough(SearchExpressionContext searchExpressionContext, String keyword) {
-        for (int i = 0; i < size; i++) {
-            if (this.resolvers[i].matchKeyword(searchExpressionContext, keyword)) {
-                return this.resolvers[i].isPassthrough(searchExpressionContext, keyword);
+        for (int i = 0; i < resolvers.size(); i++) {
+            SearchKeywordResolver resolver = resolvers.get(i);
+            if (resolver.matchKeyword(searchExpressionContext, keyword)) {
+                return resolver.isPassthrough(searchExpressionContext, keyword);
             }
         }
 
@@ -106,9 +102,10 @@ public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
 
     @Override
     public boolean isLeaf(SearchExpressionContext searchExpressionContext, String keyword) {
-        for (int i = 0; i < size; i++) {
-            if (this.resolvers[i].matchKeyword(searchExpressionContext, keyword)) {
-                return this.resolvers[i].isLeaf(searchExpressionContext, keyword);
+        for (int i = 0; i < resolvers.size(); i++) {
+            SearchKeywordResolver resolver = resolvers.get(i);
+            if (resolver.matchKeyword(searchExpressionContext, keyword)) {
+                return resolver.isLeaf(searchExpressionContext, keyword);
             }
         }
 

@@ -45,14 +45,14 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_3">The <strong>SearchExpressionHandler</strong> is responsible for
+ * <div class="changed_added_2_3">The <strong>SearchExpressionHandler</strong> is responsible for
  * resolving <em>search expression(s)</em>.
  * 
  * <p>A <em>search expression</em> consists of either an identifier
  * (which is matched exactly against the <code>id</code> property of
  * a {@link UIComponent}, or an keyword (like <code>@this</code> or <code>@form</code>),
  * or a series of such identifiers and keywords linked by
- * the {@link UINamingContainer#getSeparatorChar} character value.
+ * the {@link javax.faces.component.UINamingContainer#getSeparatorChar} character value.
  * The search algorithm should operates as follows, though alternate
  * alogrithms may be used as long as the end result is the same:</p>
  * 
@@ -79,30 +79,41 @@ import javax.faces.context.FacesContext;
  *     component (if any) based on the identifier and/or keywords:
  *     <ul>
  *       <li>
- *          The expression will be splitted by {@link UINamingContainer#getSeparatorChar} into "commands".
+ *          The expression will be splitted by {@link javax.faces.component.UINamingContainer#getSeparatorChar} into "commands".
  *          The commands will be resolved one by one.
  *          For the first command, the source component, like mentioned above, will be used to start the lookup.
  *          For all further commands, the previous resolved component, from the previous command, will be used the start the lookup.
  *       </li>
  *       <li>
- *           If the command starts with the {@link #KEYWORD_PREFIX}, the {@link SearchKeywordResolver}s
- *           will used the resolve the command.
+ *           If the command starts with the {@link #KEYWORD_PREFIX}, then it is considered a keyword and the
+ *           {@link SearchKeywordResolver}s will be used the resolve the keyword.
  *       </li>
  *       <li>
- *           Otherwise, If the command starts not with the {@link #KEYWORD_PREFIX}, the component will be resolved
- *           based on the component id. Similar to {@link UIComponent#findComponent}.
+ *           Otherwise, if the command does not start with {@link #KEYWORD_PREFIX}, then the component will be resolved
+ *           based on the component ID using {@link UIComponent#findComponent}.
  *       </li>
  *     </ul>
  *   </li>
  * </ul>
- * </p>
+ * </div>
  * 
  * @since 2.3
  */
 public abstract class SearchExpressionHandler {
 
+    /**
+     * <p class="changed_added_2_3">The prefix to identify a keyword.</p>
+     * 
+     * @since 2.3
+     */
     public static final String KEYWORD_PREFIX = "@";
     
+    /**
+     * <p class="changed_added_2_3">The default characters used to separate expressions 
+     * in a series of expressions. Expressions are per default separated by space and comma.</p>
+     * 
+     * @since 2.3
+     */
     protected static final char[] EXPRESSION_SEPARATOR_CHARS = new char[] {
         ',', ' '
     };
@@ -256,7 +267,7 @@ public abstract class SearchExpressionHandler {
      *
      * @param searchExpressionContext the {@link SearchExpressionContext}
      * @param expression the expression
-     * @return If the given expression is a passtrough expression
+     * @return If the given expression is a valid expression
      *
      * @since 2.3
      */
@@ -264,7 +275,8 @@ public abstract class SearchExpressionHandler {
     
     /**
      * <p class="changed_added_2_3">Return the characters used to separate expressions
-     * in a series of expressions.</p>
+     * in a series of expressions.
+     * The default implementation returns {@link SearchExpressionHandler#EXPRESSION_SEPARATOR_CHARS}.</p>
      *
      * @param context the {@link FacesContext} for the current request
      * @return the separator chars

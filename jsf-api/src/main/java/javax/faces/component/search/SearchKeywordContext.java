@@ -45,8 +45,7 @@ import javax.faces.component.UIComponent;
 /**
  * <p class="changed_added_2_3"><strong>SearchKeywordContext</strong>
  * provides context information that may be useful to 
- * {@link javax.faces.component.search.SearchKeywordResolver#resolve(javax.faces.component.search.SearchKeywordContext, javax.faces.component.UIComponent, java.lang.String)}
- * implementations.
+ * {@link SearchKeywordResolver#resolve} implementations.
  * </p>
  *
  * @since 2.3
@@ -55,41 +54,90 @@ public class SearchKeywordContext {
 
     private final SearchExpressionContext searchExpressionContext;
     private final ContextCallback callback;
-
+    private final String remainingExpression;
+    
     private boolean commandResolved;
-    private String remainingExpression;
 
-    public SearchKeywordContext(SearchExpressionContext searchExpressionContext, ContextCallback callback) {
+    /**
+     * <p class="changed_added_2_3">Construct a new context with the given arguments.</p>
+     *
+     * @param searchExpressionContext the {@link SearchExpressionContext} for the current command.
+     * @param callback the {@link ContextCallback}.
+     * @param remainingExpression the remaining expression.
+     */
+    public SearchKeywordContext(SearchExpressionContext searchExpressionContext, ContextCallback callback, String remainingExpression) {
         this.searchExpressionContext = searchExpressionContext;
         this.callback = callback;
+        this.remainingExpression = remainingExpression;
     }
 
+    /**
+     * <p class="changed_added_2_3">This method will be called by an implementation of {@link
+     * SearchKeywordResolver#resolve} and must be passed the resolved component
+     * with the <code>command</code> given as an argument to
+     * <code>invokeOnComponent</code>.</p>
+     *
+     * @param target the resolved {@link UIComponent}.
+     * 
+     * @since 2.3
+     */
     public void invokeContextCallback(UIComponent target) {
         commandResolved = true;
         callback.invokeContextCallback(searchExpressionContext.getFacesContext(), target);
     }
 
+    /**
+     * <p class="changed_added_2_3">Returns the {@link SearchExpressionContext} for the current request.</p>
+     * 
+     * @return the {@link SearchExpressionContext}.
+     * 
+     * @since 2.3
+     */
     public SearchExpressionContext getSearchExpressionContext() {
         return searchExpressionContext;
     }
 
+    /**
+     * <p class="changed_added_2_3">Returns the {@link ContextCallback} for the current request.</p>
+     * 
+     * @return the {@link ContextCallback}.
+     * 
+     * @since 2.3
+     */
     public ContextCallback getCallback() {
         return callback;
     }
 
-    public boolean isCommandResolved() {
-        return commandResolved;
-    }
-
-    public void setCommandResolved(boolean commandResolved) {
-        this.commandResolved = commandResolved;
-    }
-
+    /**
+     * <p class="changed_added_2_3">Returns the remaining expression for the current request.</p>
+     * 
+     * @return the remaining expression.
+     * 
+     * @since 2.3
+     */
     public String getRemainingExpression() {
         return remainingExpression;
     }
 
-    public void setRemainingExpression(String remainingExpression) {
-        this.remainingExpression = remainingExpression;
+    /**
+     * <p class="changed_added_2_3">Returns if the command was resolved.</p>
+     * 
+     * @return if the command was resolved.
+     * 
+     * @since 2.3
+     */
+    public boolean isCommandResolved() {
+        return commandResolved;
+    }
+
+    /**
+     * <p class="changed_added_2_3">Sets if the command was resolved.</p>
+     * 
+     * @param commandResolved if the command was resolved.
+     * 
+     * @since 2.3
+     */
+    public void setCommandResolved(boolean commandResolved) {
+        this.commandResolved = commandResolved;
     }
 }

@@ -57,13 +57,6 @@ public enum SearchExpressionHint {
      * </p>
      *
      * @since 2.3
-     *//**
-     * <p class="changed_added_2_3">
-     * Hint that indicates that if a expression resolves to <code>null</code>, <code>null</code> will be returned.
-     * Otherwise a {@link ComponentNotFoundException} will be thrown.
-     * </p>
-     *
-     * @since 2.3
      */
     IGNORE_NO_RESULT,
 
@@ -71,7 +64,7 @@ public enum SearchExpressionHint {
      * <p class="changed_added_2_3">
      * Hint that indicates that if no component(s) can be resolved, the parent of the source component will be returned
      * instead <code>null</code> or {@link ComponentNotFoundException}.
-     * This is quite useful for components which can be placed inside other components
+     * This is useful for components which can be placed inside other components
      * or references another component via a "for" attribute.
      * </p>
      *

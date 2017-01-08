@@ -332,6 +332,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
 
         builder.append("'");
 
+        SearchExpressionHandler handler = null;
         SearchExpressionContext searchExpressionContext = null;
         
         boolean first = true;
@@ -354,17 +355,14 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
                     searchExpressionContext = SearchExpressionContext.createSearchExpressionContext(
                             facesContext, component, EXPRESSION_HINTS, null);
                 }
+                if (handler == null) {
+                    handler = facesContext.getApplication().getSearchExpressionHandler();
+                }
                 
-                builder.append(resolveExpression(searchExpressionContext, id));
+                builder.append(handler.resolveClientId(searchExpressionContext, id));
             }
         }
 
         builder.append("'");
-    }
-
-    // Returns the resolved (client id) for a particular expression.
-    private static String resolveExpression(SearchExpressionContext searchExpressionContext, String expression) {
-        SearchExpressionHandler handler = searchExpressionContext.getFacesContext().getApplication().getSearchExpressionHandler();
-        return handler.resolveClientId(searchExpressionContext, expression);
     }
 }

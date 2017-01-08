@@ -97,19 +97,6 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         
             forClientId = context.getApplication().getSearchExpressionHandler().resolveClientId(
                 searchExpressionContext, forValue);
-
-            /*
-            forValue = augmentIdReference(forValue, component);
-            UIComponent forComponent = getForComponent(context, forValue, component);
-            if (forComponent == null) {
-                // it could that the component hasn't been created yet. So
-                // construct the clientId for component.
-                forClientId = getForComponentClientId(component, context,
-                                                      forValue);
-            } else {
-                forClientId = forComponent.getClientId(context);
-            }
-            */
         }
 
         // set a temporary attribute on the component to indicate that

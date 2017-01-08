@@ -62,7 +62,7 @@ public abstract class SearchExpressionHandlerWrapper extends SearchExpressionHan
     private final SearchExpressionHandler wrapped;
 
     /**
-     * <p class="changed_added_2_3">If this exception handler has been decorated,
+     * <p class="changed_added_2_3">If this search expression handler has been decorated,
      * the implementation doing the decorating should push the implementation being wrapped to this constructor.
      * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
      *

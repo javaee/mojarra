@@ -180,7 +180,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     private List<ELResolver> elResolvers;
     
     /**
-     * <code>/faces-config/application/search-expression-handle</code>
+     * <code>/faces-config/application/search-expression-handler</code>
      */
     private static final String SEARCH_EXPRESSION_HANDLER
          = "search-expression-handler";
