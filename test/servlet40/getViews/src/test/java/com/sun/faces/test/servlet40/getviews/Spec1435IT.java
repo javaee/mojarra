@@ -39,6 +39,8 @@
  */
 package com.sun.faces.test.servlet40.getviews;
 
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M10;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -70,7 +72,7 @@ public class Spec1435IT {
     // ### ViewHandler based tests
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetAllViews() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf");
         String content = page.asXml();
@@ -87,7 +89,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewsForPath() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F");
         String content = page.asXml();
@@ -105,7 +107,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetAllViewsAsImplicit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?implicit=true");
         String content = page.asXml();
@@ -132,7 +134,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetAllViewsWithLimit2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?maxDepth=2");
         String content = page.asXml();
@@ -150,7 +152,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewsForPathImplicit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F&implicit=true");
         String content = page.asXml();
@@ -176,7 +178,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewsForPathImplicitWithLimit2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F&implicit=true&maxDepth=2");
         String content = page.asXml();
@@ -204,7 +206,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewsForPathImplicitWithLimit3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F&implicit=true&maxDepth=3");
         String content = page.asXml();
@@ -232,7 +234,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewsForPathImplicitWithLimit0() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F&implicit=true&maxDepth=0");
         String content = page.asXml();
@@ -265,7 +267,7 @@ public class Spec1435IT {
     
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetAllViewsVDL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?fromVDL=true");
         String content = page.asXml();
@@ -282,7 +284,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewsForPathVDL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F&fromVDL=true");
         String content = page.asXml();
@@ -300,7 +302,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetAllViewsAsImplicitVDL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?implicit=true&fromVDL=true");
         String content = page.asXml();
@@ -327,7 +329,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetAllViewsWithLimit2VDL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?maxDepth=2&fromVDL=true");
         String content = page.asXml();
@@ -345,7 +347,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewsForPathImplicitVDL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F&implicit=true&fromVDL=true");
         String content = page.asXml();
@@ -371,7 +373,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewsForPathImplicitWithLimit2VDL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F&implicit=true&maxDepth=2&fromVDL=true");
         String content = page.asXml();
@@ -399,7 +401,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewsForPathImplicitWithLimit3VDL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F&implicit=true&maxDepth=3&fromVDL=true");
         String content = page.asXml();
@@ -427,7 +429,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewsForPathImplicitWithLimit0VDL() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F&implicit=true&maxDepth=0&fromVDL=true");
         String content = page.asXml();
@@ -460,7 +462,7 @@ public class Spec1435IT {
     
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetAllViewResources() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViewResources.jsf");
         String content = page.asXml();
@@ -477,7 +479,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewResourcesForPath() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViewResources.jsf?path=%2Flevel2%2F");
         String content = page.asXml();
@@ -495,7 +497,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetAllViewResourcesTopLevel() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViewResources.jsf?topLevel=true");
         String content = page.asXml();
@@ -512,7 +514,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetAllViewResourcesWithLimit2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViewResources.jsf?maxDepth=2");
         String content = page.asXml();
@@ -531,7 +533,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M10)
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetViewResourcesForPathWithLimit3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViewResources.jsf?path=%2Flevel2%2F&maxDepth=3");
         String content = page.asXml();
@@ -550,8 +552,10 @@ public class Spec1435IT {
         assertFalse(content.contains("/some_file.txt"));
     }
     
+    @Test
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testGetAllViewResourcesForPathWithLimit0() throws Exception {
-        HtmlPage page = webClient.getPage("getViewResources.jsf?path=%2Flevel2%2F&maxDepth=0");
+        HtmlPage page = webClient.getPage(webUrl + "getViewResources.jsf?path=%2Flevel2%2F&maxDepth=0");
         String content = page.asXml();
         
         assertFalse(content.contains("/getViews.xhtml"));
