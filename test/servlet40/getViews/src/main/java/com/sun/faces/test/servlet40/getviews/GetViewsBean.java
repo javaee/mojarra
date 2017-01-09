@@ -56,6 +56,7 @@ import javax.faces.annotation.ManagedProperty;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.ViewVisitOption;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewDeclarationLanguage;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -79,19 +80,36 @@ public class GetViewsBean {
     @Inject @ManagedProperty("#{param['implicit']}")
     private boolean implicit;
     
+    @Inject @ManagedProperty("#{param['fromVDL']}")
+    private boolean fromVDL;
+    
     public List<String> getViews() {
         
         ViewHandler viewHandler = context.getApplication().getViewHandler();
         
         path = path != null && !path.isEmpty() ? path : "/";
         ViewVisitOption[] options = implicit? new ViewVisitOption[] {RETURN_AS_MINIMAL_IMPLICIT_OUTCOME} : new ViewVisitOption[] {};
-
         Stream<String> views;
-        if (maxDepth != null) {
-            views = viewHandler.getViews(context, path, maxDepth, options);
+        
+        if (fromVDL) {
+            // Get Facelets VDL
+            ViewDeclarationLanguage vdl = viewHandler.getViewDeclarationLanguage(context, "/foo.xhtml");
+            if (maxDepth != null) {
+                views = vdl.getViews(context, path, maxDepth, options);
+            } else {
+                views = vdl.getViews(context, path, options);
+            }
         } else {
-            views = viewHandler.getViews(context, path, options);
+            if (maxDepth != null) {
+                views = viewHandler.getViews(context, path, maxDepth, options);
+            } else {
+                views = viewHandler.getViews(context, path, options);
+            }
+            
         }
+        
+        
+      
         
         return views.collect(toList());
     }
