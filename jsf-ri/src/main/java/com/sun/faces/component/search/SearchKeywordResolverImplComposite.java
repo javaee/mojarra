@@ -47,13 +47,13 @@ import javax.faces.component.search.SearchKeywordResolver;
 public class SearchKeywordResolverImplComposite extends SearchKeywordResolver {
 
     @Override
-    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent previous, String command) {
+    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent current, String keyword) {
         searchKeywordContext.invokeContextCallback(
-            UIComponent.getCompositeComponentParent(previous));
+            UIComponent.getCompositeComponentParent(current));
     }
 
     @Override
-    public boolean matchKeyword(SearchExpressionContext searchExpressionContext, String command) {
-        return "composite".equals(command);
+    public boolean isResolverForKeyword(SearchExpressionContext searchExpressionContext, String keyword) {
+        return "composite".equals(keyword);
     }
 }

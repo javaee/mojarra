@@ -969,22 +969,22 @@ public class SearchExpressionHandlerTest extends JUnitFacesTestCaseBase {
         s.add(new SearchKeywordResolver() {
 
             @Override
-            public void resolve(SearchKeywordContext searchKeywordContext, UIComponent previous, String command) {
+            public void resolve(SearchKeywordContext searchKeywordContext, UIComponent previous, String keyword) {
                 
             }
 
             @Override
-            public boolean matchKeyword(SearchExpressionContext searchExpressionContext, String command) {
-                return command.startsWith("(") && command.endsWith(")");
+            public boolean isResolverForKeyword(SearchExpressionContext searchExpressionContext, String keyword) {
+                return keyword.startsWith("(") && keyword.endsWith(")");
             }
             
             @Override
-            public boolean isPassthrough(SearchExpressionContext searchExpressionContext, String command) {
+            public boolean isPassthrough(SearchExpressionContext searchExpressionContext, String keyword) {
                 return true;
             }
             
             @Override
-            public boolean isLeaf(SearchExpressionContext searchExpressionContext, String command) {
+            public boolean isLeaf(SearchExpressionContext searchExpressionContext, String keyword) {
                 return true;
             }
         });

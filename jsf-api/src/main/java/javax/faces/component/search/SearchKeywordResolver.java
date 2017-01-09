@@ -43,7 +43,7 @@ import javax.faces.component.UIComponent;
 
 /**
  * <div class="changed_added_2_3">A <strong>SearchKeywordResolver</strong> is responsible for
- * resolving a single command. A command (e.g. <code>@child(2)</code>) is a "instance" of a keyword (e.g. <code>@child</code>).
+ * resolving a single keyword.
  * 
  * New {@link SearchKeywordResolver} can be registered via
  *   {@link javax.faces.application.Application#addSearchKeywordResolver(javax.faces.component.search.SearchKeywordResolver)}
@@ -60,43 +60,43 @@ import javax.faces.component.UIComponent;
 public abstract class SearchKeywordResolver {
 
    /**
-     * <p class="changed_added_2_3">Try to resolve one or multiple {@link UIComponent}s based on the command and calls
+     * <p class="changed_added_2_3">Try to resolve one or multiple {@link UIComponent}s based on the keyword and calls
      * {@link SearchKeywordContext#invokeContextCallback(javax.faces.component.UIComponent)} for each resolved component.
      * </p>
      *
      * @param searchKeywordContext the {@code SearchKeywordContext}
-     * @param previous the previous resolved component or the source component (if called for the first command in the chain)
-     * @param command the command
+     * @param current the previous resolved component or the source component (if called for the first keyword in the chain)
+     * @param keyword the keyword
      *
      * @since 2.3
      */
-    public abstract void resolve(SearchKeywordContext searchKeywordContext, UIComponent previous, String command);
+    public abstract void resolve(SearchKeywordContext searchKeywordContext, UIComponent current, String keyword);
 
     /**
      * <p class="changed_added_2_3">Checks if the current instance of the {@link SearchKeywordResolver}
-     * is responsible for resolving the command / keyword.</p>
+     * is responsible for resolving the keyword.</p>
      *
      * @param searchExpressionContext the {@link SearchExpressionContext}
-     * @param command the command
+     * @param keyword the keyword
      *
-     * @return <code>true</code> if it's responsible for resolving this command
+     * @return <code>true</code> if it's responsible for resolving this keyword
      *
      * @since 2.3
      */
-    public abstract boolean matchKeyword(SearchExpressionContext searchExpressionContext, String command);
+    public abstract boolean isResolverForKeyword(SearchExpressionContext searchExpressionContext, String keyword);
 
     /**
      * <p class="changed_added_2_3">A passthrough keyword is a keyword, that according to the context,
      * does not require to be resolved on the server, and can be passed "unresolved" to the client.</p>
      *
      * @param searchExpressionContext the {@link SearchExpressionContext}
-     * @param command the command
+     * @param keyword the keyword
      *
      * @return <code>true</code> if it's passthrough keyword.
      *
      * @since 2.3
      */
-    public boolean isPassthrough(SearchExpressionContext searchExpressionContext, String command) {
+    public boolean isPassthrough(SearchExpressionContext searchExpressionContext, String keyword) {
         return false;
     }
 
@@ -106,13 +106,13 @@ public abstract class SearchKeywordResolver {
      * For example: @none:@parent.</p>
      *
      * @param searchExpressionContext the {@link SearchExpressionContext}
-     * @param command the command
+     * @param keyword the keyword
      *
      * @return <code>true</code> if it's leave keyword.
      *
      * @since 2.3
      */
-    public boolean isLeaf(SearchExpressionContext searchExpressionContext, String command) {
+    public boolean isLeaf(SearchExpressionContext searchExpressionContext, String keyword) {
         return false;
     }
 }

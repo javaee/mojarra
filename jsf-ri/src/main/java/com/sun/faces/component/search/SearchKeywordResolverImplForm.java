@@ -48,14 +48,14 @@ import javax.faces.component.search.SearchKeywordContext;
 public class SearchKeywordResolverImplForm extends AbstractSearchKeywordResolverImpl {
 
     @Override
-    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent previous, String command) {
+    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent current, String keyword) {
         searchKeywordContext.invokeContextCallback(
-                closest(UIForm.class, previous));
+                closest(UIForm.class, current));
     }
 
     @Override
-    public boolean matchKeyword(SearchExpressionContext searchExpressionContext, String command) {
-        return "form".equals(command);
+    public boolean isResolverForKeyword(SearchExpressionContext searchExpressionContext, String keyword) {
+        return "form".equals(keyword);
     }
     
     @Override

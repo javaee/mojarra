@@ -62,14 +62,14 @@ public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
     }
 
     @Override
-    public void resolve(SearchKeywordContext context, UIComponent previous, String command) {
-        context.setCommandResolved(false);
+    public void resolve(SearchKeywordContext context, UIComponent current, String keyword) {
+        context.setKeywordResolved(false);
 
         for (int i = 0; i < resolvers.size(); i++) {
             SearchKeywordResolver resolver = resolvers.get(i);
-            if (resolver.matchKeyword(context.getSearchExpressionContext(), command)) {
-                resolver.resolve(context, previous, command);
-                if (context.isCommandResolved()) {
+            if (resolver.isResolverForKeyword(context.getSearchExpressionContext(), keyword)) {
+                resolver.resolve(context, current, keyword);
+                if (context.isKeywordResolved()) {
                     return;
                 }
             }
@@ -77,10 +77,10 @@ public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
     }
 
     @Override
-    public boolean matchKeyword(SearchExpressionContext searchExpressionContext, String keyword) {
+    public boolean isResolverForKeyword(SearchExpressionContext searchExpressionContext, String keyword) {
         for (int i = 0; i < resolvers.size(); i++) {
             SearchKeywordResolver resolver = resolvers.get(i);
-            if (resolver.matchKeyword(searchExpressionContext, keyword)) {
+            if (resolver.isResolverForKeyword(searchExpressionContext, keyword)) {
                 return true;
             }
         }
@@ -92,7 +92,7 @@ public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
     public boolean isPassthrough(SearchExpressionContext searchExpressionContext, String keyword) {
         for (int i = 0; i < resolvers.size(); i++) {
             SearchKeywordResolver resolver = resolvers.get(i);
-            if (resolver.matchKeyword(searchExpressionContext, keyword)) {
+            if (resolver.isResolverForKeyword(searchExpressionContext, keyword)) {
                 return resolver.isPassthrough(searchExpressionContext, keyword);
             }
         }
@@ -104,7 +104,7 @@ public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
     public boolean isLeaf(SearchExpressionContext searchExpressionContext, String keyword) {
         for (int i = 0; i < resolvers.size(); i++) {
             SearchKeywordResolver resolver = resolvers.get(i);
-            if (resolver.matchKeyword(searchExpressionContext, keyword)) {
+            if (resolver.isResolverForKeyword(searchExpressionContext, keyword)) {
                 return resolver.isLeaf(searchExpressionContext, keyword);
             }
         }

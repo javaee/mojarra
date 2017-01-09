@@ -85,7 +85,7 @@ import javax.faces.context.FacesContext;
  *          For all further commands, the previous resolved component, from the previous command, will be used the start the lookup.
  *       </li>
  *       <li>
- *           If the command starts with the {@link #KEYWORD_PREFIX}, then it is considered a keyword and the
+ *           If the command starts with the {@link #KEYWORD_PREFIX}, then it is considered as a keyword and the
  *           {@link SearchKeywordResolver}s will be used the resolve the keyword.
  *       </li>
  *       <li>

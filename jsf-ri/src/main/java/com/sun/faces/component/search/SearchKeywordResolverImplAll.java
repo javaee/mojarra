@@ -47,10 +47,10 @@ import javax.faces.component.search.SearchKeywordContext;
 public class SearchKeywordResolverImplAll extends AbstractSearchKeywordResolverImpl {
 
     @Override
-    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent previous, String command) {
+    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent current, String keyword) {
         
-        if (previous.getParent() != null) {
-            UIComponent parent = previous.getParent();
+        if (current.getParent() != null) {
+            UIComponent parent = current.getParent();
 
             while (parent.getParent() != null) {
                 parent = parent.getParent();
@@ -58,13 +58,13 @@ public class SearchKeywordResolverImplAll extends AbstractSearchKeywordResolverI
 
             searchKeywordContext.invokeContextCallback(parent);
         } else {
-            searchKeywordContext.setCommandResolved(true);
+            searchKeywordContext.setKeywordResolved(true);
         }
     }
 
     @Override
-    public boolean matchKeyword(SearchExpressionContext searchExpressionContext, String command) {
-        return "all".equals(command);
+    public boolean isResolverForKeyword(SearchExpressionContext searchExpressionContext, String keyword) {
+        return "all".equals(keyword);
     }
     
     @Override
@@ -73,7 +73,7 @@ public class SearchKeywordResolverImplAll extends AbstractSearchKeywordResolverI
     }
     
     @Override
-    public boolean isLeaf(SearchExpressionContext searchExpressionContext, String command) {
+    public boolean isLeaf(SearchExpressionContext searchExpressionContext, String keyword) {
         return true;
     }
 }

@@ -47,14 +47,14 @@ import javax.faces.component.search.SearchKeywordContext;
 public class SearchKeywordResolverImplNamingContainer extends AbstractSearchKeywordResolverImpl {
 
     @Override
-    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent previous, String command) {
+    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent current, String keyword) {
         searchKeywordContext.invokeContextCallback(
-                (UIComponent) closest(NamingContainer.class, previous));
+                (UIComponent) closest(NamingContainer.class, current));
     }
 
     @Override
-    public boolean matchKeyword(SearchExpressionContext searchExpressionContext, String command) {
-        return "namingcontainer".equals(command);
+    public boolean isResolverForKeyword(SearchExpressionContext searchExpressionContext, String keyword) {
+        return "namingcontainer".equals(keyword);
     }
     
 }

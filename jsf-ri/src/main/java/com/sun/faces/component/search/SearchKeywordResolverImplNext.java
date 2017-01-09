@@ -49,12 +49,12 @@ import javax.faces.component.search.SearchKeywordResolver;
 public class SearchKeywordResolverImplNext extends SearchKeywordResolver {
 
     @Override
-    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent previous, String command) {
-        UIComponent parent = previous.getParent();
+    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent current, String keyword) {
+        UIComponent parent = current.getParent();
         
         if (parent.getChildCount() > 1) {
             List<UIComponent> children = parent.getChildren();
-            int index = children.indexOf(previous);
+            int index = children.indexOf(current);
 
             if (index < parent.getChildCount() - 1) {
                 int nextIndex = -1;
@@ -72,12 +72,12 @@ public class SearchKeywordResolverImplNext extends SearchKeywordResolver {
             }
         }
 
-        searchKeywordContext.setCommandResolved(true);
+        searchKeywordContext.setKeywordResolved(true);
     }
 
     @Override
-    public boolean matchKeyword(SearchExpressionContext searchExpressionContext, String command) {
-        return "next".equals(command);
+    public boolean isResolverForKeyword(SearchExpressionContext searchExpressionContext, String keyword) {
+        return "next".equals(keyword);
     }
     
 }

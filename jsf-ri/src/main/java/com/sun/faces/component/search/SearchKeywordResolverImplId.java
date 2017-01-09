@@ -57,17 +57,17 @@ public class SearchKeywordResolverImplId extends AbstractSearchKeywordResolverIm
     private static final Pattern PATTERN = Pattern.compile("id\\((\\w+)\\)");
 
     @Override
-    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent previous, String command) {
+    public void resolve(SearchKeywordContext searchKeywordContext, UIComponent current, String keyword) {
         FacesContext facesContext = searchKeywordContext.getSearchExpressionContext().getFacesContext();
 
-        String id = extractId(command);
+        String id = extractId(keyword);
 
         if (isHintSet(searchKeywordContext.getSearchExpressionContext(), SearchExpressionHint.SKIP_VIRTUAL_COMPONENTS)) {
             // Avoid visit tree because in this case we need real component instances.
             // This means components inside UIData will not be scanned. 
-            findWithId(facesContext, id, previous, searchKeywordContext.getCallback());
+            findWithId(facesContext, id, current, searchKeywordContext.getCallback());
         } else {
-            previous.visitTree(
+            current.visitTree(
                     VisitContext.createVisitContext(facesContext, null, searchKeywordContext.getSearchExpressionContext().getVisitHints()),
                     new VisitCallback() {
                         @Override
@@ -87,15 +87,15 @@ public class SearchKeywordResolverImplId extends AbstractSearchKeywordResolverIm
                     });
         }
 
-        searchKeywordContext.setCommandResolved(true);
+        searchKeywordContext.setKeywordResolved(true);
     }
     
     @Override
-    public boolean matchKeyword(SearchExpressionContext searchExpressionContext, String command) {
+    public boolean isResolverForKeyword(SearchExpressionContext searchExpressionContext, String keyword) {
 
-        if (command.startsWith("id")) {
+        if (keyword.startsWith("id")) {
             try {
-                Matcher matcher = PATTERN.matcher(command);
+                Matcher matcher = PATTERN.matcher(keyword);
                 return matcher.matches();
             } catch (Exception e) {
                 return false;

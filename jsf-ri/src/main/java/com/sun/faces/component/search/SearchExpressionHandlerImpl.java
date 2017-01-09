@@ -297,7 +297,7 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
  
             String command = extractFirstCommand(facesContext, expression);
 
-            // check if there are remaining commands/id's after the first command
+            // check if there are remaining keywords/id's after the first command
             String remainingExpression = null;
             if (command.length() < expression.length()) {
                 remainingExpression = expression.substring(command.length() + 1);
@@ -305,27 +305,29 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
 
             if (command.startsWith(KEYWORD_PREFIX)) {
                 
-                command = command.substring(KEYWORD_PREFIX.length());
+                String keyword = command.substring(KEYWORD_PREFIX.length());
 
                 if (remainingExpression == null) {
-                    invokeKeywordResolvers(searchExpressionContext, previous, command, null, callback);
+                    invokeKeywordResolvers(searchExpressionContext, previous, keyword, null, callback);
                 } else {
 
-                    if (facesContext.getApplication().getSearchKeywordResolver().isLeaf(searchExpressionContext, command)) {
-                        throw new FacesException("Expression cannot have keywords or ids at the right side: " + command);
+                    if (facesContext.getApplication().getSearchKeywordResolver().isLeaf(searchExpressionContext, keyword)) {
+                        throw new FacesException("Expression cannot have keywords or ids at the right side: " + keyword);
                     }
 
                     final String finalRemainingExpression = remainingExpression;
 
-                    invokeKeywordResolvers(searchExpressionContext, previous, command, remainingExpression, new ContextCallback() {
+                    invokeKeywordResolvers(searchExpressionContext, previous, keyword, remainingExpression, new ContextCallback() {
                         @Override
                         public void invokeContextCallback(FacesContext facesContext, UIComponent target) {
                             handler.invokeOnComponent(searchExpressionContext, target, finalRemainingExpression, callback);
                         }
                     });
                 }
-            } else {
-                UIComponent target = previous.findComponent(command);
+            } else {                
+                String id = command;
+
+                UIComponent target = previous.findComponent(id);
                 if (target != null) {
                     if (remainingExpression == null) {
                         callback.invokeContextCallback(facesContext, target);
@@ -353,13 +355,13 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
     }
 
     protected void invokeKeywordResolvers(SearchExpressionContext searchExpressionContext, UIComponent previous,
-                             String command, String remainingExpression, ContextCallback callback)
+                             String keyword, String remainingExpression, ContextCallback callback)
     {
-        // take the command and resolve it using the chain of responsibility pattern.
+        // take the keyword and resolve it using the chain of responsibility pattern.
         SearchKeywordContext searchContext = new SearchKeywordContext(searchExpressionContext, callback, remainingExpression);
 
         searchExpressionContext.getFacesContext().getApplication()
-                .getSearchKeywordResolver().resolve(searchContext, previous, command);
+                .getSearchKeywordResolver().resolve(searchContext, previous, keyword);
     }
     
     @Override
@@ -428,13 +430,11 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
                 remainingExpression = expression.substring(command.length() + 1);
             }
 
-            if (command.startsWith(KEYWORD_PREFIX)) {   
-                command = command.substring(KEYWORD_PREFIX.length());
-            }
+            if (command.startsWith(KEYWORD_PREFIX) && remainingExpression == null) {   
+                String keyword = command.substring(KEYWORD_PREFIX.length());
 
-            if (remainingExpression == null) {
                 SearchKeywordResolver keywordResolver = facesContext.getApplication().getSearchKeywordResolver();
-                return keywordResolver.isPassthrough(searchExpressionContext, command);
+                return keywordResolver.isPassthrough(searchExpressionContext, keyword);
             }
 
             // check again the remainingExpression
@@ -474,17 +474,17 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
             }
 
             if (command.startsWith(KEYWORD_PREFIX)) {   
-                command = command.substring(KEYWORD_PREFIX.length());
+                String keyword = command.substring(KEYWORD_PREFIX.length());
 
-                // resolver for command available?
+                // resolver for keyword available?
                 SearchKeywordResolver keywordResolver = facesContext.getApplication().getSearchKeywordResolver();
-                if (!keywordResolver.matchKeyword(searchExpressionContext, command)) {
+                if (!keywordResolver.isResolverForKeyword(searchExpressionContext, keyword)) {
                     return false;
                 }
 
                 if (remainingExpression != null && !remainingExpression.trim().isEmpty()) {
-                    // there is remaingExpression avialable but the current command is leaf -> invalid
-                    if (keywordResolver.isLeaf(searchExpressionContext, command)) {
+                    // there is remaingExpression avialable but the current keyword is leaf -> invalid
+                    if (keywordResolver.isLeaf(searchExpressionContext, keyword)) {
                         return false;
                     }
 

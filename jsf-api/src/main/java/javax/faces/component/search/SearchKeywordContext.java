@@ -56,12 +56,12 @@ public class SearchKeywordContext {
     private final ContextCallback callback;
     private final String remainingExpression;
     
-    private boolean commandResolved;
+    private boolean keywordResolved;
 
     /**
      * <p class="changed_added_2_3">Construct a new context with the given arguments.</p>
      *
-     * @param searchExpressionContext the {@link SearchExpressionContext} for the current command.
+     * @param searchExpressionContext the {@link SearchExpressionContext} for the current request.
      * @param callback the {@link ContextCallback}.
      * @param remainingExpression the remaining expression.
      */
@@ -73,16 +73,14 @@ public class SearchKeywordContext {
 
     /**
      * <p class="changed_added_2_3">This method will be called by an implementation of {@link
-     * SearchKeywordResolver#resolve} and must be passed the resolved component
-     * with the <code>command</code> given as an argument to
-     * <code>invokeOnComponent</code>.</p>
+     * SearchKeywordResolver#resolve} with the resolved component for the keyword.</p>
      *
      * @param target the resolved {@link UIComponent}.
      * 
      * @since 2.3
      */
     public void invokeContextCallback(UIComponent target) {
-        commandResolved = true;
+        keywordResolved = true;
         callback.invokeContextCallback(searchExpressionContext.getFacesContext(), target);
     }
 
@@ -120,24 +118,24 @@ public class SearchKeywordContext {
     }
 
     /**
-     * <p class="changed_added_2_3">Returns if the command was resolved.</p>
+     * <p class="changed_added_2_3">Returns if the keyword was resolved.</p>
      * 
-     * @return if the command was resolved.
+     * @return if the keyword was resolved.
      * 
      * @since 2.3
      */
-    public boolean isCommandResolved() {
-        return commandResolved;
+    public boolean isKeywordResolved() {
+        return keywordResolved;
     }
 
     /**
-     * <p class="changed_added_2_3">Sets if the command was resolved.</p>
+     * <p class="changed_added_2_3">Sets if the keyword was resolved.</p>
      * 
-     * @param commandResolved if the command was resolved.
+     * @param keywordResolved if the keyword was resolved.
      * 
      * @since 2.3
      */
-    public void setCommandResolved(boolean commandResolved) {
-        this.commandResolved = commandResolved;
+    public void setKeywordResolved(boolean keywordResolved) {
+        this.keywordResolved = keywordResolved;
     }
 }
