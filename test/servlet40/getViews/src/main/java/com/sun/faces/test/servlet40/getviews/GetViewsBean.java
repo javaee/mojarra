@@ -108,9 +108,6 @@ public class GetViewsBean {
             
         }
         
-        
-      
-        
         return views.collect(toList());
     }
     

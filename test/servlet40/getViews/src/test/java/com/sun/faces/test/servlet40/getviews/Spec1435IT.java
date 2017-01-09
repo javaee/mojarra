@@ -71,6 +71,41 @@ public class Spec1435IT {
     
     @Test
     @JsfTest(value = JSF_2_3_0_M10)
+    public void testGetAllViews() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "getViews.jsf");
+        String content = page.asXml();
+        
+        assertTrue(content.contains("/getViews.xhtml"));
+        assertTrue(content.contains("view: /foo.xhtml")); // include marker since is also subset of "/level2/foo.xhtml" etc
+        assertTrue(content.contains("/level2/bar.xhtml"));
+        assertTrue(content.contains("/level2/foo.xhtml"));
+        assertTrue(content.contains("/level2/level3/foo.xhtml"));
+        assertTrue(content.contains("/level2/level3/level4/foo.xhtml"));
+        
+        assertFalse(content.contains("/some_file.txt"));
+        assertFalse(content.contains("include.xtml"));
+    }
+    
+    @Test
+    @JsfTest(value = JSF_2_3_0_M10)
+    public void testGetViewsForPath() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F");
+        String content = page.asXml();
+        
+        assertFalse(content.contains("/getViews.xhtml"));
+        assertFalse(content.contains("view: /foo.xhtml"));
+        
+        assertTrue(content.contains("/level2/bar.xhtml"));
+        assertTrue(content.contains("/level2/foo.xhtml"));
+        assertTrue(content.contains("/level2/level3/foo.xhtml"));
+        assertTrue(content.contains("/level2/level3/level4/foo.xhtml"));
+        
+        assertFalse(content.contains("/some_file.txt"));
+        assertFalse(content.contains("include.xtml"));
+    }
+    
+    @Test
+    @JsfTest(value = JSF_2_3_0_M10)
     public void testGetAllViewsAsImplicit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?implicit=true");
         String content = page.asXml();
@@ -419,5 +454,121 @@ public class Spec1435IT {
         assertFalse(content.contains("/some_file"));
         assertFalse(content.contains("include"));
     }
+    
+    
+    // ### ViewDeclarationLanguage based tests
+    
+    
+    @Test
+    @JsfTest(value = JSF_2_3_0_M10)
+    public void testGetAllViewResources() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "getViewResources.jsf");
+        String content = page.asXml();
+        
+        assertTrue(content.contains("/getViews.xhtml"));
+        assertTrue(content.contains("resource name: /foo.xhtml")); // include marker since is also subset of "/level2/foo.xhtml" etc
+        assertTrue(content.contains("/level2/bar.xhtml"));
+        assertTrue(content.contains("/level2/foo.xhtml"));
+        assertTrue(content.contains("/WEB-INF/include.xhtml"));
+        assertTrue(content.contains("/level2/level3/foo.xhtml"));
+        assertTrue(content.contains("/level2/level3/level4/foo.xhtml"));
+        
+        assertFalse(content.contains("/some_file.txt"));
+    }
+    
+    @Test
+    @JsfTest(value = JSF_2_3_0_M10)
+    public void testGetViewResourcesForPath() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "getViewResources.jsf?path=%2Flevel2%2F");
+        String content = page.asXml();
+        
+        assertFalse(content.contains("/getViews.xhtml"));
+        assertFalse(content.contains("view: /foo.xhtml"));
+        assertFalse(content.contains("/WEB-INF/include.xhtml"));
+        
+        assertTrue(content.contains("/level2/bar.xhtml"));
+        assertTrue(content.contains("/level2/foo.xhtml"));
+        assertTrue(content.contains("/level2/level3/foo.xhtml"));
+        assertTrue(content.contains("/level2/level3/level4/foo.xhtml"));
+        
+        assertFalse(content.contains("/some_file.txt"));
+    }
+    
+    @Test
+    @JsfTest(value = JSF_2_3_0_M10)
+    public void testGetAllViewResourcesTopLevel() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "getViewResources.jsf?topLevel=true");
+        String content = page.asXml();
+        
+        assertTrue(content.contains("/getViews.xhtml"));
+        assertTrue(content.contains("resource name: /foo.xhtml")); // include marker since is also subset of "/level2/foo.xhtml" etc
+        assertTrue(content.contains("/level2/bar.xhtml"));
+        assertTrue(content.contains("/level2/foo.xhtml"));
+        assertTrue(content.contains("/level2/level3/foo.xhtml"));
+        assertTrue(content.contains("/level2/level3/level4/foo.xhtml"));
+        
+        assertFalse(content.contains("/WEB-INF/include.xhtml"));
+        assertFalse(content.contains("/some_file.txt"));
+    }
+    
+    @Test
+    @JsfTest(value = JSF_2_3_0_M10)
+    public void testGetAllViewResourcesWithLimit2() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "getViewResources.jsf?maxDepth=2");
+        String content = page.asXml();
+        
+        assertTrue(content.contains("/getViews.xhtml"));
+        assertTrue(content.contains("resource name: /foo.xhtml")); // include marker since is also subset of "/level2/foo.xhtml" etc
+        
+        assertTrue(content.contains("/WEB-INF/include.xhtml"));
+        assertTrue(content.contains("/level2/bar.xhtml"));
+        assertTrue(content.contains("/level2/foo.xhtml"));
+        
+        assertFalse(content.contains("/level2/level3/foo.xhtml"));
+        assertFalse(content.contains("/level2/level3/level4/foo.xhtml"));
+        
+        assertFalse(content.contains("/some_file.txt"));
+    }
+    
+    @Test
+    @JsfTest(value = JSF_2_3_0_M10)
+    public void testGetViewResourcesForPathWithLimit3() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "getViewResources.jsf?path=%2Flevel2%2F&maxDepth=3");
+        String content = page.asXml();
+        
+        assertFalse(content.contains("/getViews.xhtml"));
+        assertFalse(content.contains("resource name: /foo.xhtml"));
+        assertFalse(content.contains("include.xtml"));
+        
+        // Contains only the view resources up to level 3, not those of /level2/ + 2
+        assertTrue(content.contains("/level2/bar.xhtml"));
+        assertTrue(content.contains("/level2/foo.xhtml"));
+        assertTrue(content.contains("/level2/level3/foo.xhtml"));
+        
+        assertFalse(content.contains("/level2/level3/level4/foo.xhtml"));
+        
+        assertFalse(content.contains("/some_file.txt"));
+    }
+    
+    public void testGetAllViewResourcesForPathWithLimit0() throws Exception {
+        HtmlPage page = webClient.getPage("getViewResources.jsf?path=%2Flevel2%2F&maxDepth=0");
+        String content = page.asXml();
+        
+        assertFalse(content.contains("/getViews.xhtml"));
+        assertFalse(content.contains("resource name: /foo.xhtml")); // include marker since is also subset of "/level2/foo.xhtml" etc
+        assertFalse(content.contains("/WEB-INF/include.xhtml"));
+        
+        assertTrue(content.contains("/level2/bar.xhtml"));
+        assertTrue(content.contains("/level2/foo.xhtml"));
+        
+        assertFalse(content.contains("/level2/level3/foo.xhtml"));
+        assertFalse(content.contains("/level2/level3/level4/foo.xhtml"));
+        
+        assertFalse(content.contains("/some_file.txt"));
+        assertFalse(content.contains("include.xtml"));
+    }
+    
+
+    
    
 }
