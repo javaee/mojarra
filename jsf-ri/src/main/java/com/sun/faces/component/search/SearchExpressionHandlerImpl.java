@@ -86,10 +86,6 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
         }
         
         String clientId = internalCallback.getClientId();
-        
-        if (clientId == null && isHintSet(searchExpressionContext, SearchExpressionHint.PARENT_FALLBACK)) {
-            clientId = searchExpressionContext.getSource().getParent().getClientId(facesContext);
-        }
 
         if (clientId == null && !isHintSet(searchExpressionContext, SearchExpressionHint.IGNORE_NO_RESULT)) {
             throw new ComponentNotFoundException("Cannot find component for expression \""
@@ -136,10 +132,6 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
                     handler.invokeOnComponent(searchExpressionContext, expression, internalCallback);
                 }
             }
-        }
-        
-        if (internalCallback.getClientIds() == null && isHintSet(searchExpressionContext, SearchExpressionHint.PARENT_FALLBACK)) {
-            internalCallback.addClientId(searchExpressionContext.getSource().getParent().getClientId(facesContext));
         }
 
         if (internalCallback.getClientIds() == null && !isHintSet(searchExpressionContext, SearchExpressionHint.IGNORE_NO_RESULT)) {
@@ -191,10 +183,6 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
         ResolveComponentCallback internalCallback = new ResolveComponentCallback(callback);        
         handler.invokeOnComponent(searchExpressionContext, expression, internalCallback);
 
-        if (!internalCallback.isInvoked() && isHintSet(searchExpressionContext, SearchExpressionHint.PARENT_FALLBACK)) {
-            internalCallback.invokeContextCallback(facesContext, searchExpressionContext.getSource().getParent());
-        }
-
         if (!internalCallback.isInvoked() && !isHintSet(searchExpressionContext, SearchExpressionHint.IGNORE_NO_RESULT)) {
             throw new ComponentNotFoundException("Cannot find component for expression \""
                 + expression + "\" referenced from \""
@@ -240,10 +228,6 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
             for (String expression : handler.splitExpressions(facesContext, expressions)) {
                 handler.invokeOnComponent(searchExpressionContext, expression, internalCallback);
             }
-        }
-
-        if (!internalCallback.isInvoked() && isHintSet(searchExpressionContext, SearchExpressionHint.PARENT_FALLBACK)) {
-            internalCallback.invokeContextCallback(facesContext, searchExpressionContext.getSource().getParent());
         }
 
         if (!internalCallback.isInvoked() && !isHintSet(searchExpressionContext, SearchExpressionHint.IGNORE_NO_RESULT)) {

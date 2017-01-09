@@ -62,19 +62,6 @@ public enum SearchExpressionHint {
 
     /**
      * <p class="changed_added_2_3">
-     * Hint that indicates that if no component(s) can be resolved, the parent of the source component will be returned
-     * instead <code>null</code> or {@link ComponentNotFoundException}.
-     * This is useful for components which can be placed inside other components
-     * or references another component via a "for" attribute.
-     * </p>
-     *
-     * @since 2.3
-     */
-    PARENT_FALLBACK,
-
-
-    /**
-     * <p class="changed_added_2_3">
      * Hint that indicates that only real {@link UIComponent}s should be resolved.
      * </p>
      *

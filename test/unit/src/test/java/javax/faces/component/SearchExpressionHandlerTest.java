@@ -664,24 +664,6 @@ public class SearchExpressionHandlerTest extends JUnitFacesTestCaseBase {
         assertTrue("Failed", resolvedComponents.contains(innerContainer));
 	    assertEquals("Failed", 2, resolvedComponents.size());
 	}
-
-	public void test_ResolveClientIdsWithParentFallback() {
-
-	    UIComponent root = new UIPanel();
-	    root.setId("test");
-
-	    UIForm form = new UIForm();
-	    form.setId("form");
-	    root.getChildren().add(form);
-
-	    assertEquals(
-	    		"test",
-	    		resolveClientIds(form, null, SearchExpressionHint.PARENT_FALLBACK));
-
-	    assertEquals(
-	    		"test",
-	    		resolveClientIds(form, " ", SearchExpressionHint.PARENT_FALLBACK));
-	}
     
 	public void test_ResolveComponent_Next() {
 
