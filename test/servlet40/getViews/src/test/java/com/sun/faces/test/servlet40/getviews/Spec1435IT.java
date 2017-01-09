@@ -39,7 +39,7 @@
  */
 package com.sun.faces.test.servlet40.getviews;
 
-import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M09;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M10;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -68,7 +68,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M09)
+    @JsfTest(value = JSF_2_3_0_M10)
     public void testGetAllViews() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf");
         String content = page.asXml();
@@ -82,7 +82,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M09)
+    @JsfTest(value = JSF_2_3_0_M10)
     public void testGetViewsForPath() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F");
         String content = page.asXml();
@@ -97,7 +97,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M09)
+    @JsfTest(value = JSF_2_3_0_M10)
     public void testGetAllViewsAsImplicit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?implicit=true");
         String content = page.asXml();
@@ -118,7 +118,7 @@ public class Spec1435IT {
     }
     
     @Test
-    @JsfTest(value = JSF_2_3_0_M09)
+    @JsfTest(value = JSF_2_3_0_M10)
     public void testGetViewsForPathImplicit() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "getViews.jsf?path=%2Flevel2%2F&implicit=true");
         String content = page.asXml();
