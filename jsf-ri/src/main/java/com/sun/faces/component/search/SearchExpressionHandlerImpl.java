@@ -364,7 +364,7 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
     
     @Override
     public String[] splitExpressions(FacesContext context, String expressions) {
-        // we can't use a split(":") or split(" ") as keyword parameters might contain spaces or commas        
+        // we can't use a split(",") or split(" ") as keyword parameters might contain spaces or commas        
         List<String> tokens = new ArrayList<>();
         StringBuilder buffer = new StringBuilder();
         char[] separators = getExpressionSeperatorChars(context);

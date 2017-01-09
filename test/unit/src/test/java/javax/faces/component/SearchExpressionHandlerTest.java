@@ -961,7 +961,7 @@ public class SearchExpressionHandlerTest extends JUnitFacesTestCaseBase {
     
     /**
      * The SearchExpression API was inspired by PrimeFaces.
-     * This tests only tests, if PFS (PrimeFaces Selectors -> jQuery like selectors; like @(#myId > .myStyle))
+     * This test only tests, if PFS (PrimeFaces Selectors -> jQuery like selectors; like @(#myId > .myStyle))
      * can be correctly handled by the API+IMPL as a passthrough expression.
      */
     public void test_PFS() {
