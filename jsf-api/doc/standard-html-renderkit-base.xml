@@ -2397,7 +2397,10 @@
         <code>UIMessage</code> component.  If not present, keep the
         empty string as the value, respectively.  Obtain the first
         <code>FacesMessage</code> to render from the component, using
-        the "for" property of the <code>UIMessage</code>.  This will be
+        the "for" property of the <code>UIMessage</code>.  
+        <p class="changed_added_2_3">If the "for" property is set and
+        not empty, the <code>SearchExpressionHandler</code> must be used to
+        resolve the associated component.</p>  This will be
         the only message we render.  Obtain the severity style for this
         message.  If the severity of the message is
         <code>FacesMessage.SEVERITY_INFO</code>, the severity style
@@ -2543,12 +2546,13 @@
 
         <renderer>
 
-            <description>Renders an HTML "label" element.  Render the current value
+            <description><![CDATA[Renders an HTML "label" element.  Render the current value
       of the component as label text if it is specified. If a "for" attribute is
       specified, find the component specified by the value of the "for"
-      attribute, and render its client id as the value of the "for" attribute.
+      attribute <p class="changed_added_2_3">via the <code>SearchExpressionHandler</code></p>,
+      and render its client id as the value of the "for" attribute.
       If "styleClass" attribute is specified, render its value as the value
-      of the "class" attribute.</description>
+      of the "class" attribute.]]></description>
             <component-family>javax.faces.Output</component-family>
             <renderer-type>javax.faces.Label</renderer-type>
             <renderer-class>
