@@ -756,6 +756,26 @@ public class SearchExpressionHandlerTest extends JUnitFacesTestCaseBase {
 		}
 	}
     
+	public void test_ResolveComponent_Root() {
+
+	    UIComponent root = new UIPanel();
+	    root.setId("root");
+
+	    UIComponent command1 = new UICommand();
+	    command1.setId("command1");
+	    root.getChildren().add(command1);
+
+	    UIComponent command2 = new UICommand();
+	    command2.setId("command2");
+	    root.getChildren().add(command2);
+
+	    UIComponent command3 = new UICommand();
+	    command3.setId("command3");
+	    root.getChildren().add(command3);
+
+	    assertSame("Failed", facesContext.getViewRoot(), resolveComponent(command2, " @root "));
+	}
+    
 	public void test_ResolveComponent_FormChildNextNext() {
 
 	    UIForm root = new UIForm();
@@ -980,5 +1000,38 @@ public class SearchExpressionHandlerTest extends JUnitFacesTestCaseBase {
         SearchExpressionContext searchExpressionContext =  SearchExpressionContext.createSearchExpressionContext(facesContext, null);
         Assert.assertTrue(handler.isValidExpression(searchExpressionContext, "@(.myPanel #id)"));
         Assert.assertFalse(handler.isValidExpression(searchExpressionContext, "@(.myPanel #id):test"));
+    }
+
+    public void test_chainOfResponsability() {
+        CompositeSearchKeywordResolver s = (CompositeSearchKeywordResolver) application.getSearchKeywordResolver();
+        s.add(new CustomSearchKeywordResolverImplForm()); //drop in new @form resolver
+        
+       
+		UIComponent root = new UIPanel();
+
+		UIForm form = new UIForm();
+		root.getChildren().add(form);
+
+		UINamingContainer outerContainer = new UINamingContainer();
+		form.getChildren().add(outerContainer);
+
+		UINamingContainer innerContainer = new UINamingContainer();
+		outerContainer.getChildren().add(innerContainer);
+
+		UIComponent component = new UIOutput();
+		innerContainer.getChildren().add(component);
+
+		UIComponent source = new UICommand();
+		innerContainer.getChildren().add(source);
+
+		assertSame("Failed", source, resolveComponent(source, "@form"));
+        assertNotSame("Failed", form, resolveComponent(source, "@form"));
+    }
+    
+    class CustomSearchKeywordResolverImplForm extends SearchKeywordResolverImplForm {
+        @Override
+        public void resolve(SearchKeywordContext searchKeywordContext, UIComponent current, String keyword) {
+            searchKeywordContext.invokeContextCallback(current);
+        }
     }
 }

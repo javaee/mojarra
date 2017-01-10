@@ -60,7 +60,7 @@ public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
             throw new NullPointerException();
         }
 
-        resolvers.add(searchKeywordResolver);
+        resolvers.add(0, searchKeywordResolver);
     }
 
     @Override

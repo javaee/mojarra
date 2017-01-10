@@ -250,11 +250,6 @@ public class ApplicationImpl extends Application {
         elResolvers = new CompositeELResolver();
 
         searchKeywordResolvers = new CompositeSearchKeywordResolver();
-        if (associate.getSearchKeywordResolversFromFacesConfig() != null) {
-            for (SearchKeywordResolver resolver : associate.getSearchKeywordResolversFromFacesConfig()) {
-                searchKeywordResolvers.add(resolver);
-            }
-        }
         searchKeywordResolvers.add(new SearchKeywordResolverImplThis());
         searchKeywordResolvers.add(new SearchKeywordResolverImplParent());
         searchKeywordResolvers.add(new SearchKeywordResolverImplForm());
@@ -267,6 +262,11 @@ public class ApplicationImpl extends Application {
         searchKeywordResolvers.add(new SearchKeywordResolverImplId());
         searchKeywordResolvers.add(new SearchKeywordResolverImplChild());
         searchKeywordResolvers.add(new SearchKeywordResolverImplAll());
+        if (associate.getSearchKeywordResolversFromFacesConfig() != null) {
+            for (SearchKeywordResolver resolver : associate.getSearchKeywordResolversFromFacesConfig()) {
+                searchKeywordResolvers.add(resolver);
+            }
+        }
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         WebConfiguration webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
