@@ -1604,7 +1604,7 @@ of POJOs.
                 </p>
             ]]></description>
             <name>onmessage</name>
-            <required>true</required>
+            <required>false</required>
             <type>java.lang.String</type>
         </attribute>
 
