@@ -40,6 +40,7 @@
 package javax.faces.component.search;
 
 import java.util.List;
+import javax.faces.FacesException;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -127,6 +128,7 @@ public abstract class SearchExpressionHandler {
      *
      * @throws ComponentNotFoundException if the expression can not be resolved
      *  and if {@link SearchExpressionHint#IGNORE_NO_RESULT} was not passed.
+     * @throws FacesException if the expression is not valid.
      *
      * @return The resolved clientId or passtrough expression. If the expression can not be resolved and if
      *  {@link SearchExpressionHint#IGNORE_NO_RESULT} was passed, <code>null</code> will be returned.
@@ -146,6 +148,7 @@ public abstract class SearchExpressionHandler {
      *
      * @throws ComponentNotFoundException if one of the expression can not be resolved
      *  and if {@link SearchExpressionHint#IGNORE_NO_RESULT} was not passed.
+     * @throws FacesException if the expression is not valid.
      *
      * @return The resolved clientIds and passtrough expressions.
      *
@@ -163,7 +166,8 @@ public abstract class SearchExpressionHandler {
      * @param callback the callback for the resolved component
      *
      * @throws ComponentNotFoundException if the expression can not be resolved
-     * and if {@link SearchExpressionHint#IGNORE_NO_RESULT} was not passed.
+     *  and if {@link SearchExpressionHint#IGNORE_NO_RESULT} was not passed.
+     * @throws FacesException if the expression is not valid.
      *
      * @since 2.3
      */
@@ -182,7 +186,8 @@ public abstract class SearchExpressionHandler {
      * @param callback the callback for each resolved component
      *
      * @throws ComponentNotFoundException if any of the expressions can not be resolved
-     * and if {@link SearchExpressionHint#IGNORE_NO_RESULT} was not passed.
+     *  and if {@link SearchExpressionHint#IGNORE_NO_RESULT} was not passed.
+     * @throws FacesException if the expression is not valid.
      *
      * @since 2.3
      */
@@ -200,6 +205,8 @@ public abstract class SearchExpressionHandler {
      * @param searchExpressionContext the {@link SearchExpressionContext}
      * @param expression the search expression
      * @param callback the callback for the resolved component
+     * 
+     * @throws FacesException if the expression is not valid.
      * 
      * @since 2.3
      */
@@ -220,6 +227,8 @@ public abstract class SearchExpressionHandler {
      * @param previous The previous resolved component, that will be the base for searching
      * @param expression the search expression
      * @param callback the callback for the resolved component
+     * 
+     * @throws FacesException if the expression is not valid.
      * 
      * @since 2.3
      */
@@ -267,6 +276,7 @@ public abstract class SearchExpressionHandler {
      *
      * @param searchExpressionContext the {@link SearchExpressionContext}
      * @param expression the expression
+     *
      * @return If the given expression is a valid expression
      *
      * @since 2.3

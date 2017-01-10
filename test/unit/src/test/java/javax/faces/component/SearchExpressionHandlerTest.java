@@ -63,6 +63,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.component.search.ComponentNotFoundException;
 import javax.faces.component.search.SearchExpressionContext;
@@ -1042,4 +1043,17 @@ public class SearchExpressionHandlerTest extends JUnitFacesTestCaseBase {
             searchKeywordContext.invokeContextCallback(current);
         }
     }
+    
+	public void test_ResolveComponent_LeafErrorHandling() {
+
+	    UIComponent root = new UIPanel();
+	    root.setId("root");
+
+		try {
+			resolveComponent(root, " @none:myId");
+			fail("This should actually raise an exception");
+		} catch (Exception e) {
+			assertEquals(FacesException.class, e.getClass());
+		}
+	}
 }

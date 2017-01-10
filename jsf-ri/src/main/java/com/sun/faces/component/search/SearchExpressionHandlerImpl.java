@@ -296,7 +296,8 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
                 } else {
 
                     if (facesContext.getApplication().getSearchKeywordResolver().isLeaf(searchExpressionContext, keyword)) {
-                        throw new FacesException("Expression cannot have keywords or ids at the right side: " + keyword);
+                        throw new FacesException("It's not valid to place a keyword or id after a leaf keyword: "
+                                + KEYWORD_PREFIX + keyword + ". Expression: " + expression);
                     }
 
                     final String finalRemainingExpression = remainingExpression;
