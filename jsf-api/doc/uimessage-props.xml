@@ -61,9 +61,9 @@
 
     <property>
         <description>
-          Client identifier of the component for which to display messages.
+           Search expression to the component for which to display messages.
         </description>
-        <display-name>Associated Client Id</display-name>
+        <display-name>Associated component</display-name>
         <icon></icon>
         <property-name>for</property-name>
         <property-class>java.lang.String</property-class>

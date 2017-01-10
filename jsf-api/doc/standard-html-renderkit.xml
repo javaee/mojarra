@@ -1706,9 +1706,9 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
-          Client identifier of the component for which to display messages.
+          Search expression to the component for which to display messages.
         </description>
-      <display-name>Associated Client Id</display-name>
+      <display-name>Associated component</display-name>
       <icon/>
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
@@ -1910,11 +1910,11 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
-          Client identifier of the component for which to display messages. This
+          Search expression to the component for which to display messages. This
           attribute is mutually exclusive with globalOnly and take precedence
           if used.
         </description>
-      <display-name>Associated Client Id</display-name>
+      <display-name>Associated component</display-name>
       <icon/>
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
@@ -14058,10 +14058,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
     <property>
       <description>
-        Client identifier of the component for which this element
+        Search expression to the component for which this element
         is a label.
         </description>
-      <display-name>Label For Identifier</display-name>
+      <display-name>Associated component</display-name>
       <icon/>
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
