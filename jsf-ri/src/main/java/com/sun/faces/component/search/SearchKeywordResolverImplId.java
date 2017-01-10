@@ -54,7 +54,7 @@ import javax.faces.context.FacesContext;
 
 public class SearchKeywordResolverImplId extends AbstractSearchKeywordResolverImpl {
 
-    private static final Pattern PATTERN = Pattern.compile("id\\((\\w+)\\)");
+    private static final Pattern PATTERN = Pattern.compile("id\\(([\\w-]+)\\)");
 
     @Override
     public void resolve(SearchKeywordContext searchKeywordContext, UIComponent current, String keyword) {
