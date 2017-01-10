@@ -49,18 +49,49 @@ import javax.faces.FacesException;
  */
 public class ComponentNotFoundException extends FacesException {
 
+    /**
+     * <p class="changed_added_2_3">Construct a new exception with no detail message or root cause.</p>
+     * 
+     * @since 2.3
+     */
     public ComponentNotFoundException() {
         super();
     }
 
+    /**
+     * <p class="changed_added_2_3">Construct a new exception with the specified detail message and
+     * no root cause.</p>
+     *
+     * @param message The detail message for this exception
+     * 
+     * @since 2.3
+     */
     public ComponentNotFoundException(String message) {
         super(message);
     }
 
+    /**
+     * <p class="changed_added_2_3">Construct a new exception with the specified root cause.  The detail
+     * message will be set to <code>(cause == null ? null :
+     * cause.toString()</code>
+     *
+     * @param cause The root cause for this exception
+     * 
+     * @since 2.3
+     */
     public ComponentNotFoundException(Throwable cause) {
         super(cause);
     }
 
+    /**
+     * <p class="changed_added_2_3">Construct a new exception with the specified detail message and
+     * root cause.</p>
+     *
+     * @param message The detail message for this exception
+     * @param cause The root cause for this exception
+     * 
+     * @since 2.3
+     */
     public ComponentNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }

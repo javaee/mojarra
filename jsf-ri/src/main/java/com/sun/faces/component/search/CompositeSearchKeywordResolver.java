@@ -47,10 +47,12 @@ import javax.faces.component.search.SearchKeywordResolver;
 
 public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
 
+    private static final int NUMBER_OF_DEFAULT_IMPLEMENTATIONS = 12;
+    
     private final ArrayList<SearchKeywordResolver> resolvers;
 
     public CompositeSearchKeywordResolver() {
-        this.resolvers = new ArrayList<>(12); // 12 -> all default implementations
+        this.resolvers = new ArrayList<>(NUMBER_OF_DEFAULT_IMPLEMENTATIONS);
     }
 
     public void add(SearchKeywordResolver searchKeywordResolver) {

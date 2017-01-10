@@ -63,6 +63,7 @@ public enum SearchExpressionHint {
     /**
      * <p class="changed_added_2_3">
      * Hint that indicates that only real {@link UIComponent}s should be resolved.
+     * Virtual components are components, which are reused in repeatable components like {@link javax.faces.component.UIData} or <code>ui:repeat</code>.
      * </p>
      *
      * @since 2.3

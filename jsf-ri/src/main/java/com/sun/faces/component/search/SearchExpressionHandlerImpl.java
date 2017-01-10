@@ -56,7 +56,7 @@ import javax.faces.context.FacesContext;
 public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
 
     protected void addHint(SearchExpressionContext searchExpressionContext, SearchExpressionHint hint) {
-        // already available
+        // It is a Set already
         if (!searchExpressionContext.getExpressionHints().contains(hint))  {
             searchExpressionContext.getExpressionHints().add(hint);
         }
@@ -325,7 +325,7 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
             UIComponent target = previous.findComponent(expression);
             if (target != null) {
                 callback.invokeContextCallback(facesContext, target);
-            } else {
+            } else if (!isHintSet(searchExpressionContext, SearchExpressionHint.SKIP_VIRTUAL_COMPONENTS)) {
                 // fallback
                 // invokeOnComponent doesnt work with the leading ':'
                 char separatorChar = facesContext.getNamingContainerSeparatorChar();
@@ -485,11 +485,7 @@ public class SearchExpressionHandlerImpl extends SearchExpressionHandler {
         return true;
     }
 
-    protected boolean isHintSet(SearchExpressionContext searchExpressionContext, SearchExpressionHint hint) {
-        if (searchExpressionContext.getExpressionHints() == null) {
-            return false;
-        }
-        
+    protected boolean isHintSet(SearchExpressionContext searchExpressionContext, SearchExpressionHint hint) {        
         return searchExpressionContext.getExpressionHints().contains(hint);
     }
     

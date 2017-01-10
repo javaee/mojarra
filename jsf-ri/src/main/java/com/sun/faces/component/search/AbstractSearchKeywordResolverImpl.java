@@ -61,10 +61,6 @@ public abstract class AbstractSearchKeywordResolverImpl extends SearchKeywordRes
     }
 
     protected boolean isHintSet(SearchExpressionContext searchExpressionContext, SearchExpressionHint hint) {
-        if (searchExpressionContext.getExpressionHints() == null) {
-            return false;
-        }
-        
         return searchExpressionContext.getExpressionHints().contains(hint);
     }
 }

@@ -2036,6 +2036,7 @@ public abstract class Application {
      * 
      * @throws IllegalStateException if called after the first
      *      request to the {@link javax.faces.webapp.FacesServlet} has been serviced.
+     * @throws NullPointerException when resolver is null.
      * 
      * @param resolver the SearchKeywordResolver to add.
      * @since 2.3

@@ -108,7 +108,7 @@ public abstract class SearchKeywordResolver {
      * @param searchExpressionContext the {@link SearchExpressionContext}
      * @param keyword the keyword
      *
-     * @return <code>true</code> if it's leave keyword.
+     * @return <code>true</code> if it's leaf keyword.
      *
      * @since 2.3
      */

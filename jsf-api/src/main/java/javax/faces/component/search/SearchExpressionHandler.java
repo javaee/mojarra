@@ -63,8 +63,8 @@ import javax.faces.context.FacesContext;
  *       <li>
  *           If the search expression begins with the separator character
  *           (called an "absolute" search expression),
- *           the base will be the root {@link UIComponent} of the component
- *           tree. The leading separator character will be stripped off,
+ *           the base will be the {@link javax.faces.component.UIViewRoot}.
+ *           The leading separator character will be stripped off,
  *           and the remainder of the search expression will be treated as
  *           a "relative" search expression as described below.
  *       </li>
