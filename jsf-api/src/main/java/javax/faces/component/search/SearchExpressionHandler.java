@@ -90,7 +90,7 @@ import javax.faces.context.FacesContext;
  *       </li>
  *       <li>
  *           Otherwise, if the command does not start with {@link #KEYWORD_PREFIX}, then the component will be resolved
- *           based on the component ID using {@link UIComponent#findComponent}.
+ *           based on the component ID.
  *       </li>
  *     </ul>
  *   </li>
