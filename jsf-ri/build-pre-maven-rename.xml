@@ -522,7 +522,6 @@
             <arg value="${build.generate.tld.dir}/facelets_html_basic.tld"/>
             <arg value="${conf.share.dir}/jstl-core.tld"/>
             <arg value="${conf.share.dir}/jstl-fn.tld"/>
-            <arg value="${conf.share.dir}/ui.tld"/>
         </java>
         <copy todir="${build.dir}/vdldocs/facelets">
            <fileset dir="${basedir}/../jsf-api/doc/">
