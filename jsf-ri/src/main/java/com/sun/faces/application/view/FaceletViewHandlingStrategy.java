@@ -50,6 +50,7 @@ import static com.sun.faces.context.StateContext.getStateContext;
 import static com.sun.faces.util.RequestStateManager.FACELET_FACTORY;
 import static com.sun.faces.util.Util.getDOCTYPEFromFacesContextAttributes;
 import static com.sun.faces.util.Util.getXMLDECLFromFacesContextAttributes;
+import static com.sun.faces.util.Util.isViewIdExactMappedToFacesServlet;
 import static com.sun.faces.util.Util.isViewPopulated;
 import static com.sun.faces.util.Util.notNull;
 import static com.sun.faces.util.Util.saveDOCTYPEToFacesContextAttributes;
@@ -973,37 +974,51 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     @Override
     public boolean handlesViewId(String viewId) {
          if (viewId != null) {
-             
-             if (viewId.endsWith(FLOW_DEFINITION_ID_SUFFIX)) {
+             if (handlesByPrefixOrSuffix(viewId)) {
                  return true;
              }
              
-            // If there's no extensions array or prefixes array, then
-            // assume defaults.  .xhtml extension is handled by
-            // the FaceletViewHandler and .jsp will be handled by
-            // the JSP view handler
-            if (extensionsArray == null && prefixesArray == null) {
-                return isMatchedWithFaceletsSuffix(viewId) ? true : viewId.endsWith(DEFAULT_FACELETS_SUFFIX);
-            }
-
-            if (extensionsArray != null) {
-                for (String extension : extensionsArray) {
-                    if (viewId.endsWith(extension)) {
-                        return true;
-                    }
-                }
-            }
-
-            if (prefixesArray != null) {
-                for (String prefix : prefixesArray) {
-                    if (viewId.startsWith(prefix)) {
-                        return true;
-                    }
-                }
-            }
+             if (isViewIdExactMappedToFacesServlet(viewId)) {
+                 // If the Facelets VDL is reached, no other ViewDeclarationLanguage has declared
+                 // to handle the view (via ViewExists()), so we handle it if the viewId happens to be exact
+                 // mapped to the FacesServlet. The JSP ViewDeclarationLanguage still comes after us,
+                 // but we don't support that.
+                 return true;
+             }
         }
 
         return false;
+    }
+    
+    private boolean handlesByPrefixOrSuffix(String viewId) {
+        if (viewId.endsWith(FLOW_DEFINITION_ID_SUFFIX)) {
+            return true;
+        }
+        
+       // If there's no extensions array or prefixes array, then assume defaults.  
+        // .xhtml extension is handled by the FaceletViewHandler and .jsp will be handled by
+       // the JSP view handler
+       if (extensionsArray == null && prefixesArray == null) {
+           return isMatchedWithFaceletsSuffix(viewId) ? true : viewId.endsWith(DEFAULT_FACELETS_SUFFIX);
+       }
+
+       if (extensionsArray != null) {
+           for (String extension : extensionsArray) {
+               if (viewId.endsWith(extension)) {
+                   return true;
+               }
+           }
+       }
+
+       if (prefixesArray != null) {
+           for (String prefix : prefixesArray) {
+               if (viewId.startsWith(prefix)) {
+                   return true;
+               }
+           }
+       }
+       
+       return false;
     }
 
     @Override 

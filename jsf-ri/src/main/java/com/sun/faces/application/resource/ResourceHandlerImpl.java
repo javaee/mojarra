@@ -44,6 +44,8 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Defa
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceBufferSize;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceExcludes;
 import static com.sun.faces.util.RequestStateManager.RESOURCE_REQUEST;
+import static com.sun.faces.util.Util.getFacesMapping;
+import static com.sun.faces.util.Util.isPrefixMapped;
 import static com.sun.faces.util.Util.notNegative;
 import static com.sun.faces.util.Util.notNull;
 import static java.lang.Boolean.FALSE;
@@ -553,15 +555,17 @@ public class ResourceHandlerImpl extends ResourceHandler {
      * the path to the FacesServlet will be removed.
      * If the FacesServlet servicing this request was extension mapped, then
      * the extension will be trimmed off.
+     * 
      * @param context the <code>FacesContext</code> for the current request
      * @return the request path without JSF invocation information
      */
     private String normalizeResourceRequest(FacesContext context) {
 
         String path;
-        String facesServletMapping = Util.getFacesMapping(context);
+        String facesServletMapping = getFacesMapping(context);
+        
         // If it is extension mapped
-        if (!Util.isPrefixMapped(facesServletMapping)) {
+        if (!isPrefixMapped(facesServletMapping)) {
             path = context.getExternalContext().getRequestServletPath();
             // strip off the extension
             int i = path.lastIndexOf(".");

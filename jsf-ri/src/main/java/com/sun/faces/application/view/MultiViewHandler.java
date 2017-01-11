@@ -46,7 +46,10 @@ import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter
 import static com.sun.faces.util.MessageUtils.ILLEGAL_VIEW_ID_ID;
 import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
 import static com.sun.faces.util.Util.getFacesMapping;
+import static com.sun.faces.util.Util.getFirstWildCardMappingToFacesServlet;
+import static com.sun.faces.util.Util.isExactMapped;
 import static com.sun.faces.util.Util.isPrefixMapped;
+import static com.sun.faces.util.Util.isViewIdExactMappedToFacesServlet;
 import static com.sun.faces.util.Util.notNull;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
@@ -571,14 +574,22 @@ public class MultiViewHandler extends ViewHandler {
             String mapping = getFacesMapping(ctx);
             if (mapping != null) {
                 String physicalViewId;
-                if (!isPrefixMapped(mapping)) {
+                
+                if (isExactMapped(mapping)) {
                     
-                    // Suffix mapping
+                    // Exact mapping, e.g. /foo
+                    
+                    // physicalViewId = requestViewId;
+                    
+                    physicalViewId = convertViewId(ctx, requestViewId);
+                } else if (!isPrefixMapped(mapping)) {
+                    
+                    // Suffix mapping, e.g. /foo.xhtml
                     
                     physicalViewId = convertViewId(ctx, requestViewId);
                 } else {
                     
-                    // Prefix mapping
+                    // Prefix mapping, e.g. /faces/foo.xhtml
                     
                     physicalViewId = normalizeRequestURI(requestViewId, mapping);
                     if (physicalViewId.equals(mapping)) {
@@ -764,11 +775,10 @@ public class MultiViewHandler extends ViewHandler {
         notNull("viewId", viewId);
 
         if (viewId.length() == 0 || viewId.charAt(0) != '/') {
-            String message = getExceptionMessageString(ILLEGAL_VIEW_ID_ID, viewId);
             if (LOGGER.isLoggable(SEVERE)) {
                 LOGGER.log(SEVERE, "jsf.illegal_view_id_error", viewId);
             }
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(getExceptionMessageString(ILLEGAL_VIEW_ID_ID, viewId));
         }
 
         // Acquire the context path, which we will prefix on all results
@@ -782,6 +792,41 @@ public class MultiViewHandler extends ViewHandler {
         if (mapping == null) {
             return contextPath + viewId;
         }
+        
+        // Deal with exact mapping
+        if (isExactMapped(mapping)) {
+            if (viewId.contains(".")) {
+                for (String extension : configuredExtensions) {
+                    if (viewId.endsWith(extension)) {
+                        String exactViewId = viewId.substring(0, viewId.lastIndexOf(extension));
+                        if (isViewIdExactMappedToFacesServlet(exactViewId)) {
+                            return contextPath + exactViewId;
+                        }
+                    }
+                }
+            } else {
+                if (isViewIdExactMappedToFacesServlet(viewId)) {
+                    return contextPath + viewId;
+                }
+            }
+            
+            // No exact mapping for the requested view id, see if Facelets service is mapped to 
+            // e.g. /faces/* or *.xhtml and take that mapping
+            String servletMapping = getFirstWildCardMappingToFacesServlet(context.getExternalContext());
+            
+            if (servletMapping == null) {
+                
+                // If there are only exact mappings and the view is not exact mapped,
+                // we can't serve this view
+                
+                throw new IllegalStateException(
+                    "No suitable mapping for FacesServlet found. To serve views that are not exact mapped " +
+                    "FacesServlet should have at least one prefix or suffix mapping."
+                );
+            }
+            
+            mapping = servletMapping.replace("*", "");
+        }
 
         // Deal with prefix mapping
         if (isPrefixMapped(mapping)) {
@@ -792,7 +837,7 @@ public class MultiViewHandler extends ViewHandler {
             }
         }
 
-        // Deal with extension mapping
+        // Deal with suffix mapping
         int period = viewId.lastIndexOf('.');
         if (period < 0) {
             return contextPath + viewId + mapping;
