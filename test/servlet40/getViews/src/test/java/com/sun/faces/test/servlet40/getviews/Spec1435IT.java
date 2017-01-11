@@ -52,7 +52,10 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class Spec1435IT {
 
     private String webUrl;
