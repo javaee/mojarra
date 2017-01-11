@@ -86,6 +86,7 @@
         <module>importConstants</module>
 	<module>localizedResources</module>
         <module>namespacedView</module>
+        <module>passthrough</module>
         <module>uiinput</module>
         <module>uiinput-required-true</module>
         <module>validateWholeBean</module>
