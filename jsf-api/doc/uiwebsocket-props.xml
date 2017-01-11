@@ -140,7 +140,7 @@
             It's interpreted as a JavaScript instruction whether to open or close the websocket push connection.
             The <code>connected</code> and <code>rendered</code> attributes are implicitly re-evaluated on every ajax request by a <code>PreRenderViewEvent</code> listener on the <code>UIViewRoot</code>.
             If the value of <code>connected</code> or <code>rendered</code> attribute changes to <code>false</code> while the websocket is already opened, then the websocket will implicitly be closed.
-            You can also explicitly set <code>connected</code> attribute to <code>false</code> and then manually control in JavaScript by <code>jsf.push.open("channelName")</code> and <code>jsf.push.close("channelName")</code>.
+            You can also explicitly set <code>connected</code> attribute to <code>false</code> and then manually control in JavaScript by <code>jsf.push.open(clientId)</code> and <code>jsf.push.close(clientId)</code>.
         ]]></description>
         <icon></icon>
         <property-name>connected</property-name>
