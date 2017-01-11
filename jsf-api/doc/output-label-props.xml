@@ -59,10 +59,10 @@
 <root>
     <property>
         <description>
-        Client identifier of the component for which this element
+        Search expression to the component for which this element
         is a label.
         </description>
-        <display-name>Label For Identifier</display-name>
+        <display-name>Associated component</display-name>
         <icon></icon>
         <property-name>for</property-name>
         <property-class>java.lang.String</property-class>

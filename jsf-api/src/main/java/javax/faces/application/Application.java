@@ -65,6 +65,8 @@ import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.el.ELException;
 import javax.el.ELResolver;
+import javax.faces.component.search.SearchExpressionHandler;
+import javax.faces.component.search.SearchKeywordResolver;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.flow.FlowHandler;
@@ -1984,5 +1986,105 @@ public abstract class Application {
 
     }
 
+    /**
+     * <p class="changed_added_2_3">Return the thread-safe singleton 
+     * {@link SearchExpressionHandler} for this application.</p>
+     * 
+     * @return the {@link SearchExpressionHandler}.
+     * @since 2.3
+     */
+    public SearchExpressionHandler getSearchExpressionHandler() {
 
+        if (defaultApplication != null) {
+            return defaultApplication.getSearchExpressionHandler();
+        } else {
+            throw new UnsupportedOperationException();
+        }
+   
+    }
+    
+    /**
+     * <p class="changed_added_2_3">Set the {@link SearchExpressionHandler} instance used by the application.</p>
+     * 
+     * @param searchExpressionHandler the {@link SearchExpressionHandler}.
+     * @throws NullPointerException if searchExpressionHandler is <code>null</code>
+     * @throws IllegalStateException if this method is called after at least one 
+     *      request has been processed by the {@code Lifecycle} instance for this application. 
+     *
+     * @since 2.3
+     */ 
+    public void setSearchExpressionHandler(SearchExpressionHandler searchExpressionHandler) {
+
+        if (defaultApplication != null) {
+            defaultApplication.setSearchExpressionHandler(searchExpressionHandler);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+        
+    }
+ 
+    /**
+     * <p class="changed_added_2_3">Cause an the argument <code>resolver</code> to be added to the resolver chain.
+     *
+     * It is not possible to remove an {@link SearchKeywordResolver}
+     * registered with this method, once it has been registered.</p>
+     *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * {@link Application}.</p>
+     * 
+     * @throws IllegalStateException if called after the first
+     *      request to the {@link javax.faces.webapp.FacesServlet} has been serviced.
+     * @throws NullPointerException when resolver is null.
+     * 
+     * @param resolver the SearchKeywordResolver to add.
+     * @since 2.3
+     */
+    public void addSearchKeywordResolver(SearchKeywordResolver resolver) {
+
+        if (defaultApplication != null) {
+            defaultApplication.addSearchKeywordResolver(resolver);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+    /**
+     * <p class="changed_added_2_3">Return the singleton {@link SearchKeywordResolver} instance to be used
+     * for all search keyword resolution. This is actually an instance of a composite SearchKeywordResolver
+     * that must contain the following <code>SearchKeywordResolver</code> instances in the following order:</p>
+     *
+     * 	<ol>
+     *
+     *	  <li><p><code>SearchKeywordResolver</code> instances declared using the
+     *	  &lt;search-keyword-resolver&gt; element in the application configuration
+     *	  resources.  </p></li>
+     *
+     *	  <li><p>Any <code>SearchKeywordResolver</code> instances added by calls to
+     *	  {@link #addSearchKeywordResolver}.</p></li>
+     *
+     *	  <li><p>The <code>SearchKeywordResolver</code> implementations for <code>@all</code>, <code>@child(n)</code>, <code>@composite</code>,
+     *    <code>@form</code>, <code>@id(...)</code>, <code>@namingcontainer</code>, <code>@next</code>, <code>@none</code>, <code>@parent</code>,
+     *    <code>@previous</code>, <code>@root</code> and <code>@this</code>.
+     *    </p></li>
+     *
+     *	</ol>
+     * 
+     * <p>The default implementation throws <code>UnsupportedOperationException</code>
+     * and is provided for the sole purpose of not breaking existing applications 
+     * that extend {@link Application}.</p>
+     *
+     * @return the {@link SearchKeywordResolver}.
+     * @since 2.3
+     */
+    public SearchKeywordResolver getSearchKeywordResolver() {
+
+        if (defaultApplication != null) {
+            return defaultApplication.getSearchKeywordResolver();
+        }
+        throw new UnsupportedOperationException();
+
+    }
 }
