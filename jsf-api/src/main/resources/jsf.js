@@ -511,6 +511,22 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
         }
 
         /**
+         * Namespace given spaceseparated parameters if necessary.
+         * @param parameters Spaceseparated string of parameters as usually specified in f:ajax execute and render attributes. 
+         * @param namingContainerPrefix The naming container prefix (the view root ID suffixed with separator character).
+         * @ignore
+         */
+        var namespaceParametersIfNecessary = function namespaceParametersIfNecessary(parameters, namingContainerPrefix) {
+        	var array = parameters.replace(/^\s+|\s+$/g, '').replace(/\s\s+/g, ' ').split(' ');
+        	for (var i = 0; i < array.length; i++) {
+				if (array[i].indexOf(namingContainerPrefix) != 0) {
+					array[i] = namingContainerPrefix + array[i];
+				}
+			}
+        	return array.join(' ');
+        };
+
+        /**
          * Check if a value exists in an array
          * @ignore
          */
@@ -2523,6 +2539,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                             if (!isInArray(temp, element.name)) {
                                 options.execute = element.name + " " + options.execute;
                             }
+                            if (namingContainerPrefix) {
+                            	options.execute = namespaceParametersIfNecessary(options.execute, namingContainerPrefix);
+                            }
                         } else {
                             options.execute = "@all";
                         }
@@ -2540,6 +2559,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                         if (all < 0) {
                             options.render = options.render.replace("@this", element.id);
                             options.render = options.render.replace("@form", form.id);
+                            if (namingContainerPrefix) {
+                            	options.render = namespaceParametersIfNecessary(options.render, namingContainerPrefix);
+                            }
                         } else {
                             options.render = "@all";
                         }
