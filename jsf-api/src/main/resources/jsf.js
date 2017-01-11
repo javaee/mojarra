@@ -633,6 +633,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                 if (loadedScriptUrls.indexOf(url) < 0) {
                     // create script node
                     var scriptNode = document.createElement('script');
+                    var parserElement = document.createElement('div');
+                    parserElement.innerHTML = scriptStr[0];
+                    cloneAttributes(scriptNode, parserElement.firstChild);
+                    deleteNode(parserElement);
                     scriptNode.type = 'text/javascript';
                     scriptNode.src = url; // add the src to the script node
                     scriptNode.onload = scriptNode.onreadystatechange = function(_, abort) {
@@ -641,7 +645,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                             scriptNode = null;
                             runScript(head, loadedScriptUrls, scripts, index + 1); // Run next script.
                         }
-                    }
+                    };
                     head.insertBefore(scriptNode, null); // add it to end of the head (and don't remove it)
                     scriptLoadedViaUrl = true;
                 }
@@ -681,6 +685,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
             var stylesheets = [];
             var loadedStylesheetUrls = null;
             var head = document.head || document.getElementsByTagName('head')[0] || document.documentElement;
+            var parserElement = null;
 
             var initialnodes = str.match(findlinks);
             while (!!initialnodes && initialnodes.length > 0) {
@@ -692,7 +697,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                 }
                 var href = linkStr[1].match(findhref);
                 if (!!href && href[1]) {
-                    if (loadedStylesheetUrls == null) {
+                    if (loadedStylesheetUrls === null) {
                         var loadedLinks = document.getElementsByTagName("link");
                         loadedStylesheetUrls = [];
 
@@ -713,7 +718,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
 
                     if (loadedStylesheetUrls.indexOf(url) < 0) {
                         // create stylesheet node
-                        var linkNode = document.createElement('link');
+                        parserElement = parserElement !== null ? parserElement : document.createElement('div');
+                        parserElement.innerHTML = linkStr[0];
+                        var linkNode = parserElement.firstChild;
                         linkNode.type = 'text/css';
                         linkNode.rel = 'stylesheet';
                         linkNode.href = url;
@@ -721,7 +728,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                     }
                 }
             }
-        }
+
+            deleteNode(parserElement);
+        };
 
         /**
          * Replace DOM element with a new tagname and supplied innerHTML

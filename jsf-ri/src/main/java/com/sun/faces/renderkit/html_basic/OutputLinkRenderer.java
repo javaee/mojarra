@@ -229,7 +229,7 @@ public class OutputLinkRenderer extends LinkRenderer {
             if (pn != null && pn.length() != 0) {
                 String pv = paramList[i].value;
                 sb.append((paramWritten) ? '&' : '?');
-                sb.append(URLEncoder.encode(getParameterName(context, pn), "UTF-8"));
+                sb.append(URLEncoder.encode(pn, "UTF-8"));
                 sb.append('=');
                 if (pv != null && pv.length() != 0) {
                     sb.append(URLEncoder.encode(pv, "UTF-8"));
