@@ -354,6 +354,10 @@ public class MultiViewHandler extends ViewHandler {
     @Override
     public String getResourceURL(FacesContext context, String path) {
 
+        if (context == null || path == null) {
+            throw new NullPointerException();
+        }
+        
         if (path.charAt(0) == '/') {
             return context.getExternalContext().getRequestContextPath() + path;
         }
