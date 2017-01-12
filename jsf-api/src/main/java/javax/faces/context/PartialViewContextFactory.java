@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,7 +43,7 @@ package javax.faces.context;
 import javax.faces.FacesWrapper;
 
 /**
- * <p class="changed_modified_2_0">PartialViewContextFactory is a
+ * <p class="changed_modified_2_0"><span class="changed_modified_2_3">PartialViewContextFactory</span> is a
  * factory object that creates (if needed) and returns new {@link
  * PartialViewContext} instances.</p>
  *
@@ -58,7 +58,7 @@ import javax.faces.FacesWrapper;
  * </pre>
  *
  * </div>
- * 
+ *
  * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
  * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
@@ -73,14 +73,14 @@ public abstract class PartialViewContextFactory implements FacesWrapper<PartialV
      */
     @Deprecated
     public PartialViewContextFactory() {
-        
+
     }
 
     /**
-     * <p class="changed_added_2_3">If this factory has been decorated, 
+     * <p class="changed_added_2_3">If this factory has been decorated,
      * the implementation doing the decorating should push the implementation being wrapped to this constructor.
      * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
-     * 
+     *
      * @param wrapped The implementation being wrapped.
      */
     public PartialViewContextFactory(PartialViewContextFactory wrapped) {
@@ -88,7 +88,7 @@ public abstract class PartialViewContextFactory implements FacesWrapper<PartialV
     }
 
     /**
-     * <p class="changed_modified_2_3">If this factory has been decorated, the 
+     * <p class="changed_modified_2_3">If this factory has been decorated, the
      * implementation doing the decorating may override this method to provide
      * access to the implementation being wrapped.</p>
      */
@@ -106,10 +106,10 @@ public abstract class PartialViewContextFactory implements FacesWrapper<PartialV
      * and return a {@link PartialViewContext} instance that is initialized
      * using the current {@link FacesContext} instance.</p>
      *
-     * @param context the {@link FacesContext} for the current request. 
+     * @param context the {@link FacesContext} for the current request.
      *
      * @return the {@link PartialViewContext} as specified above
      */
     public abstract PartialViewContext getPartialViewContext(FacesContext context);
-    
+
 }

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -49,14 +49,14 @@ import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0"><span class="changed_modified_2_2">Provides</span> 
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2 changed_modified_2_3">Provides</span>
  * a simple implementation of
  * {@link Resource} that can be subclassed by developers wishing to
  * provide specialized behavior to an existing {@link Resource}
  * instance.  The default implementation of all methods is to call
  * through to the wrapped {@link Resource}.</p>
  *
- * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
  * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
  * @since 2.0
@@ -64,7 +64,7 @@ import javax.faces.context.FacesContext;
 public abstract class ResourceWrapper extends Resource implements FacesWrapper<Resource> {
 
     private Resource wrapped;
-    
+
     /**
      * @deprecated Use the other constructor taking the implementation being wrapped.
      */
@@ -74,17 +74,17 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
     }
 
     /**
-     * <p class="changed_added_2_3">If this resource has been decorated, 
+     * <p class="changed_added_2_3">If this resource has been decorated,
      * the implementation doing the decorating should push the implementation being wrapped to this constructor.
      * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
-     * 
+     *
      * @param wrapped The implementation being wrapped.
      * @since 2.3
      */
     public ResourceWrapper(Resource wrapped) {
         this.wrapped = wrapped;
     }
-    
+
     @Override
     public Resource getWrapped() {
         return wrapped;
@@ -154,7 +154,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
     public boolean userAgentNeedsUpdate(FacesContext context) {
 
         return getWrapped().userAgentNeedsUpdate(context);
-        
+
     }
 
 
@@ -166,10 +166,10 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
     public String getContentType() {
 
         return getWrapped().getContentType();
-        
+
     }
 
-    
+
     /**
      * <p class="changed_added_2_2"> The default behavior of this method is to call
      * {@link Resource#setContentType(String)} on the wrapped {@link ResourceHandler} object. </p>
@@ -192,41 +192,41 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
         return getWrapped().getLibraryName();
 
     }
-    
-    
+
+
     /**
      * <p class="changed_added_2_2"> The default behavior of this method is to call
      * {@link Resource#setLibraryName(String)} on the wrapped {@link ResourceHandler} object. </p>
      */
     @Override
     public void setLibraryName(String libraryName) {
-        
+
         getWrapped().setLibraryName(libraryName);
-        
+
     }
 
-    
+
     /**
      * <p class="changed_added_2_2"> The default behavior of this method is to call
      * {@link Resource#getResourceName()} on the wrapped {@link ResourceHandler} object. </p>
      */
     @Override
     public String getResourceName() {
-        
+
         return getWrapped().getResourceName();
-        
+
     }
-    
-    
+
+
     /**
      * <p class="changed_added_2_2"> The default behavior of this method is to call
      * {@link Resource#setResourceName(String)} on the wrapped {@link ResourceHandler} object. </p>
      */
     @Override
     public void setResourceName(String resourceName) {
-        
+
         getWrapped().setResourceName(resourceName);
-        
+
     }
-        
+
 }

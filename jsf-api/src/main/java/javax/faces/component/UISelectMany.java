@@ -1,4 +1,4 @@
-/*
+!/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
@@ -54,7 +54,7 @@ import javax.faces.el.ValueBinding;
 
 
 /**
- * <p><strong class="changed_modified_2_0">UISelectMany</strong> is a
+ * <p><strong class="changed_modified_2_0 changed_modified_2_3">UISelectMany</strong> is a
  * {@link UIComponent} that represents the user's choice of a zero or
  * more items from among a discrete set of available options.  The user
  * can modify the selected values.  Optionally, the component can be
@@ -78,7 +78,7 @@ import javax.faces.el.ValueBinding;
  *
  * <p>Obtain the {@link javax.faces.convert.Converter} using the following algorithm:</p>
  *
- * <blockquote> 
+ * <blockquote>
  *
  * <p>If the component has an attached {@link javax.faces.convert.Converter}, use it.</p>
  *
@@ -88,12 +88,12 @@ import javax.faces.el.ValueBinding;
  *
  * <ul> <li><p>An array of primitives (such as <code>int[]</code>).
  * Look up the registered by-class {@link javax.faces.convert.Converter}
- * for this primitive type.</p></li> 
+ * for this primitive type.</p></li>
 
  * <li><p>An array of objects (such as <code>Integer[]</code> or
  * <code>String[]</code>).  Look up the registered by-class {@link
  * javax.faces.convert.Converter} for the underlying element
- * type.</p></li> 
+ * type.</p></li>
 
  * <li class="changed_added_2_0"><p>A <code>java.util.Collection</code>.
  * Do not convert the values. <span class="changed_modified_2_3">Instead,
@@ -175,7 +175,7 @@ import javax.faces.el.ValueBinding;
  * <tr>
 
  * <th>If <em>modelType</em> is an instance of</th>
- 
+
  * <th>then <em>targetForConvertedValues</em> must be an instance
  * of</th>
 
@@ -290,7 +290,7 @@ public class UISelectMany extends UIInput {
      * <p>Return the currently selected values, or <code>null</code> if there
      * are no currently selected values.  This is a typesafe alias for
      * <code>getValue()</code>.</p>
-     * 
+     *
      * @return the selected values, or <code>null</code>.
      */
     public Object[] getSelectedValues() {
@@ -399,7 +399,7 @@ public class UISelectMany extends UIInput {
         }
 
     }
-    
+
     /**
      * <p>Store any {@link ValueExpression} specified for
      * <code>selectedValues</code> under <code>value</code> instead;
@@ -424,7 +424,7 @@ public class UISelectMany extends UIInput {
         }
 
     }
-    
+
     // --------------------------------------------------------- UIInput Methods
 
 
@@ -435,7 +435,7 @@ public class UISelectMany extends UIInput {
      *
      * @param previous old value of this component
      * @param value new value of this component
-     * @return <code>true</code> if the new value is different from the 
+     * @return <code>true</code> if the new value is different from the
      * previous value, <code>false</code> otherwise.
      */
     @Override
@@ -466,19 +466,19 @@ public class UISelectMany extends UIInput {
         // If values are still not of the type Object[], it is perhaps a
         // mistake by the renderers, so return false, so that
         // ValueChangedEvent is not queued in this case.
-        if (!(previous instanceof Object[]) || 
+        if (!(previous instanceof Object[]) ||
               !(value instanceof Object[])) {
               return false;
         }
         oldarray = (Object[]) previous;
         newarray = (Object[])value;
-       
+
         // If we got here then both the arrays cannot be null
         // if their lengths vary, return false.
         if ( oldarray.length != newarray.length) {
             return true;
         }
-        
+
         // make sure every element in the previous array occurs the same
         // number of times in the current array. This should help us
         // to find out the values changed are not. Since we cannot assume
@@ -492,13 +492,13 @@ public class UISelectMany extends UIInput {
             if ( count1 != count2 ) {
                 valueChanged = true;
                 break;
-            }     
-        }    
+            }
+        }
         return valueChanged;
 
-    }    
+    }
 
-    
+
     /**
      * <p>Return the number of occurrances of a particular element in the
      * array.</p>
@@ -516,12 +516,12 @@ public class UISelectMany extends UIInput {
                     count ++;
                 }
             }
-        }    
+        }
         return count;
 
-    }    
+    }
 
-    
+
     /**
      * Convert an array of primitives to an array of boxed objects.
      * @param primitiveArray object containing the primitive values
@@ -532,7 +532,7 @@ public class UISelectMany extends UIInput {
         if (primitiveArray == null) {
             throw new NullPointerException();
         }
-        
+
         if (primitiveArray instanceof Object[]) {
             return (Object[]) primitiveArray;
         }
@@ -540,7 +540,7 @@ public class UISelectMany extends UIInput {
         if (primitiveArray instanceof Collection) {
             return ((Collection) primitiveArray).toArray();
         }
-          
+
         Class clazz = primitiveArray.getClass();
         if (!clazz.isArray()) {
             return null;
@@ -557,7 +557,7 @@ public class UISelectMany extends UIInput {
 
     // ------------------------------------------------------ Validation Methods
 
-    
+
 
     /**
      * <p><span class="changed_modified_2_0">In</span> addition to the standard
@@ -597,7 +597,7 @@ public class UISelectMany extends UIInput {
         if (!isValid() || (value == null)) {
             return;
         }
-        
+
         boolean doAddMessage = false;
 
         // Ensure that the values match one of the available options
@@ -616,7 +616,7 @@ public class UISelectMany extends UIInput {
                 break;
             }
         }
-        
+
         // Ensure that if the value is noSelection and a
         // value is required, a message is queued
         if (isRequired()) {
@@ -633,7 +633,7 @@ public class UISelectMany extends UIInput {
                 }
             }
         }
-        
+
         if (doAddMessage) {
             // Enqueue an error message if an invalid value was specified
             FacesMessage message =
@@ -702,7 +702,7 @@ public class UISelectMany extends UIInput {
             } else {
                 return Array.get(value, idx++);
             }
-            
+
         }
 
 

@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
- * 
+ *
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
- * 
+ *
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
- * 
+ *
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
- * 
+ *
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -43,7 +43,7 @@ package javax.faces.context;
 import javax.faces.FacesWrapper;
 
 /**
- * <p><strong class="changed_added_2_2">FlashFactory</strong> is a 
+ * <p><strong class="changed_added_2_2 changed_modified_2_3">FlashFactory</strong> is a
  * factory object that creates (if needed) and returns {@link Flash}
  * instances.  Implementations of JavaServer Faces must provide at
  * least a default implementation of {@link Flash}.</p>
@@ -65,10 +65,10 @@ import javax.faces.FacesWrapper;
  * instantiate the flash.</p>
 
  * </div>
- * 
+ *
  * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
  * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
- * 
+ *
  * @since 2.2
  */
 public abstract class FlashFactory implements FacesWrapper<FlashFactory> {
@@ -80,14 +80,14 @@ public abstract class FlashFactory implements FacesWrapper<FlashFactory> {
      */
     @Deprecated
     public FlashFactory() {
-        
+
     }
 
     /**
-     * <p class="changed_added_2_3">If this factory has been decorated, 
+     * <p class="changed_added_2_3">If this factory has been decorated,
      * the implementation doing the decorating should push the implementation being wrapped to this constructor.
      * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
-     * 
+     *
      * @param wrapped The implementation being wrapped.
      */
     public FlashFactory(FlashFactory wrapped) {
@@ -95,7 +95,7 @@ public abstract class FlashFactory implements FacesWrapper<FlashFactory> {
     }
 
     /**
-     * <p class="changed_modified_2_3">If this factory has been decorated, the 
+     * <p class="changed_modified_2_3">If this factory has been decorated, the
      * implementation doing the decorating may override this method to provide
      * access to the implementation being wrapped.</p>
      */
@@ -103,19 +103,19 @@ public abstract class FlashFactory implements FacesWrapper<FlashFactory> {
     public FlashFactory getWrapped() {
         return wrapped;
     }
-    
+
     /**
      * <p class="changed_added_2_2">Create (if needed) and return a
      * {@link Flash} instance for this web application.</p>
-     * 
-     * @param create <code>true</code> to create a new instance for this request if 
-     * necessary; <code>false</code> to return <code>null</code> if there's no 
+     *
+     * @param create <code>true</code> to create a new instance for this request if
+     * necessary; <code>false</code> to return <code>null</code> if there's no
      * instance in the current <code>session</code>.
-     * 
+     *
      *  @return the instance of <code>Flash</code>.
-     * 
+     *
      * @since 2.2
      */
     public abstract Flash getFlash(boolean create);
-    
+
 }

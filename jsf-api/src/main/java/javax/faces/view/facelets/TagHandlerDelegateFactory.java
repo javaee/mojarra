@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,9 +43,9 @@ package javax.faces.view.facelets;
 import javax.faces.FacesWrapper;
 
 /**
- * <p class="changed_added_2_0"><span class="changed_modified_2_2">Abstract</span>
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2 changed_modified_2_3">Abstract</span>
  * factory for creating instances of {@link TagHandlerDelegate}.</p>
- * 
+ *
  * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
  * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
@@ -60,14 +60,14 @@ public abstract class TagHandlerDelegateFactory implements FacesWrapper<TagHandl
      */
     @Deprecated
     public TagHandlerDelegateFactory() {
-        
+
     }
 
     /**
-     * <p class="changed_added_2_3">If this factory has been decorated, 
+     * <p class="changed_added_2_3">If this factory has been decorated,
      * the implementation doing the decorating should push the implementation being wrapped to this constructor.
      * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
-     * 
+     *
      * @param wrapped The implementation being wrapped.
      */
     public TagHandlerDelegateFactory(TagHandlerDelegateFactory wrapped) {
@@ -75,17 +75,17 @@ public abstract class TagHandlerDelegateFactory implements FacesWrapper<TagHandl
     }
 
     /**
-     * <p class="changed_modified_2_3">If this factory has been decorated, the 
+     * <p class="changed_modified_2_3">If this factory has been decorated, the
      * implementation doing the decorating may override this method to provide
      * access to the implementation being wrapped.</p>
-     * 
+     *
      * @since 2.2
      */
     @Override
     public TagHandlerDelegateFactory getWrapped() {
         return wrapped;
     }
-    
+
     /**
      * <p class="changed_added_2_0">Create and return a {@link
      * TagHandlerDelegate} instance designed for use with {@link
@@ -95,9 +95,9 @@ public abstract class TagHandlerDelegateFactory implements FacesWrapper<TagHandl
      * helped by this helper instance.
      *
      * @return the newly created instance
-     * 
+     *
      * @since 2.0
-     */ 
+     */
     public abstract TagHandlerDelegate createComponentHandlerDelegate(ComponentHandler owner);
 
     /**
@@ -109,9 +109,9 @@ public abstract class TagHandlerDelegateFactory implements FacesWrapper<TagHandl
      * helped by this helper instance.
      *
      * @return the newly created instance
-     * 
+     *
      * @since 2.0
-     */ 
+     */
     public abstract TagHandlerDelegate createValidatorHandlerDelegate(ValidatorHandler owner);
 
     /**
@@ -123,9 +123,9 @@ public abstract class TagHandlerDelegateFactory implements FacesWrapper<TagHandl
      * helped by this helper instance.
      *
      * @return the newly created instance
-     * 
+     *
      * @since 2.0
-     */ 
+     */
     public abstract TagHandlerDelegate createConverterHandlerDelegate(ConverterHandler owner);
 
     /**
@@ -137,9 +137,9 @@ public abstract class TagHandlerDelegateFactory implements FacesWrapper<TagHandl
      * helped by this helper instance.
      *
      * @return the newly created instance
-     * 
+     *
      * @since 2.0
-     */ 
+     */
     public abstract TagHandlerDelegate createBehaviorHandlerDelegate(BehaviorHandler owner);
 
 }

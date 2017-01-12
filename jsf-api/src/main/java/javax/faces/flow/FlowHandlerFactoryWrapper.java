@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- * Copyright (c) 2011-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011-2017 Oracle and/or its affiliates. All rights reserved.
 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -44,14 +44,14 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p
- * class="changed_added_2_2"><strong>FlowHandlerFactoryWrapper</strong>
+ * class="changed_added_2_2 changed_modified_2_3"><strong>FlowHandlerFactoryWrapper</strong>
  * provides a simple implementation of {@link FlowHandlerFactory} that
  * can be subclassed by developers wishing to provide specialized
  * behavior to an existing {@link FlowHandlerFactory} instance.  The
  * default implementation of all methods is to call through to the
  * wrapped {@link FlowHandlerFactory} instance.</p>
  *
- * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
  * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
  * @since 2.2
@@ -59,7 +59,7 @@ import javax.faces.context.FacesContext;
 public abstract class FlowHandlerFactoryWrapper extends FlowHandlerFactory implements FacesWrapper<FlowHandlerFactory> {
 
     private FlowHandlerFactory wrapped;
-    
+
     /**
      * @deprecated Use the other constructor taking the implementation being wrapped.
      */
@@ -69,17 +69,17 @@ public abstract class FlowHandlerFactoryWrapper extends FlowHandlerFactory imple
     }
 
     /**
-     * <p class="changed_added_2_3">If this flow handler factory has been decorated, 
+     * <p class="changed_added_2_3">If this flow handler factory has been decorated,
      * the implementation doing the decorating should push the implementation being wrapped to this constructor.
      * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
-     * 
+     *
      * @param wrapped The implementation being wrapped.
      * @since 2.3
      */
     public FlowHandlerFactoryWrapper(FlowHandlerFactory wrapped) {
         this.wrapped = wrapped;
     }
-    
+
     @Override
     public FlowHandlerFactory getWrapped() {
         return wrapped;
@@ -89,5 +89,5 @@ public abstract class FlowHandlerFactoryWrapper extends FlowHandlerFactory imple
     public FlowHandler createFlowHandler(FacesContext context) {
         return getWrapped().createFlowHandler(context);
     }
-    
+
 }

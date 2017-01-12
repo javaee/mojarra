@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -47,14 +47,15 @@ import javax.faces.FacesWrapper;
 import javax.faces.event.PhaseId;
 
 /**
- * <p class="changed_added_2_0"><span class="changed_modified_2_2">Provides</span> 
+ * <p class="changed_added_2_0"><span class="changed_modified_2_2
+ * changed_modified_2_3">Provides</span>
  * a simple implementation of {@link PartialViewContext} that can
  * be subclassed by developers wishing to provide specialized behavior
  * to an existing {@link PartialViewContext} instance.  The default
  * implementation of all methods is to call through to the wrapped
  * {@link ExternalContext} instance.</p>
  *
- * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
  * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
  * @since 2.0
@@ -63,7 +64,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
 
 
     private PartialViewContext wrapped;
-    
+
     /**
      * @deprecated Use the other constructor taking the implementation being wrapped.
      */
@@ -73,17 +74,17 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
     }
 
     /**
-     * <p class="changed_added_2_3">If this partial view context has been decorated, 
+     * <p class="changed_added_2_3">If this partial view context has been decorated,
      * the implementation doing the decorating should push the implementation being wrapped to this constructor.
      * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
-     * 
+     *
      * @param wrapped The implementation being wrapped.
      * @since 2.3
      */
     public PartialViewContextWrapper(PartialViewContext wrapped) {
         this.wrapped = wrapped;
     }
-    
+
     @Override
     public PartialViewContext getWrapped() {
         return wrapped;
@@ -119,7 +120,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
 
     /**
      * <p class="changed_added_2_3">
-     * The default behavior of this method is to call 
+     * The default behavior of this method is to call
      * {@link PartialViewContext#getRenderIds()}
      * on the wrapped {@link PartialViewContext} object.
      * </p>
@@ -154,7 +155,7 @@ public abstract class PartialViewContextWrapper extends PartialViewContext imple
     public void setPartialRequest(boolean isPartialRequest) {
         getWrapped().setPartialRequest(isPartialRequest);
     }
-    
+
     /**
      * <p>The default behavior of this method is to
      * call {@link PartialViewContext#isAjaxRequest()}

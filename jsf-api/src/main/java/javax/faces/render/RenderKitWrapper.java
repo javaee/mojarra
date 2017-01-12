@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -49,7 +49,7 @@ import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
 
 /**
- * <p class="changed_modified_2_0">Provides a simple implementation of 
+ * <p class="changed_modified_2_0"><span class="changed_modified_2_3">Provides</span> a simple implementation of
  * {@link RenderKit} that
  * can be subclassed by developers wishing to provide specialized
  * behavior to an existing {@link RenderKit} instance.  The default
@@ -59,15 +59,15 @@ import javax.faces.context.ResponseWriter;
  * <p class="changed_added_2_0">Usage: extend this class and override {@link #getWrapped} to
  * return the instance we are wrapping.</p>
  *
- * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
  * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
- * 
+ *
  * @since 2.0
  */
 public abstract class RenderKitWrapper extends RenderKit implements FacesWrapper<RenderKit> {
 
     private RenderKit wrapped;
-    
+
     /**
      * @deprecated Use the other constructor taking the implementation being wrapped.
      */
@@ -77,17 +77,17 @@ public abstract class RenderKitWrapper extends RenderKit implements FacesWrapper
     }
 
     /**
-     * <p class="changed_added_2_3">If this render kit has been decorated, 
+     * <p class="changed_added_2_3">If this render kit has been decorated,
      * the implementation doing the decorating should push the implementation being wrapped to this constructor.
      * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
-     * 
+     *
      * @param wrapped The implementation being wrapped.
      * @since 2.3
      */
     public RenderKitWrapper(RenderKit wrapped) {
         this.wrapped = wrapped;
     }
-    
+
     @Override
     public RenderKit getWrapped() {
         return wrapped;
@@ -112,7 +112,7 @@ public abstract class RenderKitWrapper extends RenderKit implements FacesWrapper
      * call {@link RenderKit#createResponseStream(java.io.OutputStream)}
      * on the wrapped {@link RenderKit} object.</p>
      *
-     * @see RenderKit#createResponseStream(java.io.OutputStream)  
+     * @see RenderKit#createResponseStream(java.io.OutputStream)
      */
     @Override
     public ResponseStream createResponseStream(OutputStream out) {
@@ -196,7 +196,7 @@ public abstract class RenderKitWrapper extends RenderKit implements FacesWrapper
     public void addClientBehaviorRenderer(String type, ClientBehaviorRenderer renderer) {
         getWrapped().addClientBehaviorRenderer(type, renderer);
     }
-    
+
 
     /**
      * <p>The default behavior of this method is to

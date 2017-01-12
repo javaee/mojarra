@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -54,13 +54,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewDeclarationLanguage;
 
 /**
- * <p class="changed_modified_2_2">Provides a simple implementation of {@link ViewHandler} that can
+ * <p class="changed_modified_2_2"><span class="changed_modified_2_3">Provides</span>
+ * a simple implementation of {@link ViewHandler} that can
  * be subclassed by developers wishing to provide specialized behavior
  * to an existing {@link ViewHandler} instance.  The default
  * implementation of all methods is to call through to the wrapped
  * {@link ViewHandler}.</p>
  *
- * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
  * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
  * @since 1.2
@@ -69,7 +70,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
 
     private ViewHandler wrapped;
-    
+
     /**
      * @deprecated Use the other constructor taking the implementation being wrapped.
      */
@@ -79,17 +80,17 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     }
 
     /**
-     * <p class="changed_added_2_3">If this view handler has been decorated, 
+     * <p class="changed_added_2_3">If this view handler has been decorated,
      * the implementation doing the decorating should push the implementation being wrapped to this constructor.
      * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
-     * 
+     *
      * @param wrapped The implementation being wrapped.
      * @since 2.3
      */
     public ViewHandlerWrapper(ViewHandler wrapped) {
         this.wrapped = wrapped;
     }
-    
+
     @Override
     public ViewHandler getWrapped() {
         return wrapped;
@@ -97,7 +98,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
 
     // ------------------------ Methods from javax.faces.application.ViewHandler
-    
+
     /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#initView}
@@ -110,7 +111,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     public void initView(FacesContext context) throws FacesException {
         getWrapped().initView(context);
     }
-    
+
     /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#restoreView(javax.faces.context.FacesContext, String)}
@@ -123,7 +124,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     public UIViewRoot restoreView(FacesContext context, String viewId) {
         return getWrapped().restoreView(context, viewId);
     }
-    
+
     /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#createView(javax.faces.context.FacesContext, String)}
@@ -136,7 +137,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     public UIViewRoot createView(FacesContext context, String viewId) {
         return getWrapped().createView(context, viewId);
     }
-    
+
     /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)}
@@ -152,7 +153,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
 
     /**
-     * 
+     *
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#calculateCharacterEncoding(javax.faces.context.FacesContext)}
      * on the wrapped {@link ViewHandler} object.</p>
@@ -164,9 +165,9 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     public String calculateCharacterEncoding(FacesContext context) {
         return getWrapped().calculateCharacterEncoding(context);
     }
-        
+
     /**
-     * 
+     *
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#calculateLocale(javax.faces.context.FacesContext)}
      * on the wrapped {@link ViewHandler} object.</p>
@@ -206,7 +207,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     public String deriveLogicalViewId(FacesContext context, String requestViewId) {
         return getWrapped().deriveLogicalViewId(context, requestViewId);
     }
-    
+
     /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#calculateRenderKitId(javax.faces.context.FacesContext)}
@@ -274,7 +275,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     public boolean removeProtectedView(String urlPattern) {
         return getWrapped().removeProtectedView(urlPattern);
     }
-    
+
     /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#getRedirectURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)}
@@ -338,7 +339,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context, String viewId) {
         return getWrapped().getViewDeclarationLanguage(context, viewId);
     }
-    
+
     /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#getViews(FacesContext, String, ViewVisitOption...)}
@@ -350,7 +351,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     public Stream<String> getViews(FacesContext context, String path, ViewVisitOption... options) {
         return getWrapped().getViews(context, path, options);
     }
-    
+
     /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#getViews(FacesContext, String, int, ViewVisitOption...)}

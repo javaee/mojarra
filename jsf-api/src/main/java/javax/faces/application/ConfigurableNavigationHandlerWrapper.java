@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- * Copyright (c) 2011-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011-2017 Oracle and/or its affiliates. All rights reserved.
 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -47,13 +47,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.flow.Flow;
 
 /**
- * <p class="changed_added_2_2">Provides a simple implementation of
+ * <p class="changed_added_2_2"><span class="changed_modified_2_3">Provides</span> a simple implementation of
  * {@link ConfigurableNavigationHandler} that can be subclassed by developers wishing
  * to provide specialized behavior to an existing {@link
  * ConfigurableNavigationHandler} instance.  The default implementation of all methods
  * is to call through to the wrapped {@link ConfigurableNavigationHandler}.</p>
  *
- * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
  * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
  * @since 2.2
@@ -71,22 +71,22 @@ public abstract class ConfigurableNavigationHandlerWrapper extends ConfigurableN
     }
 
     /**
-     * <p class="changed_added_2_3">If this configurable navigation handler has been decorated, 
+     * <p class="changed_added_2_3">If this configurable navigation handler has been decorated,
      * the implementation doing the decorating should push the implementation being wrapped to this constructor.
      * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
-     * 
+     *
      * @param wrapped The implementation being wrapped.
      * @since 2.3
      */
     public ConfigurableNavigationHandlerWrapper(ConfigurableNavigationHandler wrapped) {
         this.wrapped = wrapped;
     }
-    
+
     @Override
     public ConfigurableNavigationHandler getWrapped() {
         return wrapped;
     }
-    
+
     @Override
     public NavigationCase getNavigationCase(FacesContext context, String fromAction, String outcome) {
         return getWrapped().getNavigationCase(context, fromAction, outcome);

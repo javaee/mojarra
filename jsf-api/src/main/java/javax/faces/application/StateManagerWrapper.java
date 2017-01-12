@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -47,13 +47,13 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 /**
- * <p>Provides a simple implementation of {@link StateManager} that can
+ * <p><span class="changed_modified_2_3">Provides</span> a simple implementation of {@link StateManager} that can
  * be subclassed by developers wishing to provide specialized behavior
  * to an existing {@link StateManager} instance.  The default
  * implementation of all methods is to call through to the wrapped
  * {@link StateManager}.</p>
  *
- * <p class="changed_modified_2_3">Usage: extend this class and push the implementation being wrapped to the
+ * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
  * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
  * @since 1.2
@@ -61,7 +61,7 @@ import javax.faces.context.FacesContext;
 public abstract class StateManagerWrapper extends StateManager implements FacesWrapper<StateManager> {
 
     private StateManager wrapped;
-    
+
     /**
      * @deprecated Use the other constructor taking the implementation being wrapped.
      */
@@ -71,17 +71,17 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
     }
 
     /**
-     * <p class="changed_added_2_3">If this state manager has been decorated, 
+     * <p class="changed_added_2_3">If this state manager has been decorated,
      * the implementation doing the decorating should push the implementation being wrapped to this constructor.
      * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
-     * 
+     *
      * @param wrapped The implementation being wrapped.
      * @since 2.3
      */
     public StateManagerWrapper(StateManager wrapped) {
         this.wrapped = wrapped;
     }
-    
+
     @Override
     public StateManager getWrapped() {
         return wrapped;
@@ -250,7 +250,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      * call {@link StateManager#isSavingStateInClient(javax.faces.context.FacesContext)}
      * on the wrapped {@link StateManager} object.</p>
      *
-     * @see StateManager#isSavingStateInClient(javax.faces.context.FacesContext) 
+     * @see StateManager#isSavingStateInClient(javax.faces.context.FacesContext)
      * @since 1.2
      */
     @Override
