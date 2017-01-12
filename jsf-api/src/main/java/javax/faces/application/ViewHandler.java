@@ -474,6 +474,15 @@ public abstract class ViewHandler {
      * <p class="changed_added_2_0">Derive and return the viewId from
      * the current request, or the argument input by following the
      * algorithm defined in specification section JSF.7.6.2.</p>
+     * 
+     * <p class="changed_added_2_3">This method should work correctly when the 
+     * FacesServlet is invoked via either a <code>path mapping</code>,
+     * <code>extension mapping</code> or an <code>exact match</code> (mapping) as
+     * defined by Servlet.12.2. Note that <code>path mapping</code> is also commonly 
+     * known as prefix mapping (e.g. "/faces/*") and <code>extension mapping</code> 
+     * as suffix mapping (e.g. "*.xhtml"). An <code>exact match</code> is possible
+     * where there's a servlet mapping with an exact URL pattern such as "/foo".
+     * </p>
      *
      * <p>The default implementation of this method simply returns
      * requestViewId unchanged.</p>
@@ -494,10 +503,19 @@ public abstract class ViewHandler {
      * algorithm defined in specification section JSF.7.6.2.  Note that
      * unlike <code>deriveViewId()</code>, this method does not require that
      * a physical view be present.</p>
+     * 
+     * <p class="changed_added_2_3">This method should work correctly when the 
+     * FacesServlet is invoked via either a <code>path mapping</code>,
+     * <code>extension mapping</code> or an <code>exact match</code> (mapping) as
+     * defined by Servlet.12.2. Note that <code>path mapping</code> is also commonly 
+     * known as prefix mapping (e.g. "/faces/*") and <code>extension mapping</code> 
+     * as suffix mapping (e.g. "*.xhtml"). An <code>exact match</code> is possible
+     * where there's a servlet mapping with an exact URL pattern such as "/foo".
+     * </p>
      *
      * <p>The default implementation of this method simply returns
      * requestViewId unchanged.</p>
-     *
+     * 
      * @param context the <code>FacesContext</code> for this request
      *
      * @param requestViewId the <code>viewId</code> to derive,
@@ -520,7 +538,10 @@ public abstract class ViewHandler {
      * section JSF.7.6.2 for the complete specification, 
      * <span class="changed_added_2_2">especially for details related
      * to view protection using the {@link javax.faces.render.ResponseStateManager#NON_POSTBACK_VIEW_TOKEN_PARAM}
-     * </span>.</p>
+     * </span><span class="changed_added_2_3"> and the behavior when the current request is to a URL
+     * for which the FacesServlet has an exact mapping as defined by Servlet.12.2</span>.
+     * </p>
+     * 
      *
      * @param context {@link FacesContext} for this request
      * @param viewId View identifier of the desired view

@@ -46,6 +46,7 @@ import java.net.URL;
 import java.util.Map;
 
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletRegistration;
 
 /**
  * <p class="changed_added_2_0"><span
@@ -235,10 +236,39 @@ public abstract class Resource extends ViewResource {
      * in slash.  For discussion this will be called
      * <em>contextRoot</em>.</p></li>
      *
-     * <li><p>Discover if the <code>FacesServlet</code> is prefix or
-     * extension mapped, and the value of the mapping (including the
+     * <li><p class="changed_modified_2_3">
+     * Discover if the <code>FacesServlet</code> is prefix (path) mapped,
+     * extension mapped, or exact mapped (as
+     * defined by Servlet.12.2.) and the value of the mapping (including the
      * leading '.'  in the case of extension mapping).  For discussion,
      * this will be <em>facesServletMapping</em>.</p>
+     * 
+     * <div class="changed_added_2_3">
+     * <p>If exact mapped, <em>result</em> must be the following if and only
+     * if the FacesServlet is mapped to the exact URL pattern {@link
+     * ResourceHandler#RESOURCE_IDENTIFIER} + {@link #getResourceName}
+     * </p>
+     * 
+     * <blockquote>
+     * <p><code>result = <em>contextRoot</em> + {@link
+     * ResourceHandler#RESOURCE_IDENTIFIER} + {@link #getResourceName}</code></p>
+     * </blockquote>
+     * 
+     * <p>If exact mapped, and the FacesServlet is <em>not</em> mapped to the exact 
+     * URL pattern {@link ResourceHandler#RESOURCE_IDENTIFIER} + {@link #getResourceName}
+     * do the following:
+     * </p>
+     * 
+     * <p>
+     * Retrieve the existing mappings of the FacesServlet, e.g. using 
+     * {@link ServletRegistration#getMappings()}, and from those pick any
+     * prefix mapping or extension mapping. If no such mapping is found,
+     * throw an {@link IllegalStateException}. If such mapping is found remove 
+     * the <code>*</code> character from that mapping, take that as the new 
+     * <em>facesServletMapping</em> and continue with evaluating this mapping
+     * as specified below for <em>if prefix mapped</em> and for 
+     * <em>if extension mapped</em>
+     * </div>
      *
      * <p>If prefix mapped, <em>result</em> must be</p>
      *
@@ -256,7 +286,7 @@ public abstract class Resource extends ViewResource {
      * ResourceHandler#RESOURCE_IDENTIFIER} + {@link #getResourceName} +
      * <em>facesServletMapping</em></code></p>
      * </blockquote>
-     *
+     * 
      * </li>
      *
      * <li class="changed_modified_2_2"><p>Build up a string, called
@@ -269,7 +299,7 @@ public abstract class Resource extends ViewResource {
      * <p>If {@link #getLibraryName} returns non-<code>null</code>,
      * <code>resourceMetaData</code> must include "ln=" + the return
      * from {@link #getLibraryName}</p>
-
+     *
      * <p class="changed_added_2_2">If there is a
      * <code>localePrefix</code> for this application, as defined in
      * {@link ResourceHandler#LOCALE_PREFIX}, <code>resourceMetaData</code> must

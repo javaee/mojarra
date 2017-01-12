@@ -283,7 +283,7 @@ public class ResourceImpl extends Resource implements Externalizable {
             if (isResourceExactMappedToFacesServlet(context.getExternalContext(), resource)) {
                 uri = facesServletMapping + resource;
             } else {
-                // No exact mapping for the requested resource, see if Facelets service is mapped to 
+                // No exact mapping for the requested resource, see if Facelets servlet is mapped to 
                 // e.g. /faces/* or *.xhtml and take that mapping
                 String mapping = getFirstWildCardMappingToFacesServlet(context.getExternalContext());
                 
