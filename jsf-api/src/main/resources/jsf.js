@@ -511,12 +511,24 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
         }
 
         /**
-         * Namespace given spaceseparated parameters if necessary (only call this if there is a namingContainerPrefix!). 
-         * This function is here for backwards compatibility with manual jsf.ajax.request() calls written before Spec790 changes.
-         * @param parameters Spaceseparated string of parameters as usually specified in f:ajax execute and render attributes.
-         * @param sourceClientId The client ID of the f:ajax source. This is to be used for prefixing relative target client IDs.
-         * It's expected that this already starts with namingContainerPrefix.
-         * @param namingContainerPrefix The naming container prefix (the view root ID suffixed with separator character).
+         * <p>Namespace given space separated parameters if necessary (only
+         * call this if there is a namingContainerPrefix!).  This
+         * function is here for backwards compatibility with manual
+         * jsf.ajax.request() calls written before Spec790 changes.</p>
+
+         * @param parameters Spaceseparated string of parameters as
+         * usually specified in f:ajax execute and render attributes.
+
+         * @param sourceClientId The client ID of the f:ajax
+         * source. This is to be used for prefixing relative target
+         * client IDs.
+
+         * It's expected that this already starts with
+         * namingContainerPrefix.
+
+         * @param namingContainerPrefix The naming container prefix (the
+         * view root ID suffixed with separator character).
+
          * This is to be used for prefixing absolute target client IDs.
          * @ignore
          */
