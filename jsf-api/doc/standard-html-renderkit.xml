@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- DO NOT EDIT     DO NOT EDIT    DO NOT EDIT    DO NOT EDIT    DO NOT EDIT -->
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -23171,15 +23169,14 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       associated with this component by calling the implementation of
       <code>javax.faces.component.behavior.ClientBehaviorHolder.getClientBehaviors</code>.</li>
       <li>If there are <code>client behaviors</code>, determine the
-      client behavior event name from the request parameter:
-      <code>javax.faces.behavior.event</code>.</li>
+      client behavior event name from the request parameter given by the value of the constant <code>javax.faces.component.behavior.ClientBehaviorContext.BEHAVIOR_EVENT_PARAM_NAME</code>.</li>
       <li>If that request parameter exists, get the <code>List</code> of
       <code>javax.faces.component.behavior.ClientBehavior</code>s for the
       behavior event name from the <code>Map</code> returned from
       <code>javax.faces.component.behavior.ClientBehaviorHolder.getClientBehaviors</code>.</li>
       <li>If there are <code>client behaviors</code> for the <code>behavior event name</code>,
-      determine the behavior source name from the request parameter:
-      <code>javax.faces.source</code>.</li>
+      determine the behavior source name from the request parameter given by the value
+      of the constant <code>javax.faces.component.behavior.ClientBehaviorContext.BEHAVIOR_SOURCE_PARAM_NAME</code>.</li>
       <li>If the request parameter exists, and its value is the same as this
       component's <code>clientId</code>, iterate over the <code>List</code> of
       <code>javax.faces.component.behavior.ClientBehavior</code>s and call the
