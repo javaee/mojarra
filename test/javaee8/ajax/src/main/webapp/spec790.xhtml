@@ -51,16 +51,22 @@
     <h:body>
         <h:panelGroup id="panel1" layout="block">
             <h:form id="form1">
-                <h:commandButton id="button" value="submit form1 and render panel2">
-                    <f:ajax execute=":form1" render=":panel2" />
+                <h:commandButton id="button" value="submit form1 and render panel2 and panel3 using h:commandButton f:ajax">
+                    <f:ajax execute=":form1" render=":panel2 :panel3" />
                 </h:commandButton>
             </h:form>
         </h:panelGroup>
         <h:panelGroup id="panel2" layout="block">
             <h:form id="form2">
-                <h:commandButton id="button" value="submit form2 and render panel1">
-                    <f:ajax execute=":form2" render=":panel1" />
-                </h:commandButton>
+                <h:commandLink id="link" value="submit form2 and render panel1 and panel3 using h:commandLink f:ajax">
+                    <f:ajax execute=":form2" render=":panel1 :panel3" />
+                </h:commandLink>
+            </h:form>
+        </h:panelGroup>
+        <h:panelGroup id="panel3" layout="block">
+            <h:form id="form3">
+                <h:commandLink id="link" value="submit form3 and render panel1 and panel2 using manual jsf.ajax.request()"
+                    onclick="jsf.ajax.request(this,event,{execute:'form3',render:':panel1 :panel2'});return false;" />
             </h:form>
         </h:panelGroup>
     </h:body>

@@ -40,6 +40,7 @@
 package com.sun.faces.test.javaee8.namespacedView;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -74,30 +75,53 @@ public class Spec790WithNamespacedViewIT {
         HtmlInput form1ViewState = (HtmlInput) form1.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
         HtmlForm form2 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form2");
         HtmlInput form2ViewState = (HtmlInput) form2.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
+        HtmlForm form3 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form3");
+        HtmlInput form3ViewState = (HtmlInput) form3.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
         assertTrue(!form1ViewState.getValueAttribute().isEmpty());
         assertTrue(!form2ViewState.getValueAttribute().isEmpty());
+        assertTrue(!form3ViewState.getValueAttribute().isEmpty());
 
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById(namingContainerPrefix + "form1:button");
-        page = button.click();
+        HtmlSubmitInput form1Button = (HtmlSubmitInput) page.getHtmlElementById(namingContainerPrefix + "form1:button");
+        page = form1Button.click();
         webClient.waitForBackgroundJavaScript(60000);
         namingContainerPrefix = page.getHead().getId().split("(?<=:)", 2)[0];
         form1 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form1");
         form1ViewState = (HtmlInput) form1.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
         form2 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form2");
         form2ViewState = (HtmlInput) form2.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
+        form3 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form3");
+        form3ViewState = (HtmlInput) form3.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
         assertTrue(!form1ViewState.getValueAttribute().isEmpty());
         assertTrue(!form2ViewState.getValueAttribute().isEmpty());
+        assertTrue(!form3ViewState.getValueAttribute().isEmpty());
 
-        button = (HtmlSubmitInput) page.getHtmlElementById(namingContainerPrefix + "form2:button");
-        page = button.click();
+        HtmlAnchor form2Link = (HtmlAnchor) page.getHtmlElementById(namingContainerPrefix + "form2:link");
+        page = form2Link.click();
         webClient.waitForBackgroundJavaScript(60000);
         namingContainerPrefix = page.getHead().getId().split("(?<=:)", 2)[0];
         form1 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form1");
         form1ViewState = (HtmlInput) form1.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
         form2 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form2");
         form2ViewState = (HtmlInput) form2.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
+        form3 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form3");
+        form3ViewState = (HtmlInput) form3.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
         assertTrue(!form1ViewState.getValueAttribute().isEmpty());
         assertTrue(!form2ViewState.getValueAttribute().isEmpty());
+        assertTrue(!form3ViewState.getValueAttribute().isEmpty());
+
+        HtmlAnchor form3Link = (HtmlAnchor) page.getHtmlElementById(namingContainerPrefix + "form3:link");
+        page = form3Link.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        namingContainerPrefix = page.getHead().getId().split("(?<=:)", 2)[0];
+        form1 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form1");
+        form1ViewState = (HtmlInput) form1.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
+        form2 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form2");
+        form2ViewState = (HtmlInput) form2.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
+        form3 = (HtmlForm) page.getHtmlElementById(namingContainerPrefix + "form3");
+        form3ViewState = (HtmlInput) form3.getInputByName(namingContainerPrefix + "javax.faces.ViewState");
+        assertTrue(!form1ViewState.getValueAttribute().isEmpty());
+        assertTrue(!form2ViewState.getValueAttribute().isEmpty());
+        assertTrue(!form3ViewState.getValueAttribute().isEmpty());
     }
 
     @Test

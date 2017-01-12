@@ -511,19 +511,47 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
         }
 
         /**
-         * Namespace given spaceseparated parameters if necessary.
-         * @param parameters Spaceseparated string of parameters as usually specified in f:ajax execute and render attributes. 
+         * Namespace given spaceseparated parameters if necessary (only call this if there is a namingContainerPrefix!). 
+         * This function is here for backwards compatibility with manual jsf.ajax.request() calls written before Spec790 changes.
+         * @param parameters Spaceseparated string of parameters as usually specified in f:ajax execute and render attributes.
+         * @param sourceClientId The client ID of the f:ajax source. This is to be used for prefixing relative target client IDs.
+         * It's expected that this already starts with namingContainerPrefix.
          * @param namingContainerPrefix The naming container prefix (the view root ID suffixed with separator character).
+         * This is to be used for prefixing absolute target client IDs.
          * @ignore
          */
-        var namespaceParametersIfNecessary = function namespaceParametersIfNecessary(parameters, namingContainerPrefix) {
-        	var array = parameters.replace(/^\s+|\s+$/g, '').replace(/\s\s+/g, ' ').split(' ');
-        	for (var i = 0; i < array.length; i++) {
-				if (array[i].indexOf(namingContainerPrefix) != 0) {
-					array[i] = namingContainerPrefix + array[i];
+        var namespaceParametersIfNecessary = function namespaceParametersIfNecessary(parameters, sourceClientId, namingContainerPrefix) {
+            if (sourceClientId.indexOf(namingContainerPrefix) != 0) {
+                return parameters; // Unexpected source client ID; let's silently do nothing.
+            }
+
+        	var targetClientIds = parameters.replace(/^\s+|\s+$/g, '').split(/\s+/g);
+
+        	for (var i = 0; i < targetClientIds.length; i++) {
+        	    var targetClientId = targetClientIds[i];
+
+        	    if (targetClientId.indexOf(jsf.separatorchar) == 0) {
+        	        targetClientId = targetClientId.substring(1);
+
+        	        if (targetClientId.indexOf(namingContainerPrefix) != 0) {
+                        targetClientId = namingContainerPrefix + targetClientId;
+                    }
+        	    }
+        	    else if (targetClientId.indexOf(namingContainerPrefix) != 0) {
+        	        var parentClientId = sourceClientId.substring(0, sourceClientId.lastIndexOf(jsf.separatorchar));
+
+        	        if (namingContainerPrefix + targetClientId == parentClientId) {
+        	            targetClientId = parentClientId;
+        	        }
+        	        else {
+        	            targetClientId = parentClientId + jsf.separatorchar + targetClientId;
+        	        }
 				}
+
+				targetClientIds[i] = targetClientId;
 			}
-        	return array.join(' ');
+
+        	return targetClientIds.join(' ');
         };
 
         /**
@@ -2540,7 +2568,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                                 options.execute = element.name + " " + options.execute;
                             }
                             if (namingContainerPrefix) {
-                            	options.execute = namespaceParametersIfNecessary(options.execute, namingContainerPrefix);
+                            	options.execute = namespaceParametersIfNecessary(options.execute, element.name, namingContainerPrefix);
                             }
                         } else {
                             options.execute = "@all";
@@ -2560,7 +2588,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                             options.render = options.render.replace("@this", element.id);
                             options.render = options.render.replace("@form", form.id);
                             if (namingContainerPrefix) {
-                            	options.render = namespaceParametersIfNecessary(options.render, namingContainerPrefix);
+                            	options.render = namespaceParametersIfNecessary(options.render, element.name, namingContainerPrefix);
                             }
                         } else {
                             options.render = "@all";
