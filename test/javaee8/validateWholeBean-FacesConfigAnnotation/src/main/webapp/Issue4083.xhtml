@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>JSF 2.3 validateWholeBean Test</title>
+    </h:head>
+    <h:body>
+        <h:form prependId="false" id="form">
+            
+            <h:panelGrid columns="2">
+
+                <h:outputText value="Password" />  
+                <h:inputSecret id="password1" value="#{backingBean.password1}"/>
+
+                <h:outputText value="Password again" /> 
+                <h:inputSecret id="password2" value="#{backingBean.password2}"/>
+                
+                <h:commandButton id="submit" value="Submit"/>
+            </h:panelGrid>
+            
+            <h:messages id="err"/>
+           <f:validateWholeBean value="#{backingBean}" copierType="SerializationCopier"
+                                 validationGroups="com.sun.faces.test.javaee8.validateWholeBean.PasswordValidationGroup" />
+        </h:form>
+    </h:body>
+</html>
+

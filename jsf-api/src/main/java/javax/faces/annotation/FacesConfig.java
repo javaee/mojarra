@@ -69,6 +69,10 @@ import javax.faces.view.facelets.ResourceResolver;
 import javax.faces.webapp.FacesServlet;
 import javax.inject.Qualifier;
 
+/**
+ * <p class="changed_added_2_3">PENDING(Arjan Tijms): specification.</p>
+ */
+
 @Qualifier
 @Target(TYPE)
 @Retention(RUNTIME)
