@@ -41,7 +41,7 @@ package com.sun.faces.cdi;
 
 import static com.sun.faces.cdi.CdiUtils.getAnnotation;
 import static java.util.Collections.unmodifiableMap;
-import static javax.faces.annotation.FacesConfig.Version.JSF_2_2;
+import static javax.faces.annotation.FacesConfig.Version.JSF_2_3;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -78,19 +78,19 @@ import com.sun.faces.push.WebsocketUserManager;
  * The CDI extension.
  */
 public class CdiExtension implements Extension {
-    
+
     /**
      * Map of classes that can be wrapped by a data model to data model implementation classes
      */
     private Map<Class<?>, Class<? extends DataModel<?>>> forClassToDataModelClass = new HashMap<>();
-    
+
     private Set<Type> managedPropertyTargetTypes = new HashSet<>();
-    
+
     private boolean addBeansForJSFImplicitObjects;
 
     /**
      * Before bean discovery.
-     * 
+     *
      * @param beforeBeanDiscovery the before bean discovery.
      * @param beanManager the bean manager.
      */
@@ -132,54 +132,54 @@ public class CdiExtension implements Extension {
             afterBeanDiscovery.addBean(new ViewMapProducer());
             afterBeanDiscovery.addBean(new ViewProducer());
         }
-        
+
         afterBeanDiscovery.addBean(new DataModelClassesMapProducer());
-        
+
         for (Type type : managedPropertyTargetTypes) {
             afterBeanDiscovery.addBean(new ManagedPropertyProducer(type, beanManager));
         }
     }
-    
+
     /**
      * Processing of beans
-     * 
+     *
      * @param event the process bean event
      * @param beanManager the current bean manager
      */
     @SuppressWarnings("unchecked")
     public <T extends DataModel<?>> void processBean(@Observes ProcessBean<T> event, BeanManager beanManager) {
-        
+
         Optional<FacesDataModel> optionalFacesDataModel = getAnnotation(beanManager, event.getAnnotated(), FacesDataModel.class);
         if (optionalFacesDataModel.isPresent()) {
             forClassToDataModelClass.put(
-                optionalFacesDataModel.get().forClass(), 
+                optionalFacesDataModel.get().forClass(),
                 (Class<? extends DataModel<?>>) event.getBean().getBeanClass());
         }
     }
-    
+
     public <T> void collect(@Observes ProcessManagedBean<T> eventIn, BeanManager beanManager) {
-        
+
         ProcessManagedBean<T> event = eventIn; // JDK8 u60 workaround
-        
+
         getAnnotation(beanManager, event.getAnnotated(), FacesConfig.class)
-            .ifPresent(config -> 
-                setAddBeansForJSFImplicitObjects(config.version().ordinal() > JSF_2_2.ordinal()));  
-        
+            .ifPresent(config ->
+                setAddBeansForJSFImplicitObjects(config.version().ordinal() >= JSF_2_3.ordinal()));
+
         for (AnnotatedField<? super T> field : event.getAnnotatedBeanClass().getFields()) {
             if (field.isAnnotationPresent(ManagedProperty.class) && (field.getBaseType() instanceof Class || field.getBaseType() instanceof ParameterizedType)) {
                 managedPropertyTargetTypes.add(field.getBaseType());
             }
         }
     }
-    
+
     /**
      * After deployment validation
-     * 
+     *
      * @param event the after deployment validation event
      * @param beanManager the current bean manager
      */
     public void afterDeploymentValidation(@Observes AfterDeploymentValidation event, BeanManager beanManager) {
-        
+
         // Sort the classes wrapped by a DataModel that we collected in processBean() such that
         // for any 2 classes X and Y from this collection, if an object of X is an instanceof an object of Y,
         // X appears in the collection before Y. The collection's sorting is otherwise arbitrary.
@@ -193,9 +193,9 @@ public class CdiExtension implements Extension {
         // The only requirement here is that A appears before B, since A is a subclass of B.
         //
         // This sorting is used so given an instance of type Z that's being bound to a UIData or UIRepeat
-        // component, we can find the most specific DataModel that can wrap Z by iterating through the sorted 
+        // component, we can find the most specific DataModel that can wrap Z by iterating through the sorted
         // collection from beginning to end and stopping this iteration at the first match.
-        
+
         List<Class<?>> sortedForDataModelClasses = new ArrayList<>();
         for (Class<?> clazz : forClassToDataModelClass.keySet()) {
             int highestSuper = -1;
@@ -217,27 +217,27 @@ public class CdiExtension implements Extension {
                 }
             }
         }
-        
+
         // Use the sorting computed above to order the Map on this. Note that a linked hash map is used
         // to preserve this ordering.
-        
+
         Map<Class<?>, Class<? extends DataModel<?>>> linkedForClassToDataModelClass = new LinkedHashMap<>();
         for (Class<?> sortedClass : sortedForDataModelClasses) {
-            linkedForClassToDataModelClass.put(sortedClass, forClassToDataModelClass.get(sortedClass)); 
+            linkedForClassToDataModelClass.put(sortedClass, forClassToDataModelClass.get(sortedClass));
         }
-        
+
         forClassToDataModelClass = unmodifiableMap(linkedForClassToDataModelClass);
     }
-    
+
     /**
      * Gets the map of classes that can be wrapped by a data model to data model implementation classes
-     * 
+     *
      * @return Map of classes that can be wrapped by a data model to data model implementation classes
      */
     public Map<Class<?>, Class<? extends DataModel<?>>> getForClassToDataModelClass() {
         return forClassToDataModelClass;
     }
-    
+
     public boolean isAddBeansForJSFImplicitObjects() {
         return addBeansForJSFImplicitObjects;
     }

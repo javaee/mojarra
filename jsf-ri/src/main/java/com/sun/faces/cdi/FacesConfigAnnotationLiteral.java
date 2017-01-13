@@ -44,7 +44,7 @@ import javax.faces.annotation.FacesConfig;
 
 /**
  * An annotation literal for <code>@FacesConfig.</code>
- * 
+ *
  * @since 2.3
  * @see FacesConfig
  */
@@ -54,8 +54,8 @@ public class FacesConfigAnnotationLiteral extends AnnotationLiteral<FacesConfig>
 
 	@Override
 	public Version version() {
-		return FacesConfig.Version.JSF_2_2;
+		return FacesConfig.Version.JSF_2_3;
 	}
-    
-    
+
+
 }
