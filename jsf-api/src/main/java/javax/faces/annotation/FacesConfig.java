@@ -178,7 +178,7 @@ public @interface FacesConfig {
         FACELETS_REFRESH_PERIOD(ViewHandler.FACELETS_REFRESH_PERIOD_PARAM_NAME, Integer.class, 2),
 
         /**
-         * <code>javax.faces.FACELETS_RESOURCE_RESOLVER as <code>Class&lt;ResourceResolver&gt;</code>.
+         * <code>javax.faces.FACELETS_RESOURCE_RESOLVER</code> as <code>Class&lt;ResourceResolver&gt;</code>.
          * @see ResourceResolver#FACELETS_RESOURCE_RESOLVER_PARAM_NAME
          */
         FACELETS_RESOURCE_RESOLVER(ResourceResolver.FACELETS_RESOURCE_RESOLVER_PARAM_NAME, ResourceResolver.class, null),
@@ -214,7 +214,7 @@ public @interface FacesConfig {
         INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL(UIInput.EMPTY_STRING_AS_NULL_PARAM_NAME, Boolean.class, false),
 
         /**
-         * <code>javax.faces.LIFECYCLE_ID as <code>Class&lt;Lifecycle&gt;</code>.
+         * <code>javax.faces.LIFECYCLE_ID</code> as <code>Class&lt;Lifecycle&gt;</code>.
          * @see FacesServlet#LIFECYCLE_ID_ATTR
          */
         LIFECYCLE_ID(FacesServlet.LIFECYCLE_ID_ATTR, Lifecycle.class, null),
