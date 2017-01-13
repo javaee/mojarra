@@ -71,23 +71,23 @@ import javax.inject.Qualifier;
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface FacesConfig {
-    
-    public static enum Version { 
-        
+
+    public static enum Version {
+
         /**
-         * Activates all features for JSF 2.2 and earlier, as long as JSF 2.2 doesn't provide newer versions 
+         * Activates all features for JSF 2.2 and earlier, as long as JSF 2.2 doesn't provide newer versions
          */
         JSF_2_2,
-        
+
         /**
-         * Activates all features for JSF 2.3 and earlier, as long as JSF 2.3 doesn't provide newer versions 
+         * Activates all features for JSF 2.3 and earlier, as long as JSF 2.3 doesn't provide newer versions
          */
         JSF_2_3,
-        
+
         /**
          * Activates all features for the JSF version the implementation code corresponds with.
          */
-        CURRENT  
+        CURRENT
     }
 
     public static enum ContextParameter {
@@ -134,31 +134,31 @@ public @interface FacesConfig {
          */
         DISABLE_FACESSERVLET_TO_XHTML(FacesServlet.DISABLE_FACESSERVLET_TO_XHTML_PARAM_NAME, Boolean.class, false),
 
-        /** 
+        /**
          * javax.faces.validator.ENABLE_VALIDATE_WHOLE_BEAN as {@link Boolean}.
          * @see BeanValidator#ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME
          */
         ENABLE_VALIDATE_WHOLE_BEAN(BeanValidator.ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME, Boolean.class, false),
 
-        /** 
+        /**
          * javax.faces.ENABLE_WEBSOCKET_ENDPOINT as {@link Boolean}.
          * @see PushContext#ENABLE_WEBSOCKET_ENDPOINT_PARAM_NAME
          */
         ENABLE_WEBSOCKET_ENDPOINT(PushContext.ENABLE_WEBSOCKET_ENDPOINT_PARAM_NAME, Boolean.class, false),
 
-        /** 
+        /**
          * javax.faces.FACELETS_BUFFER_SIZE as {@link Integer}.
          * @see ViewHandler#FACELETS_BUFFER_SIZE_PARAM_NAME
          */
         FACELETS_BUFFER_SIZE(ViewHandler.FACELETS_BUFFER_SIZE_PARAM_NAME, Integer.class, 1024),
 
-        /** 
+        /**
          * javax.faces.FACELETS_DECORATORS as {@link String} array.
          * @see ViewHandler#FACELETS_DECORATORS_PARAM_NAME
          */
         FACELETS_DECORATORS(ViewHandler.FACELETS_DECORATORS_PARAM_NAME, StringArray.SEMICOLON_SEPARATED, null),
 
-        /** 
+        /**
          * javax.faces.FACELETS_LIBRARIES as {@link String} array.
          * @see ViewHandler#FACELETS_LIBRARIES_PARAM_NAME
          */
@@ -182,7 +182,7 @@ public @interface FacesConfig {
          */
         FACELETS_SKIP_COMMENTS(ViewHandler.FACELETS_SKIP_COMMENTS_PARAM_NAME, Boolean.class, false),
 
-        /** 
+        /**
          * javax.faces.FACELETS_SUFFIX as {@link String}.
          * @see ViewHandler#FACELETS_SUFFIX_PARAM_NAME
          */
@@ -280,7 +280,7 @@ public @interface FacesConfig {
             COMMA_SEPARATED(Pattern.compile("\\s*,\\s*"));
 
             private Pattern pattern;
-            
+
             private StringArray(Pattern pattern) {
                 this.pattern = pattern;
             }
@@ -293,30 +293,30 @@ public @interface FacesConfig {
         private String name;
         private Class<?> type;
         private StringArray separated;
-        private Object defaultValue;        
-        
+        private Object defaultValue;
+
         private <T> ContextParameter(String name, Class<T> type, T defaultValue) {
             this.name = name;
             this.type = type;
             this.defaultValue = defaultValue;
         }
-        
+
         private ContextParameter(String name, StringArray separated, String[] defaultValue) {
             this.name = name;
             this.type = String.class;
             this.separated = separated;
             this.defaultValue = defaultValue;
         }
-        
+
         /**
          * <p>
          * Returns the name of the context parameter.
-         * @return
+         * @return the name of the context parameter.
          */
         public String getName() {
             return name;
         }
-        
+
         /**
          * <p>
          * Returns the expected type of the context parameter value. Supported values are:
@@ -354,7 +354,7 @@ public @interface FacesConfig {
                 if (separated != null) {
                     return (T) separated.split(value);
                 }
-                
+
                 return (T) value;
             }
             else if (type == Boolean.class) {
