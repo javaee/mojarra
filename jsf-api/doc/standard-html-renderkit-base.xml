@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -2390,7 +2390,7 @@
 
         <renderer>
 
-            <description><![CDATA[<p><span class="changed_modified_2_2">Render</span> a single message for a specific component.</p>
+            <description><![CDATA[<p><span class="changed_modified_2_2 changed_modified_2_3">Render</span> a single message for a specific component.</p>
 
       <p>Set-up for Rendering</p>
 
@@ -2400,7 +2400,10 @@
         <code>UIMessage</code> component.  If not present, keep the
         empty string as the value, respectively.  Obtain the first
         <code>FacesMessage</code> to render from the component, using
-        the "for" property of the <code>UIMessage</code>.  This will be
+        the "for" property of the <code>UIMessage</code>.  
+        <p class="changed_added_2_3">If the "for" property is set and
+        not empty, the <code>SearchExpressionHandler</code> must be used to
+        resolve the associated component.</p>  This will be
         the only message we render.  Obtain the severity style for this
         message.  If the severity of the message is
         <code>FacesMessage.SEVERITY_INFO</code>, the severity style
@@ -2546,12 +2549,19 @@
 
         <renderer>
 
-            <description>Renders an HTML "label" element.  Render the current value
-      of the component as label text if it is specified. If a "for" attribute is
-      specified, find the component specified by the value of the "for"
-      attribute, and render its client id as the value of the "for" attribute.
-      If "styleClass" attribute is specified, render its value as the value
-      of the "class" attribute.</description>
+          <description>
+
+            <![CDATA[Renders an HTML "label" element.  Render the
+            current value of the component as label text if it is
+            specified. If a "for" attribute is specified, find the
+            component specified by the value of the "for" attribute
+            <span class="changed_added_2_3">via the
+            <code>SearchExpressionHandler</code></span>, and render its
+            client id as the value of the "for" attribute.  If
+            "styleClass" attribute is specified, render its value as the
+            value of the "class" attribute.]]>
+
+          </description>
             <component-family>javax.faces.Output</component-family>
             <renderer-type>javax.faces.Label</renderer-type>
             <renderer-class>

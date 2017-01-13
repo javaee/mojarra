@@ -73,9 +73,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.faces.component.search.UntargetableComponent;
 
 @SuppressWarnings({"deprecation"})
-public class UILeaf extends UIComponentBase {
+public class UILeaf extends UIComponentBase implements UntargetableComponent {
     
     private final static Map<String,UIComponent> facets = new HashMap<String,UIComponent>(0, 1.0f){
     
