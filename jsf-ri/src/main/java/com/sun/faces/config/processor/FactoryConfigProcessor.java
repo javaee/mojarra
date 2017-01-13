@@ -143,6 +143,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      * <code>/faces-config/factory/flow-handler-factory</code>
      */
     private static final String FLOW_HANDLER_FACTORY = "flow-handler-factory";
+    
+    /**
+     * <code>/faces-config/factory/search-expression-context-factory</code>
+     */
+    private static final String SEARCH_EXPRESSION_CONTEXT_FACTORY = "search-expression-context-factory";
 
     /**
      * <code>Array of Factory names for post-configuration validation.</code>
@@ -162,6 +167,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
           FactoryFinder.FACELET_CACHE_FACTORY,
           FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY,
           FactoryFinder.FLOW_HANDLER_FACTORY,
+          FactoryFinder.SEARCH_EXPRESSION_CONTEXT_FACTORY
     };
 
     private boolean validateFactories = true;
@@ -312,6 +318,10 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                         break;
                     case FLOW_HANDLER_FACTORY:
                         setFactory(FactoryFinder.FLOW_HANDLER_FACTORY,
+                                getNodeText(n));
+                        break;
+                    case SEARCH_EXPRESSION_CONTEXT_FACTORY:
+                        setFactory(FactoryFinder.SEARCH_EXPRESSION_CONTEXT_FACTORY,
                                 getNodeText(n));
                         break;
                 }
