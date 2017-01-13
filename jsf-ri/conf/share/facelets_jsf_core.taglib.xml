@@ -96,7 +96,7 @@
         <description><![CDATA[
 
         <p class="changed_added_2_0"><span
-        class="changed_modified_2_0_rev_a changed_modified_2_2">Register</span> an
+        class="changed_modified_2_0_rev_a changed_modified_2_2 changed_modified_2_3">Register</span> an
         AjaxBehavior instance on one or more UIComponents implementing
         the ClientBehaviorHolder interface.  This tag may be nested
         witin a single component (enabling Ajax for a single component),
@@ -185,11 +185,11 @@
          <p class="changed_added_2_0"><span
          class="changed_modified_2_0_rev_a">Evaluates</span> to
          Collection&lt;String&gt;. This is a space separated list of
-         client ids of components that will participate in the "execute"
+         <span class="changed_modified_2_3">search expressions to components</span> that will participate in the "execute"
          portion of the Request Processing Lifecycle.  If a literal is
-         specified the ids must be space delimited.  Any of the keywords
+         specified the ids must be space delimited. <p class="changed_removed_2_3">Any of the keywords
          "@this", "@form", "@all", "@none" may be specified in the id
-         list. <span class="changed_modified_2_0_rev_a">If not
+         list.</span> <span class="changed_modified_2_0_rev_a">If not
          specified, the default value of "@this" is assumed.  For
          example, <code>@this clientIdOne clientIdTwo</code>.</span></p>            ]]></description>
             <name>execute</name>
@@ -246,11 +246,11 @@
             <description><![CDATA[
          <p class="changed_added_2_0"><span
          class="changed_modified_2_0_rev_a">Evaluates</span> to
-         Collection&lt;String&gt;. The clientIds of components that will
-         participate in the "render" portion of the Request Processing
+         Collection&lt;String&gt;. The <span class="changed_modified_2_3">search expressions to components</span>
+         that will participate in the "render" portion of the Request Processing
          Lifecycle.  If a literal is specified the identifiers must be
-         space delimited.  Any of the keywords "@this", "@form", "@all",
-         "@none" may be specified in the identifier list. <span
+         space delimited. <p class="changed_removed_2_3"Any of the keywords "@this", "@form", "@all",
+         "@none" may be specified in the identifier list. </span><span
          class="changed_modified_2_0_rev_a">If not specified, the
          default value of "@none" is assumed.  For example, <code>@this
          clientIdOne clientIdTwo</code>.</span></p>

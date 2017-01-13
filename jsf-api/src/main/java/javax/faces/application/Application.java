@@ -65,6 +65,8 @@ import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.el.ELException;
 import javax.el.ELResolver;
+import javax.faces.component.search.SearchExpressionHandler;
+import javax.faces.component.search.SearchKeywordResolver;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.flow.FlowHandler;
@@ -74,7 +76,7 @@ import javax.faces.view.ViewDeclarationLanguage;
 
 /**
  * <p><strong class="changed_modified_2_0 changed_modified_2_0_rev_a
- * changed_modified_2_2">Application</strong> represents a
+ * changed_modified_2_2 changed_modified_2_3">Application</strong> represents a
  * per-web-application singleton object where applications based on
  * JavaServer Faces (or implementations wishing to provide extended
  * functionality) can register application-wide singletons that provide
@@ -102,11 +104,11 @@ public abstract class Application {
 
 
     /**
-     * <p><span class="changed_modified_2_2">Return</span> the default 
+     * <p><span class="changed_modified_2_2">Return</span> the default
      * {@link ActionListener} to be registered for
      * all {@link javax.faces.component.ActionSource} components in this
      * application.  If not explicitly set, a default implementation must
-     * be provided that performs the <span class="changed_modified_2_2">functions 
+     * be provided that performs the <span class="changed_modified_2_2">functions
      * as specified in the section
      * titled "ActionListener Property" in the chapter titled "Application Integration"
      * of the spec prose document.</span></p>
@@ -119,7 +121,7 @@ public abstract class Application {
      * continue to work with components that do not implement {@link
      * javax.faces.component.ActionSource2}, and only implement {@link
      * javax.faces.component.ActionSource}.</p>
-     * 
+     *
      * @return the action listener.
      */
     public abstract ActionListener getActionListener();
@@ -139,9 +141,9 @@ public abstract class Application {
     /**
      * <p>Return the default <code>Locale</code> for this application.  If
      * not explicitly set, <code>null</code> is returned.</p>
-     * 
+     *
      * @return the default Locale, or <code>null</code>.
-     */ 
+     */
     public abstract Locale getDefaultLocale();
 
 
@@ -160,7 +162,7 @@ public abstract class Application {
      * <p>Return the <code>renderKitId</code> to be used for rendering
      * this application.  If not explicitly set, <code>null</code> is
      * returned.</p>
-     * 
+     *
      * @return the default render kit id, or <code>null</code>.
      */
     public abstract String getDefaultRenderKitId();
@@ -174,7 +176,7 @@ public abstract class Application {
      * application startup, before any Faces requests have been processed.
      * This is a limitation of the current Specification, and may be lifted in
      * a future release.</p>
-     * 
+     *
      * @param renderKitId the render kit id to set.
      */
     public abstract void setDefaultRenderKitId(String renderKitId);
@@ -186,7 +188,7 @@ public abstract class Application {
      * <code>ResourceBundle</code> to be used for JavaServer Faces messages
      * for this application.  If not explicitly set, <code>null</code>
      * is returned.</p>
-     * 
+     *
      * @return the message bundle class name, or <code>null</code>.
      */
     public abstract String getMessageBundle();
@@ -212,22 +214,22 @@ public abstract class Application {
      * web application.  If not explicitly set, a default implementation
      * must be provided that performs the functions described in the
      * {@link NavigationHandler} class description.</p>
-     * 
+     *
      * <div class="changed_added_2_3">
      *  <ul>
      *   <li>
-     *    The <code>NavigationHandler</code> implementation is declared in the 
-     *    application configuration resources by giving the fully qualified 
+     *    The <code>NavigationHandler</code> implementation is declared in the
+     *    application configuration resources by giving the fully qualified
      *    class name as the value of the <code>&lt;navigation-handler&gt;</code>
-     *    element within the <code>&lt;application&gt;</code> element.  
+     *    element within the <code>&lt;application&gt;</code> element.
      *   </li>
      *  </ul>
      *  <p>
-     *   The runtime must employ the decorator pattern as for every other 
+     *   The runtime must employ the decorator pattern as for every other
      *   pluggable artifact in JSF.
      *  </p>
      * </div>
-     * 
+     *
      * @return the navigation handler.
      */
     public abstract NavigationHandler getNavigationHandler();
@@ -269,7 +271,7 @@ public abstract class Application {
 
 
      * </div>
-     * 
+     *
      * @return the resource handler.
      * @since 2.0
      */
@@ -280,7 +282,7 @@ public abstract class Application {
         }
 
         throw new UnsupportedOperationException();
-        
+
     }
 
     /**
@@ -306,9 +308,9 @@ public abstract class Application {
         } else {
             throw new UnsupportedOperationException();
         }
-        
+
     }
-    
+
 
     /**
      * <p>Return a {@link PropertyResolver} instance that wraps the
@@ -322,7 +324,7 @@ public abstract class Application {
      * affect the EL resolution process.</p>
      *
      * @return the property resolver.
-     * @deprecated This has been replaced by {@link #getELResolver}.  
+     * @deprecated This has been replaced by {@link #getELResolver}.
      */
     public abstract PropertyResolver getPropertyResolver();
 
@@ -360,7 +362,7 @@ public abstract class Application {
      * serviced.
      */
     public abstract void setPropertyResolver(PropertyResolver resolver);
-    
+
     /**
      * <p>Find a <code>ResourceBundle</code> as defined in the
      * application configuration resources under the specified name.  If
@@ -368,7 +370,7 @@ public abstract class Application {
      * instance that uses the locale of the current {@link
      * javax.faces.component.UIViewRoot}.</p>
      *
-     * <p>The default implementation throws 
+     * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
@@ -385,7 +387,7 @@ public abstract class Application {
         if (defaultApplication != null) {
             return defaultApplication.getResourceBundle(ctx, name);
         }
-        
+
         throw new UnsupportedOperationException();
 
     }
@@ -394,12 +396,12 @@ public abstract class Application {
     /**
      * <p class="changed_added_2_0">Return the project stage
      * for the currently running application instance.  The default
-     * value is {@link ProjectStage#Production}</p> 
+     * value is {@link ProjectStage#Production}</p>
 
      * <div class="changed_added_2_0"> <p>The implementation of this
      * method must perform the following algorithm or an equivalent with
-     * the same end result to determine the value to return.</p> 
-     * 
+     * the same end result to determine the value to return.</p>
+     *
      * <blockquote>
      *
      * <p>If the value has already been determined by a previous call to
@@ -439,11 +441,11 @@ public abstract class Application {
      * @since 2.0
      */
     public ProjectStage getProjectStage() {
-        
+
         if (defaultApplication != null) {
             return defaultApplication.getProjectStage();
         }
-        
+
         return ProjectStage.Production;
     }
 
@@ -463,7 +465,7 @@ public abstract class Application {
      * affect the EL resolution process.</p>
      *
      * @return the variable resolver.
-     * @deprecated This has been replaced by {@link #getELResolver}.  
+     * @deprecated This has been replaced by {@link #getELResolver}.
      */
     public abstract VariableResolver getVariableResolver();
 
@@ -479,7 +481,7 @@ public abstract class Application {
      *
      *  <p>It is illegal to call this method after
      * the application has received any requests from the client.  If an
-     * attempt is made to register a listener after that time it must have 
+     * attempt is made to register a listener after that time it must have
      * no effect.</p>
      *
      * @param resolver The new {@link VariableResolver} instance
@@ -523,7 +525,7 @@ public abstract class Application {
      * <code>CompositeELResolver</code> that is already in the
      * chain.</p>
      *
-     * <p>The default implementation throws 
+     * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * {@link Application}.</p>
@@ -532,7 +534,7 @@ public abstract class Application {
      * class="changed_modified_2_0_rev_a">if called after the first
      * request to the {@link javax.faces.webapp.FacesServlet} has been
      * serviced.</span>
-     * 
+     *
      * @param resolver the EL resolver to add.
      * @since 1.2
      */
@@ -574,7 +576,7 @@ public abstract class Application {
      *	</ol>
      *
      * <p>The default implementation throws <code>UnsupportedOperationException</code>
-     * and is provided for the sole purpose of not breaking existing applications 
+     * and is provided for the sole purpose of not breaking existing applications
      * that extend {@link Application}.</p>
      *
      * @return the EL resolver.
@@ -590,9 +592,9 @@ public abstract class Application {
     }
 
     /**
-     * <p class="changed_added_2_2">Return the thread-safe singleton 
-     * {@link FlowHandler} for this application.  For implementations declaring 
-     * compliance with version 2.2 of the specification, this method must never return 
+     * <p class="changed_added_2_2">Return the thread-safe singleton
+     * {@link FlowHandler} for this application.  For implementations declaring
+     * compliance with version 2.2 of the specification, this method must never return
      * {@code null}, even if the application has no flows.  This is necessary to enable
      * dynamic flow creation during the application's lifetime.</p>
      *
@@ -601,15 +603,15 @@ public abstract class Application {
      * <p>All implementations that declare compliance with version 2.2
      * of the specification must implement this method.  For the purpose
      * of backward compatibility with environments that extend {@code
-     * Application} but do not override this method, an implementation is 
+     * Application} but do not override this method, an implementation is
      * provided that returns {@code null}.  Due to the decoratable nature
      * of {@code Application}, code calling this method should always check
      * for a {@code null} return.</p>
      * </div>
-     * 
+     *
      * @return the flow handler.
      * @since 2.2
-     */ 
+     */
     public FlowHandler getFlowHandler() {
 
         if (defaultApplication != null) {
@@ -623,13 +625,13 @@ public abstract class Application {
      * <p class="changed_added_2_2">Set the {@link FlowHandler} instance used by
      * the {@link NavigationHandler} to satisfy the requirements of the faces
      * flows feature.</p>
-     * 
+     *
      * @param newHandler the flow handler to set.
      * @throws NullPointerException if newHandler is <code>null</code>
-     * @throws IllegalStateException if this method is called after at least one 
-     * request has been processed by the {@code Lifecycle} instance for this application. 
+     * @throws IllegalStateException if this method is called after at least one
+     * request has been processed by the {@code Lifecycle} instance for this application.
      * @since 2.2
-     */ 
+     */
     public void setFlowHandler(FlowHandler newHandler) {
 
         if (defaultApplication != null) {
@@ -646,7 +648,7 @@ public abstract class Application {
      * a default implementation must be provided that performs the functions
      * described in the {@link ViewHandler} description in the
      * JavaServer Faces Specification.</p>
-     * 
+     *
      * @return the view handler.
      */
     public abstract ViewHandler getViewHandler();
@@ -676,7 +678,7 @@ public abstract class Application {
      * a default implementation must be provided that performs the functions
      * described in the {@link StateManager} description
      * in the JavaServer Faces Specification.</p>
-     * 
+     *
      * @return the state manager.
      */
     public abstract StateManager getStateManager();
@@ -701,22 +703,22 @@ public abstract class Application {
     // ------------------------------------------------------- Object Factories
 
     /**
-     * <p><span class="changed_added_2_0">Register</span> a new mapping 
+     * <p><span class="changed_added_2_0">Register</span> a new mapping
      * of behavior id to the name of the corresponding
      * {@link Behavior} class.  This allows subsequent calls
      * to <code>createBehavior()</code> to serve as a factory for
      * {@link Behavior} instances.</p>
-     *                                 
+     *
      * @param behaviorId The behavior id to be registered
      * @param behaviorClass The fully qualified class name of the
      *  corresponding {@link Behavior} implementation
-     *                                                
+     *
      * @throws NullPointerException if <code>behaviorId</code>
      *  or <code>behaviorClass</code> is <code>null</code>
-     *  
+     *
      * @since 2.0
      */
-    public void addBehavior(String behaviorId, 
+    public void addBehavior(String behaviorId,
         String behaviorClass) {
 
         if (defaultApplication != null) {
@@ -724,12 +726,12 @@ public abstract class Application {
         }
 
     }
-    
+
     /**
      * <p><span class="changed_added_2_0">Instantiate</span> and
      * return a new {@link Behavior} instance of the class specified by
      * a previous call to <code>addBehavior()</code> for the specified
-     * behavior id.</p> 
+     * behavior id.</p>
      *
      * @param behaviorId The behavior id for which to create and
      *  return a new {@link Behavior} instance
@@ -737,7 +739,7 @@ public abstract class Application {
      * @throws FacesException if the {@link Behavior} cannot be
      *  created
      * @throws NullPointerException if <code>behaviorId</code>
-     *  is <code>null</code> 
+     *  is <code>null</code>
      */
     public Behavior createBehavior(String behaviorId)
     	throws FacesException {
@@ -752,7 +754,7 @@ public abstract class Application {
     /**
      * <p>Return an <code>Iterator</code> over the set of currently registered
      * behavior ids for this <code>Application</code>.</p>
-     * 
+     *
      * @return an iterator with behavior ids.
      */
     public Iterator<String> getBehaviorIds() {
@@ -761,7 +763,7 @@ public abstract class Application {
             return defaultApplication.getBehaviorIds();
         }
         return Collections.EMPTY_LIST.iterator();
-        
+
     }
 
     /**
@@ -810,13 +812,13 @@ public abstract class Application {
      *  specified type cannot be created
      * @throws NullPointerException if <code>componentType</code>
      *  is <code>null</code>
-     */ 
+     */
     public abstract UIComponent createComponent(String componentType)
         throws FacesException;
 
 
 
-    
+
 
     /**
      * <p>Wrap the argument <code>componentBinding</code> in an
@@ -866,8 +868,8 @@ public abstract class Application {
      * province of {@link #createComponent(ValueExpression,
      * FacesContext, String, String)} or {@link
      * #createComponent(FacesContext, String, String)}.</p>
-     * 
-     * <p>A default implementation is provided that throws 
+     *
+     * <p>A default implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users
      * that decorate <code>Application</code> can continue to function.</p>
      *
@@ -1022,9 +1024,9 @@ public abstract class Application {
 	  <li><p>Obtain a reference to the {@link
 	  ViewDeclarationLanguage} for this <code>Application</code>
 	  instance by calling {@link ViewHandler#getViewDeclarationLanguage},
-     *    passing the <code>viewId</code> found by calling 
-     *    {@link javax.faces.component.UIViewRoot#getViewId} on the 
-     *    {@link javax.faces.component.UIViewRoot} in the argument 
+     *    passing the <code>viewId</code> found by calling
+     *    {@link javax.faces.component.UIViewRoot#getViewId} on the
+     *    {@link javax.faces.component.UIViewRoot} in the argument
      *    {@link FacesContext}.</p></li>
 
 
@@ -1124,7 +1126,7 @@ public abstract class Application {
      * @throws FacesException if a {@link UIComponent} from the {@link
      * Resource} cannot be created
      * @throws NullPointerException if any parameter is <code>null</code>
-     * @throws NullPointerException if unable, for any reason, to obtain a 
+     * @throws NullPointerException if unable, for any reason, to obtain a
      * <code>ViewDeclarationLanguage</code> instance as described above.
      * @since 2.0
      */
@@ -1139,11 +1141,11 @@ public abstract class Application {
         throw new UnsupportedOperationException();
 
     }
-    
+
     /**
      * <p>Return an <code>Iterator</code> over the set of currently defined
      * component types for this <code>Application</code>.</p>
-     * 
+     *
      * @return an iterator with component types.
      */
     public abstract Iterator<String> getComponentTypes();
@@ -1161,7 +1163,7 @@ public abstract class Application {
      * @throws NullPointerException if <code>converterId</code>
      *  or <code>converterClass</code> is <code>null</code>
      */
-    public abstract void addConverter(String converterId, 
+    public abstract void addConverter(String converterId,
 				      String converterClass);
 
 
@@ -1203,8 +1205,8 @@ public abstract class Application {
      * If the <code>ResourceDependency</code> annotation is present,
      * the action described in <code>ResourceDependency</code> must
      * be taken.  If the <code>ResourceDependency</code> annotation is
-     * not present, the argument <code>converter</code> must be inspected 
-     * for the presence of the {@link 
+     * not present, the argument <code>converter</code> must be inspected
+     * for the presence of the {@link
      * javax.faces.application.ResourceDependencies} annotation.
      * If the <code>ResourceDependencies</code> annotation
      * is present, the action described in <code>ResourceDependencies</code>
@@ -1217,7 +1219,7 @@ public abstract class Application {
      *  created
      * @throws NullPointerException if <code>converterId</code>
      *  is <code>null</code>
-     */ 
+     */
     public abstract Converter createConverter(String converterId);
 
 
@@ -1271,22 +1273,22 @@ public abstract class Application {
     /**
      * <p>Return an <code>Iterator</code> over the set of currently registered
      * converter ids for this <code>Application</code>.</p>
-     * 
+     *
      * @return an iterator with converter ids.
      */
     public abstract Iterator<String> getConverterIds();
 
-    
+
     /**
      * <p>Return an <code>Iterator</code> over the set of <code>Class</code>
      * instances for which {@link Converter} classes have been explicitly
      * registered.</p>
-     * 
+     *
      * @return an iterator with converter types.
      */
     public abstract Iterator<Class<?>> getConverterTypes();
 
-    
+
     /**
      * <p class="changed_added_2_0">Register a validator by its id that
      * is applied to all <code>UIInput</code> components in a view.  The
@@ -1306,13 +1308,13 @@ public abstract class Application {
 
         if (defaultApplication != null) {
             defaultApplication.addDefaultValidatorId(validatorId);
-        } 
+        }
 
     }
 
 
     /**
-     * <p class="changed_added_2_0">Return an immutable <code>Map</code> over 
+     * <p class="changed_added_2_0">Return an immutable <code>Map</code> over
      * the set of currently registered default validator IDs and their class
      * name for this <code>Application</code>.</p>
      *
@@ -1342,7 +1344,7 @@ public abstract class Application {
      * <code>ExpressionFactory</code> from the JSP container by calling
      * <code>JspFactory.getDefaultFactory().getJspApplicationContext(servletContext).getExpressionFactory()</code>. </p>
      *
-     * <p>An implementation is provided that throws 
+     * <p>An implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
@@ -1369,7 +1371,7 @@ public abstract class Application {
      * {@link FacesContext#getELContext} and pass it to {@link
      * ValueExpression#getValue}, returning the result.</p>
      *
-     * <p>An implementation is provided that throws 
+     * <p>An implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
@@ -1420,9 +1422,9 @@ public abstract class Application {
     /**
      * <p>Return an <code>Iterator</code> over the supported
      * <code>Locale</code>s for this appication.</p>
-     * 
+     *
      * @return an iterator of the supported locales.
-     */ 
+     */
     public abstract Iterator<Locale> getSupportedLocales();
 
 
@@ -1436,7 +1438,7 @@ public abstract class Application {
      * @throws NullPointerException if the argument
      * <code>newLocales</code> is <code>null</code>.
      *
-     */ 
+     */
     public abstract void setSupportedLocales(Collection<Locale> locales);
 
     /**
@@ -1444,8 +1446,8 @@ public abstract class Application {
      * <code>ELContextListener</code> that will be notified on creation
      * of <code>ELContext</code> instances.  This listener will be
      * called once per request.</p>
-     * 
-     * <p>An implementation is provided that throws 
+     *
+     * <p>An implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
@@ -1470,10 +1472,10 @@ public abstract class Application {
      * <code>listener</code> is not in the list, no exception is thrown
      * and no action is performed.</p>
      *
-     * <p>An implementation is provided that throws 
+     * <p>An implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
-     * 
+     *
      * @param listener the EL context listener to remove.
      * @since 1.2
      */
@@ -1495,7 +1497,7 @@ public abstract class Application {
      * <p>Otherwise, return an array representing the list of listeners
      * added by calls to {@link #addELContextListener}.</p>
      *
-     * <p>An implementation is provided that throws 
+     * <p>An implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
@@ -1526,7 +1528,7 @@ public abstract class Application {
      * @throws NullPointerException if <code>validatorId</code>
      *  or <code>validatorClass</code> is <code>null</code>
      */
-    public abstract void addValidator(String validatorId, 
+    public abstract void addValidator(String validatorId,
 				      String validatorClass);
 
 
@@ -1542,8 +1544,8 @@ public abstract class Application {
      * If the <code>ResourceDependency</code> annotation is present,
      * the action described in <code>ResourceDependency</code> must
      * be taken.  If the <code>ResourceDependency</code> annotation is
-     * not present, the argument <code>validator</code> must be inspected 
-     * for the presence of the {@link 
+     * not present, the argument <code>validator</code> must be inspected
+     * for the presence of the {@link
      * javax.faces.application.ResourceDependencies} annotation.
      * If the <code>ResourceDependencies</code> annotation
      * is present, the action described in <code>ResourceDependencies</code>
@@ -1556,7 +1558,7 @@ public abstract class Application {
      *  specified id cannot be created
      * @throws NullPointerException if <code>validatorId</code>
      *  is <code>null</code>
-     */ 
+     */
     public abstract Validator createValidator(String validatorId)
         throws FacesException;
 
@@ -1564,7 +1566,7 @@ public abstract class Application {
     /**
      * <p>Return an <code>Iterator</code> over the set of currently registered
      * validator ids for this <code>Application</code>.</p>
-     * 
+     *
      * @return an iterator of validator ids.
      */
     public abstract Iterator<String> getValidatorIds();
@@ -1969,7 +1971,7 @@ public abstract class Application {
      * @throws NullPointerException if any combination of
      * <code>context</code>, <code>systemEventClass</code>, or
      * <code>listener</code> are
-     * <code>null</code>.                
+     * <code>null</code>.
      *
      * @since 2.0
      */
@@ -1984,5 +1986,105 @@ public abstract class Application {
 
     }
 
+    /**
+     * <p class="changed_added_2_3">Return the thread-safe singleton
+     * {@link SearchExpressionHandler} for this application.</p>
+     *
+     * @return the {@link SearchExpressionHandler}.
+     * @since 2.3
+     */
+    public SearchExpressionHandler getSearchExpressionHandler() {
 
+        if (defaultApplication != null) {
+            return defaultApplication.getSearchExpressionHandler();
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+    /**
+     * <p class="changed_added_2_3">Set the {@link SearchExpressionHandler} instance used by the application.</p>
+     *
+     * @param searchExpressionHandler the {@link SearchExpressionHandler}.
+     * @throws NullPointerException if searchExpressionHandler is <code>null</code>
+     * @throws IllegalStateException if this method is called after at least one
+     *      request has been processed by the {@code Lifecycle} instance for this application.
+     *
+     * @since 2.3
+     */
+    public void setSearchExpressionHandler(SearchExpressionHandler searchExpressionHandler) {
+
+        if (defaultApplication != null) {
+            defaultApplication.setSearchExpressionHandler(searchExpressionHandler);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+    /**
+     * <p class="changed_added_2_3">Cause an the argument <code>resolver</code> to be added to the resolver chain.
+     *
+     * It is not possible to remove an {@link SearchKeywordResolver}
+     * registered with this method, once it has been registered.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * {@link Application}.</p>
+     *
+     * @throws IllegalStateException if called after the first
+     *      request to the {@link javax.faces.webapp.FacesServlet} has been serviced.
+     * @throws NullPointerException when resolver is null.
+     *
+     * @param resolver the SearchKeywordResolver to add.
+     * @since 2.3
+     */
+    public void addSearchKeywordResolver(SearchKeywordResolver resolver) {
+
+        if (defaultApplication != null) {
+            defaultApplication.addSearchKeywordResolver(resolver);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+    /**
+     * <p class="changed_added_2_3">Return the singleton {@link SearchKeywordResolver} instance to be used
+     * for all search keyword resolution. This is actually an instance of a composite SearchKeywordResolver
+     * that must contain the following <code>SearchKeywordResolver</code> instances in the following order:</p>
+     *
+     * 	<ol>
+     *
+     *	  <li><p><code>SearchKeywordResolver</code> instances declared using the
+     *	  &lt;search-keyword-resolver&gt; element in the application configuration
+     *	  resources.  </p></li>
+     *
+     *	  <li><p>Any <code>SearchKeywordResolver</code> instances added by calls to
+     *	  {@link #addSearchKeywordResolver}.</p></li>
+     *
+     *	  <li><p>The <code>SearchKeywordResolver</code> implementations for <code>@all</code>, <code>@child(n)</code>, 
+     *    <code>@form</code>, <code>@id(...)</code>, <code>@namingcontainer</code>, <code>@next</code>, <code>@none</code>, <code>@parent</code>,
+     *    <code>@previous</code>, <code>@root</code> and <code>@this</code>.
+     *    </p></li>
+     *
+     *	</ol>
+     *
+     * <p>The default implementation throws <code>UnsupportedOperationException</code>
+     * and is provided for the sole purpose of not breaking existing applications
+     * that extend {@link Application}.</p>
+     *
+     * @return the {@link SearchKeywordResolver}.
+     * @since 2.3
+     */
+    public SearchKeywordResolver getSearchKeywordResolver() {
+
+        if (defaultApplication != null) {
+            return defaultApplication.getSearchKeywordResolver();
+        }
+        throw new UnsupportedOperationException();
+
+    }
 }
