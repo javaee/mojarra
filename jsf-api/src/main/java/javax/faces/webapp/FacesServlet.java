@@ -86,8 +86,10 @@ import javax.servlet.http.HttpServletResponse;
  * javax.servlet.annotation.HandlesTypes} annotation.</p>
 
  * <ul>
- 
- * <li>{@link javax.faces.application.ResourceDependencies}</li>
+
+ * <li class="changed_added_2_3">{@link javax.faces.annotation.FacesConfig}</li>
+
+* <li>{@link javax.faces.application.ResourceDependencies}</li>
 
  * <li>{@link javax.faces.application.ResourceDependency}</li>
 
@@ -141,7 +143,7 @@ import javax.servlet.http.HttpServletResponse;
  *        <code>onStartup()</code> method of the
  *        <code>ServletContainerInitializer</code> implementation is not
  *        empty.</p></li>
-	
+
  * </ul>
 
  * <p>If the runtime determines that the servlet must be automatically
@@ -157,12 +159,12 @@ import javax.servlet.http.HttpServletResponse;
  *	</ul>
 
  * </div>
- * 
+ *
  * <p class="changed_added_2_3">Note that the automatic mapping to {@code *.xhtml}
  * can be disabled with the context param {@link #DISABLE_FACESSERVLET_TO_XHTML_PARAM_NAME}.</p>
 
  * <div class="changed_added_2_2">
- * 
+ *
  * <p>This class must be annotated with {@code javax.servlet.annotation.MultipartConfig}.
  * This causes the Servlet container in which the JSF implementation is running
  * to correctly handle multipart form data.</p>
@@ -209,19 +211,19 @@ import javax.servlet.http.HttpServletResponse;
  */
 @MultipartConfig
 public final class FacesServlet implements Servlet {
-    
+
     /*
      * A white space separated list of case sensitive HTTP method names
      * that are allowed to be processed by this servlet. * means allow all
      */
     private static final String ALLOWED_HTTP_METHODS_ATTR =
             "com.sun.faces.allowedHttpMethods";
-    
+
     // Http method names must be upper case. http://www.w3.org/Protocols/HTTP/NoteMethodCS.html
     // List of valid methods in Http 1.1 http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9
 
     private enum HttpMethod {
-        
+
         OPTIONS("OPTIONS"),
         GET("GET"),
         HEAD("HEAD"),
@@ -230,9 +232,9 @@ public final class FacesServlet implements Servlet {
         DELETE("DELETE"),
         TRACE("TRACE"),
         CONNECT("CONNECT");
-        
+
         private String name;
-        
+
         HttpMethod(String name) {
             this.name = name;
         }
@@ -241,13 +243,13 @@ public final class FacesServlet implements Servlet {
         public String toString() {
             return name;
         }
-        
+
     }
 
 
     private Set<String> allowedUnknownHttpMethods;
     private Set<HttpMethod> allowedKnownHttpMethods;
-    final private Set<HttpMethod> defaultAllowedHttpMethods = 
+    final private Set<HttpMethod> defaultAllowedHttpMethods =
             EnumSet.range(HttpMethod.OPTIONS, HttpMethod.CONNECT);
     private Set<HttpMethod> allHttpMethods;
 
@@ -271,17 +273,17 @@ public final class FacesServlet implements Servlet {
         "javax.faces.LIFECYCLE_ID";
 
     /**
-     * <p class="changed_added_2_3">The <code>ServletContext</code> init 
+     * <p class="changed_added_2_3">The <code>ServletContext</code> init
      * parameter consulted by the runtime to tell if the automatic mapping
      * of the {@code FacesServlet} to the extension {@code *.xhtml}
      * should be disabled.  The implementation must disable this automatic
-     * mapping if and only if the value of this parameter is equal, ignoring 
+     * mapping if and only if the value of this parameter is equal, ignoring
      * case, to {@code true}.</p>
-     * 
+     *
      * <p>If this parameter is not specified, this automatic mapping is enabled
      * as specified above.</p>
      */
-    public static final String DISABLE_FACESSERVLET_TO_XHTML_PARAM_NAME = 
+    public static final String DISABLE_FACESSERVLET_TO_XHTML_PARAM_NAME =
             "javax.faces.DISABLE_FACESSERVLET_TO_XHTML";
 
     /**
@@ -310,10 +312,10 @@ public final class FacesServlet implements Servlet {
 
     /**
      * From GLASSFISH-15632.  If true, the FacesContext instance
-     * left over from startup time has been released.  
+     * left over from startup time has been released.
      */
     private boolean initFacesContextReleased = false;
-    
+
 
     /**
      * <p>Release all resources acquired at startup time.</p>
@@ -386,7 +388,7 @@ public final class FacesServlet implements Servlet {
 
             // First look in the servlet init-param set
             if (null == (lifecycleId = servletConfig.getInitParameter(LIFECYCLE_ID_ATTR))) {
-                // If not found, look in the context-param set 
+                // If not found, look in the context-param set
                 lifecycleId = servletConfig.getServletContext().getInitParameter
                     (LIFECYCLE_ID_ATTR);
             }
@@ -418,7 +420,7 @@ public final class FacesServlet implements Servlet {
 
         allowedUnknownHttpMethods = Collections.emptySet();
         allowedKnownHttpMethods = defaultAllowedHttpMethods;
-        
+
         String[] methods;
         String allowedHttpMethodsString = servletConfig.getServletContext().getInitParameter(ALLOWED_HTTP_METHODS_ATTR);
         if (null != allowedHttpMethodsString) {
@@ -440,13 +442,13 @@ public final class FacesServlet implements Servlet {
                 } catch (IllegalArgumentException e) {
                     isKnownHttpMethod = false;
                 }
-                
+
                 if (!isKnownHttpMethod) {
                     if (LOGGER.isLoggable(Level.WARNING)) {
                         HttpMethod [] values = HttpMethod.values();
                         Object [] arg = new Object[values.length + 1];
                         arg[0] = cur;
-                        System.arraycopy(values, HttpMethod.OPTIONS.ordinal(), 
+                        System.arraycopy(values, HttpMethod.OPTIONS.ordinal(),
                                          arg, 1, values.length);
                         LOGGER.log(Level.WARNING,
                                 "warning.webapp.facesservlet.init_invalid_http_method",
@@ -479,27 +481,27 @@ public final class FacesServlet implements Servlet {
                         HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(2)),
                         HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(3))
                         );
-                
+
             } else if (3 == allowedKnownHttpMethodsStringList.size()) {
                 allowedKnownHttpMethods = EnumSet.of(
                         HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
                         HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)),
                         HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(2))
                         );
-                
+
             } else if (2 == allowedKnownHttpMethodsStringList.size()) {
                 allowedKnownHttpMethods = EnumSet.of(
                         HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
                         HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1))
                         );
-                
+
             } else if (1 == allowedKnownHttpMethodsStringList.size()) {
                 allowedKnownHttpMethods = EnumSet.of(
                         HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0))
                         );
-                
+
             } else {
-                List<HttpMethod> restList = 
+                List<HttpMethod> restList =
                         new ArrayList<>(allowedKnownHttpMethodsStringList.size() - 1);
                 for (int i = 1; i < allowedKnownHttpMethodsStringList.size() - 1; i++) {
                     restList.add(HttpMethod.valueOf(
@@ -510,8 +512,8 @@ public final class FacesServlet implements Servlet {
                 HttpMethod [] rest = new HttpMethod[restList.size()];
                 restList.toArray(rest);
                 allowedKnownHttpMethods = EnumSet.of(first, rest);
-                
-            } 
+
+            }
         }
     }
 
@@ -535,7 +537,7 @@ public final class FacesServlet implements Servlet {
      * class="changed_modified_2_2">Process</span> an incoming request,
      * and create the corresponding response according to the following
      * specification.</p>
-     * 
+     *
      * <div class="changed_modified_2_0">
      *
      * <p>If the <code>request</code> and <code>response</code>
@@ -560,7 +562,7 @@ public final class FacesServlet implements Servlet {
 </code></pre>
      *
      *
-     
+
      * <p>If none of the cases described above in the specification for
      * this method apply to the servicing of this request, the following
      * action must be taken to service the request.</p>
@@ -615,14 +617,14 @@ public final class FacesServlet implements Servlet {
         HttpServletResponse response = (HttpServletResponse) resp;
 
         requestStart(request.getRequestURI()); // V3 Probe hook
-        
+
         if (!isHttpMethodValid(request)) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
         if (Thread.currentThread().isInterrupted()) {
             if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.log(Level.FINE, "Thread {0} given to FacesServlet.service() in interrupted state", 
+                LOGGER.log(Level.FINE, "Thread {0} given to FacesServlet.service() in interrupted state",
                         Thread.currentThread().getName());
             }
         }
@@ -652,7 +654,7 @@ public final class FacesServlet implements Servlet {
             FactoryFinder.getFactory("com.sun.faces.ServletContextFacesContextFactory_Removal");
             initFacesContextReleased = true;
         }
-        
+
         // Acquire the FacesContext instance for this request
         FacesContext context = facesContextFactory.getFacesContext
               (servletConfig.getServletContext(), request, response, lifecycle);
@@ -709,7 +711,7 @@ public final class FacesServlet implements Servlet {
             } else {
                 result = allowedUnknownHttpMethods.contains(requestMethodString);
             }
-            
+
         }
 
         return result;
@@ -730,5 +732,5 @@ public final class FacesServlet implements Servlet {
      * DO NOT REMOVE. Necessary for V3 probe monitoring.
      */
     private void requestEnd() { }
-    
-    }    
+
+    }
