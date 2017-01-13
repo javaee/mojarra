@@ -59,6 +59,7 @@ import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ResourceHandler;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitCallback;
@@ -466,7 +467,7 @@ import com.sun.faces.util.Util;
         PartialViewContext pvc = context.getPartialViewContext();
         PartialResponseWriter writer = pvc.getPartialResponseWriter();
         
-        if (!Util.isPortletRequest(context)) {
+        if (!(viewRoot instanceof NamingContainer)) {
             writer.startUpdate(PartialResponseWriter.RENDER_ALL_MARKER);
             if (viewRoot.getChildCount() > 0) {
                 for (UIComponent uiComponent : viewRoot.getChildren()) {
@@ -479,7 +480,7 @@ import com.sun.faces.util.Util;
             /*
              * If we have a portlet request, start rendering at the view root.
              */
-            writer.startUpdate(viewRoot.getClientId(ctx));
+            writer.startUpdate(viewRoot.getClientId(context));
             viewRoot.encodeBegin(context);
             if (viewRoot.getChildCount() > 0) {
                 for (UIComponent uiComponent : viewRoot.getChildren()) {
