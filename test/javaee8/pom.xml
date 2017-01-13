@@ -92,6 +92,5 @@
         <module>validateWholeBean</module>
         <module>websocket</module>
         <module>xhtmlMappingToFaceletByDefault</module>
-        <module>searchExpression</module>
     </modules>
 </project>

@@ -42,14 +42,14 @@ package javax.faces;
 
 
 /**
- * <p><strong class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2 changed_modified_2_3">FactoryFinder</strong>
+ * <p><strong class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2">FactoryFinder</strong>
  * implements the standard discovery algorithm for all factory objects
  * specified in the JavaServer Faces APIs.  For a given factory class
  * name, a corresponding implementation class is searched for based on
  * the following algorithm.  Items are listed in order of decreasing
- * search precedence:</p>
+ * search precedence:</p> 
 
- * <ul>
+ * <ul> 
 
  * <li><p>If the JavaServer Faces configuration file bundled into the
  * <code>WEB-INF</code> directory of the webapp contains a
@@ -60,7 +60,7 @@ package javax.faces;
  * <code>javax.faces.CONFIG_FILES</code> <code>ServletContext</code> init
  * parameter contain any <code>factory</code> entries of the given
  * factory class name, those injectionProvider are used, with the last one taking
- * precedence.</p></li>
+ * precedence.</p></li> 
 
  * <li><p>If there are any JavaServer Faces configuration files bundled
  * into the <code>META-INF</code> directory of any jars on the
@@ -170,7 +170,7 @@ public final class FactoryFinder {
     /**
      * <p class="changed_added_2_2">The property name for the
      * {@link javax.faces.context.FlashFactory} class name.</p>
-     *
+     * 
      * @since 2.2
      */
     public final static String FLASH_FACTORY =
@@ -179,7 +179,7 @@ public final class FactoryFinder {
     /**
      * <p class="changed_added_2_2">The property name for the
      * {@link javax.faces.flow.FlowHandlerFactory} class name.</p>
-     *
+     * 
      * @since 2.2
      */
     public final static String FLOW_HANDLER_FACTORY =
@@ -227,13 +227,6 @@ public final class FactoryFinder {
     public final static String TAG_HANDLER_DELEGATE_FACTORY =
          "javax.faces.view.facelets.TagHandlerDelegateFactory";
 
-    /**
-     * <p class="changed_added_2_3">The property name for the {@link
-     * javax.faces.component.search.SearchExpressionContext} class name.</p>
-     */
-    public static final String SEARCH_EXPRESSION_CONTEXT_FACTORY =
-         "javax.faces.component.search.SearchExpressionContextFactory";
-
     // ------------------------------------------------------- Static Variables
 
     static final CurrentThreadToServletContext FACTORIES_CACHE;
@@ -273,14 +266,14 @@ public final class FactoryFinder {
      *                                  implementation class for the specified factory name
      * @throws NullPointerException     if <code>factoryname</code>
      *                                  is null
-     *
+     * 
      * @return the found factory instance
      */
     public static Object getFactory(String factoryName)
          throws FacesException {
 
         FactoryFinderInstance manager;
-        // Bug 20458755: If the factory being requested is the special
+        // Bug 20458755: If the factory being requested is the special 
         // SERVLET_CONTEXT_FINDER, do not lazily create the FactoryFinderInstance.
         if (null != factoryName && factoryName.equals(ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_NAME)) {
             manager = FACTORIES_CACHE.getApplicationFactoryManager(false);
@@ -300,11 +293,11 @@ public final class FactoryFinder {
      * <code>factoryName/implName</code> mapping in such a way that
      * {@link #getFactory} will find this mapping when searching for a
      * match.</p>
-     *
+     * 
      * <p>This method has no effect if <code>getFactory()</code> has
      * already been called looking for a factory for this
      * <code>factoryName</code>.</p>
-     *
+     * 
      * <p>This method can be used by implementations to store a factory
      * mapping while parsing the Faces configuration file</p>
      *
@@ -312,9 +305,9 @@ public final class FactoryFinder {
      *                                  identify a standard JavaServer Faces factory name
      * @throws NullPointerException     if <code>factoryname</code>
      *                                  is null
-     *
+     * 
      * @param factoryName the name to be used in a subsequent call to {@link #getFactory}.
-     *
+     * 
      * @param implName the fully qualified class name of the factory corresponding
      * to {@code factoryName}.
      */

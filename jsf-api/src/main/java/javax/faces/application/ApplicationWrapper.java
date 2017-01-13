@@ -55,8 +55,6 @@ import javax.faces.FacesException;
 import javax.faces.FacesWrapper;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
-import javax.faces.component.search.SearchExpressionHandler;
-import javax.faces.component.search.SearchKeywordResolver;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
@@ -808,25 +806,5 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
                                      SystemEventListener listener) {
         getWrapped().unsubscribeFromEvent(systemEventClass, listener);
-    }
-
-    @Override
-    public SearchExpressionHandler getSearchExpressionHandler() {
-        return getWrapped().getSearchExpressionHandler();
-    }
-    
-    @Override
-    public void setSearchExpressionHandler(SearchExpressionHandler searchExpressionHandler) {
-        getWrapped().setSearchExpressionHandler(searchExpressionHandler);
-    }
- 
-    @Override
-    public void addSearchKeywordResolver(SearchKeywordResolver resolver) {
-        getWrapped().addSearchKeywordResolver(resolver);
-    }
-    
-    @Override
-    public SearchKeywordResolver getSearchKeywordResolver() {
-        return getWrapped().getSearchKeywordResolver();
     }
 }

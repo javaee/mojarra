@@ -121,8 +121,6 @@ final class FactoryFinderInstance {
                  javax.faces.view.facelets.TagHandlerDelegateFactory.class);
         buildUpFactoryClasses.put(FactoryFinder.FLOW_HANDLER_FACTORY,
                  javax.faces.flow.FlowHandlerFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.SEARCH_EXPRESSION_CONTEXT_FACTORY,
-                 javax.faces.component.search.SearchExpressionContextFactory.class);
         FACTORY_CLASSES = Collections.unmodifiableMap(buildUpFactoryClasses);
 
         FACTORY_NAMES = new String [] {
@@ -139,8 +137,7 @@ final class FactoryFinderInstance {
             FactoryFinder.RENDER_KIT_FACTORY,
             FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY,
             FactoryFinder.FACELET_CACHE_FACTORY,
-            FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY,
-            FactoryFinder.SEARCH_EXPRESSION_CONTEXT_FACTORY
+            FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY
         };
 
         // Optimize performance of validateFactoryName

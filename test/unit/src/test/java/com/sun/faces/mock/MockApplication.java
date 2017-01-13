@@ -81,8 +81,6 @@ import javax.faces.event.SystemEventListenerHolder;
 import javax.faces.validator.Validator;
 import javax.servlet.ServletContext;
 import com.sun.el.ExpressionFactoryImpl;
-import javax.faces.component.search.SearchExpressionHandler;
-import javax.faces.component.search.SearchKeywordResolver;
 
 public class MockApplication extends Application {
 
@@ -1084,26 +1082,4 @@ public class MockApplication extends Application {
         }
 
     } // END Cache
-    
-    private SearchExpressionHandler searchExpressionHandler;
-    private SearchKeywordResolver searchKeywordResolver;
-    
-    @Override
-    public SearchExpressionHandler getSearchExpressionHandler() {
-        return searchExpressionHandler;
-    }
-    
-    @Override
-    public void setSearchExpressionHandler(SearchExpressionHandler searchExpressionHandler) {
-        this.searchExpressionHandler = searchExpressionHandler;
-    }
-    
-    @Override
-    public SearchKeywordResolver getSearchKeywordResolver() {
-        return searchKeywordResolver;
-    }
-
-    public void setSearchKeywordResolver(SearchKeywordResolver searchKeywordResolver) {
-        this.searchKeywordResolver = searchKeywordResolver;
-    }
 }

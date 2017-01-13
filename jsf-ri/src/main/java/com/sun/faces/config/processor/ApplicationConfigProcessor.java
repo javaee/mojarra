@@ -87,8 +87,6 @@ import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
-import javax.faces.component.search.SearchExpressionHandler;
-import javax.faces.component.search.SearchKeywordResolver;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -178,20 +176,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     private static final String EL_RESOLVER
          = "el-resolver";
     private List<ELResolver> elResolvers;
-    
-    /**
-     * <code>/faces-config/application/search-expression-handler</code>
-     */
-    private static final String SEARCH_EXPRESSION_HANDLER
-         = "search-expression-handler";
-    private List<SearchExpressionHandler> searchExpressionHandlers;
-    
-    /**
-     * <code>/faces-config/application/search-keyword-resolver</code>
-     */
-    private static final String SEARCH_KEYWORD_RESOLVER
-         = "search-keyword-resolver";
-    private List<SearchKeywordResolver> searchKeywordResolvers;
 
     /**
      * <code>/faces-config/application/property-resolver</code>
@@ -280,8 +264,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         resourceHandlers = new CopyOnWriteArrayList<ResourceHandler>();
         elResolvers = new CopyOnWriteArrayList<ELResolver>();
         systemEventListeners = new CopyOnWriteArrayList<SystemEventListener>();
-        searchExpressionHandlers = new CopyOnWriteArrayList<SearchExpressionHandler>();
-        searchKeywordResolvers = new CopyOnWriteArrayList<SearchKeywordResolver>();
     }
     
     // -------------------------------------------- Methods from ConfigProcessor
@@ -378,12 +360,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                 case VALIDATOR_ID:
                                     defaultValidatorIds.add(getNodeText(n));
                                     break;
-                                case SEARCH_EXPRESSION_HANDLER:
-                                    setSearchExpressionHandler(sc, app, n);
-                                    break;
-                                case SEARCH_KEYWORD_RESOLVER:
-                                    addSearchKeywordResolver(sc, associate, n);
-                                    break;
                             }
                         }
                     }
@@ -413,8 +389,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         destroyInstances(sc, elResolvers);
         destroyInstances(sc, resourceHandlers);
         destroyInstances(sc, systemEventListeners);
-        destroyInstances(sc, searchExpressionHandlers);
-        destroyInstances(sc, searchKeywordResolvers);
         
         destroyNext(sc);
     }
@@ -720,77 +694,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void setSearchExpressionHandler(ServletContext sc, Application application,
-                                      Node searchExpressionHandler) {
-
-        if (searchExpressionHandler != null) {
-
-            String handler = getNodeText(searchExpressionHandler);
-            if (handler != null) {
-                Class<?> rootType = findRootType(sc, handler,
-                                                 searchExpressionHandler,
-                                                 new Class[] {
-                                                       SearchExpressionHandler.class
-                                                     });
-                boolean [] didPerformInjection = { false };
-                SearchExpressionHandler instance = (SearchExpressionHandler) createInstance(sc, handler,
-                                                 ((rootType != null) ? rootType : SearchExpressionHandler.class),
-                                                 application.getSearchExpressionHandler(),
-                                                 searchExpressionHandler, true, didPerformInjection);
-                if (instance != null) {
-                    if (didPerformInjection[0]) {
-                        searchExpressionHandlers.add(instance);
-                    }
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "Calling Application.setSearchExpressionHandler({0})",
-                                        handler));
-                    }
-                    application
-                         .setSearchExpressionHandler(instance);
-                }
-            }
-        }
-
-    }
-    
-    private void addSearchKeywordResolver(ServletContext sc, ApplicationAssociate associate,
-                               Node searchKeywordResolver) {
-
-        if (searchKeywordResolver != null) {
-            if (associate != null) {
-                List<SearchKeywordResolver> resolvers = associate
-                     .getSearchKeywordResolversFromFacesConfig();
-                if (resolvers == null) {
-                    //noinspection CollectionWithoutInitialCapacity
-                    resolvers = new ArrayList<>();
-                    associate.setSearchKeywordResolversFromFacesConfig(resolvers);
-                }
-                String searchKeywordResolverClass = getNodeText(searchKeywordResolver);
-                if (searchKeywordResolverClass != null) {
-                    boolean [] didPerformInjection = { false };
-                    SearchKeywordResolver skRes = (SearchKeywordResolver) createInstance(sc, searchKeywordResolverClass,
-                                                  SearchKeywordResolver.class,
-                                                  null,
-                                                  searchKeywordResolver, true, didPerformInjection);
-                    if (skRes != null) {
-                        if (didPerformInjection[0]) {
-                            searchKeywordResolvers.add(skRes);
-                        }
-                        if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.log(Level.FINE,
-                                       MessageFormat.format(
-                                            "Adding ''{0}'' to SearchKeywordResolver chain",
-                                            searchKeywordResolverClass));
-                        }
-                        resolvers.add(skRes);
-                    }
-                }
-            }
-        }
-
-    }
 
     @SuppressWarnings("deprecation")
     private void addPropertyResolver(ServletContext sc, ApplicationAssociate associate,

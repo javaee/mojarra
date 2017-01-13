@@ -58,16 +58,11 @@
 -->
 <root>
     <property>
-      <description>
-        <![CDATA[
-
-        <p class="changed_modified_2_3">Search expression to the component
-        for which this element is a label.</p>
-
-        ]]>
-
+        <description>
+        Client identifier of the component for which this element
+        is a label.
         </description>
-        <display-name>Associated component</display-name>
+        <display-name>Label For Identifier</display-name>
         <icon></icon>
         <property-name>for</property-name>
         <property-class>java.lang.String</property-class>

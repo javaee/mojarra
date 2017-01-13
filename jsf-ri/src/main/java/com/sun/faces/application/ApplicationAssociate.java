@@ -46,7 +46,6 @@ import com.sun.faces.application.resource.ResourceCache;
 import com.sun.faces.application.resource.ResourceManager;
 import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.application.annotation.FacesComponentUsage;
-import com.sun.faces.component.search.SearchExpressionHandlerImpl;
 import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.compiler.Compiler;
@@ -118,8 +117,6 @@ import javax.faces.application.Application;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.FacesComponent;
-import javax.faces.component.search.SearchExpressionHandler;
-import javax.faces.component.search.SearchKeywordResolver;
 import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.flow.FlowHandler;
@@ -177,8 +174,6 @@ public class ApplicationAssociate {
         };
 
     private List<ELResolver> elResolversFromFacesConfig = null;
-    
-    private List<SearchKeywordResolver> searchKeywordResolversFromFacesConfig = null;
 
     @SuppressWarnings("deprecation")
     private VariableResolver legacyVRChainHead = null;
@@ -221,8 +216,6 @@ public class ApplicationAssociate {
     private WebConfiguration webConfig;
     
     private FlowHandler flowHandler;
-    
-    private SearchExpressionHandler searchExpressionHandler;
     
     private Map<String, String> definingDocumentIdsToTruncatedJarUrls;
     
@@ -303,10 +296,6 @@ public class ApplicationAssociate {
             if (null == ApplicationAssociate.this.flowHandler) {
                 FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
                 ApplicationAssociate.this.flowHandler = flowHandlerFactory.createFlowHandler(FacesContext.getCurrentInstance());
-            }
-
-            if (null == ApplicationAssociate.this.searchExpressionHandler) {
-                ApplicationAssociate.this.searchExpressionHandler = new SearchExpressionHandlerImpl();
             }
 
             FacesContext context = FacesContext.getCurrentInstance();
@@ -573,14 +562,6 @@ public class ApplicationAssociate {
         this.flowHandler = flowHandler;
     }
 
-    public SearchExpressionHandler getSearchExpressionHandler() {
-        return searchExpressionHandler;
-    }
-
-    public void setSearchExpressionHandler(SearchExpressionHandler searchExpressionHandler) {
-        this.searchExpressionHandler = searchExpressionHandler;
-    }
-    
     public void setFacesELResolverForJsp(FacesCompositeELResolver celr) {
         facesELResolverForJsp = celr;
     }
@@ -591,14 +572,6 @@ public class ApplicationAssociate {
 
     public List<ELResolver> getELResolversFromFacesConfig() {
         return elResolversFromFacesConfig;
-    }
-    
-    public void setSearchKeywordResolversFromFacesConfig(List<SearchKeywordResolver> searchKeywordResolversFromFacesConfig) {
-        this.searchKeywordResolversFromFacesConfig = searchKeywordResolversFromFacesConfig;
-    }
-
-    public List<SearchKeywordResolver> getSearchKeywordResolversFromFacesConfig() {
-        return searchKeywordResolversFromFacesConfig;
     }
 
     public void setExpressionFactory(ExpressionFactory expressionFactory) {

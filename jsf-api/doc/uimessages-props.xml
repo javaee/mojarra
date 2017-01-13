@@ -76,19 +76,12 @@
     </property>
 
     <property>
-      <description>
-
-                  <![CDATA[
-
-          <p class="changed_modified_2_3">Search expression to the
-          component for which to display messages. This attribute is
-          mutually exclusive with globalOnly and take precedence if
-          used.</p>
-
-                  ]]>
-
+        <description>
+          Client identifier of the component for which to display messages. This
+          attribute is mutually exclusive with globalOnly and take precedence
+          if used.
         </description>
-        <display-name>Associated component</display-name>
+        <display-name>Associated Client Id</display-name>
         <icon></icon>
         <property-name>for</property-name>
         <property-class>java.lang.String</property-class>
