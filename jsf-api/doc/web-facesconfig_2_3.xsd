@@ -573,6 +573,34 @@
           ]]></xsd:documentation>
         </xsd:annotation>
       </xsd:element>
+      <xsd:element name="search-expression-handler"
+                   type="javaee:fully-qualified-classType">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p> The "search-keyword-resolver" element contains the fully
+            qualified class name of the concrete
+            javax.faces.component.search.SearchExpressionHandler implementation class
+            that will be used for processing of
+            a search expression.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="search-keyword-resolver"
+                   type="javaee:fully-qualified-classType">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p> The "search-keyword-resolver" element contains the fully
+            qualified class name of the concrete
+            javax.faces.component.search.SearchKeywordResolver implementation class
+            that will be used during the processing of
+            a search expression keyword.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="system-event-listener"
                    type="javaee:faces-config-system-event-listenerType"
                    minOccurs="0"
@@ -956,6 +984,21 @@
                 will be called when FactoryFinder.getFactory(CLIENT_WINDOW_FACTORY) is called.</p>  
             ]]></xsd:documentation>
         </xsd:annotation>    
+      </xsd:element>
+      <xsd:element name="search-expression-context-factory"
+                   type="javaee:fully-qualified-classType">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+
+           <p> The "search-expression-context-factory" element contains the
+            fully qualified class name of the concrete
+            SearchExpressionContextFactory implementation class that will
+            be called when
+            FactoryFinder.getFactory(SEARCH_EXPRESSION_CONTEXT_FACTORY) is
+            called.</p>
+            
+          ]]></xsd:documentation>
+        </xsd:annotation>
       </xsd:element>
       <xsd:element name="factory-extension"
                    type="javaee:faces-config-factory-extensionType"
