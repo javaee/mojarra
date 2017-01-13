@@ -90,6 +90,19 @@ import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.cdi.CdiUtils;
+import com.sun.faces.component.search.CompositeSearchKeywordResolver;
+import com.sun.faces.component.search.SearchKeywordResolverImplAll;
+import com.sun.faces.component.search.SearchKeywordResolverImplChild;
+import com.sun.faces.component.search.SearchKeywordResolverImplComposite;
+import com.sun.faces.component.search.SearchKeywordResolverImplForm;
+import com.sun.faces.component.search.SearchKeywordResolverImplId;
+import com.sun.faces.component.search.SearchKeywordResolverImplNamingContainer;
+import com.sun.faces.component.search.SearchKeywordResolverImplNext;
+import com.sun.faces.component.search.SearchKeywordResolverImplNone;
+import com.sun.faces.component.search.SearchKeywordResolverImplParent;
+import com.sun.faces.component.search.SearchKeywordResolverImplPrevious;
+import com.sun.faces.component.search.SearchKeywordResolverImplRoot;
+import com.sun.faces.component.search.SearchKeywordResolverImplThis;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
@@ -127,6 +140,8 @@ import java.util.LinkedHashMap;
 import javax.el.ValueExpression;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.application.Resource;
+import javax.faces.component.search.SearchExpressionHandler;
+import javax.faces.component.search.SearchKeywordResolver;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.view.ViewDeclarationLanguage;
@@ -215,6 +230,7 @@ public class ApplicationImpl extends Application {
     private boolean passDefaultTimeZone;
     private boolean registerPropertyEditors;
     private TimeZone systemTimeZone;
+    CompositeSearchKeywordResolver searchKeywordResolvers = null;
 
     /**
      * Constructor
@@ -232,6 +248,25 @@ public class ApplicationImpl extends Application {
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
         elResolvers = new CompositeELResolver();
+
+        searchKeywordResolvers = new CompositeSearchKeywordResolver();
+        searchKeywordResolvers.add(new SearchKeywordResolverImplThis());
+        searchKeywordResolvers.add(new SearchKeywordResolverImplParent());
+        searchKeywordResolvers.add(new SearchKeywordResolverImplForm());
+        searchKeywordResolvers.add(new SearchKeywordResolverImplComposite());
+        searchKeywordResolvers.add(new SearchKeywordResolverImplNext());
+        searchKeywordResolvers.add(new SearchKeywordResolverImplPrevious());
+        searchKeywordResolvers.add(new SearchKeywordResolverImplNone());
+        searchKeywordResolvers.add(new SearchKeywordResolverImplNamingContainer());
+        searchKeywordResolvers.add(new SearchKeywordResolverImplRoot());
+        searchKeywordResolvers.add(new SearchKeywordResolverImplId());
+        searchKeywordResolvers.add(new SearchKeywordResolverImplChild());
+        searchKeywordResolvers.add(new SearchKeywordResolverImplAll());
+        if (associate.getSearchKeywordResolversFromFacesConfig() != null) {
+            for (SearchKeywordResolver resolver : associate.getSearchKeywordResolversFromFacesConfig()) {
+                searchKeywordResolvers.add(resolver);
+            }
+        }
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         WebConfiguration webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
@@ -2707,4 +2742,39 @@ public class ApplicationImpl extends Application {
         }       
         return beanManager;
     }
+    
+
+    @Override
+    public SearchExpressionHandler getSearchExpressionHandler() {
+        return associate.getSearchExpressionHandler();
+    }
+    
+    @Override
+    public void setSearchExpressionHandler(SearchExpressionHandler searchExpressionHandler) {
+        Util.notNull("searchExpressionHandler", searchExpressionHandler);
+
+        associate.setSearchExpressionHandler(searchExpressionHandler);
+
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("set SearchExpressionHandler Instance to ''{0}''",
+                                             searchExpressionHandler.getClass().getName()));
+        }
+    }
+    
+    @Override
+    public void addSearchKeywordResolver(SearchKeywordResolver resolver) {
+        if (associate.hasRequestBeenServiced()) {
+            throw new IllegalStateException(
+                  MessageUtils.getExceptionMessageString(
+                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "SearchKeywordResolver"));
+        }
+
+        searchKeywordResolvers.add(resolver);
+    }
+    
+    @Override
+    public SearchKeywordResolver getSearchKeywordResolver() {
+        return searchKeywordResolvers;
+    }
+
 }
