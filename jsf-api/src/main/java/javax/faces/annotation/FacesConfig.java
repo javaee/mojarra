@@ -93,181 +93,181 @@ public @interface FacesConfig {
     public static enum ContextParameter {
 
         /**
-         * javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE as {@link Boolean}.
+         * <code>javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE</code> as {@link Boolean}.
          * @see UIInput#ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE
          */
         ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE(UIInput.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE, Boolean.class, false),
 
         /**
-         * javax.faces.CLIENT_WINDOW_MODE as {@link String}.
+         * <code>javax.faces.CLIENT_WINDOW_MODE</code> as {@link String}.
          * @see ClientWindow#CLIENT_WINDOW_MODE_PARAM_NAME
          */
         CLIENT_WINDOW_MODE(ClientWindow.CLIENT_WINDOW_MODE_PARAM_NAME, String.class, "none"),
 
         /**
-         * javax.faces.CONFIG_FILES as {@link String} array.
+         * <code>javax.faces.CONFIG_FILES</code> as {@link String} array.
          * @see FacesServlet#CONFIG_FILES_ATTR
          */
         CONFIG_FILES(FacesServlet.CONFIG_FILES_ATTR, StringArray.COMMA_SEPARATED, null),
 
         /**
-         * javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE as {@link Boolean}.
+         * <code>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</code> as {@link Boolean}.
          * @see Converter#DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE_PARAM_NAME
          */
         DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE(Converter.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE_PARAM_NAME, Boolean.class, false),
 
         /**
-         * javax.faces.validator.DISABLE_DEFAULT_BEAN_VALIDATOR as {@link Boolean}.
+         * <code>javax.faces.validator.DISABLE_DEFAULT_BEAN_VALIDATOR</code> as {@link Boolean}.
          * @see BeanValidator#DISABLE_DEFAULT_BEAN_VALIDATOR_PARAM_NAME
          */
         DISABLE_DEFAULT_BEAN_VALIDATOR(BeanValidator.DISABLE_DEFAULT_BEAN_VALIDATOR_PARAM_NAME, Boolean.class, false),
 
         /**
-         * javax.faces.DISABLE_FACELET_JSF_VIEWHANDLER as {@link Boolean}.
+         * <code>javax.faces.DISABLE_FACELET_JSF_VIEWHANDLER</code> as {@link Boolean}.
          * @see ViewHandler#DISABLE_FACELET_JSF_VIEWHANDLER_PARAM_NAME
          */
         DISABLE_FACELET_JSF_VIEWHANDLER(ViewHandler.DISABLE_FACELET_JSF_VIEWHANDLER_PARAM_NAME, Boolean.class, false),
 
         /**
-         * javax.faces.DISABLE_FACESSERVLET_TO_XHTML as {@link Boolean}.
+         * <code>javax.faces.DISABLE_FACESSERVLET_TO_XHTML</code> as {@link Boolean}.
          * @see FacesServlet#DISABLE_FACESSERVLET_TO_XHTML_PARAM_NAME
          */
         DISABLE_FACESSERVLET_TO_XHTML(FacesServlet.DISABLE_FACESSERVLET_TO_XHTML_PARAM_NAME, Boolean.class, false),
 
         /**
-         * javax.faces.validator.ENABLE_VALIDATE_WHOLE_BEAN as {@link Boolean}.
+         * <code>javax.faces.validator.ENABLE_VALIDATE_WHOLE_BEAN</code> as {@link Boolean}.
          * @see BeanValidator#ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME
          */
         ENABLE_VALIDATE_WHOLE_BEAN(BeanValidator.ENABLE_VALIDATE_WHOLE_BEAN_PARAM_NAME, Boolean.class, false),
 
         /**
-         * javax.faces.ENABLE_WEBSOCKET_ENDPOINT as {@link Boolean}.
+         * <code>javax.faces.ENABLE_WEBSOCKET_ENDPOINT</code> as {@link Boolean}.
          * @see PushContext#ENABLE_WEBSOCKET_ENDPOINT_PARAM_NAME
          */
         ENABLE_WEBSOCKET_ENDPOINT(PushContext.ENABLE_WEBSOCKET_ENDPOINT_PARAM_NAME, Boolean.class, false),
 
         /**
-         * javax.faces.FACELETS_BUFFER_SIZE as {@link Integer}.
+         * <code>javax.faces.FACELETS_BUFFER_SIZE</code> as {@link Integer}.
          * @see ViewHandler#FACELETS_BUFFER_SIZE_PARAM_NAME
          */
         FACELETS_BUFFER_SIZE(ViewHandler.FACELETS_BUFFER_SIZE_PARAM_NAME, Integer.class, 1024),
 
         /**
-         * javax.faces.FACELETS_DECORATORS as {@link String} array.
+         * <code>javax.faces.FACELETS_DECORATORS</code> as {@link String} array.
          * @see ViewHandler#FACELETS_DECORATORS_PARAM_NAME
          */
         FACELETS_DECORATORS(ViewHandler.FACELETS_DECORATORS_PARAM_NAME, StringArray.SEMICOLON_SEPARATED, null),
 
         /**
-         * javax.faces.FACELETS_LIBRARIES as {@link String} array.
+         * <code>javax.faces.FACELETS_LIBRARIES</code> as {@link String} array.
          * @see ViewHandler#FACELETS_LIBRARIES_PARAM_NAME
          */
         FACELETS_LIBRARIES(ViewHandler.FACELETS_LIBRARIES_PARAM_NAME, StringArray.SEMICOLON_SEPARATED, null),
 
         /**
-         * javax.faces.FACELETS_REFRESH_PERIOD as {@link Integer}.
+         * <code>javax.faces.FACELETS_REFRESH_PERIOD</code> as {@link Integer}.
          * @see ViewHandler#FACELETS_REFRESH_PERIOD_PARAM_NAME
          */
         FACELETS_REFRESH_PERIOD(ViewHandler.FACELETS_REFRESH_PERIOD_PARAM_NAME, Integer.class, 2),
 
         /**
-         * javax.faces.FACELETS_RESOURCE_RESOLVER as <code>Class&gt;ResourceResolver&lt;</code>.
+         * <code>javax.faces.FACELETS_RESOURCE_RESOLVER as <code>Class&lt;ResourceResolver&gt;</code>.
          * @see ResourceResolver#FACELETS_RESOURCE_RESOLVER_PARAM_NAME
          */
         FACELETS_RESOURCE_RESOLVER(ResourceResolver.FACELETS_RESOURCE_RESOLVER_PARAM_NAME, ResourceResolver.class, null),
 
         /**
-         * javax.faces.FACELETS_SKIP_COMMENTS as {@link Boolean}.
+         * <code>javax.faces.FACELETS_SKIP_COMMENTS</code> as {@link Boolean}.
          * @see ViewHandler#FACELETS_SKIP_COMMENTS_PARAM_NAME
          */
         FACELETS_SKIP_COMMENTS(ViewHandler.FACELETS_SKIP_COMMENTS_PARAM_NAME, Boolean.class, false),
 
         /**
-         * javax.faces.FACELETS_SUFFIX as {@link String}.
+         * <code>javax.faces.FACELETS_SUFFIX</code> as {@link String}.
          * @see ViewHandler#FACELETS_SUFFIX_PARAM_NAME
          */
         FACELETS_SUFFIX(ViewHandler.FACELETS_SUFFIX_PARAM_NAME, String.class, ViewHandler.DEFAULT_FACELETS_SUFFIX),
 
         /**
-         * javax.faces.FACELETS_VIEW_MAPPINGS as {@link String} array.
+         * <code>javax.faces.FACELETS_VIEW_MAPPINGS</code> as {@link String} array.
          * @see ViewHandler#FACELETS_VIEW_MAPPINGS_PARAM_NAME
          */
         FACELETS_VIEW_MAPPINGS(ViewHandler.FACELETS_VIEW_MAPPINGS_PARAM_NAME, StringArray.SEMICOLON_SEPARATED, null),
 
         /**
-         * javax.faces.FULL_STATE_SAVING_VIEW_IDS as {@link String} array.
+         * <code>javax.faces.FULL_STATE_SAVING_VIEW_IDS</code> as {@link String} array.
          * @see StateManager#FULL_STATE_SAVING_VIEW_IDS_PARAM_NAME
          */
         FULL_STATE_SAVING_VIEW_IDS(StateManager.FULL_STATE_SAVING_VIEW_IDS_PARAM_NAME, StringArray.COMMA_SEPARATED, null),
 
         /**
-         * javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL as {@link Boolean}.
+         * <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code> as {@link Boolean}.
          * @see UIInput#EMPTY_STRING_AS_NULL_PARAM_NAME
          */
         INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL(UIInput.EMPTY_STRING_AS_NULL_PARAM_NAME, Boolean.class, false),
 
         /**
-         * javax.faces.LIFECYCLE_ID as <code>Class&gt;Lifecycle&lt;</code>.
+         * <code>javax.faces.LIFECYCLE_ID as <code>Class&lt;Lifecycle&gt;</code>.
          * @see FacesServlet#LIFECYCLE_ID_ATTR
          */
         LIFECYCLE_ID(FacesServlet.LIFECYCLE_ID_ATTR, Lifecycle.class, null),
 
         /**
-         * javax.faces.PARTIAL_STATE_SAVING as {@link Boolean}.
+         * <code>javax.faces.PARTIAL_STATE_SAVING</code> as {@link Boolean}.
          * @see StateManager#PARTIAL_STATE_SAVING_PARAM_NAME
          */
         PARTIAL_STATE_SAVING(StateManager.PARTIAL_STATE_SAVING_PARAM_NAME, Boolean.class, true),
 
         /**
-         * javax.faces.PROJECT_STAGE as {@link ProjectStage}.
+         * <code>javax.faces.PROJECT_STAGE</code> as {@link ProjectStage}.
          * @see ProjectStage#PROJECT_STAGE_PARAM_NAME
          */
         PROJECT_STAGE(ProjectStage.PROJECT_STAGE_PARAM_NAME, ProjectStage.class, ProjectStage.Production),
 
         /**
-         * javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE as {@link String} array.
+         * <code>javax.faces.RESOURCE_EXCLUDES</code> as {@link String} array.
          * @see ResourceHandler#RESOURCE_EXCLUDES_PARAM_NAME
          */
         RESOURCE_EXCLUDES(ResourceHandler.RESOURCE_EXCLUDES_PARAM_NAME, StringArray.SPACE_SEPARATED, new String[] { ResourceHandler.RESOURCE_EXCLUDES_DEFAULT_VALUE, ".groovy" }),
 
         /**
-         * javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE as {@link Boolean}.
+         * <code>javax.faces.SERIALIZE_SERVER_STATE</code> as {@link Boolean}.
          * @see StateManager#SERIALIZE_SERVER_STATE_PARAM_NAME
          */
         SERIALIZE_SERVER_STATE(StateManager.SERIALIZE_SERVER_STATE_PARAM_NAME, Boolean.class, false),
 
         /**
-         * javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE as {@link String}.
+         * <code>javax.faces.STATE_SAVING_METHOD</code> as {@link String}.
          * @see StateManager#STATE_SAVING_METHOD_PARAM_NAME
          */
         STATE_SAVING_METHOD(StateManager.STATE_SAVING_METHOD_PARAM_NAME, String.class, "server"),
 
         /**
-         * javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE as {@link String}.
+         * <code>javax.faces.VALIDATE_EMPTY_FIELDS</code> as {@link String}.
          * @see UIInput#VALIDATE_EMPTY_FIELDS_PARAM_NAME
          */
         VALIDATE_EMPTY_FIELDS(UIInput.VALIDATE_EMPTY_FIELDS_PARAM_NAME, String.class, "auto"),
 
         /**
-         * javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE as {@link Boolean}.
+         * <code>javax.faces.VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS</code> as {@link Boolean}.
          * @see UIViewRoot#VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME
          */
         VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS(UIViewRoot.VIEWROOT_PHASE_LISTENER_QUEUES_EXCEPTIONS_PARAM_NAME, Boolean.class, false),
 
         /**
-         * javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE as {@link Path}.
+         * <code>javax.faces.WEBAPP_CONTRACTS_DIRECTORY</code> as {@link Path}.
          * @see ResourceHandler#WEBAPP_CONTRACTS_DIRECTORY_PARAM_NAME
          */
         WEBAPP_CONTRACTS_DIRECTORY(ResourceHandler.WEBAPP_CONTRACTS_DIRECTORY_PARAM_NAME, Path.class, Paths.get("/contracts")),
 
         /**
-         * javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE as {@link Path}.
+         * <code>javax.faces.WEBAPP_RESOURCES_DIRECTORY</code> as {@link Path}.
          * @see ResourceHandler#WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME
          */
         WEBAPP_RESOURCES_DIRECTORY(ResourceHandler.WEBAPP_RESOURCES_DIRECTORY_PARAM_NAME, Path.class, Paths.get("/resources")),
 
         /**
-         * javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE as {@link Integer}.
+         * <code>javax.faces.WEBSOCKET_ENDPOINT_PORT</code> as {@link Integer}.
          * @see PushContext#WEBSOCKET_ENDPOINT_PORT_PARAM_NAME
          */
         WEBSOCKET_ENDPOINT_PORT(PushContext.WEBSOCKET_ENDPOINT_PORT_PARAM_NAME, Integer.class, null),
@@ -302,16 +302,14 @@ public @interface FacesConfig {
         }
 
         private ContextParameter(String name, StringArray separated, String[] defaultValue) {
-            this.name = name;
-            this.type = String.class;
+            this(name, String[].class, defaultValue);
             this.separated = separated;
-            this.defaultValue = defaultValue;
         }
 
         /**
          * <p>
          * Returns the name of the context parameter.
-         * @return the name of the context parameter.
+         * @return The name of the context parameter.
          */
         public String getName() {
             return name;
@@ -319,7 +317,8 @@ public @interface FacesConfig {
 
         /**
          * <p>
-         * Returns the expected type of the context parameter value. Supported values are:
+         * Returns the expected type of the context parameter value.
+         * Supported values are:
          * <ul>
          * <li>{@link String}
          * <li>{@link String} array
@@ -351,11 +350,10 @@ public @interface FacesConfig {
                 return (T) defaultValue;
             }
             else if (type == String.class) {
-                if (separated != null) {
-                    return (T) separated.split(value);
-                }
-
                 return (T) value;
+            }
+            else if (type == String[].class) {
+                return (T) separated.split(value);
             }
             else if (type == Boolean.class) {
                 return (T) Boolean.valueOf(value);
