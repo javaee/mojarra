@@ -73,6 +73,11 @@ import javax.faces.render.Renderer;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import java.util.EnumSet;
+import java.util.Set;
+import javax.faces.component.search.SearchExpressionContext;
+import javax.faces.component.search.SearchExpressionHandler;
+import javax.faces.component.search.SearchExpressionHint;
 
 /**
  * <B>HtmlBasicRenderer</B> is a base class for implementing renderers
@@ -541,37 +546,32 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     }
 
+    private static final Set<SearchExpressionHint> EXPRESSION_HINTS =
+            EnumSet.of(SearchExpressionHint.IGNORE_NO_RESULT, SearchExpressionHint.RESOLVE_SINGLE_COMPONENT);
 
     protected Iterator getMessageIter(FacesContext context,
                                       String forComponent,
                                       UIComponent component) {
-
-        Iterator messageIter;
-        // Attempt to use the "for" attribute to locate
-        // messages.  Three possible scenarios here:
-        // 1. valid "for" attribute - messages returned
-        //    for valid component identified by "for" expression.
-        // 2. zero length "for" expression - global errors
-        //    not associated with any component returned
-        // 3. no "for" expression - all messages returned.
-        if (null != forComponent) {
-            if (forComponent.length() == 0) {
-                messageIter = context.getMessages(null);
-            } else {
-                UIComponent result = getForComponent(context, forComponent,
-                                                     component);
-                if (result == null) {
-                    messageIter = Collections.EMPTY_LIST.iterator();
-                } else {
-                    messageIter =
-                          context.getMessages(result.getClientId(context));
-                }
-            }
-        } else {
-            messageIter = context.getMessages();
+        // no "for" expression - return all messages
+        if (forComponent == null) {
+            return context.getMessages();
         }
-        return messageIter;
+        
+        // zero length "for" expression - global errors not associated with any component returned
+        if (forComponent.trim().isEmpty()) {
+            return context.getMessages(null);
+        }
+ 
+        SearchExpressionHandler searchExpressionHandler = context.getApplication().getSearchExpressionHandler();
+        String clientId = searchExpressionHandler.resolveClientId(
+                SearchExpressionContext.createSearchExpressionContext(
+                        context, component, EXPRESSION_HINTS, null), forComponent);
 
+        if (clientId == null) {
+            return Collections.emptyIterator();
+        }
+
+        return context.getMessages(clientId);
     }
 
 
