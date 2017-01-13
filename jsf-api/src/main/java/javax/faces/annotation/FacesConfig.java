@@ -373,7 +373,12 @@ public @interface FacesConfig {
                 value = Boolean.valueOf(param);
             }
             else if (type == Integer.class) {
-                value = Integer.valueOf(param);
+                try {
+                    value = Integer.valueOf(param);
+                }
+                catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("Context parameter '" + name + "' value '" + param + "' must represent a valid integer", e);
+                }
             }
             else if (type == Path.class) {
                 value = Paths.get(param);
@@ -387,7 +392,7 @@ public @interface FacesConfig {
                 }
 
                 if (value == null) {
-                    throw new IllegalArgumentException("Invalid enum constant " + param + " for enum type " + type);
+                    throw new IllegalArgumentException("Context parameter '" + name + "' value '" + param + "' must represent a valid enum of type " + type.getName());
                 }
             }
             else {
@@ -395,7 +400,7 @@ public @interface FacesConfig {
                     value = Class.forName(param);
                 }
                 catch (ClassNotFoundException e) {
-                    throw new IllegalArgumentException("Invalid FQN " + param, e);
+                    throw new IllegalArgumentException("Context parameter '" + name + "' value '" + param + "' must represent a valid fully qualified name", e);
                 }
             }
 
