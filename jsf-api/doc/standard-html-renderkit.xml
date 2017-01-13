@@ -24440,7 +24440,9 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </renderer>
     <renderer>
       <description><![CDATA[
-                    <p class="changed_added_2_3">
+
+  <div class="changed_added_2_3">
+                    <p>
                         Render a JavaScript function that invokes <code>jsf.ajax.request()</code> function.
                     </p>
     
@@ -24470,7 +24472,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
                         If the value in the <code>Map</code> for the value of the "javax.faces.source" equals to the "clientId" property of the component,
                         create a <code>javax.faces.event.ActionEvent</code> around the component, and pass it to the <code>queueEvent()</code> method of the component,
                         which must be an instance of <code>UICommand</code>.
-                    </p>
+                        </p>
+</div>                        
                 ]]></description>
       <component-family>javax.faces.Command</component-family>
       <renderer-type>javax.faces.Script</renderer-type>
@@ -24554,6 +24557,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
       <renderer-extension>
         <renders-children>false</renders-children>
+        <jsp-ignore>true</jsp-ignore>
       </renderer-extension>
     </renderer>
     <renderer>
@@ -36147,7 +36151,8 @@ unmodified to the rendered output.</p>
     </renderer>
     <renderer>
       <description><![CDATA[
-                    <p class="changed_added_2_3">
+<div class="changed_added_2_3">                       
+                    <p>
                         Render a JavaScript function that invokes <code>jsf.push.init()</code> function.
                     </p>
 
@@ -36158,6 +36163,7 @@ unmodified to the rendered output.</p>
                         <code>onopen</code>, <code>onmessage</code>, <code>onclose</code> and <code>connected</code>
                         arguments, if any. 
                     </p>
+   </div>                    
                 ]]></description>
       <component-family>javax.faces.Script</component-family>
       <renderer-type>javax.faces.Websocket</renderer-type>
@@ -36166,6 +36172,7 @@ unmodified to the rendered output.</p>
     </renderer-class>
       <renderer-extension>
         <renders-children>false</renders-children>
+        <jsp-ignore>true</jsp-ignore>
       </renderer-extension>
     </renderer>
   </render-kit>
