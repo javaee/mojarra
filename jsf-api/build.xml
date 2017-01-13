@@ -251,6 +251,8 @@
              <include name="changed*.cur" />
            </fileset>
         </copy>
+
+        <echo message="Using renderkit ${standard.renderkit.xml}" />
         
         <generateRenderkitDocs
               generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
@@ -263,6 +265,7 @@
                 <pathelement location="${jsf-tools.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
+            <sysproperty key="impl.version.number" value="${impl.version.number}"/>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             <sysproperty key="tools.src.dir" value="${tools.dir}/src/main/java"/>
             <jvmarg line="${debug.jvm.args}"/>

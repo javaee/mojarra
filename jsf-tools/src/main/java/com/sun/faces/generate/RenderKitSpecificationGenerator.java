@@ -71,7 +71,7 @@ public class RenderKitSpecificationGenerator implements Generator {
     public static String DOCTYPE =
         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"\"http://www.w3.org/TR/REC-html40/loose.dtd\">";
 
-    
+
     // -------------------------------------------------------- Static Variables
 
 
@@ -84,7 +84,7 @@ public class RenderKitSpecificationGenerator implements Generator {
     private String renderKitId;
 
     private FacesConfigBean configBean;
-    
+
 
 
     // ------------------------------------------------------------ Constructors
@@ -105,7 +105,7 @@ public class RenderKitSpecificationGenerator implements Generator {
             baseDirectory.mkdirs();
         }
 
-        renderKitDirectory = new File(baseDirectory, renderKitId);        
+        renderKitDirectory = new File(baseDirectory, renderKitId);
 
         if (!renderKitDirectory.exists()) {
             renderKitDirectory.mkdirs();
@@ -205,7 +205,14 @@ public class RenderKitSpecificationGenerator implements Generator {
             "com/sun/faces/generate/facesdoc/allrenderers-frame.top",
             sb);
         sb.append("<FONT size=\"+1\" CLASS=\"FrameHeadingFont\">\n");
-        sb.append("<B>" + renderKitId + " RenderKit</B></FONT>\n");
+
+        sb.append("<B>" + renderKitId + " RenderKit ");
+        String implVersionNumber = System.getProperty("impl.version.number");
+        if (null != implVersionNumber) {
+            sb.append("(" + implVersionNumber + ")");
+        }
+        sb.append("</B></FONT>\n");
+
         sb.append("<BR>\n\n");
         sb.append("<DL CLASS=\"FrameItemFont\">\n\n");
 
@@ -224,7 +231,7 @@ public class RenderKitSpecificationGenerator implements Generator {
                 RendererBean renderer = rendererIter.next();
                 String curType = renderer.getRendererType();
                 DescriptionBean[] descriptions = renderer.getDescriptions();
-                String 
+                String
                         enclosingDiv = null,
                         enclosingSpan = null;
                 int [] divStart = new int[1];
@@ -232,20 +239,20 @@ public class RenderKitSpecificationGenerator implements Generator {
                 if (null != descriptions) {
                     // Get the current operating locale
                     String localeStr = Locale.getDefault().getCountry().toLowerCase();
-                    // iterate over the descriptions and try to find one that matches 
+                    // iterate over the descriptions and try to find one that matches
                     // the country of the current locale
                     for (DescriptionBean cur : descriptions) {
-                        if (null != cur.getLang() && 
+                        if (null != cur.getLang() &&
                             (-1 != localeStr.indexOf(cur.getLang().toLowerCase()))) {
-                            
-                            enclosingDiv = 
+
+                            enclosingDiv =
                                    GeneratorUtil.getFirstDivFromString(renderer.getDescription(cur.getLang()).getDescription(), divStart);
                             enclosingSpan = GeneratorUtil.getFirstSpanFromString(renderer.getDescription(cur.getLang()).getDescription(), spanStart);
-                            
+
                             break;
                         }
                     }
-                    
+
                 }
                 if (null != enclosingDiv || null != enclosingSpan) {
                     String divOrSpan = (null != enclosingDiv ? enclosingDiv : enclosingSpan);
@@ -258,7 +265,7 @@ public class RenderKitSpecificationGenerator implements Generator {
                     curFamily + curType +
                     ".html\" TARGET=\"rendererFrame\">" + curType +
                             "</A>");
-                    sb.append((null != enclosingDiv ? "</div>" : "</span>") + 
+                    sb.append((null != enclosingDiv ? "</div>" : "</span>") +
                             "</DD>\n");
                 }
                 else {
@@ -288,7 +295,13 @@ public class RenderKitSpecificationGenerator implements Generator {
         appendResourceToStringBuffer(
             "com/sun/faces/generate/facesdoc/renderkit-summary.top",
             sb);
-        sb.append("<H2>" + renderKitId + " RenderKit</H2>\n");
+        sb.append("<H2>" + renderKitId + " RenderKit ");
+
+        String implVersionNumber = System.getProperty("impl.version.number");
+        if (null != implVersionNumber) {
+            sb.append("(" + implVersionNumber + ")");
+        }
+        sb.append("</H2>");
         sb.append("<BR>\n\n");
 
         RenderKitBean renderKit = configBean.getRenderKit(renderKitId);
