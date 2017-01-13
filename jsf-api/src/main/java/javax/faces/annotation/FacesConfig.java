@@ -48,6 +48,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import javax.enterprise.util.Nonbinding;
@@ -133,6 +135,11 @@ public @interface FacesConfig {
          * @see FacesServlet#DISABLE_FACESSERVLET_TO_XHTML_PARAM_NAME
          */
         DISABLE_FACESSERVLET_TO_XHTML(FacesServlet.DISABLE_FACESSERVLET_TO_XHTML_PARAM_NAME, Boolean.class, false),
+
+        /**
+         * <code>javax.faces.ENABLE_CDI_RESOLVER_CHAIN</code> as {@link Boolean}.
+         */
+        ENABLE_CDI_RESOLVER_CHAIN("javax.faces.ENABLE_CDI_RESOLVER_CHAIN", Boolean.class, false),
 
         /**
          * <code>javax.faces.validator.ENABLE_VALIDATE_WHOLE_BEAN</code> as {@link Boolean}.
@@ -274,6 +281,8 @@ public @interface FacesConfig {
 
         ;
 
+        private static final Map<String, Object> VALUES = new ConcurrentHashMap<>(ContextParameter.values().length);
+
         private enum StringArray {
             SPACE_SEPARATED(Pattern.compile("\\s+")),
             SEMICOLON_SEPARATED(Pattern.compile("\\s*;\\s*")),
@@ -344,43 +353,54 @@ public @interface FacesConfig {
          */
         @SuppressWarnings("unchecked")
         public <T> T getValue(FacesContext context) {
-            String value = context.getExternalContext().getInitParameter(name);
+            if (VALUES.containsKey(name)) {
+                return (T) VALUES.get(name);
+            }
 
-            if (value == null) {
-                return (T) defaultValue;
+            String param = context.getExternalContext().getInitParameter(name);
+            Object value = null;
+
+            if (param == null) {
+                value = defaultValue;
             }
             else if (type == String.class) {
-                return (T) value;
+                value = param;
             }
             else if (type == String[].class) {
-                return (T) separated.split(value);
+                value = separated.split(param);
             }
             else if (type == Boolean.class) {
-                return (T) Boolean.valueOf(value);
+                value = Boolean.valueOf(param);
             }
             else if (type == Integer.class) {
-                return (T) Integer.valueOf(value);
+                value = Integer.valueOf(param);
             }
             else if (type == Path.class) {
-                return (T) Paths.get(value);
+                value = Paths.get(param);
             }
             else if (type.isEnum()) {
                 for (Object constant : type.getEnumConstants()) {
-                    if (constant.toString().equalsIgnoreCase(value)) {
-                        return (T) constant;
+                    if (constant.toString().equalsIgnoreCase(param)) {
+                        value = constant;
+                        break;
                     }
                 }
 
-                throw new IllegalArgumentException("Invalid enum constant " + value + " for enum type " + type);
+                if (value == null) {
+                    throw new IllegalArgumentException("Invalid enum constant " + param + " for enum type " + type);
+                }
             }
             else {
                 try {
-                    return (T) Class.forName(value);
+                    value = Class.forName(param);
                 }
                 catch (ClassNotFoundException e) {
-                    throw new IllegalArgumentException("Invalid FQN " + value, e);
+                    throw new IllegalArgumentException("Invalid FQN " + param, e);
                 }
             }
+
+            VALUES.putIfAbsent(name, value);
+            return (T) value;
         }
     }
 
