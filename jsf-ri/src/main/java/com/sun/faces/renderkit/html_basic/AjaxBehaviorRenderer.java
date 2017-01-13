@@ -49,7 +49,6 @@ import java.util.logging.Logger;
 import javax.faces.component.ActionSource;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorContext;
@@ -61,6 +60,11 @@ import javax.faces.render.ClientBehaviorRenderer;
 
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
+import java.util.EnumSet;
+import java.util.Set;
+import javax.faces.component.search.SearchExpressionContext;
+import javax.faces.component.search.SearchExpressionHandler;
+import javax.faces.component.search.SearchExpressionHint;
 
 /*
  *<b>AjaxBehaviorRenderer</b> renders Ajax behavior for a component.
@@ -253,9 +257,9 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         ajaxCommand.append(eventName);
         ajaxCommand.append("',");
 
-        appendIds(component, ajaxCommand, execute);
+        appendIds(behaviorContext.getFacesContext(), component, ajaxCommand, execute);
         ajaxCommand.append(",");
-        appendIds(component, ajaxCommand, render);
+        appendIds(behaviorContext.getFacesContext(), component, ajaxCommand, render);
         
         if ((onevent != null) || (onerror != null) || (delay != null) ||
                 (resetValues != null) || !params.isEmpty())  {
@@ -312,8 +316,12 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         return ajaxCommand.toString();
     }
 
+    private static final Set<SearchExpressionHint> EXPRESSION_HINTS =
+            EnumSet.of(SearchExpressionHint.RESOLVE_CLIENT_SIDE, SearchExpressionHint.RESOLVE_SINGLE_COMPONENT);
+    
     // Appends an ids argument to the ajax command
-    private static void appendIds(UIComponent component,
+    private static void appendIds(FacesContext facesContext,
+                                  UIComponent component,
                                   StringBuilder builder,
                                   Collection<String> ids) {
 
@@ -324,6 +332,9 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
 
         builder.append("'");
 
+        SearchExpressionHandler handler = null;
+        SearchExpressionContext searchExpressionContext = null;
+        
         boolean first = true;
 
         for (String id : ids) {
@@ -340,24 +351,18 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
                 id.equals("@form") || id.equals("@this")) {
                 builder.append(id);
             } else {
-                builder.append(getResolvedId(component, id));
+                if (searchExpressionContext == null)  {
+                    searchExpressionContext = SearchExpressionContext.createSearchExpressionContext(
+                            facesContext, component, EXPRESSION_HINTS, null);
+                }
+                if (handler == null) {
+                    handler = facesContext.getApplication().getSearchExpressionHandler();
+                }
+                
+                builder.append(handler.resolveClientId(searchExpressionContext, id));
             }
         }
 
         builder.append("'");
-    }
-
-    // Returns the resolved (client id) for a particular id.
-    private static String getResolvedId(UIComponent component, String id) {
-
-        UIComponent resolvedComponent = component.findComponent(id);
-        if (resolvedComponent == null) {
-            if (id.charAt(0) == UINamingContainer.getSeparatorChar(FacesContext.getCurrentInstance())) {
-                return id.substring(1);
-            }
-            return id;
-        }
-
-        return resolvedComponent.getClientId();
     }
 }
