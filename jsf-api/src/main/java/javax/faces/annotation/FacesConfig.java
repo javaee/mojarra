@@ -52,9 +52,8 @@ import javax.inject.Qualifier;
 /**
  * <p class="changed_added_2_3">The presence of this annotation on a managed
  * bean deployed within an application causes version specific features
- * to be enabled as specified in the enum {@see Version}</p>
+ * to be enabled as specified in the enum {@link Version}</p>
  */
-
 @Qualifier
 @Target(TYPE)
 @Retention(RUNTIME)
@@ -63,7 +62,7 @@ public @interface FacesConfig {
     public static enum Version {
 
         /**
-         * <p clss="changed_added_2_3">This value indicates CDI should be used
+         * <p class="changed_added_2_3">This value indicates CDI should be used
          * for EL resolution as well as enabling JSF CDI injection, as specified
          * in Section 5.6.3 "CDI for EL Resolution" and Section 5.9 "CDI Integration".</p>
          */
