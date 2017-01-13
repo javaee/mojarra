@@ -50,8 +50,8 @@ import javax.servlet.ServletRegistration;
 
 /**
  * <p class="changed_added_2_0"><span
- * class="changed_modified_2_1 changed_modified_2_2">An</span> instance of
- * <code>Resource</code> is a Java object representation of the artifact
+ * class="changed_modified_2_1 changed_modified_2_2 changed_modified_2_3">An</span>
+ * instance of <code>Resource</code> is a Java object representation of the artifact
  * that is served up in response to a <i>resource request</i> from the
  * client.  Instances of <code>Resource</code> are normally created and
  * initialized via calls to {@link ResourceHandler#createResource}.  See
@@ -64,15 +64,15 @@ import javax.servlet.ServletRegistration;
  * @since 2.0
  */
 public abstract class Resource extends ViewResource {
-    
+
     /**
-     * <p class="changed_added_2_0">This constant is used as the key in the 
-     * component attribute map of a composite component to associate 
+     * <p class="changed_added_2_0">This constant is used as the key in the
+     * component attribute map of a composite component to associate
      * the component with its <code>Resource</code> instance.  The
      * value for this key is the actual <code>Resource</code> instance.</p>
-     * 
+     *
      */
-    public static final String COMPONENT_RESOURCE_KEY = 
+    public static final String COMPONENT_RESOURCE_KEY =
             "javax.faces.application.Resource.ComponentResource";
 
 
@@ -103,7 +103,7 @@ public abstract class Resource extends ViewResource {
      * the argument.</p>
      * @param contentType the MIME content-type for this resource.  The
      * default implementation must accept <code>null</code> as a
-     * parameter.  
+     * parameter.
      */
     public void setContentType(String contentType) {
 
@@ -184,7 +184,7 @@ public abstract class Resource extends ViewResource {
      * returns <code>true</code>), return an <code>InputStream</code>
      * containing the bytes of the resource.  Otherwise, throw an
      * <code>IOException</code>.</p>
-     * 
+     *
      * @return an <code>InputStream</code> containing the bytes of the
      * resource.
      *
@@ -218,7 +218,7 @@ public abstract class Resource extends ViewResource {
 
     /**
      * <p class="changed_added_2_0"><span
-     * class="changed_modified_2_2">Return</span> a path to this
+     * class="changed_modified_2_2 changed_modified_2_3">Return</span> a path to this
      * resource such that, when the browser resolves it against the base
      * URI for the view that includes the resource, and issues a GET
      * request to the resultant fully qualified URL, the bytes of the
@@ -242,31 +242,31 @@ public abstract class Resource extends ViewResource {
      * defined by Servlet.12.2.) and the value of the mapping (including the
      * leading '.'  in the case of extension mapping).  For discussion,
      * this will be <em>facesServletMapping</em>.</p>
-     * 
+     *
      * <div class="changed_added_2_3">
      * <p>If exact mapped, <em>result</em> must be the following if and only
      * if the FacesServlet is mapped to the exact URL pattern {@link
      * ResourceHandler#RESOURCE_IDENTIFIER} + {@link #getResourceName}
      * </p>
-     * 
+     *
      * <blockquote>
      * <p><code>result = <em>contextRoot</em> + {@link
      * ResourceHandler#RESOURCE_IDENTIFIER} + {@link #getResourceName}</code></p>
      * </blockquote>
-     * 
-     * <p>If exact mapped, and the FacesServlet is <em>not</em> mapped to the exact 
+     *
+     * <p>If exact mapped, and the FacesServlet is <em>not</em> mapped to the exact
      * URL pattern {@link ResourceHandler#RESOURCE_IDENTIFIER} + {@link #getResourceName}
      * do the following:
      * </p>
-     * 
+     *
      * <p>
-     * Retrieve the existing mappings of the FacesServlet, e.g. using 
+     * Retrieve the existing mappings of the FacesServlet, e.g. using
      * {@link ServletRegistration#getMappings()}, and from those pick any
      * prefix mapping or extension mapping. If no such mapping is found,
-     * throw an {@link IllegalStateException}. If such mapping is found remove 
-     * the <code>*</code> character from that mapping, take that as the new 
+     * throw an {@link IllegalStateException}. If such mapping is found remove
+     * the <code>*</code> character from that mapping, take that as the new
      * <em>facesServletMapping</em> and continue with evaluating this mapping
-     * as specified below for <em>if prefix mapped</em> and for 
+     * as specified below for <em>if prefix mapped</em> and for
      * <em>if extension mapped</em>
      * </div>
      *
@@ -286,7 +286,7 @@ public abstract class Resource extends ViewResource {
      * ResourceHandler#RESOURCE_IDENTIFIER} + {@link #getResourceName} +
      * <em>facesServletMapping</em></code></p>
      * </blockquote>
-     * 
+     *
      * </li>
      *
      * <li class="changed_modified_2_2"><p>Build up a string, called
