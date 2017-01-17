@@ -48,10 +48,10 @@
     <version>@version@</version>
     <packaging>jar</packaging>
     <name>
-        Oracle's implementation of the JSF 2.2 specification API.
+        Oracle's implementation of the JSF 2.3 specification API.
     </name>
     <description>
-        This is the master POM file for Oracle's Implementation of the JSF 2.2 Specification.
+        This is the master POM file for Oracle's Implementation of the JSF 2.3 Specification.
     </description>
     <url>http://java.sun.com/javaee/javaserverfaces/</url>
     <licenses>
@@ -79,9 +79,9 @@
             <timezone>-6</timezone>
         </developer>
         <developer>
-            <id>rogerk</id>
-            <name>Roger Kitain</name>
-            <email>roger.kitain@oracle.com</email>
+            <id>mriem</id>
+            <name>Manfred Riem</name>
+            <email>manfred.riem@oracle.com</email>
             <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
