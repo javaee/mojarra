@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsd:schema xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://xmlns.jcp.org/xml/ns/javaee" version="2.2" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+<xsd:schema xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee" 
+            attributeFormDefault="unqualified" 
+            elementFormDefault="qualified" 
+            targetNamespace="http://xmlns.jcp.org/xml/ns/javaee" 
+            version="2.3" 
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <xsd:include schemaLocation="javaee_7.xsd" />
     <xsd:annotation>
         <xsd:documentation>
@@ -50,7 +56,7 @@
       <![CDATA[
 
       <p>The XML Schema for the JavaServer Faces Application
-      Configuration File (Version 2.2).</p>
+      Configuration File (Version 2.3).</p>
       
       <p>All JavaServer Faces configuration files must indicate
       the JavaServer Faces schema by indicating the JavaServer
@@ -3759,7 +3765,7 @@ which must contain exactly one <code>&lt;flow-id&gt;</code> element.</p>
       ]]></xsd:documentation>
     </xsd:annotation>
     <xsd:restriction base="xsd:token">
-      <xsd:enumeration value="2.2"/>
+      <xsd:enumeration value="2.3"/>
     </xsd:restriction>
   </xsd:simpleType>
 

@@ -3,7 +3,7 @@
             attributeFormDefault="unqualified"
             elementFormDefault="qualified"
             targetNamespace="http://xmlns.jcp.org/xml/ns/javaee"
-            version="2.2"
+            version="2.3"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <xsd:include schemaLocation="javaee_7.xsd"/>
 
@@ -56,7 +56,7 @@
       <![CDATA[[
       <p>
       
-      The XML Schema for the JavaServer Faces (Version 2.2)  
+      The XML Schema for the JavaServer Faces (Version 2.3)  
       Partial Response used in JSF Ajax frameworks.
       
       </p>
