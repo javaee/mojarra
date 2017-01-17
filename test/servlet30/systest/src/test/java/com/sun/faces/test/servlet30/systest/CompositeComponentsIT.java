@@ -144,10 +144,11 @@ public class CompositeComponentsIT {
      * Maps Validator to inputText within composite/validator1.xhtml using only
      * the name attribute.
      * </p>
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testValidator1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -200,10 +201,10 @@ public class CompositeComponentsIT {
         assertNotNull(input);
         return (HtmlPage) input.click();
     }
-    
+
     /**
      * Added for issue 1298.
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
@@ -229,7 +230,7 @@ public class CompositeComponentsIT {
     @Test
     public void testForNoNPE() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/composite/simpleCompositeComponentUsingPage.xhtml");
-        if (page.asXml().contains("Development")) {        
+        if (page.asXml().contains("Development")) {
             HtmlSubmitInput element = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
             page = element.click();
             String pageAsText = page.asText();
@@ -244,10 +245,11 @@ public class CompositeComponentsIT {
      *  Maps ActionListener to commandButton within composite/actionSource1.xhtml using
      *   only the name attribute.
      * </p>
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testActionSource1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -267,10 +269,11 @@ public class CompositeComponentsIT {
      *   Maps ActionListener to commandButton within composite/actionSource2.xhtml using
      *   name and target attributes.
      * </p>
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testActionSource2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -292,10 +295,11 @@ public class CompositeComponentsIT {
      *   which is nested within composite/actionSource3.xhtml. Using the same ID
      *   in the nesting.
      * </p>
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testActionSource3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -319,10 +323,11 @@ public class CompositeComponentsIT {
      *  'targets' attribute within the composite:implementation section
      *  of actionSource4.xhtml.
      * </p>
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testActionSource4() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -333,10 +338,10 @@ public class CompositeComponentsIT {
                 !page.asXml().contains("Serializing Server State: true")) {
             page = webClient.getPage(webUrl + "faces/composite/actionsource.xhtml");
             validateActionMessagePresent(page,
-                                     "form:actionsource4:naming:command");  
+                                     "form:actionsource4:naming:command");
         }
     }
-    
+
     private void validateActionMessagePresent(HtmlPage page, String commandId) throws Exception {
         page = pushButton(page, commandId);
         validateMessage(page, "Action Invoked", commandId);
@@ -347,10 +352,11 @@ public class CompositeComponentsIT {
      *   Maps Validator to inputText within composite/validator2.xhtml using
      *   name and target attributes.
      * </p>
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testValidator2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -372,10 +378,11 @@ public class CompositeComponentsIT {
      *   Maps Validator to inputText within composite/validator2.xhtml using
      *   name and target attributes.
      * </p>
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testValidator3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -400,10 +407,11 @@ public class CompositeComponentsIT {
      *  'targets' attribute within the composite:implementation section
      *  of validator4.xhtml.
      * </p>
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testValidator4() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -443,10 +451,11 @@ public class CompositeComponentsIT {
      *  'targets' attribute within the composite:implementation section
      *  of validator4.xhtml.
      * </p>
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
+    @Ignore
     public void testConverters() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -469,7 +478,7 @@ public class CompositeComponentsIT {
             validateConverterMessages(page, messageSuffixes);
         }
     }
-    
+
     private void validateConverterMessages(HtmlPage page, String[] messageSuffixes) {
 
         List<HtmlUnorderedList> list = page.getBody().getHtmlElementsByTagName("ul");
