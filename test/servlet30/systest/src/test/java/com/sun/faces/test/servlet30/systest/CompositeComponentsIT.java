@@ -149,7 +149,6 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testValidator1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -250,7 +249,6 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testActionSource1() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -274,7 +272,6 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testActionSource2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -300,7 +297,6 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testActionSource3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -328,7 +324,6 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testActionSource4() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -357,7 +352,6 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testValidator2() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -383,7 +377,6 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testValidator3() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -412,7 +405,6 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testValidator4() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
@@ -456,7 +448,6 @@ public class CompositeComponentsIT {
      * @throws Exception when a serious error occurs.
      */
     @Test
-    @Ignore
     public void testConverters() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
         /*
