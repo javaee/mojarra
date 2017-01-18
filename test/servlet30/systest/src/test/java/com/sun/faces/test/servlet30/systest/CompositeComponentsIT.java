@@ -41,13 +41,13 @@ package com.sun.faces.test.servlet30.systest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
 import java.util.List;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
@@ -55,6 +55,7 @@ import static junit.framework.TestCase.fail;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 
 public class CompositeComponentsIT {
 
@@ -210,20 +211,20 @@ public class CompositeComponentsIT {
     @Test
     @Ignore
     public void testMethodExpressionNesting() throws Exception {
-//        HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
-//        /*
-//         * When systest migrated this test was found not to be working on client side state saving
-//         * and when serializing the server state.
-//         */
-//        if (!page.asXml().contains("State Saving Method: client") &&
-//                !page.asXml().contains("Serializing Server State: true")) {
-//            page = webClient.getPage(webUrl + "faces/composite/nesting08.xhtml");
-//            HtmlForm form = page.getForms().get(0);
-//            HtmlSubmitInput button = (HtmlSubmitInput) form.getHtmlElementById("form:submit");
-//            assertNotNull(button);
-//            page = button.click();
-//            assertTrue(page.asText().contains("Action invoked"));
-//        }
+        HtmlPage page = webClient.getPage(webUrl + "faces/preflight.xhtml");
+        /*
+         * When systest migrated this test was found not to be working on client side state saving
+         * and when serializing the server state.
+         */
+        if (!page.asXml().contains("State Saving Method: client") &&
+                !page.asXml().contains("Serializing Server State: true")) {
+            page = webClient.getPage(webUrl + "faces/composite/nesting08.xhtml");
+            HtmlForm form = page.getForms().get(0);
+            HtmlSubmitInput button = (HtmlSubmitInput) form.getHtmlElementById("form:submit");
+            assertNotNull(button);
+            page = button.click();
+            assertTrue(page.asText().contains("Action invoked"));
+        }
     }
 
     //issue 1696
