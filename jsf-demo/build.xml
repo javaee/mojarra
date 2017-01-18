@@ -317,6 +317,9 @@
             </frameset>
             </html>
         </echoxml>
+        <copy todir="${dist.home}/docs/javadocs">
+            <fileset dir="${api.dir}/build/mvn/target/generated-resources/xml/xslt" includes="*.jar"/>
+        </copy>
         <zip basedir="${dist.home}/docs" excludes="*.zip" destfile="${dist.home}/mojarra-@{version}-documentation.zip" />
         <delete dir="${dist.home}/docs/renderkitdocs"/>
         <delete dir="${dist.home}/docs/vdldocs"/>
