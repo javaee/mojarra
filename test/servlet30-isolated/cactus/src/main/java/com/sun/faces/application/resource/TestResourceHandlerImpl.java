@@ -83,33 +83,33 @@ import org.apache.cactus.WebResponse;
 public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     /* HTTP Date format required by the HTTP/1.1 RFC */
-    private static final String RFC1123_DATE_PATTERN =
-          "EEE, dd MMM yyyy HH:mm:ss zzz";
+    private static final String RFC1123_DATE_PATTERN = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
     private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 
-
-     public TestResourceHandlerImpl() {
+    public TestResourceHandlerImpl() {
         super("TestResourceHandlerImpl");
-	initLocalHostPath();
+        initLocalHostPath();
     }
-
 
     public TestResourceHandlerImpl(String name) {
         super(name);
-	initLocalHostPath();
+        initLocalHostPath();
     }
 
     private String path = "localhost:8080";
 
     private void initLocalHostPath() {
-	String containerPort = System.getProperty("container.port");
-	if (null == containerPort || 0 == containerPort.length()) {
-	    containerPort = "8080";
-	}
-	path = "localhost:" + containerPort;
+        String containerPort = System.getProperty("container.port");
+        if (null == containerPort || 0 == containerPort.length()) {
+            containerPort = "8080";
+        }
+        path = "localhost:" + containerPort;
     }
-	
+    
+    public void testAll() {
+        
+    }
 
     @Override
     public void setUp() {
@@ -121,13 +121,11 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
             FacesContext oldContext = FacesContext.getCurrentInstance();
             if (null != oldContext && (oldContext instanceof InitFacesContext)) {
                 // JAVASERVERFACES-2140
-                assert(Util.isUnitTestModeEnabled());
-                System.out.println("Re-initializing ExternalContext with ServletContext from cactus: " +
-                        getConfig().getServletContext());
+                assert (Util.isUnitTestModeEnabled());
+                System.out.println("Re-initializing ExternalContext with ServletContext from cactus: " + getConfig().getServletContext());
                 System.out.flush();
-                ((InitFacesContext)oldContext).reInitializeExternalContext(getConfig().getServletContext());
+                ((InitFacesContext) oldContext).reInitializeExternalContext(getConfig().getServletContext());
             }
-            
 
         } catch (Exception e) {
             fail(e.getMessage());
@@ -135,701 +133,14 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         super.setUp();
     }
 
-
     @Override
     public void tearDown() {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------------ Test Methods
 
-
-    public void tesAjaxIsAvailable() {
-
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-        assertTrue(handler instanceof ResourceHandlerImpl);
-
-        assertNotNull(handler.createResource("jsf.js", "javax.faces"));
-    }
-
-    public void tesAjaxCompression() throws Exception {
-        
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        Resource resource =  handler.createResource("jsf-uncompressed.js", "javax.faces");
-
-        InputStream stream = resource.getInputStream();
-
-        int origSize = getBytes(stream).length;
-
-        resource =  handler.createResource("jsf.js", "javax.faces");
-
-        stream = resource.getInputStream();
-
-        int compSize = getBytes(stream).length;
-
-        //  If we're not getting 30% compression, something's gone horribly wrong.
-        assertTrue("compressed file less than 30% smaller: orig "+origSize+" comp: "+compSize,
-                origSize * 0.7 > compSize);
-
-    }
-
-
-    public void tesCreateResource() throws Exception {
-
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-        assertTrue(handler instanceof ResourceHandlerImpl);
-
-        Resource resource = handler.createResource("duke-nv.gif");
-        assertTrue(resource != null);
-        assertTrue(resource.getLibraryName() == null);
-        assertTrue("duke-nv.gif".equals(resource.getResourceName()));
-        assertTrue("image/gif".equals(resource.getContentType()));
-
-        resource = handler.createResource("duke-nv.gif", "nvLibrary");
-        assertTrue(resource != null);
-        assertTrue("nvLibrary".equals(resource.getLibraryName()));
-        assertTrue("duke-nv.gif".equals(resource.getResourceName()));
-        assertTrue("image/gif".equals(resource.getContentType()));
-
-        resource = handler.createResource("duke-nv.gif", "nvLibrary", "text/xml");
-        assertTrue(resource != null);
-        assertTrue("nvLibrary".equals(resource.getLibraryName()));
-        assertTrue("duke-nv.gif".equals(resource.getResourceName()));
-        assertTrue("text/xml".equals(resource.getContentType()));
-
-        resource = handler.createResource("duke-nv.gif", "nvLibrary", null);
-        assertTrue(resource != null);
-        assertTrue("nvLibrary".equals(resource.getLibraryName()));
-        assertTrue("duke-nv.gif".equals(resource.getResourceName()));
-        assertTrue("image/gif".equals(resource.getContentType()));
-
-        resource = handler.createResource("foo.jpg");
-        assertTrue(resource == null);
-
-        resource = handler.createResource("duke-nv.gif", "nonExistant");
-        assertTrue(resource == null);
-        
-    }
-
-
-    public void beginIsResourceRequestPrefixMapped(WebRequest req) {
-        req.setURL(path, "/test-servlet30_isolated-cactus", "/faces/", "/javax.faces.resource/duke-nv.gif", null);
-    }
-
-    public void tesIsResourceRequestPrefixMapped() throws Exception {
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-
-        assertTrue(handler.isResourceRequest(getFacesContext()));
-    }
-
-
-    public void beginIsResourceRequestExtensionMapped(WebRequest req) {
-        req.setURL(path, "/test-servlet30_isolated-cactus", "/javax.faces.resource/duke-nv.gif.faces", null, null);
-    }
-
-    public void tesIsResourceRequestExtensionMapped() throws Exception {
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-
-        assertTrue(handler.isResourceRequest(getFacesContext()));
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    public void beginHandleResourceRequestExcludesPrefixMapped1(WebRequest req) {
-        req.setURL(path, "/test-servlet30_isolated-cactus", "/faces/", "/javax.faces.resource/test.jsp", null);
-    }
-
-    public void tesHandleResourceRequestExcludesPrefixMapped1() throws Exception {
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-
-        handler.handleResourceRequest(getFacesContext());
-    }
-
-    public void endHandleResourceRequestExcludesPrefixMapped1(WebResponse res) {
-        assertTrue(res.getStatusCode() == 404);
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    public void beginHandleResourceRequestExcludesPrefixMapped2(WebRequest req) {
-        req.setURL(path, "/test-servlet30_isolated-cactus", "/faces/", "/javax.faces.resource/test.properties", null);
-    }
-
-    public void tesHandleResourceRequestExcludesPrefixMapped2() throws Exception {
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-
-        handler.handleResourceRequest(getFacesContext());
-    }
-
-    public void endHandleResourceRequestExcludesPrefixMapped2(WebResponse res) {
-        assertTrue(res.getStatusCode() == 404);
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    public void beginHandleResourceRequestExcludesPrefixMapped3(WebRequest req) {
-        req.setURL(path, "/test-servlet30_isolated-cactus", "/faces/", "/javax.faces.resource/test.xhtml", null);
-    }
-
-    public void tesHandleResourceRequestExcludesPrefixMapped3() throws Exception {
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-
-        handler.handleResourceRequest(getFacesContext());
-    }
-
-    public void endHandleResourceRequestExcludesPrefixMapped3(WebResponse res) {
-        assertTrue(res.getStatusCode() == 404);
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    public void beginHandleResourceRequestExcludesPrefixMapped4(WebRequest req) {
-        req.setURL(path, "/test-servlet30_isolated-cactus", "/faces/", "/javax.faces.resource/test.class", null);
-    }
-
-    public void tesHandleResourceRequestExcludesPrefixMapped4() throws Exception {
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-
-        handler.handleResourceRequest(getFacesContext());
-    }
-
-    public void endHandleResourceRequestExcludesPrefixMapped4(WebResponse res) {
-        assertTrue(res.getStatusCode() == 404);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    public void beginHandleResourceRequestExcludeExtensionMapped1(WebRequest req) {
-        req.setURL(path, "/test-servlet30_isolated-cactus", "/javax.faces.resource/duke-nv.jsp.faces", null, null);
-    }
-
-    public void tesHandleResourceRequestExcludeExtensionMapped1() throws Exception {
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-
-        handler.handleResourceRequest(getFacesContext());
-    }
-
-    public void endHandleResourceRequestExcludesExtensionMapped1(WebResponse res) {
-        assertTrue(res.getStatusCode() == 404);
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    public void beginHandleResourceRequestExcludeExtensionMapped2(WebRequest req) {
-        req.setURL(path, "/test-servlet30_isolated-cactus", "/javax.faces.resource/duke-nv.properties.faces", null, null);
-    }
-
-    public void tesHandleResourceRequestExcludeExtensionMapped2() throws Exception {
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-
-        handler.handleResourceRequest(getFacesContext());
-    }
-
-    public void endHandleResourceRequestExcludesExtensionMapped2(WebResponse res) {
-        assertTrue(res.getStatusCode() == 404);
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    public void beginHandleResourceRequestExcludeExtensionMapped3(WebRequest req) {
-        req.setURL(path, "/test-servlet30_isolated-cactus", "/javax.faces.resource/duke-nv.xhtml.faces", null, null);
-    }
-
-    public void tesHandleResourceRequestExcludeExtensionMapped3() throws Exception {
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-
-        handler.handleResourceRequest(getFacesContext());
-    }
-
-    public void endHandleResourceRequestExcludesExtensionMapped3(WebResponse res) {
-        assertTrue(res.getStatusCode() == 404);
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    public void beginHandleResourceRequestExcludeExtensionMapped4(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.class.faces", null, null);
-    }
-
-    public void tesHandleResourceRequestExcludeExtensionMapped4() throws Exception {
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue(handler != null);
-
-        handler.handleResourceRequest(getFacesContext());
-    }
-
-    public void endHandleResourceRequestExcludesExtensionMapped4(WebResponse res) {
-        assertTrue(res.getStatusCode() == 404);
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    //  The next 5 tests validate a user specified exclude.
-    //  In this case, .gif is excluded as a valid resource request.
-    //  This should cause the default exclusions of .jsp, .class, .xhtml, and
-    //  .properties to now be considered valid
-    ////////////////////////////////////////////////////////////////////////////
-    public void beginUserSpecifiedResourceExclude1(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
-    }
-
-    public void tesUserSpecifiedResourceExclude1() throws Exception {
-        // documenting this once - this is hack in order to support dynamic init
-        // parameters. Unfortunately, the config object (which one can obtain
-        // the ServletContextWrapper from isn't available at the time the
-        // 'begin' methods are invoked.  So instead, leverage the knowledge that
-        // the init parameters are checked when the ResourceHandlerImpl is constructed
-        // and set the init parameters in the context before constructing.
-        WebConfiguration webconfig = WebConfiguration.getInstance(getFacesContext().getExternalContext());
-        webconfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.ResourceExcludes, ".gif");
-        ResourceHandler handler = new ResourceHandlerImpl();
-        Application app = getFacesContext().getApplication();
-        ResourceHandler oldResourceHandler = app.getResourceHandler();
-        app.setResourceHandler(handler);
-
-	try {
-	    handler.handleResourceRequest(getFacesContext());
-	} finally {
-            app.setResourceHandler(oldResourceHandler);
-        }
-
-    }
-
-    public void endUserSpecifiedResourceExclude1(WebResponse res) {
-        assertTrue(res.getStatusCode() == 404);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    public void beginUserSpecifiedResourceExclude2(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/com.sun.faces.application.ApplicationImpl.class.faces", null, null);
-    }
-
-    public void tesUserSpecifiedResourceExclude2() throws Exception {
-        WebConfiguration webconfig = WebConfiguration.getInstance(getFacesContext().getExternalContext());
-        webconfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.ResourceExcludes, ".gif");
-        ResourceHandler handler = new ResourceHandlerImpl();
-        Application app = getFacesContext().getApplication();
-        ResourceHandler oldResourceHandler = app.getResourceHandler();
-        app.setResourceHandler(handler);
-
-	try {
-	    assertTrue(handler.isResourceRequest(getFacesContext()));
-	} finally {
-            app.setResourceHandler(oldResourceHandler);
-        }
-
-    }
-
-    public void endUserSpecifiedResourceExclude2(WebResponse res) {
-        assertTrue(res.getStatusCode() == 200);
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    public void beginUserSpecifiedResourceExclude3(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/com.sun.faces.LogStrings.properties.faces", null, null);
-    }
-
-    public void tesUserSpecifiedResourceExclude3() throws Exception {
-        WebConfiguration webconfig = WebConfiguration.getInstance(getFacesContext().getExternalContext());
-        webconfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.ResourceExcludes, ".gif");
-        ResourceHandler handler = new ResourceHandlerImpl();
-        Application app = getFacesContext().getApplication();
-        ResourceHandler oldResourceHandler = app.getResourceHandler();
-        app.setResourceHandler(handler);
-
-	try {
-	    assertTrue(handler.isResourceRequest(getFacesContext()));
-	} finally {
-            app.setResourceHandler(oldResourceHandler);
-        }
-
-    }
-
-    public void endUserSpecifiedResourceExclude3(WebResponse res) {
-        assertTrue(res.getStatusCode() == 200);
-    }
-
-
-
-    //==========================================================================
-    // Validate a resource streamed from the docroot of a webapp
-    //
-    public void beginHandleResourceRequest1(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
-    }
-
-    public void testHandleResourceRequest1() throws Exception {
-
-//        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-//        assertTrue(handler != null);
-//        HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
-//        TestResponseWrapper wrapper = new TestResponseWrapper(response);
-//        getFacesContext().getExternalContext().setResponse(wrapper);
-//        byte[] control = getBytes(getFacesContext().getExternalContext().getResource("/resources/duke-nv.gif"));
-//        handler.handleResourceRequest(getFacesContext());
-//        byte[] test = wrapper.getBytes();
-//        assertTrue(Arrays.equals(control, test));
-//        assertTrue(response.containsHeader("content-length"));
-//        assertTrue(response.containsHeader("last-modified"));
-//        assertTrue(response.containsHeader("expires"));
-//        assertTrue(response.containsHeader("etag"));
-        
-    }
-
-
-    //==========================================================================
-    // Validate a resource streamed from a JAR
-    //
-    public void beginHandleResourceRequest2(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
-        req.addParameter("ln", "nvLibrary-jar");
-    }
-
-    public void tesHandleResourceRequest2() throws Exception {
-
-//        ResourceHandler handler =
-//              getFacesContext().getApplication().getResourceHandler();
-//        assertTrue(handler != null);
-//        HttpServletResponse response = (HttpServletResponse) getFacesContext()
-//              .getExternalContext().getResponse();
-//        TestResponseWrapper wrapper = new TestResponseWrapper(response);
-//        getFacesContext().getExternalContext().setResponse(wrapper);
-//        byte[] control = getBytes(Util.getCurrentLoader(this)
-//              .getResource("META-INF/resources/nvLibrary-jar/duke-nv.gif"));
-//        handler.handleResourceRequest(getFacesContext());
-//        byte[] test = wrapper.getBytes();
-//        assertTrue(Arrays.equals(control, test));
-//        assertTrue(response.containsHeader("content-length"));
-//        assertTrue(response.containsHeader("last-modified"));
-//        assertTrue(response.containsHeader("expires"));
-//        assertTrue(response.containsHeader("etag"));
-        
-    }
-
-
-    //==========================================================================
-    // Validate a 304 is returned when a request contains the If-Modified-Since
-    // request header and the resource hasn't changed on the server side.
-    //
-    public void beginHandleResourceRequest3(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
-        long 
-                curTime = System.currentTimeMillis(),
-                threeHoursAgo = curTime - 10800000L;
-        facesService.setModificationTime("resources/duke-nv.gif", 
-                threeHoursAgo);
-        facesService.setModificationTime("resources/nvLibrary/duke-nv.gif",
-                threeHoursAgo);
-        SimpleDateFormat format =
-                new SimpleDateFormat(RFC1123_DATE_PATTERN, Locale.US);
-        format.setTimeZone(GMT);
-        Date headerValue = new Date(curTime);
-        
-        req.addParameter("ln", "nvLibrary");
-        req.addHeader("If-Modified-Since", format.format(headerValue));
-    }
-
-
-    public void tesHandleResourceRequest3() throws Exception {
-//        ResourceHandler handler =
-//              getFacesContext().getApplication().getResourceHandler();
-//        assertTrue(handler != null);
-//        handler.handleResourceRequest(getFacesContext());
-    }
-
-    public void endHandleResourceRequest3(WebResponse res) {
-//        assertTrue(res.getStatusCode() == 304);
-    }
-
-
-    //==========================================================================
-    // Validate a 404 is returned when a request for a non existant resource
-    // is made
-    //
-    public void beginHandleResourceRequest4(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/duke-v.gif.faces", null, null);
-        req.addParameter("ln", "nvLibrary");
-    }
-
-
-    public void tesHandleResourceRequest4() throws Exception {
-//        ResourceHandler handler =
-//              getFacesContext().getApplication().getResourceHandler();
-//        assertTrue(handler != null);
-//        handler.handleResourceRequest(getFacesContext());
-    }
-
-    public void endHandleResourceRequest4(WebResponse res) {
-//        assertTrue(res.getStatusCode() == 404);
-    }
-
-
-    //==========================================================================
-    // Validate a 404 is returned when a request for an excluded resource is made
-    //
-    public void beginHandleResourceRequest5(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.class.faces", null, null);
-        req.addParameter("ln", "nvLibrary");
-    }
-
-
-    public void tesHandleResourceRequest5() throws Exception {
-//        ResourceHandler handler =
-//              getFacesContext().getApplication().getResourceHandler();
-//        assertTrue(handler != null);
-//        handler.handleResourceRequest(getFacesContext());
-    }
-
-    public void endHandleResourceRequest5(WebResponse res) {
-//        assertTrue(res.getStatusCode() == 404);
-    }
-
-
-    //==========================================================================
-    // Validate a resource streamed from the docroot of a webapp is compressed
-    //
-    public void beginHandleResourceRequest6(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
-        req.addHeader("accept-encoding", "deflate");
-        req.addHeader("accept-encoding", "gzip");
-    }
-
-    public void tesHandleResourceRequest6() throws Exception {
-
-//        WebConfiguration config = WebConfiguration.getInstance();
-//        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
-//        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
-//        Application app = getFacesContext().getApplication();
-//        ResourceHandler oldResourceHandler = app.getResourceHandler();
-//        associate.setResourceManager(new ResourceManager(associate.getResourceCache()));
-//        ResourceHandler handler = new ResourceHandlerImpl();
-//        app.setResourceHandler(handler);
-//
-//        HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
-//        TestResponseWrapper wrapper = new TestResponseWrapper(response);
-//        getFacesContext().getExternalContext().setResponse(wrapper);
-//        byte[] control = getBytes(getFacesContext().getExternalContext().getResource("/resources/duke-nv.gif"), true);
-//        handler.handleResourceRequest(getFacesContext());
-//        byte[] test = wrapper.getBytes();
-//        try {
-//	    assertTrue(Arrays.equals(control, test));
-//	    assertTrue(response.containsHeader("content-length"));
-//	    assertTrue(response.containsHeader("last-modified"));
-//	    assertTrue(response.containsHeader("expires"));
-//	    assertTrue(response.containsHeader("etag"));
-//	    assertTrue(response.containsHeader("content-encoding"));
-//        } finally {
-//            app.setResourceHandler(oldResourceHandler);
-//        }
-
-    }
-
-
-    //==========================================================================
-    // Validate a resource streamed from a JAR is compressed
-    //
-    public void beginHandleResourceRequest7(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
-        req.addParameter("ln", "nvLibrary-jar");
-        req.addHeader("accept-encoding", "gzip,deflate");
-    }
-
-    public void tesHandleResourceRequest7() throws Exception {
-
-//        WebConfiguration config = WebConfiguration.getInstance();
-//        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
-//        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
-//        Application app = getFacesContext().getApplication();
-//        ResourceHandler oldResourceHandler = app.getResourceHandler();
-//        associate.setResourceManager(new ResourceManager(associate.getResourceCache()));
-//        ResourceHandler handler = new ResourceHandlerImpl();
-//        app.setResourceHandler(handler);
-//        HttpServletResponse response = (HttpServletResponse) getFacesContext()
-//              .getExternalContext().getResponse();
-//        TestResponseWrapper wrapper = new TestResponseWrapper(response);
-//        getFacesContext().getExternalContext().setResponse(wrapper);
-//        byte[] control = getBytes(Util.getCurrentLoader(this)
-//              .getResource("META-INF/resources/nvLibrary-jar/duke-nv.gif"), true);
-//        handler.handleResourceRequest(getFacesContext());
-//        byte[] test = wrapper.getBytes();
-//        try {
-//            assertTrue(Arrays.equals(control, test));
-//            assertTrue(response.containsHeader("content-length"));
-//            assertTrue(response.containsHeader("last-modified"));
-//            assertTrue(response.containsHeader("expires"));
-//            assertTrue(response.containsHeader("etag"));
-//            assertTrue(response.containsHeader("content-encoding"));
-//        } finally {
-//            app.setResourceHandler(oldResourceHandler);
-//        }
-    }
-
-
-
-    public void tesLibraryExistsNegative() throws Exception {
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertNotNull(handler);
-
-        assertFalse(handler.libraryExists("oeunhtnhtnhhnhh"));
-
-    }
-
-
-    //==========================================================================
-    // Validate the fix for issue 1162.
-    //
-    public void beginHandleResourceRequest14(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/web.xml.faces", null, "ln=../WEB-INF");
-    }
-
-    public void tesHandleResourceRequest14() throws Exception {
-
-//        ResourceHandler handler =
-//              getFacesContext().getApplication().getResourceHandler();
-//        assertTrue(handler != null);
-//        handler.handleResourceRequest(getFacesContext());
-        
-    }
-
-    public void endHandleResourceRequest14(WebResponse res) {
-       // assertTrue(res.getStatusCode() == 404);
-    }
-
-
-    //==========================================================================
-    // Validate the fix for issue 1162.
-    //
-    public void beginHandleResourceRequest15(WebRequest req) {
-        req.setURL(path, "/test", "/javax.faces.resource/web.xml.faces", null, "ln=nvLibrary/../../WEB-INF");
-    }
-
-    public void tesHandleResourceRequest15() throws Exception {
-
-//        ResourceHandler handler =
-//              getFacesContext().getApplication().getResourceHandler();
-//        assertTrue(handler != null);
-//        handler.handleResourceRequest(getFacesContext());
-
-    }
-
-    public void endHandleResourceRequest15(WebResponse res) {
-//        assertTrue(res.getStatusCode() == 404);
-    }
-
-
-    //==========================================================================
-    // Validate the fix for issue ????.
-    //
-    public void beginHandleResourceRequest16(WebRequest req) {
-//        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
-//        req.addHeader("accept-encoding", "gzip;q=0, deflate");
-    }
-
-    static class TestInputStreamContainingZeroes extends InputStream {
-        private boolean open = true;
-
-        @Override
-        public int read() throws IOException {
-            return 0;
-        }
-        @Override
-        public void close() throws IOException {
-            open = false;
-        }
-        public boolean isOpen() {
-            return open;
-        }
-    };
-
-    public void tesHandleResourceRequest16() throws Exception {
-
-//        final ResourceHandler originalResourceHandler =
-//                getFacesContext().getApplication().getResourceHandler();
-//
-//        final TestInputStreamContainingZeroes resourceInputStream = new TestInputStreamContainingZeroes();
-//
-//        ResourceHandler resourceHandler = new ResourceHandlerWrapper() {
-//            @Override
-//            public ResourceHandler getWrapped() {
-//                return originalResourceHandler;
-//            }
-//            @Override
-//            public Resource createResource(String resourceName, String libraryName) {
-//                final Resource resource = super.createResource(resourceName, libraryName);
-//                return new ResourceWrapper() {
-//                    @Override
-//                    public Resource getWrapped() {
-//                        return resource;
-//                    }
-//                    @Override
-//                    public InputStream getInputStream() throws IOException {
-//                        return resourceInputStream;
-//                    }
-//                };
-//            }
-//        };
-//
-//        HttpServletResponse wrappedResponse = new HttpServletResponseWrapper(response) {
-//            @Override
-//            public ServletOutputStream getOutputStream() throws IOException {
-//                return new ServletOutputStream() {
-//                    @Override
-//                    public void write(int b) throws IOException {
-//                        throw new IOException("Simulation of broken pipe or connection reset by peer");
-//                    }
-//                    @Override
-//                    public void close() throws IOException {
-//                        throw new IOException("Simulation of broken pipe or connection reset by peer");
-//                    }
-//
-////                    @Override
-////                    public boolean isReady() {
-////                        throw new UnsupportedOperationException("Not supported");
-////                    }
-////
-////                    @Override
-////                    public void setWriteListener(WriteListener wl) {
-////                        throw new UnsupportedOperationException("Not supported");
-////                    }
-//                };
-//            }
-//        };
-//        getFacesContext().getExternalContext().setResponse(wrappedResponse);
-//
-//        getFacesContext().getApplication().setResourceHandler(resourceHandler);
-//        try {
-//            boolean exceptionOccurred = false;
-//            try {
-//                resourceHandler.handleResourceRequest(getFacesContext());
-//            } catch (IOException e) {
-//                exceptionOccurred = true;
-//            }
-//            assertFalse(resourceInputStream.isOpen());
-//            assertFalse(exceptionOccurred);
-//        } finally {
-//            getFacesContext().getApplication().setResourceHandler(originalResourceHandler);
-//        }
-    }
-
-    public void endHandleResourceRequest16(WebResponse res) {
-//        assertTrue(res.getStatusCode() == 404);
-    }
-
-
-// ---------------------------------------------------------- Helper Methods
-
+    // ---------------------------------------------------------- Helper Methods
 
     private byte[] getBytes(URL url) throws Exception {
 
@@ -868,13 +179,12 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     }
 
-
-// ----------------------------------------------------------- Inner Classes
-
+    // ----------------------------------------------------------- Inner Classes
 
     private static class TestResponseWrapper extends HttpServletResponseWrapper {
 
         private TestServletOutputStream out;
+
         public byte[] getBytes() {
             return out.getBytes();
         }
@@ -895,6 +205,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
             public TestServletOutputStream(ServletOutputStream wrapped) {
                 this.wrapped = wrapped;
             }
+
             public void write(int b) throws IOException {
                 wrapped.write(b);
                 out.write(b);
@@ -924,15 +235,15 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
                 return out.toByteArray();
             }
 
-//            @Override
-//            public boolean isReady() {
-//                throw new UnsupportedOperationException("Not supported");
-//            }
-//
-//            @Override
-//            public void setWriteListener(WriteListener wl) {
-//                throw new UnsupportedOperationException("Not supported");
-//            }
+            // @Override
+            // public boolean isReady() {
+            // throw new UnsupportedOperationException("Not supported");
+            // }
+            //
+            // @Override
+            // public void setWriteListener(WriteListener wl) {
+            // throw new UnsupportedOperationException("Not supported");
+            // }
         }
     }
 
