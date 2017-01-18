@@ -1154,6 +1154,15 @@ public class RenderKitUtils {
         return origIdentifier.replace("-", "$_");
     }
 
+    private static UIComponent createJsfJs() {
+
+        UIOutput output = new UIOutput();
+        output.setRendererType("javax.faces.resource.Script");
+        output.getAttributes().put("name", JSF_SCRIPT_RESOURCE_NAME);
+        output.getAttributes().put("library", JSF_SCRIPT_LIBRARY_NAME);
+        return output;
+    }
+
     /**
      * <p>Only install the JSF script resource if it doesn't exist.
      * The resource component will be installed with the target "head".
@@ -1170,11 +1179,7 @@ public class RenderKitUtils {
             return;
         }
 
-        UIOutput output = new UIOutput();
-        output.setRendererType("javax.faces.resource.Script");
-        output.getAttributes().put("name", JSF_SCRIPT_RESOURCE_NAME);
-        output.getAttributes().put("library", JSF_SCRIPT_LIBRARY_NAME);
-        context.getViewRoot().addComponentResource(context, output, "head");
+        context.getViewRoot().addComponentResource(context, createJsfJs(), "head");
     }
 
     /**
@@ -1194,19 +1199,8 @@ public class RenderKitUtils {
             return;
         }
 
-        ExternalContext extContext = context.getExternalContext();
-
         // Since we've now determined that it's not in the page, we need to manually render it.
-        Resource resource = resourceHandler.createResource(JSF_SCRIPT_RESOURCE_NAME, JSF_SCRIPT_LIBRARY_NAME);
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write('\n');
-        writer.startElement("script", null);
-        writer.writeAttribute("type", "text/javascript", null);
-        writer.writeAttribute("src", ((resource != null) ? extContext.encodeResourceURL(resource.getRequestPath()) : ""), null);
-        writer.endElement("script");
-        writer.append('\r');
-        writer.append('\n');
-
+        createJsfJs().encodeAll(context);
         resourceHandler.markResourceRendered(context, JSF_SCRIPT_RESOURCE_NAME, JSF_SCRIPT_LIBRARY_NAME);
     }
 
