@@ -344,6 +344,10 @@ public class DigesterFactory {
                 "/com/sun/faces/javaee_7.xsd"
             },
             {
+                "javaee_8.xsd",
+                "/com/sun/faces/javaee_8.xsd"
+            },
+            {
                 "javaee_web_services_client_1_2.xsd",
                 "/com/sun/faces/javaee_web_services_client_1_2.xsd"
             },
