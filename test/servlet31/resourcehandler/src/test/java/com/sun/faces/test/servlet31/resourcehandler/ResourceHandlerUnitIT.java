@@ -39,6 +39,9 @@
  */
 package com.sun.faces.test.servlet31.resourcehandler;
 
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
+import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M10;
 import static org.junit.Assert.assertFalse;
 
 import org.junit.After;
@@ -47,6 +50,7 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.TextPage;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.sun.faces.test.junit.JsfTest;
 
 public class ResourceHandlerUnitIT {
 
@@ -65,6 +69,7 @@ public class ResourceHandlerUnitIT {
     }
 
     @Test
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testResourceHandlerImplAll() throws Exception {
         TextPage page = webClient.getPage(webUrl + "testHandleResourceRequest");
         
