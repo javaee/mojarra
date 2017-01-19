@@ -518,7 +518,6 @@
             <arg line="-windowtitle 'JSF ${spec.version} View Declaration Language: Facelets Variant'"/>
             <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
             <arg value="${conf.share.dir}/composite.tld"/>
-            <arg value="${conf.share.dir}/facelets_jsf_core.tld"/>
             <arg value="${build.generate.tld.dir}/facelets_html_basic.tld"/>
             <arg value="${conf.share.dir}/jstl-core.tld"/>
             <arg value="${conf.share.dir}/jstl-fn.tld"/>

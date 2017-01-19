@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 2009-2016 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 2009-2017 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -46,8 +46,11 @@
                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_3.xsd"
                 version="2.3">
     <description><![CDATA[
-        The core JavaServer Faces custom actions that are independent of
-        any particular RenderKit.
+
+    <p><span class="changed_modified_2_3">The</span> core JavaServer
+    Faces custom actions that are independent of any particular
+    RenderKit.</p>
+    
     ]]></description>
     <namespace>http://xmlns.jcp.org/jsf/core</namespace>
     <tag>
@@ -181,17 +184,22 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+          <description><![CDATA[
+          
          <p class="changed_added_2_0"><span
          class="changed_modified_2_0_rev_a">Evaluates</span> to
          Collection&lt;String&gt;. This is a space separated list of
-         <span class="changed_modified_2_3">search expressions to components</span> that will participate in the "execute"
-         portion of the Request Processing Lifecycle.  If a literal is
-         specified the ids must be space delimited. <p class="changed_removed_2_3">Any of the keywords
-         "@this", "@form", "@all", "@none" may be specified in the id
-         list.</span> <span class="changed_modified_2_0_rev_a">If not
-         specified, the default value of "@this" is assumed.  For
-         example, <code>@this clientIdOne clientIdTwo</code>.</span></p>            ]]></description>
+         <span class="changed_modified_2_3">search expressions to
+         components</span> that will participate in the "execute"
+         portion of the Request Processing Lifecycle.  <span
+         class="changed_added_2_3">See the javadoc for
+         <code>SearchKeywordResolver</code> for the complete list of
+         keywords.</span> If a literal is specified the ids must be
+         space delimited.  <span class="changed_modified_2_0_rev_a">If
+         not specified, the default value of "@this" is assumed.  For
+         example, <code>@this clientIdOne clientIdTwo</code>.</span></p>
+
+         ]]></description>
             <name>execute</name>
             <required>false</required>
             <type>java.util.Collection</type>
@@ -243,17 +251,22 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description><![CDATA[
+          <description><![CDATA[
+          
          <p class="changed_added_2_0"><span
          class="changed_modified_2_0_rev_a">Evaluates</span> to
-         Collection&lt;String&gt;. The <span class="changed_modified_2_3">search expressions to components</span>
-         that will participate in the "render" portion of the Request Processing
-         Lifecycle.  If a literal is specified the identifiers must be
-         space delimited. <p class="changed_removed_2_3"Any of the keywords "@this", "@form", "@all",
-         "@none" may be specified in the identifier list. </span><span
+         Collection&lt;String&gt;. The <span
+         class="changed_modified_2_3">search expressions to
+         components</span> that will participate in the "render" portion
+         of the Request Processing Lifecycle.  <span
+         class="changed_added_2_3">See the javadoc for
+         <code>SearchKeywordResolver</code> for the complete list of
+         keywords.</span> If a literal is specified the identifiers must
+         be space delimited.  <span
          class="changed_modified_2_0_rev_a">If not specified, the
          default value of "@none" is assumed.  For example, <code>@this
          clientIdOne clientIdTwo</code>.</span></p>
+         
             ]]></description>
             <name>render</name>
             <required>false</required>
@@ -771,8 +784,9 @@ for <code>@NamedEvent</code>.</p>
     <tag>
         <description><![CDATA[
 
-            <p>Register a named facet on the UIComponent associated with
-            the closest parent UIComponent custom action.</p>
+            <p><span class="changed_modified_2_3">Register</span> a named
+            facet on the UIComponent associated with the closest parent
+            UIComponent custom action.</p>
 
             <p class="changed_added_2_3">
               When the facet contains more than one child the children will be
@@ -865,7 +879,7 @@ for <code>@NamedEvent</code>.</p>
 
             <p class="changed_added_2_0">Declare the metadata
             facet for this view. This must be a child of the
-            <code>&amp;lt;f:view&amp;gt;</code>. This tag
+            <code>&lt;f:view&gt;</code>. This tag
             must reside within the top level XHTML file for the given
             viewId<span class="changed_modified_2_0_rev_a">, or in a
             template client, but</span> not in a template. The
@@ -888,40 +902,40 @@ for <code>@NamedEvent</code>.</p>
             </div>
 
             <div class="html4strict" style="font-family: monospace;"><ol><li
-            class="li1"><div class="de1"><span class="sc2">&amp;lt;ui:composition
-            template=<span class="st0">&amp;quot;template.xhtml&amp;quot;</span><span
-            class="kw2">&amp;gt;</span></span></div></li>
-            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
-            <span class="sc2">&amp;lt;ui:define <span class="kw3">name</span>=<span
-            class="st0">&amp;quot;metadata&amp;quot;</span><span
-            class="kw2">&amp;gt;</span></span></div></li>
-            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; <span class="sc2">&amp;lt;f:metadata&amp;gt;</span></div></li>
-            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &amp;nbsp; <span class="sc2">&amp;lt;f:viewParam
-            <span class="kw3">name</span>=<span class="st0">&amp;quot;id&amp;quot;</span>/<span
-            class="kw2">&amp;gt;</span></span></div></li>
-            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; <span class="sc2"><span class="kw2">&amp;lt;</span>/f:metadata&amp;gt;</span></div></li>
-            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
-            <span class="sc2"><span class="kw2">&amp;lt;</span>/ui:define&amp;gt;</span></div></li>
-            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-            <span class="sc2">&amp;lt;ui:define <span class="kw3">name</span>=<span
-            class="st0">&amp;quot;content&amp;quot;</span><span
-            class="kw2">&amp;gt;</span></span></div></li>
-            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &amp;nbsp; <span class="sc2"><span class="kw2">&amp;lt;h1&amp;gt;</span></span>The
+            class="li1"><div class="de1"><span class="sc2">&lt;ui:composition
+            template=<span class="st0">&quot;template.xhtml&quot;</span><span
+            class="kw2">&gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&nbsp; &nbsp;
+            <span class="sc2">&lt;ui:define <span class="kw3">name</span>=<span
+            class="st0">&quot;metadata&quot;</span><span
+            class="kw2">&gt;</span></span></div></li>
+            <li class="li1"><div class="de1">&nbsp; &nbsp;
+            &nbsp; <span class="sc2">&lt;f:metadata&gt;</span></div></li>
+            <li class="li2"><div class="de2">&nbsp; &nbsp;
+            &nbsp; &nbsp; <span class="sc2">&lt;f:viewParam
+            <span class="kw3">name</span>=<span class="st0">&quot;id&quot;</span>/<span
+            class="kw2">&gt;</span></span></div></li>
+            <li class="li1"><div class="de1">&nbsp; &nbsp;
+            &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/f:metadata&gt;</span></div></li>
+            <li class="li2"><div class="de2">&nbsp; &nbsp;
+            <span class="sc2"><span class="kw2">&lt;</span>/ui:define&gt;</span></div></li>
+            <li class="li1"><div class="de1">&nbsp; &nbsp;
+            <span class="sc2">&lt;ui:define <span class="kw3">name</span>=<span
+            class="st0">&quot;content&quot;</span><span
+            class="kw2">&gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&nbsp; &nbsp;
+            &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;h1&gt;</span></span>The
             big news stories of the day<span class="sc2"><span
-            class="kw2">&amp;lt;/h1&amp;gt;</span></span></div></li>
-            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-            <span class="sc2"><span class="kw2">&amp;lt;</span>/ui:define&amp;gt;</span></div></li>
+            class="kw2">&lt;/h1&gt;</span></span></div></li>
+            <li class="li1"><div class="de1">&nbsp; &nbsp;
+            <span class="sc2"><span class="kw2">&lt;</span>/ui:define&gt;</span></div></li>
             <li class="li2"><div class="de2"><span class="sc2"><span
-            class="kw2">&amp;lt;</span>/ui:composition&amp;gt;</span>
+            class="kw2">&lt;</span>/ui:composition&gt;</span>
             </div></li></ol></div></div>
 
             <div class="changed_added_2_0">
             <p>Note line 4. The page author must ensure that the
-            <code>&amp;lt;f:metadata&amp;gt;</code> element does not
+            <code>&lt;f:metadata&gt;</code> element does not
             appear on a template or
             included page. It must reside on the root page that corresponds to
             the
@@ -934,48 +948,48 @@ for <code>@NamedEvent</code>.</p>
 
             <div class="html4strict" style="font-family: monospace;"><ol><li
             class="li1"><div class="de1"><span class="sc2"><span
-            class="kw2">&amp;lt;html</span> xmlns=<span class="st0">&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;</span></div></li>
-            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; xmlns:ui=<span class="st0">&amp;quot;http://xmlns.jcp.org/jsf/facelets&amp;quot;</span></div></li>
-            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; xmlns:f=<span class="st0">&amp;quot;http://xmlns.jcp.org/jsf/core&amp;quot;</span></div></li>
-            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; xml:<span class="kw3">lang</span>=<span
-            class="st0">&amp;quot;en&amp;quot;</span> <span
-            class="kw3">lang</span>=<span class="st0">&amp;quot;en&amp;quot;</span><span
-            class="kw2">&amp;gt;</span></span></div></li>
-            <li class="li1"><div class="de1">&amp;nbsp;</div></li>
+            class="kw2">&lt;html</span> xmlns=<span class="st0">&quot;http://www.w3.org/1999/xhtml&quot;</span></div></li>
+            <li class="li2"><div class="de2">&nbsp; &nbsp;
+            &nbsp; xmlns:ui=<span class="st0">&quot;http://xmlns.jcp.org/jsf/facelets&quot;</span></div></li>
+            <li class="li1"><div class="de1">&nbsp; &nbsp;
+            &nbsp; xmlns:f=<span class="st0">&quot;http://xmlns.jcp.org/jsf/core&quot;</span></div></li>
+            <li class="li2"><div class="de2">&nbsp; &nbsp;
+            &nbsp; xml:<span class="kw3">lang</span>=<span
+            class="st0">&quot;en&quot;</span> <span
+            class="kw3">lang</span>=<span class="st0">&quot;en&quot;</span><span
+            class="kw2">&gt;</span></span></div></li>
+            <li class="li1"><div class="de1">&nbsp;</div></li>
             <li class="li2"><div class="de2"><span class="sc2"><span
-            class="kw2">&amp;lt;body&amp;gt;</span></span></div></li>
-            <li class="li1"><div class="de1"><span class="sc2">&amp;lt;f:view&amp;gt;</span></div></li>
-            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
+            class="kw2">&lt;body&gt;</span></span></div></li>
+            <li class="li1"><div class="de1"><span class="sc2">&lt;f:view&gt;</span></div></li>
+            <li class="li2"><div class="de2">&nbsp; &nbsp;
             </div></li>
-            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &amp;nbsp; <span class="sc2">&amp;lt;ui:insert <span
-            class="kw3">name</span>=<span class="st0">&amp;quot;metadata&amp;quot;</span>/<span
-            class="kw2">&amp;gt;</span></span></div></li>
-            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;</div></li>
-            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-            <span class="sc2"><span class="kw2">&amp;lt;div</span>
-            <span class="kw3">id</span>=<span class="st0">&amp;quot;container&amp;quot;</span><span
-            class="kw2">&amp;gt;</span></span></div></li>
-            <li class="li2"><div class="de2">&amp;nbsp; &amp;nbsp;
-            &amp;nbsp; &amp;nbsp; <span class="sc2">&amp;lt;ui:insert <span
-            class="kw3">name</span>=<span class="st0">&amp;quot;content&amp;quot;</span>/<span
-            class="kw2">&amp;gt;</span></span></div></li>
-            <li class="li1"><div class="de1">&amp;nbsp; &amp;nbsp;
-            <span class="sc2"><span class="kw2">&amp;lt;/div&amp;gt;</span></span></div></li>
+            <li class="li1"><div class="de1">&nbsp; &nbsp;
+            &nbsp; &nbsp; <span class="sc2">&lt;ui:insert <span
+            class="kw3">name</span>=<span class="st0">&quot;metadata&quot;</span>/<span
+            class="kw2">&gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&nbsp; &nbsp;</div></li>
+            <li class="li1"><div class="de1">&nbsp; &nbsp;
+            <span class="sc2"><span class="kw2">&lt;div</span>
+            <span class="kw3">id</span>=<span class="st0">&quot;container&quot;</span><span
+            class="kw2">&gt;</span></span></div></li>
+            <li class="li2"><div class="de2">&nbsp; &nbsp;
+            &nbsp; &nbsp; <span class="sc2">&lt;ui:insert <span
+            class="kw3">name</span>=<span class="st0">&quot;content&quot;</span>/<span
+            class="kw2">&gt;</span></span></div></li>
+            <li class="li1"><div class="de1">&nbsp; &nbsp;
+            <span class="sc2"><span class="kw2">&lt;/div&gt;</span></span></div></li>
             <li class="li2"><div class="de2"><span class="sc2"><span
-            class="kw2">&amp;lt;</span>/f:view&amp;gt;</span></div></li>
+            class="kw2">&lt;</span>/f:view&gt;</span></div></li>
             <li class="li1"><div class="de1"><span class="sc2"><span
-            class="kw2">&amp;lt;/body&amp;gt;</span></span></div></li>
+            class="kw2">&lt;/body&gt;</span></span></div></li>
             <li class="li2"><div class="de2"><span class="sc2"><span
-            class="kw2">&amp;lt;/html&amp;gt;</span></span> </div></li></ol></div></div>
+            class="kw2">&lt;/html&gt;</span></span> </div></li></ol></div></div>
 
             <p>The page author is not <em>required</em> to use
             templating, but if
             they do, it must be done as shown above, (or with
-            <code>&amp;lt;ui:include&amp;gt;</code> in a similar
+            <code>&lt;ui:include&gt;</code> in a similar
             manner).</p>
 
             </div>
@@ -1502,157 +1516,6 @@ of POJOs.
             <name>value</name>
             <required>true</required>
             <type>java.lang.String</type>
-        </attribute>
-    </tag>
-
-    <tag>
-        <description><![CDATA[
-            <p class="changed_added_2_3">
-                Registers a websocket push connection in client side by rendering the necessary scripts.
-                Push messages can be sent from server side via <code>javax.faces.push.PushContext</code> interface.
-                See also <code>javax.faces.push.Push</code> API documentation for an elaborate instruction on how to use <code>&lt;f:websocket&gt;</code>.
-            </p>
-        ]]></description>
-        <tag-name>websocket</tag-name>
-        <component>
-        	<component-type>javax.faces.Websocket</component-type>
-        </component>
-
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_3">
-                	Value binding expression to a backing bean property bound to the component instance for the <code>UIComponent</code> created by this tag.
-                </p>
-            ]]></description>
-            <name>binding</name>
-            <required>false</required>
-            <type>javax.faces.component.UIComponent</type>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_3">
-                	Component identifier of the <code>UIWebsocket</code> component to be created.
-                </p>
-            ]]></description>
-            <name>id</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_3">
-                    The name of the websocket channel.
-                    It may not be an EL expression and it may only contain alphanumeric characters, hyphens, underscores and periods.
-                    All open websockets on the same channel name will receive the same push notification from the server.
-                </p>
-            ]]></description>
-            <name>channel</name>
-            <required>true</required>
-            <type>java.lang.String</type>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_3">
-                    The scope of the websocket channel.
-                    It may not be an EL expression and allowed values are <code>application</code>, <code>session</code> and <code>view</code>, case insensitive.
-                    When the value is <code>application</code>, then all channels with the same name throughout the application will receive the same push message.
-                    When the value is <code>session</code>, then only the channels with the same name in the current user session will receive the same push message.
-                    When the value is <code>view</code>, then only the channel in the current view will receive the push message.
-                    The default scope is <code>application</code>.
-                    When the <code>user</code> attribute is specified, then the default scope is <code>session</code>.
-                </p>
-            ]]></description>
-            <name>scope</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_3">
-                    The user identifier of the websocket channel, so that user-targeted push messages can be sent.
-                    It must implement <code>Serializable</code> and preferably have low memory footprint.
-                    Suggestion: use <code>#{request.remoteUser}</code> or <code>#{someLoggedInUser.id}</code>.
-                    All open websockets on the same channel and user will receive the same push message from the server.
-                </p>
-            ]]></description>
-            <name>user</name>
-            <required>false</required>
-            <type>java.io.Serializable</type>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_3">
-                    The JavaScript event handler function that is invoked when the websocket is opened.
-                    The function will be invoked with one argument: the channel name.
-                </p>
-            ]]></description>
-            <name>onopen</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_3">
-                    The JavaScript event handler function that is invoked when a push message is received from the server.
-                    The function will be invoked with three arguments: the push message, the channel name and the raw <code>MessageEvent</code> itself.
-                </p>
-            ]]></description>
-            <name>onmessage</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_3">
-                    The JavaScript event handler function that is invoked when the websocket is closed.
-                    The function will be invoked with three arguments: the close reason code, the channel name and the raw <code>CloseEvent</code> itself.
-                    Note that this will also be invoked on errors and that you can inspect the close reason code if an error occurred and which one (i.e. when the code is not 1000).
-                    See also 
-                    <a href="http://tools.ietf.org/html/rfc6455#section-7.4.1">RFC 6455 section 7.4.1</a> 
-                    and
-                    <a href="http://docs.oracle.com/javaee/7/api/javax/websocket/CloseReason.CloseCodes.html">CloseCodes</a>
-                    API for an elaborate list of all close codes.
-                </p>
-            ]]></description>
-            <name>onclose</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_3">
-                    Whether to (auto)connect the websocket or not.
-                    Defaults to <code>true</code>.
-                    It's interpreted as a JavaScript instruction whether to open or close the websocket push connection.
-                    This attribute is implicitly re-evaluated on every ajax request by a <code>PreRenderViewEvent</code> listener on the <code>UIViewRoot</code>.
-                    You can also explicitly set it to <code>false</code> and then manually control in JavaScript by <code>jsf.push.open(clientId)</code> and <code>jsf.push.close(clientId)</code>.
-                </p>
-            ]]></description>
-            <name>connected</name>
-            <required>false</required>
-            <type>java.lang.Boolean</type>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[
-                <p class="changed_added_2_3">
-                    Whether to render the websocket scripts or not.
-                    Defaults to <code>true</code>.
-                    This attribute is implicitly re-evaluated on every ajax request by a <code>PreRenderViewEvent</code> listener on the <code>UIViewRoot</code>.
-                    If the value changes to <code>false</code> while the websocket is already opened, then the websocket will implicitly be closed.
-                </p>
-            ]]></description>
-            <name>rendered</name>
-            <required>false</required>
-            <type>java.lang.Boolean</type>
         </attribute>
     </tag>
 
@@ -2940,6 +2803,161 @@ public class BackingBean implements PasswordHolder, Cloneable {
             <name>maxlength</name>
             <required>false</required>
             <type>int</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description><![CDATA[
+
+        <p class="changed_added_2_3">Registers a websocket push
+        connection in client side by rendering the necessary scripts.
+        Push messages can be sent from server side via
+        <code>javax.faces.push.PushContext</code> interface.  See also
+        <code>javax.faces.push.Push</code> API documentation for an
+        elaborate instruction on how to use
+        <code>&lt;f:websocket&gt;</code>.  </p>
+                
+        ]]></description>
+        <tag-name>websocket</tag-name>
+        <component>
+        	<component-type>javax.faces.Websocket</component-type>
+        </component>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                	Value binding expression to a backing bean property bound to the component instance for the <code>UIComponent</code> created by this tag.
+                </p>
+            ]]></description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                	Component identifier of the <code>UIWebsocket</code> component to be created.
+                </p>
+            ]]></description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    The name of the websocket channel.
+                    It may not be an EL expression and it may only contain alphanumeric characters, hyphens, underscores and periods.
+                    All open websockets on the same channel name will receive the same push notification from the server.
+                </p>
+            ]]></description>
+            <name>channel</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    The scope of the websocket channel.
+                    It may not be an EL expression and allowed values are <code>application</code>, <code>session</code> and <code>view</code>, case insensitive.
+                    When the value is <code>application</code>, then all channels with the same name throughout the application will receive the same push message.
+                    When the value is <code>session</code>, then only the channels with the same name in the current user session will receive the same push message.
+                    When the value is <code>view</code>, then only the channel in the current view will receive the push message.
+                    The default scope is <code>application</code>.
+                    When the <code>user</code> attribute is specified, then the default scope is <code>session</code>.
+                </p>
+            ]]></description>
+            <name>scope</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    The user identifier of the websocket channel, so that user-targeted push messages can be sent.
+                    It must implement <code>Serializable</code> and preferably have low memory footprint.
+                    Suggestion: use <code>#{request.remoteUser}</code> or <code>#{someLoggedInUser.id}</code>.
+                    All open websockets on the same channel and user will receive the same push message from the server.
+                </p>
+            ]]></description>
+            <name>user</name>
+            <required>false</required>
+            <type>java.io.Serializable</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    The JavaScript event handler function that is invoked when the websocket is opened.
+                    The function will be invoked with one argument: the channel name.
+                </p>
+            ]]></description>
+            <name>onopen</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    The JavaScript event handler function that is invoked when a push message is received from the server.
+                    The function will be invoked with three arguments: the push message, the channel name and the raw <code>MessageEvent</code> itself.
+                </p>
+            ]]></description>
+            <name>onmessage</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    The JavaScript event handler function that is invoked when the websocket is closed.
+                    The function will be invoked with three arguments: the close reason code, the channel name and the raw <code>CloseEvent</code> itself.
+                    Note that this will also be invoked on errors and that you can inspect the close reason code if an error occurred and which one (i.e. when the code is not 1000).
+                    See also 
+                    <a href="http://tools.ietf.org/html/rfc6455#section-7.4.1">RFC 6455 section 7.4.1</a> 
+                    and
+                    <a href="http://docs.oracle.com/javaee/7/api/javax/websocket/CloseReason.CloseCodes.html">CloseCodes</a>
+                    API for an elaborate list of all close codes.
+                </p>
+            ]]></description>
+            <name>onclose</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    Whether to (auto)connect the websocket or not.
+                    Defaults to <code>true</code>.
+                    It's interpreted as a JavaScript instruction whether to open or close the websocket push connection.
+                    This attribute is implicitly re-evaluated on every ajax request by a <code>PreRenderViewEvent</code> listener on the <code>UIViewRoot</code>.
+                    You can also explicitly set it to <code>false</code> and then manually control in JavaScript by <code>jsf.push.open(clientId)</code> and <code>jsf.push.close(clientId)</code>.
+                </p>
+            ]]></description>
+            <name>connected</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[
+                <p class="changed_added_2_3">
+                    Whether to render the websocket scripts or not.
+                    Defaults to <code>true</code>.
+                    This attribute is implicitly re-evaluated on every ajax request by a <code>PreRenderViewEvent</code> listener on the <code>UIViewRoot</code>.
+                    If the value changes to <code>false</code> while the websocket is already opened, then the websocket will implicitly be closed.
+                </p>
+            ]]></description>
+            <name>rendered</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
         </attribute>
     </tag>
 
