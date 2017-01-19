@@ -59,7 +59,7 @@
     <property name="Name" value="JavaServer Faces"/>
     <property name="name" value="jsf-demo"/>
     <property name="javaserverfaces-spec-eg.dir" 
-              value="${jsf.build.home}/../javaserverfaces-spec-eg-trunk"/>
+              value="${jsf.build.home}/../javaserverfaces-spec-eg~git"/>
 
     <property name="build.home" value="${basedir}/build"/>
 

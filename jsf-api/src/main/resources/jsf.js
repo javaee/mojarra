@@ -74,7 +74,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
 
     /**
 
-     * <span class="changed_modified_2_2">The namespace for Ajax
+     * <span class="changed_modified_2_2 changed_modified_2_3">The namespace for Ajax
      * functionality.</span>
 
      * @name jsf.ajax

@@ -478,18 +478,17 @@
       element encapsulates information specific to a JSF
       UIComponent.</p>
 
-      ]]></xsd:documentation>
-<!--
-
 <div class="changed_added_2_2 changed_deleted_2_3">
 
-<p>This element must have exactly one of
+<p>As of 2.3 of the specification, this requirement is no longer
+present: This element must have exactly one of
 <code>&lt;component-type&gt;</code>, <code>&lt;resource-id&gt;</code>,
 or <code>&lt;handler-class&gt;</code> among its child elements.</p>
 
 </div>
-       
--->
+
+      ]]></xsd:documentation>
+
     </xsd:annotation>
     <xsd:sequence>
       <xsd:group ref="javaee:descriptionGroup"/>

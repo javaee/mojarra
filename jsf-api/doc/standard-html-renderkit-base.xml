@@ -1748,19 +1748,20 @@
             <description>
                 <![CDATA[
 
-      <p><span class="changed_modified_2_0_rev_a">Renders</span> an HTML
-      "table" element compliant with the HTML 401 specification.  Render
-      the "caption" facet, if present, inside a "caption" element
-      immediately below the "table" element.  If the "captionClass"
-      attribute is specified, render its value as the value of the
-      "class" attribute on the "caption" element.  If the "captionStyle"
-      attribute is specified, render its value as the value of the
-      "style" attribute on the "caption" element.</p> <p>Please consult
-      the javadoc for <code>UIData</code> to supplement this
-      specification.  If the "styleClass" attribute is specified, render
-      its value as the value of the "class" attribute on the "table"
-      element.  Any ignored-by-renderer attributes are also rendered on the
-      "table" element.  </p>
+      <p><span class="changed_modified_2_0_rev_a
+      changed_modified_2_3">Renders</span> an HTML "table" element
+      compliant with the HTML 401 specification.  Render the "caption"
+      facet, if present, inside a "caption" element immediately below
+      the "table" element.  If the "captionClass" attribute is
+      specified, render its value as the value of the "class" attribute
+      on the "caption" element.  If the "captionStyle" attribute is
+      specified, render its value as the value of the "style" attribute
+      on the "caption" element.</p> <p>Please consult the javadoc for
+      <code>UIData</code> to supplement this specification.  If the
+      "styleClass" attribute is specified, render its value as the value
+      of the "class" attribute on the "table" element.  Any
+      ignored-by-renderer attributes are also rendered on the "table"
+      element.  </p>
 
      <p>Column Groups</p>
 
@@ -2551,7 +2552,12 @@
 
           <description>
 
-            <![CDATA[Renders an HTML "label" element.  Render the
+            <![CDATA[
+
+            <p><span class="changed_modified_2_3">Renders</span> an HTML
+            "label" element.</p>
+
+            <p>Render the
             current value of the component as label text if it is
             specified. If a "for" attribute is specified, find the
             component specified by the value of the "for" attribute
@@ -2559,7 +2565,10 @@
             <code>SearchExpressionHandler</code></span>, and render its
             client id as the value of the "for" attribute.  If
             "styleClass" attribute is specified, render its value as the
-            value of the "class" attribute.]]>
+            value of the "class" attribute.
+            </p>
+
+            ]]>
 
           </description>
             <component-family>javax.faces.Output</component-family>

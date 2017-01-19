@@ -218,7 +218,17 @@
     
       <property>
         <description>
-          Assigns one or more space-separated CSS class names to each "tr"
+
+          <![CDATA[
+
+          <div class="changed_added_2_3">
+
+          <p>Assigns one or more space-separated CSS class names to each
+          "tr"</p>
+
+          </div>
+
+          ]]>
         </description>
         <display-name>Row CSS Class</display-name>
         <icon></icon>

@@ -1,6 +1,13 @@
     <tag>
         <description>
-            <![CDATA[<p>Renders a UIComponent that represents a single column of data within a parent <code>UIData</code> component.</p>]]>
+
+         <![CDATA[
+
+           <p><span class="changed_modified_2_3">Renders</span> a
+           UIComponent that represents a single column of data within a
+           parent <code>UIData</code> component.</p>
+
+        ]]>
         </description>
         <name>
             column
@@ -25,6 +32,32 @@
             </required>
             <deferred-value>
                 <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+              <![CDATA[
+
+              <div class="changed_added_2_3">
+
+                <p>Space-separated list of CSS style class(es) that will
+                be applied to the "td" of this column.</p>
+
+              </div>
+
+                
+              ]]>
+            </description>
+            <name>
+                footerClass
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
             </deferred-value>
         </attribute>
         <attribute>
