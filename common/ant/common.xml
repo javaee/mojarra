@@ -638,6 +638,56 @@
 
     </macrodef>
 
+    <macrodef name="jsf.gitinfo">
+        <sequential>
+            <if>
+                <os family="windows"/>
+                <then>
+                    <property name="git.cmd" value="git.exe"/>
+                </then>
+                <else>
+                    <property name="git.cmd" value="git"/>
+                </else>
+            </if>
+            <var name="gitinfo.out" unset="true" />
+            <var name="gitinfo.to.process" unset="true" />
+            <var name="git.last.sha1" unset="true" />
+
+            <exec os="SunOS" dir="${jsf.build.home}" failonerror="false" failifexecutionfails="false"
+                  resultproperty="gitinfo.result"
+                  executable="${git.cmd}" outputproperty="git.last.sha1">
+                <arg line="rev-parse HEAD"/>
+            </exec>
+            <exec os="Linux" dir="${jsf.build.home}" failonerror="false" failifexecutionfails="false"
+                  resultproperty="gitinfo.result"
+                  executable="${git.cmd}" outputproperty="git.last.sha1">
+                <arg line="rev-parse HEAD"/>
+
+            </exec>
+            <exec osfamily="windows" dir="${jsf.build.home}" executable="${git.cmd}"
+                  resultproperty="gitinfo.result"
+                  failonerror="false" failifexecutionfails="false" outputproperty="git.last.sha1">
+                <arg line="rev-parse HEAD"/>
+            </exec>
+            <exec os="Mac OS X" dir="${jsf.build.home}" executable="${git.cmd}"
+                  resultproperty="gitinfo.result"
+                  failonerror="false" failifexecutionfails="false" outputproperty="git.last.sha1">
+                <arg line="rev-parse HEAD"/>
+            </exec>
+
+            <if>
+                <not>
+                    <isset property="git.last.sha1" />
+                </not>
+                <then>
+                    <property name="git.last.sha1" value="unable to get git info" />
+                </then>
+            </if>
+
+        </sequential>
+
+    </macrodef>
+
 
     <!-- Change bundle target(s) -->
 
