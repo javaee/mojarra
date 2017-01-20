@@ -51,7 +51,10 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.TextPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import org.junit.runner.RunWith;
 
+@RunWith(JsfTestRunner.class)
 public class ResourceHandlerUnitIT {
 
     private String webUrl;
