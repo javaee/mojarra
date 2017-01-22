@@ -60,6 +60,7 @@
     </dependencies>
     <modules>
         <module>el</module>
+        <module>exactMapping</module>
         <module>faceletCacheFactory</module>
         <module>facelets</module>
         <module>getViews</module>
