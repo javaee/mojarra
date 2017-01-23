@@ -101,13 +101,13 @@ public class Spec1396IT {
             try {
                 System.out.println("Wait until WS push - iteration #" + i);
                 Thread.sleep(1000); // waitForBackgroundJavaScript doesn't wait until the WS push is arrived.
-        
+
                 assertTrue(page.getHtmlElementById("form:button").asText().equals("pushed!"));
                 assertTrue(page.getHtmlElementById("user").asText().equals("pushed!"));
                 assertTrue(page.getHtmlElementById("ajaxOutput").asText().equals("pushed!"));
                 
                 break;
-            } catch (Exception e) {
+            } catch (Error e) {
                 e.printStackTrace();
             }
         }
