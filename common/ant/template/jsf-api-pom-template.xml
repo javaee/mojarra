@@ -88,6 +88,15 @@
             </roles>
             <timezone>-6</timezone>
         </developer>
+        <developer>
+            <id>arjan_t</id>
+            <name>Arjan Tijms</name>
+            <email>arjan.tijms@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
     </developers>
     <distributionManagement>
       <snapshotRepository>
