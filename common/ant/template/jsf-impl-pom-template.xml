@@ -89,6 +89,15 @@
             <timezone>-6</timezone>
         </developer>
         <developer>
+            <id>juneau001</id>
+            <name>Josh Juneau</name>
+            <email>juneau001@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
             <id>balusc</id>
             <name>Bauke Scholtz</name>
             <email>balusc@gmail.com</email>
