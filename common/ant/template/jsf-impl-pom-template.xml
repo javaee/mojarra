@@ -79,7 +79,17 @@
             <timezone>-6</timezone>
         </developer>
         <developer>
-            <id>mriem</id>
+            <id>ren.zhijun.oracle</id>
+            <name>Zhijun Ren</name>
+            <email>ren.zhijun@oracle.com</email>
+            <organization>Oracle America, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <id>manfredriem</id>
             <name>Manfred Riem</name>
             <email>manfred.riem@oracle.com</email>
             <organization>Oracle America, Inc.</organization>
@@ -96,7 +106,15 @@
                 <role>developer</role>
             </roles>
             <timezone>-6</timezone>
-        </developer>
+        </developer>       
+        <developer>
+            <id>ruolli</id>
+            <name>Ruolin Li</name>
+            <email>ruolin.li@oracle.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>     
         <developer>
             <id>balusc</id>
             <name>Bauke Scholtz</name>
@@ -114,6 +132,14 @@
                 <role>developer</role>
             </roles>
             <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>emma0221</id>
+            <name>Xinyuan Zang</name>
+            <email>xinyuan.zhang@oracle.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
         </developer>
     </developers>
     <distributionManagement>
