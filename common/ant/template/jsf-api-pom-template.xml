@@ -86,7 +86,7 @@
             <roles>
                 <role>project-owner</role>
             </roles>
-            <timezone>-6</timezone>
+            <timezone>-7</timezone>
         </developer>
         <developer>
             <id>arjan_t</id>

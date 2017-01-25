@@ -389,9 +389,14 @@
                                         <unzip src="${glassfish.tck.zip.file}" dest=".." overwrite="true"/>
                                         <mkdir dir="../jsftck/report.dir"/>
                                         <mkdir dir="../jsftck/work.dir"/>
+                                        <!--
+                                            Initial release of TCK does not have an exclude file,
+                                            so this is why the 3 lines below are currently commented out.
+                                            
                                         <delete file="../ts.jtx" failonerror="false"/>
                                         <get src="${glassfish.tck.exclude.url}" dest="../ts.jtx"/>
                                         <copy force="true" file="../ts.jtx" tofile="../jsftck/bin/ts.jtx"/>
+                                          -->
                                         <replaceregexp file="../jsftck/bin/ts.jte" 
                                                        match="sigTestClasspath=(.*)"
                                                        replace="sigTestClasspath=${sigTestClasspath}"
