@@ -99,6 +99,20 @@
             <timezone>-6</timezone>
         </developer>
         <developer>
+            <id>juangon</id>
+            <name>Juan Gonzalez</name>
+            <email>juangon@gmail.com</email>
+            <organization>Liferay, Inc.</organization>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>ngriffin7a</id>
+            <name>Neil Griffin</name>
+            <email>neil.griffin.scm@gmail.com</email>
+            <organization>Liferay, Inc.</organization>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
             <id>juneau001</id>
             <name>Josh Juneau</name>
             <email>juneau001@gmail.com</email>
@@ -123,6 +137,20 @@
                 <role>developer</role>
             </roles>
             <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>vsingleton</id>
+            <name>Vernon Singleton</name>
+            <email>vsingleton@gmail.com</email>
+            <organization>Liferay, Inc.</organization>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <id>stiemannkj1</id>
+            <name>Kyle Stiemann</name>
+            <email>stiemannkj1@gmail.com</email>
+            <organization>Liferay, Inc.</organization>
+            <timezone>-5</timezone>
         </developer>
         <developer>
             <id>arjan_t</id>
