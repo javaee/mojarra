@@ -2024,15 +2024,21 @@ public abstract class Application {
     }
 
     /**
-     * <p class="changed_added_2_3">Cause an the argument <code>resolver</code> to be added to the resolver chain.
+     * <p class="changed_added_2_3">Cause the argument
+     * <code>resolver</code> to be added to the head of the resolver
+     * chain.</p>
      *
-     * It is not possible to remove an {@link SearchKeywordResolver}
+     * <div class="changed_added_2_3">
+     *
+     * <p>It is not possible to remove a {@link SearchKeywordResolver}
      * registered with this method, once it has been registered.</p>
      *
      * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * {@link Application}.</p>
+     *
+     * </div>
      *
      * @throws IllegalStateException if called after the first
      *      request to the {@link javax.faces.webapp.FacesServlet} has been serviced.
