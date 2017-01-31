@@ -49,6 +49,8 @@ import javax.faces.FacesException;
  */
 public class ComponentNotFoundException extends FacesException {
 
+    private static final long serialVersionUID = -8962632721771880921L;
+
     /**
      * <p class="changed_added_2_3">Construct a new exception with no detail message or root cause.</p>
      * 
