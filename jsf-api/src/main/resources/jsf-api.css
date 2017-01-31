@@ -716,17 +716,22 @@ div.contentContainer ul.blockList li.blockList h2{
                  border-top:none; border-bottom:none; border-color:red;
                  text-decoration: line-through; }
 
+   /*
 a[href^="#type_faces-config-protected-viewsType"], a[href^="#type_faces-config-flow-definitionType"], a[href^="#type_faces-config-flow-definition-switchType"], a[href^="#type_faces-config-flow-definition-switch-defaultType"], a[href^="#type_faces-config-flow-definition-initializerType"], a[href^="#type_faces-config-flow-definition-finalizerType"], a[href^="#type_faces-config-flow-definition-faces-flow-returnType"], a[href^="#type_faces-config-application-resource-library-contracts-contract-mappingType"], a[href^="#type_faces-config-application-resource-library-contractsType"] { cursor: url(changed_added_2_3_cursor.cur), auto;
                  background: url(changed_added_2_3.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:green 
 }
+*/
 
+   /**
 a[href^="#type_facelet-taglib-tag-componentType"] { cursor: url(changed_modified_2_3_cursor.cur), auto;
                  background: url(changed_modified_2_3.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:green 
 }
+
+**/
 
