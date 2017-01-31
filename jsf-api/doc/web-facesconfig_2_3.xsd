@@ -584,11 +584,11 @@
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
-           <p> The "search-keyword-resolver" element contains the fully
-            qualified class name of the concrete
-            javax.faces.component.search.SearchExpressionHandler implementation class
-            that will be used for processing of
-            a search expression.</p>
+           <p class="changed_added_2_3">The "search-expression-handler"
+           element contains the fully qualified class name of the
+           concrete javax.faces.component.search.SearchExpressionHandler
+           implementation class that will be used for processing of a
+           search expression.</p>
             
           ]]></xsd:documentation>
         </xsd:annotation>
@@ -598,11 +598,11 @@
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
-           <p> The "search-keyword-resolver" element contains the fully
-            qualified class name of the concrete
-            javax.faces.component.search.SearchKeywordResolver implementation class
-            that will be used during the processing of
-            a search expression keyword.</p>
+           <p class="changed_added_2_3"> The "search-keyword-resolver"
+           element contains the fully qualified class name of the
+           concrete javax.faces.component.search.SearchKeywordResolver
+           implementation class that will be used during the processing
+           of a search expression keyword.</p>
             
           ]]></xsd:documentation>
         </xsd:annotation>
@@ -996,12 +996,13 @@
         <xsd:annotation>
           <xsd:documentation><![CDATA[
 
-           <p> The "search-expression-context-factory" element contains the
-            fully qualified class name of the concrete
-            SearchExpressionContextFactory implementation class that will
-            be called when
-            FactoryFinder.getFactory(SEARCH_EXPRESSION_CONTEXT_FACTORY) is
-            called.</p>
+           <p class="changed_added_2_3"> The
+           "search-expression-context-factory" element contains the
+           fully qualified class name of the concrete
+           SearchExpressionContextFactory implementation class that will
+           be called when
+           FactoryFinder.getFactory(SEARCH_EXPRESSION_CONTEXT_FACTORY)
+           is called.</p>
             
           ]]></xsd:documentation>
         </xsd:annotation>
