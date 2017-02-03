@@ -15,9 +15,9 @@
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
-        <groupId>net.java</groupId>
-        <artifactId>jvnet-parent</artifactId>
-        <version>5</version>
+       <groupId>com.sun.faces</groupId>
+        <artifactId>project</artifactId>
+        <version>2.3.0-m10-SNAPSHOT</version>
     </parent>
     
     <groupId>org.glassfish</groupId>
@@ -1009,6 +1009,11 @@
                         <artifactId>commons-digester</artifactId>
                         <version>2.1</version>
                     </dependency>
+                    <dependency>
+                        <groupId>com.sun.faces.build</groupId>
+                        <artifactId>jsf-tools</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
                 </dependencies>
             </plugin>
             
@@ -1045,7 +1050,7 @@
                 </executions>
             </plugin>
             
-           <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
