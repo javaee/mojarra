@@ -1081,15 +1081,17 @@ public class RenderKitUtils {
             setScriptAsRendered(context);
             return;
         }
-        // Since we've now determined that it's not in the page, we need to add it.
 
+        ExternalContext extContext = context.getExternalContext();
+
+        // Since we've now determined that it's not in the page, we need to add it.
         ResourceHandler handler = context.getApplication().getResourceHandler();
         Resource resource = handler.createResource(name, library);
         ResponseWriter writer = context.getResponseWriter();
         writer.write('\n');
         writer.startElement("script", null);
         writer.writeAttribute("type", "text/javascript", null);
-        writer.writeAttribute("src", ((resource != null) ? resource.getRequestPath() : ""), null);
+        writer.writeAttribute("src", ((resource != null) ? extContext.encodeResourceURL(resource.getRequestPath()) : ""), null);
         writer.endElement("script");
         writer.append('\r');
         writer.append('\n');
