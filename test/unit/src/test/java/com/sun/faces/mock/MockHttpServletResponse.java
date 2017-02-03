@@ -235,4 +235,9 @@ public class MockHttpServletResponse implements HttpServletResponse {
     public Collection<String> getHeaderNames() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public void setContentLengthLong(long len) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

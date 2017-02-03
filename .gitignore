@@ -24,7 +24,7 @@ spi/**/.classpath
 spi/**/.project
 impl/**/.classpath
 impl/**/.project
-impl/src/**
+impl/src/main/**
 impl/bnd.bnd
 impl/strict-impl/src/**
 api/**/.classpath
