@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -65,13 +65,13 @@
     </licenses>
     <scm>
         <url>http://java.net/projects/mojarra/sources</url>
-        <connection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</connection>
+        <connection>scm:git:git://java.net/mojarra~git</connection>
     </scm>
     <developers>
         <developer>
             <id>edburns</id>
             <name>Ed Burns</name>
-            <email>ed.burns@sun.com</email>
+            <email>edward.burns@oracle.com</email>
             <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
@@ -312,39 +312,88 @@
         </mailingList>
     </mailingLists>
     <contributors>
-        <contributor>
-            <name>Craig McClanahan</name>
-        </contributor>
-        <contributor>
-            <name>Deepak Gothe</name>
-        </contributor>
-        <contributor>
-            <name>Gregory Murray</name>
-        </contributor>
-        <contributor>
-            <name>Justyna Horwat</name>
-        </contributor>
-        <contributor>
-            <name>Jayashri Visvanathan</name>
-        </contributor>
-        <contributor>
-            <name>Jennifer Ball</name>
-        </contributor>
-        <contributor>
-            <name>Jacob Hookom</name>
-        </contributor>
-        <contributor>
-            <name>Raj Premkumar</name>
-        </contributor>
-        <contributor>
-            <name>Stan Silvert</name>
-        </contributor>
-        <contributor>
-            <name>Mike Youngstrom</name>
-        </contributor>
-        <contributor>
-            <name>Jason Lee</name>
-        </contributor>
+        <contributor><name>Dan Allen</name></contributor>
+        <contributor><name>Thomas Andraschko</name></contributor>
+        <contributor><name>Thomas Asel</name></contributor>
+        <contributor><name>Jennifer Ball</name></contributor>
+        <contributor><name>Lincoln Baxter III</NAME></CONTRIBUTOR>
+        <contributor><name>Hans Bergsnten</name></contributor>
+        <contributor><name>Ed Burns</name></contributor>
+        <contributor><name>Shawn Bayern</name></contributor>
+        <contributor><name>Joseph Berkovitz</name></contributor>
+        <contributor><name>Dennis Bynre</name></contributor>
+        <contributor><name>Frank Caputo</name></contributor>
+        <contributor><name>Pete Carapetyan</name></contributor>
+        <contributor><name>Cagatay Civici</name></contributor>
+        <contributor><name>Ryan Delaplante</name></contributor>
+        <contributor><name>Keith Donald</name></contributor>
+        <contributor><name>Jim Driscoll</name></contributor>
+        <contributor><name>Hanspeter Dunnenberger</name></contributor>
+        <contributor><name>Ken Finnigan</name></contributor>
+        <contributor><name>Amy Fowler</name></contributor>
+        <contributor><name>Mike Freedman</name></contributor>
+        <contributor><name>Kin Fyten</name></contributor>
+        <contributor><name>David Geary</name></contributor>
+        <contributor><name>Manfred Geiler</name></contributor>
+        <contributor><name>Ted Goddard</name></contributor>
+        <contributor><name>Juan Gonzalez</name></contributor>
+        <contributor><name>Jeremy Grelle</name></contributor>
+        <contributor><name>Neil Griffin</name></contributor>
+        <contributor><name>Rick Hightower</name></contributor>
+        <contributor><name>Jacob Hookom</name></contributor>
+        <contributor><name>Justyna Horwat</name></contributor>
+        <contributor><name>Alexander Jesse</name></contributor>
+        <contributor><name>Josh Juneau</name></contributor>
+        <contributor><name>Max Katz</name></contributor>
+        <contributor><name>Roger Keayes</name></contributor>
+        <contributor><name>Gavin King</name></contributor>
+        <contributor><name>Roger Kitain</name></contributor>
+        <contributor><name>Eric Lazarus</name></contributor>
+        <contributor><name>Brian Leatham</name></contributor>
+        <contributor><name>Jason Lee</name></contributor>
+        <contributor><name>Felipe Leme</name></contributor>
+        <contributor><name>Cody Lerum</name></contributor>
+        <contributor><name>Ryan Lubke</name></contributor>
+        <contributor><name>Barbara Louis</name></contributor>
+        <contributor><name>Kito Mann</name></contributor>
+        <contributor><name>Martin Marinschek</name></contributor>
+        <contributor><name>Kumar Mettu</name></contributor>
+        <contributor><name>Craig McClanahan</name></contributor>
+        <contributor><name>Pete Muir</name></contributor>
+        <contributor><name>Bernd Müller</name></contributor>
+        <contributor><name>Michael Müller</name></contributor>
+        <contributor><name>Hans Muller</name></contributor>
+        <contributor><name>Michael Nash</name></contributor>
+        <contributor><name>Paul Nicolucci</name></contributor>
+        <contributor><name>Imre Osswald</name></contributor>
+        <contributor><name>Joe Ottinger</name></contributor>
+        <contributor><name>Ken Paulsen</name></contributor>
+        <contributor><name>Dhiru Pandey</name></contributor>
+        <contributor><name>Raj Premkumar</name></contributor>
+        <contributor><name>Werner Punz</name></contributor>
+        <contributor><name>Matt Raible</name></contributor>
+        <contributor><name>Manfred Riem</name></contributor>
+        <contributor><name>Hazem Saleh</name></contributor>
+        <contributor><name>Bauke Schotz</name></contributor>
+        <contributor><name>Andy Schwartz</name></contributor>
+        <contributor><name>Yara Senger</name></contributor>
+        <contributor><name>Stan Silvert</name></contributor>
+        <contributor><name>Vernon Singleton</name></contributor>
+        <contributor><name>Amanpreet Singh</name></contributor>
+        <contributor><name>Bernhard Slominski</name></contributor>
+        <contributor><name>Alexander Smirnov</name></contributor>
+        <contributor><name>Thomas Spiegel</name></contributor>
+        <contributor><name>Alberto) Spock (Lemos</name></contributor>
+        <contributor><name>Kyle Stiemann</name></contributor>
+        <contributor><name>James Strachan</name></contributor>
+        <contributor><name>Arjan Tijms</name></contributor>
+        <contributor><name>Leonardo Uribe</name></contributor>
+        <contributor><name>Jayashri Visvanathan</name></contributor>
+        <contributor><name>Anna Von Klopp</name></contributor>
+        <contributor><name>Matthias Wessendorf</name></contributor>
+        <contributor><name>Adam Winer</name></contributor>
+        <contributor><name>Mike Youngstrom</name></contributor>
+        <contributor><name>John A. Zukowski</name></contributor>
     </contributors>
     <organization>
         <name>Oracle America, Inc</name>
