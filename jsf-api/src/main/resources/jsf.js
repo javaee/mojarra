@@ -463,6 +463,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          * @param context An object containing the request context, including the following properties:
          * the source element, per call onerror callback function, per call onevent callback function, the render
          * instructions, the submitting form ID, the naming container ID and naming container prefix.
+         * @ignore
          */
         var getFormsToUpdate = function getFormsToUpdate(context) {
             var formsToUpdate = [];
@@ -537,33 +538,33 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                 return parameters; // Unexpected source client ID; let's silently do nothing.
             }
 
-        	var targetClientIds = parameters.replace(/^\s+|\s+$/g, '').split(/\s+/g);
+            var targetClientIds = parameters.replace(/^\s+|\s+$/g, '').split(/\s+/g);
 
-        	for (var i = 0; i < targetClientIds.length; i++) {
-        	    var targetClientId = targetClientIds[i];
+            for (var i = 0; i < targetClientIds.length; i++) {
+                var targetClientId = targetClientIds[i];
 
-        	    if (targetClientId.indexOf(jsf.separatorchar) == 0) {
-        	        targetClientId = targetClientId.substring(1);
+                if (targetClientId.indexOf(jsf.separatorchar) == 0) {
+                    targetClientId = targetClientId.substring(1);
 
-        	        if (targetClientId.indexOf(namingContainerPrefix) != 0) {
+                    if (targetClientId.indexOf(namingContainerPrefix) != 0) {
                         targetClientId = namingContainerPrefix + targetClientId;
                     }
-        	    }
-        	    else if (targetClientId.indexOf(namingContainerPrefix) != 0) {
-        	        var parentClientId = sourceClientId.substring(0, sourceClientId.lastIndexOf(jsf.separatorchar));
+                }
+                else if (targetClientId.indexOf(namingContainerPrefix) != 0) {
+                    var parentClientId = sourceClientId.substring(0, sourceClientId.lastIndexOf(jsf.separatorchar));
 
-        	        if (namingContainerPrefix + targetClientId == parentClientId) {
-        	            targetClientId = parentClientId;
-        	        }
-        	        else {
-        	            targetClientId = parentClientId + jsf.separatorchar + targetClientId;
-        	        }
-				}
+                    if (namingContainerPrefix + targetClientId == parentClientId) {
+                        targetClientId = parentClientId;
+                    }
+                    else {
+                        targetClientId = parentClientId + jsf.separatorchar + targetClientId;
+                    }
+                }
 
-				targetClientIds[i] = targetClientId;
-			}
+                targetClientIds[i] = targetClientId;
+            }
 
-        	return targetClientIds.join(' ');
+            return targetClientIds.join(' ');
         };
 
         /**
@@ -1387,6 +1388,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          * the source element, per call onerror callback function, per call onevent callback function, the render
          * instructions, the submitting form ID, the naming container ID and naming container prefix.
          * @param hiddenStateFieldName The hidden state field name, e.g. javax.faces.ViewState or javax.faces.ClientWindow 
+         * @ignore
          */
         var updateHiddenStateFields = function updateHiddenStateFields(updateElement, context, hiddenStateFieldName) {
             var firstChild = updateElement.firstChild;
@@ -2580,7 +2582,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                                 options.execute = element.name + " " + options.execute;
                             }
                             if (namingContainerPrefix) {
-                            	options.execute = namespaceParametersIfNecessary(options.execute, element.name, namingContainerPrefix);
+                                options.execute = namespaceParametersIfNecessary(options.execute, element.name, namingContainerPrefix);
                             }
                         } else {
                             options.execute = "@all";
@@ -2600,7 +2602,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                             options.render = options.render.replace("@this", element.id);
                             options.render = options.render.replace("@form", form.id);
                             if (namingContainerPrefix) {
-                            	options.render = namespaceParametersIfNecessary(options.render, element.name, namingContainerPrefix);
+                                options.render = namespaceParametersIfNecessary(options.render, element.name, namingContainerPrefix);
                             }
                         } else {
                             options.render = "@all";
@@ -3317,11 +3319,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
      * @namespace
      * @exec
      */
-    jsf.push = (function(window) {
+    jsf.push = function() {
 
         // "Constant" fields ----------------------------------------------------------------------------------------------
 
-        var URL_PROTOCOL = window.location.protocol.replace("http", "ws") + "//";
         var RECONNECT_INTERVAL = 500;
         var MAX_RECONNECT_ATTEMPTS = 25;
         var REASON_EXPIRED = "Expired";
@@ -3329,7 +3330,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
         // Private static fields ------------------------------------------------------------------------------------------
 
         var sockets = {};
-        var self = {};
 
         // Private constructor functions ----------------------------------------------------------------------------------
 
@@ -3344,6 +3344,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          * @param {function} onmessage The function to be invoked when a message is received.
          * @param {function} onclose The function to be invoked when the websocket is closed.
          * @param {Object} behaviors Client behavior functions to be invoked when specific message is received.
+         * @ignore
          */
         function ReconnectingWebsocket(url, channel, onopen, onmessage, onclose, behaviors) {
 
@@ -3414,71 +3415,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
 
         }
 
-        // Public static functions ----------------------------------------------------------------------------------------
-
-        /**
-         * Initialize a websocket on the given client identifier. When connected, it will stay open and reconnect as
-         * long as URL is valid and <code>jsf.push.close()</code> hasn't explicitly been called on the same client
-         * identifier.
-         * @param {string} clientId The client identifier of the websocket.
-         * @param {string} url The URL of the websocket. All open websockets on the same URL will receive the
-         * same push notification from the server.
-         * @param {string} channel The channel name of the websocket.
-         * @param {function} onopen The JavaScript event handler function that is invoked when the websocket is opened.
-         * The function will be invoked with one argument: the client identifier.
-         * @param {function} onmessage The JavaScript event handler function that is invoked when a message is received from
-         * the server. The function will be invoked with three arguments: the push message, the client identifier and
-         * the raw <code>MessageEvent</code> itself.
-         * @param {function} onclose The JavaScript event handler function that is invoked when the websocket is closed.
-         * The function will be invoked with three arguments: the close reason code, the client identifier and the raw
-         * <code>CloseEvent</code> itself. Note that this will also be invoked on errors and that you can inspect the
-         * close reason code if an error occurred and which one (i.e. when the code is not 1000). See also
-         * <a href="http://tools.ietf.org/html/rfc6455#section-7.4.1">RFC 6455 section 7.4.1</a> and
-         * <a href="http://docs.oracle.com/javaee/7/api/javax/websocket/CloseReason.CloseCodes.html">CloseCodes</a> API
-         * for an elaborate list.
-         * @param {Object} behaviors Client behavior functions to be invoked when specific message is received.
-         * @param {boolean} autoconnect Whether or not to automatically connect the socket. Defaults to <code>false</code>.
-         * @member jsf.push
-         * @function jsf.push.init
-         */
-        self.init = function(clientId, url, channel, onopen, onmessage, onclose, behaviors, autoconnect) {
-            onclose = resolveFunction(onclose);
-
-            if (!window.WebSocket) { // IE6-9.
-                onclose(-1, clientId);
-                return;
-            }
-
-            if (!sockets[clientId]) {
-                sockets[clientId] = new ReconnectingWebsocket(url, channel, resolveFunction(onopen), resolveFunction(onmessage), onclose, behaviors);
-            }
-
-            if (autoconnect) {
-                self.open(clientId);
-            }
-        }
-
-        /**
-         * Open the websocket on the given client identifier.
-         * @param {string} clientId The client identifier of the websocket.
-         * @throws {Error} When client identifier is unknown. You may need to initialize it first via <code>init()</code> function.
-         * @member jsf.push
-         * @function jsf.push.open
-         */
-        self.open = function(clientId) {
-            getSocket(clientId).open();
-        }
-
-        /**
-         * Close the websocket on the given client identifier.
-         * @param {string} clientId The client identifier of the websocket.
-         * @throws {Error} When client identifier is unknown. You may need to initialize it first via <code>init()</code> function.
-         * @member jsf.push
-         * @function jsf.push.close
-         */
-        self.close = function(clientId) {
-            getSocket(clientId).close();
-        }
 
         // Private static functions ---------------------------------------------------------------------------------------
 
@@ -3487,6 +3423,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          * If it still doesn't resolve to anything, then return a NOOP function.
          * @param {Object} fn Can be function, or string representing function name, or undefined.
          * @return {function} The intented function, or a NOOP function when undefined.
+         * @ignore
          */
         function resolveFunction(fn) {
             return (typeof fn !== "function") && (fn = window[fn] || function(){}), fn;
@@ -3497,6 +3434,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          * @param {string} clientId The client identifier of the websocket.
          * @return {Socket} Socket associated with given client identifier.
          * @throws {Error} When client identifier is unknown. You may need to initialize it first via <code>init()</code> function.
+         * @ignore
          */
         function getSocket(clientId) {
             var socket = sockets[clientId];
@@ -3509,12 +3447,77 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
             }
         }
 
-        // Expose self to public ------------------------------------------------------------------------------------------
 
-        return self;
+        // Public static functions ----------------------------------------------------------------------------------------
 
-    })(window);
+        return {
+
+            /**
+             * Initialize a websocket on the given client identifier. When connected, it will stay open and reconnect as
+             * long as URL is valid and <code>jsf.push.close()</code> hasn't explicitly been called on the same client
+             * identifier.
+             * @param {string} clientId The client identifier of the websocket.
+             * @param {string} url The URL of the websocket. All open websockets on the same URL will receive the
+             * same push notification from the server.
+             * @param {string} channel The channel name of the websocket.
+             * @param {function} onopen The JavaScript event handler function that is invoked when the websocket is opened.
+             * The function will be invoked with one argument: the client identifier.
+             * @param {function} onmessage The JavaScript event handler function that is invoked when a message is received from
+             * the server. The function will be invoked with three arguments: the push message, the client identifier and
+             * the raw <code>MessageEvent</code> itself.
+             * @param {function} onclose The JavaScript event handler function that is invoked when the websocket is closed.
+             * The function will be invoked with three arguments: the close reason code, the client identifier and the raw
+             * <code>CloseEvent</code> itself. Note that this will also be invoked on errors and that you can inspect the
+             * close reason code if an error occurred and which one (i.e. when the code is not 1000). See also
+             * <a href="http://tools.ietf.org/html/rfc6455#section-7.4.1">RFC 6455 section 7.4.1</a> and
+             * <a href="http://docs.oracle.com/javaee/7/api/javax/websocket/CloseReason.CloseCodes.html">CloseCodes</a> API
+             * for an elaborate list.
+             * @param {Object} behaviors Client behavior functions to be invoked when specific message is received.
+             * @param {boolean} autoconnect Whether or not to automatically connect the socket. Defaults to <code>false</code>.
+             * @member jsf.push
+             * @function jsf.push.init
+             */
+            init: function(clientId, url, channel, onopen, onmessage, onclose, behaviors, autoconnect) {
+                onclose = resolveFunction(onclose);
     
+                if (!window.WebSocket) { // IE6-9.
+                    onclose(-1, clientId);
+                    return;
+                }
+    
+                if (!sockets[clientId]) {
+                    sockets[clientId] = new ReconnectingWebsocket(url, channel, resolveFunction(onopen), resolveFunction(onmessage), onclose, behaviors);
+                }
+    
+                if (autoconnect) {
+                	getSocket(clientId).open();
+                }
+            },
+
+            /**
+             * Open the websocket on the given client identifier.
+             * @param {string} clientId The client identifier of the websocket.
+             * @throws {Error} When client identifier is unknown. You may need to initialize it first via <code>init()</code> function.
+             * @member jsf.push
+             * @function jsf.push.open
+             */
+            open: function(clientId) {
+                getSocket(clientId).open();
+            },
+
+            /**
+             * Close the websocket on the given client identifier.
+             * @param {string} clientId The client identifier of the websocket.
+             * @throws {Error} When client identifier is unknown. You may need to initialize it first via <code>init()</code> function.
+             * @member jsf.push
+             * @function jsf.push.close
+             */
+            close: function(clientId) {
+                getSocket(clientId).close();
+            }
+        }
+    }();
+
 
     /**
      * The namespace for JavaServer Faces JavaScript utilities.
@@ -3567,12 +3570,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
      * <code>UINamingContainer.getNamingContainerSeparatorChar().</code></p>
      */
     jsf.separatorchar = '#{facesContext.namingContainerSeparatorChar}';
-
-    /**
-     * <p class="changed_added_2_3">
-     * The result of calling <code>ExternalContext.getRequestContextPath()</code>.
-     */
-    jsf.contextpath = '#{facesContext.externalContext.requestContextPath}';
 
     /**
      * <p>An integer specifying the specification version that this file implements.
