@@ -715,6 +715,15 @@
                                             <destFileName>jstl-impl.jar</destFileName>
                                         </artifactItem>
                                         <artifactItem>
+                                            <groupId>org.glassfish.web</groupId>
+                                            <artifactId>javax.el</artifactId>
+                                            <version>2.2.6</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>                                     
+                                            <outputDirectory>${integration.container.extractDir}/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+                                            <destFileName>javax.el.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
                                             <groupId>org.jboss.weld.servlet</groupId>
                                             <artifactId>weld-servlet</artifactId>
                                             <version>2.4.1.Final</version>
@@ -789,12 +798,12 @@
                 </plugins>
             </build>
             <properties>
-                <integration.container.downloadDir>C:/Temp/Cargo/download</integration.container.downloadDir>
-                <integration.container.downloadUrl>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.35/bin/apache-tomcat-7.0.35.zip</integration.container.downloadUrl>
-                <integration.container.extractDir>C:/Temp/Cargo/extracts</integration.container.extractDir>
-                <integration.container.home>C:/Temp/Cargo/tomcat7</integration.container.home>
-                <integration.container.id>tomcat7x</integration.container.id>
-                <tomcat.version>7.0.35</tomcat.version>
+                <integration.container.downloadDir>${session.executionRootDirectory}/target/container/download</integration.container.downloadDir>
+                <integration.container.downloadUrl>http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.11/bin/apache-tomcat-8.5.11.zip</integration.container.downloadUrl>
+                <integration.container.extractDir>${session.executionRootDirectory}/target/container/extracts</integration.container.extractDir>
+                <integration.container.home>${session.executionRootDirectory}/target/container/tomcat7</integration.container.home>
+                <integration.container.id>tomcat8x</integration.container.id>
+                <tomcat.version>8.5.11</tomcat.version>
             </properties>
         </profile>
         <profile>
