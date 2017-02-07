@@ -43,16 +43,21 @@
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.sun.faces</groupId>
+        <artifactId>project</artifactId>
+        <version>2.4.0-m01-SNAPSHOT</version>
+    </parent>
     <groupId>com.sun.faces.build</groupId>
     <artifactId>jsf-tools</artifactId>
-    <version>2.3.0-m10-SNAPSHOT</version>
+    <version>2.4.0-m01-SNAPSHOT</version>
     <description>
         Java code executed at build time
     </description>
-    <name>Mojarra JSF Tools</name>
+    <name>Mojarra ${project.version} - JSF Tools</name>
     <packaging>jar</packaging>
     <build>
         <plugins>
@@ -97,96 +102,96 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-  <profiles>
-    <profile>
-      <id>default-tools.jar</id>
-      <activation>
-        <property>
-          <name>java.vendor</name>
-          <value>Sun Microsystems Inc.</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>com.sun</groupId>
-          <artifactId>tools</artifactId>
-          <version>1.6.0</version>
-          <scope>system</scope>
-          <systemPath>${java.home}/../lib/tools.jar</systemPath>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>default-tools17.jar</id>
-      <activation>
-        <jdk>1.7</jdk>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>com.sun</groupId>
-          <artifactId>tools</artifactId>
-          <version>1.7.0</version>
-          <scope>system</scope>
-          <systemPath>${java.home}/../lib/tools.jar</systemPath>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>vdldoc</id>
-      <build>
-        <plugins>
-          <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>exec-maven-plugin</artifactId>
-              <version>1.3.2</version>
-              <executions>
-                <execution>
-                  <id>generate-vdldoc</id>
-                  <phase>prepare-package</phase>
-                  <goals>
-                    <goal>exec</goal>
-                  </goals>
-                </execution>
-              </executions>
-              <configuration>
-                <executable>java</executable>
-                <arguments>
-                  <argument>-jar</argument>
-                  <argument>${settings.localRepository}/org/omnifaces/vdldoc/${vdldoc.version}/vdldoc-${vdldoc.version}.jar</argument>
-                  <argument>-f</argument>
-                  <argument>-css</argument>
-                  <argument>jsf-api.css</argument>
-                  <argument>-d</argument>
-                  <argument>${project.build.directory}/site/vdldoc</argument>
-                  <argument>-windowtitle</argument>
-                  <argument>${doctitle}</argument>
-                  <argument>-doctitle</argument>
-                  <argument>${doctitle}</argument>
-                  <argument>${project.basedir}/../jsf-ri/conf/share/composite.taglib.xml</argument>
-                  <argument>${project.basedir}/../jsf-ri/conf/share/facelets_jsf_core.taglib.xml</argument>
-                  <argument>${project.basedir}/../jsf-ri/conf/share/facelets_passthrough_attributes.taglib.xml</argument>
-                  <argument>${project.basedir}/../jsf-ri/conf/share/facelets_passthrough_elements.taglib.xml</argument>
-                  <argument>${project.basedir}/../jsf-ri/conf/share/ui.taglib.xml</argument>
-<!--                  <argument>additional taglibs here</argument> -->
-                </arguments>
-              </configuration>
-              <dependencies>
+    <profiles>
+        <profile>
+            <id>default-tools.jar</id>
+            <activation>
+                <property>
+                    <name>java.vendor</name>
+                    <value>Sun Microsystems Inc.</value>
+                </property>
+            </activation>
+            <dependencies>
                 <dependency>
-                  <groupId>org.omnifaces</groupId>
-                  <artifactId>vdldoc</artifactId>
-                  <version>${vdldoc.version}</version>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                    <version>1.6.0</version>
+                    <scope>system</scope>
+                    <systemPath>${java.home}/../lib/tools.jar</systemPath>
                 </dependency>
-              </dependencies>
-            </plugin>
-        </plugins>
-      </build>
-      <properties>
-        <vdldoc.version>2.1</vdldoc.version>
-        <spec.version>2.3</spec.version>
-        <doctitle>JSF ${spec.version} VDL Documentation</doctitle>
-      </properties>
-    </profile>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>default-tools17.jar</id>
+            <activation>
+                <jdk>1.7</jdk>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                    <version>1.7.0</version>
+                    <scope>system</scope>
+                    <systemPath>${java.home}/../lib/tools.jar</systemPath>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>vdldoc</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.3.2</version>
+                        <executions>
+                            <execution>
+                                <id>generate-vdldoc</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-jar</argument>
+                                <argument>${settings.localRepository}/org/omnifaces/vdldoc/${vdldoc.version}/vdldoc-${vdldoc.version}.jar</argument>
+                                <argument>-f</argument>
+                                <argument>-css</argument>
+                                <argument>jsf-api.css</argument>
+                                <argument>-d</argument>
+                                <argument>${project.build.directory}/site/vdldoc</argument>
+                                <argument>-windowtitle</argument>
+                                <argument>${doctitle}</argument>
+                                <argument>-doctitle</argument>
+                                <argument>${doctitle}</argument>
+                                <argument>${project.basedir}/../jsf-ri/conf/share/composite.taglib.xml</argument>
+                                <argument>${project.basedir}/../jsf-ri/conf/share/facelets_jsf_core.taglib.xml</argument>
+                                <argument>${project.basedir}/../jsf-ri/conf/share/facelets_passthrough_attributes.taglib.xml</argument>
+                                <argument>${project.basedir}/../jsf-ri/conf/share/facelets_passthrough_elements.taglib.xml</argument>
+                                <argument>${project.basedir}/../jsf-ri/conf/share/ui.taglib.xml</argument>
+                                <!--                  <argument>additional taglibs here</argument> -->
+                            </arguments>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.omnifaces</groupId>
+                                <artifactId>vdldoc</artifactId>
+                                <version>${vdldoc.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <vdldoc.version>2.1</vdldoc.version>
+                <spec.version>2.3</spec.version>
+                <doctitle>JSF ${spec.version} VDL Documentation</doctitle>
+            </properties>
+        </profile>
 
-  </profiles>
+    </profiles>
 
 </project>
