@@ -41,28 +41,23 @@
 // TestValueExpressionImpl.java
 package com.sun.faces.el;
 
-import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestBean;
-import com.sun.faces.CustomerBean;
-import com.sun.faces.cactus.TestBean.Inner2Bean;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.cactus.TestBean.InnerBean;
-import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.util.Util;
-import org.apache.cactus.WebRequest;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import javax.el.ELException;
+import javax.el.ValueExpression;
+import javax.faces.application.Application;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-
-import javax.el.ValueExpression;
-import javax.el.ELException;
-import javax.el.PropertyNotFoundException;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Locale;
+import org.apache.cactus.WebRequest;
 
 /**
  * <B>TestValueExpressionImpl </B> is a class ... <p/><B>Lifetime And Scope </B>
@@ -913,7 +908,7 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
 
     public void testGetExpressionString() throws Exception
     {
-        ApplicationImpl app = (ApplicationImpl) getFacesContext()
+        Application app = (Application) getFacesContext()
                 .getApplication();
         String ref = null;
         ValueExpression vb = null;

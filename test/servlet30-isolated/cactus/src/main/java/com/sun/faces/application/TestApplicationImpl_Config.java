@@ -43,25 +43,9 @@
 package com.sun.faces.application;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
-import com.sun.faces.TestComponent;
-import com.sun.faces.TestConverter;
-
-import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.application.NavigationHandler;
-import javax.faces.application.StateManager;
-import javax.faces.application.ViewHandler;
-import javax.faces.component.UIComponent;
-import javax.faces.convert.Converter;
-import javax.faces.el.PropertyResolver;
-import javax.faces.el.VariableResolver;
-import javax.faces.event.ActionListener;
-import javax.faces.validator.LengthValidator;
-import javax.faces.validator.Validator;
-
-import java.util.Iterator;
-import java.util.Locale;
 
 /**
  * <B>TestApplicationImpl_Config</B> is a class ...
@@ -232,7 +216,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 //
 // Instance Variables
 //
-    private ApplicationImpl application = null;
+    private Application application = null;
 
 // Attribute Instance Variables
 
@@ -263,7 +247,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
         ApplicationFactory aFactory =
             (ApplicationFactory) FactoryFinder.getFactory(
                 FactoryFinder.APPLICATION_FACTORY);
-        application = (ApplicationImpl) aFactory.getApplication();
+        application = (Application) aFactory.getApplication();
     }
 	
     //****

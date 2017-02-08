@@ -40,19 +40,17 @@
 
 package com.sun.faces.application;
 
-import org.apache.cactus.WebRequest;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
-
+import java.io.IOException;
+import java.util.Locale;
 import javax.faces.FacesException;
-import javax.faces.application.ViewHandler;
-import javax.faces.component.UIViewRoot;
-
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import java.io.IOException;
-import java.util.Locale;
+import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewRoot;
+import org.apache.cactus.WebRequest;
 
 
 /**
@@ -99,7 +97,7 @@ public class TestHASDeprStateManagerImpl extends ServletFacesTestCase {
         ApplicationFactory aFactory =
             (ApplicationFactory) FactoryFinder.getFactory(
                 FactoryFinder.APPLICATION_FACTORY);
-        application = (ApplicationImpl) aFactory.getApplication();
+        application = (Application) aFactory.getApplication();
         application.setViewHandler(new ViewHandlerImpl());
         application.setStateManager(new DeprStateManagerImpl());
     }

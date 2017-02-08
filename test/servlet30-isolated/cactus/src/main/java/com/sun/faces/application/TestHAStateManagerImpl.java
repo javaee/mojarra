@@ -40,29 +40,11 @@
 
 package com.sun.faces.application;
 
-import org.apache.cactus.server.ServletConfigWrapper;
-import com.sun.faces.RIConstants;
 import com.sun.faces.cactus.ServletFacesTestCase;
-import com.sun.faces.util.Util;
-
-import javax.faces.application.StateManager;
-import javax.faces.application.ViewHandler;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIGraphic;
-import javax.faces.component.UIInput;
-import javax.faces.component.UIOutput;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIForm;
-import javax.faces.component.UIPanel;
-import javax.faces.context.FacesContext;
-import javax.faces.render.RenderKitFactory;
-import javax.servlet.http.HttpSession;
-import javax.faces.application.StateManager.SerializedView;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import java.util.ArrayList;
 
 
 /**
@@ -91,7 +73,7 @@ public class TestHAStateManagerImpl extends ServletFacesTestCase {
         ApplicationFactory aFactory =
             (ApplicationFactory) FactoryFinder.getFactory(
                 FactoryFinder.APPLICATION_FACTORY);
-        application = (ApplicationImpl) aFactory.getApplication();
+        application = (Application) aFactory.getApplication();
         application.setViewHandler(new ViewHandlerImpl());
         application.setStateManager(new StateManagerImpl());
     }

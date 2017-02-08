@@ -47,7 +47,6 @@ import com.sun.faces.TestBean;
 import com.sun.faces.mgbean.ManagedBeanInfo;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.cactus.TestBean.InnerBean;
-import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.util.Util;
 
@@ -56,6 +55,7 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIViewRoot;
 import javax.faces.el.VariableResolver;
 import java.util.Locale;
+import javax.faces.application.Application;
 
 
 /**
@@ -291,7 +291,7 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
 
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        Application application = (Application) aFactory.getApplication();
         ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
         BeanManager manager = associate.getBeanManager();
         manager.register(beanInfo);

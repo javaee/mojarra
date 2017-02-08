@@ -64,14 +64,11 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.convert.NumberConverter;
-import javax.servlet.ServletConfig;
 
 import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.cactus.TestingUtil;
 import com.sun.faces.util.Util;
-import com.sun.faces.application.ApplicationImpl;
 import org.apache.cactus.WebRequest;
-import org.apache.cactus.server.AbstractServletContextWrapper;
 
 /**
  * Test encode and decode methods in Renderer classes.
@@ -804,12 +801,10 @@ public class TestConverters extends JspFacesTestCase {
 
     public void testDateTimeConverterDefaultTimeZone() throws Exception {
         TestingUtil.setPrivateField("passDefaultTimeZone",
-                                    ApplicationImpl.class,
-                                    application,
+                Application.class,                                    application,
                                     Boolean.TRUE);
         TestingUtil.setPrivateField("systemTimeZone",
-                                    ApplicationImpl.class,
-                                    application,
+                Application.class,                                    application,
                                     TimeZone.getDefault());
         UIInput input = new UIInput();
         DateFormat df = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.ENGLISH);

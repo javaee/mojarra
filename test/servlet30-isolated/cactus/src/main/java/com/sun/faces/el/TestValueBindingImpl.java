@@ -43,9 +43,7 @@ package com.sun.faces.el;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestBean;
-import com.sun.faces.cactus.TestBean.Inner2Bean;
 import com.sun.faces.cactus.TestBean.InnerBean;
-import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
@@ -65,6 +63,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Locale;
+import javax.faces.application.Application;
 
 /**
  * <B>TestValueBindingImpl </B> is a class ... <p/><B>Lifetime And Scope </B>
@@ -890,7 +889,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
     public void testGetExpressionString() throws Exception
     {
-        ApplicationImpl app = (ApplicationImpl) getFacesContext()
+        Application app = (Application) getFacesContext()
                 .getApplication();
         String ref = null;
         ValueBinding vb = null;

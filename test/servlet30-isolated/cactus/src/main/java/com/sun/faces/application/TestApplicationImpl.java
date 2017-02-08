@@ -42,13 +42,17 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.TestComponent;
+import com.sun.faces.TestForm;
+import com.sun.faces.cactus.JspFacesTestCase;
+import com.sun.faces.cactus.TestingUtil;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.List;
-import java.util.Date;
-import java.util.ArrayList;
-
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -56,36 +60,29 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
-import javax.faces.application.StateManager;
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
+import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIOutput;
-import javax.faces.context.FacesContext;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.IntegerConverter;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
-import javax.faces.event.ListenerFor;
-import javax.faces.event.PostAddToViewEvent;
-import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.ListenerFor;
 import javax.faces.event.ListenersFor;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PreRenderComponentEvent;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.TestComponent;
-import com.sun.faces.TestForm;
-
-import com.sun.faces.cactus.JspFacesTestCase;
-import com.sun.faces.cactus.TestingUtil;
 
 /**
  * <B>TestApplicationImpl</B> is a class ...
@@ -108,7 +105,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
 //
 // Instance Variables
 //
-    private ApplicationImpl application = null;
+    private Application application = null;
 
 // Attribute Instance Variables
 
@@ -139,7 +136,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         ApplicationFactory aFactory =
             (ApplicationFactory) FactoryFinder.getFactory(
                 FactoryFinder.APPLICATION_FACTORY);
-        application = (ApplicationImpl) aFactory.getApplication();
+        application = (Application) aFactory.getApplication();
     }
 
 
