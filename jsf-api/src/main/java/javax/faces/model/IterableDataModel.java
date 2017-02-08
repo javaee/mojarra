@@ -140,7 +140,7 @@ public class IterableDataModel<E> extends DataModel<E> {
             return null;
         }
         if (!isRowAvailable()) {
-            throw new IllegalStateException();
+            throw new IllegalArgumentException();
         }
 
         return list.get(index);
