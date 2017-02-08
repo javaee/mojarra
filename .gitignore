@@ -35,3 +35,6 @@ api/src/**
 glassfish-8.0/
 nbactions.xml
 /test/javaee8/passthrough/nb-configuration.xml
+*.DS_Store
+.idea/
+Mojarra.iml
