@@ -22,7 +22,6 @@
         <module>javaee8</module>
         <module>osgi</module>
         <module>protocolaware</module>
-        <module>quality</module>
         <module>servlet30</module>
         <module>servlet30-isolated</module>
         <module>servlet31</module>

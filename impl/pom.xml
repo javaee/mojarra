@@ -1034,6 +1034,28 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <targetJdk>1.8</targetJdk>
+                    <excludes>
+                        <exclude>com/sun/faces/taglib/html_basic/**/*.java</exclude>
+                        <exclude>javax/faces/component/html/**/*.java</exclude>
+                    </excludes>
+                    <rulesets>
+                        <ruleset>${project.build.directory}/../pmd-ruleset.xml</ruleset>
+                    </rulesets>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sourceforge.pmd</groupId>
+                        <artifactId>pmd</artifactId>
+                        <version>5.1.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
                  
             <!-- Tell Maven we want a source jar -->
             <plugin>
@@ -1109,6 +1131,27 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>clirr-maven-plugin</artifactId>
+                <version>2.8</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>bcel-findbugs</artifactId>
+                        <version>6.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.4</version>
+                <configuration>
+                    <threshold>High</threshold>
+                    <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+                </configuration>
             </plugin>
             
             <!-- Validate that the various XML files are well formed and match their schema-->
@@ -1189,6 +1232,73 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.9.1</version>
+                <configuration>
+                    <configLocation>${project.build.directory}/../checkstyle-config.xml</configLocation>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>checkstyle</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <targetJdk>1.8</targetJdk>
+                    <excludes>
+                        <exclude>com/sun/faces/taglib/html_basic/**/*.java</exclude>
+                        <exclude>javax/faces/component/html/**/*.java</exclude>
+                    </excludes>
+                    <rulesets>
+                        <ruleset>${project.build.directory}/../pmd-ruleset.xml</ruleset>
+                    </rulesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>clirr-maven-plugin</artifactId>
+                <version>2.8</version>
+                <configuration>
+                    <comparisonArtifacts>
+                        <comparisonArtifact>
+                            <groupId>org.glassfish</groupId>
+                            <artifactId>javax.faces</artifactId>
+                            <version>2.3.0-m09</version>
+                        </comparisonArtifact>
+                    </comparisonArtifacts>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.4</version>
+                <configuration>
+                    <threshold>High</threshold>
+                    <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+        </plugins>
+    </reporting>
     <scm>
         <connection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</connection>
         <developerConnection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</developerConnection>
