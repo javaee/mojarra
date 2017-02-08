@@ -61,7 +61,6 @@
                                 -->
                                 <delete dir="src/main/java"/>
                                 <delete dir="src/main/resources"/>
-                                <delete dir="src/main/js"/>
                                 <delete dir="src/main/template"/>
                                 <delete dir="src/main/doc"/>
                                 <!--
@@ -211,16 +210,6 @@
                                 -->
                                 <copy todir="src/main/resources/META-INF" 
                                     file="${jsf-api-dir}/../legal/jsf-cddl/LICENSE.txt" />
-                                
-                                <!--
-                                
-                                    Copy jsf.js and mojarra.js into src/main/js
-                                
-                                -->
-                                <copy todir="src/main/js">
-                                    <fileset dir="${jsf-api-dir}/src/main/resources" includes="jsf.js"/>
-                                    <fileset dir="${jsf-ri-dir}/resources" includes="mojarra.js"/>
-                                </copy>
                                 
                                 <!--
                                 

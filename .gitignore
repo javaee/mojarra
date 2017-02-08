@@ -18,7 +18,6 @@ spi/**/.classpath
 spi/**/.project
 impl/**/.classpath
 impl/**/.project
-impl/src/main/**
 impl/bnd.bnd
 impl/strict-impl/src/**
 api/**/.classpath
@@ -32,3 +31,7 @@ nbactions.xml
 *.DS_Store
 .idea/
 Mojarra.iml
+/impl/src/main/doc/
+/impl/src/main/resources/
+/impl/src/main/template/
+/impl/src/main/java/
