@@ -230,8 +230,6 @@
             </then>
         </if>
 
-        <copy overwrite="true" file="${groovy.jar}" todir="${container.home}/modules"/>
-
         <if>
             <os family="windows"/>
             <then>
@@ -251,8 +249,6 @@
                 <container.stop/>
             </then>
         </if>
-
-        <delete file="${container.home}/modules/${groovy.jarfile}"/>
 
         <if>
             <os family="windows"/>

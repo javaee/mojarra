@@ -42,10 +42,10 @@
 
 package com.sun.faces.util;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.io.FastStringWriter;
 import static com.sun.faces.util.RequestStateManager.INVOCATION_PATH;
-import static java.util.Collections.emptyList;
-import static java.util.logging.Level.FINE;
-
 import java.beans.FeatureDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,15 +58,16 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
+import static java.util.Collections.emptyList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+import static java.util.logging.Level.FINE;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-
 import javax.el.ELResolver;
 import javax.el.ValueExpression;
 import javax.enterprise.inject.spi.BeanManager;
@@ -97,12 +98,7 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-
 import org.xml.sax.InputSource;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.io.FastStringWriter;
 
 /**
  * <B>Util</B> is a class ...
@@ -308,28 +304,7 @@ public class Util {
                 return primitiveClasses[i];
             }
         }
-        // Where to begin...
-        // JDK 6 introduced CR 6434149 where one couldn't pass
-        // in a literal for an array type ([Ljava.lang.String) and
-        // get the Class representation using ClassLoader.loadClass().
-        // It was recommended to use Class.forName(String, boolean, ClassLoader)
-        // for all ClassLoading requests.
-        // HOWEVER, when trying to eliminate the need for .groovy extensions
-        // being specified in the faces-config.xml for Groovy-based artifacts,
-        // by using an adapter to the GroovyScriptEngine, I found that the class
-        // instance was cached somewhere, so that no matter what change I made,
-        // Class.forName() always returned the same instance.  I haven't been
-        // able to determine why this happens in the appserver environment
-        // as the same adapter in a standalone program works as one might expect.
-        // So, for now, if the classname starts with '[', then use Class.forName()
-        // to avoid CR 643419 and for all other cases, use ClassLoader.loadClass().
-        if (loader.getClass() == com.sun.faces.scripting.groovy.GroovyHelperImpl.MojarraGroovyClassLoader.class) {
-            if (name.charAt(0) == '[') {
-                return Class.forName(name, true, loader);
-            } else {
-                return loader.loadClass(name);
-            }
-        }        
+
         return Class.forName(name, true, loader);
     }
 

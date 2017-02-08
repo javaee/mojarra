@@ -63,8 +63,6 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
-
-import javax.faces.view.facelets.ResourceResolver;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -206,20 +204,6 @@ public class ReflectionUtil {
                                     Object root) {
         Object returnObject = null;
         try {
-            if (isDevModeEnabled()) {
-                Class<?>[] interfaces = clazz.getInterfaces();
-                if (interfaces != null) {
-                    for (Class<?> c : interfaces) {
-                        if ("groovy.lang.GroovyObject"
-                                .equals(c.getName())) {
-                            // all groovy classes will implement this interface
-                            returnObject =
-                                    createScriptProxy(rootType, clazz.getName(), root);
-                            break;
-                        }
-                    }
-                }
-            }
             if (returnObject == null) {
                 // Look for an adapter constructor if we've got
                 // an object to adapt
@@ -315,15 +299,4 @@ public class ReflectionUtil {
         return (webconfig != null
                   && "Development".equals(webconfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage)));
     }
-    
-    private static Object createScriptProxy(Class<?> artifactType,
-                                     String scriptName,
-                                     Object root) {
-        if (ResourceResolver.class.equals(artifactType)) {
-            return new ResourceResolverProxy(scriptName, (ResourceResolver) root);
-        }
-        return null;
-    }
-    
-    
 }

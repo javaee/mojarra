@@ -236,8 +236,6 @@ grant {
             </then>
         </if>
 
-        <copy overwrite="true" file="${groovy.jar}" todir="${container.home}/lib"/>
-
         <if>
             <os family="windows"/>
             <then>
@@ -257,8 +255,6 @@ grant {
                 <container.stop/>
             </then>
         </if>
-
-        <delete file="${container.home}/modules/${groovy.jarfile}"/>
 
         <if>
             <os family="windows"/>

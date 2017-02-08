@@ -179,7 +179,6 @@ Function of sub-directories in top-level test directory
  * agnostic         - Application server agnostic tests (do not put any new projects in here).
  * cluster          - Cluster specific tests.
  * glassfish        - Glassfish specific tests.
- * groovy           - Groovy specific tests.
  * javaee6          - JavaEE 6 specific tests.
  * javaee6web       - JavaEE 6 Web-Profile specific tests.
  * javaee7          - JavaEE 7 specific tests.

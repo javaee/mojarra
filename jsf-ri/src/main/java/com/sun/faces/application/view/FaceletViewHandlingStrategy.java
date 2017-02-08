@@ -43,11 +43,29 @@ package com.sun.faces.application.view;
 import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
 import static com.sun.faces.RIConstants.FACELETS_ENCODING_KEY;
 import static com.sun.faces.RIConstants.FLOW_DEFINITION_ID_SUFFIX;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsBufferSize;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsViewMappings;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
+import com.sun.faces.context.StateContext;
 import static com.sun.faces.context.StateContext.getStateContext;
+import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
+import com.sun.faces.facelets.el.VariableMapperWrapper;
+import com.sun.faces.facelets.impl.DefaultFaceletFactory;
+import com.sun.faces.facelets.impl.XMLFrontMatterSaver;
+import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
+import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
+import com.sun.faces.facelets.tag.ui.UIDebug;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.Cache;
+import com.sun.faces.util.Cache.Factory;
+import com.sun.faces.util.ComponentStruct;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.HtmlUtils;
+import com.sun.faces.util.RequestStateManager;
 import static com.sun.faces.util.RequestStateManager.FACELET_FACTORY;
+import com.sun.faces.util.Util;
 import static com.sun.faces.util.Util.getDOCTYPEFromFacesContextAttributes;
 import static com.sun.faces.util.Util.getXMLDECLFromFacesContextAttributes;
 import static com.sun.faces.util.Util.isViewIdExactMappedToFacesServlet;
@@ -56,36 +74,16 @@ import static com.sun.faces.util.Util.notNull;
 import static com.sun.faces.util.Util.saveDOCTYPEToFacesContextAttributes;
 import static com.sun.faces.util.Util.saveXMLDECLToFacesContextAttributes;
 import static com.sun.faces.util.Util.setViewPopulated;
-import static java.lang.Boolean.TRUE;
-import static java.util.Arrays.stream;
-import static java.util.Collections.emptyList;
-import static java.util.logging.Level.FINE;
-import static java.util.logging.Level.FINEST;
-import static java.util.logging.Level.SEVERE;
-import static java.util.logging.Level.WARNING;
-import static javax.faces.FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY;
-import static javax.faces.application.ProjectStage.Development;
-import static javax.faces.application.Resource.COMPONENT_RESOURCE_KEY;
-import static javax.faces.application.StateManager.IS_BUILDING_INITIAL_STATE;
-import static javax.faces.application.StateManager.STATE_SAVING_METHOD_SERVER;
-import static javax.faces.application.ViewHandler.CHARACTER_ENCODING_KEY;
-import static javax.faces.application.ViewHandler.DEFAULT_FACELETS_SUFFIX;
-import static javax.faces.application.ViewVisitOption.RETURN_AS_MINIMAL_IMPLICIT_OUTCOME;
-import static javax.faces.component.UIComponent.BEANINFO_KEY;
-import static javax.faces.component.UIComponent.COMPOSITE_FACET_NAME;
-import static javax.faces.component.UIComponent.VIEW_LOCATION_KEY;
-import static javax.faces.component.UIViewRoot.COMPONENT_TYPE;
-import static javax.faces.view.AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY;
-import static javax.faces.view.facelets.FaceletContext.FACELET_CONTEXT_KEY;
-import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
-
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
+import static java.lang.Boolean.TRUE;
 import java.util.ArrayList;
+import static java.util.Arrays.stream;
+import static java.util.Collections.emptyList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -93,9 +91,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.FINEST;
+import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
-
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
@@ -103,17 +104,28 @@ import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import static javax.faces.FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY;
+import static javax.faces.application.ProjectStage.Development;
 import javax.faces.application.Resource;
-import javax.faces.application.ResourceHandler;
+import static javax.faces.application.Resource.COMPONENT_RESOURCE_KEY;
 import javax.faces.application.StateManager;
+import static javax.faces.application.StateManager.IS_BUILDING_INITIAL_STATE;
+import static javax.faces.application.StateManager.STATE_SAVING_METHOD_SERVER;
 import javax.faces.application.ViewHandler;
+import static javax.faces.application.ViewHandler.CHARACTER_ENCODING_KEY;
+import static javax.faces.application.ViewHandler.DEFAULT_FACELETS_SUFFIX;
 import javax.faces.application.ViewVisitOption;
+import static javax.faces.application.ViewVisitOption.RETURN_AS_MINIMAL_IMPLICIT_OUTCOME;
 import javax.faces.component.ActionSource2;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
+import static javax.faces.component.UIComponent.BEANINFO_KEY;
+import static javax.faces.component.UIComponent.COMPOSITE_FACET_NAME;
+import static javax.faces.component.UIComponent.VIEW_LOCATION_KEY;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
+import static javax.faces.component.UIViewRoot.COMPONENT_TYPE;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
@@ -132,6 +144,7 @@ import javax.faces.view.ActionSource2AttachedObjectHandler;
 import javax.faces.view.ActionSource2AttachedObjectTarget;
 import javax.faces.view.AttachedObjectHandler;
 import javax.faces.view.AttachedObjectTarget;
+import static javax.faces.view.AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY;
 import javax.faces.view.BehaviorHolderAttachedObjectHandler;
 import javax.faces.view.BehaviorHolderAttachedObjectTarget;
 import javax.faces.view.EditableValueHolderAttachedObjectHandler;
@@ -144,27 +157,9 @@ import javax.faces.view.ViewDeclarationLanguageFactory;
 import javax.faces.view.ViewMetadata;
 import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletContext;
+import static javax.faces.view.facelets.FaceletContext.FACELET_CONTEXT_KEY;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import javax.servlet.http.HttpSession;
-
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.context.StateContext;
-import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
-import com.sun.faces.facelets.el.VariableMapperWrapper;
-import com.sun.faces.facelets.impl.DefaultFaceletFactory;
-import com.sun.faces.facelets.impl.XMLFrontMatterSaver;
-import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
-import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
-import com.sun.faces.facelets.tag.ui.UIDebug;
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.scripting.groovy.GroovyHelper;
-import com.sun.faces.util.Cache;
-import com.sun.faces.util.Cache.Factory;
-import com.sun.faces.util.ComponentStruct;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.HtmlUtils;
-import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.util.Util;
 
 /**
  * This {@link ViewHandlingStrategy} handles Facelets/PDL-based views.
@@ -192,8 +187,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     private MethodRetargetHandlerManager retargetHandlerManager =
           new MethodRetargetHandlerManager();
 
-
-    private boolean groovyAvailable;
     private int responseBufferSize;
     private boolean responseBufferSizeSet;
     private boolean isTrinidadStateManager;
@@ -667,19 +660,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         notNull("context", context);
         notNull("componentResource", componentResource);
 
-        if (!groovyAvailable) {
-            return null;
-        }
-        Resource result = null;
-
-        String resourceName = componentResource.getResourceName();
-        if (resourceName.endsWith(".xhtml")) {
-            resourceName = resourceName.substring(0, resourceName.length() - 6) + ".groovy";
-            ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
-            result = resourceHandler.createResource(resourceName, componentResource.getLibraryName());
-        }
-        
-        return result;
+        return null;
     }
 
     /**
@@ -1040,8 +1021,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         this.initializeMappings();
-
-        groovyAvailable = GroovyHelper.isGroovyAvailable(FacesContext.getCurrentInstance());
 
         metadataCache = new Cache<>(new Factory<Resource, BeanInfo>() {
 

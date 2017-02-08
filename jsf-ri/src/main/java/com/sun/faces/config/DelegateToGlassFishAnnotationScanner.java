@@ -40,9 +40,9 @@
  */
 package com.sun.faces.config;
 
+import com.sun.faces.spi.AnnotationScanner.ScannedAnnotation;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.FacesLogger;
-import static com.sun.faces.spi.AnnotationScanner.ScannedAnnotation;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -80,7 +80,6 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
         Set<String> classList = new HashSet<>();
 
         processAnnotations(classList);
-        processScripts(classList);
 
         return processClassList(classList);
     }

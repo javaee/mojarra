@@ -41,42 +41,21 @@
 package com.sun.faces.config.processor;
 
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.ApplicationResourceBundle;
 import com.sun.faces.application.ApplicationInstanceFactoryMetadataMap;
+import com.sun.faces.application.ApplicationResourceBundle;
 import com.sun.faces.application.annotation.AnnotationManager;
-import com.sun.faces.config.ConfigurationException;
-import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.ConfigManager;
+import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import com.sun.faces.util.ReflectionUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.scripting.groovy.RendererProxy;
-import com.sun.faces.scripting.groovy.NavigationHandlerProxy;
-import com.sun.faces.scripting.groovy.ELResolverProxy;
-import com.sun.faces.scripting.groovy.PhaseListenerProxy;
-import com.sun.faces.scripting.groovy.ViewHandlerProxy;
-import com.sun.faces.scripting.groovy.ActionListenerProxy;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.FacesLogger;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
-import javax.faces.FactoryFinder;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionListener;
-import javax.faces.event.PhaseListener;
-import javax.faces.render.Renderer;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.NavigationHandler;
-import javax.faces.application.ViewHandler;
-import javax.el.ELResolver;
-import javax.servlet.ServletContext;
-
-import java.lang.reflect.Constructor;
+import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Util;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -86,7 +65,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.faces.application.ProjectStage;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 
 /**
@@ -303,18 +289,6 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
             try {
                 clazz = loadClass(sc, className, returnObject, null);
                 if (clazz != null) {
-                    if (isDevModeEnabled(sc)) {
-                        Class<?>[] interfaces = clazz.getInterfaces();
-                        if (interfaces != null) {
-                            for (Class<?> c : interfaces) {
-                                if ("groovy.lang.GroovyObject".equals(c.getName())) {
-                                    // all groovy classes will implement this interface
-                                    returnObject = createScriptProxy(rootType, className, root);
-                                    break;
-                                }
-                            }
-                        }
-                    }
                     if (returnObject == null) {
                         // Look for an adapter constructor if we've got
                         // an object to adapt
@@ -464,28 +438,6 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                                     cause);
 
     }
-
-
-    private Object createScriptProxy(Class<?> artifactType,
-                                     String scriptName,
-                                     Object root) {
-        if (Renderer.class.equals(artifactType)) {
-            return new RendererProxy(scriptName);
-        } else if (PhaseListener.class.equals(artifactType)) {
-            return new PhaseListenerProxy(scriptName);
-        } else if (ViewHandler.class.equals(artifactType)) {
-            return new ViewHandlerProxy(scriptName, (ViewHandler) root);
-        } else if (NavigationHandler.class.equals(artifactType)) {
-            return new NavigationHandlerProxy(scriptName, (NavigationHandler) root);
-        } else if (ActionListener.class.equals(artifactType)) {
-            return new ActionListenerProxy(scriptName, (ActionListener) root);
-        } else if (ELResolver.class.equals(artifactType)) {
-            return new ELResolverProxy(scriptName);
-        } else {
-            return null;
-        }
-    }
-
 
     private boolean isDevModeEnabled(ServletContext sc) {
         return getProjectStage(sc).equals(ProjectStage.Development);

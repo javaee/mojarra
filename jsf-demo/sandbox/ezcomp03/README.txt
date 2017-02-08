@@ -1,1 +1,0 @@
-This demo requires the Java EE APIs.

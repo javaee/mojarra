@@ -40,24 +40,22 @@
 
 package com.sun.faces.application.resource;
 
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.DefaultResourceMaxAge;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceBufferSize;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceExcludes;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.RequestStateManager;
 import static com.sun.faces.util.RequestStateManager.RESOURCE_REQUEST;
+import com.sun.faces.util.Util;
 import static com.sun.faces.util.Util.getFacesMapping;
 import static com.sun.faces.util.Util.isPrefixMapped;
 import static com.sun.faces.util.Util.notNegative;
 import static com.sun.faces.util.Util.notNull;
-import static java.lang.Boolean.FALSE;
-import static java.util.logging.Level.FINE;
-import static java.util.logging.Level.WARNING;
-import static javax.faces.application.ProjectStage.Development;
-import static javax.faces.application.ProjectStage.Production;
-import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
-import static javax.servlet.http.HttpServletResponse.SC_NOT_MODIFIED;
-
 import java.io.IOException;
 import java.io.InputStream;
+import static java.lang.Boolean.FALSE;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -66,21 +64,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.WARNING;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
+import static javax.faces.application.ProjectStage.Development;
+import static javax.faces.application.ProjectStage.Production;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.ResourceVisitOption;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.util.Util;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_MODIFIED;
 
 /**
  * This is the default implementation of {@link ResourceHandler}.
@@ -203,12 +200,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
         ResourceInfo info = manager.findResource(resourceId);
         String ctype = getContentType(ctx, resourceId);
         if (info == null) {
-            // prevent message from being when we're dealing with
-            // groovy is present and Application.createComponent()
-            // tries to resolve a .groovy file as backing UIComponent.
-            if (!development && "application/x-groovy".equals(ctype)) {
-                return null;
-            }
             logMissingResource(ctx, resourceId, null);
             return null;
         } else {

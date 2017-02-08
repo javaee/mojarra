@@ -62,7 +62,6 @@ Import-Package: javax.faces.*,\
   javax.persistence.*;resolution:=optional, \
   javax.xml.*,org.w3c.dom.*, \
   com.sun.enterprise.*;resolution:=optional, \
-  groovy.*;resolution:=optional,\
   org.mortbay.jetty.annotations;resolution:=optional, \
   org.mortbay.jetty.plus.annotation;resolution:=optional, \
   org.apache.*;resolution:=optional, \

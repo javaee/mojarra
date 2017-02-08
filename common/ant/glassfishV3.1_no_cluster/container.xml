@@ -275,7 +275,6 @@
             </then>
         </if>
 
-        <copy overwrite="true" file="${groovy.jar}" todir="${container.home}/modules"/>
         <if>
             <not>
                 <isset property="skip.container.bounce"/>
@@ -290,8 +289,6 @@
     <target name="container.undeploy.test.dependencies"
             description="Undeploy any container level dependencies from the container.">
         <container.stop/>
-
-        <delete failonerror="false" file="${container.home}/modules/${groovy.jarfile}"/>
 
         <container.start/>
     </target>

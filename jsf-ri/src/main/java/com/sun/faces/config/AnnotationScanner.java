@@ -40,7 +40,11 @@
 
 package com.sun.faces.config;
 
-import javax.faces.view.facelets.FaceletsResourceResolver;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.AnnotationScanPackages;
+import com.sun.faces.spi.AnnotationProvider;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -48,27 +52,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import com.sun.faces.scripting.ScriptManager;
-import com.sun.faces.scripting.groovy.GroovyHelper;
-import com.sun.faces.scripting.groovy.GroovyScriptManager;
-import com.sun.faces.spi.AnnotationProvider;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.behavior.FacesBehavior;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.NamedEvent;
 import javax.faces.render.FacesBehaviorRenderer;
 import javax.faces.render.FacesRenderer;
 import javax.faces.validator.FacesValidator;
+import javax.faces.view.facelets.FaceletsResourceResolver;
 import javax.servlet.ServletContext;
-import java.lang.annotation.Annotation;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.AnnotationScanPackages;
 
 
 /**
@@ -145,7 +140,6 @@ public abstract class AnnotationScanner extends AnnotationProvider {
         FACES_ANNOTATION_TYPE = Collections.unmodifiableSet(annotationInstances);
     }
 
-    private List<ScriptManager> scriptManagers = new ArrayList<>();
     private boolean isAnnotationScanPackagesSet = false;
     private String[] webInfClassesPackages;
     private Map<String,String[]> classpathPackages;
@@ -163,10 +157,6 @@ public abstract class AnnotationScanner extends AnnotationProvider {
      */
     public AnnotationScanner(ServletContext sc) {
         super(sc);
-
-        if (GroovyHelper.isGroovyAvailable(FacesContext.getCurrentInstance())) {
-            scriptManagers.add(new GroovyScriptManager(sc));
-        }
 
         WebConfiguration webConfig = WebConfiguration.getInstance(sc);
 	initializeAnnotationScanPackages(sc, webConfig);
@@ -342,18 +332,6 @@ public abstract class AnnotationScanner extends AnnotationProvider {
         return ((annotatedClasses != null)
                 ? annotatedClasses
                 : Collections.<Class<? extends Annotation>, Set<Class<?>>>emptyMap());
-
-	// </editor-fold>
-
-    }
-
-    protected void processScripts(Set<String> classList) {
-
-	// <editor-fold defaultstate="collapsed">
-
-        for (ScriptManager sm : scriptManagers) {
-            classList.addAll(sm.getScripts());
-        }
 
 	// </editor-fold>
 

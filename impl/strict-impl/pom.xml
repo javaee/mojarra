@@ -153,14 +153,6 @@
             <scope>provided</scope>
         </dependency>
         
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>2.4.4</version>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
-        
         <!-- 
             Depend on the source jar of the full implementation Mojarra jar. This is used for
             unpacking and re-compiling. This jar is created by executing mvn clean install

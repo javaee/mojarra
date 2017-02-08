@@ -58,7 +58,6 @@
 <!--        <module>ezcomp00</module>-->
         <module>ezcomp02</module>
 <!--        <module>ezcomp03</module>-->
-        <module>groovy-demo</module>
         <module>head-body</module>
 <!--        <module>stock</module>-->
         <module>tree-visit</module>

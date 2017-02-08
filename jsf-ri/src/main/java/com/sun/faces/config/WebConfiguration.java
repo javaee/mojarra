@@ -94,7 +94,9 @@ import com.sun.faces.lifecycle.HttpMethodRestrictionsPhaseListener;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
-/** Class Documentation */
+/**
+ * Class Documentation
+ */
 public class WebConfiguration {
 
     // Log instance for this class
@@ -915,8 +917,8 @@ public class WebConfiguration {
               ""
         ),
         ResourceExcludes(
-            ResourceHandler.RESOURCE_EXCLUDES_PARAM_NAME,
-            ResourceHandler.RESOURCE_EXCLUDES_DEFAULT_VALUE + " .groovy"
+                ResourceHandler.RESOURCE_EXCLUDES_PARAM_NAME,
+                ResourceHandler.RESOURCE_EXCLUDES_DEFAULT_VALUE
         ),
         NumberOfViews(
               "com.sun.faces.numberOfViewsInSession",
@@ -1316,10 +1318,6 @@ public class WebConfiguration {
         ),
         RegisterConverterPropertyEditors(
             "com.sun.faces.registerConverterPropertyEditors",
-            false
-        ),
-        EnableGroovyScripting(
-            "com.sun.faces.enableGroovyScripting",
             false
         ),
         DisableFaceletJSFViewHandler(

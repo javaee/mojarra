@@ -39,15 +39,31 @@
  */
 package com.sun.faces.config;
 
+import com.sun.faces.RIConstants;
 import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableGroovyScripting;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.WebappLifecycleListener;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableWebsocketEndpoint;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceLoadFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.VerifyFacesConfigObjects;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
-
+import com.sun.faces.el.ChainTypeCompositeELResolver;
+import com.sun.faces.el.ELContextImpl;
+import com.sun.faces.el.ELContextListenerImpl;
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.mgbean.BeanBuilder;
+import com.sun.faces.mgbean.BeanManager;
+import com.sun.faces.push.WebsocketEndpoint;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.MojarraThreadFactory;
+import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Timer;
+import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -66,7 +82,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.FactoryFinder;
@@ -96,32 +111,10 @@ import javax.websocket.server.ServerEndpointConfig;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.WebappLifecycleListener;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import com.sun.faces.el.ChainTypeCompositeELResolver;
-import com.sun.faces.el.ELContextImpl;
-import com.sun.faces.el.ELContextListenerImpl;
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.el.FacesCompositeELResolver;
-import com.sun.faces.mgbean.BeanBuilder;
-import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.push.WebsocketEndpoint;
-import com.sun.faces.scripting.groovy.GroovyHelper;
-import com.sun.faces.scripting.groovy.GroovyHelperFactory;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.MojarraThreadFactory;
-import com.sun.faces.util.ReflectionUtils;
-import com.sun.faces.util.Timer;
-import com.sun.faces.util.Util;
 
 /**
  * <p>Parse all relevant JavaServer Faces configuration resources, and
@@ -233,7 +226,6 @@ public class ConfigureListener implements ServletRequestListener,
                 webConfig.overrideContextInitParameter(EnableLazyBeanValidation, false);
                 Verifier.setCurrentInstance(new Verifier());
             }
-            initScripting();
             configManager.initialize(context);
             if (shouldInitConfigMonitoring()) {
                 initConfigMonitoring(context);
@@ -353,10 +345,6 @@ public class ConfigureListener implements ServletRequestListener,
             }
             if (webResourcePool != null) {
                 webResourcePool.shutdownNow();
-            }
-            GroovyHelper helper = GroovyHelper.getCurrentInstance(context);
-            if (helper != null) {
-                helper.setClassLoader();
             }
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
@@ -540,16 +528,6 @@ public class ConfigureListener implements ServletRequestListener,
 
     }
 
-    private void initScripting() {
-        if (webConfig.isOptionEnabled(EnableGroovyScripting)) {
-            GroovyHelper helper = GroovyHelperFactory.createHelper();
-            if (helper != null) {
-                helper.setClassLoader();
-            }
-        }
-    }
-
-
     private boolean isDevModeEnabled() {
 
         // interrogate the init parameter directly vs looking up the application
@@ -569,10 +547,6 @@ public class ConfigureListener implements ServletRequestListener,
             LOGGER.log(Level.INFO,
                     "Reloading JSF configuration for context {0}",
                     getServletContextIdentifier(sc));
-        }
-        GroovyHelper helper = GroovyHelper.getCurrentInstance();
-        if (helper != null) {
-            helper.setClassLoader();
         }
         // tear down the application
         try {

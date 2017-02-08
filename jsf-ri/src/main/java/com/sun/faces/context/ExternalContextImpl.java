@@ -40,12 +40,18 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SendPoweredByHeader;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.WebsocketEndpointPort;
+import com.sun.faces.context.flash.ELFlash;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
 import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
 import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
-
+import com.sun.faces.util.TypedCollections;
+import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -63,7 +69,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
@@ -84,14 +89,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.context.flash.ELFlash;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.TypedCollections;
-import com.sun.faces.util.Util;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
@@ -155,7 +152,6 @@ public class ExternalContextImpl extends ExternalContext {
         fallbackContentTypeMap = new HashMap<>(3, 1.0f);
         fallbackContentTypeMap.put("js", "text/javascript");
         fallbackContentTypeMap.put("css", "text/css");
-        fallbackContentTypeMap.put("groovy", "application/x-groovy");
         fallbackContentTypeMap.put("properties", "text/plain");
         
     }

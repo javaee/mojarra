@@ -41,91 +41,90 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.scripting.groovy.GroovyHelper;
-import com.sun.faces.application.resource.ResourceCache;
-import com.sun.faces.application.resource.ResourceManager;
 import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.application.annotation.FacesComponentUsage;
+import com.sun.faces.application.resource.ResourceCache;
+import com.sun.faces.application.resource.ResourceManager;
 import com.sun.faces.component.search.SearchExpressionHandlerImpl;
 import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.facelets.compiler.Compiler;
-import com.sun.faces.facelets.compiler.SAXCompiler;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.SystemEvent;
-import javax.faces.view.facelets.TagDecorator;
-import com.sun.faces.facelets.tag.composite.CompositeLibrary;
-import com.sun.faces.facelets.tag.jstl.core.JstlCoreLibrary;
-import com.sun.faces.facelets.tag.jstl.fn.JstlFunction;
-import com.sun.faces.facelets.tag.ui.UILibrary;
-import com.sun.faces.facelets.tag.jsf.core.CoreLibrary;
-import com.sun.faces.facelets.tag.jsf.html.HtmlLibrary;
-import com.sun.faces.facelets.util.ReflectionUtil;
-import com.sun.faces.facelets.util.FunctionLibrary;
-import com.sun.faces.facelets.util.DevTools;
-import javax.faces.view.facelets.ResourceResolver;
-import javax.faces.view.facelets.FaceletCache;
-import com.sun.faces.facelets.impl.DefaultResourceResolver;
-import com.sun.faces.facelets.impl.DefaultFaceletFactory;
-import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.spi.InjectionProvider;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.*;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableFaceletsResourceResolverResolveCompositeComponents;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.*;
 import com.sun.faces.el.DemuxCompositeELResolver;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
+import com.sun.faces.facelets.compiler.Compiler;
+import com.sun.faces.facelets.compiler.SAXCompiler;
+import com.sun.faces.facelets.impl.DefaultFaceletFactory;
+import com.sun.faces.facelets.impl.DefaultResourceResolver;
+import com.sun.faces.facelets.tag.composite.CompositeLibrary;
 import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
 import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
+import com.sun.faces.facelets.tag.jsf.core.CoreLibrary;
+import com.sun.faces.facelets.tag.jsf.html.HtmlLibrary;
+import com.sun.faces.facelets.tag.jstl.core.JstlCoreLibrary;
+import com.sun.faces.facelets.tag.jstl.fn.JstlFunction;
+import com.sun.faces.facelets.tag.ui.UILibrary;
+import com.sun.faces.facelets.util.DevTools;
+import com.sun.faces.facelets.util.FunctionLibrary;
+import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
+import com.sun.faces.mgbean.BeanManager;
+import com.sun.faces.spi.InjectionProvider;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import javax.el.CompositeELResolver;
-import javax.el.ELResolver;
-import javax.el.ExpressionFactory;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.el.PropertyResolver;
-import javax.faces.el.VariableResolver;
-import javax.faces.application.ProjectStage;
-import javax.faces.event.PreDestroyCustomScopeEvent;
-import javax.faces.event.ScopeContext;
-import javax.servlet.ServletContext;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.LinkedHashSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.concurrent.ConcurrentHashMap;
+import javax.el.CompositeELResolver;
+import javax.el.ELResolver;
+import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationCase;
+import javax.faces.application.ProjectStage;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.FacesComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.search.SearchExpressionHandler;
 import javax.faces.component.search.SearchKeywordResolver;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.el.PropertyResolver;
+import javax.faces.el.VariableResolver;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostConstructApplicationEvent;
+import javax.faces.event.PreDestroyCustomScopeEvent;
+import javax.faces.event.ScopeContext;
+import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowHandlerFactory;
+import javax.faces.view.facelets.FaceletCache;
 import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletsResourceResolver;
+import javax.faces.view.facelets.ResourceResolver;
+import javax.faces.view.facelets.TagDecorator;
+import javax.servlet.ServletContext;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -206,7 +205,6 @@ public class ApplicationAssociate {
     private boolean errorPagePresent;
 
     private BeanManager beanManager;
-    private GroovyHelper groovyHelper;
     private AnnotationManager annotationManager;
     private boolean devModeEnabled;
     private Compiler compiler;
@@ -259,8 +257,6 @@ public class ApplicationAssociate {
                              ScopeContext.class,
                              beanManager);
         annotationManager = new AnnotationManager();
-
-        groovyHelper = GroovyHelper.getCurrentInstance();
 
         devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
 
@@ -469,10 +465,6 @@ public class ApplicationAssociate {
 
     public BeanManager getBeanManager() {
         return beanManager;
-    }
-
-    public GroovyHelper getGroovyHelper() {
-        return groovyHelper;
     }
 
     public void initializeELResolverChains() {

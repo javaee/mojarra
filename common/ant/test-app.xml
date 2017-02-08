@@ -63,7 +63,7 @@ Define some properties in your build file that imports
 this file.  Use the following as an example.
 
     &lt;property name="deploy-exploded-applications"
-              value="groovy" /&gt;
+              value="myapp" /&gt;
 
     &lt;property name="applications-for-V3-only"
               value="disable-bean-validator,
