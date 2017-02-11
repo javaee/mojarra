@@ -41,21 +41,52 @@
 package com.sun.faces.application;
 
 
-import java.beans.*;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.RegisterConverterPropertyEditors;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
+import static com.sun.faces.util.MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID;
+import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
+import static com.sun.faces.util.Util.getCdiBeanManager;
+import static com.sun.faces.util.Util.getWebXmlVersion;
+import static com.sun.faces.util.Util.notNull;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static javax.faces.application.ProjectStage.Development;
+import static javax.faces.application.ProjectStage.Production;
+
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.beans.PropertyEditor;
+import java.beans.PropertyEditorManager;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,16 +96,21 @@ import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
+import javax.el.ValueExpression;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ProjectStage;
+import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
-import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.component.search.SearchExpressionHandler;
+import javax.faces.component.search.SearchKeywordResolver;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
@@ -85,8 +121,23 @@ import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionListener;
+import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
+import javax.faces.event.PostAddToViewEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
+import javax.faces.event.SystemEventListenerHolder;
 import javax.faces.flow.FlowHandler;
+import javax.faces.render.RenderKit;
+import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.xml.sax.InputSource;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.cdi.CdiUtils;
@@ -104,9 +155,6 @@ import com.sun.faces.component.search.SearchKeywordResolverImplPrevious;
 import com.sun.faces.component.search.SearchKeywordResolverImplRoot;
 import com.sun.faces.component.search.SearchKeywordResolverImplThis;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.RegisterConverterPropertyEditors;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
@@ -117,39 +165,6 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashSet;
-
-import java.util.LinkedHashSet;
-
-import javax.faces.event.ExceptionQueuedEvent;
-import javax.faces.event.PostAddToViewEvent;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
-import javax.faces.event.SystemEventListenerHolder;
-import javax.faces.event.ExceptionQueuedEventContext;
-
-import java.util.List;
-import java.util.TimeZone;
-import java.util.LinkedHashMap;
-
-import javax.el.ValueExpression;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.faces.application.Resource;
-import javax.faces.component.search.SearchExpressionHandler;
-import javax.faces.component.search.SearchKeywordResolver;
-import javax.faces.render.RenderKit;
-import javax.faces.render.Renderer;
-import javax.faces.view.ViewDeclarationLanguage;
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import org.xml.sax.InputSource;
 
 
 /**
@@ -285,12 +300,8 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#publishEvent(FacesContext, Class, Object)
      */
     @Override
-    public void publishEvent(FacesContext context,
-                             Class<? extends SystemEvent> systemEventClass,
-                             Object source) {
-
+    public void publishEvent(FacesContext context, Class<? extends SystemEvent> systemEventClass, Object source) {
         publishEvent(context, systemEventClass, null, source);
-
     }
 
 
@@ -298,27 +309,22 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#publishEvent(FacesContext, Class, Object)
      */
     @Override
-    public void publishEvent(FacesContext context,
-                             Class<? extends SystemEvent> systemEventClass,
-                             Class<?> sourceBaseType,
-                             Object source) {
+    public void publishEvent(FacesContext context, Class<? extends SystemEvent> systemEventClass, Class<?> sourceBaseType, Object source) {
 
-        Util.notNull("context", context);
-        Util.notNull("systemEventClass", systemEventClass);
-        Util.notNull("source", source);
+        notNull("context", context);
+        notNull("systemEventClass", systemEventClass);
+        notNull("source", source);
+        
         if (!needsProcessing(context, systemEventClass)) {
             return;
         }
-        // source is not compatible with the provided base type.
-        // Log a warning that the types are incompatible and return. 
-        if (getProjectStage() == ProjectStage.Development
-              && sourceBaseType != null
-              && !sourceBaseType.isInstance(source)) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
-                           "jsf.application.publish.event.base_type_mismatch",
-                           new Object[] { source.getClass().getName(),
-                                          sourceBaseType.getName() });                
+        
+        // Source is not compatible with the provided base type.
+        // Log a warning that the types are incompatible and return.
+        if (getProjectStage() == Development && sourceBaseType != null && !sourceBaseType.isInstance(source)) {
+            if (LOGGER.isLoggable(WARNING)) {
+                LOGGER.log(WARNING, "jsf.application.publish.event.base_type_mismatch",
+                        new Object[] { source.getClass().getName(), sourceBaseType.getName() });
             }
             return;
         }
@@ -338,38 +344,25 @@ public class ApplicationImpl extends Application {
 
             // look for and invoke any listeners stored on the application
             // using source type.
-            event = invokeListenersFor(systemEventClass,
-                                       event,
-                                       source,
-                                       sourceBaseType,
-                                       true);
+            event = invokeListenersFor(systemEventClass, event, source, sourceBaseType, true);
 
             // look for and invoke any listeners not specific to the source class
             invokeListenersFor(systemEventClass, event, source, null, false);
         } catch (AbortProcessingException ape) {
-            context.getApplication().publishEvent(context,
-                                                  ExceptionQueuedEvent.class,
-                                                  new ExceptionQueuedEventContext(context, ape));
+            context.getApplication().publishEvent(context, ExceptionQueuedEvent.class, new ExceptionQueuedEventContext(context, ape));
         }
-
     }
-
 
     /**
      * @see Application#subscribeToEvent(Class, Class, javax.faces.event.SystemEventListener)
      */
     @Override
-    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
-                                 Class<?> sourceClass,
-                                 SystemEventListener listener) {
+    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass, Class<?> sourceClass, SystemEventListener listener) {
 
-        Util.notNull("systemEventClass", systemEventClass);
-        Util.notNull("listener", listener);
+        notNull("systemEventClass", systemEventClass);
+        notNull("listener", listener);
 
-        Set<SystemEventListener> listeners =
-              getListeners(systemEventClass, sourceClass);
-        listeners.add(listener);
-
+        getListeners(systemEventClass, sourceClass).add(listener);
     }
 
 
@@ -377,44 +370,34 @@ public class ApplicationImpl extends Application {
      * @see Application#subscribeToEvent(Class, javax.faces.event.SystemEventListener)
      */
     @Override
-    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
-                                 SystemEventListener listener) {
-
+    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass, SystemEventListener listener) {
         subscribeToEvent(systemEventClass, null, listener);
-
     }
 
 
     /**
-     * @see Application#unsubscribeFromEvent(Class, Class, javax.faces.event.SystemEventListener)
+     * @see Application#unsubscribeFromEvent(Class, Class,
+     *      javax.faces.event.SystemEventListener)
      */
     @Override
-    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
-                                     Class<?> sourceClass,
-                                     SystemEventListener listener) {
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass, Class<?> sourceClass, SystemEventListener listener) {
 
-        Util.notNull("systemEventClass", systemEventClass);
-        Util.notNull("listener", listener);
+        notNull("systemEventClass", systemEventClass);
+        notNull("listener", listener);
 
-        Set<SystemEventListener> listeners =
-              getListeners(systemEventClass, sourceClass);
+        Set<SystemEventListener> listeners = getListeners(systemEventClass, sourceClass);
         if (listeners != null) {
             listeners.remove(listener);
         }
-
     }
 
     /**
      * @see Application#unsubscribeFromEvent(Class, javax.faces.event.SystemEventListener)
      */
     @Override
-    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
-                                     SystemEventListener listener) {
-
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass, SystemEventListener listener) {
         unsubscribeFromEvent(systemEventClass, null, listener);
-
     }
-
 
     /**
      * @see javax.faces.application.Application#addELContextListener(javax.el.ELContextListener)
@@ -426,7 +409,6 @@ public class ApplicationImpl extends Application {
         }
     }
 
-
     /**
      * @see javax.faces.application.Application#removeELContextListener(javax.el.ELContextListener)
      */
@@ -437,20 +419,17 @@ public class ApplicationImpl extends Application {
         }
     }
 
-
     /**
      * @see javax.faces.application.Application#getELContextListeners()
      */
     @Override
-    public ELContextListener [] getELContextListeners() {
+    public ELContextListener[] getELContextListeners() {
         if (!elContextListeners.isEmpty()) {
-            return elContextListeners.toArray(
-                       new ELContextListener[elContextListeners.size()]);
+            return elContextListeners.toArray(new ELContextListener[elContextListeners.size()]);
         } else {
             return EMPTY_EL_CTX_LIST_ARRAY;
         }
     }
-
 
     /**
      * @see javax.faces.application.Application#getExpressionFactory()
@@ -468,53 +447,36 @@ public class ApplicationImpl extends Application {
     @Override
     public synchronized void setFlowHandler(FlowHandler flowHandler) {
 
-        Util.notNull("flowHandler", flowHandler);
+        notNull("flowHandler", flowHandler);
 
         associate.setFlowHandler(flowHandler);
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("set FlowHandler Instance to ''{0}''",
-                                             flowHandler.getClass().getName()));
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format("set FlowHandler Instance to ''{0}''", flowHandler.getClass().getName()));
         }
     }
 
-    
-
-
     /**
-     * @see javax.faces.application.Application#evaluateExpressionGet(javax.faces.context.FacesContext, String, Class)
+     * @see javax.faces.application.Application#evaluateExpressionGet(javax.faces.context.FacesContext,
+     *      String, Class)
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public <T> T evaluateExpressionGet(FacesContext context,
-                                       String expression,
-                                       Class<? extends T> expectedType) throws ELException {
-        ValueExpression ve = 
-          getExpressionFactory().createValueExpression(context.getELContext(), 
-                                                       expression,
-                                                       expectedType);
-        //noinspection unchecked
-        return (T)(ve.getValue(context.getELContext()));
+    public <T> T evaluateExpressionGet(FacesContext context, String expression, Class<? extends T> expectedType) throws ELException {
+        return (T) getExpressionFactory()
+                        .createValueExpression(context.getELContext(), expression, expectedType)
+                        .getValue(context.getELContext());
     }
 
-
     @Override
-    public UIComponent createComponent(ValueExpression componentExpression,
-                                       FacesContext context,
-                                       String componentType)
-    throws FacesException {
+    public UIComponent createComponent(ValueExpression componentExpression, FacesContext context, String componentType) throws FacesException {
 
-        Util.notNull("componentExpression", componentExpression);
-        Util.notNull("context", context);
-        Util.notNull("componentType", componentType);
+        notNull("componentExpression", componentExpression);
+        notNull("context", context);
+        notNull("componentType", componentType);
 
-        return createComponentApplyAnnotations(context,
-                                               componentExpression,
-                                               componentType,
-                                               null,
-                                               true);
-
+        return createComponentApplyAnnotations(context, componentExpression, componentType, null, true);
     }
-
 
     /**
      * @see javax.faces.application.Application#getELResolver()
@@ -527,9 +489,7 @@ public class ApplicationImpl extends Application {
         }
 
         return compositeELResolver;
-
     }
-
 
     /**
      * @see javax.faces.application.Application#addELResolver(javax.el.ELResolver)
@@ -538,17 +498,14 @@ public class ApplicationImpl extends Application {
     public void addELResolver(ELResolver resolver) {
 
         if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ELResolver"));
+            throw new IllegalStateException(getExceptionMessageString(
+                ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ELResolver"));
         }
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
-                Util.getWebXmlVersion(facesContext).equals("4.0")) {
-            
-            javax.enterprise.inject.spi.BeanManager beanManager = 
-                Util.getCdiBeanManager(facesContext);
+        if (getFacesConfigXmlVersion(facesContext).equals("2.3") || getWebXmlVersion(facesContext).equals("4.0")) {
+
+            javax.enterprise.inject.spi.BeanManager beanManager = getCdiBeanManager(facesContext);
             
             if (beanManager != null && !resolver.equals(beanManager.getELResolver())) {
                 elResolvers.add(resolver);
@@ -558,59 +515,53 @@ public class ApplicationImpl extends Application {
         }
     }
 
-
     /**
      * @see javax.faces.application.Application#getProjectStage() 
      */
     @Override
     public ProjectStage getProjectStage() {
-        
+
         if (projectStage == null) {
-            WebConfiguration webConfig =
-                  WebConfiguration.getInstance(
-                        FacesContext.getCurrentInstance().getExternalContext());
+            WebConfiguration webConfig = WebConfiguration.getInstance(FacesContext.getCurrentInstance().getExternalContext());
             String value = webConfig.getEnvironmentEntry(WebConfiguration.WebEnvironmentEntry.ProjectStage);
+            
             if (value != null) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               "ProjectStage configured via JNDI: {0}",
-                               value);
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, "ProjectStage configured via JNDI: {0}", value);
                 }
             } else {
-                value = webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage);
-                if (value != null && LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                       "ProjectStage configured via servlet context init parameter: {0}", 
-                       value);
+                value = webConfig.getOptionValue(JavaxFacesProjectStage);
+                if (value != null && LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, "ProjectStage configured via servlet context init parameter: {0}", value);
                 }
             }
+            
             if (value != null) {
                 try {
                     projectStage = ProjectStage.valueOf(value);
                 } catch (IllegalArgumentException iae) {
-                    if (LOGGER.isLoggable(Level.INFO)) {
-                        LOGGER.log(Level.INFO,
-                                   "Unable to discern ProjectStage for value {0}.",
-                                   value);
+                    if (LOGGER.isLoggable(INFO)) {
+                        LOGGER.log(INFO, "Unable to discern ProjectStage for value {0}.", value);
                     }
                 }
             }
+            
             if (projectStage == null) {
-                projectStage = ProjectStage.Production;
+                projectStage = Production;
             }
-            if (projectStage == ProjectStage.Development) {
+            
+            if (projectStage == Development) {
                 subscribeToEvent(PostAddToViewEvent.class, new ValidateComponentNesting());
             }
-           
-        }
-        return projectStage;
 
+        }
+        
+        return projectStage;
     }
 
     public CompositeELResolver getApplicationELResolvers() {
         return elResolvers;
     }
-
 
     /**
      * @see javax.faces.application.Application#getActionListener()
@@ -620,7 +571,6 @@ public class ApplicationImpl extends Application {
         return actionListener;
     }
 
-
     /**
      * @see javax.faces.application.Application#getViewHandler()
      */
@@ -629,26 +579,24 @@ public class ApplicationImpl extends Application {
         return viewHandler;
     }
 
-
     /**
      * @see javax.faces.application.Application#setViewHandler(javax.faces.application.ViewHandler)
      */
     @Override
     public synchronized void setViewHandler(ViewHandler viewHandler) {
 
-        Util.notNull("viewHandler", viewHandler);
+        notNull("viewHandler", viewHandler);
 
         if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ViewHandler"));
+            throw new IllegalStateException(getExceptionMessageString(
+                ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ViewHandler"));
         }
 
         this.viewHandler = viewHandler;
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, MessageFormat.format("set ViewHandler Instance to ''{0}''", viewHandler.getClass().getName()));
+        
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, MessageFormat.format("set ViewHandler Instance to ''{0}''", viewHandler.getClass().getName()));
         }
-
     }
 
     /**
@@ -656,11 +604,8 @@ public class ApplicationImpl extends Application {
      */
     @Override
     public ResourceHandler getResourceHandler() {
-
         return resourceHandler;
-
     }
-
 
     /**
      * @see javax.faces.application.Application#setResourceHandler(javax.faces.application.ResourceHandler)
@@ -668,23 +613,18 @@ public class ApplicationImpl extends Application {
     @Override
     public synchronized void setResourceHandler(ResourceHandler resourceHandler) {
 
-        Util.notNull("resourceHandler", resourceHandler);
+        notNull("resourceHandler", resourceHandler);
 
         if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ResourceHandler"));
+            throw new IllegalStateException(getExceptionMessageString(
+                ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ResourceHandler"));
         }
 
         this.resourceHandler = resourceHandler;
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE,
-                       "set ResourceHandler Instance to ''{0}''",
-                       resourceHandler.getClass().getName());
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, "set ResourceHandler Instance to ''{0}''", resourceHandler.getClass().getName());
         }
-
     }
-
 
     /**
      * @see javax.faces.application.Application#getStateManager()
@@ -694,29 +634,25 @@ public class ApplicationImpl extends Application {
         return stateManager;
     }
 
-
     /**
      * @see javax.faces.application.Application#setStateManager(javax.faces.application.StateManager)
      */
     @Override
     public synchronized void setStateManager(StateManager stateManager) {
 
-        Util.notNull("stateManager", stateManager);
+        notNull("stateManager", stateManager);
 
         if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "StateManager"));
+            throw new IllegalStateException(getExceptionMessageString(
+                ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "StateManager"));
         }
 
         this.stateManager = stateManager;
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, MessageFormat.format("set StateManager Instance to ''{0}''",
-                                                        stateManager.getClass().getName()));
+        
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, MessageFormat.format("set StateManager Instance to ''{0}''", stateManager.getClass().getName()));
         }
-
     }
-
 
     /**
      * @see Application#setActionListener(javax.faces.event.ActionListener)
@@ -724,16 +660,14 @@ public class ApplicationImpl extends Application {
     @Override
     public synchronized void setActionListener(ActionListener actionListener) {
 
-        Util.notNull("actionListener", actionListener);
+        notNull("actionListener", actionListener);
 
         this.actionListener = actionListener;
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("set ActionListener Instance to ''{0}''",
-                                             actionListener.getClass().getName()));
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format("set ActionListener Instance to ''{0}''", actionListener.getClass().getName()));
         }
     }
-
 
     /**
      * @see javax.faces.application.Application#getNavigationHandler()
@@ -743,20 +677,18 @@ public class ApplicationImpl extends Application {
         return navigationHandler;
     }
 
-
     /**
      * @see javax.faces.application.Application#setNavigationHandler(javax.faces.application.NavigationHandler)
      */
     @Override
     public synchronized void setNavigationHandler(NavigationHandler navigationHandler) {
 
-        Util.notNull("navigationHandler", navigationHandler);
+        notNull("navigationHandler", navigationHandler);
 
         this.navigationHandler = navigationHandler;
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("set NavigationHandler Instance to ''{0}''",
-                                             navigationHandler.getClass().getName()));
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format("set NavigationHandler Instance to ''{0}''", navigationHandler.getClass().getName()));
         }
     }
 
@@ -769,9 +701,9 @@ public class ApplicationImpl extends Application {
         if (compositeELResolver == null) {
             performOneTimeELInitialization();
         }
+        
         return propertyResolver;
     }
-
 
     /**
      * @see javax.faces.application.Application#getResourceBundle(javax.faces.context.FacesContext, String)
@@ -779,12 +711,11 @@ public class ApplicationImpl extends Application {
     @Override
     public ResourceBundle getResourceBundle(FacesContext context, String var) {
 
-        Util.notNull("context", context);
-        Util.notNull("var", var);
+        notNull("context", context);
+        notNull("var", var);
+        
         return associate.getResourceBundle(context, var);
-
     }
-
 
     /**
      * @see javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)
@@ -792,16 +723,16 @@ public class ApplicationImpl extends Application {
     @SuppressWarnings("deprecation")
     @Override
     public void setPropertyResolver(PropertyResolver resolver) {
-        // Throw Illegal State Exception if  a PropertyResolver is set after 
+        
+        // Throw Illegal State Exception if a PropertyResolver is set after
         // a request has been processed.
         if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(
-                    MessageUtils.getExceptionMessageString(
-                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "PropertyResolver"));
+            throw new IllegalStateException(getExceptionMessageString(
+                ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "PropertyResolver"));
         }
+        
         if (resolver == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
+            String message = getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
             throw new NullPointerException(message);
         }
 
@@ -809,8 +740,7 @@ public class ApplicationImpl extends Application {
         associate.setLegacyPropertyResolver(resolver);
         propertyResolver = new PropertyResolverImpl();
 
-
-        if (LOGGER.isLoggable(Level.FINE)) {
+        if (LOGGER.isLoggable(FINE)) {
             LOGGER.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", resolver.getClass().getName()));
         }
     }

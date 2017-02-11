@@ -99,7 +99,7 @@ public class ActionPhase extends Phase {
             /*
              * 2. Get an instance of that bean.
              */
-            Instance instance = CDI.current().select(
+            Instance<?> instance = CDI.current().select(
                     current.getBean().getBeanClass(), new AnnotationLiteral<Any>() {
 
                         private static final long serialVersionUID = 712321596615027132L;
@@ -138,6 +138,7 @@ public class ActionPhase extends Phase {
         Class clazz = bean.getBeanClass();
         AnnotatedType annotatedType = beanManager.createAnnotatedType(clazz);
         Set<AnnotatedMethod> annotatedMethodSet = annotatedType.getMethods();
+        
         for (AnnotatedMethod method : annotatedMethodSet) {
             if (method.isAnnotationPresent(RequestMapping.class)) {
                 RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);

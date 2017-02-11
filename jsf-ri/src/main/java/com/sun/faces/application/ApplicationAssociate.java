@@ -40,46 +40,27 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.application.annotation.AnnotationManager;
-import com.sun.faces.application.annotation.FacesComponentUsage;
-import com.sun.faces.application.resource.ResourceCache;
-import com.sun.faces.application.resource.ResourceManager;
-import com.sun.faces.component.search.SearchExpressionHandlerImpl;
-import com.sun.faces.config.ConfigManager;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import static com.sun.faces.RIConstants.FACES_CONFIG_VERSION;
+import static com.sun.faces.RIConstants.FACES_PREFIX;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableFaceletsResourceResolverResolveCompositeComponents;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.*;
-import com.sun.faces.el.DemuxCompositeELResolver;
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.el.FacesCompositeELResolver;
-import com.sun.faces.el.VariableResolverChainWrapper;
-import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
-import com.sun.faces.facelets.compiler.Compiler;
-import com.sun.faces.facelets.compiler.SAXCompiler;
-import com.sun.faces.facelets.impl.DefaultFaceletFactory;
-import com.sun.faces.facelets.impl.DefaultResourceResolver;
-import com.sun.faces.facelets.tag.composite.CompositeLibrary;
-import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
-import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
-import com.sun.faces.facelets.tag.jsf.core.CoreLibrary;
-import com.sun.faces.facelets.tag.jsf.html.HtmlLibrary;
-import com.sun.faces.facelets.tag.jstl.core.JstlCoreLibrary;
-import com.sun.faces.facelets.tag.jstl.fn.JstlFunction;
-import com.sun.faces.facelets.tag.ui.UILibrary;
-import com.sun.faces.facelets.util.DevTools;
-import com.sun.faces.facelets.util.FunctionLibrary;
-import com.sun.faces.facelets.util.ReflectionUtil;
-import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
-import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.spi.InjectionProvider;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletCache;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsDecorators;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsDefaultRefreshPeriod;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsDefaultRefreshPeriodDeprecated;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsResourceResolver;
+import static com.sun.faces.el.ELUtils.buildFacesResolver;
+import static com.sun.faces.el.FacesCompositeELResolver.ELResolverChainType.Faces;
+import static com.sun.faces.lifecycle.ELResolverInitPhaseListener.populateFacesELResolverForJsp;
+import static com.sun.faces.util.MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
+import static com.sun.faces.util.Util.getFacesConfigXmlVersion;
+import static com.sun.faces.util.Util.isCdiAvailable;
+import static java.util.logging.Level.SEVERE;
+import static javax.faces.FactoryFinder.FLOW_HANDLER_FACTORY;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -94,6 +75,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
@@ -126,6 +108,39 @@ import javax.faces.view.facelets.ResourceResolver;
 import javax.faces.view.facelets.TagDecorator;
 import javax.servlet.ServletContext;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.application.annotation.AnnotationManager;
+import com.sun.faces.application.annotation.FacesComponentUsage;
+import com.sun.faces.application.resource.ResourceCache;
+import com.sun.faces.application.resource.ResourceManager;
+import com.sun.faces.component.search.SearchExpressionHandlerImpl;
+import com.sun.faces.config.ConfigManager;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.el.DemuxCompositeELResolver;
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.el.VariableResolverChainWrapper;
+import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
+import com.sun.faces.facelets.compiler.Compiler;
+import com.sun.faces.facelets.compiler.SAXCompiler;
+import com.sun.faces.facelets.impl.DefaultFaceletFactory;
+import com.sun.faces.facelets.impl.DefaultResourceResolver;
+import com.sun.faces.facelets.tag.composite.CompositeLibrary;
+import com.sun.faces.facelets.tag.jsf.PassThroughAttributeLibrary;
+import com.sun.faces.facelets.tag.jsf.PassThroughElementLibrary;
+import com.sun.faces.facelets.tag.jsf.core.CoreLibrary;
+import com.sun.faces.facelets.tag.jsf.html.HtmlLibrary;
+import com.sun.faces.facelets.tag.jstl.core.JstlCoreLibrary;
+import com.sun.faces.facelets.tag.jstl.fn.JstlFunction;
+import com.sun.faces.facelets.tag.ui.UILibrary;
+import com.sun.faces.facelets.util.DevTools;
+import com.sun.faces.facelets.util.FunctionLibrary;
+import com.sun.faces.facelets.util.ReflectionUtil;
+import com.sun.faces.mgbean.BeanManager;
+import com.sun.faces.spi.InjectionProvider;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+
 /**
  * <p>Break out the things that are associated with the Application, but
  * need to be present even when the user has replaced the Application
@@ -136,7 +151,6 @@ import javax.servlet.ServletContext;
  * certain kinds of expressions, but allow the existing application to
  * handle the rest.</p>
  */
-
 public class ApplicationAssociate {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
@@ -234,17 +248,15 @@ public class ApplicationAssociate {
         FacesContext ctx = FacesContext.getCurrentInstance();
         if (ctx == null) {
             throw new IllegalStateException(
-                    "ApplicationAssociate ctor not called in same callstack as ConfigureListener.contextInitialized()");
+                "ApplicationAssociate ctor not called in same callstack as ConfigureListener.contextInitialized()");
         }
         ExternalContext externalContext = ctx.getExternalContext();
-        if (null != externalContext.getApplicationMap().get(ASSOCIATE_KEY)) {
-            throw new IllegalStateException(
-                 MessageUtils.getExceptionMessageString(
-                      MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID));
+        if (externalContext.getApplicationMap().get(ASSOCIATE_KEY) != null) {
+            throw new IllegalStateException(getExceptionMessageString(APPLICATION_ASSOCIATE_EXISTS_ID));
         }
         Map<String, Object> appMap = externalContext.getApplicationMap();
         appMap.put(ASSOCIATE_KEY, this);
-        //noinspection CollectionWithoutInitialCapacity
+
         navigationMap = new ConcurrentHashMap<>();
         injectionProvider = (InjectionProvider) ctx.getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
         webConfig = WebConfiguration.getInstance(externalContext);
@@ -296,24 +308,24 @@ public class ApplicationAssociate {
         public void processEvent(SystemEvent event) throws AbortProcessingException {
             ApplicationAssociate.this.initializeFacelets();
             
-            if (null == ApplicationAssociate.this.flowHandler) {
-                FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
+            if (ApplicationAssociate.this.flowHandler == null) {
+                FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FLOW_HANDLER_FACTORY);
                 ApplicationAssociate.this.flowHandler = flowHandlerFactory.createFlowHandler(FacesContext.getCurrentInstance());
             }
 
-            if (null == ApplicationAssociate.this.searchExpressionHandler) {
+            if (ApplicationAssociate.this.searchExpressionHandler == null) {
                 ApplicationAssociate.this.searchExpressionHandler = new SearchExpressionHandlerImpl();
             }
 
             FacesContext context = FacesContext.getCurrentInstance();
-            if (Util.isCdiAvailable(context)) {
+            if (isCdiAvailable(context)) {
                 try {
-                    JavaFlowLoaderHelper flowLoader = new JavaFlowLoaderHelper();
-                    flowLoader.loadFlows(context, ApplicationAssociate.this.flowHandler);
+                    new JavaFlowLoaderHelper().loadFlows(context, ApplicationAssociate.this.flowHandler);
                 } catch (IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(SEVERE, null, ex);
                 }
             }
+            
             // cause the Facelet VDL to be instantiated eagerly, so it can 
             // become aware of the resource library contracts
             
@@ -321,18 +333,16 @@ public class ApplicationAssociate {
 
             // FindBugs: ignore the return value, this is just to get the 
             // ctor called at this time.
-            viewHandler.getViewDeclarationLanguage(context, 
-                    RIConstants.FACES_PREFIX + "xhtml");
+            viewHandler.getViewDeclarationLanguage(context, FACES_PREFIX + "xhtml");
             
-            String facesConfigVersion = Util.getFacesConfigXmlVersion(context);
-            context.getExternalContext().getApplicationMap().put(RIConstants.FACES_CONFIG_VERSION, facesConfigVersion);
-
+            String facesConfigVersion = getFacesConfigXmlVersion(context);
+            context.getExternalContext().getApplicationMap().put(FACES_CONFIG_VERSION, facesConfigVersion);
         }
         
     }
     
     public void initializeFacelets() {
-        if (null != compiler) {
+        if (compiler != null) {
             return;
         }
         
@@ -347,14 +357,13 @@ public class ApplicationAssociate {
         
     }
 
-    public static ApplicationAssociate getInstance(ExternalContext
-         externalContext) {
+    public static ApplicationAssociate getInstance(ExternalContext externalContext) {
         if (externalContext == null) {
             return null;
         }
-        Map applicationMap = externalContext.getApplicationMap();
-        return (ApplicationAssociate)
-             applicationMap.get(ASSOCIATE_KEY);
+        
+        return (ApplicationAssociate) externalContext.getApplicationMap()
+                                                     .get(ASSOCIATE_KEY);
     }
     
     public long getTimeOfInstantiation() {
@@ -365,17 +374,16 @@ public class ApplicationAssociate {
         if (context == null) {
             return null;
         }
+        
         return (ApplicationAssociate) context.getAttribute(ASSOCIATE_KEY);
     }
 
     public static void setCurrentInstance(ApplicationAssociate associate) {
-
         if (associate == null) {
             instance.remove();
         } else {
             instance.set(associate);
         }
-        
     }
 
     public static ApplicationAssociate getCurrentInstance() {
@@ -393,13 +401,11 @@ public class ApplicationAssociate {
         }
 
         return associate;
-
     }
 
     public ApplicationStateInfo getApplicationStateInfo() {
         return applicationStateInfo;
     }
-
 
     public ResourceManager getResourceManager() {
         return resourceManager;
@@ -427,8 +433,7 @@ public class ApplicationAssociate {
         if (null == compiler) {
             initializeFacelets();
         }
-        
-        
+
         return compiler;
     }
 
@@ -444,24 +449,26 @@ public class ApplicationAssociate {
         return faceletFactory;
     }
 
-    public static void clearInstance(ExternalContext
-         externalContext) {
-        Map applicationMap = externalContext.getApplicationMap();
+    public static void clearInstance(ExternalContext externalContext) {
+        Map<String, Object> applicationMap = externalContext.getApplicationMap();
         ApplicationAssociate me = (ApplicationAssociate) applicationMap.get(ASSOCIATE_KEY);
-        if (null != me && null != me.resourceBundles) {
+        
+        if (me != null && me.resourceBundles != null) {
             me.resourceBundles.clear();
         }
+        
         applicationMap.remove(ASSOCIATE_KEY);
     }
 
-    public static void clearInstance(ServletContext sc) {
-        ApplicationAssociate me = (ApplicationAssociate) sc.getAttribute(ASSOCIATE_KEY);
-        if (null != me && null != me.resourceBundles) {
+    public static void clearInstance(ServletContext servletContext) {
+        ApplicationAssociate me = (ApplicationAssociate) servletContext.getAttribute(ASSOCIATE_KEY);
+        
+        if (me != null && me.resourceBundles != null) {
             me.resourceBundles.clear();
         }
-        sc.removeAttribute(ASSOCIATE_KEY);    
+        
+        servletContext.removeAttribute(ASSOCIATE_KEY);    
     }
-
 
     public BeanManager getBeanManager() {
         return beanManager;
@@ -469,24 +476,22 @@ public class ApplicationAssociate {
 
     public void initializeELResolverChains() {
         // 1. initialize the chains with default values
-        if (null == app.compositeELResolver) {
-            app.compositeELResolver =
-                    new DemuxCompositeELResolver(
-                    FacesCompositeELResolver.ELResolverChainType.Faces);
-            ELUtils.buildFacesResolver(app.compositeELResolver, this);
-            ELResolverInitPhaseListener.populateFacesELResolverForJsp(app,
-                    this);
+        if (app.compositeELResolver == null) {
+            app.compositeELResolver = new DemuxCompositeELResolver(Faces);
+            buildFacesResolver(app.compositeELResolver, this);
+            populateFacesELResolverForJsp(app, this);
         }
     }
 
     public void installProgrammaticallyAddedResolvers() {
         // Ensure custom resolvers are inserted at the correct place.
-        VariableResolver vr = this.getLegacyVariableResolver();
-        if (null != vr) {
-            assert null != this.getLegacyVRChainHeadWrapperForJsp();
-            this.getLegacyVRChainHeadWrapperForJsp().setWrapped(vr);
-            assert null != this.getLegacyVRChainHeadWrapperForFaces();
-            this.getLegacyVRChainHeadWrapperForFaces().setWrapped(vr);
+        VariableResolver variableResolver = this.getLegacyVariableResolver();
+        if (variableResolver != null) {
+            assert getLegacyVRChainHeadWrapperForJsp() != null;
+            getLegacyVRChainHeadWrapperForJsp().setWrapped(variableResolver);
+            
+            assert getLegacyVRChainHeadWrapperForFaces() != null;
+            getLegacyVRChainHeadWrapperForFaces().setWrapped(variableResolver);
         }
     }
 

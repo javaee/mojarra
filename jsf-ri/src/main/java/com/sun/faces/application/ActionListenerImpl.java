@@ -40,6 +40,11 @@
 
 package com.sun.faces.application;
 
+import static java.util.logging.Level.FINE;
+
+import java.text.MessageFormat;
+import java.util.logging.Logger;
+
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
@@ -51,10 +56,6 @@ import javax.faces.el.MethodBinding;
 import javax.faces.el.MethodNotFoundException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.text.MessageFormat;
 
 import com.sun.faces.util.FacesLogger;
 
@@ -75,17 +76,16 @@ public class ActionListenerImpl implements ActionListener {
 
 
     // --------------------------------------------- Methods From ActionListener
-
  
 
     @SuppressWarnings("deprecation")
     @Override
     public void processAction(ActionEvent event) {
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("processAction({0})",
-                                             event.getComponent().getId()));
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format("processAction({0})", event.getComponent().getId()));
         }
+        
         UIComponent source = event.getComponent();
         ActionSource actionSource = (ActionSource) source;
         FacesContext context = event.getFacesContext();
@@ -99,25 +99,21 @@ public class ActionListenerImpl implements ActionListener {
         binding = actionSource.getAction();
         if (binding != null) {
             try {
-                if (null != (invokeResult = binding.invoke(context, null))) {
+                if ((invokeResult = binding.invoke(context, null)) != null) {
                     outcome = invokeResult.toString();
                 }
                 // else, default to null, as assigned above.
             } catch (MethodNotFoundException e) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, e.getMessage(), e);
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, e.getMessage(), e);
                 }
-                throw new FacesException
-                      (binding.getExpressionString() + ": " + e.getMessage(),
-                       e);
+                throw new FacesException(binding.getExpressionString() + ": " + e.getMessage(), e);
             }
             catch (EvaluationException e) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, e.getMessage(), e);
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, e.getMessage(), e);
                 }
-                throw new FacesException
-                      (binding.getExpressionString() + ": " + e.getMessage(),
-                       e);
+                throw new FacesException(binding.getExpressionString() + ": " + e.getMessage(), e);
             }
         }
 
@@ -127,15 +123,15 @@ public class ActionListenerImpl implements ActionListener {
 
         // Invoke nav handling..
         
-        String toFlowDocumentId = (String) source.getAttributes().get(ActionListener.TO_FLOW_DOCUMENT_ID_ATTR_NAME);
-        if (null == toFlowDocumentId) {
+        String toFlowDocumentId = (String) source.getAttributes().get(TO_FLOW_DOCUMENT_ID_ATTR_NAME);
+        if (toFlowDocumentId == null) {
             navHandler.handleNavigation(context,
-                    (null != binding) ?
+                    binding != null ?
                     binding.getExpressionString() : null,
                     outcome);
         } else {
             navHandler.handleNavigation(context,
-                    (null != binding) ?
+                    binding != null ?
                     binding.getExpressionString() : null,
                     outcome, toFlowDocumentId);
         }

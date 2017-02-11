@@ -39,6 +39,8 @@
  */
 package com.sun.faces.action;
 
+import static com.sun.faces.action.ActionLifecycle.ACTION_LIFECYCLE;
+
 import java.util.Iterator;
 
 import javax.faces.lifecycle.Lifecycle;
@@ -53,7 +55,7 @@ public class ActionLifecycleFactory extends LifecycleFactory {
      */
     public ActionLifecycleFactory(LifecycleFactory wrapped) {
         super(wrapped);
-        addLifecycle(ActionLifecycle.ACTION_LIFECYCLE, new ActionLifecycle());
+        addLifecycle(ACTION_LIFECYCLE, new ActionLifecycle());
     }
 
     /**

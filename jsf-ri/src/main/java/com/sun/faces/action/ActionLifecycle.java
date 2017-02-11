@@ -39,13 +39,15 @@
  */
 package com.sun.faces.action;
 
-import com.sun.faces.lifecycle.Phase;
-import com.sun.faces.lifecycle.RenderResponsePhase;
-import java.util.Arrays;
+import static java.util.Arrays.asList;
+
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
+
+import com.sun.faces.lifecycle.Phase;
+import com.sun.faces.lifecycle.RenderResponsePhase;
 
 public class ActionLifecycle extends Lifecycle {
     
@@ -57,8 +59,7 @@ public class ActionLifecycle extends Lifecycle {
     public ActionLifecycle() {
         renderResponsePhase = new RenderResponsePhase();
         try {
-            Class phaseClass = Class.forName("com.sun.faces.action.ActionPhase");
-            actionPhase = (Phase) phaseClass.newInstance();
+            actionPhase = (Phase) Class.forName("com.sun.faces.action.ActionPhase").newInstance();
         } catch(ClassNotFoundException | InstantiationException | IllegalAccessException throwable) {  
             actionPhase = null;
         }
@@ -71,7 +72,7 @@ public class ActionLifecycle extends Lifecycle {
     @Override
     public void execute(FacesContext context) throws FacesException {
         if (actionPhase != null) {
-            actionPhase.doPhase(context, this, Arrays.asList(getPhaseListeners()).listIterator());
+            actionPhase.doPhase(context, this, asList(getPhaseListeners()).listIterator());
         } else {
             throw new FacesException("Unable to handle action");
         }
@@ -88,6 +89,6 @@ public class ActionLifecycle extends Lifecycle {
 
     @Override
     public void render(FacesContext context) throws FacesException {
-        renderResponsePhase.doPhase(context, this, Arrays.asList(getPhaseListeners()).listIterator());
+        renderResponsePhase.doPhase(context, this, asList(getPhaseListeners()).listIterator());
     }
 }

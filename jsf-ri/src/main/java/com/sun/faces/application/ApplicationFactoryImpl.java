@@ -40,53 +40,40 @@
 
 package com.sun.faces.application;
 
+import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
+import static java.util.logging.Level.FINE;
+
 import java.text.MessageFormat;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
 
 /**
  * Default implementation of {@link ApplicationFactory}.
  */
 public class ApplicationFactoryImpl extends ApplicationFactory {
 
-   // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
-    //
-    // Protected Constants
-    //
 
-    //
-    // Class Variables
-    //
-
+    
     // Attribute Instance Variables
 
     private volatile Application application;
 
-    // Relationship Instance Variables
-
-    //
+    
     // Constructors and Initializers
-    //
 
-
-    /*
-     * Constructor
-     */
     public ApplicationFactoryImpl() {
         super(null);
         application = null;
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, "Created ApplicationFactory ");
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, "Created ApplicationFactory ");
         }
     }
-
 
     /**
      * <p>Create (if needed) and return an {@link Application} instance
@@ -98,14 +85,15 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
         if (application == null) {
             application = new ApplicationImpl();
             InjectionApplicationFactory.setApplicationInstance(application);
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine(MessageFormat.format("Created Application instance ''{0}''",
-                                                 application));
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.fine(MessageFormat.format(
+                                "Created Application instance ''{0}''",
+                                application));
             }
         }
+        
         return application;
     }
-
 
     /**
      * <p>Replace the {@link Application} instance that will be
@@ -116,15 +104,16 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
     @Override
     public synchronized void setApplication(Application application) {
         if (application == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "application");
-            throw new NullPointerException(message);
+            throw new NullPointerException(getExceptionMessageString(
+                NULL_PARAMETERS_ERROR_MESSAGE_ID, "application"));
         }
 
         this.application = application;
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("set Application Instance to ''{0}''", 
-                                             application.getClass().getName()));
+        
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format(
+                            "set Application Instance to ''{0}''", 
+                            application.getClass().getName()));
         }
     }
 }
