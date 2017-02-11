@@ -1212,6 +1212,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>2.9.1</version>
                 <configuration>
+                    <includes>javax/**/*.java</includes>
                     <configLocation>${project.build.directory}/../checkstyle-config.xml</configLocation>
                 </configuration>
                 <reportSets>
