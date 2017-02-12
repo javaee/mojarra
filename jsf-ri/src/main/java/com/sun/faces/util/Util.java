@@ -42,10 +42,13 @@
 
 package com.sun.faces.util;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.io.FastStringWriter;
+import static com.sun.faces.util.MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID;
+import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
 import static com.sun.faces.util.RequestStateManager.INVOCATION_PATH;
+import static java.util.Collections.emptyList;
+import static java.util.logging.Level.FINE;
+
 import java.beans.FeatureDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,16 +61,15 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
-import static java.util.Collections.emptyList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import static java.util.logging.Level.FINE;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
 import javax.el.ELResolver;
 import javax.el.ValueExpression;
 import javax.enterprise.inject.spi.BeanManager;
@@ -98,7 +100,13 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
 import org.xml.sax.InputSource;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.io.FastStringWriter;
 
 /**
  * <B>Util</B> is a class ...
@@ -433,10 +441,17 @@ public class Util {
     public static void notNull(String varname, Object var) {
         if (var == null) {
             throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(
-                      MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, varname));
+                  getExceptionMessageString(
+                      NULL_PARAMETERS_ERROR_MESSAGE_ID, varname));
         }
-        
+    }
+    
+    public static void canSetAppArtifact(ApplicationAssociate applicationAssociate, String artifactName) {
+        if (applicationAssociate.hasRequestBeenServiced()) {
+            throw new IllegalStateException(
+                    getExceptionMessageString(
+                        ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, artifactName));
+        }
     }
     
     public static void notNullAttribute(String attributeName, Object attribute) {
@@ -451,6 +466,54 @@ public class Util {
         notNullAttribute(name, valueExpression);
         
         return valueExpression;
+    }
+    
+    /**
+     * Returns true if the given string is null or is empty.
+     *
+     * @param string The string to be checked on emptiness.
+     * @return True if the given string is null or is empty.
+     */
+    public static boolean isEmpty(String string) {
+        return string == null || string.isEmpty();
+    }
+
+    /**
+     * Returns <code>true</code> if the given array is null or is empty.
+     *
+     * @param array The array to be checked on emptiness.
+     * @return <code>true</code> if the given array is null or is empty.
+     */
+    public static boolean isEmpty(Object[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
+     * Returns <code>true</code> if the given collection is null or is empty.
+     *
+     * @param collection The collection to be checked on emptiness.
+     * @return <code>true</code> if the given collection is null or is empty.
+     */
+    public static boolean isEmpty(Collection<?> collection) {
+        return collection == null || collection.isEmpty();
+    }
+
+    /**
+     * Returns <code>true</code> if the given object equals one of the given objects.
+     * @param <T> The generic object type.
+     * @param object The object to be checked if it equals one of the given objects.
+     * @param objects The argument list of objects to be tested for equality.
+     * @return <code>true</code> if the given object equals one of the given objects.
+     */
+    @SafeVarargs
+    public static <T> boolean isOneOf(T object, T... objects) {
+        for (Object other : objects) {
+            if (object == null ? other == null : object.equals(other)) {
+                return true;
+            }
+        }
+
+        return false;
     }
     
     public static <T> List<T> reverse(List<T> list) {

@@ -45,21 +45,31 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.RegisterConverterPropertyEditors;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
 import static com.sun.faces.util.MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID;
+import static com.sun.faces.util.MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID;
 import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
 import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
+import static com.sun.faces.util.Util.canSetAppArtifact;
 import static com.sun.faces.util.Util.getCdiBeanManager;
 import static com.sun.faces.util.Util.getWebXmlVersion;
+import static com.sun.faces.util.Util.isEmpty;
+import static com.sun.faces.util.Util.loadClass;
 import static com.sun.faces.util.Util.notNull;
+import static java.beans.Introspector.getBeanInfo;
+import static java.beans.PropertyEditorManager.findEditor;
 import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Level.WARNING;
 import static javax.faces.application.ProjectStage.Development;
 import static javax.faces.application.ProjectStage.Production;
+import static javax.faces.application.Resource.COMPONENT_RESOURCE_KEY;
+import static javax.faces.component.UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES;
+import static javax.faces.component.UIComponent.BEANINFO_KEY;
+import static javax.faces.component.UIComponent.COMPOSITE_COMPONENT_TYPE_KEY;
 
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
-import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
@@ -824,20 +834,16 @@ public class ApplicationImpl extends Application {
     @SuppressWarnings("deprecation")
     @Override
     public void setVariableResolver(VariableResolver resolver) {
-        Util.notNull("variableResolver", resolver);
-
-        if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(
-                    MessageUtils.getExceptionMessageString(
-                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "VariableResolver"));
-        }
+        notNull("variableResolver", resolver);
+        canSetAppArtifact(associate, "VariableResolver");
 
         variableResolver.setDelegate(ELUtils.getDelegateVR(associate, true));
         associate.setLegacyVariableResolver(resolver);
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("set VariableResolver Instance to ''{0}''",
-                                             variableResolver.getClass().getName()));
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format(
+                "set VariableResolver Instance to ''{0}''",
+                variableResolver.getClass().getName()));
         }
     }
 
@@ -847,22 +853,20 @@ public class ApplicationImpl extends Application {
     @Override
     public void addBehavior(String behaviorId, String behaviorClass) {
 
-        Util.notNull("behaviorId", behaviorId);
-        Util.notNull("behaviorClass", behaviorClass);
+        notNull("behaviorId", behaviorId);
+        notNull("behaviorClass", behaviorClass);
 
-        if (LOGGER.isLoggable(Level.FINE) && behaviorMap.containsKey(behaviorId)) {
-            LOGGER.log(Level.FINE,
-                       "behaviorId {0} has already been registered.  Replacing existing behavior class type {1} with {2}.",
-                       new Object[] { behaviorId, behaviorMap.get(behaviorId), behaviorClass });
+        if (LOGGER.isLoggable(FINE) && behaviorMap.containsKey(behaviorId)) {
+            LOGGER.log(FINE,
+               "behaviorId {0} has already been registered.  Replacing existing behavior class type {1} with {2}.",
+               new Object[] { behaviorId, behaviorMap.get(behaviorId), behaviorClass });
         }
+        
         behaviorMap.put(behaviorId, behaviorClass);
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("added behavior of type ''{0}'' class ''{1}''",
-                                             behaviorId,
-                                             behaviorClass));
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format("added behavior of type ''{0}'' class ''{1}''", behaviorId, behaviorClass));
         }
-
     }
 
     /**
@@ -871,7 +875,7 @@ public class ApplicationImpl extends Application {
     @Override
     public Behavior createBehavior(String behaviorId) throws FacesException {
 
-        Util.notNull("behaviorId", behaviorId);
+        notNull("behaviorId", behaviorId);
         
         Behavior returnVal;
         
@@ -884,20 +888,23 @@ public class ApplicationImpl extends Application {
         }
         
         returnVal = (Behavior) newThing(behaviorId, behaviorMap);
+        
         if (returnVal == null) {
             Object[] params = {behaviorId};
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                        "jsf.cannot_instantiate_behavior_error", params);
+            if (LOGGER.isLoggable(SEVERE)) {
+                LOGGER.log(SEVERE,
+                    "jsf.cannot_instantiate_behavior_error", params);
             }
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+            throw new FacesException(getExceptionMessageString(NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("created behavior of type ''{0}''",
-                                             behaviorId));
+        
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format("created behavior of type ''{0}''", behaviorId));
         }
-        associate.getAnnotationManager().applyBehaviorAnnotations(FacesContext.getCurrentInstance(), returnVal);
+        
+        associate.getAnnotationManager()
+                 .applyBehaviorAnnotations(FacesContext.getCurrentInstance(), returnVal);
+        
         return returnVal;
     }
 
@@ -906,9 +913,7 @@ public class ApplicationImpl extends Application {
      */
     @Override
     public Iterator<String> getBehaviorIds() {
-
         return behaviorMap.keySet().iterator();
-
     }
 
     /**
@@ -917,35 +922,31 @@ public class ApplicationImpl extends Application {
     @Override
     public void addComponent(String componentType, String componentClass) {
 
-        Util.notNull("componentType", componentType);
-        Util.notNull("componentType", componentClass);
+        notNull("componentType", componentType);
+        notNull("componentType", componentClass);
 
-        if (LOGGER.isLoggable(Level.FINE) && componentMap.containsKey(componentType)) {
-            LOGGER.log(Level.FINE,
-                       "componentType {0} has already been registered.  Replacing existing component class type {1} with {2}.",
-                       new Object[] { componentType, componentMap.get(componentType), componentClass });
+        if (LOGGER.isLoggable(FINE) && componentMap.containsKey(componentType)) {
+            LOGGER.log(FINE,
+               "componentType {0} has already been registered.  Replacing existing component class type {1} with {2}.",
+               new Object[] { componentType, componentMap.get(componentType), componentClass });
         }
+        
         componentMap.put(componentType, componentClass);
         
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("added component of type ''{0}'' and class ''{1}''",
-                                             componentType,
-                                             componentClass));
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format(
+                "added component of type ''{0}'' and class ''{1}''",
+                 componentType, componentClass));
         }
-        
     }
 
 
     @Override
     public UIComponent createComponent(String componentType) throws FacesException {
 
-        Util.notNull("componentType", componentType);
+        notNull("componentType", componentType);
 
-        return createComponentApplyAnnotations(FacesContext.getCurrentInstance(),
-                                               componentType,
-                                               null,
-                                               true);
-
+        return createComponentApplyAnnotations(FacesContext.getCurrentInstance(), componentType, null, true);
     }
 
 
@@ -954,8 +955,8 @@ public class ApplicationImpl extends Application {
 
         // RELEASE_PENDING (rlubke,driscoll) this method needs review.
 
-        Util.notNull("context", context);
-        Util.notNull("componentResource", componentResource);
+        notNull("context", context);
+        notNull("componentResource", componentResource);
 
         UIComponent result = null;
 
@@ -963,19 +964,19 @@ public class ApplicationImpl extends Application {
         // overriden methods
         Application app = context.getApplication();
 
-        ViewDeclarationLanguage pdl = app.getViewHandler().getViewDeclarationLanguage(context, context.getViewRoot().getViewId());
-        BeanInfo componentMetadata = pdl.getComponentMetadata(context,
-                                                              componentResource);
-        if (null != componentMetadata){
+        ViewDeclarationLanguage vdl = app.getViewHandler().getViewDeclarationLanguage(context, context.getViewRoot().getViewId());
+        BeanInfo componentMetadata = vdl.getComponentMetadata(context, componentResource);
+        
+        if (componentMetadata != null) {
             BeanDescriptor componentBeanDescriptor = componentMetadata.getBeanDescriptor();
-            
+
             // Step 1.  See if the composite component author explicitly
             // gave a componentType as part of the composite component metadata
-            ValueExpression ve = (ValueExpression)
-                  componentBeanDescriptor.getValue(UIComponent.COMPOSITE_COMPONENT_TYPE_KEY);
-            if (null != ve) {
-                String componentType = (String) ve.getValue(context.getELContext());
-                if (null != componentType && 0 < componentType.length()) {
+            ValueExpression valueExpression = (ValueExpression) componentBeanDescriptor.getValue(COMPOSITE_COMPONENT_TYPE_KEY);
+            
+            if (valueExpression != null) {
+                String componentType = (String) valueExpression.getValue(context.getELContext());
+                if (!isEmpty(componentType)) {
                     result = app.createComponent(componentType);
                 }
             }
@@ -985,26 +986,25 @@ public class ApplicationImpl extends Application {
         // Step 2. If that didn't work, if a script based resource can be 
         // found for the scriptComponentResource,
         // see if a component can be generated from it
-        if (null == result) {
-            Resource scriptComponentResource = pdl.getScriptComponentResource(context, componentResource);
+        if (result == null) {
+            Resource scriptComponentResource = vdl.getScriptComponentResource(context, componentResource);
 
-            if (null != scriptComponentResource) {
-                result = createComponentFromScriptResource(context,
-                        scriptComponentResource, componentResource);
+            if (scriptComponentResource != null) {
+                result = createComponentFromScriptResource(context, scriptComponentResource, componentResource);
             }
         }
 
         // Step 3. Use the libraryName of the resource as the java package
         // and use the resourceName as the class name.  See
         // if a Java class can be loaded
-        if (null == result) {
+        if (result == null) {
             String packageName = componentResource.getLibraryName();
             String className = componentResource.getResourceName();
             className = packageName + '.' + className.substring(0, className.lastIndexOf('.'));
             try {
                 Class<?> clazz = (Class<?>) componentMap.get(className);
                 if (clazz == null) {
-                    clazz = Util.loadClass(className, this);
+                    clazz = loadClass(className, this);
                 }
                 if (clazz != ComponentResourceClassNotFound.class) {
                     if (!associate.isDevModeEnabled()) {
@@ -1022,26 +1022,23 @@ public class ApplicationImpl extends Application {
         }
 
         // Step 4. Use javax.faces.NamingContainer as the component type
-        if (null == result) {
+        if (result == null) {
             result = app.createComponent("javax.faces.NamingContainer");
         }
 
-        assert null != result;
+        assert result != null;
 
         result.setRendererType("javax.faces.Composite");
+        
         Map<String, Object> attrs = result.getAttributes();
-        attrs.put(Resource.COMPONENT_RESOURCE_KEY,
-                componentResource);
-        attrs.put(UIComponent.BEANINFO_KEY,
-                componentMetadata);
+        attrs.put(COMPONENT_RESOURCE_KEY, componentResource);
+        attrs.put(BEANINFO_KEY, componentMetadata);
 
         associate.getAnnotationManager().applyComponentAnnotations(context, result);
         pushDeclaredDefaultValuesToAttributesMap(context, componentMetadata, attrs, result);
 
-
         return result;
     }
-
 
     /*
      * This method makes it so that any cc:attribute elements that have
@@ -1050,38 +1047,36 @@ public class ApplicationImpl extends Application {
      * (as opposed to EL access) will find the attribute values.
      *
      */
-    private void pushDeclaredDefaultValuesToAttributesMap(FacesContext context,
-            BeanInfo componentMetadata, Map<String, Object> attrs, UIComponent component) {
-        PropertyDescriptor[] declaredAttributes = componentMetadata.getPropertyDescriptors();
-        Object defaultValue;
-        String key;
+    @SuppressWarnings("unchecked")
+    private void pushDeclaredDefaultValuesToAttributesMap(FacesContext context, BeanInfo componentMetadata, Map<String, Object> attrs, UIComponent component) {
+        
         Collection<String> attributesWithDeclaredDefaultValues = null;
+        PropertyDescriptor[] propertyDescriptors = null;
 
-        PropertyDescriptor[] pd = null;
-
-        for (PropertyDescriptor cur : declaredAttributes) {
-            defaultValue = cur.getValue("default");
-            if (null != defaultValue) {
-                key = cur.getName();
+        for (PropertyDescriptor propertyDescriptor : componentMetadata.getPropertyDescriptors()) {
+            Object defaultValue = propertyDescriptor.getValue("default");
+            
+            if (defaultValue != null) {
+                String key = propertyDescriptor.getName();
                 boolean isLiteralText = false;
+                
                 if (defaultValue instanceof ValueExpression) {
                     isLiteralText = ((ValueExpression)defaultValue).isLiteralText();
                     if (isLiteralText) {
                         defaultValue = ((ValueExpression)defaultValue).getValue(context.getELContext());
                     }
                 }
-                // ensure this attribute is not a method-signature.  method-signature
+                
+                // Ensure this attribute is not a method-signature.  method-signature
                 // declared default values are handled in retargetMethodExpressions.
-                if (null == cur.getValue("method-signature") || null != cur.getValue("type")) {
+                if (propertyDescriptor.getValue("method-signature") == null || propertyDescriptor.getValue("type") != null) {
 
-                    if (null == attributesWithDeclaredDefaultValues) {
-                        BeanDescriptor desc = componentMetadata.getBeanDescriptor();
-                        attributesWithDeclaredDefaultValues = (Collection<String>)
-                                desc.getValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES);
-                        if (null == attributesWithDeclaredDefaultValues) {
+                    if (attributesWithDeclaredDefaultValues == null) {
+                        BeanDescriptor beanDescriptor = componentMetadata.getBeanDescriptor();
+                        attributesWithDeclaredDefaultValues = (Collection<String>) beanDescriptor.getValue(ATTRS_WITH_DECLARED_DEFAULT_VALUES);
+                        if (attributesWithDeclaredDefaultValues == null) {
                             attributesWithDeclaredDefaultValues = new HashSet<>();
-                            desc.setValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES,
-                                    attributesWithDeclaredDefaultValues);
+                            beanDescriptor.setValue(ATTRS_WITH_DECLARED_DEFAULT_VALUES, attributesWithDeclaredDefaultValues);
                         }
                     }
                     attributesWithDeclaredDefaultValues.add(key);
@@ -1093,13 +1088,14 @@ public class ApplicationImpl extends Application {
                     // retargetMethodExpressions.
                     if (isLiteralText) {
                         try {
-                            if (null == pd) {
-                                pd = Introspector.getBeanInfo(component.getClass()).getPropertyDescriptors();
+                            if (propertyDescriptors == null) {
+                                propertyDescriptors = getBeanInfo(component.getClass()).getPropertyDescriptors();
                             }
                         } catch (IntrospectionException e) {
                             throw new FacesException(e);
                         }
-                        defaultValue = convertValueToTypeIfNecessary(key, defaultValue, pd);
+                        
+                        defaultValue = convertValueToTypeIfNecessary(key, defaultValue, propertyDescriptors);
                         attrs.put(key, defaultValue);
                     }
                 }
@@ -1112,28 +1108,22 @@ public class ApplicationImpl extends Application {
 
     @SuppressWarnings("deprecation")
     @Override
-    public UIComponent createComponent(ValueBinding componentBinding,
-                                       FacesContext context,
-                                       String componentType)
-    throws FacesException {
+    public UIComponent createComponent(ValueBinding componentBinding, FacesContext context, String componentType) throws FacesException {
 
-        Util.notNull("componentBinding", componentBinding);
-        Util.notNull("context", context);
-        Util.notNull("componentType", componentType);
+        notNull("componentBinding", componentBinding);
+        notNull("context", context);
+        notNull("componentType", componentType);
 
         Object result;
         boolean createOne = false;
         try {
             result = componentBinding.getValue(context);
             if (result != null) {
-                createOne = (!(result instanceof UIComponent));
+                createOne = !(result instanceof UIComponent);
             }
 
             if (result == null || createOne) {
-                result = this.createComponentApplyAnnotations(context,
-                                                              componentType,
-                                                              null,
-                                                              false);
+                result = this.createComponentApplyAnnotations(context, componentType, null, false);
                 componentBinding.setValue(context, result);
             }
         } catch (Exception ex) {
@@ -1141,42 +1131,25 @@ public class ApplicationImpl extends Application {
         }
 
         return (UIComponent) result;
-
     }
 
-
     @Override
-    public UIComponent createComponent(ValueExpression componentExpression,
-                                       FacesContext context,
-                                       String componentType,
-                                       String rendererType) {
+    public UIComponent createComponent(ValueExpression componentExpression, FacesContext context, String componentType, String rendererType) {
 
-        Util.notNull("componentExpression", componentExpression);
-        Util.notNull("context", context);
-        Util.notNull("componentType", componentType);
+        notNull("componentExpression", componentExpression);
+        notNull("context", context);
+        notNull("componentType", componentType);
 
-        return createComponentApplyAnnotations(context,
-                                               componentExpression,
-                                               componentType,
-                                               rendererType,
-                                               true);
-
+        return createComponentApplyAnnotations(context, componentExpression, componentType, rendererType, true);
     }
 
-
     @Override
-    public UIComponent createComponent(FacesContext context,
-                                       String componentType,
-                                       String rendererType) {
+    public UIComponent createComponent(FacesContext context, String componentType, String rendererType) {
 
-        Util.notNull("context", context);
-        Util.notNull("componentType", componentType);
+        notNull("context", context);
+        notNull("componentType", componentType);
 
-        return createComponentApplyAnnotations(context,
-                                               componentType,
-                                               rendererType,
-                                               true);
-
+        return createComponentApplyAnnotations(context, componentType, rendererType, true);
     }
 
     /**
@@ -1184,11 +1157,8 @@ public class ApplicationImpl extends Application {
      */
     @Override
     public Iterator<String> getComponentTypes() {
-
         return componentMap.keySet().iterator();
-
     }
-
 
     /**
      * @see javax.faces.application.Application#addConverter(String, String)
@@ -1196,13 +1166,13 @@ public class ApplicationImpl extends Application {
     @Override
     public void addConverter(String converterId, String converterClass) {
 
-        Util.notNull("converterId", converterId);
-        Util.notNull("converterClass", converterClass);
+        notNull("converterId", converterId);
+        notNull("converterClass", converterClass);
 
-        if (LOGGER.isLoggable(Level.FINE) && converterIdMap.containsKey(converterId)) {
-            LOGGER.log(Level.FINE,
-                       "converterId {0} has already been registered.  Replacing existing converter class type {1} with {2}.",
-                       new Object[] { converterId, converterIdMap.get(converterId), converterClass });
+        if (LOGGER.isLoggable(FINE) && converterIdMap.containsKey(converterId)) {
+            LOGGER.log(FINE, 
+                "converterId {0} has already been registered.  Replacing existing converter class type {1} with {2}.",
+                new Object[] { converterId, converterIdMap.get(converterId), converterClass });
         }
 
         converterIdMap.put(converterId, converterClass);
@@ -1215,11 +1185,9 @@ public class ApplicationImpl extends Application {
                 addPropertyEditorIfNecessary(clazz);
             }
         }
-        
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("added converter of type ''{0}'' and class ''{1}''",
-                                             converterId,
-                                             converterClass));
+
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format("added converter of type ''{0}'' and class ''{1}''", converterId, converterClass));
         }
     }
 
@@ -1230,27 +1198,24 @@ public class ApplicationImpl extends Application {
     @Override
     public void addConverter(Class<?> targetClass, String converterClass) {
 
-        Util.notNull("targetClass", targetClass);
-        Util.notNull("converterClass", converterClass);
+        notNull("targetClass", targetClass);
+        notNull("converterClass", converterClass);
 
         String converterId = STANDARD_TYPE_TO_CONV_ID_MAP.get(targetClass);
         if (converterId != null) {
             addConverter(converterId, converterClass);
         } else {
-            if (LOGGER.isLoggable(Level.FINE) && converterTypeMap
-                  .containsKey(targetClass)) {
-                LOGGER.log(Level.FINE,
-                           "converter target class {0} has already been registered.  Replacing existing converter class type {1} with {2}.",
-                           new Object[]{
-                                 targetClass.getName(),
-                                 converterTypeMap.get(targetClass),
-                                 converterClass});
+            if (LOGGER.isLoggable(FINE) && converterTypeMap.containsKey(targetClass)) {
+                LOGGER.log(FINE, 
+                    "converter target class {0} has already been registered.  Replacing existing converter class type {1} with {2}.",
+                    new Object[] { targetClass.getName(), converterTypeMap.get(targetClass), converterClass });
             }
+            
             converterTypeMap.put(targetClass, converterClass);
             addPropertyEditorIfNecessary(targetClass);
-        }                
-        
-        if (LOGGER.isLoggable(Level.FINE)) {
+        }
+
+        if (LOGGER.isLoggable(FINE)) {
             LOGGER.fine(MessageFormat.format("added converter of class type ''{0}''", converterClass));
         }
     }
@@ -1272,16 +1237,17 @@ public class ApplicationImpl extends Application {
      * Helper method to convert a value to a type as defined in PropertyDescriptor(s)
      * @param name
      * @param value
-     * @param pd
+     * @param propertyDescriptors
      * @return value
      */
-    private Object convertValueToTypeIfNecessary(String name, Object value, PropertyDescriptor[] pd) {
-        for (PropertyDescriptor aPd : pd) {
-            if (aPd.getName().equals(name)) {
-                value = getExpressionFactory().coerceToType(value, aPd.getPropertyType());
+    private Object convertValueToTypeIfNecessary(String name, Object value, PropertyDescriptor[] propertyDescriptors) {
+        for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+            if (propertyDescriptor.getName().equals(name)) {
+                value = getExpressionFactory().coerceToType(value, propertyDescriptor.getPropertyType());
                 break;
             }
         }
+        
         return value;
     }
 
@@ -1294,34 +1260,36 @@ public class ApplicationImpl extends Application {
      * @param targetClass the target class for which a PropertyEditory may or
      *  may not be created
      */
-    
     private void addPropertyEditorIfNecessary(Class<?> targetClass) {
-        
+
         if (!registerPropertyEditors) {
             return;
         }
 
-        PropertyEditor editor = PropertyEditorManager.findEditor(targetClass);
-        if (null != editor) {
+        PropertyEditor editor = findEditor(targetClass);
+        if (editor != null) {
             return;
         }
         String className = targetClass.getName();
+        
         // Don't add a PropertyEditor for the standard by-type converters.
         if (targetClass.isPrimitive()) {
             return;
         }
+        
         for (String standardClass : STANDARD_BY_TYPE_CONVERTER_CLASSES) {
-            if (-1 != standardClass.indexOf(className)) {
+            if (standardClass.indexOf(className) != -1) {
                 return;
             }
         }
+        
         Class<?> editorClass = ConverterPropertyEditorFactory.getDefaultInstance().definePropertyEditorClassFor(targetClass);
         if (editorClass != null) {
             PropertyEditorManager.registerEditor(targetClass, editorClass);
         } else {
-        	if (LOGGER.isLoggable(Level.WARNING)) {
-        		LOGGER.warning(MessageFormat.format("definePropertyEditorClassFor({0}) returned null.", targetClass.getName()));
-        	}
+            if (LOGGER.isLoggable(WARNING)) {
+                LOGGER.warning(MessageFormat.format("definePropertyEditorClassFor({0}) returned null.", targetClass.getName()));
+            }
         }
     }
 
