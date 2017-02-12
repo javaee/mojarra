@@ -12,8 +12,8 @@
             <h:commandButton id="button" value="push" action="#{spec1396.send}"><f:ajax /></h:commandButton>
         </h:form>
 
-        <f:websocket channel="push" onmessage="function(message){document.getElementById('form:button').value=message;}" />
-        
+        <f:websocket channel="push" onmessage="onmessageFunction" />
+
         <div id="user" />
         <f:websocket channel="user" user="user" onmessage="function(message){document.getElementById('user').innerHTML=message;}" />
 
@@ -21,5 +21,11 @@
         <f:websocket channel="view" scope="view">
             <f:ajax event="renderAjaxOutput" render="ajaxOutput" />
         </f:websocket>
+
+        <script>
+            function onmessageFunction(message) {
+                document.getElementById("form:button").value = message;
+            }
+        </script>
     </h:body>
 </html>
