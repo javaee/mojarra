@@ -59,7 +59,6 @@
                                     to delete any src/main directory anymore
                                 
                                 -->
-                                <delete dir="src/main/java/com"/>
                                 <delete dir="src/main/resources"/>
                                 <delete dir="src/main/template"/>
                                 <delete dir="src/main/doc"/>
@@ -94,15 +93,6 @@
                                 <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
-                                
-                                <!--
-                                    
-                                    Copy jsf-ri sources
-                                    
-                                -->
-                                <copy todir="src/main/java">
-                                    <fileset dir="${jsf-ri-dir}/src/main/java" includes="**/*.java"/>
-                                </copy>
                                 
                                 <!--
 

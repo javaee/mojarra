@@ -19,7 +19,6 @@ spi/**/.project
 impl/**/.classpath
 impl/**/.project
 impl/bnd.bnd
-impl/strict-impl/src/**
 api/**/.classpath
 api/**/.project
 api/src/**
@@ -34,4 +33,3 @@ Mojarra.iml
 /impl/src/main/doc/
 /impl/src/main/resources/
 /impl/src/main/template/
-/impl/src/main/java/com/
