@@ -80,7 +80,7 @@ public class WebsocketRenderer extends HtmlBasicRenderer implements ComponentSys
 
     public static final String RENDERER_TYPE = "javax.faces.Websocket";
 
-    private static final String SCRIPT_INIT = "jsf.push.init('%s','%s','%s',%s,%s,%s);";
+    private static final String SCRIPT_INIT = "mojarra.l(function(){jsf.push.init('%s','%s','%s',%s,%s,%s);});";
 
     // Actions --------------------------------------------------------------------------------------------------------
 
