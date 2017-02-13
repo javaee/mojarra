@@ -1267,8 +1267,7 @@
         </plugins>
     </reporting>
     <scm>
-        <connection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</connection>
-        <developerConnection>scm:svn:https://svn.java.net/svn/mojarra~svn/trunk</developerConnection>
-        <url>https://svn.java.net/svn/mojarra~svn</url>
+        <url>http://java.net/projects/mojarra/sources</url>
+        <connection>scm:git:git://java.net/mojarra~git</connection>
     </scm>
 </project>
