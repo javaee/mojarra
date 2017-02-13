@@ -225,11 +225,11 @@
                     <execution>
                         <id>attach-javadocs</id>
                         <configuration>
-                            <doctitle>JavaServer Faces 2.3 PRD API</doctitle>
+                            <doctitle>JavaServer Faces 2.4 EDR 1 API</doctitle>
                             <excludePackageNames>com</excludePackageNames>
                             <footer>DRAFT DRAFT DRAFT DRAFT</footer>
                             <header>DRAFT DRAFT DRAFT DRAFT</header>
-                            <windowtitle>JavaServer Faces 2.3 PRD API</windowtitle>
+                            <windowtitle>JavaServer Faces 2.4 EDR 1 API</windowtitle>
                         </configuration>
                         <goals>
                             <goal>jar</goal>
@@ -402,9 +402,9 @@
             <plugin>
                 <groupId>com.phasebash.jsdoc</groupId>
                 <artifactId>jsdoc3-maven-plugin</artifactId>
-                <version>1.1.0</version>
+                <version>1.2.0</version>
                 <configuration>
-                    <configFile>${basedir}/src/main/jsdoc/conf.json</configFile>
+                    <configFile>${project.build.directory}/../src/main/jsdoc/conf.json</configFile>
                     <includePrivate>false</includePrivate>
                     <lenient>true</lenient>
                     <sourceFiles>
