@@ -46,7 +46,6 @@ import java.text.MessageFormat;
 import java.util.logging.Logger;
 
 import javax.faces.FacesException;
-import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
@@ -87,22 +86,27 @@ public class ActionListenerImpl implements ActionListener {
         }
         
         UIComponent source = event.getComponent();
-        ActionSource actionSource = (ActionSource) source;
         FacesContext context = event.getFacesContext();
+        
+        MethodBinding binding = ((ActionSource) source).getAction();
+        
+        invokeNavigationHandling(
+            context, source, binding, 
+            getNavigationOutcome(context, binding));
 
-        Application application = context.getApplication();
-
-        Object invokeResult;
-        String outcome = null;
-        MethodBinding binding;
-
-        binding = actionSource.getAction();
+        // Trigger a switch to Render Response if needed
+        context.renderResponse();
+    }
+    
+    @SuppressWarnings("deprecation")
+    private String getNavigationOutcome(FacesContext context, MethodBinding binding) {
         if (binding != null) {
             try {
+                Object invokeResult;
                 if ((invokeResult = binding.invoke(context, null)) != null) {
-                    outcome = invokeResult.toString();
-                }
-                // else, default to null, as assigned above.
+                    return invokeResult.toString();
+                } 
+                // else, default to null, as returned at the end
             } catch (MethodNotFoundException e) {
                 if (LOGGER.isLoggable(FINE)) {
                     LOGGER.log(FINE, e.getMessage(), e);
@@ -116,12 +120,14 @@ public class ActionListenerImpl implements ActionListener {
                 throw new FacesException(binding.getExpressionString() + ": " + e.getMessage(), e);
             }
         }
-
-        // Retrieve the NavigationHandler instance..
-
-        NavigationHandler navHandler = application.getNavigationHandler();
-
-        // Invoke nav handling..
+        
+        return null;
+    }
+    
+    @SuppressWarnings("deprecation")
+    private void invokeNavigationHandling(FacesContext context, UIComponent source, MethodBinding binding, String outcome) {
+        
+        NavigationHandler navHandler = context.getApplication().getNavigationHandler();
         
         String toFlowDocumentId = (String) source.getAttributes().get(TO_FLOW_DOCUMENT_ID_ATTR_NAME);
         if (toFlowDocumentId == null) {
@@ -135,10 +141,6 @@ public class ActionListenerImpl implements ActionListener {
                     binding.getExpressionString() : null,
                     outcome, toFlowDocumentId);
         }
-
-        // Trigger a switch to Render Response if needed
-        context.renderResponse();
-
     }
 
 }
