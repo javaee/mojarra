@@ -513,7 +513,7 @@ public class ApplicationImpl extends Application {
         }
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (getFacesConfigXmlVersion(facesContext).equals("2.3") || getWebXmlVersion(facesContext).equals("4.0")) {
+        if ("2.3".equals(getFacesConfigXmlVersion(facesContext)) || "4.0".equals(getWebXmlVersion(facesContext))) {
 
             javax.enterprise.inject.spi.BeanManager beanManager = getCdiBeanManager(facesContext);
             
