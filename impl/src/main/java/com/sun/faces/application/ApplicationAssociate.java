@@ -42,10 +42,12 @@ package com.sun.faces.application;
 
 import static com.sun.faces.RIConstants.FACES_CONFIG_VERSION;
 import static com.sun.faces.RIConstants.FACES_PREFIX;
+import static com.sun.faces.config.ConfigManager.getAnnotatedClasses;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableFaceletsResourceResolverResolveCompositeComponents;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.FaceletsSkipComments;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletCache;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsDecorators;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsDefaultRefreshPeriod;
@@ -53,18 +55,27 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Face
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsResourceResolver;
 import static com.sun.faces.el.ELUtils.buildFacesResolver;
 import static com.sun.faces.el.FacesCompositeELResolver.ELResolverChainType.Faces;
+import static com.sun.faces.facelets.util.ReflectionUtil.decorateInstance;
+import static com.sun.faces.facelets.util.ReflectionUtil.forName;
 import static com.sun.faces.lifecycle.ELResolverInitPhaseListener.populateFacesELResolverForJsp;
 import static com.sun.faces.util.MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID;
 import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
 import static com.sun.faces.util.Util.getFacesConfigXmlVersion;
 import static com.sun.faces.util.Util.isCdiAvailable;
+import static com.sun.faces.util.Util.split;
+import static java.lang.Long.parseLong;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.SEVERE;
+import static javax.faces.FactoryFinder.FACELET_CACHE_FACTORY;
 import static javax.faces.FactoryFinder.FLOW_HANDLER_FACTORY;
+import static javax.faces.application.ProjectStage.Production;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -73,7 +84,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.el.CompositeELResolver;
@@ -85,7 +95,6 @@ import javax.faces.application.Application;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ProjectStage;
 import javax.faces.application.ViewHandler;
-import javax.faces.component.FacesComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.search.SearchExpressionHandler;
 import javax.faces.component.search.SearchKeywordResolver;
@@ -116,7 +125,6 @@ import com.sun.faces.application.resource.ResourceManager;
 import com.sun.faces.component.search.SearchExpressionHandlerImpl;
 import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.el.DemuxCompositeELResolver;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.VariableResolverChainWrapper;
@@ -139,7 +147,6 @@ import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -391,9 +398,9 @@ public class ApplicationAssociate {
         ApplicationAssociate associate = instance.get();
         if (associate == null) {
             // Fallback to ExternalContext lookup
-            FacesContext fc = FacesContext.getCurrentInstance();
-            if (fc != null) {
-                ExternalContext extContext = fc.getExternalContext();
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            if (facesContext != null) {
+                ExternalContext extContext = facesContext.getExternalContext();
                 if (extContext != null) {
                     return ApplicationAssociate.getInstance(extContext);
                 }
@@ -430,7 +437,7 @@ public class ApplicationAssociate {
     }
 
     public Compiler getCompiler() {
-        if (null == compiler) {
+        if (compiler == null) {
             initializeFacelets();
         }
 
@@ -487,10 +494,7 @@ public class ApplicationAssociate {
         // Ensure custom resolvers are inserted at the correct place.
         VariableResolver variableResolver = this.getLegacyVariableResolver();
         if (variableResolver != null) {
-            assert getLegacyVRChainHeadWrapperForJsp() != null;
             getLegacyVRChainHeadWrapperForJsp().setWrapped(variableResolver);
-            
-            assert getLegacyVRChainHeadWrapperForFaces() != null;
             getLegacyVRChainHeadWrapperForFaces().setWrapped(variableResolver);
         }
     }
@@ -660,10 +664,9 @@ public class ApplicationAssociate {
         return legacyVariableResolver;
     }
 
-
     /**
-     * Called by application code to indicate we've processed the
-     * first request to the application.
+     * Called by application code to indicate we've processed the first request to the
+     * application.
      */
     public void setRequestServiced() {
         this.requestServiced = true;
@@ -678,32 +681,20 @@ public class ApplicationAssociate {
     }
     
     public void addFacesComponent(FacesComponentUsage facesComponentUsage) {
-        FacesComponent facesComponent = facesComponentUsage.getAnnotation();
-        assert facesComponent.createTag();
-        if (null == facesComponentsByNamespace) {
+        if (facesComponentsByNamespace == null) {
             facesComponentsByNamespace = new HashMap<>();
         }
-
-        List<FacesComponentUsage> componentsInNamespace = null;
-        final String namespace = facesComponent.namespace();
         
-        if (!facesComponentsByNamespace.containsKey(facesComponent.namespace())) {
-            componentsInNamespace = new ArrayList<>();
-            facesComponentsByNamespace.put(namespace, componentsInNamespace);
-        } else {
-            componentsInNamespace = facesComponentsByNamespace.get(namespace);
-        }
-        componentsInNamespace.add(facesComponentUsage);
-
+        facesComponentsByNamespace.computeIfAbsent(facesComponentUsage.getAnnotation().namespace(), k -> new ArrayList<>())
+                                  .add(facesComponentUsage);
     }
     
-    public List<FacesComponentUsage> getComponentsForNamespace(String ns) {
-        List<FacesComponentUsage> result = Collections.emptyList();
-        if (null != facesComponentsByNamespace && facesComponentsByNamespace.containsKey(ns)) {
-            result = facesComponentsByNamespace.get(ns);
+    public List<FacesComponentUsage> getComponentsForNamespace(String namespace) {
+        if (facesComponentsByNamespace != null && facesComponentsByNamespace.containsKey(namespace)) {
+            return facesComponentsByNamespace.get(namespace);
         }
-       
-        return result;
+
+        return emptyList();
     }
     
     /**
@@ -717,29 +708,16 @@ public class ApplicationAssociate {
      *                       mapping information from the configuration file.
      */
     public void addNavigationCase(NavigationCase navigationCase) {
-
-        String fromViewId = navigationCase.getFromViewId();
-        Set<NavigationCase> caseSet = navigationMap.get(fromViewId);
-        if (caseSet == null) {
-            //noinspection CollectionWithoutInitialCapacity
-            caseSet = new LinkedHashSet<>();
-            caseSet.add(navigationCase);
-            navigationMap.put(fromViewId, caseSet);
-        } else {
-            // if there already is a case existing for the
-            // fromviewid/fromaction.fromoutcome combination,
-            // replace it ...  (last one wins).
-            caseSet.add(navigationCase);
-        }
-
+        
+        // If there already is a case existing for the fromviewid/fromaction.fromoutcome combination,
+        // replace it ... (last one wins).
+        navigationMap.computeIfAbsent(navigationCase.getFromViewId(), k -> new LinkedHashSet<>())
+                     .add(navigationCase);
     }
-    
-    
 
     public NamedEventManager getNamedEventManager() {
         return namedEventManager;
     }
-
 
     /**
      * Return a <code>Map</code> of navigation mappings loaded from
@@ -751,36 +729,34 @@ public class ApplicationAssociate {
      */
     public Map<String, Set<NavigationCase>> getNavigationCaseListMappings() {
         if (navigationMap == null) {
-            return Collections.emptyMap();
+            return emptyMap();
         }
+        
         return navigationMap;
     }
 
-
-    public ResourceBundle getResourceBundle(FacesContext context,
-                                            String var) {
+    public ResourceBundle getResourceBundle(FacesContext context, String var) {
         ApplicationResourceBundle bundle = resourceBundles.get(var);
+       
         if (bundle == null) {
             return null;
         }
-        UIViewRoot root;
+        
         // Start out with the default locale
-        Locale locale;
         Locale defaultLocale = Locale.getDefault();
-        locale = defaultLocale;
+        Locale locale = defaultLocale;
+        
         // See if this FacesContext has a ViewRoot
-        root = context.getViewRoot();
-        if (null != root) {
+        UIViewRoot root = context.getViewRoot();
+        if (root != null) {
             locale = root.getLocale();
-            if (null == root.getLocale()){
+            if (locale == null) {
                 // If the ViewRoot has no Locale, fall back to the default.
                 locale = defaultLocale;
             }
         }
-        assert null != locale;
-        //ResourceBundleBean bean = resourceBundles.get(var);
-        return bundle.getResourceBundle(locale);
 
+        return bundle.getResourceBundle(locale);
     }
 
     /**
@@ -789,9 +765,7 @@ public class ApplicationAssociate {
      * values: ResourceBundleBean instances.
      */
 
-    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
-    Map<String, ApplicationResourceBundle> resourceBundles =
-         new HashMap<>();
+    Map<String, ApplicationResourceBundle> resourceBundles = new HashMap<>();
 
     public void addResourceBundle(String var, ApplicationResourceBundle bundle) {
         resourceBundles.put(var, bundle);
@@ -813,25 +787,25 @@ public class ApplicationAssociate {
     public boolean urlIsRelatedToDefiningDocumentInJar(URL candidateUrl, String definingDocumentId) {
         boolean result = false;
         String match = definingDocumentIdsToTruncatedJarUrls.get(definingDocumentId);
-        if (null != match) {
+        if (match != null) {
             String candidate = candidateUrl.toExternalForm();
-            if (null != candidate && null != match) {
+            if (candidate != null) {
                 int i = candidate.lastIndexOf("/META-INF");
-                if (-1 == i) {
+                if (i == -1) {
                     throw new FacesException("Invalid url for application configuration resources file with respect to faces flows");
                 }
                 candidate = candidate.substring(0, i);
                 result = candidate.equals(match);
             }
         }
-        
+
         return result;
     }
     
     public void relateUrlToDefiningDocumentInJar(URL url, String definingDocumentId) {
         String candidate = url.toExternalForm();
         int i = candidate.lastIndexOf("/META-INF");
-        if (-1 == i) {
+        if (i == -1) {
             return;
         }
         candidate = candidate.substring(0, i);
@@ -839,12 +813,10 @@ public class ApplicationAssociate {
         definingDocumentIdsToTruncatedJarUrls.put(definingDocumentId, candidate);
     }
 
-
-    protected DefaultFaceletFactory createFaceletFactory(FacesContext ctx,
-            Compiler c, WebConfiguration webConfig) {
+    protected DefaultFaceletFactory createFaceletFactory(FacesContext ctx, Compiler compiler, WebConfiguration webConfig) {
 
         // refresh period
-        boolean isProduction = app.getProjectStage() == ProjectStage.Production;
+        boolean isProduction = app.getProjectStage() == Production;
         String refreshPeriod;
         if (webConfig.isSet(FaceletsDefaultRefreshPeriod) || webConfig.isSet(FaceletsDefaultRefreshPeriodDeprecated)) {
             refreshPeriod = webConfig.getOptionValue(FaceletsDefaultRefreshPeriod);
@@ -854,7 +826,7 @@ public class ApplicationAssociate {
             refreshPeriod = FaceletsDefaultRefreshPeriod.getDefaultValue();
         }
         
-        long period = Long.parseLong(refreshPeriod);
+        long period = parseLong(refreshPeriod);
 
         // resource resolver
         ResourceResolver defaultResourceResolver = new DefaultResourceResolver(app.getResourceHandler());
@@ -862,133 +834,122 @@ public class ApplicationAssociate {
 
         String resolverName = webConfig.getOptionValue(FaceletsResourceResolver);
         if (resolverName != null && resolverName.length() > 0) {
-            resolver = (ResourceResolver) 
-                    ReflectionUtil.decorateInstance(resolverName,
-                    ResourceResolver.class,
-                    resolver);
+            resolver = (ResourceResolver) ReflectionUtil.decorateInstance(resolverName, ResourceResolver.class, resolver);
         } else {
-        
-            Set<? extends Class> resourceResolvers = 
-                    ConfigManager.getAnnotatedClasses(ctx).get(FaceletsResourceResolver.class);
+
+            Set<? extends Class<?>> resourceResolvers = getAnnotatedClasses(ctx).get(FaceletsResourceResolver.class);
             if ((null != resourceResolvers) && !resourceResolvers.isEmpty()) {
-                Class resolverClass = resourceResolvers.iterator().next();
-                if (1 < resourceResolvers.size() && LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "Found more than one class " + 
-                        "annotated with FaceletsResourceResolver.  Will " + 
-                        "use {0} and ignore the others", resolverClass);
+                Class<?> resolverClass = resourceResolvers.iterator().next();
+                if (resourceResolvers.size() > 1 && LOGGER.isLoggable(SEVERE)) {
+                    LOGGER.log(SEVERE, 
+                        "Found more than one class " + "annotated with FaceletsResourceResolver.  Will " + "use {0} and ignore the others",
+                        resolverClass);
                 }
-                resolver = (ResourceResolver) 
-                        ReflectionUtil.decorateInstance(resolverClass,
-                        ResourceResolver.class,
-                        resolver);
-            } 
+                resolver = (ResourceResolver) decorateInstance(resolverClass, ResourceResolver.class, resolver);
+            }
         }
         
         // If our resourceResolver is not the one we created above
         // and the use of this ResousrecResolver for Composite Components
         // is acceptable.
         if (!(resolver == defaultResourceResolver) && webConfig.isOptionEnabled(EnableFaceletsResourceResolverResolveCompositeComponents)) {
-            ctx.getExternalContext().getApplicationMap().put(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME,
-                    resolver);
+            ctx.getExternalContext()
+               .getApplicationMap()
+               .put(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME, resolver);
         }
         
         FaceletCache cache = null;
         String faceletCacheName = webConfig.getOptionValue(FaceletCache);
         if (faceletCacheName != null && faceletCacheName.length() > 0) {
             try {
-                com.sun.faces.facelets.FaceletCache privateApiCache =
-                        (com.sun.faces.facelets.FaceletCache)ReflectionUtil.forName(faceletCacheName)
-                                          .newInstance();
+                com.sun.faces.facelets.FaceletCache privateApiCache = (com.sun.faces.facelets.FaceletCache) ReflectionUtil.forName(faceletCacheName)
+                        .newInstance();
                 cache = new PrivateApiFaceletCacheAdapter(privateApiCache);
-            } catch(ClassCastException e) {
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
-                            "Please remove context-param when using javax.faces.view.facelets.FaceletCache class with name:" 
-                                    + faceletCacheName + "and use the new FaceletCacheFactory API", e);
+            } catch (ClassCastException e) {
+                if (LOGGER.isLoggable(INFO)) {
+                    LOGGER.log(INFO, 
+                        "Please remove context-param when using javax.faces.view.facelets.FaceletCache class with name:" + 
+                        faceletCacheName + 
+                        "and use the new FaceletCacheFactory API", e);
                 }
-            } catch(ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                               "Error Loading Facelet cache: " + faceletCacheName,
-                               e);
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                if (LOGGER.isLoggable(SEVERE)) {
+                    LOGGER.log(SEVERE, "Error Loading Facelet cache: " + faceletCacheName, e);
                 }
             }
         }
-        if (null == cache) {
-            FaceletCacheFactory cacheFactory = (FaceletCacheFactory)
-                    FactoryFinder.getFactory(FactoryFinder.FACELET_CACHE_FACTORY);
+        
+        if (cache == null) {
+            FaceletCacheFactory cacheFactory = (FaceletCacheFactory) FactoryFinder.getFactory(FACELET_CACHE_FACTORY);
             cache = cacheFactory.getFaceletCache();
         }
 
-        // Resource.getResourceUrl(ctx,"/")
         DefaultFaceletFactory toReturn = new DefaultFaceletFactory();
-        toReturn.init(c, resolver, period, cache);
+        toReturn.init(compiler, resolver, period, cache);
                 
         return toReturn;
-
     }
-
 
     protected Compiler createCompiler(Map<String, Object> appMap, WebConfiguration webConfig) {
 
-        Compiler c = new SAXCompiler();
+        Compiler newCompiler = new SAXCompiler();
 
-        // load decorators
-        String decParam = webConfig
-              .getOptionValue(FaceletsDecorators);
-        if (decParam != null) {
-            decParam = decParam.trim();
-            String[] decs = Util.split(appMap, decParam, ";");
-            TagDecorator decObj;
-            for (String decorator : decs) {
+        loadDecorators(appMap, newCompiler);
+
+        // Skip params?
+        newCompiler.setTrimmingComments(webConfig.isOptionEnabled(FaceletsSkipComments));
+
+        addTagLibraries(newCompiler);
+
+        return newCompiler;
+    }
+    
+    protected void loadDecorators(Map<String, Object> appMap, Compiler newCompiler) {
+        String decoratorsParamValue = webConfig.getOptionValue(FaceletsDecorators);
+        
+        if (decoratorsParamValue != null) {
+            for (String decorator : split(appMap, decoratorsParamValue.trim(), ";")) {
                 try {
-                    decObj = (TagDecorator) ReflectionUtil.forName(decorator)
-                          .newInstance();
-                    c.addTagDecorator(decObj);
+                    newCompiler.addTagDecorator((TagDecorator) forName(decorator).newInstance());
 
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   "Successfully Loaded Decorator: {0}",
-                                   decorator);
+                    if (LOGGER.isLoggable(FINE)) {
+                        LOGGER.log(FINE, "Successfully Loaded Decorator: {0}", decorator);
                     }
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE,
-                                   "Error Loading Decorator: " + decorator,
-                                   e);
+                    if (LOGGER.isLoggable(SEVERE)) {
+                        LOGGER.log(SEVERE, "Error Loading Decorator: " + decorator, e);
                     }
                 }
             }
         }
-
-        // skip params?
-        c.setTrimmingComments(
-              webConfig.isOptionEnabled(
-                    BooleanWebContextInitParameter.FaceletsSkipComments));
-
-        c.addTagLibrary(new CoreLibrary());
-        c.addTagLibrary(new CoreLibrary(CoreLibrary.XMLNSNamespace));
-        c.addTagLibrary(new HtmlLibrary());
-        c.addTagLibrary(new HtmlLibrary(HtmlLibrary.XMLNSNamespace));
-        c.addTagLibrary(new UILibrary());
-        c.addTagLibrary(new UILibrary(UILibrary.XMLNSNamespace));
-        c.addTagLibrary(new JstlCoreLibrary());
-        c.addTagLibrary(new JstlCoreLibrary(JstlCoreLibrary.IncorrectNamespace));
-        c.addTagLibrary(new JstlCoreLibrary(JstlCoreLibrary.XMLNSNamespace));
-        c.addTagLibrary(new PassThroughAttributeLibrary());
-        c.addTagLibrary(new PassThroughElementLibrary());
-        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, FunctionLibrary.Namespace));
-        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, FunctionLibrary.XMLNSNamespace));
-        if (isDevModeEnabled()) {
-            c.addTagLibrary(new FunctionLibrary(DevTools.class, DevTools.Namespace));
-            c.addTagLibrary(new FunctionLibrary(DevTools.class, DevTools.NewNamespace));
-        }
-        c.addTagLibrary(new CompositeLibrary());
-        c.addTagLibrary(new CompositeLibrary(CompositeLibrary.XMLNSNamespace));
-
-        return c;
-
     }
-
+    
+    protected void addTagLibraries(Compiler newCompiler) {
+        newCompiler.addTagLibrary(new CoreLibrary());
+        newCompiler.addTagLibrary(new CoreLibrary(CoreLibrary.XMLNSNamespace));
+        
+        newCompiler.addTagLibrary(new HtmlLibrary());
+        newCompiler.addTagLibrary(new HtmlLibrary(HtmlLibrary.XMLNSNamespace));
+        
+        newCompiler.addTagLibrary(new UILibrary());
+        newCompiler.addTagLibrary(new UILibrary(UILibrary.XMLNSNamespace));
+        
+        newCompiler.addTagLibrary(new JstlCoreLibrary());
+        newCompiler.addTagLibrary(new JstlCoreLibrary(JstlCoreLibrary.IncorrectNamespace));
+        newCompiler.addTagLibrary(new JstlCoreLibrary(JstlCoreLibrary.XMLNSNamespace));
+        
+        newCompiler.addTagLibrary(new PassThroughAttributeLibrary());
+        newCompiler.addTagLibrary(new PassThroughElementLibrary());
+        
+        newCompiler.addTagLibrary(new FunctionLibrary(JstlFunction.class, FunctionLibrary.Namespace));
+        newCompiler.addTagLibrary(new FunctionLibrary(JstlFunction.class, FunctionLibrary.XMLNSNamespace));
+        if (isDevModeEnabled()) {
+            newCompiler.addTagLibrary(new FunctionLibrary(DevTools.class, DevTools.Namespace));
+            newCompiler.addTagLibrary(new FunctionLibrary(DevTools.class, DevTools.NewNamespace));
+        }
+        
+        newCompiler.addTagLibrary(new CompositeLibrary());
+        newCompiler.addTagLibrary(new CompositeLibrary(CompositeLibrary.XMLNSNamespace));
+    }
 
 }
