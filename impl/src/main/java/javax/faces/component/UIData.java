@@ -1049,9 +1049,8 @@ public class UIData extends UIComponentBase
                                                preRowIndexSep + 1))) {
                             try {
                                 newRow = Integer
-                                      .valueOf(clientId.substring(preRowIndexSep,
-                                                                  postRowIndexSep))
-                                      .intValue();
+                                        .parseInt(clientId.substring(preRowIndexSep,
+                                                postRowIndexSep));
                             } catch (NumberFormatException ex) {
                                 // PENDING(edburns): I18N
                                 String message =
