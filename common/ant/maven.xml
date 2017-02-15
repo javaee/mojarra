@@ -257,6 +257,7 @@
                         version="@{version}"/>
                     <mkdir dir="${mvn.impl.dir}/target/classes"/>
                     <mkdir dir="${mvn.impl.dir}/src/main/java"/>
+                    <copy file="${mvn.impl.dir}/../../../LICENSE" tofile="${mvn.impl.dir}/src/main/java/LICENSE.txt"/>
                     <copy overwrite="true" 
                           todir="${mvn.impl.dir}/src/main/java">
                         <fileset dir="${impl.dir}/src/main/java" includes="**/*" />
