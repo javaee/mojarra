@@ -739,17 +739,23 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p><span class="changed_modified_2_2">Return</span> the value of the UIData.  This value must either be
-     * be of type {@link DataModel}, or a type that can be adapted
-     * into a {@link DataModel}.  <code>UIData</code> will automatically
+     * <p><span class="changed_modified_2_2 changed_modified_2_3">Return</span> the value of the UIData. 
+     * This value must either be of type {@link DataModel}, or a type that can be adapted
+     * into a {@link DataModel}. <code>UIData</code> will automatically
      * adapt the following types:</p>
+     * 
      * <ul>
-     * <li>Arrays</li>
      * <li><code>java.util.List</code></li>
+     * <li>Arrays</li>
      * <li><code>java.sql.ResultSet</code></li>
      * <li><code>javax.servlet.jsp.jstl.sql.Result</code>
      * <li class="changed_added_2_2"><code>java.util.Collection</code></li>
+     * <li class="changed_added_2_3"><code>java.lang.Iterable</code></li>
+     * <li class="changed_added_2_3"><code>java.util.Map</code></li>
+     * <li class="changed_added_2_3">Types for which a suitable {@link DataModel} has been registered 
+     * via {@link FacesDataModel}</li>
      * </ul>
+     * 
      * <p>All other types will be adapted using the {@link ScalarDataModel}
      * class, which will treat the object as a single row of data.</p>
      * 
