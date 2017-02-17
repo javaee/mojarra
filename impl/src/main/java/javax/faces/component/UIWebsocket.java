@@ -59,7 +59,7 @@ public class UIWebsocket extends UIComponentBase implements ClientBehaviorHolder
      * </p>
      */
     enum PropertyKeys {
-        port, channel, scope, user, onopen, onmessage, onclose, connected;
+        channel, scope, user, onopen, onmessage, onclose, connected;
     }
 
     private static final Pattern PATTERN_CHANNEL_NAME = Pattern.compile("[\\w.-]+");
@@ -157,23 +157,6 @@ public class UIWebsocket extends UIComponentBase implements ClientBehaviorHolder
     });
 
     // ------------------------------------------------------------------------------------------------------ Properties
-
-    /**
-     * Returns the port number of the websocket host.
-     * @return The port number of the websocket host.
-     */
-    public Integer getPort() {
-        return (Integer) getStateHelper().eval(PropertyKeys.port);
-    }
-
-    /**
-     * Sets the port number of the websocket host, in case it is different from the port number in the request URI.
-     * Defaults to the port number of the request URI.
-     * @param port The port number of the websocket host.
-     */
-    public void setPort(Integer port) {
-        getStateHelper().put(PropertyKeys.port, port);
-    }
 
     /**
      * Returns the name of the websocket channel.
