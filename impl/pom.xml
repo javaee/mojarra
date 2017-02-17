@@ -290,7 +290,7 @@
                                     (p.s. in a way this is compensating for components in faces-config not 
                                     being able to use inheritance)
                                 
-                                -->
+                                    -->
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
                                 <condition property="osfamily" value="unix">
                                     <or>
@@ -326,7 +326,7 @@
                                         <!-- 
                                             Global search for "property" tags in the newly copied -attrs.xml files and replace
                                             by "attribute" tags
-                                         -->
+                                            -->
                                         <replace dir="src/main/doc" summary="true">
                                             <include name="*-attrs.xml"/>
                                             <replacefilter 
@@ -340,18 +340,18 @@
                                                 value="Attributes"/>
                                         </replace>
                                         
-                                        <!-- 
+                                        <!--
                                             Use the xmllint commandline tool to do the actual inclusion of the xincludes
                                             and write out the file with the include directives replaced by their
                                             respective content.
-                                         -->
+                                            -->
                                         <exec executable="xmllint" dir="src/main/doc" failonerror="true">
                                             <arg line="--xinclude --format --output standard-html-renderkit.xml standard-html-renderkit-base.xml"/>
                                         </exec>
                                         
-                                        <!-- 
+                                        <!--
                                             Add a warning that the file is generated and should not be edited manually.
-                                         -->
+                                            -->
                                         <replace file="src/main/doc/standard-html-renderkit.xml">
                                             <replacetoken><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></replacetoken>
                                             <replacevalue><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -378,7 +378,7 @@
                                     
                                     This is used in the generating of several UI components based on their taglib descriptions
                                 
-                                -->
+                                    -->
                                 <copy todir="${jsf-tools-dir}/build/classes">
                                     <fileset dir="${jsf-ri-dir}/src/main/resources" includes="**/LogStrings.properties"/>
                                 </copy>
@@ -407,175 +407,11 @@
                                 <delete dir="${jsf-tools-dir}/build"/>
                                 
                                 
-                                <!-- 
-                                    Replace the placeholders in the Java template source files. This effectively
-                                    functions as a kind of C like preprocessor for Java.
-                                    
-                                    Many of the files are package private to prevent exposure to external users. Unfortunately
-                                    if the same class is used by multiple packages, it needs to be copied to each such package
-                                    since JDK 8 and below don't have a module system to prevent exposure otherwise.
-                                    
-                                    The #1, #2, etc in the comments below means the same source file is copied to those multiple
-                                    packages.
-                                
-                                 -->
-                                 
-                            
-                                
-                                <!--
-                                
-                                    Generate TypedCollections.java
-                                    
-                                -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.util"/>
-                                <copy file="src/main/template/TypedCollections.java"
-                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/util"
-                                    filtering="true"/>
-                                
-                                <!--
-                                
-                                    Generate SharedUtils.java #1
-                                    
-                                -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.application"/>
-                                <copy file="src/main/template/SharedUtils.java"
-                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/application"
-                                    filtering="true"/>
-                                
-                                <!--
-                                
-                                    Generate SharedUtils.java #2
-                                    
-                                -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.el"/>
-                                <copy file="src/main/template/SharedUtils.java"
-                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/el"
-                                    filtering="true"/>
-                               
-                                <!--
-                                    
-                                    Generate SharedUtils.java #3
-                                    
-                                -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.config.processor"/>
-                                <copy file="src/main/template/SharedUtils.java"
-                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/config/processor"
-                                    filtering="true"/>
-                                
-                                <!--
-                                
-                                    Generate SharedUtils.java #4
-                                
-                                -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.mgbean"/>
-                                <copy file="src/main/template/SharedUtils.java"
-                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/mgbean"
-                                    filtering="true"/>
-                                
-                                <!--
-                                
-                                    Generate StateHolderSaver.java #1
-                                    
-                                -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.application.view"/>
-                                <copy file="src/main/template/StateHolderSaver.java"
-                                      todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/view"
-                                      filtering="true"/>
-                                <replace
-                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/view/StateHolderSaver.java"
-                                    token="@serialVersionUID@"
-                                    value="4866548262845392093L"/>
-                                
-                                <!--
-                                
-                                    Generate StateHolderSaver.java #2
-                                    
-                                -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.context"/>
-                                <copy file="src/main/template/StateHolderSaver.java"
-                                      todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/context"
-                                      filtering="true"/>
-                                <replace
-                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/context/StateHolderSaver.java"
-                                    token="@serialVersionUID@"
-                                    value="146780782953074472L"/>
-                                    
-                                <!--
-                                
-                                    Generate API MultiFieldValidationUtils.java #1
-                                
-                                -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.ext.component"/>
-                                <copy file="src/main/template/MultiFieldValidationUtils.java"
-                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/ext/component"
-                                    filtering="true"/>
-                                    
-                                <!--
-                                
-                                   Generate MessageFactory.java #1
-                                
-                                  -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.util"/>
-                                <copy file="src/main/template/MessageFactory.java"
-                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/util"
-                                    filtering="true"/>
-                                    
-                                <!--
-                                
-                                   Generate MessageFactory.java #2
-                                
-                                  -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.ext.component"/>
-                                <copy file="src/main/template/MessageFactory.java"
-                                    todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/ext/component"
-                                    filtering="true"/>
-                                    
-                                
-                                <!--
-                                
-                                    Generate Adapters
-                                
-                                -->
-                                <filter token="protection" value="public"/>
-                                <filter token="package" value="com.sun.faces.application"/>
-                                <copy todir="${project.build.directory}/generated-sources/antrun/com/sun/faces/application"
-                                      filtering="true">
-                                    <fileset dir="src/main/template">
-                                        <include name="*Adapter.java"/>
-                                    </fileset>
-                                </copy>
-                                <replace
-                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
-                                    token="@serialVersionUID@"
-                                    value="6351778415298720238L"/>
-                                <replace
-                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/MethodExpressionMethodBindingAdapter.java"
-                                    token="@serialVersionUID@"
-                                    value="5639227653537610567L"/>
-                                <replace
-                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/ValueExpressionValueBindingAdapter.java"
-                                    token="@serialVersionUID@"
-                                    value="2990621816592041196L"/>
-                                <replace
-                                    file="${project.build.directory}/generated-sources/antrun/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
-                                    token="@serialVersionUID@"
-                                    value="7410146713650507654L"/>
-                                
                                 <!--
                                 
                                     Generate com.sun.faces.renderkit.html_basic sources
                                     
-                                -->
+                                    -->
                                 <copy todir="${jsf-tools-dir}/build/classes">
                                     <fileset dir="${jsf-ri-dir}/src/main/resources"
                                         includes="**/LogStrings.properties"/>
@@ -616,7 +452,7 @@
                                 
                                     Generate API components
                                     
-                                -->
+                                    -->
                                 <copy todir="${jsf-tools-dir}/build/classes">
                                     <fileset dir="${jsf-ri-dir}/src/main/resources"
                                         includes="**/LogStrings.properties"/>
