@@ -40,10 +40,13 @@
 
 package com.sun.faces.application;
 
+import static com.sun.faces.util.Util.notNull;
+import static java.text.MessageFormat.format;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.SEVERE;
+
 import java.lang.reflect.Field;
-import java.text.MessageFormat;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.application.Application;
@@ -51,7 +54,6 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 
 /**
  * This {@link javax.faces.application.ApplicationFactory} is responsible for injecting the
@@ -74,7 +76,7 @@ public class InjectionApplicationFactory extends ApplicationFactory {
 
     public InjectionApplicationFactory(ApplicationFactory delegate) {
         super(delegate);
-        Util.notNull("applicationFactory", delegate);
+        notNull("applicationFactory", delegate);
     }
 
 
@@ -86,27 +88,24 @@ public class InjectionApplicationFactory extends ApplicationFactory {
 
         if (application == null) {
             application = getWrapped().getApplication();
+            
             if (application == null) {
-                // No i18n here
-                String message = MessageFormat
-                      .format("Delegate ApplicationContextFactory, {0}, returned null when calling getApplication().",
-                              getWrapped().getClass().getName());
-                throw new IllegalStateException(message);
+                throw new IllegalStateException(format(
+                    "Delegate ApplicationContextFactory, {0}, returned null when calling getApplication().",
+                    getWrapped().getClass().getName()));
             }
+            
             injectDefaultApplication();
         }
+        
         return application;
-
     }
-
     
     @Override
     public synchronized void setApplication(Application application) {
-
         this.application = application;
         getWrapped().setApplication(application);
         injectDefaultApplication();
-        
     }
 
 
@@ -115,29 +114,27 @@ public class InjectionApplicationFactory extends ApplicationFactory {
 
     private void injectDefaultApplication() {
 
-
         if (defaultApplication == null) {
             FacesContext ctx = FacesContext.getCurrentInstance();
-            defaultApplication = InjectionApplicationFactory.
-                    removeApplicationInstance(ctx.getExternalContext().getApplicationMap());
+            defaultApplication = InjectionApplicationFactory.removeApplicationInstance(ctx.getExternalContext()
+                                                            .getApplicationMap());
         }
+        
         if (defaultApplication != null) {
             try {
                 if (defaultApplicationField == null) {
-                    defaultApplicationField =
-                          Application.class
-                                .getDeclaredField("defaultApplication");
+                    defaultApplicationField = Application.class.getDeclaredField("defaultApplication");
                     defaultApplicationField.setAccessible(true);
                 }
                 defaultApplicationField.set(application, defaultApplication);
 
             } catch (NoSuchFieldException nsfe) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, "Unable to find private field named 'defaultApplication' in javax.faces.application.Application.");
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, "Unable to find private field named 'defaultApplication' in javax.faces.application.Application.");
                 }
             } catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, e.toString(), e);
+                if (LOGGER.isLoggable(SEVERE)) {
+                    LOGGER.log(SEVERE, e.toString(), e);
                 }
             }
         }
@@ -146,8 +143,10 @@ public class InjectionApplicationFactory extends ApplicationFactory {
     // ------------------------------------------------- Package private Methods
 
     static void setApplicationInstance(Application app) {
-        Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
-        appMap.put(InjectionApplicationFactory.class.getName(), app);
+        FacesContext.getCurrentInstance()
+                    .getExternalContext()
+                    .getApplicationMap()
+                    .put(InjectionApplicationFactory.class.getName(), app);
     }
 
     static Application removeApplicationInstance(Map<String, Object> appMap) {

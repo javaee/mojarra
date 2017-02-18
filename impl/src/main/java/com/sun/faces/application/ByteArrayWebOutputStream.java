@@ -40,22 +40,23 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.util.FacesLogger;
+import static java.util.logging.Level.FINE;
 
-import javax.servlet.ServletOutputStream;
-import javax.faces.FacesException;
-import java.io.Writer;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.CharsetDecoder;
 import java.nio.charset.Charset;
-import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CharsetDecoder;
+import java.util.logging.Logger;
+
+import javax.faces.FacesException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
+
+import com.sun.faces.util.FacesLogger;
 
 /**
  * This steam converts byte content to character.  This implementation allows us
@@ -93,7 +94,6 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
         return baos.toByteArray();
     }
 
-
     /**
      * Converts the buffered bytes into chars based on the
      * specified encoding and writes them to the provided Writer.
@@ -102,24 +102,23 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
      * @param encoding character encoding
      */
     public void writeTo(Writer writer, String encoding) {
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("Converting buffered ServletOutputStream bytes"
-                    + " to chars using " + encoding);
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(
+                "Converting buffered ServletOutputStream bytes" + 
+                " to chars using " + encoding
+            );
         }
 
-        ByteBuffer bBuff = baos.getByteBuffer();
+        ByteBuffer byteBuffer = baos.getByteBuffer();
         CharsetDecoder decoder = Charset.forName(encoding).newDecoder();
 
         try {
-            CharBuffer cBuff = decoder.decode(bBuff);
-            writer.write(cBuff.array());
-        } catch (CharacterCodingException cce) {
-            throw new FacesException(cce);
+            CharBuffer charBuffer = decoder.decode(byteBuffer);
+            writer.write(charBuffer.array());
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         }
     }
-
 
     public boolean isCommitted() {
         return committed;
@@ -177,7 +176,7 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
          * @return buf wrapped in a ByteBuffer
          */
         public ByteBuffer getByteBuffer() {
-            return (ByteBuffer.wrap(buf, 0, count));
+            return ByteBuffer.wrap(buf, 0, count);
         }
 
     }

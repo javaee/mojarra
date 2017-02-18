@@ -40,21 +40,25 @@
 
 package com.sun.faces.application;
 
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.FINEST;
+import static java.util.logging.Level.WARNING;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.WeakHashMap;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
 import com.sun.faces.util.FacesLogger;
 
@@ -452,30 +456,34 @@ public class ConverterPropertyEditorFactory {
          * loaders, rather than just to the parent.
          */
         @Override
-        protected synchronized Class<?> loadClass(String name, boolean resolve)
-            throws ClassNotFoundException {
+        protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+            
             // First, check if the class has already been loaded
-            Class c = findLoadedClass(name);
+            Class<?> clazz = findLoadedClass(name);
+            
             // Otherwise check if myLoader is able to load it ...
-            //noinspection ObjectEquality
-            if ((c == null) && (myLoader != null) && (myLoader != targetLoader)) {
+            if (clazz == null && myLoader != null && myLoader != targetLoader) {
                 try {
-                    c = myLoader.loadClass(name);
+                    clazz = myLoader.loadClass(name);
                 } catch (ClassNotFoundException ignored) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST, "Ignoring ClassNotFoundException, continuing with parent ClassLoader.", ignored);
+                    if (LOGGER.isLoggable(FINEST)) {
+                        LOGGER.log(FINEST, 
+                            "Ignoring ClassNotFoundException, continuing with parent ClassLoader.", ignored);
                     }
                 }
             }
+            
             // Otherwise go ahead with the targetLoader and with the dynamic
             // class generation ...
-            if (c == null) {
-                c = super.loadClass(name, false);
+            if (clazz == null) {
+                clazz = super.loadClass(name, false);
             }
+            
             if (resolve) {
-                resolveClass(c);
+                resolveClass(clazz);
             }
-            return c;
+            
+            return clazz;
         }
 
         /**
@@ -486,43 +494,42 @@ public class ConverterPropertyEditorFactory {
          * {@link ClassNotFoundException}.
          */
         @Override
-        protected Class<?> findClass(String className)
-            throws ClassNotFoundException {
-            String targetClassName = getTemplateInfo().getTargetClassName(
-                className);
+        protected Class<?> findClass(String className) throws ClassNotFoundException {
+            String targetClassName = getTemplateInfo().getTargetClassName(className);
+            
             if (targetClassName != null) {
+                
                 // Need to generate an appropriate PropertyEditor class for the
                 // specified target class.
-                byte[] classBytes = getTemplateInfo().generateClassBytesFor(
-                    className.replace('.', '/'),
-                    targetClassName.replace('.', '/'));
-                Class editorClass = defineClass(className,
-                                                classBytes,
-                                                0,
-                                                classBytes.length);
-                if (LOGGER.isLoggable(Level.FINE)) {
+                
+                byte[] classBytes = getTemplateInfo().generateClassBytesFor(className.replace('.', '/'), targetClassName
+                                                     .replace('.', '/'));
+                
+                Class<?> editorClass = defineClass(className, classBytes, 0, classBytes.length);
+                
+                if (LOGGER.isLoggable(FINE)) {
                     LOGGER.fine("Defined editorClass " + editorClass);
                 }
+                
                 return editorClass;
             }
+            
             // This will just cause ClassNotFoundException to be thrown.
             return super.findClass(className);
         }
     }
 
     private static final Pattern UNDERSCORE_PATTERN = Pattern.compile("_+");
-    private static final Pattern SingleUnderscorePattern = Pattern
-        .compile("([^_])_([^_])");
-    private static final Pattern MultipleUnderscorePattern = Pattern
-        .compile("_(_+)");
+    private static final Pattern SingleUnderscorePattern = Pattern.compile("([^_])_([^_])");
+    private static final Pattern MultipleUnderscorePattern = Pattern.compile("_(_+)");
     private static ConverterPropertyEditorFactory defaultInstance;
     // Template information extracted from the source template class.
     private ClassTemplateInfo templateInfo;
     // Cache of DisposableClassLoaders keyed on the class loader of the target.
     private Map<ClassLoader, WeakReference<DisposableClassLoader>> classLoaderCache;
+
+    private static final Map<Character, String> PRIM_MAP = new HashMap<>(8, 1.0f);
     
-    private static final Map<Character,String> PRIM_MAP =
-          new HashMap<>(8, 1.0f);
     static {
         PRIM_MAP.put('B', "byte");
         PRIM_MAP.put('C', "char");
@@ -580,43 +587,39 @@ public class ConverterPropertyEditorFactory {
      * @return the dynamically generated PropertyEditor class.
      */
     @SuppressWarnings("unchecked")
-    public Class<? extends ConverterPropertyEditorBase> definePropertyEditorClassFor(
-        final Class<?> targetClass) {
+    public Class<? extends ConverterPropertyEditorBase> definePropertyEditorClassFor(final Class<?> targetClass) {
         try {
-            String className = getTemplateInfo().generateClassNameFor(
-                targetClass, false);
+            String className = getTemplateInfo().generateClassNameFor(targetClass, false);
+            
             if (classLoaderCache == null) {
                 // Use a WeakHashMap so as not to prevent the class loaders from
                 // being garbage collected.
-                //noinspection CollectionWithoutInitialCapacity
                 classLoaderCache = new WeakHashMap<>();
             }
+            
             DisposableClassLoader loader;
-            WeakReference<DisposableClassLoader> loaderRef = classLoaderCache
-                .get(targetClass.getClassLoader());
+            WeakReference<DisposableClassLoader> loaderRef = classLoaderCache.get(targetClass.getClassLoader());
             if (loaderRef == null || (loader = loaderRef.get()) == null) {
-                loader = (DisposableClassLoader) AccessController.doPrivileged(
-                      new PrivilegedAction() {
-                          @Override
-                          public Object run() {
-                            return new DisposableClassLoader(targetClass.getClassLoader());    
-                          }
-                      });
+                loader = (DisposableClassLoader) AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                    @Override
+                    public Object run() {
+                        return new DisposableClassLoader(targetClass.getClassLoader());
+                    }
+                });
+                
                 if (loader == null) {
                     return null;
                 }
-                classLoaderCache.put(targetClass.getClassLoader(),
-                    new WeakReference(loader));
+                
+                classLoaderCache.put(targetClass.getClassLoader(), new WeakReference<DisposableClassLoader>(loader));
             }
-            return (Class<? extends ConverterPropertyEditorBase>) loader
-                .loadClass(className);
+            return (Class<? extends ConverterPropertyEditorBase>) loader.loadClass(className);
         } catch (ClassNotFoundException e) {
-        	if (LOGGER.isLoggable(Level.WARNING)) {
-	            LOGGER.log(Level.WARNING,
-	                "definePropertyEditorClassFor: ClassNotFoundException: "
-	                    + e.getMessage(), e);
-        	}
+            if (LOGGER.isLoggable(WARNING)) {
+                LOGGER.log(WARNING, "definePropertyEditorClassFor: ClassNotFoundException: " + e.getMessage(), e);
+            }
         }
+        
         return null;
     }
 

@@ -49,8 +49,8 @@ import java.beans.PropertyEditorSupport;
  * ConverterPropertyEditorFactory}) will override {@link #getTargetClass}. (This
  * is based on the original ConverterPropertyEditor code).
  */
-public abstract class ConverterPropertyEditorBase
-      extends PropertyEditorSupport {
+public abstract class ConverterPropertyEditorBase extends PropertyEditorSupport {
+    
     /**
      * Return the target class of the objects that are being edited. This is used
      * as a key to find the appropriate {@link javax.faces.convert.Converter} from
@@ -70,12 +70,14 @@ public abstract class ConverterPropertyEditorBase
             Object appAssociate = getPropertyEditorHelper();
             // Get targetClass for the current ClassLoader
             Class<?> targetClass = Thread.currentThread()
-                  .getContextClassLoader()
-                  .loadClass(getTargetClass().getName());
+                                         .getContextClassLoader()
+                                         .loadClass(getTargetClass()
+                                         .getName());
+            
             Object value = appAssociate.getClass()
-                  .getMethod("convertToObject", Class.class, String.class)
-                  .invoke(
-                        appAssociate, targetClass, textValue);
+                                       .getMethod("convertToObject", Class.class, String.class)
+                                       .invoke( appAssociate, targetClass, textValue);
+            
             if (value != null) {
                 setValue(value);
             }
@@ -83,29 +85,32 @@ public abstract class ConverterPropertyEditorBase
             throw e;
         } catch (Exception e) {
             throw new IllegalStateException(
-                  "Unexpected Error attempting to use this ConverterPropertyEditor.  You're deployment environment may not support"
-                  + "ConverterPropertyEditors.  Try restarting your server or disabling "
-                  + "com.sun.faces.registerConverterPropertyEditors", e);
+              "Unexpected Error attempting to use this ConverterPropertyEditor.  You're deployment environment may not support" + 
+              "ConverterPropertyEditors.  Try restarting your server or disabling " + 
+              "com.sun.faces.registerConverterPropertyEditors", e);
         }
     }
 
     private Object getPropertyEditorHelper() throws Exception {
         // Load the current
-        Class<?> facesContextClass =
-              Thread.currentThread().getContextClassLoader().loadClass(
-                    "com.sun.faces.application.ApplicationAssociate");
-        // get the current context version of this class in case
-        Object appAssociate =
-              facesContextClass.getMethod("getCurrentInstance").invoke(null);
+        Class<?> facesContextClass = Thread.currentThread()
+                                           .getContextClassLoader()
+                                           .loadClass("com.sun.faces.application.ApplicationAssociate");
+        
+        // Get the current context version of this class in case
+        Object appAssociate = facesContextClass.getMethod("getCurrentInstance")
+                                               .invoke(null);
+        
         if (appAssociate == null) {
             throw new IllegalStateException(
-                  "Unable to find Deployed JSF Application.  You're deployment environment may not support"
-                  + "ConverterPropertyEditors.  Try restarting your server or turn off "
-                  + "com.sun.faces.registerConverterPropertyEditors");
+              "Unable to find Deployed JSF Application.  You're deployment environment may not support" + 
+              "ConverterPropertyEditors.  Try restarting your server or turn off " + 
+              "com.sun.faces.registerConverterPropertyEditors");
         }
-        Object propertyEditorHelper = appAssociate.getClass()
-              .getMethod("getPropertyEditorHelper").invoke(appAssociate);
-        return propertyEditorHelper;
+        
+        return appAssociate.getClass()
+                           .getMethod("getPropertyEditorHelper")
+                           .invoke(appAssociate);
     }
 
     /**
@@ -116,17 +121,22 @@ public abstract class ConverterPropertyEditorBase
     public String getAsText() {
         try {
             Object application = getPropertyEditorHelper();
+            
             Class<?> targetClass = Thread.currentThread()
-                  .getContextClassLoader()
-                  .loadClass(getTargetClass().getName());
+                                         .getContextClassLoader()
+                                         .loadClass(getTargetClass()
+                                         .getName());
+            
             String text = (String) application.getClass()
-                  .getMethod("convertToString", Class.class, Object.class)
-                  .invoke(application, targetClass, getValue());
+                                              .getMethod("convertToString", Class.class, Object.class)
+                                              .invoke(application, targetClass, getValue());
+            
             if (text != null) {
                 return text;
-            } else {
-                return super.getAsText();
-            }
+            } 
+            
+            return super.getAsText();
+            
         } catch (Exception e) {
             return super.getAsText();
         }
