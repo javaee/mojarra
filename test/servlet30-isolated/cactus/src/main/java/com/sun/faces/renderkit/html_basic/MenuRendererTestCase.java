@@ -40,16 +40,16 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import java.util.Set;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Queue;
-import java.util.LinkedList;
-import java.util.Date;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.faces.FacesException;
@@ -81,9 +81,9 @@ public class MenuRendererTestCase extends ServletFacesTestCase {
 
         // null instance using interface for the fallback should
         // result in a null return
-        assertNull(r.createCollection(null, Set.class));
+        assertNull(r.createCollection(null, (Class<? extends Collection<Object>>) Set.class));
 
-        Collection c = r.createCollection(new HashSet(), ArrayList.class);
+        Collection<Object> c = r.createCollection(new HashSet<Object>(), (Class<? extends Collection<Object>>) ArrayList.class);
         assertNotNull(c);
         assertTrue(c instanceof HashSet);
         assertTrue(c.isEmpty());
@@ -107,14 +107,15 @@ public class MenuRendererTestCase extends ServletFacesTestCase {
 
     }
 
+    @SuppressWarnings("unchecked")
     public void testBestGuess() {
 
         TestMenuRenderer r = new TestMenuRenderer();
-        assertTrue(r.bestGuess(Set.class,  1) instanceof HashSet);
-        assertTrue(r.bestGuess(List.class, 1) instanceof ArrayList);
-        assertTrue(r.bestGuess(SortedSet.class, 1) instanceof TreeSet);
-        assertTrue(r.bestGuess(Queue.class, 1) instanceof LinkedList);
-        assertTrue(r.bestGuess(Collection.class, 1) instanceof ArrayList);
+        assertTrue(r.bestGuess((Class<? extends Set<Object>>) Set.class,  1) instanceof HashSet);
+        assertTrue(r.bestGuess((Class<? extends List<Object>>) List.class, 1) instanceof ArrayList);
+        assertTrue(r.bestGuess((Class<? extends SortedSet<Object>>) SortedSet.class, 1) instanceof TreeSet);
+        assertTrue(r.bestGuess((Class<? extends Queue<Object>>) Queue.class, 1) instanceof LinkedList);
+        assertTrue(r.bestGuess((Class<? extends Collection<Object>>) Collection.class, 1) instanceof ArrayList);
         
     }
 
@@ -145,24 +146,22 @@ public class MenuRendererTestCase extends ServletFacesTestCase {
     private static final class TestMenuRenderer extends MenuRenderer {
 
         @Override
-        public Collection createCollection(Collection collection,
-                                              Class<? extends Collection> fallBackType) {
+        public Collection<Object> createCollection(Collection<Object> collection, Class<? extends Collection<Object>> fallBackType) {
             return super.createCollection(collection, fallBackType);
         }
 
         @Override
-        public Collection createCollectionFromHint(Object collectionTypeHint) {
+        public Collection<Object> createCollectionFromHint(Object collectionTypeHint) {
             return super.createCollectionFromHint(collectionTypeHint);
         }
 
         @Override
-        public Collection bestGuess(Class<? extends Collection> type,
-                                       int initialSize) {
+        public Collection<Object> bestGuess(Class<? extends Collection<Object>> type, int initialSize) {
             return super.bestGuess(type, initialSize);
         }
 
         @Override
-        protected Collection cloneValue(Object value) {
+        protected Collection<Object> cloneValue(Object value) {
             return super.cloneValue(value);
         }
     }

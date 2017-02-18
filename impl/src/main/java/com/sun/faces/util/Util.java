@@ -53,6 +53,7 @@ import static java.util.logging.Level.FINE;
 import java.beans.FeatureDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -66,6 +67,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -473,6 +475,88 @@ public class Util {
      */
     public static boolean isEmpty(Collection<?> collection) {
         return collection == null || collection.isEmpty();
+    }
+    
+    /**
+     * Returns <code>true</code> if the given value is null or is empty. Types of String, Collection, Map, Optional and Array are
+     * recognized. If none is recognized, then examine the emptiness of the toString() representation instead.
+     *
+     * @param value The value to be checked on emptiness.
+     * @return <code>true</code> if the given value is null or is empty.
+     */
+    public static boolean isEmpty(Object value) {
+        if (value == null) {
+            return true;
+        }
+        else if (value instanceof String) {
+            return ((String) value).isEmpty();
+        }
+        else if (value instanceof Collection<?>) {
+            return ((Collection<?>) value).isEmpty();
+        }
+        else if (value instanceof Map<?, ?>) {
+            return ((Map<?, ?>) value).isEmpty();
+        }
+        else if (value instanceof Optional<?>) {
+            return !((Optional<?>)value).isPresent();
+        }
+        else if (value.getClass().isArray()) {
+            return Array.getLength(value) == 0;
+        }
+        else {
+            return value.toString() == null || value.toString().isEmpty();
+        }
+    }
+    
+    /**
+     * Returns true if all values are empty, false if at least one value is not empty.
+     * @param values the values to be checked on emptiness
+     * @return True if all values are empty, false otherwise
+     */
+    public static boolean isAllEmpty(Object... values) {
+        for (Object value : values) {
+            if (!isEmpty(value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns <code>true</code> if at least one value is empty.
+     *
+     * @param values the values to be checked on emptiness
+     * @return <code>true</code> if any value is empty and <code>false</code> if no values are empty
+     */
+    public static boolean isAnyEmpty(Object... values) {
+        for (Object value : values) {
+            if (isEmpty(value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    public static boolean isAllNull(Object... values) {
+        for (Object value : values) {
+            if (value != null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    public static boolean isAnyNull(Object... values) {
+        for (Object value : values) {
+            if (value == null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -314,17 +314,35 @@ public final class ReflectionUtils {
      * @param params the parameters for the constructor of the provided Class
      * @return a Constructor that can be invoked with the specified parameters
      */
-    public static Constructor lookupConstructor(
-          Class<?> clazz,
-          Class<?>... params) {
+    public static Constructor lookupConstructor(Class<?> clazz, Class<?>... params) {
 
         ClassLoader loader = Util.getCurrentLoader(clazz);
         if (loader == null) {
             return null;
         }
-        
+
         return getMetaData(loader, clazz).lookupConstructor(params);
+
+    }
+    
+    /**
+     * <p>Returns the <code>Method</code> appropriate to the specified
+     * object instance, method name, and parameters.</p>
+     * @param object the Object instance of interest
+     * @param methodName the name of the method
+     * @param params the parameters for the specified method
+     * @return a Method that can be invoked with the specified parameters
+     */
+    public static Method lookupMethod(Object object, String methodName, Class<?>... params) {
+
+        Class<?> clazz = object.getClass();
         
+        ClassLoader loader = Util.getCurrentLoader(clazz);
+        if (loader == null) {
+            return null;
+        }
+
+        return getMetaData(loader, clazz).lookupMethod(methodName, params);
     }
     
     /**
@@ -335,20 +353,15 @@ public final class ReflectionUtils {
      * @param params the parameters for the specified method
      * @return a Method that can be invoked with the specified parameters
      */
-    public static Method lookupMethod(
-          Class<?> clazz,
-          String methodName,
-          Class<?>... params) {
+    public static Method lookupMethod(Class<?> clazz, String methodName, Class<?>... params) {
 
         ClassLoader loader = Util.getCurrentLoader(clazz);
         if (loader == null) {
             return null;
-        }        
-        
-        return getMetaData(loader, clazz).lookupMethod(methodName, params);
-        
-    }
+        }
 
+        return getMetaData(loader, clazz).lookupMethod(methodName, params);
+    }
 
     /**
      * <p>Constructs a new object instance based off the
@@ -358,8 +371,7 @@ public final class ReflectionUtils {
      * @throws InstantiationException if the class cannot be instantiated
      * @throws IllegalAccessException if there is a security violation
      */
-    public static Object newInstance(String className)
-    throws InstantiationException, IllegalAccessException {
+    public static Object newInstance(String className) throws InstantiationException, IllegalAccessException {
 
         ClassLoader loader = Util.getCurrentLoader(null);
         if (loader == null) {
@@ -367,9 +379,7 @@ public final class ReflectionUtils {
         }
 
         return getMetaData(loader, className).lookupClass().newInstance();
-        
     }
-
 
     /**
      * <p>Obtain a <code>Class</code> instance based on the provided

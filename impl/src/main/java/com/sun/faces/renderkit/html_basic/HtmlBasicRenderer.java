@@ -44,14 +44,23 @@ package com.sun.faces.renderkit.html_basic;
 
 import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_EVENT_PARAM;
 import static com.sun.faces.renderkit.RenderKitUtils.PredefinedPostbackParameter.BEHAVIOR_SOURCE_PARAM;
+import static com.sun.faces.util.MessageUtils.CANT_WRITE_ID_ATTRIBUTE_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
+import static com.sun.faces.util.Util.componentIsDisabledOrReadonly;
+import static com.sun.faces.util.Util.isEmpty;
+import static com.sun.faces.util.Util.notNull;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.WARNING;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,6 +73,9 @@ import javax.faces.component.ValueHolder;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.behavior.ClientBehaviorHolder;
+import javax.faces.component.search.SearchExpressionContext;
+import javax.faces.component.search.SearchExpressionHandler;
+import javax.faces.component.search.SearchExpressionHint;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -73,19 +85,13 @@ import javax.faces.render.Renderer;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import java.util.EnumSet;
-import java.util.Set;
-import javax.faces.component.search.SearchExpressionContext;
-import javax.faces.component.search.SearchExpressionHandler;
-import javax.faces.component.search.SearchExpressionHint;
 
 /**
- * <B>HtmlBasicRenderer</B> is a base class for implementing renderers
- * for HtmlBasicRenderKit.
+ * <B>HtmlBasicRenderer</B> is a base class for implementing renderers for
+ * HtmlBasicRenderKit.
  */
 
 public abstract class HtmlBasicRenderer extends Renderer {
-
 
     // Log instance for this class
     protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
@@ -93,7 +99,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
     protected static final Param[] EMPTY_PARAMS = new Param[0];
 
     // ------------------------------------------------------------ Constructors
-
 
     public HtmlBasicRenderer() {
 
@@ -103,14 +108,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     // ---------------------------------------------------------- Public Methods
 
-
     @Override
     public String convertClientId(FacesContext context, String clientId) {
 
         return clientId;
 
     }
-
 
     @Override
     public void decode(FacesContext context, UIComponent component) {
@@ -127,9 +130,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             // decode needs to be invoked only for components that are
             // instances or subclasses of UIInput.
             if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE,
-                           "No decoding necessary since the component {0} is not an instance or a sub class of UIInput",
-                           component.getId());
+                logger.log(Level.FINE, "No decoding necessary since the component {0} is not an instance or a sub class of UIInput", component.getId());
             }
             return;
         }
@@ -138,46 +139,38 @@ public abstract class HtmlBasicRenderer extends Renderer {
             clientId = component.getClientId(context);
         }
 
-        assert(clientId != null);
-        Map<String, String> requestMap =
-              context.getExternalContext().getRequestParameterMap();
+        assert (clientId != null);
+        Map<String, String> requestMap = context.getExternalContext().getRequestParameterMap();
         // Don't overwrite the value unless you have to!
         String newValue = requestMap.get(clientId);
         if (newValue != null) {
             setSubmittedValue(component, newValue);
             if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE,
-                           "new value after decoding {0}",
-                           newValue);
+                logger.log(Level.FINE, "new value after decoding {0}", newValue);
             }
         }
 
     }
 
-
     @Override
-    public void encodeEnd(FacesContext context, UIComponent component)
-          throws IOException {
+    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
 
-       rendererParamsNotNull(context, component);
+        rendererParamsNotNull(context, component);
 
         if (!shouldEncode(component)) {
             return;
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        assert(writer != null);
+        assert (writer != null);
 
         String currentValue = getCurrentValue(context, component);
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE,
-                       "Value to be rendered {0}",
-                       currentValue);
+            logger.log(Level.FINE, "Value to be rendered {0}", currentValue);
         }
         getEndTextToRender(context, component, currentValue);
 
     }
-
 
     @Override
     public boolean getRendersChildren() {
@@ -188,20 +181,18 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     // ------------------------------------------------------- Protected Methods
 
-
     // Decodes Behaviors if any match the behavior source/event.
     // As a convenience, returns component id, but only if it
-    // was retrieved.  This allows us to avoid duplicating
+    // was retrieved. This allows us to avoid duplicating
     // calls to getClientId(), which can be expensive for
     // deep component trees.
-    protected final String decodeBehaviors(FacesContext context,
-                                           UIComponent component)  {
+    protected final String decodeBehaviors(FacesContext context, UIComponent component) {
 
         if (!(component instanceof ClientBehaviorHolder)) {
             return null;
         }
 
-        ClientBehaviorHolder holder = (ClientBehaviorHolder)component;
+        ClientBehaviorHolder holder = (ClientBehaviorHolder) component;
         Map<String, List<ClientBehavior>> behaviors = holder.getClientBehaviors();
         if (behaviors.isEmpty()) {
             return null;
@@ -213,54 +204,56 @@ public abstract class HtmlBasicRenderer extends Renderer {
             List<ClientBehavior> behaviorsForEvent = behaviors.get(behaviorEvent);
 
             if (behaviorsForEvent != null && behaviorsForEvent.size() > 0) {
-               String behaviorSource = BEHAVIOR_SOURCE_PARAM.getValue(context);
-               String clientId = component.getClientId();
-               if (isBehaviorSource(context, behaviorSource, clientId)) {
-                   for (ClientBehavior behavior: behaviorsForEvent) {
-                       behavior.decode(context, component);
-                   }
-               }
+                String behaviorSource = BEHAVIOR_SOURCE_PARAM.getValue(context);
+                String clientId = component.getClientId();
+                if (isBehaviorSource(context, behaviorSource, clientId)) {
+                    for (ClientBehavior behavior : behaviorsForEvent) {
+                        behavior.decode(context, component);
+                    }
+                }
 
-               return clientId;
+                return clientId;
             }
         }
 
         return null;
     }
 
-
     /**
-     * @param ctx the <code>FacesContext</code> for the current request
-     * @param behaviorSourceId the ID of the behavior source
-     * @param componentClientId the client ID of the component being decoded
-     * @return <code>true</code> if the behavior source is for the component
-     *  being decoded, otherwise <code>false</code>
+     * @param ctx
+     *            the <code>FacesContext</code> for the current request
+     * @param behaviorSourceId
+     *            the ID of the behavior source
+     * @param componentClientId
+     *            the client ID of the component being decoded
+     * @return <code>true</code> if the behavior source is for the component being
+     *         decoded, otherwise <code>false</code>
      */
-    protected boolean isBehaviorSource(FacesContext ctx,
-                                       String behaviorSourceId,
-                                       String componentClientId) {
+    protected boolean isBehaviorSource(FacesContext ctx, String behaviorSourceId, String componentClientId) {
 
         return (behaviorSourceId != null && behaviorSourceId.equals(componentClientId));
 
     }
 
-
     /**
-     * <p>Conditionally augment an id-reference value.</p>
-     * <p>If the <code>forValue</code> doesn't already include a generated
-     * suffix, but the id of the <code>fromComponent</code> does include a
-     * generated suffix, then append the suffix from the
-     * <code>fromComponent</code> to the <code>forValue</code>.
-     * Otherwise just return the <code>forValue</code> as is.</p>
+     * <p>
+     * Conditionally augment an id-reference value.
+     * </p>
+     * <p>
+     * If the <code>forValue</code> doesn't already include a generated suffix, but the id
+     * of the <code>fromComponent</code> does include a generated suffix, then append the
+     * suffix from the <code>fromComponent</code> to the <code>forValue</code>. Otherwise
+     * just return the <code>forValue</code> as is.
+     * </p>
      *
-     * @param forValue      - the basic id-reference value.
-     * @param fromComponent - the component that holds the
-     *                      code>forValue</code>.
+     * @param forValue
+     *            - the basic id-reference value.
+     * @param fromComponent
+     *            - the component that holds the code>forValue</code>.
      *
      * @return the (possibly augmented) <code>forValue<code>.
      */
-    protected String augmentIdReference(String forValue,
-                                        UIComponent fromComponent) {
+    protected String augmentIdReference(String forValue, UIComponent fromComponent) {
 
         int forSuffix = forValue.lastIndexOf(UIViewRoot.UNIQUE_ID_PREFIX);
         if (forSuffix <= 0) {
@@ -271,9 +264,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
                 if (idSuffix > 0) {
                     // but the component's own id does have a suffix
                     if (logger.isLoggable(Level.FINE)) {
-                        logger.fine("Augmenting for attribute with " +
-                                    id.substring(idSuffix) +
-                                    " suffix from Id attribute");
+                        logger.fine("Augmenting for attribute with " + id.substring(idSuffix) + " suffix from Id attribute");
                     }
                     forValue += id.substring(idSuffix);
                 }
@@ -283,19 +274,21 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     }
 
-
     /**
-     * <p>Render nested child components by invoking the encode methods
-     * on those components, but only when the <code>rendered</code>
-     * property is <code>true</code>.</p>
+     * <p>
+     * Render nested child components by invoking the encode methods on those components,
+     * but only when the <code>rendered</code> property is <code>true</code>.
+     * </p>
      *
-     * @param context FacesContext for the current request
-     * @param component the component to recursively encode
+     * @param context
+     *            FacesContext for the current request
+     * @param component
+     *            the component to recursively encode
      *
-     * @throws IOException if an error occurrs during the encode process
+     * @throws IOException
+     *             if an error occurrs during the encode process
      */
-    protected void encodeRecursive(FacesContext context, UIComponent component)
-          throws IOException {
+    protected void encodeRecursive(FacesContext context, UIComponent component) throws IOException {
 
         // suppress rendering if "rendered" property on the component is
         // false.
@@ -318,13 +311,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     }
 
-
     /**
-     * @param component <code>UIComponent</code> for which to extract children
+     * @param component
+     *            <code>UIComponent</code> for which to extract children
      *
-     * @return an Iterator over the children of the specified
-     *  component, selecting only those that have a
-     *  <code>rendered</code> property of <code>true</code>.
+     * @return an Iterator over the children of the specified component, selecting only
+     *         those that have a <code>rendered</code> property of <code>true</code>.
      */
     protected Iterator<UIComponent> getChildren(UIComponent component) {
 
@@ -337,16 +329,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     }
 
-
     /**
-     * @param context the FacesContext for the current request
-     * @param component the UIComponent whose value we're interested in
+     * @param context
+     *            the FacesContext for the current request
+     * @param component
+     *            the UIComponent whose value we're interested in
      *
-     * @return the value to be rendered and formats it if required. Sets to
-     *  empty string if value is null.
+     * @return the value to be rendered and formats it if required. Sets to empty string
+     *         if value is null.
      */
-    protected String getCurrentValue(FacesContext context,
-                                     UIComponent component) {
+    protected String getCurrentValue(FacesContext context, UIComponent component) {
 
         if (component instanceof UIInput) {
             Object submittedValue = ((UIInput) component).getSubmittedValue();
@@ -365,33 +357,33 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     }
 
-
     /**
-     * Renderers override this method to write appropriate HTML content into
-     * the buffer.
+     * Renderers override this method to write appropriate HTML content into the buffer.
      *
-     * @param context the FacesContext for the current request
-     * @param component the UIComponent of interest
-     * @param currentValue <code>component</code>'s current value
+     * @param context
+     *            the FacesContext for the current request
+     * @param component
+     *            the UIComponent of interest
+     * @param currentValue
+     *            <code>component</code>'s current value
      *
-     * @throws IOException if an error occurs rendering the text
+     * @throws IOException
+     *             if an error occurs rendering the text
      */
-    protected void getEndTextToRender(FacesContext context,
-                                      UIComponent component,
-                                      String currentValue) throws IOException {
+    protected void getEndTextToRender(FacesContext context, UIComponent component, String currentValue) throws IOException {
 
         // no-op unless overridden
 
     }
 
-
     /**
-     * @param component Component from which to return a facet
-     * @param name      Name of the desired facet
+     * @param component
+     *            Component from which to return a facet
+     * @param name
+     *            Name of the desired facet
      *
-     * @return the specified facet from the specified component, but
-     *  <strong>only</strong> if its <code>rendered</code> property is
-     *  set to <code>true</code>.
+     * @return the specified facet from the specified component, but <strong>only</strong>
+     *         if its <code>rendered</code> property is set to <code>true</code>.
      */
     protected UIComponent getFacet(UIComponent component, String name) {
 
@@ -406,20 +398,20 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     }
 
-
     /**
      * Locates the component identified by <code>forComponent</code>
      *
-     * @param context the FacesContext for the current request
-     * @param forComponent - the component to search for
-     * @param component    - the starting point in which to begin the search
+     * @param context
+     *            the FacesContext for the current request
+     * @param forComponent
+     *            - the component to search for
+     * @param component
+     *            - the starting point in which to begin the search
      *
      * @return the component with the the <code>id</code that matches
      *         <code>forComponent</code> otheriwse null if no match is found.
      */
-    protected UIComponent getForComponent(FacesContext context,
-                                          String forComponent,
-                                          UIComponent component) {
+    protected UIComponent getForComponent(FacesContext context, String forComponent, UIComponent component) {
 
         if (null == forComponent || forComponent.length() == 0) {
             return null;
@@ -445,8 +437,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             // no hit from above, scan for a NamingContainer
             // that contains the component we're looking for from the root.
             if (result == null) {
-                result =
-                      findUIComponentBelow(context.getViewRoot(), forComponent);
+                result = findUIComponentBelow(context.getViewRoot(), forComponent);
             }
         } catch (Exception e) {
             if (logger.isLoggable(Level.FINEST)) {
@@ -457,9 +448,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // component (probably a misconfigured 'for' attribute
         if (result == null) {
             if (logger.isLoggable(Level.WARNING)) {
-                logger.warning(MessageUtils.getExceptionMessageString(
-                      MessageUtils.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID,
-                      forComponent));
+                logger.warning(MessageUtils.getExceptionMessageString(MessageUtils.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID, forComponent));
             }
         }
         return result;
@@ -467,22 +456,22 @@ public abstract class HtmlBasicRenderer extends Renderer {
     }
 
     /**
-     * Overloads getFormattedValue to take a advantage of a previously
-     * obtained converter.
-     * @param context the FacesContext for the current request
-     * @param component UIComponent of interest
-     * @param currentValue the current value of <code>component</code>
-     * @param converter the component's converter
-     * @return the currentValue after any associated Converter has been
-     *  applied
+     * Overloads getFormattedValue to take a advantage of a previously obtained converter.
+     * 
+     * @param context
+     *            the FacesContext for the current request
+     * @param component
+     *            UIComponent of interest
+     * @param currentValue
+     *            the current value of <code>component</code>
+     * @param converter
+     *            the component's converter
+     * @return the currentValue after any associated Converter has been applied
      *
-     * @throws ConverterException if the value cannot be converted
+     * @throws ConverterException
+     *             if the value cannot be converted
      */
-    protected String getFormattedValue(FacesContext context,
-                                       UIComponent component,
-                                       Object currentValue,
-                                       Converter converter)
-          throws ConverterException {
+    protected String getFormattedValue(FacesContext context, UIComponent component, Object currentValue, Converter converter) throws ConverterException {
 
         // formatting is supported only for components that support
         // converting value attributes.
@@ -502,8 +491,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (converter == null) {
             // if value is null and no converter attribute is specified, then
             // return a zero length String.
-            if(currentValue == null) {
-        	return "";
+            if (currentValue == null) {
+                return "";
             }
             // Do not look for "by-type" converters for Strings
             if (currentValue instanceof String) {
@@ -526,46 +515,43 @@ public abstract class HtmlBasicRenderer extends Renderer {
         return converter.getAsString(context, component, currentValue);
     }
 
-
     /**
-     * @param context the FacesContext for the current request
-     * @param component UIComponent of interest
-     * @param currentValue the current value of <code>component</code>
+     * @param context
+     *            the FacesContext for the current request
+     * @param component
+     *            UIComponent of interest
+     * @param currentValue
+     *            the current value of <code>component</code>
      *
-     * @return the currentValue after any associated Converter has been
-     *  applied
+     * @return the currentValue after any associated Converter has been applied
      *
-     * @throws ConverterException if the value cannot be converted
+     * @throws ConverterException
+     *             if the value cannot be converted
      */
-    protected String getFormattedValue(FacesContext context,
-                                       UIComponent component,
-                                       Object currentValue)
-          throws ConverterException {
+    protected String getFormattedValue(FacesContext context, UIComponent component, Object currentValue) throws ConverterException {
 
         return getFormattedValue(context, component, currentValue, null);
 
     }
 
-    private static final Set<SearchExpressionHint> EXPRESSION_HINTS =
-            EnumSet.of(SearchExpressionHint.IGNORE_NO_RESULT, SearchExpressionHint.RESOLVE_SINGLE_COMPONENT);
+    private static final Set<SearchExpressionHint> EXPRESSION_HINTS = EnumSet.of(SearchExpressionHint.IGNORE_NO_RESULT,
+            SearchExpressionHint.RESOLVE_SINGLE_COMPONENT);
 
-    protected Iterator getMessageIter(FacesContext context,
-                                      String forComponent,
-                                      UIComponent component) {
+    protected Iterator getMessageIter(FacesContext context, String forComponent, UIComponent component) {
         // no "for" expression - return all messages
         if (forComponent == null) {
             return context.getMessages();
         }
-        
-        // zero length "for" expression - global errors not associated with any component returned
+
+        // zero length "for" expression - global errors not associated with any component
+        // returned
         if (forComponent.trim().isEmpty()) {
             return context.getMessages(null);
         }
- 
+
         SearchExpressionHandler searchExpressionHandler = context.getApplication().getSearchExpressionHandler();
-        String clientId = searchExpressionHandler.resolveClientId(
-                SearchExpressionContext.createSearchExpressionContext(
-                        context, component, EXPRESSION_HINTS, null), forComponent);
+        String clientId = searchExpressionHandler
+                .resolveClientId(SearchExpressionContext.createSearchExpressionContext(context, component, EXPRESSION_HINTS, null), forComponent);
 
         if (clientId == null) {
             return Collections.emptyIterator();
@@ -574,9 +560,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
         return context.getMessages(clientId);
     }
 
-
     /**
-     * @param command the command which may have parameters
+     * @param command
+     *            the command which may have parameters
      *
      * @return an array of parameters
      */
@@ -590,9 +576,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
                     UIParameter uiParam = (UIParameter) kid;
                     if (!uiParam.isDisable()) {
                         Object value = uiParam.getValue();
-                        Param param = new Param(uiParam.getName(),
-                                                (value == null ? null :
-                                                 value.toString()));
+                        Param param = new Param(uiParam.getName(), (value == null ? null : value.toString()));
                         parameterList.add(param);
                     }
                 }
@@ -602,20 +586,19 @@ public abstract class HtmlBasicRenderer extends Renderer {
             return EMPTY_PARAMS;
         }
 
-
     }
 
     /**
-     * Collections parameters for use with Behavior script rendering.
-     * Similar to getParamList(), but returns a collection of
-     * ClientBehaviorContext.Parameter instances.
+     * Collections parameters for use with Behavior script rendering. Similar to
+     * getParamList(), but returns a collection of ClientBehaviorContext.Parameter
+     * instances.
      *
-     * @param command the command which may have parameters
+     * @param command
+     *            the command which may have parameters
      *
      * @return a collection of ClientBehaviorContext.Parameter instances.
      */
-    protected Collection<ClientBehaviorContext.Parameter> getBehaviorParameters(
-        UIComponent command) {
+    protected Collection<ClientBehaviorContext.Parameter> getBehaviorParameters(UIComponent command) {
 
         ArrayList<ClientBehaviorContext.Parameter> params = null;
         int childCount = command.getChildCount();
@@ -628,7 +611,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
                     String name = uiParam.getName();
                     Object value = uiParam.getValue();
 
-                    if ((name != null) && (name.length() > 0)) {
+                    if (!isEmpty(name)) {
 
                         if (params == null) {
                             params = new ArrayList<>(childCount);
@@ -640,37 +623,31 @@ public abstract class HtmlBasicRenderer extends Renderer {
             }
         }
 
-        return (params == null) ? Collections.<ClientBehaviorContext.Parameter>emptyList() : params;
-
+        return params == null ? Collections.<ClientBehaviorContext.Parameter>emptyList() : params;
     }
 
-
     protected Object getValue(UIComponent component) {
-
         // Make sure this method isn't being called except
         // from subclasses that override getValue()!
         throw new UnsupportedOperationException();
-
     }
 
-
     /**
-     * Renderers override this method to store the previous value
-     * of the associated component.
+     * Renderers override this method to store the previous value of the associated
+     * component.
      *
-     * @param component the target component to which the submitted value
-     *  will be set
-     * @param value the value to set
+     * @param component
+     *            the target component to which the submitted value will be set
+     * @param value
+     *            the value to set
      */
     protected void setSubmittedValue(UIComponent component, Object value) {
-
         // no-op unless overridden
-
     }
 
-
     /**
-     * @param component the component of interest
+     * @param component
+     *            the component of interest
      *
      * @return true if this renderer should render an id attribute.
      */
@@ -685,139 +662,113 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // may need access to the id (AjaxBehavior certainly does).
 
         String id;
-        return (null != (id = component.getId()) &&
-                    (!id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX) ||
-                        ((component instanceof ClientBehaviorHolder) &&
-                          !((ClientBehaviorHolder)component).getClientBehaviors().isEmpty())));
+        return (null != (id = component.getId()) && (!id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)
+                || ((component instanceof ClientBehaviorHolder) && !((ClientBehaviorHolder) component).getClientBehaviors().isEmpty())));
     }
 
-
-    protected String writeIdAttributeIfNecessary(FacesContext context,
-                                                 ResponseWriter writer,
-                                                 UIComponent component) {
+    protected String writeIdAttributeIfNecessary(FacesContext context, ResponseWriter writer, UIComponent component) {
 
         String id = null;
         if (shouldWriteIdAttribute(component)) {
             try {
-                writer.writeAttribute("id", id = component.getClientId(context),
-                                      "id");
+                writer.writeAttribute("id", id = component.getClientId(context), "id");
             } catch (IOException e) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    String message = MessageUtils.getExceptionMessageString
-                          (MessageUtils.CANT_WRITE_ID_ATTRIBUTE_ERROR_MESSAGE_ID,
-                           e.getMessage());
-                    logger.warning(message);
+                if (logger.isLoggable(WARNING)) {
+                    logger.warning(
+                        getExceptionMessageString(
+                            CANT_WRITE_ID_ATTRIBUTE_ERROR_MESSAGE_ID, e.getMessage()));
                 }
             }
         }
+        
         return id;
-
     }
 
-    protected void rendererParamsNotNull(FacesContext context,
-                                         UIComponent component) {
-
-        Util.notNull("context", context);
-        Util.notNull("component", component);
-
+    protected void rendererParamsNotNull(FacesContext context, UIComponent component) {
+        notNull("context", context);
+        notNull("component", component);
     }
-
 
     protected boolean shouldEncode(UIComponent component) {
 
-        // suppress rendering if "rendered" property on the component is
-        // false.
+        // Suppress rendering if "rendered" property on the component is false.
         if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE,
-                           "End encoding component {0} since rendered attribute is set to false",
-                           component.getId());
+            if (logger.isLoggable(FINE)) {
+                logger.log(FINE, "End encoding component {0} since rendered attribute is set to false", component.getId());
             }
             return false;
         }
+        
         return true;
-
     }
-
 
     protected boolean shouldDecode(UIComponent component) {
 
-        if (Util.componentIsDisabledOrReadonly(component)) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE,
-                           "No decoding necessary since the component {0} is disabled or read-only",
-                           component.getId());
+        if (componentIsDisabledOrReadonly(component)) {
+            if (logger.isLoggable(FINE)) {
+                logger.log(FINE, "No decoding necessary since the component {0} is disabled or read-only", component.getId());
             }
             return false;
         }
+        
         return true;
-
     }
 
     protected boolean shouldEncodeChildren(UIComponent component) {
 
-        // suppress rendering if "rendered" property on the component is
-        // false.
+        // Suppress rendering if "rendered" property on the component is false.
         if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE,
-                            "Children of component {0} will not be encoded since this component's rendered attribute is false",
-                            component.getId());
+            if (logger.isLoggable(FINE)) {
+                logger.log(FINE, "Children of component {0} will not be encoded since this component's rendered attribute is false", component.getId());
             }
             return false;
         }
+        
         return true;
-
     }
 
     /**
-     * When rendering pass thru attributes, we need to take any
-     * attached Behaviors into account.  The presence of a non-empty
-     * Behaviors map can cause us to switch from optimized pass thru
-     * attribute rendering to the unoptimized code path.  However,
-     * in two very common cases - attaching action behaviors to
-     * commands and attaching value change behaviors to editable value
-     * holders - the behaviors map is populated with behaviors that
-     * are not handled by the pass thru attribute code - ie. the
-     * behaviors are handled locally by the renderer.
+     * When rendering pass thru attributes, we need to take any attached Behaviors into
+     * account. The presence of a non-empty Behaviors map can cause us to switch from
+     * optimized pass thru attribute rendering to the unoptimized code path. However, in
+     * two very common cases - attaching action behaviors to commands and attaching value
+     * change behaviors to editable value holders - the behaviors map is populated with
+     * behaviors that are not handled by the pass thru attribute code - ie. the behaviors
+     * are handled locally by the renderer.
      *
-     * In order to optimize such cases, we check to see whether the
-     * component's behaviors map actually contains behaviors only
-     * for these non-pass thru attributes.  If so, we can pass a
-     * null behavior map into renderPassThruAttributes(), thus ensuring
-     * that we can take advantage of the optimized pass thru rendering
-     * logic.
+     * In order to optimize such cases, we check to see whether the component's behaviors
+     * map actually contains behaviors only for these non-pass thru attributes. If so, we
+     * can pass a null behavior map into renderPassThruAttributes(), thus ensuring that we
+     * can take advantage of the optimized pass thru rendering logic.
      *
-     * Note that in all cases where we use this method, we actually have
-     * two behavior events that we want to check for - a low-level/dom
-     * event (eg. "click", or "change") plus a high-level component
-     * event (eg. "action", or "valueChange").
+     * Note that in all cases where we use this method, we actually have two behavior
+     * events that we want to check for - a low-level/dom event (eg. "click", or "change")
+     * plus a high-level component event (eg. "action", or "valueChange").
      *
-     * @param component the component that we are rendering
-     * @param domEventName the name of the dom-level event
-     * @param componentEventName the name of the component-level event
+     * @param component
+     *            the component that we are rendering
+     * @param domEventName
+     *            the name of the dom-level event
+     * @param componentEventName
+     *            the name of the component-level event
      */
-    protected static Map<String, List<ClientBehavior>> getPassThruBehaviors(
-        UIComponent component,
-        String domEventName,
-        String componentEventName) {
+    protected static Map<String, List<ClientBehavior>> getPassThruBehaviors(UIComponent component, String domEventName, String componentEventName) {
 
         if (!(component instanceof ClientBehaviorHolder)) {
             return null;
         }
 
-        Map<String, List<ClientBehavior>> behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
+        Map<String, List<ClientBehavior>> behaviors = ((ClientBehaviorHolder) component).getClientBehaviors();
 
         int size = behaviors.size();
 
-        if ((size == 1) || (size == 2)) {
+        if (size == 1 || size == 2) {
             boolean hasDomBehavior = behaviors.containsKey(domEventName);
             boolean hasComponentBehavior = behaviors.containsKey(componentEventName);
 
             // If the behavior map only contains behaviors for non-pass
             // thru attributes, return null.
-            if (((size == 1) && (hasDomBehavior || hasComponentBehavior)) ||
-                ((size == 2) && hasDomBehavior && hasComponentBehavior)) {
+            if ((size == 1 && (hasDomBehavior || hasComponentBehavior)) || (size == 2 && hasDomBehavior && hasComponentBehavior)) {
                 return null;
             }
         }
@@ -825,23 +776,23 @@ public abstract class HtmlBasicRenderer extends Renderer {
         return behaviors;
     }
 
-
     // --------------------------------------------------------- Private Methods
 
-
     /**
-     * <p>Recursively searches for {@link NamingContainer}s from the
-     * given start point looking for the component with the <code>id</code>
-     * specified by <code>forComponent</code>.
+     * <p>
+     * Recursively searches for {@link NamingContainer}s from the given start point
+     * looking for the component with the <code>id</code> specified by
+     * <code>forComponent</code>.
      *
-     * @param startPoint   - the starting point in which to begin the search
-     * @param forComponent - the component to search for
+     * @param startPoint
+     *            - the starting point in which to begin the search
+     * @param forComponent
+     *            - the component to search for
      *
      * @return the component with the the <code>id</code that matches
      *         <code>forComponent</code> otheriwse null if no match is found.
      */
-    private static UIComponent findUIComponentBelow(UIComponent startPoint,
-                                                    String forComponent) {
+    private static UIComponent findUIComponentBelow(UIComponent startPoint, String forComponent) {
 
         UIComponent retComp = null;
         if (startPoint.getChildCount() > 0) {
@@ -872,23 +823,18 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     }
 
-
     // ----------------------------------------------------------- Inner Classes
 
-
     /**
-     * <p>Simple class to encapsulate the name and value of a
-     * <code>UIParameter</code>.
+     * <p>
+     * Simple class to encapsulate the name and value of a <code>UIParameter</code>.
      */
     public static class Param {
-
 
         public String name;
         public String value;
 
-
         // -------------------------------------------------------- Constructors
-
 
         public Param(String name, String value) {
 
@@ -899,11 +845,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     }
 
-
     /**
-     * Structure to hold common info used by Select* components
-     * to reduce the number of times component attributes are evaluated
-     * when rendering options.
+     * Structure to hold common info used by Select* components to reduce the number of
+     * times component attributes are evaluated when rendering options.
      */
     public static class OptionComponentInfo {
 
@@ -949,6 +893,5 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
 
     }
-
 
 } // end of class HtmlBasicRenderer
