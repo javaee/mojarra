@@ -134,7 +134,7 @@ public class Util {
     /**
      * RegEx patterns
      */
-    private static final String patternCacheKey = RIConstants.FACES_PREFIX + "patternCache";
+    private static final String PATTERN_CACKE_KEY = RIConstants.FACES_PREFIX + "patternCache";
     
     private static final String FACES_SERVLET_CLASS = FacesServlet.class.getName();
 
@@ -145,10 +145,10 @@ public class Util {
 
     private static Map<String, Pattern> getPatternCache(Map<String, Object> appMap) {
         @SuppressWarnings("unchecked")
-        Map<String, Pattern> result = (Map<String, Pattern>) appMap.get(patternCacheKey);
+        Map<String, Pattern> result = (Map<String, Pattern>) appMap.get(PATTERN_CACKE_KEY);
         if (result == null) {
             result = new LRUMap<>(15);
-            appMap.put(patternCacheKey, result);
+            appMap.put(PATTERN_CACKE_KEY, result);
         }
         
         return result;
@@ -156,10 +156,10 @@ public class Util {
 
     private static Map<String, Pattern> getPatternCache(ServletContext sc) {
         @SuppressWarnings("unchecked")
-        Map<String, Pattern> result = (Map<String, Pattern>) sc.getAttribute(patternCacheKey);
+        Map<String, Pattern> result = (Map<String, Pattern>) sc.getAttribute(PATTERN_CACKE_KEY);
         if (result == null) {
             result = new LRUMap<>(15);
-            sc.setAttribute(patternCacheKey, result);
+            sc.setAttribute(PATTERN_CACKE_KEY, result);
         }
 
         return result;
@@ -402,36 +402,6 @@ public class Util {
         return input;
     }
 
-    /*
-     * Apply a series of conventions to the component to arrive at a potential
-     * flowId, which may or may not correspond to an actual defined flow.
-     * 
-     * Assume the target is a UIViewRoot.
-     * 
-     * Get its viewId.
-     * 
-     * Strip the leading lastSlash, if any.
-     * 
-     * If the viewId has multiple segments assume the next to last is the flowId.
-     * 
-     * Otherwise, remove the extension and assume the result is the flowId.
-     * 
-     * 
-     */
-    public static String getFlowIdFromComponent(FacesContext context, UIComponent target) {
-        String result = "";
-        if (target instanceof javax.faces.component.UIViewRoot) {
-            result = Util.removeAllButNextToLastSlashPathSegment(((javax.faces.component.UIViewRoot)target).getViewId());
-            
-            int dot = result.indexOf(".");
-            if (-1 != dot) {
-                result = result.substring(0, dot);
-            }
-        }
-        
-        return result;
-    }
-    
     public static void notNegative(String varname, long number) {
         if (number < 0) {
             throw new IllegalArgumentException("\"" + varname + "\" is negative");
