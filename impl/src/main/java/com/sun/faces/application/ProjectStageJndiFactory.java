@@ -40,24 +40,25 @@
 
 package com.sun.faces.application;
 
+import static java.util.logging.Level.WARNING;
+import static javax.faces.application.ProjectStage.Production;
+
 import java.util.Hashtable;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.spi.ObjectFactory;
-import javax.naming.Name;
 import javax.naming.Context;
-import javax.naming.Reference;
+import javax.naming.Name;
 import javax.naming.RefAddr;
-import javax.faces.application.ProjectStage;
+import javax.naming.Reference;
+import javax.naming.spi.ObjectFactory;
 
 import com.sun.faces.util.FacesLogger;
 
 /**
- * Allows configuring ProjectStage at a server (or in GlassFish's case domain)
- * level.  This allows for the concept of development and test servers where
- * each application doesn't need to be individually configured, but will instead
- * rely on global JNDI configuration instead.
+ * Allows configuring ProjectStage at a server (or in GlassFish's case domain) level. This
+ * allows for the concept of development and test servers where each application doesn't
+ * need to be individually configured, but will instead rely on global JNDI configuration
+ * instead.
  */
 public class ProjectStageJndiFactory implements ObjectFactory {
 
@@ -68,16 +69,13 @@ public class ProjectStageJndiFactory implements ObjectFactory {
      * If the value of <code>stage</code> cannot be determined, the default
      * {@link javax.faces.application.ProjectStage#Production} is returned.
      *
-     * @see ObjectFactory#getObjectInstance(Object, javax.naming.Name, javax.naming.Context, java.util.Hashtable)
+     * @see ObjectFactory#getObjectInstance(Object, javax.naming.Name,
+     *      javax.naming.Context, java.util.Hashtable)
      */
     @Override
-    public Object getObjectInstance(Object obj,
-                                    Name name,
-                                    Context nameCtx,
-                                    Hashtable<?, ?> environment)
-    throws Exception {
+    public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment) throws Exception {
 
-        if (obj != null && obj instanceof Reference) {
+        if (obj instanceof Reference) {
             Reference ref = (Reference) obj;
             RefAddr addr = ref.get("stage");
             if (addr != null) {
@@ -86,12 +84,12 @@ public class ProjectStageJndiFactory implements ObjectFactory {
                     return val.trim();
                 }
             } else {
-            	if (LOGGER.isLoggable(Level.WARNING)) {
-            		LOGGER.warning("'stage' property not defined.  Defaulting to Production");
-            	}
+                if (LOGGER.isLoggable(WARNING)) {
+                    LOGGER.warning("'stage' property not defined.  Defaulting to Production");
+                }
             }
         }
-        return ProjectStage.Production.toString();
-
+        
+        return Production.toString();
     }
 }

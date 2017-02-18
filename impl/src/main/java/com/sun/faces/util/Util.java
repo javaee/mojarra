@@ -300,15 +300,13 @@ public class Util {
     }
 
 
-    public static Class loadClass(String name,
-                                  Object fallbackClass)
-        throws ClassNotFoundException {
+    public static Class loadClass(String name, Object fallbackClass) throws ClassNotFoundException {
         ClassLoader loader = Util.getCurrentLoader(fallbackClass);
-        
+
         String[] primitiveNames = { "byte", "short", "int", "long", "float", "double", "boolean", "char" };
-        Class[] primitiveClasses = { byte.class, short.class, int.class, long.class, float.class, double.class, boolean.class, char.class };
-        
-        for(int i=0; i<primitiveNames.length; i++) {
+        Class<?>[] primitiveClasses = { byte.class, short.class, int.class, long.class, float.class, double.class, boolean.class, char.class };
+
+        for (int i = 0; i < primitiveNames.length; i++) {
             if (primitiveNames[i].equals(name)) {
                 return primitiveClasses[i];
             }

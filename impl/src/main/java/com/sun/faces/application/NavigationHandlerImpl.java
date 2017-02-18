@@ -40,36 +40,51 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.InitFacesContext;
-import com.sun.faces.flow.FlowHandlerImpl;
-import com.sun.faces.flow.FlowImpl;
-import com.sun.faces.flow.builder.MutableNavigationCase;
+import static com.sun.faces.application.SharedUtils.evaluateExpressions;
+import static com.sun.faces.flow.FlowHandlerImpl.FLOW_RETURN_DEPTH_PARAM_NAME;
+import static com.sun.faces.util.Util.notNull;
+import static java.util.Arrays.asList;
+import static java.util.logging.Level.FINE;
+import static javax.faces.component.UIViewAction.isProcessingBroadcast;
+import static javax.faces.flow.FlowHandler.FLOW_ID_REQUEST_PARAM_NAME;
+import static javax.faces.flow.FlowHandler.NULL_FLOW;
+import static javax.faces.flow.FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME;
+
+import java.util.AbstractCollection;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.el.ELContext;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.application.ConfigurableNavigationHandler;
+import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.context.PartialViewContext;
-import java.util.*;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
-import java.util.concurrent.ConcurrentHashMap;
-import javax.el.ELContext;
-import javax.el.MethodExpression;
-import javax.el.ValueExpression;
-import javax.faces.application.ConfigurableNavigationHandler;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIViewAction;
 import javax.faces.context.Flash;
-import javax.faces.flow.FlowCallNode;
+import javax.faces.context.PartialViewContext;
 import javax.faces.flow.Flow;
+import javax.faces.flow.FlowCallNode;
 import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowNode;
 import javax.faces.flow.MethodCallNode;
@@ -78,6 +93,15 @@ import javax.faces.flow.ReturnNode;
 import javax.faces.flow.SwitchCase;
 import javax.faces.flow.SwitchNode;
 import javax.faces.flow.ViewNode;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.InitFacesContext;
+import com.sun.faces.flow.FlowHandlerImpl;
+import com.sun.faces.flow.FlowImpl;
+import com.sun.faces.flow.builder.MutableNavigationCase;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -116,11 +140,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     public NavigationHandlerImpl() {
 
         super();
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, "Created NavigationHandler instance ");
+        
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, "Created NavigationHandler instance ");
         }
-        ApplicationAssociate associate = ApplicationAssociate.getInstance(
-              FacesContext.getCurrentInstance().getExternalContext());
+
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(FacesContext.getCurrentInstance().getExternalContext());
         if (associate != null) {
             development = associate.isDevModeEnabled();
         }
@@ -136,38 +161,29 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      */
     @Override
     public NavigationCase getNavigationCase(FacesContext context, String fromAction, String outcome) {
-
         return getNavigationCase(context, fromAction, outcome, "");
-        
     }
 
     @Override
     public NavigationCase getNavigationCase(FacesContext context, String fromAction, String outcome, String toFlowDocumentId) {
-        Util.notNull("context", context);
-        Util.notNull("toFlowDocumentId", toFlowDocumentId);
-        NavigationCase result = null;
+        notNull("context", context);
+        notNull("toFlowDocumentId", toFlowDocumentId);
+        
         CaseStruct caseStruct = getViewId(context, fromAction, outcome, toFlowDocumentId);
-        if (null != caseStruct) {
-            result = caseStruct.navCase;
+        
+        if (caseStruct != null) {
+            return caseStruct.navCase;
         }
         
-        return result;
-        
+        return null;
     }
-    
-    
-
 
     /**
      * @see javax.faces.application.ConfigurableNavigationHandler#getNavigationCases()
      */
     @Override
     public Map<String, Set<NavigationCase>> getNavigationCases() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        Map<String, Set<NavigationCase>> result = getNavigationMap(context);
-
-        return result;
-
+        return getNavigationMap(FacesContext.getCurrentInstance());
     }
 
     @Override
@@ -175,13 +191,14 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         initializeNavigationFromFlow(context, flow);
     }
 
+    
     // ------------------------------------------ Methods from NavigationHandler
+    
     @Override
-    public void handleNavigation(FacesContext context,
-                                 String fromAction,
-                                 String outcome) {
+    public void handleNavigation(FacesContext context, String fromAction, String outcome) {
         this.handleNavigation(context, fromAction, outcome, "");
     }
+    
     /*
      * The Flow.equals() method alone is insufficient because we need to account
      * for the case where one or the other or both operands may be null.
@@ -191,17 +208,19 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         boolean result = false;
         if (flow1 == flow2) {
             result = true;
-        } else if ((null == flow1) || (null == flow2)) {
+        } else if (flow1 == null || flow2 == null) {
             result = false;
         } else {
             result = flow1.equals(flow2);
         }
+        
         return result;
     }
 
     @Override
     public void handleNavigation(FacesContext context, String fromAction, String outcome, String toFlowDocumentId) {
-        Util.notNull("context", context);
+        
+        notNull("context", context);
 
         CaseStruct caseStruct = getViewId(context, fromAction, outcome, toFlowDocumentId);
         if (caseStruct != null) {
@@ -210,98 +229,104 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             assert (null != viewHandler);
             Flash flash = extContext.getFlash();
             boolean isUIViewActionBroadcastAndViewdsDiffer = false;
-            if (UIViewAction.isProcessingBroadcast(context)) {
+            
+            if (isProcessingBroadcast(context)) {
                 flash.setKeepMessages(true);
                 String viewIdBefore = context.getViewRoot().getViewId();
                 viewIdBefore = (null == viewIdBefore) ? "" : viewIdBefore;
                 String viewIdAfter = caseStruct.navCase.getToViewId(context);
                 viewIdAfter = (null == viewIdAfter) ? "" : viewIdAfter; // NOPMD
                 isUIViewActionBroadcastAndViewdsDiffer = !viewIdBefore.equals(viewIdAfter);
-            } 
+            }
+            
             if (caseStruct.navCase.isRedirect() || isUIViewActionBroadcastAndViewdsDiffer) {
                 Map<String, List<String>> parameters = caseStruct.navCase.getParameters();
-                
+
                 // perform a 302 redirect.
                 // If this a redirect that starts causes a flow transition, ensure
                 // the necessary metadata is appended to the query string
-                
-                // If at least one of newFlow and currentFlow is not null 
-                if (null != caseStruct.newFlow || null != caseStruct.currentFlow) { // NOPMD
+
+                // If at least one of newFlow and currentFlow is not null
+                if (caseStruct.newFlow != null || caseStruct.currentFlow != null) { // NOPMD
                     if (!flowsEqual(caseStruct.newFlow, caseStruct.currentFlow)) { // NOPMD
-                        if (null == parameters) { // NOPMD
+                        if (parameters == null) { // NOPMD
                             parameters = new HashMap<>();
                         }
-                        // If we are exiting all flows 
-                        if (null == caseStruct.newFlow) { // NOPMD
-                            parameters.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, 
-                                           Arrays.asList(FlowHandler.NULL_FLOW));
-                            parameters.put(FlowHandler.FLOW_ID_REQUEST_PARAM_NAME, Arrays.asList(""));
-                            FlowHandler fh = context.getApplication().getFlowHandler();
-                            if (fh instanceof FlowHandlerImpl) {
-                                FlowHandlerImpl fhi = (FlowHandlerImpl) fh;
-                                List<String> flowReturnDepthValues = new ArrayList<>();
-                                flowReturnDepthValues.add(Integer.toString(fhi.getAndClearReturnModeDepth(context)));
-                                parameters.put(FlowHandlerImpl.FLOW_RETURN_DEPTH_PARAM_NAME, flowReturnDepthValues);
-                            }
+                        
+                        // If we are exiting all flows
+                        if (caseStruct.newFlow == null) { // NOPMD
+                            parameters.put(TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, asList(NULL_FLOW));
+                            parameters.put(FLOW_ID_REQUEST_PARAM_NAME, asList(""));
+                            FlowHandler flowHandler = context.getApplication().getFlowHandler();
                             
+                            if (flowHandler instanceof FlowHandlerImpl) {
+                                FlowHandlerImpl flowHandlerImpl = (FlowHandlerImpl) flowHandler;
+                                List<String> flowReturnDepthValues = new ArrayList<>();
+                                flowReturnDepthValues.add(Integer.toString(flowHandlerImpl.getAndClearReturnModeDepth(context)));
+                                parameters.put(FLOW_RETURN_DEPTH_PARAM_NAME, flowReturnDepthValues);
+                            }
                         } else {
-                            // If either of the two pieces of flow metadata are present in the caseStruct
-                            if (!parameters.containsKey(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME) || 
-                                    !parameters.containsKey(FlowHandler.FLOW_ID_REQUEST_PARAM_NAME)) {
+                            // If either of the two pieces of flow metadata are present in
+                            // the caseStruct
+                            if (!parameters.containsKey(TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME) || !parameters.containsKey(FLOW_ID_REQUEST_PARAM_NAME)) {
+                               
                                 // Overwrite both of them.
-                                List<String> toFlowDocumentIdParam = Arrays.asList(caseStruct.navCase.getToFlowDocumentId());
-                                parameters.put(FlowHandler.TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, toFlowDocumentIdParam);
-                                
-                                List<String> flowIdParam = Arrays.asList(caseStruct.newFlow.getId());
-                                parameters.put(FlowHandler.FLOW_ID_REQUEST_PARAM_NAME, flowIdParam);
+                                List<String> toFlowDocumentIdParam = asList(caseStruct.navCase.getToFlowDocumentId());
+                                parameters.put(TO_FLOW_DOCUMENT_ID_REQUEST_PARAM_NAME, toFlowDocumentIdParam);
+
+                                List<String> flowIdParam = asList(caseStruct.newFlow.getId());
+                                parameters.put(FLOW_ID_REQUEST_PARAM_NAME, flowIdParam);
                             }
                         }
                     }
                 }
-                
-                String redirectUrl =
-                      viewHandler.getRedirectURL(context,
-                                                 caseStruct.viewId,
-                                                 SharedUtils.evaluateExpressions(context, parameters),
-                                                 caseStruct.navCase.isIncludeViewParams());
+
+                String redirectUrl = viewHandler.getRedirectURL(
+                                                    context, caseStruct.viewId, 
+                                                    evaluateExpressions(context, parameters),
+                                                    caseStruct.navCase.isIncludeViewParams());
                 try {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE, "Redirecting to path {0} for outcome {1}and viewId {2}", new Object[]{redirectUrl, outcome, caseStruct.viewId});
+                    if (LOGGER.isLoggable(FINE)) {
+                        LOGGER.log(FINE, 
+                            "Redirecting to path {0} for outcome {1}and viewId {2}",
+                            new Object[] { redirectUrl, outcome, caseStruct.viewId });
                     }
-                    // encode the redirect to ensure session state
+                    
+                    // Encode the redirect to ensure session state
                     // is maintained
                     updateRenderTargets(context, caseStruct.viewId);
                     flash.setRedirect(true);
                     extContext.redirect(redirectUrl);
                 } catch (java.io.IOException ioe) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,"jsf.redirect_failed_error",
-                                   redirectUrl);
+                    if (LOGGER.isLoggable(FINE)) {
+                        LOGGER.log(FINE, "jsf.redirect_failed_error", redirectUrl);
                     }
+                    
                     throw new FacesException(ioe.getMessage(), ioe);
                 }
+                
                 context.responseComplete();
-               if (LOGGER.isLoggable(Level.FINE)) {
-                   LOGGER.log(Level.FINE, "Response complete for {0}", caseStruct.viewId);
-               }
+                
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, "Response complete for {0}", caseStruct.viewId);
+                }
             } else {
-                UIViewRoot newRoot = viewHandler.createView(context,
-                                                            caseStruct.viewId);
+                UIViewRoot newRoot = viewHandler.createView(context, caseStruct.viewId);
                 updateRenderTargets(context, caseStruct.viewId);
                 context.setViewRoot(newRoot);
                 FlowHandler flowHandler = context.getApplication().getFlowHandler();
-                if (null != flowHandler && !isDidTransition(context)) {
-                    flowHandler.transition(context, 
-                            caseStruct.currentFlow, caseStruct.newFlow, 
-                            caseStruct.facesFlowCallNode, caseStruct.viewId);
+                if (flowHandler != null && !isDidTransition(context)) {
+                    flowHandler.transition(context, caseStruct.currentFlow, caseStruct.newFlow, caseStruct.facesFlowCallNode, caseStruct.viewId);
                     setDidTransition(context, false);
                 }
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, "Set new view in FacesContext for {0}", caseStruct.viewId);
+                
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, "Set new view in FacesContext for {0}", caseStruct.viewId);
                 }
             }
+            
             clearViewMapIfNecessary(context, caseStruct.viewId);
-        } 
+        }
     }
     
     // --------------------------------------------------------- Private Methods

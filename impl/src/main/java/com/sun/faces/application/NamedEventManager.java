@@ -40,19 +40,21 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.util.Util;
+import static com.sun.faces.util.Util.loadClass;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.faces.FacesException;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PostRenderViewEvent;
 import javax.faces.event.PostValidateEvent;
-import javax.faces.event.PreValidateEvent;
-import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.PreRenderComponentEvent;
 import javax.faces.event.PreRenderViewEvent;
+import javax.faces.event.PreValidateEvent;
 import javax.faces.event.SystemEvent;
 
 /**
@@ -60,10 +62,8 @@ import javax.faces.event.SystemEvent;
  */
 public class NamedEventManager {
 
-    private Map<String, Class<? extends SystemEvent>> namedEvents =
-            new ConcurrentHashMap<>();
-    private Map<String, Set<Class<? extends SystemEvent>>> duplicateNames =
-             new ConcurrentHashMap<>();
+    private Map<String, Class<? extends SystemEvent>> namedEvents = new ConcurrentHashMap<>();
+    private Map<String, Set<Class<? extends SystemEvent>>> duplicateNames = new ConcurrentHashMap<>();
 
     public NamedEventManager() {
         namedEvents.put("javax.faces.event.PreRenderComponent", PreRenderComponentEvent.class);
@@ -84,17 +84,20 @@ public class NamedEventManager {
         namedEvents.put(name, event);
     }
 
+    @SuppressWarnings("unchecked")
     public Class<? extends SystemEvent> getNamedEvent(String name) {
         Class<? extends SystemEvent> namedEvent = namedEvents.get(name);
+        
         if (namedEvent == null) {
             try {
-                namedEvent = Util.loadClass(name, this);
+                namedEvent = (Class<? extends SystemEvent>) loadClass(name, this);
             } catch (ClassNotFoundException ex) {
-                throw new FacesException ("An unknown event type was specified:  " + name, ex);
+                throw new FacesException("An unknown event type was specified:  " + name, ex);
             }
         }
+        
         if (!ComponentSystemEvent.class.isAssignableFrom(namedEvent)) {
-                throw new ClassCastException();
+            throw new ClassCastException();
         }
 
         return namedEvent;
@@ -103,17 +106,19 @@ public class NamedEventManager {
     public void addDuplicateName(String name, Class<? extends SystemEvent> event) {
         Class<? extends SystemEvent> registeredEvent = namedEvents.remove(name);
         Set<Class<? extends SystemEvent>> events = duplicateNames.get(name);
+        
         if (events == null) {
             events = new HashSet<>();
             duplicateNames.put(name, events);
         }
         events.add(event);
+        
         if (registeredEvent != null) {
             events.add(registeredEvent);
         }
     }
 
     public boolean isDuplicateNamedEvent(String name) {
-        return (namedEvents.get(name) != null) || (duplicateNames.get(name) != null);
+        return namedEvents.get(name) != null || duplicateNames.get(name) != null;
     }
 }
