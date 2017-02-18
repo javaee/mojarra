@@ -40,15 +40,15 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FullStateSavingViewIds;
+import static com.sun.faces.util.Util.notNullViewId;
+import static java.util.Arrays.asList;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FullStateSavingViewIds;
-import com.sun.faces.util.MessageUtils;
+import com.sun.faces.config.WebConfiguration;
 
 /**
  * This class maintains per-application information pertaining
@@ -72,7 +72,7 @@ public class ApplicationStateInfo {
         if (partialStateSaving) {
             String[] viewIds = config.getOptionValue(FullStateSavingViewIds, ",");
             fullStateViewIds = new HashSet<>(viewIds.length, 1.0f);
-            fullStateViewIds.addAll(Arrays.asList(viewIds));
+            fullStateViewIds.addAll(asList(viewIds));
         }
         
     }
@@ -88,14 +88,9 @@ public class ApplicationStateInfo {
      *  specified view ID, otherwise <code>false</code>
      */
     public boolean usePartialStateSaving(String viewId) {
+        notNullViewId(viewId);
 
-        if (viewId == null) {
-            throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_VIEW_ID_ERROR_MESSAGE_ID));
-        }
-
-        return (partialStateSaving && !fullStateViewIds.contains(viewId));
-
+        return partialStateSaving && !fullStateViewIds.contains(viewId);
     }
 
 }

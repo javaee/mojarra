@@ -44,6 +44,7 @@ package com.sun.faces.util;
 
 import static com.sun.faces.util.MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID;
 import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
+import static com.sun.faces.util.MessageUtils.NULL_VIEW_ID_ERROR_MESSAGE_ID;
 import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
 import static com.sun.faces.util.RequestStateManager.INVOCATION_PATH;
 import static java.util.Collections.emptyList;
@@ -413,6 +414,14 @@ public class Util {
             throw new NullPointerException(
                   getExceptionMessageString(
                       NULL_PARAMETERS_ERROR_MESSAGE_ID, varname));
+        }
+    }
+    
+    public static void notNullViewId(String viewId) {
+        if (viewId == null) {
+            throw new IllegalArgumentException(
+                    getExceptionMessageString(
+                        NULL_VIEW_ID_ERROR_MESSAGE_ID));
         }
     }
     
