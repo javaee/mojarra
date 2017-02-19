@@ -40,10 +40,25 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.ApplicationStateInfo;
-import com.sun.faces.util.ComponentStruct;
+import static com.sun.faces.RIConstants.DYNAMIC_CHILD_COUNT;
+import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import static com.sun.faces.util.ComponentStruct.ADD;
+import static com.sun.faces.util.ComponentStruct.REMOVE;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.logging.Logger;
+
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -52,24 +67,14 @@ import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PreRemoveFromViewEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
-import static com.sun.faces.RIConstants.DYNAMIC_CHILD_COUNT;
-import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.ApplicationStateInfo;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+import com.sun.faces.util.ComponentStruct;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MostlySingletonSet;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.logging.Logger;
-import javax.faces.FacesException;
 
 /**
  * Context for dealing with partial state saving mechanics.
@@ -624,11 +629,11 @@ public class StateContext {
         protected void handleRemove(FacesContext context, UIComponent component) {
             if (component.isInView()) {
                 decrementDynamicChildCount(context, component.getParent());
-                ComponentStruct struct = new ComponentStruct();
-                struct.action = ComponentStruct.REMOVE;
-                struct.clientId = component.getClientId(context);
-                struct.id = component.getId();
-                handleAddRemoveWithAutoPrune(component, struct);
+               
+                handleAddRemoveWithAutoPrune(
+                    component, 
+                    new ComponentStruct(REMOVE, component.getClientId(context), component.getId())
+                );
             }            
         }
 
@@ -657,23 +662,30 @@ public class StateContext {
                     incrementDynamicChildCount(context, component.getParent());
                     component.clearInitialState();
                     component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
-                    ComponentStruct struct = new ComponentStruct();
-                    struct.action = ComponentStruct.ADD;
-                    struct.facetName = facetName;
-                    struct.parentClientId = component.getParent().getClientId(context);
-                    struct.clientId = component.getClientId(context);
-                    struct.id = component.getId();
+                    
+                    ComponentStruct struct = new ComponentStruct(
+                        ADD,
+                        facetName,
+                        component.getParent().getClientId(context),
+                        component.getClientId(context),
+                        component.getId()
+                    );
+                    
                     handleAddRemoveWithAutoPrune(component, struct);
                 }
                 else {
                     incrementDynamicChildCount(context, component.getParent());
                     component.clearInitialState();
                     component.getAttributes().put(DYNAMIC_COMPONENT, component.getParent().getChildren().indexOf(component));
-                    ComponentStruct struct = new ComponentStruct();
-                    struct.action = ComponentStruct.ADD;
-                    struct.parentClientId = component.getParent().getClientId(context);
-                    struct.clientId = component.getClientId(context);
-                    struct.id = component.getId();
+                    
+                    ComponentStruct struct = new ComponentStruct(
+                        ADD,
+                        null,
+                        component.getParent().getClientId(context),
+                        component.getClientId(context),
+                        component.getId()
+                    );
+                    
                     handleAddRemoveWithAutoPrune(component, struct);
                 }
             }
@@ -740,34 +752,34 @@ public class StateContext {
             int firstIndex = actionList.indexOf(struct);
             if (firstIndex == -1) {
                 actionList.add(struct);
-                componentMap.put(struct.clientId, component);
+                componentMap.put(struct.getClientId(), component);
             } else {
                 int lastIndex = actionList.lastIndexOf(struct);
                 if (lastIndex == firstIndex) {
                     ComponentStruct previousStruct = actionList.get(firstIndex);
-                    if (ComponentStruct.ADD.equals(previousStruct.action)) {
-                        if (ComponentStruct.ADD.equals(struct.action)) {
-                            throw new FacesException("Cannot add the same component twice: " + struct.clientId);
+                    if (ADD.equals(previousStruct.getAction())) {
+                        if (ADD.equals(struct.getAction())) {
+                            throw new FacesException("Cannot add the same component twice: " + struct.getClientId());
                         }
-                        if (ComponentStruct.REMOVE.equals(struct.action)) {
+                        if (REMOVE.equals(struct.getAction())) {
                             actionList.remove(firstIndex);
-                            componentMap.remove(struct.clientId);
+                            componentMap.remove(struct.getClientId());
                         }
                     }
-                    if (ComponentStruct.REMOVE.equals(previousStruct.action)) {
-                        if (ComponentStruct.ADD.equals(struct.action)) {
+                    if (REMOVE.equals(previousStruct.getAction())) {
+                        if (ADD.equals(struct.getAction())) {
                             actionList.add(struct);
-                            componentMap.put(struct.clientId, component);                            
+                            componentMap.put(struct.getClientId(), component);                            
                         }
-                        if (ComponentStruct.REMOVE.equals(struct.action)) {
-                            throw new FacesException("Cannot remove the same component twice: " + struct.clientId);
+                        if (REMOVE.equals(struct.getAction())) {
+                            throw new FacesException("Cannot remove the same component twice: " + struct.getClientId());
                         }
                     }
                 } else {
-                    if (ComponentStruct.ADD.equals(struct.action)) {
-                        throw new FacesException("Cannot add the same component twice: " + struct.clientId);
+                    if (ADD.equals(struct.getAction())) {
+                        throw new FacesException("Cannot add the same component twice: " + struct.getClientId());
                     }
-                    if (ComponentStruct.REMOVE.equals(struct.action)) {
+                    if (REMOVE.equals(struct.getAction())) {
                         actionList.remove(lastIndex);
                     }
                 }
@@ -776,4 +788,4 @@ public class StateContext {
 
     } // END AddRemoveListener
 
-} // END StateContext
+}

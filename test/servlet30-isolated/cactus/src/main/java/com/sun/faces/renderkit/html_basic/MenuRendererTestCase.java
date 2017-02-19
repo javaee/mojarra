@@ -58,6 +58,8 @@ import com.sun.faces.cactus.ServletFacesTestCase;
 
 
 public class MenuRendererTestCase extends ServletFacesTestCase {
+    
+    
 
     // ----------------------------------------------------------- Setup Methods
 
@@ -81,15 +83,13 @@ public class MenuRendererTestCase extends ServletFacesTestCase {
 
         // null instance using interface for the fallback should
         // result in a null return
-        assertNull(r.createCollection(null, (Class<? extends Collection<Object>>) Set.class));
+        assertNull(r.createCollection(null, setClass()));
 
-        Collection<Object> c = r.createCollection(new HashSet<Object>(), (Class<? extends Collection<Object>>) ArrayList.class);
+        Collection<Object> c = r.createCollection(new HashSet<Object>(), arrayListClass());
         assertNotNull(c);
         assertTrue(c instanceof HashSet);
         assertTrue(c.isEmpty());
-
     }
-
 
     public void testCloneValue() {
 
@@ -107,16 +107,57 @@ public class MenuRendererTestCase extends ServletFacesTestCase {
 
     }
 
-    @SuppressWarnings("unchecked")
     public void testBestGuess() {
 
         TestMenuRenderer r = new TestMenuRenderer();
-        assertTrue(r.bestGuess((Class<? extends Set<Object>>) Set.class,  1) instanceof HashSet);
-        assertTrue(r.bestGuess((Class<? extends List<Object>>) List.class, 1) instanceof ArrayList);
-        assertTrue(r.bestGuess((Class<? extends SortedSet<Object>>) SortedSet.class, 1) instanceof TreeSet);
-        assertTrue(r.bestGuess((Class<? extends Queue<Object>>) Queue.class, 1) instanceof LinkedList);
-        assertTrue(r.bestGuess((Class<? extends Collection<Object>>) Collection.class, 1) instanceof ArrayList);
+        assertTrue(r.bestGuess(setClass(),  1) instanceof HashSet);
+        assertTrue(r.bestGuess(listClass(), 1) instanceof ArrayList);
+        assertTrue(r.bestGuess(sortedSetClass(), 1) instanceof TreeSet);
+        assertTrue(r.bestGuess(queueClass(), 1) instanceof LinkedList);
+        assertTrue(r.bestGuess(collectionClass(), 1) instanceof ArrayList);
         
+    }
+    
+    @SuppressWarnings("unchecked")
+    Class<? extends Set<Object>> setClass() {
+        @SuppressWarnings("rawtypes")
+        Class clazz = Set.class;
+        return (Class<? extends Set<Object>>) clazz;
+    }
+    
+    @SuppressWarnings("unchecked")
+    Class<? extends Collection<Object>> collectionClass() {
+        @SuppressWarnings("rawtypes")
+        Class clazz = Collection.class;
+        return (Class<? extends Collection<Object>>) clazz;
+    }
+    
+    @SuppressWarnings("unchecked")
+    Class<? extends Queue<Object>> queueClass() {
+        @SuppressWarnings("rawtypes")
+        Class clazz = Queue.class;
+        return (Class<? extends Queue<Object>>) clazz;
+    }
+    
+    @SuppressWarnings("unchecked")
+    Class<? extends SortedSet<Object>> sortedSetClass() {
+        @SuppressWarnings("rawtypes")
+        Class clazz = SortedSet.class;
+        return (Class<? extends SortedSet<Object>>) clazz;
+    }
+    
+    @SuppressWarnings("unchecked")
+    Class<? extends List<Object>> arrayListClass() {
+        @SuppressWarnings("rawtypes")
+        Class clazz = ArrayList.class;
+        return (Class<? extends List<Object>>) clazz;
+    }
+    
+    @SuppressWarnings("unchecked")
+    Class<? extends List<Object>> listClass() {
+        @SuppressWarnings("rawtypes")
+        Class clazz = List.class;
+        return (Class<? extends List<Object>>) clazz;
     }
 
     public void testCreateCollectionFromHint() {

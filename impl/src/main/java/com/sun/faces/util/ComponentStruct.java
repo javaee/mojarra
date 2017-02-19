@@ -47,21 +47,39 @@ import javax.faces.context.FacesContext;
  * Utility class to enable partial state saving of components that have been
  * dynamically added to the view.
  */
-public class ComponentStruct implements StateHolder {    
+public class ComponentStruct implements StateHolder {   
+    
     /**
      * Marker that specifies this is an ADD.
      */
     public static final String ADD = "ADD";
+    
     /**
      * Marker that specifies this is a REMOVE.
      */
     public static final String REMOVE = "REMOVE";
 
-    public String action;
-    public String parentClientId;
-    public String id;
-    public String clientId;
-    public String facetName;
+    private String action;
+    private String facetName;
+    private String parentClientId;
+    private String clientId;
+    private String id;
+    
+    public ComponentStruct() {}
+    
+    public ComponentStruct(String action, String clientId, String id) {
+        this.action = action;
+        this.clientId = clientId;
+        this.id = id;
+    }
+    
+    public ComponentStruct(String action, String facetName, String parentClientId, String clientId, String id) {
+        this.action = action;
+        this.facetName = facetName;
+        this.parentClientId = parentClientId;
+        this.clientId = clientId;
+        this.id = id;
+    }
 
     @Override
     public boolean isTransient() {
@@ -73,9 +91,11 @@ public class ComponentStruct implements StateHolder {
         if (ctx == null) {
             throw new NullPointerException();
         }
+        
         if (state == null) {
             return;
         }
+        
         Object s[] = (Object[]) state;
         this.action = (String) s[0];
         this.parentClientId = (String) s[1];
@@ -89,12 +109,14 @@ public class ComponentStruct implements StateHolder {
         if (ctx == null) {
             throw new NullPointerException();
         }
+        
         Object state[] = new Object[5];
         state[0] = this.action;
         state[1] = this.parentClientId;
         state[2] = this.clientId;
         state[3] = this.id;
         state[4] = this.facetName;
+        
         return state;
     }
 
@@ -125,7 +147,25 @@ public class ComponentStruct implements StateHolder {
         hash = 89 * hash + (this.clientId != null ? this.clientId.hashCode() : 0);
         return hash;
     }
-
-
     
-} // END ComponentStruct
+    public String getAction() {
+        return action;
+    }
+
+    public String getFacetName() {
+        return facetName;
+    }
+
+    public String getParentClientId() {
+        return parentClientId;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getId() {
+        return id;
+    }
+    
+}

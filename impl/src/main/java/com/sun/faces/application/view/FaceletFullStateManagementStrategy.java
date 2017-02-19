@@ -321,12 +321,13 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
             if (lastIndex == -1 || lastIndex == firstIndex) {
                 dynamicActionList.add(struct);
             } else {
-                if (ADD.equals(struct.action)) {
+                if (ADD.equals(struct.getAction())) {
                     dynamicActionList.remove(lastIndex);
                     dynamicActionList.remove(firstIndex);
                     dynamicActionList.add(struct);
                 }
-                if (REMOVE.equals(struct.action)) {
+                
+                if (REMOVE.equals(struct.getAction())) {
                     dynamicActionList.remove(lastIndex);
                 }
             }
@@ -401,10 +402,10 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
             for (Object savedAction : savedActions) {
                 ComponentStruct action = new ComponentStruct();
                 action.restoreState(context, savedAction);
-                if (ADD.equals(action.action)) {
+                if (ADD.equals(action.getAction())) {
                     restoreDynamicAdd(context, state, action);
                 }
-                if (REMOVE.equals(action.action)) {
+                if (REMOVE.equals(action.getAction())) {
                     restoreDynamicRemove(context, action);
                 }
                 pruneAndReAddToDynamicActions(actions, action);
@@ -424,10 +425,10 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
             LOGGER.finest("FaceletFullStateManagementStrategy.restoreDynamicAdd");
         }
 
-        UIComponent parent = locateComponentByClientId(context, context.getViewRoot(), struct.parentClientId);
+        UIComponent parent = locateComponentByClientId(context, context.getViewRoot(), struct.getParentClientId());
 
         if (parent != null) {
-            UIComponent child = locateComponentByClientId(context, parent, struct.clientId);
+            UIComponent child = locateComponentByClientId(context, parent, struct.getClientId());
 
             /*
              * If Facelets engine restored the child before us we are going to
@@ -435,10 +436,10 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
              * correct place.
              */
             if (child != null) {
-                if (struct.facetName == null) {
+                if (struct.getFacetName() == null) {
                     parent.getChildren().remove(child);
                 } else {
-                    parent.getFacets().remove(struct.facetName);
+                    parent.getFacets().remove(struct.getFacetName());
                 }
             }
 
@@ -447,7 +448,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
              * the component was saved in the state.
              */
             if (child == null) {
-                StateHolderSaver saver = (StateHolderSaver) state.get(struct.clientId);
+                StateHolderSaver saver = (StateHolderSaver) state.get(struct.getClientId());
                 if (saver != null) {
                     child = (UIComponent) saver.restore(context);
                 }
@@ -460,21 +461,21 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
              */
             StateContext stateContext = StateContext.getStateContext(context);
             if (child == null) {
-                child = stateContext.getDynamicComponents().get(struct.clientId);
+                child = stateContext.getDynamicComponents().get(struct.getClientId());
             }
 
             /*
              * Now if we have the child we are going to add it back in.
              */
             if (child != null) {
-                if (struct.facetName != null) {
-                    parent.getFacets().put(struct.facetName, child);
+                if (struct.getFacetName() != null) {
+                    parent.getFacets().put(struct.getFacetName(), child);
                 } else {
                     int childIndex = -1;
                     if (child.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
                         childIndex = (Integer) child.getAttributes().get(DYNAMIC_COMPONENT);
                     }
-                    child.setId(struct.id);
+                    child.setId(struct.getId());
                     if (childIndex >= parent.getChildCount() || childIndex == -1) {
                         parent.getChildren().add(child);
                     } else {
@@ -483,7 +484,7 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
                     child.getClientId();
                 }
                 child.getAttributes().put(DYNAMIC_COMPONENT, child.getParent().getChildren().indexOf(child));
-                stateContext.getDynamicComponents().put(struct.clientId, child);
+                stateContext.getDynamicComponents().put(struct.getClientId(), child);
             }
         }
     }
@@ -499,10 +500,10 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
             LOGGER.finest("FaceletFullStateManagementStrategy.restoreDynamicRemove");
         }
 
-        UIComponent child = locateComponentByClientId(context, context.getViewRoot(), struct.clientId);
+        UIComponent child = locateComponentByClientId(context, context.getViewRoot(), struct.getClientId());
         if (child != null) {
             StateContext stateContext = StateContext.getStateContext(context);
-            stateContext.getDynamicComponents().put(struct.clientId, child);
+            stateContext.getDynamicComponents().put(struct.getClientId(), child);
             UIComponent parent = child.getParent();
             parent.getChildren().remove(child);
         }
@@ -681,12 +682,12 @@ public class FaceletFullStateManagementStrategy extends StateManagementStrategy 
         if (actions != null) {
             List<Object> savedActions = new ArrayList<>(actions.size());
             for (ComponentStruct action : actions) {
-                UIComponent component = componentMap.get(action.clientId);
+                UIComponent component = componentMap.get(action.getClientId());
                 if (component == null && context.isProjectStage(Development)) {
                     LOGGER.log(
                         WARNING,
                         "Unable to save dynamic action with clientId ''{0}'' because the UIComponent cannot be found",
-                        action.clientId);
+                        action.getClientId());
                 }
                 if (component != null) {
                     savedActions.add(action.saveState(context));

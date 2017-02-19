@@ -39,12 +39,17 @@
  */
 package com.sun.faces.application.view;
 
-import com.sun.faces.context.StateContext;
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.ComponentStruct;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
+import static com.sun.faces.RIConstants.DYNAMIC_ACTIONS;
+import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
+import static com.sun.faces.util.ComponentStruct.ADD;
+import static com.sun.faces.util.ComponentStruct.REMOVE;
+import static com.sun.faces.util.Util.isEmpty;
+import static java.util.logging.Level.FINEST;
+import static javax.faces.component.visit.VisitHint.SKIP_ITERATION;
+import static javax.faces.component.visit.VisitResult.ACCEPT;
+import static javax.faces.component.visit.VisitResult.COMPLETE;
+import static javax.faces.component.visit.VisitResult.REJECT;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -54,7 +59,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.FacesException;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
@@ -66,9 +73,13 @@ import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 import javax.faces.view.StateManagementStrategy;
-import static com.sun.faces.RIConstants.DYNAMIC_ACTIONS;
-import static com.sun.faces.RIConstants.DYNAMIC_COMPONENT;
-import javax.faces.application.ProjectStage;
+
+import com.sun.faces.context.StateContext;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.ComponentStruct;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * The state management strategy for PSS.
@@ -108,8 +119,8 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
      * @param clientId the client id of the component to find.
      */
     private UIComponent locateComponentByClientId(final FacesContext context, final UIComponent subTree, final String clientId) {
-        if (LOGGER.isLoggable(Level.FINEST)) {
-            LOGGER.log(Level.FINEST, "FaceletPartialStateManagementStrategy.locateComponentByClientId", clientId);
+        if (LOGGER.isLoggable(FINEST)) {
+            LOGGER.log(FINEST, "FaceletPartialStateManagementStrategy.locateComponentByClientId", clientId);
         }
 
         final List<UIComponent> found = new ArrayList<>();
@@ -117,20 +128,20 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
 
         try {
             context.getAttributes().put(SKIP_ITERATION_HINT, true);
-            Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
+            Set<VisitHint> hints = EnumSet.of(SKIP_ITERATION);
 
             VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
             subTree.visitTree(visitContext, new VisitCallback() {
 
                 @Override
                 public VisitResult visit(VisitContext visitContext, UIComponent component) {
-                    VisitResult result = VisitResult.ACCEPT;
+                    VisitResult result = ACCEPT;
                     if (component.getClientId(visitContext.getFacesContext()).equals(clientId)) {
                         /*
                          * If the client id matches up we have found our match.
                          */
                         found.add(component);
-                        result = VisitResult.COMPLETE;
+                        result = COMPLETE;
                     } else if (component instanceof UIForm) {
                         /*
                          * If the component is a UIForm and it is prepending its
@@ -140,7 +151,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                          */
                         UIForm form = (UIForm) component;
                         if (form.isPrependId() && !clientId.startsWith(form.getClientId(visitContext.getFacesContext()))) {
-                            result = VisitResult.REJECT;
+                            result = REJECT;
                         }
                     } else if (component instanceof NamingContainer &&
                         !clientId.startsWith(component.getClientId(visitContext.getFacesContext()))) {
@@ -150,7 +161,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                          * looking for does not start with the naming container
                          * id we can skip visiting this tree.
                          */
-                        result = VisitResult.REJECT;
+                        result = REJECT;
                     }
 
                     return result;
@@ -163,6 +174,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
         if (!found.isEmpty()) {
             result = found.get(0);
         }
+        
         return result;
     }
 
@@ -179,7 +191,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
      * @param struct the component struct to add.
      */
     private void pruneAndReAddToDynamicActions(List<ComponentStruct> dynamicActionList, ComponentStruct struct) {
-        if (LOGGER.isLoggable(Level.FINEST)) {
+        if (LOGGER.isLoggable(FINEST)) {
             LOGGER.finest("FaceletPartialStateManagementStrategy.pruneAndReAddToDynamicActions");
         }
 
@@ -191,12 +203,12 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
             if (lastIndex == -1 || lastIndex == firstIndex) {
                 dynamicActionList.add(struct);
             } else {
-                if (ComponentStruct.ADD.equals(struct.action)) {
+                if (ADD.equals(struct.getAction())) {
                     dynamicActionList.remove(lastIndex);
                     dynamicActionList.remove(firstIndex);
                     dynamicActionList.add(struct);
                 }
-                if (ComponentStruct.REMOVE.equals(struct.action)) {
+                if (REMOVE.equals(struct.getAction())) {
                     dynamicActionList.remove(lastIndex);
                 }
             }
@@ -212,21 +224,22 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
      * @param viewRoot the view root.
      */
     private void restoreDynamicActions(FacesContext context, StateContext stateContext, Map<String, Object> stateMap) {
-        if (LOGGER.isLoggable(Level.FINEST)) {
+        if (LOGGER.isLoggable(FINEST)) {
             LOGGER.finest("FaceletPartialStateManagementStrategy.restoreDynamicActions");
         }
 
+        @SuppressWarnings("unchecked")
         List<Object> savedActions = (List<Object>) stateMap.get(DYNAMIC_ACTIONS);
         List<ComponentStruct> actions = stateContext.getDynamicActions();
 
-        if (savedActions != null && !savedActions.isEmpty()) {
-            for (Object object : savedActions) {
+        if (!isEmpty(savedActions)) {
+            for (Object savedAction : savedActions) {
                 ComponentStruct action = new ComponentStruct();
-                action.restoreState(context, object);
-                if (ComponentStruct.ADD.equals(action.action)) {
+                action.restoreState(context, savedAction);
+                if (ADD.equals(action.getAction())) {
                     restoreDynamicAdd(context, stateMap, action);
                 }
-                if (ComponentStruct.REMOVE.equals(action.action)) {
+                if (REMOVE.equals(action.getAction())) {
                     restoreDynamicRemove(context, action);
                 }
                 pruneAndReAddToDynamicActions(actions, action);
@@ -242,14 +255,14 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
      * @param struct the component struct.
      */
     private void restoreDynamicAdd(FacesContext context, Map<String, Object> state, ComponentStruct struct) {
-        if (LOGGER.isLoggable(Level.FINEST)) {
+        if (LOGGER.isLoggable(FINEST)) {
             LOGGER.finest("FaceletPartialStateManagementStrategy.restoreDynamicAdd");
         }
 
-        UIComponent parent = locateComponentByClientId(context, context.getViewRoot(), struct.parentClientId);
+        UIComponent parent = locateComponentByClientId(context, context.getViewRoot(), struct.getParentClientId());
 
         if (parent != null) {
-            UIComponent child = locateComponentByClientId(context, parent, struct.clientId);
+            UIComponent child = locateComponentByClientId(context, parent, struct.getClientId());
 
             /*
              * If Facelets engine restored the child before us we are going to
@@ -257,10 +270,10 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
              * correct place.
              */
             if (child != null) {
-                if (struct.facetName == null) {
+                if (struct.getFacetName() == null) {
                     parent.getChildren().remove(child);
                 } else {
-                    parent.getFacets().remove(struct.facetName);
+                    parent.getFacets().remove(struct.getFacetName());
                 }
             }
 
@@ -269,7 +282,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
              * the component was saved in the state.
              */
             if (child == null) {
-                StateHolderSaver saver = (StateHolderSaver) state.get(struct.clientId);
+                StateHolderSaver saver = (StateHolderSaver) state.get(struct.getClientId());
                 if (saver != null) {
                     child = (UIComponent) saver.restore(context);
                 }
@@ -282,21 +295,21 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
              */
             StateContext stateContext = StateContext.getStateContext(context);
             if (child == null) {
-                child = stateContext.getDynamicComponents().get(struct.clientId);
+                child = stateContext.getDynamicComponents().get(struct.getClientId());
             }
 
             /*
              * Now if we have the child we are going to add it back in.
              */
             if (child != null) {
-                if (struct.facetName != null) {
-                    parent.getFacets().put(struct.facetName, child);
+                if (struct.getFacetName() != null) {
+                    parent.getFacets().put(struct.getFacetName(), child);
                 } else {
                     int childIndex = -1;
                     if (child.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
                         childIndex = (Integer) child.getAttributes().get(DYNAMIC_COMPONENT);
                     }
-                    child.setId(struct.id);
+                    child.setId(struct.getId());
                     if (childIndex >= parent.getChildCount() || childIndex == -1) {
                         parent.getChildren().add(child);
                     } else {
@@ -305,7 +318,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
                     child.getClientId();
                 }
                 child.getAttributes().put(DYNAMIC_COMPONENT, child.getParent().getChildren().indexOf(child));
-                stateContext.getDynamicComponents().put(struct.clientId, child);
+                stateContext.getDynamicComponents().put(struct.getClientId(), child);
             }
         }
     }
@@ -321,10 +334,10 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
             LOGGER.finest("FaceletPartialStateManagementStrategy.restoreDynamicRemove");
         }
 
-        UIComponent child = locateComponentByClientId(context, context.getViewRoot(), struct.clientId);
+        UIComponent child = locateComponentByClientId(context, context.getViewRoot(), struct.getClientId());
         if (child != null) {
             StateContext stateContext = StateContext.getStateContext(context);
-            stateContext.getDynamicComponents().put(struct.clientId, child);
+            stateContext.getDynamicComponents().put(struct.getClientId(), child);
             UIComponent parent = child.getParent();
             parent.getChildren().remove(child);
         }
@@ -354,6 +367,7 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
             return null;
         }
 
+        @SuppressWarnings("unchecked")
         final Map<String, Object> state = (Map<String, Object>) rawState[1];
         final StateContext stateContext = StateContext.getStateContext(context);
 
@@ -423,12 +437,12 @@ public class FaceletPartialStateManagementStrategy extends StateManagementStrate
         if (actions != null) {
             List<Object> savedActions = new ArrayList<>(actions.size());
             for (ComponentStruct action : actions) {
-                UIComponent component = componentMap.get(action.clientId);
+                UIComponent component = componentMap.get(action.getClientId());
                 if (component == null && context.isProjectStage(ProjectStage.Development)) {
                     LOGGER.log(
                             Level.WARNING,
                             "Unable to save dynamic action with clientId ''{0}'' because the UIComponent cannot be found",
-                            action.clientId);
+                            action.getClientId());
                 }
                 if (component != null) {
                     savedActions.add(action.saveState(context));
