@@ -39,9 +39,6 @@
  */
 package com.sun.faces.application.view;
 
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -53,6 +50,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.FacesException;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
@@ -60,6 +58,10 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 import javax.faces.view.StateManagementStrategy;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 /**
  * A state management strategy for JSP.
@@ -217,8 +219,8 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
                 fn = (FacetNode) tree[i];
                 c = newInstance(fn);
                 tree[i] = c;
-                if (i != fn.parent) {
-                    ((UIComponent) tree[fn.parent]).getFacets().put(fn.facetName, c);
+                if (i != fn.getParent()) {
+                    ((UIComponent) tree[fn.getParent()]).getFacets().put(fn.facetName, c);
                 }
 
             } else {
@@ -322,10 +324,11 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
          * Stores the serial version UID.
          */
         private static final long serialVersionUID = -3777170310958005106L;
+        
         /**
          * Stores the facet name.
          */
-        public String facetName;
+        private String facetName;
 
         /**
          * Constructor.
@@ -341,7 +344,6 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
          * @param c the component.
          */
         public FacetNode(int parent, String name, UIComponent c) {
-
             super(parent, c);
             this.facetName = name;
         }
@@ -355,10 +357,8 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
          */
         @Override
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-
             super.readExternal(in);
             this.facetName = in.readUTF();
-
         }
 
         /**
@@ -389,19 +389,22 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
          * Stores the NULL_ID constant.
          */
         private static final String NULL_ID = "";
+        
         /**
          * Stores the component type.
          */
-        public String componentType;
+        private String componentType;
+        
         /**
          * Stores the id.
          */
-        public String id;
+        private String id;
+        
         /**
          * Stores the parent.
          */
-        public int parent;
-
+        private int parent;
+       
         /**
          * Constructor.
          */
@@ -457,5 +460,10 @@ public class JspStateManagementStrategy extends StateManagementStrategy {
                 out.writeUTF(NULL_ID);
             }
         }
+        
+        public int getParent() {
+            return parent;
+        }
+
     }
 }
