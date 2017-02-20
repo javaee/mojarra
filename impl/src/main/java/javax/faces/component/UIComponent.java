@@ -40,11 +40,21 @@
 
 package javax.faces.component;
 
+import static com.sun.faces.util.Util.isAnyNull;
+import static com.sun.faces.util.Util.isOneOf;
+import static java.util.Collections.emptyMap;
+import static java.util.logging.Level.SEVERE;
+import static javax.faces.application.Resource.COMPONENT_RESOURCE_KEY;
+import static javax.faces.component.visit.VisitHint.SKIP_TRANSIENT;
+import static javax.faces.component.visit.VisitHint.SKIP_UNRENDERED;
+import static javax.faces.component.visit.VisitResult.ACCEPT;
+import static javax.faces.component.visit.VisitResult.COMPLETE;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,10 +63,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.el.ELContext;
@@ -208,6 +218,16 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @since 2.1
      */
     public static final String ATTRS_WITH_DECLARED_DEFAULT_VALUES = "javax.faces.component.ATTR_NAMES_WITH_DEFAULT_VALUES";
+    
+    /**
+     * key used to look up current component stack if FacesContext attributes
+     */
+    private static final String _CURRENT_COMPONENT_STACK_KEY = "javax.faces.component.CURRENT_COMPONENT_STACK";
+
+    /**
+     * key used to look up current composite component stack if FacesContext attributes
+     */
+    private static final String _CURRENT_COMPOSITE_COMPONENT_STACK_KEY = "javax.faces.component.CURRENT_COMPOSITE_COMPONENT_STACK";
 
     enum PropertyKeysPrivate {
         attributesThatAreSet
@@ -227,10 +247,25 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * authoritative on what has been set.
      */
     List<String> attributesThatAreSet;
-    ComponentStateHelper stateHelper = null;
+    ComponentStateHelper stateHelper;
     UIComponent compositeParent;
+    private boolean isInView;
+    private Map<String, String> resourceBundleMap;
 
     private transient Boolean isSetCurrentComponent;
+    
+    // It is safe to cache this because components never go from being
+    // composite to non-composite.
+    private transient Boolean isCompositeComponent;
+    
+    /**
+     * Track whether we have been pushed as current in order to handle mismatched pushes
+     * and pops of EL context stack. We use a counter to handle cases where the same component
+     * is pushed on multiple times
+     */
+    private int _isPushedAsCurrentRefCount = 0;
+
+   
 
     // -------------------------------------------------------------- Attributes
 
@@ -281,9 +316,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @return the pass-through attribute map.
      * @since 2.2
      */
-
     public Map<String, Object> getPassThroughAttributes() {
-
         return getPassThroughAttributes(true);
     }
 
@@ -329,13 +362,13 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * 
      * @since 2.2
      */
-
     public Map<String, Object> getPassThroughAttributes(boolean create) {
-        return Collections.emptyMap();
+        return emptyMap();
     }
+    
 
+    
     // ---------------------------------------------------------------- Bindings
-
    
 
     /**
@@ -364,9 +397,10 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
             throw new NullPointerException();
         }
 
+        @SuppressWarnings("unchecked")
         Map<String, ValueExpression> map = (Map<String, ValueExpression>) getStateHelper().get(UIComponentBase.PropertyKeys.bindings);
-        return ((map != null) ? map.get(name) : null);
-
+        
+        return map != null ? map.get(name) : null;
     }
 
     /**
@@ -413,28 +447,26 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
 
         if (name == null) {
             throw new NullPointerException();
-        } else if ("id".equals(name) || "parent".equals(name)) {
+        }
+        
+        if (isOneOf(name, "id", "parent")) {
             throw new IllegalArgumentException();
         }
 
         if (binding != null) {
             if (!binding.isLiteralText()) {
-                // if (bindings == null) {
-                // //noinspection CollectionWithoutInitialCapacity
-                // bindings = new HashMap<String, ValueExpression>();
-                // }
-                // add this binding name to the 'attributesThatAreSet' list
-                // List<String> sProperties = (List<String>)
-                // getStateHelper().get(PropertyKeysPrivate.attributesThatAreSet);
 
+                @SuppressWarnings("unchecked")
                 List<String> sProperties = (List<String>) getStateHelper().get(PropertyKeysPrivate.attributesThatAreSet);
+                
                 if (sProperties == null) {
                     getStateHelper().add(PropertyKeysPrivate.attributesThatAreSet, name);
                 } else if (!sProperties.contains(name)) {
                     getStateHelper().add(PropertyKeysPrivate.attributesThatAreSet, name);
                 }
+                
                 getStateHelper().put(UIComponentBase.PropertyKeys.bindings, name, binding);
-                // bindings.put(name, binding);
+
             } else {
                 ELContext context = FacesContext.getCurrentInstance().getELContext();
                 try {
@@ -444,22 +476,11 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                 }
             }
         } else {
-            // if (bindings != null) {
-            // remove this binding name from the 'attributesThatAreSet' list
-            // List<String> sProperties = getAttributesThatAreSet(false);
-            // if (sProperties != null) {
-            // sProperties.remove(name);
-            // }
             getStateHelper().remove(PropertyKeysPrivate.attributesThatAreSet, name);
             getStateHelper().remove(UIComponentBase.PropertyKeys.bindings, name);
-            // bindings.remove(name);
-            // if (bindings.isEmpty()) {
-            // bindings = null;
-            // }
         }
-        // }
-
     }
+    
 
     // -------------------------------------------------------------- Properties
 
@@ -539,8 +560,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
         if (create && stateHelper == null) {
             stateHelper = new ComponentStateHelper(this);
         }
+        
         return stateHelper;
-
     }
 
     /**
@@ -554,7 +575,6 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @return the transient state helper.
      * @since 2.1
      */
-
     public TransientStateHelper getTransientStateHelper() {
         return getTransientStateHelper(true);
     }
@@ -578,8 +598,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
         if (create && stateHelper == null) {
             stateHelper = new ComponentStateHelper(this);
         }
+        
         return stateHelper;
-
     }
 
     /**
@@ -590,7 +610,6 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      *
      * @since 2.1
      */
-
     @Override
     public void restoreTransientState(FacesContext context, Object state) {
         boolean forceCreate = (state != null);
@@ -609,15 +628,12 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      *
      * @since 2.1
      */
-
     @Override
     public Object saveTransientState(FacesContext context) {
         TransientStateHelper helper = getTransientStateHelper(false);
 
-        return (helper == null) ? null : helper.saveTransientState(context);
+        return helper == null ? null : helper.saveTransientState(context);
     }
-
-    private boolean isInView;
 
     /**
      * <p class="changed_added_2_0">
@@ -662,10 +678,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @return the client id.
      * @since 2.0
      */
-
     public String getClientId() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        return getClientId(context);
+        return getClientId(FacesContext.getCurrentInstance());
     }
 
     /**
@@ -730,7 +744,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
         if (context == null) {
             throw new NullPointerException();
         }
-        return this.getClientId(context);
+        
+        return getClientId(context);
     }
 
     /**
@@ -817,22 +832,20 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * <div class="changed_modified_2_0_rev_a">
      * 
      * <ul>
+     *   <li>
+     *     <p>
+     *       {@link javax.faces.context.FacesContext#getCurrentPhaseId} returns
+     *       {@link javax.faces.event.PhaseId#RESTORE_VIEW} and partial state saving is enabled.
+     *     </p>
+     *   </li>
      * 
-     * <li>
-     * <p>
-     * {@link javax.faces.context.FacesContext#getCurrentPhaseId} returns
-     * {@link javax.faces.event.PhaseId#RESTORE_VIEW} and partial state saving is enabled.
-     * </p>
-     * </li>
-     * 
-     * <li>
-     * <p>
-     * {@link javax.faces.context.FacesContext#isPostback} returns <code>false</code> and
-     * {@link javax.faces.context.FacesContext#getCurrentPhaseId} returns something other
-     * than {@link javax.faces.event.PhaseId#RESTORE_VIEW}
-     * </p>
-     * </li>
-     * 
+     *   <li>
+     *     <p>
+     *         {@link javax.faces.context.FacesContext#isPostback} returns <code>false</code> and
+     *         {@link javax.faces.context.FacesContext#getCurrentPhaseId} returns something other
+     *         than {@link javax.faces.event.PhaseId#RESTORE_VIEW}
+     *     </p>
+     *   </li>
      * </ul>
      * 
      * </div>
@@ -909,8 +922,6 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      */
     public abstract boolean getRendersChildren();
 
-    private Map<String, String> resourceBundleMap = null;
-
     /**
      * <p class="changed_added_2_0">
      * Return a <code>Map&lt;String,String&gt;</code> of the <code>ResourceBundle</code>
@@ -942,231 +953,33 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      */
     public Map<String, String> getResourceBundleMap() {
 
-        if (null == resourceBundleMap) {
-            // See if there is a ResourceBundle under the FQCN for this class
-            String className = this.getClass().getName();
-            Locale currentLocale = null;
-            FacesContext context = null;
-            UIViewRoot root = null;
-            ResourceBundle resourceBundle = null;
+        if (resourceBundleMap == null) {
+            
+            FacesContext context = FacesContext.getCurrentInstance();
 
             // Step 1: look for a ResourceBundle under the FQCN of this instance
-            if (null != (context = FacesContext.getCurrentInstance())) {
-                if (null != (root = context.getViewRoot())) {
-                    currentLocale = root.getLocale();
-                }
-            }
-            if (null == currentLocale) {
-                currentLocale = Locale.getDefault();
-            }
-            try {
-                resourceBundle = ResourceBundle.getBundle(className, currentLocale);
-            } catch (MissingResourceException e) {
-                // It is not an error if there is no ResourceBundle
-            }
+            ResourceBundle resourceBundle = findResourceBundleUnderFQCNofThis(context);
 
             // Step 2: if this is a composite component, look for a
             // ResourceBundle as a Resource
-            if (null == resourceBundle) {
-                if (this.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
-                    Resource ccResource = (Resource) this.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
-                    if (null != ccResource) {
-                        if (null != (ccResource = findComponentResourceBundleLocaleMatch(context, ccResource.getResourceName(), ccResource.getLibraryName()))) {
-                            try (InputStream propertiesInputStream = ccResource.getInputStream()) {
-                                resourceBundle = new PropertyResourceBundle(propertiesInputStream);
-                            } catch (IOException ex) {
-                                Logger.getLogger(UIComponent.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                    }
-                }
+            if (resourceBundle == null) {
+                resourceBundle = findResourceBundleAsResource(context);
             }
 
             // Step 3: if the previous steps yielded a ResourceBundle, wrap it
             // with a Map
-
-            if (null != resourceBundle) {
-                final ResourceBundle bundle = resourceBundle;
-                resourceBundleMap = new Map() {
-                    // this is an immutable Map
-
-                    @Override
-                    public String toString() {
-                        StringBuffer sb = new StringBuffer();
-                        Iterator<Map.Entry<String, Object>> entries = this.entrySet().iterator();
-                        Map.Entry<String, Object> cur;
-                        while (entries.hasNext()) {
-                            cur = entries.next();
-                            sb.append(cur.getKey()).append(": ").append(cur.getValue()).append('\n');
-                        }
-
-                        return sb.toString();
-                    }
-
-                    // Do not need to implement for immutable Map
-                    @Override
-                    public void clear() {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    @Override
-                    public boolean containsKey(Object key) {
-                        boolean result = false;
-                        if (null != key) {
-                            result = (null != bundle.getObject(key.toString()));
-                        }
-                        return result;
-                    }
-
-                    @Override
-                    public boolean containsValue(Object value) {
-                        Enumeration<String> keys = bundle.getKeys();
-                        boolean result = false;
-                        while (keys.hasMoreElements()) {
-                            Object curObj = bundle.getObject(keys.nextElement());
-                            if ((curObj == value) || ((null != curObj) && curObj.equals(value))) {
-                                result = true;
-                                break;
-                            }
-                        }
-                        return result;
-                    }
-
-                    @Override
-                    public Set<Map.Entry<String, Object>> entrySet() {
-                        HashMap<String, Object> mappings = new HashMap<>();
-                        Enumeration<String> keys = bundle.getKeys();
-                        while (keys.hasMoreElements()) {
-                            String key = keys.nextElement();
-                            Object value = bundle.getObject(key);
-                            mappings.put(key, value);
-                        }
-                        return mappings.entrySet();
-                    }
-
-                    @Override
-                    public boolean equals(Object obj) {
-                        return !((obj == null) || !(obj instanceof Map)) && entrySet().equals(((Map) obj).entrySet());
-
-                    }
-
-                    @Override
-                    public Object get(Object key) {
-                        if (null == key) {
-                            return null;
-                        }
-                        try {
-                            return bundle.getObject(key.toString());
-                        } catch (MissingResourceException e) {
-                            return "???" + key + "???";
-                        }
-                    }
-
-                    @Override
-                    public int hashCode() {
-                        return bundle.hashCode();
-                    }
-
-                    @Override
-                    public boolean isEmpty() {
-                        Enumeration<String> keys = bundle.getKeys();
-                        return !keys.hasMoreElements();
-                    }
-
-                    @Override
-                    public Set keySet() {
-                        Set<String> keySet = new HashSet<>();
-                        Enumeration<String> keys = bundle.getKeys();
-                        while (keys.hasMoreElements()) {
-                            keySet.add(keys.nextElement());
-                        }
-                        return keySet;
-                    }
-
-                    // Do not need to implement for immutable Map
-                    @Override
-                    public Object put(Object k, Object v) {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    // Do not need to implement for immutable Map
-                    @Override
-                    public void putAll(Map t) {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    // Do not need to implement for immutable Map
-                    @Override
-                    public Object remove(Object k) {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    @Override
-                    public int size() {
-                        int result = 0;
-                        Enumeration<String> keys = bundle.getKeys();
-                        while (keys.hasMoreElements()) {
-                            keys.nextElement();
-                            result++;
-                        }
-                        return result;
-                    }
-
-                    @Override
-                    public java.util.Collection values() {
-                        ArrayList<Object> result = new ArrayList<>();
-                        Enumeration<String> keys = bundle.getKeys();
-                        while (keys.hasMoreElements()) {
-                            result.add(bundle.getObject(keys.nextElement()));
-                        }
-                        return result;
-                    }
-                };
-
+            if (resourceBundle != null) {
+                resourceBundleMap = wrapBundleAsMap(resourceBundle);
             }
 
-            if (null == resourceBundleMap) {
-                resourceBundleMap = Collections.EMPTY_MAP;
+            if (resourceBundleMap == null) {
+                resourceBundleMap = emptyMap();
             }
-
         }
 
         return resourceBundleMap;
     }
-
-    // PENDING(rlubke): I'm sure there's a more efficient
-    // way to handle this.
-    private Resource findComponentResourceBundleLocaleMatch(FacesContext context, String resourceName, String libraryName) {
-        Resource result = null;
-        ResourceBundle resourceBundle = null;
-        int i;
-        if (-1 != (i = resourceName.lastIndexOf("."))) {
-            resourceName = resourceName.substring(0, i) + ".properties";
-            if (null != context) {
-                result = context.getApplication().getResourceHandler().createResource(resourceName, libraryName);
-                InputStream propertiesInputStream = null;
-                try {
-                    propertiesInputStream = result.getInputStream();
-                    resourceBundle = new PropertyResourceBundle(propertiesInputStream);
-                } catch (IOException ex) {
-                    Logger.getLogger(UIComponent.class.getName()).log(Level.SEVERE, null, ex);
-                } finally {
-                    if (null != propertiesInputStream) {
-                        try {
-                            propertiesInputStream.close();
-                        } catch (IOException ioe) {
-                            if (LOGGER.isLoggable(Level.SEVERE)) {
-                                LOGGER.log(Level.SEVERE, null, ioe);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        result = (null != resourceBundle) ? result : null;
-
-        return result;
-    }
+   
 
     // This is necessary for JSF components that extend from UIComponent
     // directly rather than extending from UIComponentBase. Such components
@@ -1292,38 +1105,38 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * </p>
      * 
      * <ul>
-     * <li>Identify the {@link UIComponent} that will be the base for searching, by
-     * stopping as soon as one of the following conditions is met:
-     * <ul>
-     * <li>If the search expression begins with the the separator character (called an
-     * "absolute" search expression), the base will be the root {@link UIComponent} of the
-     * component tree. The leading separator character will be stripped off, and the
-     * remainder of the search expression will be treated as a "relative" search
-     * expression as described below.</li>
-     * <li>Otherwise, if this {@link UIComponent} is a {@link NamingContainer} it will
-     * serve as the basis.</li>
-     * <li>Otherwise, search up the parents of this component. If a
-     * {@link NamingContainer} is encountered, it will be the base.</li>
-     * <li>Otherwise (if no {@link NamingContainer} is encountered) the root
-     * {@link UIComponent} will be the base.</li>
-     * </ul>
-     * </li>
-     * <li>The search expression (possibly modified in the previous step) is now a
-     * "relative" search expression that will be used to locate the component (if any)
-     * that has an <code>id</code> that matches, within the scope of the base component.
-     * The match is performed as follows:
-     * <ul>
-     * <li>If the search expression is a simple identifier, this value is compared to the
-     * <code>id</code> property, and then recursively through the facets and children of
-     * the base {@link UIComponent} (except that if a descendant {@link NamingContainer}
-     * is found, its own facets and children are not searched).</li>
-     * <li>If the search expression includes more than one identifier separated by the
-     * separator character, the first identifier is used to locate a
-     * {@link NamingContainer} by the rules in the previous bullet point. Then, the
-     * <code>findComponent()</code> method of this {@link NamingContainer} will be called,
-     * passing the remainder of the search expression.</li>
-     * </ul>
-     * </li>
+     *   <li>Identify the {@link UIComponent} that will be the base for searching, by
+     *       stopping as soon as one of the following conditions is met:
+     *     <ul>
+     *       <li>If the search expression begins with the the separator character (called an
+     *           "absolute" search expression), the base will be the root {@link UIComponent} of the
+     *           component tree. The leading separator character will be stripped off, and the
+     *           remainder of the search expression will be treated as a "relative" search
+     *           expression as described below.</li>
+     *       <li>Otherwise, if this {@link UIComponent} is a {@link NamingContainer} it will
+     *           serve as the basis.</li>
+     *       <li>Otherwise, search up the parents of this component. If a
+     *           {@link NamingContainer} is encountered, it will be the base.</li>
+     *       <li>Otherwise (if no {@link NamingContainer} is encountered) the root
+     *           {@link UIComponent} will be the base.</li>
+     *     </ul>
+     *   </li>
+     *   <li>The search expression (possibly modified in the previous step) is now a
+     *       "relative" search expression that will be used to locate the component (if any)
+     *       that has an <code>id</code> that matches, within the scope of the base component.
+     *       The match is performed as follows:
+     *       <ul>
+     *         <li>If the search expression is a simple identifier, this value is compared to the
+     *             <code>id</code> property, and then recursively through the facets and children of
+     *             the base {@link UIComponent} (except that if a descendant {@link NamingContainer}
+     *             is found, its own facets and children are not searched).</li>
+     *         <li>If the search expression includes more than one identifier separated by the
+     *             separator character, the first identifier is used to locate a
+     *             {@link NamingContainer} by the rules in the previous bullet point. Then, the
+     *             <code>findComponent()</code> method of this {@link NamingContainer} will be called,
+     *             passing the remainder of the search expression.</li>
+     *      </ul>
+     *    </li>
      * </ul>
      *
      * @param expr
@@ -1436,17 +1249,18 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      *         found.
      *
      */
-
     public boolean invokeOnComponent(FacesContext context, String clientId, ContextCallback callback) throws FacesException {
-        if (null == context || null == clientId || null == callback) {
+        
+        if (isAnyNull(context, clientId, callback)) {
             throw new NullPointerException();
         }
 
         boolean found = false;
-        if (clientId.equals(this.getClientId(context))) {
+        if (clientId.equals(getClientId(context))) {
             try {
-                this.pushComponentToEL(context, this);
+                pushComponentToEL(context, this);
                 callback.invokeContextCallback(context, this);
+                
                 return true;
             } catch (Exception e) {
                 throw new FacesException(e);
@@ -1454,14 +1268,16 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                 this.popComponentFromEL(context);
             }
         } else {
-            Iterator<UIComponent> itr = this.getFacetsAndChildren();
+            Iterator<UIComponent> facetsAndChildrenIterator = getFacetsAndChildren();
 
-            while (itr.hasNext() && !found) {
-                found = itr.next().invokeOnComponent(context, clientId, callback);
+            while (facetsAndChildrenIterator.hasNext() && !found) {
+                found = facetsAndChildrenIterator.next().invokeOnComponent(context, clientId, callback);
             }
         }
+        
         return found;
     }
+    
 
     // ------------------------------------------------ Facet Management Methods
 
@@ -1474,30 +1290,30 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * </p>
      * 
      * <ul>
-     * <li>The <code>Map</code> implementation must implement the
-     * <code>java.io.Serializable</code> interface.</li>
-     * <li>Any attempt to add a <code>null</code> key or value must throw a
-     * NullPointerException.</li>
-     * <li>Any attempt to add a key that is not a String must throw a
-     * ClassCastException.</li>
-     * <li>Any attempt to add a value that is not a {@link UIComponent} must throw a
-     * ClassCastException.</li>
-     * <li>Whenever a new facet {@link UIComponent} is added:
-     * <ul>
-     * <li>The <code>parent</code> property of the component must be set to this component
-     * instance.</li>
-     * <li>If the <code>parent</code> property of the component was already non-null, the
-     * component must first be removed from its previous parent (where it may have been
-     * either a child or a facet).</li>
-     * </ul>
-     * </li>
+     *   <li>The <code>Map</code> implementation must implement the
+     *       <code>java.io.Serializable</code> interface.</li>
+     *   <li>Any attempt to add a <code>null</code> key or value must throw a
+     *       NullPointerException.</li>
+     *   <li>Any attempt to add a key that is not a String must throw a
+     *       ClassCastException.</li>
+     *   <li>Any attempt to add a value that is not a {@link UIComponent} must throw a
+     *       ClassCastException.</li>
+     *   <li>Whenever a new facet {@link UIComponent} is added:
+     *       <ul>
+     *         <li>The <code>parent</code> property of the component must be set to this component
+     *             instance.</li>
+     *         <li>If the <code>parent</code> property of the component was already non-null, the
+     *             component must first be removed from its previous parent (where it may have been
+     *             either a child or a facet).</li>
+     *      </ul>
+     *   </li>
      * 
-     * <li>Whenever an existing facet {@link UIComponent} is removed:
-     * <ul>
-     * <li>The <code>parent</code> property of the facet must be set to
-     * <code>null</code>.</li>
-     * </ul>
-     * </li>
+     *   <li>Whenever an existing facet {@link UIComponent} is removed:
+     *     <ul>
+     *      <li>The <code>parent</code> property of the facet must be set to
+     *          <code>null</code>.</li>
+     *    </ul>
+     *   </li>
      * </ul>
      * 
      * @return the map of facets.
@@ -1522,7 +1338,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @since 1.2
      */
     public int getFacetCount() {
-        return (getFacets().size());
+        return getFacets().size();
     }
 
     /**
@@ -1556,6 +1372,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      */
     public abstract Iterator<UIComponent> getFacetsAndChildren();
 
+    
     // -------------------------------------------- Lifecycle Processing Methods
 
     /**
@@ -1627,7 +1444,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * before performing the visit and UIComponent.popComponentFromEL() after the visit.
      * </p>
      *
-     * @param context
+     * @param visitContext
      *            the <code>VisitContext</code> for this visit
      * @param callback
      *            the <code>VisitCallback</code> instance whose <code>visit</code> method
@@ -1643,37 +1460,40 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      *
      * @since 2.0
      */
-    public boolean visitTree(VisitContext context, VisitCallback callback) {
+    public boolean visitTree(VisitContext visitContext, VisitCallback callback) {
 
         // First check to see whether we are visitable. If not
         // short-circuit out of this subtree, though allow the
         // visit to proceed through to other subtrees.
-        if (!isVisitable(context))
+        if (!isVisitable(visitContext)) {
             return false;
+        }
 
         // Push ourselves to EL before visiting
-        FacesContext facesContext = context.getFacesContext();
+        FacesContext facesContext = visitContext.getFacesContext();
         pushComponentToEL(facesContext, null);
 
         try {
             // Visit ourselves. Note that we delegate to the
             // VisitContext to actually perform the visit.
-            VisitResult result = context.invokeVisitCallback(this, callback);
+            VisitResult result = visitContext.invokeVisitCallback(this, callback);
 
             // If the visit is complete, short-circuit out and end the visit
-            if (result == VisitResult.COMPLETE)
+            if (result == COMPLETE) {
                 return true;
+            }
 
             // Visit children if necessary
-            if (result == VisitResult.ACCEPT) {
-                Iterator<UIComponent> kids = this.getFacetsAndChildren();
+            if (result == ACCEPT) {
+                Iterator<UIComponent> kids = getFacetsAndChildren();
 
                 while (kids.hasNext()) {
-                    boolean done = kids.next().visitTree(context, callback);
+                    boolean done = kids.next().visitTree(visitContext, callback);
 
                     // If any kid visit returns true, we are done.
-                    if (done)
+                    if (done) {
                         return true;
+                    }
                 }
             }
         } finally {
@@ -1714,13 +1534,12 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      */
     protected boolean isVisitable(VisitContext context) {
 
-        // VisitHints currently defines two hints that affect
-        // visitability: VIIST_RENDERED and VISIT_TRANSIENT.
-        // Check for both of these and if set, verify that
-        // we comply.
+        // VisitHints currently defines two hints that affect visitability: 
+        // VIIST_RENDERED and VISIT_TRANSIENT.
+        // Check for both of these and if set, verify that we comply.
         Set<VisitHint> hints = context.getHints();
 
-        if ((hints.contains(VisitHint.SKIP_UNRENDERED) && !this.isRendered()) || (hints.contains(VisitHint.SKIP_TRANSIENT) && this.isTransient())) {
+        if ((hints.contains(SKIP_UNRENDERED) && !this.isRendered()) || (hints.contains(SKIP_TRANSIENT) && this.isTransient())) {
             return false;
         }
 
@@ -1846,27 +1665,21 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
         }
 
         encodeBegin(context);
+        
         if (getRendersChildren()) {
             encodeChildren(context);
-        } else if (this.getChildCount() > 0) {
+        } else if (getChildCount() > 0) {
             for (UIComponent kid : getChildren()) {
                 kid.encodeAll(context);
             }
         }
 
         encodeEnd(context);
-
     }
 
+    @SuppressWarnings("unchecked")
     private static ArrayDeque<UIComponent> _getComponentELStack(String keyName, Map<Object, Object> contextAttributes) {
-        ArrayDeque<UIComponent> elStack = (ArrayDeque<UIComponent>) contextAttributes.get(keyName);
-
-        if (elStack == null) {
-            elStack = new ArrayDeque<>();
-            contextAttributes.put(keyName, elStack);
-        }
-
-        return elStack;
+        return (ArrayDeque<UIComponent>) contextAttributes.computeIfAbsent(keyName, e -> new ArrayDeque<>());
     }
 
     // bugdb 18090503
@@ -1879,25 +1692,17 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      */
 
     private boolean isSetCurrentComponent(FacesContext context) {
-        if (null != isSetCurrentComponent) {
+        if (isSetCurrentComponent != null) {
             return isSetCurrentComponent;
         }
 
-        Boolean bool = (Boolean) context.getAttributes().get(HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
-        if (null != bool) {
-            isSetCurrentComponent = bool;
-        } else {
-            String val = context.getExternalContext().getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
-            isSetCurrentComponent = Boolean.valueOf(val);
-        }
-
-        return isSetCurrentComponent;
+        Boolean honorComponentAttribute = (Boolean) context.getAttributes().get(HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
+        if (honorComponentAttribute != null) {
+            return honorComponentAttribute;
+        } 
+            
+        return Boolean.valueOf(context.getExternalContext().getInitParameter(HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME));
     }
-
-    // private UIComponent previouslyPushed = null;
-    // private UIComponent previouslyPushedCompositeComponent = null;
-    // private boolean pushed;
-    // private int depth;
 
     /**
      * <p class="changed_added_2_0">
@@ -1943,7 +1748,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
             throw new NullPointerException();
         }
 
-        if (null == component) {
+        if (component == null) {
             component = this;
         }
 
@@ -1952,35 +1757,23 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
         componentELStack.push(component);
         component._isPushedAsCurrentRefCount++;
 
-        // we only do this because of the spec
+        // We only do this because of the spec
         boolean setCurrentComponent = isSetCurrentComponent(context);
         if (setCurrentComponent) {
-            contextAttributes.put(UIComponent.CURRENT_COMPONENT, component);
+            contextAttributes.put(CURRENT_COMPONENT, component);
         }
 
-        // if the pushed component is a composite component, we need to update that
+        // If the pushed component is a composite component, we need to update that
         // stack as well
         if (UIComponent.isCompositeComponent(component)) {
             _getComponentELStack(_CURRENT_COMPOSITE_COMPONENT_STACK_KEY, contextAttributes).push(component);
 
-            // we only do this because of the spec
+            // We only do this because of the spec
             if (setCurrentComponent) {
-                contextAttributes.put(UIComponent.CURRENT_COMPOSITE_COMPONENT, component);
+                contextAttributes.put(CURRENT_COMPOSITE_COMPONENT, component);
             }
         }
     }
-
-    // track whether we have been pushed as current in order to handle mismatched pushes
-    // and
-    // pops of EL context stack. We use a counter to handle cases where the same component
-    // is pushed on multiple times
-    private int _isPushedAsCurrentRefCount = 0;
-
-    // key used to look up current component stack if FacesContext attributes
-    private static final String _CURRENT_COMPONENT_STACK_KEY = "javax.faces.component.CURRENT_COMPONENT_STACK";
-
-    // key used to look up current composite component stack if FacesContext attributes
-    private static final String _CURRENT_COMPOSITE_COMPONENT_STACK_KEY = "javax.faces.component.CURRENT_COMPOSITE_COMPONENT_STACK";
 
     /**
      * <p class="changed_added_2_0">
@@ -2004,12 +1797,12 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
             throw new NullPointerException();
         }
 
-        // detect cases where the stack has become unbalanced. Due to how UIComponentBase
+        // Detect cases where the stack has become unbalanced. Due to how UIComponentBase
         // implemented pushing and pooping of components from the ELContext, components
         // that
         // overrode just one of encodeBegin or encodeEnd, or only called super in one case
         // will become unbalanced. Detect and correct for those cases here.
-
+        //
         // detect case where push was never called. In that case, pop should be a no-op
         if (_isPushedAsCurrentRefCount < 1) {
             return;
@@ -2032,13 +1825,13 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
 
         boolean setCurrentComponent = isSetCurrentComponent(context);
 
-        // update the current component with the new top of stack. We only do this because
+        // Update the current component with the new top of stack. We only do this because
         // of the spec
         if (setCurrentComponent) {
-            contextAttributes.put(UIComponent.CURRENT_COMPONENT, componentELStack.peek());
+            contextAttributes.put(CURRENT_COMPONENT, componentELStack.peek());
         }
 
-        // if we're a composite component, we also have to pop ourselves off of the
+        // If we're a composite component, we also have to pop ourselves off of the
         // composite stack
         if (UIComponent.isCompositeComponent(this)) {
             ArrayDeque<UIComponent> compositeELStack = _getComponentELStack(_CURRENT_COMPOSITE_COMPONENT_STACK_KEY, contextAttributes);
@@ -2046,17 +1839,13 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
                 compositeELStack.pop();
             }
 
-            // update the current composite component with the new top of stack.
+            // Update the current composite component with the new top of stack.
             // We only do this because of the spec
             if (setCurrentComponent) {
-                contextAttributes.put(UIComponent.CURRENT_COMPOSITE_COMPONENT, compositeELStack.peek());
+                contextAttributes.put(CURRENT_COMPOSITE_COMPONENT, compositeELStack.peek());
             }
         }
     }
-
-    // It is safe to cache this because components never go from being
-    // composite to non-composite.
-    private transient Boolean isCompositeComponent = null;
 
     /**
      * <p class="changed_added_2_0">
@@ -2168,12 +1957,9 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * @since 2.0
      */
     public static UIComponent getCurrentCompositeComponent(FacesContext context) {
-        // return
-        // (UIComponent)context.getAttributes().get(UIComponent.CURRENT_COMPOSITE_COMPONENT);
-        Map<Object, Object> contextAttributes = context.getAttributes();
-        ArrayDeque<UIComponent> compositeELStack = _getComponentELStack(_CURRENT_COMPOSITE_COMPONENT_STACK_KEY, contextAttributes);
-        return compositeELStack.peek();
+        return _getComponentELStack(_CURRENT_COMPOSITE_COMPONENT_STACK_KEY, context.getAttributes()).peek();
     }
+    
 
     // -------------------------------------------------- Event Listener Methods
 
@@ -2332,8 +2118,10 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
             }
             namingContainer = namingContainer.getParent();
         }
+        
         return null;
     }
+    
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 
@@ -2345,17 +2133,16 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * itself, as follows.
      * </p>
      * <ul>
-     * <li class="changed_modified_2_0">Call the <code>restoreState()</code> method of
-     * this component.</li>
+     *   <li class="changed_modified_2_0">Call the <code>restoreState()</code> method of
+     *     this component.</li>
      *
-     * <li class="changed_added_2_0">Call {@link UIComponent#pushComponentToEL}.</li>
+     *   <li class="changed_added_2_0">Call {@link UIComponent#pushComponentToEL}.</li>
      * 
-     * <li>Call the <code>processRestoreState()</code> method of all facets and children
-     * of this {@link UIComponent} in the order determined by a call to
-     * <code>getFacetsAndChildren()</code>. <span class="changed_added_2_0">After
-     * returning from the <code>processRestoreState()</code> method on a child or facet,
-     * call {@link UIComponent#popComponentFromEL}</span></li>
-     * 
+     *   <li>Call the <code>processRestoreState()</code> method of all facets and children
+     *       of this {@link UIComponent} in the order determined by a call to
+     *       <code>getFacetsAndChildren()</code>. <span class="changed_added_2_0">After
+     *       returning from the <code>processRestoreState()</code> method on a child or facet,
+     *       call {@link UIComponent#popComponentFromEL}</span></li>
      * </ul>
      *
      * <p>
@@ -2380,22 +2167,21 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * </p>
      * 
      * <ul>
-     * <li>If the <code>rendered</code> property of this {@link UIComponent} is
-     * <code>false</code>, skip further processing.</li>
-     * <li class="changed_added_2_0">Call {@link #pushComponentToEL}.</li>
-     * <li>Call the <code>processDecodes()</code> method of all facets and children of
-     * this {@link UIComponent}, in the order determined by a call to
-     * <code>getFacetsAndChildren()</code>.</li>
+     *   <li>If the <code>rendered</code> property of this {@link UIComponent} is
+     *       <code>false</code>, skip further processing.</li>
+     *   <li class="changed_added_2_0">Call {@link #pushComponentToEL}.</li>
+     *   
+     *   <li>Call the <code>processDecodes()</code> method of all facets and children of
+     *       this {@link UIComponent}, in the order determined by a call to
+     *       <code>getFacetsAndChildren()</code>.</li>
      * 
-     * <li>Call the <code>decode()</code> method of this component.</li>
+     *   <li>Call the <code>decode()</code> method of this component.</li>
      * 
-     * <li>Call {@link #popComponentFromEL} from inside of a
-     * <code>finally block, just before returning.</code></li>
+     *   <li>Call {@link #popComponentFromEL} from inside of a
+     *       <code>finally block, just before returning.</code></li>
      * 
-     * 
-     * 
-     * <li>If a <code>RuntimeException</code> is thrown during decode processing, call
-     * {@link FacesContext#renderResponse} and re-throw the exception.</li>
+     *   <li>If a <code>RuntimeException</code> is thrown during decode processing, call
+     *       {@link FacesContext#renderResponse} and re-throw the exception.</li>
      * </ul>
      *
      * @param context
@@ -2416,19 +2202,18 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * <code>this</code>.
      * </p>
      */
-
     @Override
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
         if (event instanceof PostRestoreStateEvent) {
-            assert (this == event.getComponent());
-            // if this component has a component value reference expression,
+
+            // If this component has a component value reference expression,
             // make sure to populate the ValueExpression for it.
-            ValueExpression valueExpression;
-            if (null != (valueExpression = this.getValueExpression("binding"))) {
+            ValueExpression valueExpression = getValueExpression("binding");
+            if (valueExpression != null) {
                 valueExpression.setValue(FacesContext.getCurrentInstance().getELContext(), this);
             }
+            
             isCompositeComponent = null;
-
         }
     }
 
@@ -2442,16 +2227,15 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * </p>
      * 
      * <ul>
-     * <li>If the <code>rendered</code> property of this {@link UIComponent} is
-     * <code>false</code>, skip further processing.</li>
-     * <li class="changed_added_2_0">Call {@link #pushComponentToEL}.</li>
-     * <li>Call the <code>processValidators()</code> method of all facets and children of
-     * this {@link UIComponent}, in the order determined by a call to
-     * <code>getFacetsAndChildren()</code>.</li>
-     * 
-     * <li><span class="changed_modified_2_0_rev_a">After returning from calling
-     * <code>getFacetsAndChildren()</code> call
-     * {@link UIComponent#popComponentFromEL}.</span></li>
+     *   <li>If the <code>rendered</code> property of this {@link UIComponent} is
+     *       <code>false</code>, skip further processing.</li>
+     *   <li class="changed_added_2_0">Call {@link #pushComponentToEL}.</li>
+     *   <li>Call the <code>processValidators()</code> method of all facets and children of
+     *       this {@link UIComponent}, in the order determined by a call to
+     *       <code>getFacetsAndChildren()</code>.</li>
+     *   <li><span class="changed_modified_2_0_rev_a">After returning from calling
+     *       <code>getFacetsAndChildren()</code> call
+     *       {@link UIComponent#popComponentFromEL}.</span></li>
      * </ul>
      *
      * @param context
@@ -2473,18 +2257,16 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * </p>
      * 
      * <ul>
+     *   <li>If the <code>rendered</code> property of this {@link UIComponent} is
+     *       <code>false</code>, skip further processing.</li>
      * 
-     * <li>If the <code>rendered</code> property of this {@link UIComponent} is
-     * <code>false</code>, skip further processing.</li>
+     *   <li class="changed_added_2_0">Call {@link #pushComponentToEL}.</li>
      * 
-     * <li class="changed_added_2_0">Call {@link #pushComponentToEL}.</li>
-     * 
-     * <li>Call the <code>processUpdates()</code> method of all facets and children of
-     * this {@link UIComponent}, in the order determined by a call to
-     * <code>getFacetsAndChildren()</code>. <span class="changed_added_2_0">After
-     * returning from the <code>processUpdates()</code> method on a child or facet, call
-     * {@link UIComponent#popComponentFromEL}</span></li>
-     * 
+     *   <li>Call the <code>processUpdates()</code> method of all facets and children of
+     *       this {@link UIComponent}, in the order determined by a call to
+     *       <code>getFacetsAndChildren()</code>. <span class="changed_added_2_0">After
+     *       returning from the <code>processUpdates()</code> method on a child or facet, call
+     *       {@link UIComponent#popComponentFromEL}</span></li>
      * </ul>
      *
      * @param context
@@ -2535,6 +2317,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      */
     public abstract Object processSaveState(FacesContext context);
 
+    
+    
     // ----------------------------------------------------- Convenience Methods
 
     /**
@@ -2559,10 +2343,11 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      */
     protected abstract Renderer getRenderer(FacesContext context);
 
+    
+    
     // --------------------------------------------------------- Package Private
 
-    static final class ComponentSystemEventListenerAdapter
-            implements ComponentSystemEventListener, SystemEventListener, StateHolder, FacesWrapper<ComponentSystemEventListener> {
+    static final class ComponentSystemEventListenerAdapter implements ComponentSystemEventListener, SystemEventListener, StateHolder, FacesWrapper<ComponentSystemEventListener> {
 
         ComponentSystemEventListener wrapped;
         Class<?> instanceClass;
@@ -2570,16 +2355,12 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
         // -------------------------------------------------------- Constructors
 
         ComponentSystemEventListenerAdapter() {
-
             // necessary for state saving
-
         }
 
         ComponentSystemEventListenerAdapter(ComponentSystemEventListener wrapped, UIComponent component) {
-
             this.wrapped = wrapped;
             this.instanceClass = component.getClass();
-
         }
 
         // ------------------------------------ Methods from SystemEventListener
@@ -2594,9 +2375,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
          */
         @Override
         public void processEvent(SystemEvent event) throws AbortProcessingException {
-
             wrapped.processEvent((ComponentSystemEvent) event);
-
         }
 
         // ------------------------------------ Methods from SystemEventListener
@@ -2611,9 +2390,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
          */
         @Override
         public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
-
             wrapped.processEvent(event);
-
         }
 
         /**
@@ -2628,10 +2405,9 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
 
             if (wrapped instanceof SystemEventListener) {
                 return ((SystemEventListener) wrapped).isListenerForSource(component);
-            } else {
-                return instanceClass.isAssignableFrom(component.getClass());
-            }
-
+            } 
+                
+            return instanceClass.isAssignableFrom(component.getClass());
         }
 
         // -------------------------------------------- Methods from StateHolder
@@ -2649,8 +2425,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
             if (context == null) {
                 throw new NullPointerException();
             }
+            
             return new Object[] { ((wrapped instanceof UIComponent) ? null : new StateHolderSaver(context, wrapped)), instanceClass };
-
         }
 
         /**
@@ -2667,15 +2443,16 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
             if (context == null) {
                 throw new NullPointerException();
             }
+            
             if (state == null) {
                 return;
             }
+            
             Object[] s = (Object[]) state;
             Object listener = s[0];
             wrapped = (ComponentSystemEventListener) ((listener == null) ? UIComponent.getCurrentComponent(context)
                     : ((StateHolderSaver) listener).restore(context));
             instanceClass = (Class<?>) s[1];
-
         }
 
         /**
@@ -2689,8 +2466,8 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
             if (wrapped instanceof StateHolder) {
                 return ((StateHolder) wrapped).isTransient();
             }
+            
             return false;
-
         }
 
         /**
@@ -2705,9 +2482,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
          */
         @Override
         public void setTransient(boolean newTransientValue) {
-
             // no-op
-
         }
 
         // ------------------------------------------- Methods from FacesWrapper
@@ -2719,18 +2494,14 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
          */
         @Override
         public ComponentSystemEventListener getWrapped() {
-
             return wrapped;
-
         }
 
         // ------------------------------------------------------ Public Methods
 
         @Override
         public int hashCode() {
-
-            return (wrapped.hashCode() ^ instanceClass.hashCode());
-
+            return wrapped.hashCode() ^ instanceClass.hashCode();
         }
 
         @Override
@@ -2739,11 +2510,246 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
             if (!(obj instanceof ComponentSystemEventListenerAdapter)) {
                 return false;
             }
+            
             ComponentSystemEventListenerAdapter in = (ComponentSystemEventListenerAdapter) obj;
-            return (wrapped.equals(in.wrapped) && instanceClass.equals(in.instanceClass));
+            
+            return wrapped.equals(in.wrapped) && instanceClass.equals(in.instanceClass);
 
         }
     } // END ComponentSystemEventListenerAdapter
+    
+    
+    
+    // --------------------------------------------------------- Private methods
+    
+    
+    private Map<String, String> wrapBundleAsMap(final ResourceBundle bundle) {
+        return new Map<String, String>() {
+            
+            // This is an immutable Map
+
+            @Override
+            public String toString() {
+                StringBuffer sb = new StringBuffer();
+                Iterator<Map.Entry<String, String>> entries = this.entrySet().iterator();
+                Map.Entry<String, String> cur;
+                while (entries.hasNext()) {
+                    cur = entries.next();
+                    sb.append(cur.getKey()).append(": ").append(cur.getValue()).append('\n');
+                }
+
+                return sb.toString();
+            }
+
+            // Do not need to implement for immutable Map
+            @Override
+            public void clear() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public boolean containsKey(Object key) {
+                if (key != null) {
+                    return bundle.getString(key.toString()) != null;
+                }
+                
+                return false;
+            }
+
+            @Override
+            public boolean containsValue(Object value) {
+                Enumeration<String> keys = bundle.getKeys();
+                while (keys.hasMoreElements()) {
+                    if (Objects.equals(value, bundle.getString(keys.nextElement()))) {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+
+            @Override
+            public Set<Map.Entry<String, String>> entrySet() {
+                HashMap<String, String> mappings = new HashMap<>();
+                
+                Enumeration<String> keys = bundle.getKeys();
+                while (keys.hasMoreElements()) {
+                    String key = keys.nextElement();
+                    String value = bundle.getString(key);
+                    mappings.put(key, value);
+                }
+                
+                return mappings.entrySet();
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public boolean equals(Object obj) {
+                return !((obj == null) || !(obj instanceof Map)) && entrySet().equals(((Map<String, String>) obj).entrySet());
+            }
+
+            @Override
+            public String get(Object key) {
+                if (key == null) {
+                    return null;
+                }
+                
+                try {
+                    return bundle.getString(key.toString());
+                } catch (MissingResourceException e) {
+                    return "???" + key + "???";
+                }
+            }
+
+            @Override
+            public int hashCode() {
+                return bundle.hashCode();
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return !bundle.getKeys().hasMoreElements();
+            }
+
+            @Override
+            public Set<String> keySet() {
+                Set<String> keySet = new HashSet<>();
+                Enumeration<String> keys = bundle.getKeys();
+                while (keys.hasMoreElements()) {
+                    keySet.add(keys.nextElement());
+                }
+                
+                return keySet;
+            }
+
+            // Do not need to implement for immutable Map
+            @Override
+            public String put(String k, String v) {
+                throw new UnsupportedOperationException();
+            }
+            
+            // Do not need to implement for immutable Map
+            @Override
+            public void putAll(Map<? extends String, ? extends String> m) {
+                throw new UnsupportedOperationException();
+            }
+
+            // Do not need to implement for immutable Map
+            @Override
+            public String remove(Object k) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public int size() {
+                int result = 0;
+                
+                Enumeration<String> keys = bundle.getKeys();
+                while (keys.hasMoreElements()) {
+                    keys.nextElement();
+                    result++;
+                }
+                
+                return result;
+            }
+
+            @Override
+            public Collection<String> values() {
+                List<String> result = new ArrayList<>();
+                
+                Enumeration<String> keys = bundle.getKeys();
+                while (keys.hasMoreElements()) {
+                    result.add(bundle.getString(keys.nextElement()));
+                }
+                
+                return result;
+            }
+        };
+    }
+    
+    private ResourceBundle findResourceBundleUnderFQCNofThis(FacesContext context) {
+        String className = this.getClass().getName();
+        Locale currentLocale = null;
+        UIViewRoot root = null;
+        ResourceBundle resourceBundle = null;
+
+        // Step 1: look for a ResourceBundle under the FQCN of this instance
+        if (context != null) {
+            if ((root = context.getViewRoot()) != null) {
+                currentLocale = root.getLocale();
+            }
+        }
+        
+        if (currentLocale == null) {
+            currentLocale = Locale.getDefault();
+        }
+        
+        try {
+            resourceBundle = ResourceBundle.getBundle(className, currentLocale);
+        } catch (MissingResourceException e) {
+            // It is not an error if there is no ResourceBundle
+        }
+        
+        return resourceBundle;
+    }
+    
+    private ResourceBundle findResourceBundleAsResource(FacesContext context) {
+        
+        if (getAttributes().containsKey(COMPONENT_RESOURCE_KEY)) {
+            Resource ccResource = (Resource) this.getAttributes().get(COMPONENT_RESOURCE_KEY);
+            
+            if (ccResource != null) {
+                
+                ccResource = findComponentResourceBundleLocaleMatch(context, ccResource.getResourceName(), ccResource.getLibraryName());
+                
+                if (ccResource  != null) {
+                    try (InputStream propertiesInputStream = ccResource.getInputStream()) {
+                        return new PropertyResourceBundle(propertiesInputStream);
+                    } catch (IOException ex) {
+                        Logger.getLogger(UIComponent.class.getName()).log(SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    // PENDING(rlubke): I'm sure there's a more efficient
+    // way to handle this.
+    private Resource findComponentResourceBundleLocaleMatch(FacesContext context, String resourceName, String libraryName) {
+        Resource result = null;
+        ResourceBundle resourceBundle = null;
+        int i;
+        if (-1 != (i = resourceName.lastIndexOf("."))) {
+            resourceName = resourceName.substring(0, i) + ".properties";
+            if (null != context) {
+                result = context.getApplication().getResourceHandler().createResource(resourceName, libraryName);
+                InputStream propertiesInputStream = null;
+                try {
+                    propertiesInputStream = result.getInputStream();
+                    resourceBundle = new PropertyResourceBundle(propertiesInputStream);
+                } catch (IOException ex) {
+                    Logger.getLogger(UIComponent.class.getName()).log(SEVERE, null, ex);
+                } finally {
+                    if (propertiesInputStream != null) {
+                        try {
+                            propertiesInputStream.close();
+                        } catch (IOException ioe) {
+                            if (LOGGER.isLoggable(SEVERE)) {
+                                LOGGER.log(SEVERE, null, ioe);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return resourceBundle != null ? result : null;
+    }
+    
+    
+    
     
     
     
