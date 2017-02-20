@@ -42,7 +42,6 @@ package javax.faces.component;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,13 +52,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -73,13 +72,13 @@ import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
+import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
-import javax.faces.event.FacesListener;
 import javax.faces.event.SystemEventListenerHolder;
 import javax.faces.render.Renderer;
 
@@ -131,40 +130,6 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * </p>
      */
     public static final String HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME = "javax.faces.HONOR_CURRENT_COMPONENT_ATTRIBUTES";
-
-    /**
-     * <p class="changed_added_2_0">
-     * <span class="changed_deleted_2_2">The</span> key to which the
-     * <code>UIComponent</code> currently being processed will be associated with within
-     * the {@link FacesContext} attributes map. <span class="changed_deleted_2_2">The use
-     * of this constant is deprecated. Please see
-     * {@link #HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME} to enable its use.</span>
-     * </p>
-     *
-     * @see javax.faces.context.FacesContext#getAttributes()
-     *
-     * @since 2.0
-     *
-     * @deprecated
-     */
-    public static final String CURRENT_COMPONENT = "javax.faces.component.CURRENT_COMPONENT";
-
-    /**
-     * <p class="changed_added_2_0">
-     * <span class="changed_deleted_2_2">The</span> key to which the <em>composite</em>
-     * <code>UIComponent</code> currently being processed will be associated with within
-     * the {@link FacesContext} attributes map. <span class="changed_deleted_2_2">The use
-     * of this constant is deprecated. Please see
-     * {@link #HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME} to enable its use.</span>
-     * </p>
-     *
-     * @see javax.faces.context.FacesContext#getAttributes()
-     *
-     * @since 2.0
-     *
-     * @deprecated
-     */
-    public static final String CURRENT_COMPOSITE_COMPONENT = "javax.faces.component.CURRENT_COMPOSITE_COMPONENT";
 
     /**
      * <p class="changed_added_2_0">
@@ -371,54 +336,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
 
     // ---------------------------------------------------------------- Bindings
 
-    /**
-     *
-     * <p>
-     * Call through to {@link #getValueExpression} and examine the result. If the result
-     * is an instance of the wrapper class mandated in {@link #setValueBinding}, extract
-     * the <code>ValueBinding</code> instance and return it. Otherwise, wrap the result in
-     * an implementation of <code>ValueBinding</code>, and return it.
-     * </p>
-     *
-     * @param name
-     *            Name of the attribute or property for which to retrieve a
-     *            {@link ValueBinding}
-     * @return the value binding.
-     * @throws NullPointerException
-     *             if <code>name</code> is <code>null</code>
-     *
-     * @deprecated This has been replaced by {@link #getValueExpression}.
-     */
-    public abstract ValueBinding getValueBinding(String name);
-
-    /**
-     * <p>
-     * Wrap the argument <code>binding</code> in an implementation of
-     * {@link ValueExpression} and call through to {@link #setValueExpression}.
-     * </p>
-     *
-     * @param name
-     *            Name of the attribute or property for which to set a
-     *            {@link ValueBinding}
-     * @param binding
-     *            The {@link ValueBinding} to set, or <code>null</code> to remove any
-     *            currently set {@link ValueBinding}
-     *
-     * @throws IllegalArgumentException
-     *             if <code>name</code> is one of <code>id</code> or <code>parent</code>
-     * @throws NullPointerException
-     *             if <code>name</code> is <code>null</code>
-     *
-     * @deprecated This has been replaced by {@link #setValueExpression}.
-     */
-    public abstract void setValueBinding(String name, ValueBinding binding);
-
-    // The set of ValueExpressions for this component, keyed by property
-    // name This collection is lazily instantiated
-    // The set of ValueExpressions for this component, keyed by property
-    // name This collection is lazily instantiated
-    @Deprecated
-    protected Map<String, ValueExpression> bindings = null;
+   
 
     /**
      * <p>
@@ -2826,5 +2744,95 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
 
         }
     } // END ComponentSystemEventListenerAdapter
+    
+    
+    
+    
+    
+    // ------------------------------------------- Deprecated code
+    
+    
+    /**
+     * <p class="changed_added_2_0">
+     * <span class="changed_deleted_2_2">The</span> key to which the
+     * <code>UIComponent</code> currently being processed will be associated with within
+     * the {@link FacesContext} attributes map. <span class="changed_deleted_2_2">The use
+     * of this constant is deprecated. Please see
+     * {@link #HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME} to enable its use.</span>
+     * </p>
+     *
+     * @see javax.faces.context.FacesContext#getAttributes()
+     *
+     * @since 2.0
+     *
+     * @deprecated
+     */
+    public static final String CURRENT_COMPONENT = "javax.faces.component.CURRENT_COMPONENT";
+
+    /**
+     * <p class="changed_added_2_0">
+     * <span class="changed_deleted_2_2">The</span> key to which the <em>composite</em>
+     * <code>UIComponent</code> currently being processed will be associated with within
+     * the {@link FacesContext} attributes map. <span class="changed_deleted_2_2">The use
+     * of this constant is deprecated. Please see
+     * {@link #HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME} to enable its use.</span>
+     * </p>
+     *
+     * @see javax.faces.context.FacesContext#getAttributes()
+     *
+     * @since 2.0
+     *
+     * @deprecated
+     */
+    public static final String CURRENT_COMPOSITE_COMPONENT = "javax.faces.component.CURRENT_COMPOSITE_COMPONENT";
+
+    /**
+     *
+     * <p>
+     * Call through to {@link #getValueExpression} and examine the result. If the result
+     * is an instance of the wrapper class mandated in {@link #setValueBinding}, extract
+     * the <code>ValueBinding</code> instance and return it. Otherwise, wrap the result in
+     * an implementation of <code>ValueBinding</code>, and return it.
+     * </p>
+     *
+     * @param name
+     *            Name of the attribute or property for which to retrieve a
+     *            {@link ValueBinding}
+     * @return the value binding.
+     * @throws NullPointerException
+     *             if <code>name</code> is <code>null</code>
+     *
+     * @deprecated This has been replaced by {@link #getValueExpression}.
+     */
+    public abstract ValueBinding getValueBinding(String name);
+
+    /**
+     * <p>
+     * Wrap the argument <code>binding</code> in an implementation of
+     * {@link ValueExpression} and call through to {@link #setValueExpression}.
+     * </p>
+     *
+     * @param name
+     *            Name of the attribute or property for which to set a
+     *            {@link ValueBinding}
+     * @param binding
+     *            The {@link ValueBinding} to set, or <code>null</code> to remove any
+     *            currently set {@link ValueBinding}
+     *
+     * @throws IllegalArgumentException
+     *             if <code>name</code> is one of <code>id</code> or <code>parent</code>
+     * @throws NullPointerException
+     *             if <code>name</code> is <code>null</code>
+     *
+     * @deprecated This has been replaced by {@link #setValueExpression}.
+     */
+    public abstract void setValueBinding(String name, ValueBinding binding);
+
+    // The set of ValueExpressions for this component, keyed by property
+    // name This collection is lazily instantiated
+    // The set of ValueExpressions for this component, keyed by property
+    // name This collection is lazily instantiated
+    @Deprecated
+    protected Map<String, ValueExpression> bindings = null;
 
 }
