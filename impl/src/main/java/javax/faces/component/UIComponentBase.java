@@ -40,27 +40,27 @@
 
 package javax.faces.component;
 
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.application.Application;
-import javax.faces.component.behavior.Behavior;
-import javax.faces.component.behavior.ClientBehavior;
-import javax.faces.component.behavior.ClientBehaviorHolder;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.faces.event.*;
-import javax.faces.render.Renderer;
+import static com.sun.faces.util.Util.isAllNull;
+import static com.sun.faces.util.Util.isAnyNull;
+import static com.sun.faces.util.Util.isEmpty;
+import static java.beans.Introspector.getBeanInfo;
+import static java.lang.Boolean.TRUE;
+import static java.lang.Character.isDigit;
+import static java.lang.Character.isLetter;
+import static java.lang.Thread.currentThread;
+import static java.util.Collections.unmodifiableCollection;
+import static java.util.Collections.unmodifiableList;
+import static java.util.logging.Level.FINE;
+
 import java.beans.IntrospectionException;
-import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
@@ -73,13 +73,36 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.el.ELException;
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
+import javax.faces.application.Application;
+import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.BehaviorEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
+import javax.faces.event.PostAddToViewEvent;
+import javax.faces.event.PostValidateEvent;
+import javax.faces.event.PreRemoveFromViewEvent;
+import javax.faces.event.PreRenderComponentEvent;
+import javax.faces.event.PreValidateEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
+import javax.faces.render.Renderer;
 
 /**
  * <p>
@@ -105,6 +128,9 @@ public abstract class UIComponentBase extends UIComponent {
     private static Logger LOGGER = Logger.getLogger("javax.faces.component", "javax.faces.LogStrings");
 
     private static final String ADDED = UIComponentBase.class.getName() + ".ADDED";
+    
+    private static final int MY_STATE = 0;
+    private static final int CHILD_STATE = 1;
 
     /**
      * <p>
@@ -120,7 +146,7 @@ public abstract class UIComponentBase extends UIComponent {
      * Reference to the map of <code>PropertyDescriptor</code>s for this class in the
      * <code>descriptors<code> <code>Map<code>.
      */
-    private Map<String, PropertyDescriptor> pdMap = null;
+    private Map<String, PropertyDescriptor> propertyDescriptorMap;
 
     private Map<Class<? extends SystemEvent>, List<SystemEventListener>> listenersByEventClass;
 
@@ -130,77 +156,57 @@ public abstract class UIComponentBase extends UIComponent {
      * </p>
      */
     private static final Object EMPTY_OBJECT_ARRAY[] = new Object[0];
-
-    public UIComponentBase() {
-        populateDescriptorsMapIfNecessary();
-    }
-
-    private void populateDescriptorsMapIfNecessary() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        Class<?> clazz = getClass();
-
-        /*
-         * If we can find a valid FacesContext we are going to use it to get access to the property
-         * descriptor map.
-         */
-        if (facesContext != null && facesContext.getExternalContext() != null && facesContext.getExternalContext().getApplicationMap() != null) {
-
-            Map<String, Object> applicationMap = facesContext.getExternalContext().getApplicationMap();
-
-            if (!applicationMap.containsKey("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP")) {
-                applicationMap.put("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP", new ConcurrentHashMap<>());
-            }
-
-            descriptors = (Map<Class<?>, Map<String, PropertyDescriptor>>) applicationMap.get("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP");
-            pdMap = descriptors.get(clazz);
-        }
-
-        if (pdMap == null) {
-            /*
-             * We did not find the property descriptor map so we are now going to load it.
-             */
-            PropertyDescriptor pd[] = getPropertyDescriptors();
-            if (pd != null) {
-                pdMap = new HashMap<>(pd.length, 1.0f);
-                for (PropertyDescriptor aPd : pd) {
-                    pdMap.put(aPd.getName(), aPd);
-                }
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, "fine.component.populating_descriptor_map", new Object[] { clazz, Thread.currentThread().getName() });
-                }
-
-                if (descriptors != null && !descriptors.containsKey(clazz)) {
-                    descriptors.put(clazz, pdMap);
-                }
-            }
-        }
-    }
-
-    /**
-     * <p>
-     * Return an array of <code>PropertyDescriptors</code> for this {@link UIComponent}'s
-     * implementation class. If no descriptors can be identified, a zero-length array will be
-     * returned.
-     * </p>
-     *
-     * @throws FacesException if an introspection exception occurs
-     */
-    private PropertyDescriptor[] getPropertyDescriptors() {
-        PropertyDescriptor[] pd;
-        try {
-            pd = Introspector.getBeanInfo(this.getClass()).getPropertyDescriptors();
-        } catch (IntrospectionException e) {
-            throw new FacesException(e);
-        }
-        return (pd);
-    }
-
+    
     /**
      * <p>
      * The <code>Map</code> containing our attributes, keyed by attribute name.
      * </p>
      */
-    private AttributesMap attributes = null;
+    private AttributesMap attributes;
+    
+    /**
+     * <p>
+     * The component identifier for this component.
+     * </p>
+     */
+    private String id;
+    
+    /**
+     * <p>
+     * The assigned client identifier for this component.
+     * </p>
+     */
+    private String clientId;
+    
+    /**
+     * <p>
+     * The parent component for this component.
+     * </p>
+     */
+    private UIComponent parent;
+    
+    /**
+     * The <code>List</code> containing our child components.
+     */
+    private List<UIComponent> children;
+    
+    /**
+     * The <code>Map</code> containing our related facet components.
+     */
+    private Map<String, UIComponent> facets;
+    
+    private AttachedObjectListHolder<FacesListener> listeners;
+    
+    /**
+     * Flag indicating a desire to now participate in state saving.
+     */
+    private boolean transientFlag;
+    
+    
+
+    public UIComponentBase() {
+        populateDescriptorsMapIfNecessary();
+    }
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -208,114 +214,26 @@ public abstract class UIComponentBase extends UIComponent {
         if (attributes == null) {
             attributes = new AttributesMap(this);
         }
-        return (attributes);
-
+        
+        return attributes;
     }
 
     @Override
     public Map<String, Object> getPassThroughAttributes(boolean create) {
-        Map<String, Object> result = (Map<String, Object>) this.getStateHelper().get(PropertyKeys.passThroughAttributes);
-        if (null == result) {
-            if (create) {
-                result = new PassThroughAttributesMap<>();
-                this.getStateHelper().put(PropertyKeys.passThroughAttributes, result);
-            }
+        @SuppressWarnings("unchecked")
+        Map<String, Object> passThroughAttributes = (Map<String, Object>) this.getStateHelper().get(PropertyKeys.passThroughAttributes);
+        
+        if (passThroughAttributes == null && create) {
+            passThroughAttributes = new PassThroughAttributesMap<>();
+            getStateHelper().put(PropertyKeys.passThroughAttributes, passThroughAttributes);
         }
 
-        return result;
-
+        return passThroughAttributes;
     }
 
-    private static class PassThroughAttributesMap<K, V> extends ConcurrentHashMap<String, Object> implements Serializable {
-
-        private static final long serialVersionUID = 4230540513272170861L;
-
-        @Override
-        public Object put(String key, Object value) {
-            if (null == key || null == value) {
-                throw new NullPointerException();
-            }
-            validateKey(key);
-            return super.put(key, value);
-        }
-
-        @Override
-        public Object putIfAbsent(String key, Object value) {
-            if (null == key || null == value) {
-                throw new NullPointerException();
-            }
-            validateKey(key);
-            return super.putIfAbsent(key, value);
-        }
-
-        private void validateKey(Object key) {
-            if (!(key instanceof String) || (key instanceof ValueExpression) || !(key instanceof Serializable)) {
-                throw new IllegalArgumentException();
-            }
-        }
-
-    }
-
-    // ---------------------------------------------------------------- Bindings
-
-    /**
-     * {@inheritDoc}
-     *
-     * @throws NullPointerException {@inheritDoc}
-     * @deprecated This has been replaced by {@link #getValueExpression}.
-     */
-    @Override
-    public ValueBinding getValueBinding(String name) {
-
-        if (name == null) {
-            throw new NullPointerException();
-        }
-        ValueBinding result = null;
-        ValueExpression ve;
-
-        if (null != (ve = getValueExpression(name))) {
-            // if the ValueExpression is an instance of our private
-            // wrapper class.
-            if (ve.getClass().equals(ValueExpressionValueBindingAdapter.class)) {
-                result = ((ValueExpressionValueBindingAdapter) ve).getWrapped();
-            } else {
-                // otherwise, this is a real ValueExpression. Wrap it
-                // in a ValueBinding.
-                result = new ValueBindingValueExpressionAdapter(ve);
-            }
-        }
-        return result;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @throws IllegalArgumentException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}
-     * @deprecated This has been replaced by {@link #setValueExpression}.
-     */
-    @Override
-    public void setValueBinding(String name, ValueBinding binding) {
-        if (name == null) {
-            throw new NullPointerException();
-        }
-        if (binding != null) {
-            ValueExpressionValueBindingAdapter adapter = new ValueExpressionValueBindingAdapter(binding);
-            setValueExpression(name, adapter);
-        } else {
-            setValueExpression(name, null);
-        }
-
-    }
+  
 
     // -------------------------------------------------------------- Properties
-
-    /**
-     * <p>
-     * The assigned client identifier for this component.
-     * </p>
-     */
-    private String clientId = null;
 
     /**
      * @throws NullPointerException {@inheritDoc}
@@ -327,67 +245,37 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
 
-        // if the clientId is not yet set
-        if (this.clientId == null) {
-            UIComponent namingContainerAncestor = this.getNamingContainerAncestor();
-            UIComponent parent = namingContainerAncestor;
-            String parentId = null;
+        // If the clientId is not yet set
+        if (clientId == null) {
+            UIComponent namingContainerAncestor = getNamingContainerAncestor();
+            
+            // Give the parent the opportunity to first grab a unique clientId
+            String parentId = getParentId(context, namingContainerAncestor);
 
-            // give the parent the opportunity to first
-            // grab a unique clientId
-            if (parent != null) {
-                parentId = parent.getContainerClientId(context);
+            // Now resolve our own client id
+            clientId = getId();
+            if (clientId == null) {
+                setId(generateId(context, namingContainerAncestor));
+                clientId = getId();
             }
-
-            // now resolve our own client id
-            this.clientId = getId();
-            if (this.clientId == null) {
-                String generatedId;
-                if (null != namingContainerAncestor && namingContainerAncestor instanceof UniqueIdVendor) {
-                    generatedId = ((UniqueIdVendor) namingContainerAncestor).createUniqueId(context, null);
-                } else {
-                    generatedId = context.getViewRoot().createUniqueId();
-                }
-                setId(generatedId);
-                this.clientId = getId();
-            }
+            
             if (parentId != null) {
-                StringBuilder idBuilder = new StringBuilder(parentId.length() + 1 + this.clientId.length());
-                this.clientId = idBuilder.append(parentId).append(UINamingContainer.getSeparatorChar(context)).append(this.clientId).toString();
+                clientId = addParentId(context, parentId, clientId);
             }
 
-            // allow the renderer to convert the clientId
-            Renderer renderer = this.getRenderer(context);
+            // Allow the renderer to convert the clientId
+            Renderer renderer = getRenderer(context);
             if (renderer != null) {
-                this.clientId = renderer.convertClientId(context, this.clientId);
+                clientId = renderer.convertClientId(context, clientId);
             }
         }
-        return this.clientId;
+     
+        return clientId;
     }
-
-    /**
-     * <p>
-     * The component identifier for this component.
-     * </p>
-     */
-    private String id = null;
 
     @Override
     public String getId() {
-
-        return (id);
-
-    }
-
-    private UIComponent getNamingContainerAncestor() {
-        UIComponent namingContainer = this.getParent();
-        while (namingContainer != null) {
-            if (namingContainer instanceof NamingContainer) {
-                return namingContainer;
-            }
-            namingContainer = namingContainer.getParent();
-        }
-        return null;
+        return id;
     }
 
     /**
@@ -406,19 +294,11 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         this.clientId = null; // Erase any cached value
-
     }
-
-    /**
-     * <p>
-     * The parent component for this component.
-     * </p>
-     */
-    private UIComponent parent = null;
 
     @Override
     public UIComponent getParent() {
-        return (this.parent);
+        return parent;
     }
 
     @Override
@@ -432,14 +312,17 @@ public abstract class UIComponentBase extends UIComponent {
             compositeParent = null;
         } else {
             this.parent = parent;
-            if (this.getAttributes().get(ADDED) == null) {
-                // add an attribute to this component here to indiciate that
+            if (getAttributes().get(ADDED) == null) {
+                
+                // Add an attribute to this component here to indiciate that
                 // it's being processed. If we don't do this, and the component
                 // is re-parented, the events could fire again in certain cases
                 // and cause a stack overflow.
-                this.getAttributes().put(ADDED, Boolean.TRUE);
+                getAttributes().put(ADDED, TRUE);
+                
                 doPostAddProcessing(FacesContext.getCurrentInstance(), this);
-                // remove the attribute once we've returned from the event
+                
+                // Remove the attribute once we've returned from the event
                 // processing.
                 this.getAttributes().remove(ADDED);
             }
@@ -448,8 +331,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     @Override
     public boolean isRendered() {
-
-        return Boolean.valueOf(getStateHelper().eval(PropertyKeys.rendered, Boolean.TRUE).toString());
+        return Boolean.valueOf(getStateHelper().eval(PropertyKeys.rendered, TRUE).toString());
     }
 
     @Override
@@ -459,232 +341,71 @@ public abstract class UIComponentBase extends UIComponent {
 
     @Override
     public String getRendererType() {
-
         return (String) getStateHelper().eval(PropertyKeys.rendererType);
-
     }
 
     @Override
     public void setRendererType(String rendererType) {
-
         getStateHelper().put(PropertyKeys.rendererType, rendererType);
-
     }
 
     @Override
     public boolean getRendersChildren() {
-        boolean result = false;
-
-        Renderer renderer;
         if (getRendererType() != null) {
-            if (null != (renderer = getRenderer(getFacesContext()))) {
-                result = renderer.getRendersChildren();
+            Renderer renderer = getRenderer(getFacesContext());
+            if (renderer != null) {
+                return renderer.getRendersChildren();
             }
         }
-        return result;
-
+        
+        return false;
     }
 
+    
     // ------------------------------------------------- Tree Management Methods
-
-    /*
-     * <p>The <code>List</code> containing our child components.</p>
-     */
-    private List<UIComponent> children = null;
 
     @Override
     public List<UIComponent> getChildren() {
-
         if (children == null) {
             children = new ChildrenList(this);
         }
-        return (children);
-
+        
+        return children;
     }
 
     // Do not allocate the children List to answer this question
     @Override
     public int getChildCount() {
-
         if (children != null) {
-            return (children.size());
-        } else {
-            return (0);
-        }
-
-    }
-
-    /**
-     * <p>
-     * If the specified {@link UIComponent} has a non-null parent, remove it as a child or facet (as
-     * appropriate) of that parent. As a result, the <code>parent</code> property will always be
-     * <code>null</code> when this method returns.
-     * </p>
-     *
-     * @param component {@link UIComponent} to have any parent erased
-     */
-    private static void eraseParent(UIComponent component) {
-
-        UIComponent parent = component.getParent();
-        if (parent == null) {
-            return;
-        }
-        if (parent.getChildCount() > 0) {
-            List children = parent.getChildren();
-            int index = children.indexOf(component);
-            if (index >= 0) {
-                children.remove(index);
-                return;
-            }
-        }
-        if (parent.getFacetCount() > 0) {
-            Map facets = parent.getFacets();
-            Iterator entries = facets.entrySet().iterator();
-            while (entries.hasNext()) {
-                Map.Entry entry = (Map.Entry) entries.next();
-                // noinspection ObjectEquality
-                if (entry.getValue() == component) {
-                    entries.remove();
-                    return;
-                }
-            }
-        }
-
-        // Throw an exception for the "cannot happen" case
-        throw new IllegalStateException("Parent was not null, " + "but this component not related");
-
-    }
-
-    /**
-     * <p>
-     * Throw <code>IllegalArgumentException</code> if the specified component identifier is
-     * non-<code>null</code> and not syntactically valid.
-     * </p>
-     *
-     * @param id The component identifier to test
-     */
-    private static void validateId(String id) {
-
-        if (id == null) {
-            return;
-        }
-        int n = id.length();
-        if (n < 1) {
-            throw new IllegalArgumentException("Empty id attribute is not allowed");
-        }
-        for (int i = 0; i < n; i++) {
-            char c = id.charAt(i);
-            if (i == 0) {
-                if (!Character.isLetter(c) && (c != '_')) {
-                    throw new IllegalArgumentException(id);
-                }
-            } else {
-                if (!Character.isLetter(c) && !Character.isDigit(c) && (c != '-') && (c != '_')) {
-                    throw new IllegalArgumentException(id);
-                }
-            }
-        }
-
+            return children.size();
+        } 
+            
+        return 0;
     }
 
     /**
      * @throws NullPointerException {@inheritDoc}
      */
     @Override
-    public UIComponent findComponent(String expr) {
-        if (expr == null) {
+    public UIComponent findComponent(String expression) {
+        if (expression == null) {
             throw new NullPointerException();
         }
-
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        final char sepChar = UINamingContainer.getSeparatorChar(ctx);
-        final String SEPARATOR_STRING = String.valueOf(sepChar);
-
-        if (expr.length() == 0) {
-            // if an empty value is provided, fail fast.
+        
+        if (expression.isEmpty()) {
+            // If an empty value is provided, fail fast.
             throw new IllegalArgumentException("\"\"");
         }
 
+        final char sepChar = UINamingContainer.getSeparatorChar(FacesContext.getCurrentInstance());
+
         // Identify the base component from which we will perform our search
-        UIComponent base = this;
-        if (expr.charAt(0) == sepChar) {
-            // Absolute searches start at the root of the tree
-            while (base.getParent() != null) {
-                base = base.getParent();
-            }
-            // Treat remainder of the expression as relative
-            expr = expr.substring(1);
-        } else if (!(base instanceof NamingContainer)) {
-            // Relative expressions start at the closest NamingContainer or root
-            while (base.getParent() != null) {
-                if (base instanceof NamingContainer) {
-                    break;
-                }
-                base = base.getParent();
-            }
-        }
+        UIComponent base = findBaseComponent(expression, sepChar);
 
         // Evaluate the search expression (now guaranteed to be relative)
-        UIComponent result = null;
-        String[] segments = expr.split(SEPARATOR_STRING);
-        for (int i = 0, length = (segments.length - 1); i < segments.length; i++, length--) {
-            result = findComponent(base, segments[i], (i == 0));
-            // the first element of the expression may match base.id
-            // (vs. a child if of base)
-            if (i == 0 && result == null && segments[i].equals(base.getId())) {
-                result = base;
-            }
-            if (result != null && (!(result instanceof NamingContainer)) && length > 0) {
-                throw new IllegalArgumentException(segments[i]);
-            }
-            if (result == null) {
-                break;
-            }
-            base = result;
-        }
-
-        // Return the final result of our search
-        return (result);
-
+        return evaluateSearchExpression(base, expression, String.valueOf(sepChar));
     }
-
-    /**
-     * <p>
-     * Return the {@link UIComponent} (if any) with the specified <code>id</code>, searching
-     * recursively starting at the specified <code>base</code>, and examining the base component
-     * itself, followed by examining all the base component's facets and children (unless the base
-     * component is a {@link NamingContainer}, in which case the recursive scan is skipped.
-     * </p>
-     *
-     * @param base Base {@link UIComponent} from which to search
-     * @param id Component identifier to be matched
-     */
-    private static UIComponent findComponent(UIComponent base, String id, boolean checkId) {
-        if (checkId && id.equals(base.getId())) {
-            return base;
-        }
-        // Search through our facets and children
-        UIComponent result = null;
-        for (Iterator i = base.getFacetsAndChildren(); i.hasNext();) {
-            UIComponent kid = (UIComponent) i.next();
-            if (!(kid instanceof NamingContainer)) {
-                if (checkId && id.equals(kid.getId())) {
-                    result = kid;
-                    break;
-                }
-                result = findComponent(kid, id, true);
-                if (result != null) {
-                    break;
-                }
-            } else if (id.equals(kid.getId())) {
-                result = kid;
-                break;
-            }
-        }
-        return (result);
-
-    }
-
+    
     /**
      * {@inheritDoc}
      *
@@ -697,72 +418,64 @@ public abstract class UIComponentBase extends UIComponent {
         return super.invokeOnComponent(context, clientId, callback);
     }
 
+    
+    
     // ------------------------------------------------ Facet Management Methods
 
-    /*
-     * <p>The <code>Map</code> containing our related facet components.</p>
-     */
-    private Map<String, UIComponent> facets = null;
 
     @Override
     public Map<String, UIComponent> getFacets() {
-
         if (facets == null) {
             facets = new FacetsMap(this);
         }
-        return (facets);
-
+        
+        return facets;
     }
 
     // Do not allocate the children List to answer this question
     @Override
     public int getFacetCount() {
-
         if (facets != null) {
-            return (facets.size());
-        } else {
-            return (0);
-        }
-
+            return facets.size();
+        } 
+            
+        return 0;
     }
 
     // Do not allocate the facets Map to answer this question
     @Override
     public UIComponent getFacet(String name) {
-
         if (facets != null) {
-            return (facets.get(name));
-        } else {
-            return (null);
+            return facets.get(name);
         }
-
+            
+        return null;
     }
 
     @Override
     public Iterator<UIComponent> getFacetsAndChildren() {
 
-        Iterator<UIComponent> result;
-        int childCount = this.getChildCount(), facetCount = this.getFacetCount();
+        int childCount = getChildCount(), facetCount = getFacetCount();
+        
         // If there are neither facets nor children
-        if (0 == childCount && 0 == facetCount) {
-            result = EMPTY_ITERATOR;
+        if (childCount == 0 && facetCount == 0) {
+            return EMPTY_ITERATOR;
         }
+        
         // If there are only facets and no children
-        else if (0 == childCount) {
-            Collection<UIComponent> unmodifiable = Collections.unmodifiableCollection(getFacets().values());
-            result = unmodifiable.iterator();
+        if (childCount == 0) {
+            return unmodifiableCollection(getFacets().values()).iterator();
         }
+        
         // If there are only children and no facets
-        else if (0 == facetCount) {
-            List<UIComponent> unmodifiable = Collections.unmodifiableList(getChildren());
-            result = unmodifiable.iterator();
+        if (facetCount == 0) {
+            return unmodifiableList(getChildren()).iterator();
         }
+        
         // If there are both children and facets
-        else {
-            result = new FacetsAndChildrenIterator(this);
-        }
-        return result;
+        return new FacetsAndChildrenIterator(this);
     }
+    
 
     // -------------------------------------------- Lifecycle Processing Methods
 
@@ -777,6 +490,7 @@ public abstract class UIComponentBase extends UIComponent {
         if (event == null) {
             throw new NullPointerException();
         }
+        
         if (event instanceof BehaviorEvent) {
             BehaviorEvent behaviorEvent = (BehaviorEvent) event;
             Behavior behavior = behaviorEvent.getBehavior();
@@ -803,13 +517,14 @@ public abstract class UIComponentBase extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
+        
         String rendererType = getRendererType();
         if (rendererType != null) {
-            Renderer renderer = this.getRenderer(context);
+            Renderer renderer = getRenderer(context);
             if (renderer != null) {
                 renderer.decode(context, this);
             } else {
-                if (LOGGER.isLoggable(Level.FINE)) {
+                if (LOGGER.isLoggable(FINE)) {
                     LOGGER.fine("Can't get Renderer for type " + rendererType);
                 }
             }
@@ -836,16 +551,15 @@ public abstract class UIComponentBase extends UIComponent {
 
         String rendererType = getRendererType();
         if (rendererType != null) {
-            Renderer renderer = this.getRenderer(context);
+            Renderer renderer = getRenderer(context);
             if (renderer != null) {
                 renderer.encodeBegin(context, this);
             } else {
-                if (LOGGER.isLoggable(Level.FINE)) {
+                if (LOGGER.isLoggable(FINE)) {
                     LOGGER.fine("Can't get Renderer for type " + rendererType);
                 }
             }
         }
-
     }
 
     /**
@@ -857,21 +571,20 @@ public abstract class UIComponentBase extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
+        
         if (!isRendered()) {
             return;
         }
-        String rendererType = getRendererType();
-        if (rendererType != null) {
-            Renderer renderer = this.getRenderer(context);
+        
+        if (getRendererType() != null) {
+            Renderer renderer = getRenderer(context);
             if (renderer != null) {
                 renderer.encodeChildren(context, this);
             }
             // We've already logged for this component
-        } else {
-            if (getChildCount() > 0) {
-                for (UIComponent child : getChildren()) {
-                    child.encodeAll(context);
-                }
+        } else if (getChildCount() > 0) {
+            for (UIComponent child : getChildren()) {
+                child.encodeAll(context);
             }
         }
     }
@@ -886,26 +599,27 @@ public abstract class UIComponentBase extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
+        
         if (!isRendered()) {
             popComponentFromEL(context);
             return;
         }
-        String rendererType = getRendererType();
-        if (rendererType != null) {
-            Renderer renderer = this.getRenderer(context);
+        
+        if (getRendererType() != null) {
+            Renderer renderer = getRenderer(context);
             if (renderer != null) {
                 renderer.encodeEnd(context, this);
-            } else {
-                // We've already logged for this component
-            }
+            } 
+            
+            // We've already logged for this component
         }
+        
         popComponentFromEL(context);
-
     }
+    
 
     // -------------------------------------------------- Event Listener Methods
-
-    private AttachedObjectListHolder<FacesListener> listeners;
+    
 
     /**
      * <p>
@@ -959,7 +673,6 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         listeners.add(listener);
-
     }
 
     /**
@@ -979,6 +692,7 @@ public abstract class UIComponentBase extends UIComponent {
         if (this.listeners == null) {
             return (FacesListener[]) Array.newInstance(clazz, 0);
         }
+        
         FacesListener[] listeners = this.listeners.asArray(FacesListener.class);
         if (listeners.length == 0) {
             return (FacesListener[]) Array.newInstance(clazz, 0);
@@ -991,8 +705,7 @@ public abstract class UIComponentBase extends UIComponent {
             }
         }
 
-        return (results.toArray((FacesListener[]) Array.newInstance(clazz, results.size())));
-
+        return results.toArray((FacesListener[]) Array.newInstance(clazz, results.size()));
     }
 
     /**
@@ -1013,7 +726,6 @@ public abstract class UIComponentBase extends UIComponent {
         if (listeners != null) {
             listeners.remove(listener);
         }
-
     }
 
     /**
@@ -1026,13 +738,14 @@ public abstract class UIComponentBase extends UIComponent {
         if (event == null) {
             throw new NullPointerException();
         }
+        
         UIComponent parent = getParent();
+        
         if (parent == null) {
             throw new IllegalStateException();
-        } else {
-            parent.queueEvent(event);
-        }
-
+        } 
+            
+        parent.queueEvent(event);
     }
 
     /**
@@ -1062,30 +775,29 @@ public abstract class UIComponentBase extends UIComponent {
      */
     @Override
     public void subscribeToEvent(Class<? extends SystemEvent> eventClass, ComponentSystemEventListener componentListener) {
-
-        if (eventClass == null) {
-            throw new NullPointerException();
-        }
-        if (componentListener == null) {
+        
+        if (isAnyNull(eventClass, componentListener)) {
             throw new NullPointerException();
         }
 
         if (initialStateMarked()) {
             initialState = false;
         }
-        if (null == listenersByEventClass) {
+        
+        if (listenersByEventClass == null) {
             listenersByEventClass = new HashMap<>(3, 1.0f);
         }
+        
         SystemEventListener facesLifecycleListener = new ComponentSystemEventListenerAdapter(componentListener, this);
         List<SystemEventListener> listenersForEventClass = listenersByEventClass.get(eventClass);
         if (listenersForEventClass == null) {
             listenersForEventClass = new ArrayList<>(3);
             listenersByEventClass.put(eventClass, listenersForEventClass);
         }
+        
         if (!listenersForEventClass.contains(facesLifecycleListener)) {
             listenersForEventClass.add(facesLifecycleListener);
         }
-
     }
 
     /**
@@ -1110,27 +822,24 @@ public abstract class UIComponentBase extends UIComponent {
      */
     @Override
     public void unsubscribeFromEvent(Class<? extends SystemEvent> eventClass, ComponentSystemEventListener componentListener) {
-
-        if (eventClass == null) {
-            throw new NullPointerException();
-        }
-        if (componentListener == null) {
+        
+        if (isAnyNull(eventClass, componentListener)) {
             throw new NullPointerException();
         }
 
         List<SystemEventListener> listeners = getListenersForEventClass(eventClass);
-        if (listeners != null && !listeners.isEmpty()) {
+        
+        if (!isEmpty(listeners)) {
             for (Iterator<SystemEventListener> i = listeners.iterator(); i.hasNext();) {
-                SystemEventListener item = i.next();
-                ComponentSystemEventListenerAdapter csla = (ComponentSystemEventListenerAdapter) item;
-                ComponentSystemEventListener l = csla.getWrapped();
-                if (l.equals(componentListener)) {
+                
+                ComponentSystemEventListener existingListener = ((ComponentSystemEventListenerAdapter) i.next()).getWrapped();
+                
+                if (existingListener.equals(componentListener)) {
                     i.remove();
                     break;
                 }
             }
         }
-
     }
 
     /**
@@ -1152,13 +861,14 @@ public abstract class UIComponentBase extends UIComponent {
         if (eventClass == null) {
             throw new NullPointerException();
         }
-        List<SystemEventListener> result = null;
+        
         if (listenersByEventClass != null) {
-            result = listenersByEventClass.get(eventClass);
+            return listenersByEventClass.get(eventClass);
         }
-        return result;
-
+        
+        return null;
     }
+    
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 
@@ -1181,7 +891,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         try {
             // Process all facets and children of this component
-            Iterator kids = getFacetsAndChildren();
+            Iterator<UIComponent> kids = getFacetsAndChildren();
             while (kids.hasNext()) {
                 UIComponent kid = (UIComponent) kids.next();
                 kid.processDecodes(context);
@@ -1217,15 +927,17 @@ public abstract class UIComponentBase extends UIComponent {
         pushComponentToEL(context, null);
 
         try {
-            Application app = context.getApplication();
-            app.publishEvent(context, PreValidateEvent.class, this);
+            Application application = context.getApplication();
+            application.publishEvent(context, PreValidateEvent.class, this);
+            
             // Process all the facets and children of this component
-            Iterator kids = getFacetsAndChildren();
+            Iterator<UIComponent> kids = getFacetsAndChildren();
             while (kids.hasNext()) {
                 UIComponent kid = (UIComponent) kids.next();
                 kid.processValidators(context);
             }
-            app.publishEvent(context, PostValidateEvent.class, this);
+            
+            application.publishEvent(context, PostValidateEvent.class, this);
         } finally {
             popComponentFromEL(context);
         }
@@ -1250,19 +962,15 @@ public abstract class UIComponentBase extends UIComponent {
 
         try {
             // Process all facets and children of this component
-            Iterator kids = getFacetsAndChildren();
+            Iterator<UIComponent> kids = getFacetsAndChildren();
             while (kids.hasNext()) {
                 UIComponent kid = (UIComponent) kids.next();
                 kid.processUpdates(context);
-
             }
         } finally {
             popComponentFromEL(context);
         }
     }
-
-    private static final int MY_STATE = 0;
-    private static final int CHILD_STATE = 1;
 
     /**
      * @throws NullPointerException {@inheritDoc}
@@ -1273,9 +981,11 @@ public abstract class UIComponentBase extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        if (this.isTransient()) {
+        
+        if (isTransient()) {
             return null;
         }
+        
         Object[] stateStruct = new Object[2];
         Object[] childState = EMPTY_ARRAY;
 
@@ -1285,46 +995,20 @@ public abstract class UIComponentBase extends UIComponent {
             // Process this component itself
             stateStruct[MY_STATE] = saveState(context);
 
-            // determine if we have any children to store
-            int count = this.getChildCount() + this.getFacetCount();
+            // Determine if we have any children to store
+            int count = getChildCount() + getFacetCount();
             if (count > 0) {
 
-                // this arraylist will store state
+                // This arraylist will store state
                 List<Object> stateList = new ArrayList<>(count);
+                
+                // If we have children, add them to the stateList
+                collectChildState(context, stateList);
+                
+                // If we have facets, add them to the stateList
+                collectFacetsState(context, stateList);
 
-                // if we have children, add them to the stateList
-                if (this.getChildCount() > 0) {
-                    Iterator kids = getChildren().iterator();
-                    UIComponent kid;
-                    while (kids.hasNext()) {
-                        kid = (UIComponent) kids.next();
-                        if (!kid.isTransient()) {
-                            stateList.add(kid.processSaveState(context));
-                        }
-                    }
-                }
-
-                // if we have facets, add them to the stateList
-                if (this.getFacetCount() > 0) {
-                    Iterator myFacets = getFacets().entrySet().iterator();
-                    UIComponent facet;
-                    Object facetState;
-                    Object[] facetSaveState;
-                    Map.Entry entry;
-                    while (myFacets.hasNext()) {
-                        entry = (Map.Entry) myFacets.next();
-                        facet = (UIComponent) entry.getValue();
-                        if (!facet.isTransient()) {
-                            facetState = facet.processSaveState(context);
-                            facetSaveState = new Object[2];
-                            facetSaveState[0] = entry.getKey();
-                            facetSaveState[1] = facetState;
-                            stateList.add(facetSaveState);
-                        }
-                    }
-                }
-
-                // finally, capture the stateList and replace the original,
+                // Finally, capture the stateList and replace the original,
                 // EMPTY_OBJECT_ARRAY Object array
                 childState = stateList.toArray();
             }
@@ -1354,44 +1038,18 @@ public abstract class UIComponentBase extends UIComponent {
             // Process this component itself
             restoreState(context, stateStruct[MY_STATE]);
 
-            int i = 0;
-
             // Process all the children of this component
-            if (this.getChildCount() > 0) {
-                for (UIComponent kid : getChildren()) {
-                    if (kid.isTransient()) {
-                        continue;
-                    }
-                    Object currentState = childState[i++];
-                    if (currentState == null) {
-                        continue;
-                    }
-                    kid.processRestoreState(context, currentState);
-                }
-            }
+            int i = restoreChildState(context, childState);
 
-            // process all of the facets of this component
-            if (this.getFacetCount() > 0) {
-                int facetsSize = getFacets().size();
-                int j = 0;
-                Object[] facetSaveState;
-                String facetName;
-                UIComponent facet;
-                Object facetState;
-                while (j < facetsSize) {
-                    if (null != (facetSaveState = (Object[]) childState[i++])) {
-                        facetName = (String) facetSaveState[0];
-                        facetState = facetSaveState[1];
-                        facet = getFacets().get(facetName);
-                        facet.processRestoreState(context, facetState);
-                    }
-                    ++j;
-                }
-            }
+            // Process all of the facets of this component
+            restoreFacetsState(context, childState, i);
+            
         } finally {
             popComponentFromEL(context);
         }
     }
+    
+    
 
     // ------------------------------------------------------- Protected Methods
 
@@ -1409,29 +1067,28 @@ public abstract class UIComponentBase extends UIComponent {
         // solution.
 
         return FacesContext.getCurrentInstance();
-
     }
 
     @Override
     protected Renderer getRenderer(FacesContext context) {
+        
+        Renderer renderer = null;
 
         String rendererType = getRendererType();
-        Renderer result = null;
         if (rendererType != null) {
-            result = context.getRenderKit().getRenderer(getFamily(), rendererType);
-            if (null == result) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("Can't get Renderer for type " + rendererType);
-                }
+            renderer = context.getRenderKit().getRenderer(getFamily(), rendererType);
+            
+            if (renderer == null && LOGGER.isLoggable(FINE)) {
+                LOGGER.fine("Can't get Renderer for type " + rendererType);
             }
         } else {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                String id = this.getId();
-                id = (null != id) ? id : this.getClass().getName();
-                LOGGER.fine("No renderer-type for component " + id);
+            if (LOGGER.isLoggable(FINE)) {
+                String id = getId();
+                LOGGER.fine("No renderer-type for component " + id != null ? id : getClass().getName());
             }
         }
-        return result;
+        
+        return renderer;
     }
 
     // ---------------------------------------------- PartialStateHolder Methods
@@ -1503,57 +1160,67 @@ public abstract class UIComponentBase extends UIComponent {
 
     @Override
     public Object saveState(FacesContext context) {
-        Object[] values = null;
+        
         if (context == null) {
             throw new NullPointerException();
         }
-        assert (!transientFlag);
+        
+        Object[] values = null;
+        
         if (initialStateMarked()) {
-            Object savedFacesListeners = ((listeners != null) ? listeners.saveState(context) : null);
+            Object savedFacesListeners = listeners != null ? listeners.saveState(context) : null;
             Object savedSysEventListeners = saveSystemEventListeners(context);
             Object savedBehaviors = saveBehaviorsState(context);
             Object savedBindings = null;
+            
             if (bindings != null) {
                 savedBindings = saveBindingsState(context);
             }
+            
             Object savedHelper = null;
             if (stateHelper != null) {
                 savedHelper = stateHelper.saveState(context);
             }
-            if (savedFacesListeners == null && savedSysEventListeners == null && savedBehaviors == null && savedBindings == null && savedHelper == null) {
+            
+            if (isAllNull(savedFacesListeners, savedSysEventListeners, savedBehaviors, savedBindings, savedHelper)) {
                 return null;
-            } else {
-                if (values == null || values.length != 5) {
-                    values = new Object[5];
-                }
-
-                // since we're saving partial state, skip id and clientId
-                // as this will be reconstructed from the template execution
-                // when the view is restored
-                values[0] = savedFacesListeners;
-                values[1] = savedSysEventListeners;
-                values[2] = savedBehaviors;
-                values[3] = savedBindings;
-                values[4] = savedHelper;
-                return values;
             }
+            
+            if (values == null || values.length != 5) {
+                values = new Object[5];
+            }
+
+            // Since we're saving partial state, skip id and clientId
+            // as this will be reconstructed from the template execution
+            // when the view is restored
+            values[0] = savedFacesListeners;
+            values[1] = savedSysEventListeners;
+            values[2] = savedBehaviors;
+            values[3] = savedBindings;
+            values[4] = savedHelper;
+            
+            return values;
+            
         } else {
             if (values == null || values.length != 6) {
                 values = new Object[6];
             }
 
-            values[0] = ((listeners != null) ? listeners.saveState(context) : null);
+            values[0] = listeners != null ? listeners.saveState(context) : null;
             values[1] = saveSystemEventListeners(context);
             values[2] = saveBehaviorsState(context);
+            
             if (bindings != null) {
                 values[3] = saveBindingsState(context);
             }
+            
             if (stateHelper != null) {
                 values[4] = stateHelper.saveState(context);
             }
+            
             values[5] = id;
 
-            return (values);
+            return values;
         }
     }
 
@@ -1567,6 +1234,7 @@ public abstract class UIComponentBase extends UIComponent {
         if (state == null) {
             return;
         }
+        
         Object[] values = (Object[]) state;
 
         if (values[0] != null) {
@@ -1575,25 +1243,30 @@ public abstract class UIComponentBase extends UIComponent {
             }
             listeners.restoreState(context, values[0]);
         }
+        
         if (values[1] != null) {
-            Map m = restoreSystemEventListeners(context, values[1]);
+            Map<Class<? extends SystemEvent>, List<SystemEventListener>> restoredListeners = restoreSystemEventListeners(context, values[1]);
             if (listenersByEventClass != null) {
-                listenersByEventClass.putAll(m);
+                listenersByEventClass.putAll(restoredListeners);
             } else {
-                listenersByEventClass = m;
+                listenersByEventClass = restoredListeners;
             }
         }
+        
         if (values[2] != null) {
             behaviors = restoreBehaviorsState(context, values[2]);
         }
+        
         if (values[3] != null) {
             bindings = restoreBindingsState(context, values[3]);
         }
+        
         if (values[4] != null) {
             getStateHelper().restoreState(context, values[4]);
         }
+        
         if (values.length == 6) {
-            // this means we've saved full state and need to do a little more
+            // This means we've saved full state and need to do a little more
             // work to finish the job
             if (values[5] != null) {
                 id = (String) values[5];
@@ -1602,29 +1275,20 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
-    /**
-     * <p>
-     * Flag indicating a desire to now participate in state saving.
-     * </p>
-     */
-    private boolean transientFlag = false;
-
     @Override
     public boolean isTransient() {
-
-        return (this.transientFlag);
-
+        return transientFlag;
     }
 
     @Override
     public void setTransient(boolean transientFlag) {
-
         this.transientFlag = transientFlag;
-
     }
 
+    
     // -------------------------------------- Helper methods for state saving
 
+    
     // --------- methods used by UIComponents to save their attached Objects.
 
     /**
@@ -1655,12 +1319,14 @@ public abstract class UIComponentBase extends UIComponent {
      */
 
     public static Object saveAttachedState(FacesContext context, Object attachedObject) {
-        if (null == context) {
+        if (context == null) {
             throw new NullPointerException();
         }
-        if (null == attachedObject) {
+        
+        if (attachedObject == null) {
             return null;
         }
+        
         Object result;
         Class mapOrCollectionClass = attachedObject.getClass();
         boolean newWillSucceed = true;
@@ -1886,7 +1552,7 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     Map<String, PropertyDescriptor> getDescriptorMap() {
-        return pdMap;
+        return propertyDescriptorMap;
     }
 
     private void doPostAddProcessing(FacesContext context, UIComponent added) {
@@ -3420,6 +3086,442 @@ public abstract class UIComponentBase extends UIComponent {
         private Map<String, List<ClientBehavior>> getModifiableMap() {
             return modifiableMap;
         }
+    }
+    
+    private static class PassThroughAttributesMap<K, V> extends ConcurrentHashMap<String, Object> implements Serializable {
+
+        private static final long serialVersionUID = 4230540513272170861L;
+
+        @Override
+        public Object put(String key, Object value) {
+            if (null == key || null == value) {
+                throw new NullPointerException();
+            }
+            validateKey(key);
+            return super.put(key, value);
+        }
+
+        @Override
+        public Object putIfAbsent(String key, Object value) {
+            if (null == key || null == value) {
+                throw new NullPointerException();
+            }
+            validateKey(key);
+            return super.putIfAbsent(key, value);
+        }
+
+        private void validateKey(Object key) {
+            if (!(key instanceof String) || (key instanceof ValueExpression) || !(key instanceof Serializable)) {
+                throw new IllegalArgumentException();
+            }
+        }
+
+    }
+    
+    
+    @SuppressWarnings("unchecked")
+    private void populateDescriptorsMapIfNecessary() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Class<?> clazz = getClass();
+
+        /*
+         * If we can find a valid FacesContext we are going to use it to get access to the property
+         * descriptor map.
+         */
+        if (facesContext != null && facesContext.getExternalContext() != null && facesContext.getExternalContext().getApplicationMap() != null) {
+
+            Map<String, Object> applicationMap = facesContext.getExternalContext().getApplicationMap();
+
+            if (!applicationMap.containsKey("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP")) {
+                applicationMap.put("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP", new ConcurrentHashMap<>());
+            }
+
+            descriptors = (Map<Class<?>, Map<String, PropertyDescriptor>>) applicationMap.get("com.sun.faces.compnent.COMPONENT_DESCRIPTORS_MAP");
+            propertyDescriptorMap = descriptors.get(clazz);
+        }
+
+        if (propertyDescriptorMap == null) {
+             
+            // We did not find the property descriptor map so we are now going to load it.
+            
+            PropertyDescriptor propertyDescriptors[] = getPropertyDescriptors();
+            if (propertyDescriptors != null) {
+                propertyDescriptorMap = new HashMap<>(propertyDescriptors.length, 1.0f);
+                for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+                    propertyDescriptorMap.put(propertyDescriptor.getName(), propertyDescriptor);
+                }
+                
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, "fine.component.populating_descriptor_map", new Object[] { clazz, currentThread().getName() });
+                }
+
+                if (descriptors != null && !descriptors.containsKey(clazz)) {
+                    descriptors.put(clazz, propertyDescriptorMap);
+                }
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Return an array of <code>PropertyDescriptors</code> for this {@link UIComponent}'s
+     * implementation class. If no descriptors can be identified, a zero-length array will be
+     * returned.
+     * </p>
+     *
+     * @throws FacesException if an introspection exception occurs
+     */
+    private PropertyDescriptor[] getPropertyDescriptors() {
+        try {
+            return getBeanInfo(getClass()).getPropertyDescriptors();
+        } catch (IntrospectionException e) {
+            throw new FacesException(e);
+        }
+    }
+    
+    private String addParentId(FacesContext context, String parentId, String childId) {
+        return new StringBuilder(parentId.length() + 1 + childId.length())
+                        .append(parentId)
+                        .append(UINamingContainer.getSeparatorChar(context))
+                        .append(childId)
+                        .toString();
+    }
+    
+    private String getParentId(FacesContext context, UIComponent parent) {
+        if (parent == null) {
+            return null;
+        }
+        
+        return parent.getContainerClientId(context);
+    }
+    
+    private String generateId(FacesContext context, UIComponent namingContainerAncestor) {
+        if (namingContainerAncestor instanceof UniqueIdVendor) {
+            return ((UniqueIdVendor) namingContainerAncestor).createUniqueId(context, null);
+        } 
+        
+        return context.getViewRoot().createUniqueId();
+    }
+    
+    private UIComponent getNamingContainerAncestor() {
+        UIComponent namingContainer = getParent();
+        while (namingContainer != null) {
+            if (namingContainer instanceof NamingContainer) {
+                return namingContainer;
+            }
+            namingContainer = namingContainer.getParent();
+        }
+        
+        return null;
+    }
+    
+    /**
+     * <p>
+     * If the specified {@link UIComponent} has a non-null parent, remove it as a child or facet (as
+     * appropriate) of that parent. As a result, the <code>parent</code> property will always be
+     * <code>null</code> when this method returns.
+     * </p>
+     *
+     * @param component {@link UIComponent} to have any parent erased
+     */
+    private static void eraseParent(UIComponent component) {
+
+        UIComponent parent = component.getParent();
+        if (parent == null) {
+            return;
+        }
+        
+        if (parent.getChildCount() > 0) {
+            List<UIComponent> children = parent.getChildren();
+            int index = children.indexOf(component);
+            if (index >= 0) {
+                children.remove(index);
+                return;
+            }
+        }
+        
+        if (parent.getFacetCount() > 0) {
+            Map<String, UIComponent> facets = parent.getFacets();
+            Iterator<Entry<String, UIComponent>> entries = facets.entrySet().iterator();
+            
+            while (entries.hasNext()) {
+                Map.Entry<String, UIComponent> entry = entries.next();
+                // noinspection ObjectEquality
+                if (entry.getValue() == component) {
+                    entries.remove();
+                    return;
+                }
+            }
+        }
+
+        // Throw an exception for the "cannot happen" case
+        throw new IllegalStateException("Parent was not null, " + "but this component not related");
+    }
+
+    /**
+     * <p>
+     * Throw <code>IllegalArgumentException</code> if the specified component identifier is
+     * non-<code>null</code> and not syntactically valid.
+     * </p>
+     *
+     * @param id The component identifier to test
+     */
+    private static void validateId(String id) {
+
+        if (id == null) {
+            return;
+        }
+        
+        int idLength = id.length();
+        if (idLength < 1) {
+            throw new IllegalArgumentException("Empty id attribute is not allowed");
+        }
+        
+        for (int i = 0; i < idLength; i++) {
+            char c = id.charAt(i);
+            if (i == 0) {
+                if (!isLetter(c) && c != '_') {
+                    throw new IllegalArgumentException(id);
+                }
+            } else {
+                if (!isLetter(c) && !isDigit(c) && c != '-' && c != '_') {
+                    throw new IllegalArgumentException(id);
+                }
+            }
+        }
+    }
+    
+    private UIComponent findBaseComponent(String expression, final char sepChar) {
+        // Identify the base component from which we will perform our search
+        UIComponent base = this;
+        
+        if (expression.charAt(0) == sepChar) {
+            
+            // Absolute searches start at the root of the tree
+            while (base.getParent() != null) {
+                base = base.getParent();
+            }
+            
+            // Treat remainder of the expression as relative
+            expression = expression.substring(1);
+        } else if (!(base instanceof NamingContainer)) {
+            
+            // Relative expressions start at the closest NamingContainer or root
+            while (base.getParent() != null) {
+                if (base instanceof NamingContainer) {
+                    break;
+                }
+                base = base.getParent();
+            }
+        }
+        
+        return base;
+    }
+    
+    private UIComponent evaluateSearchExpression(UIComponent base, String expression, final String SEPARATOR_STRING) {
+        UIComponent result = null;
+        
+        String[] segments = expression.split(SEPARATOR_STRING);
+        for (int i = 0, length = (segments.length - 1); i < segments.length; i++, length--) {
+            result = findComponent(base, segments[i], (i == 0));
+            
+            // the first element of the expression may match base.id
+            // (vs. a child if of base)
+            if (i == 0 && result == null && segments[i].equals(base.getId())) {
+                result = base;
+            }
+            
+            if (result != null && !(result instanceof NamingContainer) && length > 0) {
+                throw new IllegalArgumentException(segments[i]);
+            }
+            
+            if (result == null) {
+                break;
+            }
+            
+            base = result;
+        }
+        
+        return result;
+    }
+    
+    /**
+     * <p>
+     * Return the {@link UIComponent} (if any) with the specified <code>id</code>, searching
+     * recursively starting at the specified <code>base</code>, and examining the base component
+     * itself, followed by examining all the base component's facets and children (unless the base
+     * component is a {@link NamingContainer}, in which case the recursive scan is skipped.
+     * </p>
+     *
+     * @param base Base {@link UIComponent} from which to search
+     * @param id Component identifier to be matched
+     */
+    private static UIComponent findComponent(UIComponent base, String id, boolean checkId) {
+        
+        if (checkId && id.equals(base.getId())) {
+            return base;
+        }
+        
+        // Search through our facets and children
+        UIComponent component = null;
+        for (Iterator<UIComponent> i = base.getFacetsAndChildren(); i.hasNext();) {
+            UIComponent kid = (UIComponent) i.next();
+            if (!(kid instanceof NamingContainer)) {
+                if (checkId && id.equals(kid.getId())) {
+                    component = kid;
+                    break;
+                }
+                
+                component = findComponent(kid, id, true);
+                
+                if (component != null) {
+                    break;
+                }
+            } else if (id.equals(kid.getId())) {
+                component = kid;
+                break;
+            }
+        }
+        
+        return component;
+    }
+
+    private List<Object> collectChildState(FacesContext context, List<Object> stateList) {
+        if (getChildCount() > 0) {
+            Iterator<UIComponent> kids = getChildren().iterator();
+            while (kids.hasNext()) {
+                UIComponent kid = (UIComponent) kids.next();
+                if (!kid.isTransient()) {
+                    stateList.add(kid.processSaveState(context));
+                }
+            }
+        }
+        
+        return stateList;
+    }
+    
+    private List<Object> collectFacetsState(FacesContext context, List<Object> stateList) {
+        if (getFacetCount() > 0) {
+            Iterator<Entry<String, UIComponent>> myFacets = getFacets().entrySet().iterator();
+            
+            while (myFacets.hasNext()) {
+                Map.Entry<String, UIComponent> entry = myFacets.next();
+                UIComponent facet = (UIComponent) entry.getValue();
+                if (!facet.isTransient()) {
+                    Object facetState = facet.processSaveState(context);
+                    Object[] facetSaveState = new Object[2];
+                    facetSaveState[0] = entry.getKey();
+                    facetSaveState[1] = facetState;
+                    stateList.add(facetSaveState);
+                }
+            }
+        }
+        
+        return stateList;
+    }
+    
+
+    private int restoreChildState(FacesContext context, Object[] childState) {
+        int i = 0;
+
+        // Process all the children of this component
+        if (getChildCount() > 0) {
+            for (UIComponent kid : getChildren()) {
+                if (kid.isTransient()) {
+                    continue;
+                }
+                
+                Object currentState = childState[i++];
+                
+                if (currentState == null) {
+                    continue;
+                }
+                
+                kid.processRestoreState(context, currentState);
+            }
+        }
+        
+        return i;
+    }
+    
+    private void restoreFacetsState(FacesContext context, Object[] childState, int i) {
+        if (getFacetCount() > 0) {
+            
+            int j = 0;
+            int facetsSize = getFacets().size();
+            
+            while (j < facetsSize) {
+                
+                Object[] facetSaveState = (Object[]) childState[i++];
+                
+                if (facetSaveState != null) {
+                    String facetName = (String) facetSaveState[0];
+                    Object facetState = facetSaveState[1];
+                    UIComponent facet = getFacets().get(facetName);
+                    facet.processRestoreState(context, facetState);
+                }
+                
+                ++j;
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    // ------------------------------------------- Deprecated code
+    
+    
+    /**
+     * {@inheritDoc}
+     *
+     * @throws NullPointerException {@inheritDoc}
+     * @deprecated This has been replaced by {@link #getValueExpression}.
+     */
+    @Override
+    public ValueBinding getValueBinding(String name) {
+
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        ValueBinding result = null;
+        ValueExpression ve;
+
+        if (null != (ve = getValueExpression(name))) {
+            // if the ValueExpression is an instance of our private
+            // wrapper class.
+            if (ve.getClass().equals(ValueExpressionValueBindingAdapter.class)) {
+                result = ((ValueExpressionValueBindingAdapter) ve).getWrapped();
+            } else {
+                // otherwise, this is a real ValueExpression. Wrap it
+                // in a ValueBinding.
+                result = new ValueBindingValueExpressionAdapter(ve);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @deprecated This has been replaced by {@link #setValueExpression}.
+     */
+    @Override
+    public void setValueBinding(String name, ValueBinding binding) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        if (binding != null) {
+            ValueExpressionValueBindingAdapter adapter = new ValueExpressionValueBindingAdapter(binding);
+            setValueExpression(name, adapter);
+        } else {
+            setValueExpression(name, null);
+        }
+
     }
 
 }
