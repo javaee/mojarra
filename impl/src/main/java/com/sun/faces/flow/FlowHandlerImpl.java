@@ -321,7 +321,7 @@ public class FlowHandlerImpl extends FlowHandler {
                 }
             } else {
                 String maxReturnDepthStr = requestParamMap.get(FLOW_RETURN_DEPTH_PARAM_NAME);
-                int maxReturnDepth = Integer.valueOf(maxReturnDepthStr).intValue();
+                int maxReturnDepth = Integer.parseInt(maxReturnDepthStr);
                 FlowDeque<Flow> flowStack = getFlowStack(context);
                 flowStack.setMaxReturnDepth(context, maxReturnDepth);
             }
