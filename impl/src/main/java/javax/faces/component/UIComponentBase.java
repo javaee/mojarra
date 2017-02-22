@@ -401,6 +401,11 @@ public abstract class UIComponentBase extends UIComponent {
 
         // Identify the base component from which we will perform our search
         UIComponent base = findBaseComponent(expression, sepChar);
+        
+        if (expression.charAt(0) == sepChar) {
+            // Treat remainder of the expression as relative
+            expression = expression.substring(1);
+        }
 
         // Evaluate the search expression (now guaranteed to be relative)
         return evaluateSearchExpression(base, expression, String.valueOf(sepChar));
