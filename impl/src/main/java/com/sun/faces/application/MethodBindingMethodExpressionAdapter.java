@@ -40,6 +40,8 @@
 
 package com.sun.faces.application;
 
+import static com.sun.faces.util.Util.isAnyNull;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -49,11 +51,13 @@ import javax.el.ELException;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.el.MethodInfo;
+import javax.el.PropertyNotFoundException;
 import javax.el.ValueExpression;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
+import javax.faces.el.MethodNotFoundException;
 
 /**
  * <p>
@@ -75,18 +79,16 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
         this.methodExpression = methodExpression;
     }
 
-    public Object invoke(FacesContext context, Object params[]) throws javax.faces.el.EvaluationException, javax.faces.el.MethodNotFoundException {
-        assert (null != methodExpression);
+    public Object invoke(FacesContext context, Object params[]) throws EvaluationException, MethodNotFoundException {
         if (context == null) {
             throw new NullPointerException("FacesConext -> null");
         }
 
-        Object result = null;
         try {
-            result = methodExpression.invoke(context.getELContext(), params);
-        } catch (javax.el.MethodNotFoundException e) {
-            throw new javax.faces.el.MethodNotFoundException(e);
-        } catch (javax.el.PropertyNotFoundException e) {
+            return methodExpression.invoke(context.getELContext(), params);
+        } catch (javax.el.MethodNotFoundException | NullPointerException e) {
+            throw new MethodNotFoundException(e);
+        } catch (PropertyNotFoundException e) {
             throw new EvaluationException(e);
         } catch (ELException e) {
             Throwable cause = e.getCause();
@@ -94,34 +96,20 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
                 cause = e;
             }
             throw new EvaluationException(cause);
-        } catch (NullPointerException e) {
-            throw new javax.faces.el.MethodNotFoundException(e);
         }
-        
-        return result;
     }
 
-    public Class getType(FacesContext context) throws javax.faces.el.MethodNotFoundException {
-        assert (null != methodExpression);
+    public Class<?> getType(FacesContext context) throws MethodNotFoundException {
+        
         if (context == null) {
             throw new NullPointerException("FacesConext -> null");
         }
-        Class result = null;
-        if (context == null) {
-            throw new NullPointerException();
-        }
 
         try {
-            MethodInfo mi = methodExpression.getMethodInfo(context.getELContext());
-            result = mi.getReturnType();
-        } catch (javax.el.PropertyNotFoundException e) {
-            throw new javax.faces.el.MethodNotFoundException(e);
-        } catch (javax.el.MethodNotFoundException e) {
-            throw new javax.faces.el.MethodNotFoundException(e);
+            return methodExpression.getMethodInfo(context.getELContext()).getReturnType();
         } catch (ELException e) {
-            throw new javax.faces.el.MethodNotFoundException(e);
+            throw new MethodNotFoundException(e);
         }
-        return result;
     }
 
     public String getExpressionString() {
@@ -132,6 +120,7 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
         if (this == other) {
             return true;
         }
+        
         if (other instanceof MethodBindingMethodExpressionAdapter) {
             return methodExpression.equals(((MethodBindingMethodExpressionAdapter) other).getWrapped());
         } else if (other instanceof MethodBinding) {
@@ -150,13 +139,12 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
             ELContext elContext = context.getELContext();
             MethodInfo controlInfo = methodExpression.getMethodInfo(elContext);
 
-            // ensure the method names are the same
+            // Ensure the method names are the same
             if (!controlInfo.getName().equals(method)) {
                 return false;
             }
 
-            // Using the target, create an expression and evaluate
-            // it.
+            // Using the target, create an expression and evaluate it.
             ExpressionFactory factory = context.getApplication().getExpressionFactory();
             ValueExpression ve = factory.createValueExpression(elContext, "#{" + target + '}', Object.class);
             if (ve == null) {
@@ -172,7 +160,7 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
             // Get all of the methods with the matching name and try
             // to find a match based on controlInfo's return and parameter
             // types
-            Class type = binding.getType(context);
+            Class<?> type = binding.getType(context);
             Method[] methods = result.getClass().getMethods();
             for (Method meth : methods) {
                 if (meth.getName().equals(method) && type.equals(controlInfo.getReturnType())
@@ -183,12 +171,9 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
         }
 
         return false;
-
     }
 
     public int hashCode() {
-        assert (null != methodExpression);
-
         return methodExpression.hashCode();
     }
 
@@ -204,6 +189,7 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
         if (context == null) {
             throw new NullPointerException();
         }
+        
         Object result = null;
         if (!tranzient) {
             if (methodExpression instanceof StateHolder) {
@@ -211,6 +197,7 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
 
                 // save the actual state of our wrapped methodExpression
                 stateStruct[0] = ((StateHolder) methodExpression).saveState(context);
+                
                 // save the class name of the methodExpression impl
                 stateStruct[1] = methodExpression.getClass().getName();
 
@@ -221,15 +208,14 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
         }
 
         return result;
-
     }
 
     public void restoreState(FacesContext context, Object state) {
         if (context == null) {
             throw new NullPointerException();
         }
-        // if we have state
-        if (null == state) {
+        
+        if (state == null) {
             return;
         }
 
@@ -238,26 +224,20 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
             Object savedState = stateStruct[0];
             String className = stateStruct[1].toString();
             MethodExpression result = null;
+            
+            if (className != null) {
+                
+                Class<?> toRestoreClass = loadClass(className, this);
 
-            Class toRestoreClass = null;
-            if (null != className) {
-                try {
-                    toRestoreClass = loadClass(className, this);
-                } catch (ClassNotFoundException e) {
-                    throw new IllegalStateException(e.getMessage());
-                }
-
-                if (null != toRestoreClass) {
+                if (toRestoreClass != null) {
                     try {
                         result = (MethodExpression) toRestoreClass.newInstance();
-                    } catch (InstantiationException e) {
+                    } catch (InstantiationException | IllegalAccessException e) {
                         throw new IllegalStateException(e.getMessage());
-                    } catch (IllegalAccessException a) {
-                        throw new IllegalStateException(a.getMessage());
                     }
                 }
 
-                if (null != result && null != savedState) {
+                if (!isAnyNull(result, savedState)) {
                     // don't need to check transient, since that was
                     // done on the saving side.
                     ((StateHolder) result).restoreState(context, savedState);
@@ -277,12 +257,17 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
     // Helper methods for StateHolder
     //
 
-    private static Class loadClass(String name, Object fallbackClass) throws ClassNotFoundException {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        if (loader == null) {
-            loader = fallbackClass.getClass().getClassLoader();
+    private static Class<?> loadClass(String name, Object fallbackClass) {
+        try {
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            if (loader == null) {
+                loader = fallbackClass.getClass().getClassLoader();
+            }
+        
+            return Class.forName(name, true, loader);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e.getMessage(), e);
         }
-        return Class.forName(name, true, loader);
     }
 
 }
