@@ -46,13 +46,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.sun.faces.test</groupId>
-        <artifactId>pom</artifactId>
+        <groupId>com.sun.faces</groupId>
+        <artifactId>project</artifactId>
         <version>2.4.0-m01-SNAPSHOT</version>
     </parent>
-    <groupId>com.sun.faces.test</groupId>
+    <groupId>com.sun.faces</groupId>
     <artifactId>util</artifactId>
-    <name>Mojarra ${project.version} - Test - Utils</name>
+    <name>Mojarra ${project.version} - Util</name>
     <dependencies>
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>

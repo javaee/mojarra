@@ -25,7 +25,6 @@
         <module>servlet30-isolated</module>
         <module>servlet31</module>
         <module>servlet40</module>
-        <module>util</module>
         <module>weblogic</module>
     </modules>
     <build>

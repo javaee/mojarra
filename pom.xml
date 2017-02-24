@@ -22,6 +22,7 @@
         <module>impl</module>
         <module>jsf-tools</module>
         <module>test</module>
+        <module>util</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
