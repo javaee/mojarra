@@ -41,23 +41,19 @@
 
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
     <parent>
         <groupId>com.sun.faces.test</groupId>
         <artifactId>pom</artifactId>
         <version>2.4.0-m01-SNAPSHOT</version>
     </parent>
+    
     <groupId>com.sun.faces.test.servlet40</groupId>
     <artifactId>pom</artifactId>
     <packaging>pom</packaging>
+    
     <name>Mojarra ${project.version} - Test - Servlet 4.0</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    
     <modules>
         <module>el</module>
         <module>exactMapping</module>

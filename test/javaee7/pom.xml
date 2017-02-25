@@ -52,19 +52,15 @@
     <packaging>pom</packaging>
     <name>Mojarra ${project.version} - Test - JavaEE 7</name>
     <dependencies>
-        <dependency>
-            <groupId>com.sun.faces.test</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
+       
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
-    </dependencies>    
+    </dependencies> 
+       
     <modules>
         <module>cdiBeanValidator</module>
         <module>cdiInitDestroyEvent</module>
