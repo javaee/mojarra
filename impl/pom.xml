@@ -60,7 +60,6 @@
                                 
                                 -->
                                 <delete dir="src/main/resources"/>
-                                <delete dir="src/main/template"/>
                                 <delete dir="src/main/doc"/>
                                 <!--
                                 
@@ -191,26 +190,6 @@
                                 -->
                                 <copy todir="src/main/resources/META-INF" 
                                     file="${jsf-api-dir}/../legal/jsf-cddl/LICENSE.txt" />
-                                
-                                <!--
-                                
-                                    Copy template-src into src/main/template
-                                    
-                                -->
-                                <copy todir="src/main/template">
-                                    <fileset dir="${jsf-tools-dir}/template-src"/>
-                                </copy>
-                                
-                                <!--
-                                
-                                    Copy API template-src into src/main/template 
-                                
-                                -->
-                                <copy todir="src/main/template">
-                                    <fileset dir="${jsf-api-dir}/template-src">
-                                        <include name="*Adapter.java"/>
-                                    </fileset>
-                                </copy>
                                 
                                 <!--
                                 
