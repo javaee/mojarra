@@ -233,7 +233,7 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
                     try {
                         result = (MethodExpression) toRestoreClass.newInstance();
                     } catch (InstantiationException | IllegalAccessException e) {
-                        throw new IllegalStateException(e.getMessage());
+                        throw new IllegalStateException(e.getMessage(), e);
                     }
                 }
 

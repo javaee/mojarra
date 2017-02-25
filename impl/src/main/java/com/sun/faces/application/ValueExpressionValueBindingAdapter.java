@@ -40,31 +40,33 @@
 
 package com.sun.faces.application;
 
-import javax.el.ValueExpression;
-import javax.el.ELException;
-import javax.el.ELContext;
-import javax.faces.el.ValueBinding;
-import javax.faces.context.FacesContext;
-import javax.faces.component.StateHolder;
-
 import java.io.Serializable;
 
+import javax.el.ELContext;
+import javax.el.ELException;
+import javax.el.ValueExpression;
+import javax.faces.component.StateHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+
 /**
- * <p>Wrap a ValueBinding instance and expose it as a
- * ValueExpression.</p>
+ * <p>
+ * Wrap a ValueBinding instance and expose it as a ValueExpression.
+ * </p>
  */
 
 public class ValueExpressionValueBindingAdapter extends ValueExpression implements Serializable, StateHolder {
 
     private static final long serialVersionUID = 2990621816592041196L;
 
-    public ValueExpressionValueBindingAdapter() {}
+    public ValueExpressionValueBindingAdapter() {
+    }
 
     private ValueBinding binding = null;
 
     public ValueExpressionValueBindingAdapter(ValueBinding binding) {
-	assert(null != binding);
-	this.binding = binding;
+        assert (null != binding);
+        this.binding = binding;
     }
 
     //
@@ -72,114 +74,105 @@ public class ValueExpressionValueBindingAdapter extends ValueExpression implemen
     //
 
     public Object getValue(ELContext context) throws ELException {
-	assert(null != binding);
-	if (context == null) {
-	    throw new NullPointerException("ELContext -> null");
-    }
-	Object result = null;
-	FacesContext facesContext = (FacesContext) 
-	    context.getContext(FacesContext.class);
-	assert(null != facesContext);
-	try {
-	    result = binding.getValue(facesContext);
-	}
-	catch (Throwable e) {
-	    throw new ELException(e);
-	}
-	return result;
+        assert (null != binding);
+        if (context == null) {
+            throw new NullPointerException("ELContext -> null");
+        }
+        Object result = null;
+        FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
+        assert (null != facesContext);
+        try {
+            result = binding.getValue(facesContext);
+        } catch (Throwable e) {
+            throw new ELException(e);
+        }
+        return result;
     }
 
     public void setValue(ELContext context, Object value) throws ELException {
-	assert(null != binding);
-	if (context == null) {
-	    throw new NullPointerException("ELContext -> null");
+        assert (null != binding);
+        if (context == null) {
+            throw new NullPointerException("ELContext -> null");
+        }
+        FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
+        assert (null != facesContext);
+        try {
+            binding.setValue(facesContext, value);
+        } catch (Throwable e) {
+            throw new ELException(e);
+        }
     }
-	FacesContext facesContext = (FacesContext) 
-	    context.getContext(FacesContext.class);
-	assert(null != facesContext);
-	try {
-	    binding.setValue(facesContext, value);
-	}
-	catch (Throwable e) {
-	    throw new ELException(e);
-	}
-    }
-
 
     public boolean isReadOnly(ELContext context) throws ELException {
-	assert(null != binding);
-	if (context == null) {
-	    throw new NullPointerException("ELContext -> null");
-    }
-	boolean result = false;
-	FacesContext facesContext = (FacesContext) 
-	    context.getContext(FacesContext.class);
-	assert(null != facesContext);
-	try {
-	    result = binding.isReadOnly(facesContext);
-	}
-	catch (Throwable e) {
-	    throw new ELException(e);
-	}
-	return result;
+        assert (null != binding);
+        if (context == null) {
+            throw new NullPointerException("ELContext -> null");
+        }
+        boolean result = false;
+        FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
+        assert (null != facesContext);
+        try {
+            result = binding.isReadOnly(facesContext);
+        } catch (Throwable e) {
+            throw new ELException(e);
+        }
+        return result;
     }
 
     public Class<?> getType(ELContext context) throws ELException {
-	assert(null != binding);
-	if (context == null) {
-	    throw new NullPointerException("ELContext -> null");
-    }
-	Class result = null;
-	FacesContext facesContext = (FacesContext) 
-	    context.getContext(FacesContext.class);
-	assert(null != facesContext);
-	try {
-	    result = binding.getType(facesContext);
-	}
-	catch (Throwable e) {
-	    throw new ELException(e);
-	}
-	return result;
+        assert (null != binding);
+        if (context == null) {
+            throw new NullPointerException("ELContext -> null");
+        }
+        Class result = null;
+        FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
+        assert (null != facesContext);
+        try {
+            result = binding.getType(facesContext);
+        } catch (Throwable e) {
+            throw new ELException(e);
+        }
+        return result;
     }
 
     /**
-     * <p>Always return <code>false</code> since we can't possibly know
-     * if this is a literal text binding or not.</p>
+     * <p>
+     * Always return <code>false</code> since we can't possibly know if this is a literal text
+     * binding or not.
+     * </p>
      */
 
     public boolean isLiteralText() {
-	return false;
+        return false;
     }
-    
+
     public Class<?> getExpectedType() {
-	assert(null != binding);
-	Class result = null;
-	FacesContext context = FacesContext.getCurrentInstance();
-	try {
-	    Object value = binding.getValue(context);
-	    result = value.getClass();
-	}
-	catch (Throwable e) {
-	    result = null;
-	}
-	return result;
+        assert (null != binding);
+        Class result = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            Object value = binding.getValue(context);
+            result = value.getClass();
+        } catch (Throwable e) {
+            result = null;
+        }
+        return result;
     }
 
     public String getExpressionString() {
-	assert(null != binding);
-	return binding.getExpressionString();
-	
+        assert (null != binding);
+        return binding.getExpressionString();
+
     }
 
     public boolean equals(Object other) {
-    
+
         if (other == this) {
             return true;
         }
-        
+
         if (other instanceof ValueExpressionValueBindingAdapter) {
-            ValueBinding vb = 
-                ((ValueExpressionValueBindingAdapter) other).getWrapped();
+            ValueBinding vb = ((ValueExpressionValueBindingAdapter) other).getWrapped();
             return (binding.equals(vb));
         } else if (other instanceof ValueExpression) {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -187,134 +180,123 @@ public class ValueExpressionValueBindingAdapter extends ValueExpression implemen
             Class type = binding.getType(context);
             if (type != null) {
                 return type.equals(otherVE.getType(context.getELContext()));
-            }            
+            }
         }
         return false;
-        
+
     }
 
     public int hashCode() {
-	assert(null != binding);
+        assert (null != binding);
 
-	return binding.hashCode();
+        return binding.hashCode();
     }
-    
+
     public String getDelimiterSyntax() {
         // PENDING (visvan) Implementation
         return "";
     }
-    
-    // 
+
+    //
     // Methods from StateHolder
     //
-
-    
 
     public Object saveState(FacesContext context) {
         if (context == null) {
             throw new NullPointerException();
         }
-	Object result = null;
-	if (!tranzient) {
-	    if (binding instanceof StateHolder) {
-		Object [] stateStruct = new Object[2];
-		
-		// save the actual state of our wrapped binding
-		stateStruct[0] = ((StateHolder)binding).saveState(context);
-		// save the class name of the binding impl
-		stateStruct[1] = binding.getClass().getName();
+        Object result = null;
+        if (!tranzient) {
+            if (binding instanceof StateHolder) {
+                Object[] stateStruct = new Object[2];
 
-		result = stateStruct;
-	    }
-	    else {
-		result = binding;
-	    }
-	}
+                // save the actual state of our wrapped binding
+                stateStruct[0] = ((StateHolder) binding).saveState(context);
+                // save the class name of the binding impl
+                stateStruct[1] = binding.getClass().getName();
 
-	return result;
+                result = stateStruct;
+            } else {
+                result = binding;
+            }
+        }
+
+        return result;
     }
 
     public void restoreState(FacesContext context, Object state) {
         if (context == null) {
             throw new NullPointerException();
         }
-	// if we have state
-	if (null == state) {
-	    return;
-	}
-	
-	if (!(state instanceof ValueBinding)) {
-	    Object [] stateStruct = (Object []) state;
-	    Object savedState = stateStruct[0];
-	    String className = stateStruct[1].toString();
-	    ValueBinding result = null;
-	    
-	    Class toRestoreClass = null;
-	    if (null != className) {
-		try {
-		    toRestoreClass = loadClass(className, this);
-		}
-		catch (ClassNotFoundException e) {
-		    throw new IllegalStateException(e.getMessage());
-		}
-		
-		if (null != toRestoreClass) {
-		    try {
-			result = 
-			    (ValueBinding) toRestoreClass.newInstance();
-		    }
-		    catch (InstantiationException e) {
-			throw new IllegalStateException(e.getMessage());
-		    }
-		    catch (IllegalAccessException a) {
-			throw new IllegalStateException(a.getMessage());
-		    }
-		}
-		
-		if (null != result && null != savedState) {
-		    // don't need to check transient, since that was
-		    // done on the saving side.
-		    ((StateHolder)result).restoreState(context, savedState);
-		}
-		binding = result;
-	    }
-	}
-	else {
-	    binding = (ValueBinding) state;
-	}
+        // if we have state
+        if (null == state) {
+            return;
+        }
+
+        if (!(state instanceof ValueBinding)) {
+            Object[] stateStruct = (Object[]) state;
+            Object savedState = stateStruct[0];
+            String className = stateStruct[1].toString();
+            ValueBinding result = null;
+
+            Class toRestoreClass = null;
+            if (null != className) {
+                try {
+                    toRestoreClass = loadClass(className, this);
+                } catch (ClassNotFoundException e) {
+                    throw new IllegalStateException(e.getMessage());
+                }
+
+                if (null != toRestoreClass) {
+                    try {
+                        result = (ValueBinding) toRestoreClass.newInstance();
+                    } catch (InstantiationException e) {
+                        throw new IllegalStateException(e.getMessage());
+                    } catch (IllegalAccessException a) {
+                        throw new IllegalStateException(a.getMessage());
+                    }
+                }
+
+                if (null != result && null != savedState) {
+                    // don't need to check transient, since that was
+                    // done on the saving side.
+                    ((StateHolder) result).restoreState(context, savedState);
+                }
+                binding = result;
+            }
+        } else {
+            binding = (ValueBinding) state;
+        }
     }
 
     private boolean tranzient = false;
 
     public boolean isTransient() {
-	return tranzient;
+        return tranzient;
     }
 
     public void setTransient(boolean newTransientValue) {
-	tranzient = newTransientValue;
+        tranzient = newTransientValue;
     }
 
     //
     // Helper methods for StateHolder
     //
 
-    private static Class loadClass(String name, 
-            Object fallbackClass) throws ClassNotFoundException {
-        ClassLoader loader =
-            Thread.currentThread().getContextClassLoader();
+    private static Class loadClass(String name, Object fallbackClass) throws ClassNotFoundException {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
         return Class.forName(name, true, loader);
     }
- 
 
-    // 
+    //
     // methods used by classes aware of this class's wrapper nature
     //
 
     public ValueBinding getWrapped() {
-	return binding;
+        return binding;
     }
 
 }
