@@ -40,6 +40,10 @@
 
 package com.sun.faces.application;
 
+import static com.sun.faces.util.Util.isAnyNull;
+import static com.sun.faces.util.Util.loadClass2;
+import static com.sun.faces.util.Util.newInstance;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -234,7 +238,7 @@ public class MethodExpressionMethodBindingAdapter extends MethodExpression imple
         if (context == null) {
             throw new NullPointerException();
         }
-        // if we have state
+
         if (null == state) {
             return;
         }
@@ -245,25 +249,14 @@ public class MethodExpressionMethodBindingAdapter extends MethodExpression imple
             String className = stateStruct[1].toString();
             MethodBinding result = null;
 
-            Class toRestoreClass = null;
-            if (null != className) {
-                try {
-                    toRestoreClass = loadClass(className, this);
-                } catch (ClassNotFoundException e) {
-                    throw new IllegalStateException(e.getMessage());
+            if (className != null) {
+                Class<?> toRestoreClass = loadClass2(className, this);
+
+                if (toRestoreClass != null) {
+                    result = newInstance(toRestoreClass);
                 }
 
-                if (null != toRestoreClass) {
-                    try {
-                        result = (MethodBinding) toRestoreClass.newInstance();
-                    } catch (InstantiationException e) {
-                        throw new IllegalStateException(e.getMessage());
-                    } catch (IllegalAccessException a) {
-                        throw new IllegalStateException(a.getMessage());
-                    }
-                }
-
-                if (null != result && null != savedState) {
+                if (!isAnyNull(result, savedState)) {
                     // don't need to check transient, since that was
                     // done on the saving side.
                     ((StateHolder) result).restoreState(context, savedState);
@@ -283,18 +276,6 @@ public class MethodExpressionMethodBindingAdapter extends MethodExpression imple
 
     public void setTransient(boolean newTransientMethod) {
         tranzient = newTransientMethod;
-    }
-
-    //
-    // Helper methods for StateHolder
-    //
-
-    private static Class loadClass(String name, Object fallbackClass) throws ClassNotFoundException {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        if (loader == null) {
-            loader = fallbackClass.getClass().getClassLoader();
-        }
-        return Class.forName(name, true, loader);
     }
 
     //

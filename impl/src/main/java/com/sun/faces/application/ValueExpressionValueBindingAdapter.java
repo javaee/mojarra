@@ -40,6 +40,10 @@
 
 package com.sun.faces.application;
 
+import static com.sun.faces.util.Util.isAnyNull;
+import static com.sun.faces.util.Util.loadClass2;
+import static com.sun.faces.util.Util.newInstance;
+
 import java.io.Serializable;
 
 import javax.el.ELContext;
@@ -228,8 +232,8 @@ public class ValueExpressionValueBindingAdapter extends ValueExpression implemen
         if (context == null) {
             throw new NullPointerException();
         }
-        // if we have state
-        if (null == state) {
+
+        if (state == null) {
             return;
         }
 
@@ -239,25 +243,14 @@ public class ValueExpressionValueBindingAdapter extends ValueExpression implemen
             String className = stateStruct[1].toString();
             ValueBinding result = null;
 
-            Class toRestoreClass = null;
-            if (null != className) {
-                try {
-                    toRestoreClass = loadClass(className, this);
-                } catch (ClassNotFoundException e) {
-                    throw new IllegalStateException(e.getMessage());
+            if (className != null) {
+                Class<?> toRestoreClass = loadClass2(className, this);
+
+                if (toRestoreClass != null) {
+                    result = newInstance(toRestoreClass);
                 }
 
-                if (null != toRestoreClass) {
-                    try {
-                        result = (ValueBinding) toRestoreClass.newInstance();
-                    } catch (InstantiationException e) {
-                        throw new IllegalStateException(e.getMessage());
-                    } catch (IllegalAccessException a) {
-                        throw new IllegalStateException(a.getMessage());
-                    }
-                }
-
-                if (null != result && null != savedState) {
+                if (!isAnyNull(result, savedState)) {
                     // don't need to check transient, since that was
                     // done on the saving side.
                     ((StateHolder) result).restoreState(context, savedState);
@@ -279,17 +272,6 @@ public class ValueExpressionValueBindingAdapter extends ValueExpression implemen
         tranzient = newTransientValue;
     }
 
-    //
-    // Helper methods for StateHolder
-    //
-
-    private static Class loadClass(String name, Object fallbackClass) throws ClassNotFoundException {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        if (loader == null) {
-            loader = fallbackClass.getClass().getClassLoader();
-        }
-        return Class.forName(name, true, loader);
-    }
 
     //
     // methods used by classes aware of this class's wrapper nature

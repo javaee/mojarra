@@ -88,6 +88,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.render.ResponseStateManager;
 import javax.faces.webapp.FacesServlet;
@@ -301,7 +302,6 @@ public class Util {
         return factory;
     }
 
-
     public static Class loadClass(String name, Object fallbackClass) throws ClassNotFoundException {
         ClassLoader loader = Util.getCurrentLoader(fallbackClass);
 
@@ -315,6 +315,28 @@ public class Util {
         }
 
         return Class.forName(name, true, loader);
+    }
+    
+    public static Class<?> loadClass2(String name, Object fallbackClass) {
+        try {
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            if (loader == null) {
+                loader = fallbackClass.getClass().getClassLoader();
+            }
+        
+            return Class.forName(name, true, loader);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static <T> T newInstance(Class<?> clazz) {
+        try {
+            return (T) clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
     }
 
 

@@ -41,6 +41,8 @@
 package com.sun.faces.application;
 
 import static com.sun.faces.util.Util.isAnyNull;
+import static com.sun.faces.util.Util.loadClass2;
+import static com.sun.faces.util.Util.newInstance;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -227,14 +229,10 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
             
             if (className != null) {
                 
-                Class<?> toRestoreClass = loadClass(className, this);
+                Class<?> toRestoreClass = loadClass2(className, this);
 
                 if (toRestoreClass != null) {
-                    try {
-                        result = (MethodExpression) toRestoreClass.newInstance();
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        throw new IllegalStateException(e.getMessage(), e);
-                    }
+                    result = newInstance(toRestoreClass);
                 }
 
                 if (!isAnyNull(result, savedState)) {
@@ -253,21 +251,5 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
         return methodExpression;
     }
 
-    //
-    // Helper methods for StateHolder
-    //
-
-    private static Class<?> loadClass(String name, Object fallbackClass) {
-        try {
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            if (loader == null) {
-                loader = fallbackClass.getClass().getClassLoader();
-            }
-        
-            return Class.forName(name, true, loader);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
-    }
 
 }
