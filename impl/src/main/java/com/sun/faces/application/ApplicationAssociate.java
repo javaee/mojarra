@@ -71,6 +71,7 @@ import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.SEVERE;
 import static javax.faces.FactoryFinder.FACELET_CACHE_FACTORY;
 import static javax.faces.FactoryFinder.FLOW_HANDLER_FACTORY;
+import static javax.faces.application.ProjectStage.Development;
 import static javax.faces.application.ProjectStage.Production;
 
 import java.io.IOException;
@@ -93,7 +94,6 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationCase;
-import javax.faces.application.ProjectStage;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.search.SearchExpressionHandler;
@@ -268,7 +268,7 @@ public class ApplicationAssociate {
         app.subscribeToEvent(PreDestroyCustomScopeEvent.class, ScopeContext.class, beanManager);
         annotationManager = new AnnotationManager();
 
-        devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
+        devModeEnabled = appImpl.getProjectStage() == Development;
 
         if (!devModeEnabled) {
             resourceCache = new ResourceCache();
