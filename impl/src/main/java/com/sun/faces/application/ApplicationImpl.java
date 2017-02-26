@@ -186,6 +186,13 @@ import com.sun.faces.util.Util;
  */
 public class ApplicationImpl extends Application {
 
+    private static final String SOURCE = "source";
+    private static final String SYSTEM_EVENT_CLASS = "systemEventClass";
+    private static final String CONTEXT = "context";
+    private static final String COMPONENT_EXPRESSION = "componentExpression";
+    private static final String COMPONENT_TYPE = "componentType";
+    private static final String COMPONENT_CLASS = "componentClass";
+
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
@@ -321,9 +328,9 @@ public class ApplicationImpl extends Application {
     @Override
     public void publishEvent(FacesContext context, Class<? extends SystemEvent> systemEventClass, Class<?> sourceBaseType, Object source) {
 
-        notNull("context", context);
-        notNull("systemEventClass", systemEventClass);
-        notNull("source", source);
+        notNull(CONTEXT, context);
+        notNull(SYSTEM_EVENT_CLASS, systemEventClass);
+        notNull(SOURCE, source);
         
         if (!needsProcessing(context, systemEventClass)) {
             return;
@@ -369,7 +376,7 @@ public class ApplicationImpl extends Application {
     @Override
     public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass, Class<?> sourceClass, SystemEventListener listener) {
 
-        notNull("systemEventClass", systemEventClass);
+        notNull(SYSTEM_EVENT_CLASS, systemEventClass);
         notNull("listener", listener);
 
         getListeners(systemEventClass, sourceClass).add(listener);
@@ -392,7 +399,7 @@ public class ApplicationImpl extends Application {
     @Override
     public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass, Class<?> sourceClass, SystemEventListener listener) {
 
-        notNull("systemEventClass", systemEventClass);
+        notNull(SYSTEM_EVENT_CLASS, systemEventClass);
         notNull("listener", listener);
 
         Set<SystemEventListener> listeners = getListeners(systemEventClass, sourceClass);
@@ -481,9 +488,9 @@ public class ApplicationImpl extends Application {
     @Override
     public UIComponent createComponent(ValueExpression componentExpression, FacesContext context, String componentType) throws FacesException {
 
-        notNull("componentExpression", componentExpression);
-        notNull("context", context);
-        notNull("componentType", componentType);
+        notNull(COMPONENT_EXPRESSION, componentExpression);
+        notNull(CONTEXT, context);
+        notNull(COMPONENT_TYPE, componentType);
 
         return createComponentApplyAnnotations(context, componentExpression, componentType, null, true);
     }
@@ -515,9 +522,9 @@ public class ApplicationImpl extends Application {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if ("2.3".equals(getFacesConfigXmlVersion(facesContext)) || "4.0".equals(getWebXmlVersion(facesContext))) {
 
-            javax.enterprise.inject.spi.BeanManager beanManager = getCdiBeanManager(facesContext);
+            javax.enterprise.inject.spi.BeanManager cdiBeanManager = getCdiBeanManager(facesContext);
             
-            if (beanManager != null && !resolver.equals(beanManager.getELResolver())) {
+            if (cdiBeanManager != null && !resolver.equals(cdiBeanManager.getELResolver())) {
                 elResolvers.add(resolver);
             }
         } else {
@@ -532,38 +539,13 @@ public class ApplicationImpl extends Application {
     public ProjectStage getProjectStage() {
 
         if (projectStage == null) {
-            WebConfiguration webConfig = WebConfiguration.getInstance(FacesContext.getCurrentInstance().getExternalContext());
-            String value = webConfig.getEnvironmentEntry(WebConfiguration.WebEnvironmentEntry.ProjectStage);
+            String value = fetchProjectStageFromConfig();
             
-            if (value != null) {
-                if (LOGGER.isLoggable(FINE)) {
-                    LOGGER.log(FINE, "ProjectStage configured via JNDI: {0}", value);
-                }
-            } else {
-                value = webConfig.getOptionValue(JavaxFacesProjectStage);
-                if (value != null && LOGGER.isLoggable(FINE)) {
-                    LOGGER.log(FINE, "ProjectStage configured via servlet context init parameter: {0}", value);
-                }
-            }
-            
-            if (value != null) {
-                try {
-                    projectStage = ProjectStage.valueOf(value);
-                } catch (IllegalArgumentException iae) {
-                    if (LOGGER.isLoggable(INFO)) {
-                        LOGGER.log(INFO, "Unable to discern ProjectStage for value {0}.", value);
-                    }
-                }
-            }
-            
-            if (projectStage == null) {
-                projectStage = Production;
-            }
+            setProjectStageFromValue(value, Production);
             
             if (projectStage == Development) {
                 subscribeToEvent(PostAddToViewEvent.class, new ValidateComponentNesting());
             }
-
         }
         
         return projectStage;
@@ -721,7 +703,7 @@ public class ApplicationImpl extends Application {
     @Override
     public ResourceBundle getResourceBundle(FacesContext context, String var) {
 
-        notNull("context", context);
+        notNull(CONTEXT, context);
         notNull("var", var);
         
         return associate.getResourceBundle(context, var);
@@ -922,8 +904,8 @@ public class ApplicationImpl extends Application {
     @Override
     public void addComponent(String componentType, String componentClass) {
 
-        notNull("componentType", componentType);
-        notNull("componentType", componentClass);
+        notNull(COMPONENT_TYPE, componentType);
+        notNull(COMPONENT_CLASS, componentClass);
 
         if (LOGGER.isLoggable(FINE) && componentMap.containsKey(componentType)) {
             LOGGER.log(FINE,
@@ -944,7 +926,7 @@ public class ApplicationImpl extends Application {
     @Override
     public UIComponent createComponent(String componentType) throws FacesException {
 
-        notNull("componentType", componentType);
+        notNull(COMPONENT_TYPE, componentType);
 
         return createComponentApplyAnnotations(FacesContext.getCurrentInstance(), componentType, null, true);
     }
@@ -955,7 +937,7 @@ public class ApplicationImpl extends Application {
 
         // RELEASE_PENDING (rlubke,driscoll) this method needs review.
 
-        notNull("context", context);
+        notNull(CONTEXT, context);
         notNull("componentResource", componentResource);
 
         UIComponent result = null;
@@ -1111,8 +1093,8 @@ public class ApplicationImpl extends Application {
     public UIComponent createComponent(ValueBinding componentBinding, FacesContext context, String componentType) throws FacesException {
 
         notNull("componentBinding", componentBinding);
-        notNull("context", context);
-        notNull("componentType", componentType);
+        notNull(CONTEXT, context);
+        notNull(COMPONENT_TYPE, componentType);
 
         Object result;
         boolean createOne = false;
@@ -1136,9 +1118,9 @@ public class ApplicationImpl extends Application {
     @Override
     public UIComponent createComponent(ValueExpression componentExpression, FacesContext context, String componentType, String rendererType) {
 
-        notNull("componentExpression", componentExpression);
-        notNull("context", context);
-        notNull("componentType", componentType);
+        notNull(COMPONENT_EXPRESSION, componentExpression);
+        notNull(CONTEXT, context);
+        notNull(COMPONENT_TYPE, componentType);
 
         return createComponentApplyAnnotations(context, componentExpression, componentType, rendererType, true);
     }
@@ -1146,8 +1128,8 @@ public class ApplicationImpl extends Application {
     @Override
     public UIComponent createComponent(FacesContext context, String componentType, String rendererType) {
 
-        notNull("context", context);
-        notNull("componentType", componentType);
+        notNull(CONTEXT, context);
+        notNull(COMPONENT_TYPE, componentType);
 
         return createComponentApplyAnnotations(context, componentType, rendererType, true);
     }
@@ -2291,6 +2273,40 @@ public class ApplicationImpl extends Application {
 	private boolean needsProcessing(FacesContext context, Class<? extends SystemEvent> systemEventClass) {
 		return context.isProcessingEvents() || ExceptionQueuedEvent.class.isAssignableFrom(systemEventClass);
 	}
+	
+    private String fetchProjectStageFromConfig() {
+        WebConfiguration webConfig = WebConfiguration.getInstance(FacesContext.getCurrentInstance().getExternalContext());
+        String value = webConfig.getEnvironmentEntry(WebConfiguration.WebEnvironmentEntry.ProjectStage);
+        
+        if (value != null) {
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, "ProjectStage configured via JNDI: {0}", value);
+            }
+        } else {
+            value = webConfig.getOptionValue(JavaxFacesProjectStage);
+            if (value != null && LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, "ProjectStage configured via servlet context init parameter: {0}", value);
+            }
+        }
+        
+        return value;
+    }
+    
+    private void setProjectStageFromValue(String value, ProjectStage defaultStage) {
+        if (value != null) {
+            try {
+                projectStage = ProjectStage.valueOf(value);
+            } catch (IllegalArgumentException iae) {
+                if (LOGGER.isLoggable(INFO)) {
+                    LOGGER.log(INFO, "Unable to discern ProjectStage for value {0}.", value);
+                }
+            }
+        }
+        
+        if (projectStage == null) {
+            projectStage = defaultStage;
+        }
+    }
 
 
     // ----------------------------------------------------------- Inner Classes
