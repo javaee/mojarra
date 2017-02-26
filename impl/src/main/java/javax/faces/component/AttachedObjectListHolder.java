@@ -48,19 +48,17 @@ import java.util.Iterator;
 
 /**
  * <p>
- * Utility class to enable partial state saving of Lists of attached objects
- * such as <code>FacesListener</code>s or <code>Validator</code>s.
+ * Utility class to enable partial state saving of Lists of attached objects such as
+ * <code>FacesListener</code>s or <code>Validator</code>s.
  * </p>
  */
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({ "unchecked" })
 class AttachedObjectListHolder<T> implements PartialStateHolder {
 
     private boolean initialState;
     private List<T> attachedObjects = new ArrayList<>(2);
 
-
     // ------------------------------------- Methods from PartialStateHolder
-
 
     @Override
     public void markInitialState() {
@@ -76,14 +74,12 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
 
     }
 
-
     @Override
     public boolean initialStateMarked() {
 
         return initialState;
 
     }
-
 
     @Override
     public void clearInitialState() {
@@ -99,9 +95,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
 
     }
 
-
     // -------------------------------------------- Methods from StateHolder
-
 
     @Override
     public Object saveState(FacesContext context) {
@@ -138,7 +132,6 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
         }
 
     }
-
 
     @Override
     public void restoreState(FacesContext context, Object state) {
@@ -177,14 +170,12 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
 
     }
 
-
     @Override
     public boolean isTransient() {
 
         return false;
 
     }
-
 
     @Override
     public void setTransient(boolean newTransientValue) {
@@ -193,9 +184,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
 
     }
 
-
     // ------------------------------------------------------ Public Methods
-
 
     void add(T attachedObject) {
 
@@ -213,12 +202,12 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
 
     T[] asArray(Class<T> type) {
 
-        return new ArrayList<>(attachedObjects).toArray((T[])Array.newInstance(type, attachedObjects.size()));
-        
+        return new ArrayList<>(attachedObjects).toArray((T[]) Array.newInstance(type, attachedObjects.size()));
+
     }
-    
+
     Iterator<T> iterator() {
         return attachedObjects.iterator();
     }
-    
+
 }

@@ -44,31 +44,29 @@ import javax.faces.context.FacesContext;
 
 /**
  *
- * <p>A simple callback interace that enables taking action on a
- * specific UIComponent (either facet or child) in the view while
- * preserving any contextual state for that component instance in the
- * view.</p>
+ * <p>
+ * A simple callback interace that enables taking action on a specific UIComponent (either facet or
+ * child) in the view while preserving any contextual state for that component instance in the view.
+ * </p>
  *
  */
 public interface ContextCallback {
-    
+
     /**
-     * <p>This method will be called by an implementation of {@link
-     * UIComponent#invokeOnComponent} and must be passed the component
-     * with the <code>clientId</code> given as an argument to
-     * <code>invokeOnComponent</code>.  At the point in time when this
-     * method is called, the argument <code>target</code> is guaranteed
-     * to be in the proper state with respect to its ancestors in the
-     * View.</p>
+     * <p>
+     * This method will be called by an implementation of {@link UIComponent#invokeOnComponent} and
+     * must be passed the component with the <code>clientId</code> given as an argument to
+     * <code>invokeOnComponent</code>. At the point in time when this method is called, the argument
+     * <code>target</code> is guaranteed to be in the proper state with respect to its ancestors in
+     * the View.
+     * </p>
      *
      * @param context the <code>FacesContext</code> for this request.
      *
-     * @param target the {@link UIComponent} that was located by
-     * <code>clientId</code> by a call to {@link
-     * UIComponent#invokeOnComponent}.
+     * @param target the {@link UIComponent} that was located by <code>clientId</code> by a call to
+     *            {@link UIComponent#invokeOnComponent}.
      */
-    
-    public void invokeContextCallback(FacesContext context, 
-				      UIComponent target);
-    
+
+    public void invokeContextCallback(FacesContext context, UIComponent target);
+
 }
