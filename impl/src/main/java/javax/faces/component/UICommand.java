@@ -47,6 +47,9 @@ import javax.faces.el.MethodBinding;
 import javax.faces.event.*;
 import javax.faces.render.Renderer;
 
+import com.sun.faces.application.MethodBindingMethodExpressionAdapter;
+import com.sun.faces.application.MethodExpressionMethodBindingAdapter;
+
 
 /**
  * <p><strong>UICommand</strong> is a {@link UIComponent} that represents

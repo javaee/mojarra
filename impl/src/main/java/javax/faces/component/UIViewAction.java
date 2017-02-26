@@ -73,6 +73,8 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PreRenderViewEvent;
 import javax.faces.view.ViewMetadata;
 
+import com.sun.faces.application.MethodBindingMethodExpressionAdapter;
+
 /**
 
  * <p class="changed_added_2_2"><strong

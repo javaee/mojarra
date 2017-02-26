@@ -39,9 +39,10 @@
  */
 package javax.faces.component;
 
-import com.sun.faces.mock.MockExternalContext;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
@@ -52,13 +53,11 @@ import javax.faces.event.PhaseId;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
+
+import com.sun.faces.mock.MockExternalContext;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * <p>
@@ -138,37 +137,46 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         UICommand command = (UICommand) component;
         Application app = facesContext.getApplication();
         MethodBinding methodBinding = null;
-
         assertEquals(command.getValue(), (String) component.getAttributes().get("value"));
+        
         command.setValue("foo");
         assertEquals("foo", (String) component.getAttributes().get("value"));
+        
         command.setValue(null);
         assertNull((String) component.getAttributes().get("value"));
+        
         component.getAttributes().put("value", "bar");
         assertEquals("bar", command.getValue());
+        
         component.getAttributes().put("value", null);
         assertNull(command.getValue());
-
-        assertEquals(command.getAction(), (MethodBinding) command.getAttributes().get("action"));
+        assertEquals("command.getAction(), (MethodBinding) command.getAttributes().get(\"action\")", command.getAction(), (MethodBinding) command.getAttributes().get("action"));
+        
         command.setAction(methodBinding = app.createMethodBinding("#{foo.bar}", null));
-        assertEquals(methodBinding, (MethodBinding) command.getAttributes().get("action"));
+        assertEquals("methodBinding, (MethodBinding) command.getAttributes().get(\"action\")", methodBinding, (MethodBinding) command.getAttributes().get("action"));
+        
         command.setAction(null);
-        assertNull((MethodBinding) command.getAttributes().get("action"));
+        assertNull("(MethodBinding) command.getAttributes().get(\"action\")", (MethodBinding) command.getAttributes().get("action"));
+        
         methodBinding = app.createMethodBinding("#{bar.baz}", null);
         command.getAttributes().put("action", methodBinding);
-        assertEquals(methodBinding, command.getAction());
+        assertEquals("methodBinding, command.getAction()", methodBinding, command.getAction());
+        
         command.getAttributes().put("action", null);
         assertNull(command.getAction());
-
-        assertEquals(command.getActionListener(), (MethodBinding) command.getAttributes().get("actionListener"));
+        assertEquals("command.getActionListener(), (MethodBinding) command.getAttributes().get(\"actionListener\")", command.getActionListener(), (MethodBinding) command.getAttributes().get("actionListener"));
+        
         methodBinding = app.createMethodBinding("#{foo.yoyo}", actionListenerSignature);
         command.setActionListener(methodBinding);
-        assertEquals(methodBinding, (MethodBinding) command.getAttributes().get("actionListener"));
+        assertEquals("methodBinding, (MethodBinding) command.getAttributes().get(\"actionListener\")", methodBinding, (MethodBinding) command.getAttributes().get("actionListener"));
+        
         command.setActionListener(null);
         assertNull((MethodBinding) command.getAttributes().get("actionListener"));
+        
         methodBinding = app.createMethodBinding("#{foo.buckaroo}", actionListenerSignature);
         command.getAttributes().put("actionListener", methodBinding);
-        assertEquals(methodBinding, command.getActionListener());
+        assertEquals("methodBinding, command.getActionListener()", methodBinding, command.getActionListener());
+        
         command.getAttributes().put("actionListener", null);
         assertNull(command.getActionListener());
 

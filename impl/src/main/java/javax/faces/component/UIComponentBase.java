@@ -104,6 +104,9 @@ import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.render.Renderer;
 
+import com.sun.faces.application.ValueBindingValueExpressionAdapter;
+import com.sun.faces.application.ValueExpressionValueBindingAdapter;
+
 /**
  * <p>
  * <strong class="changed_modified_2_0 changed_modified_2_0_rev_a
