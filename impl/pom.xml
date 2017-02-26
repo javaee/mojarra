@@ -777,7 +777,7 @@
                 <version>3.0.4</version>
                 <configuration>
                     <threshold>High</threshold>
-                    <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+                    <excludeFilterFile>${project.build.directory}/../src/main/findbugs/exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
             
@@ -933,7 +933,7 @@
                 <version>3.0.4</version>
                 <configuration>
                     <threshold>High</threshold>
-                    <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+                    <excludeFilterFile>${project.build.directory}/../src/main/findbugs/exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
             <plugin>
