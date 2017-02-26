@@ -62,7 +62,8 @@ import static junit.framework.Assert.assertTrue;
 
 /**
  * <p>
- * Unit tests for {@link UICommand}.</p>
+ * Unit tests for {@link UICommand}.
+ * </p>
  */
 public class UICommandTestCase extends UIComponentBaseTestCase {
 
@@ -76,7 +77,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         super(name);
     }
 
-    private static Class actionListenerSignature[] = {ActionEvent.class};
+    private static Class actionListenerSignature[] = { ActionEvent.class };
 
     // ---------------------------------------------------- Overall Test Methods
     // Set up instance variables required by this test case.
@@ -99,19 +100,13 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
     public void PENDING_FIXME_testActionOrder() throws Exception {
 
         RenderKitFactory renderKitFactory = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit renderKit
-                = renderKitFactory.getRenderKit(facesContext,
-                        RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        renderKit.addRenderer(UICommand.COMPONENT_FAMILY,
-                "javax.faces.Button", new ButtonRenderer());
+        RenderKit renderKit = renderKitFactory.getRenderKit(facesContext, RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        renderKit.addRenderer(UICommand.COMPONENT_FAMILY, "javax.faces.Button", new ButtonRenderer());
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UICommand command = (UICommand) component;
-        MethodBinding binding = facesContext.getApplication().
-                createMethodBinding("#{l3.processAction}",
-                        actionListenerSignature);
-        MethodBinding actionBinding = facesContext.getApplication().
-                createMethodBinding("#{l4.test}", null);
+        MethodBinding binding = facesContext.getApplication().createMethodBinding("#{l3.processAction}", actionListenerSignature);
+        MethodBinding actionBinding = facesContext.getApplication().createMethodBinding("#{l4.test}", null);
         command.setId("command");
         command.addActionListener(new CommandActionListenerTestImpl("l1"));
         command.addActionListener(new CommandActionListenerTestImpl("l2"));
@@ -121,22 +116,18 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         request.setAttribute("l3", new CommandActionListenerTestImpl("l3"));
 
         // Override the default action listener to test ordering
-        ActionListener oldDefaultActionListener
-                = facesContext.getApplication().getActionListener();
-        facesContext.getApplication().setActionListener(
-                new CommandActionListenerTestImpl("14"));
+        ActionListener oldDefaultActionListener = facesContext.getApplication().getActionListener();
+        facesContext.getApplication().setActionListener(new CommandActionListenerTestImpl("14"));
         Map map = new HashMap();
         map.put(command.getClientId(facesContext), "");
-        MockExternalContext econtext
-                = (MockExternalContext) facesContext.getExternalContext();
+        MockExternalContext econtext = (MockExternalContext) facesContext.getExternalContext();
         econtext.setRequestParameterMap(map);
         CommandActionListenerTestImpl.trace(null);
         root.processDecodes(facesContext);
         assertEquals("/l1/l2/l3/14", CommandActionListenerTestImpl.trace());
 
         // Restore the default action listener
-        facesContext.getApplication().setActionListener(
-                oldDefaultActionListener);
+        facesContext.getApplication().setActionListener(oldDefaultActionListener);
     }
 
     // Test attribute-property transparency
@@ -148,8 +139,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         Application app = facesContext.getApplication();
         MethodBinding methodBinding = null;
 
-        assertEquals(command.getValue(),
-                (String) component.getAttributes().get("value"));
+        assertEquals(command.getValue(), (String) component.getAttributes().get("value"));
         command.setValue("foo");
         assertEquals("foo", (String) component.getAttributes().get("value"));
         command.setValue(null);
@@ -159,12 +149,9 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         component.getAttributes().put("value", null);
         assertNull(command.getValue());
 
-        assertEquals(command.getAction(),
-                (MethodBinding) command.getAttributes().get("action"));
-        command.setAction(methodBinding
-                = app.createMethodBinding("#{foo.bar}", null));
-        assertEquals(methodBinding,
-                (MethodBinding) command.getAttributes().get("action"));
+        assertEquals(command.getAction(), (MethodBinding) command.getAttributes().get("action"));
+        command.setAction(methodBinding = app.createMethodBinding("#{foo.bar}", null));
+        assertEquals(methodBinding, (MethodBinding) command.getAttributes().get("action"));
         command.setAction(null);
         assertNull((MethodBinding) command.getAttributes().get("action"));
         methodBinding = app.createMethodBinding("#{bar.baz}", null);
@@ -173,17 +160,13 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         command.getAttributes().put("action", null);
         assertNull(command.getAction());
 
-        assertEquals(command.getActionListener(),
-                (MethodBinding) command.getAttributes().get("actionListener"));
-        methodBinding = app.createMethodBinding("#{foo.yoyo}",
-                actionListenerSignature);
+        assertEquals(command.getActionListener(), (MethodBinding) command.getAttributes().get("actionListener"));
+        methodBinding = app.createMethodBinding("#{foo.yoyo}", actionListenerSignature);
         command.setActionListener(methodBinding);
-        assertEquals(methodBinding,
-                (MethodBinding) command.getAttributes().get("actionListener"));
+        assertEquals(methodBinding, (MethodBinding) command.getAttributes().get("actionListener"));
         command.setActionListener(null);
         assertNull((MethodBinding) command.getAttributes().get("actionListener"));
-        methodBinding = app.createMethodBinding("#{foo.buckaroo}",
-                actionListenerSignature);
+        methodBinding = app.createMethodBinding("#{foo.buckaroo}", actionListenerSignature);
         command.getAttributes().put("actionListener", methodBinding);
         assertEquals(methodBinding, command.getActionListener());
         command.getAttributes().put("actionListener", null);
@@ -211,8 +194,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         root.processDecodes(facesContext);
         root.processValidators(facesContext);
         root.processApplication(facesContext);
-        assertEquals("/AP0@INVOKE_APPLICATION 5/AP1@INVOKE_APPLICATION 5/AP2@INVOKE_APPLICATION 5",
-                ActionListenerTestImpl.trace());
+        assertEquals("/AP0@INVOKE_APPLICATION 5/AP1@INVOKE_APPLICATION 5/AP2@INVOKE_APPLICATION 5", ActionListenerTestImpl.trace());
 
     }
 
@@ -236,8 +218,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         root.processDecodes(facesContext);
         root.processValidators(facesContext);
         root.processApplication(facesContext);
-        assertEquals("/ARV@INVOKE_APPLICATION 5/PV@INVOKE_APPLICATION 5/AP@INVOKE_APPLICATION 5",
-                ActionListenerTestImpl.trace());
+        assertEquals("/ARV@INVOKE_APPLICATION 5/PV@INVOKE_APPLICATION 5/AP@INVOKE_APPLICATION 5", ActionListenerTestImpl.trace());
 
     }
 
@@ -263,8 +244,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         root.processDecodes(facesContext);
         root.processValidators(facesContext);
         root.processApplication(facesContext);
-        assertEquals("/ARV@APPLY_REQUEST_VALUES 2/PV@APPLY_REQUEST_VALUES 2/AP@APPLY_REQUEST_VALUES 2",
-                ActionListenerTestImpl.trace());
+        assertEquals("/ARV@APPLY_REQUEST_VALUES 2/PV@APPLY_REQUEST_VALUES 2/AP@APPLY_REQUEST_VALUES 2", ActionListenerTestImpl.trace());
 
     }
 
@@ -294,7 +274,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         CommandTestImpl command = new CommandTestImpl();
         ActionListenerTestImpl listener = null;
 
-        //No listeners added, should be empty
+        // No listeners added, should be empty
         ActionListener listeners[] = command.getActionListeners();
         assertEquals(0, listeners.length);
 
@@ -334,21 +314,18 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 
         // value
         command.setValue("foo.bar");
-        assertEquals("expected value",
-                "foo.bar", command.getValue());
+        assertEquals("expected value", "foo.bar", command.getValue());
         command.setValue(null);
         assertNull("erased value", command.getValue());
 
         MethodBinding methodBinding = null;
 
-        command.setAction(methodBinding
-                = app.createMethodBinding("#{foo.bar}", null));
+        command.setAction(methodBinding = app.createMethodBinding("#{foo.bar}", null));
         assertEquals(methodBinding, command.getAction());
         command.setAction(null);
         assertNull(command.getAction());
 
-        methodBinding = app.createMethodBinding("#{foo.yoyo}",
-                actionListenerSignature);
+        methodBinding = app.createMethodBinding("#{foo.yoyo}", actionListenerSignature);
         command.setActionListener(methodBinding);
         assertEquals(methodBinding, command.getActionListener());
         command.setActionListener(null);
@@ -420,8 +397,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(command);
 
-        ActionListenerTestImpl ta1 = new ActionListenerTestImpl("ta1"),
-                ta2 = new ActionListenerTestImpl("ta2");
+        ActionListenerTestImpl ta1 = new ActionListenerTestImpl("ta1"), ta2 = new ActionListenerTestImpl("ta2");
 
         command.addActionListener(ta1);
         command.addActionListener(ta2);
@@ -457,21 +433,15 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         Application app = facesContext.getApplication();
         MethodBinding methodBinding = null;
 
-        c.setAction(methodBinding = app.createMethodBinding("#{foo.bar}",
-                null));
-        c.setActionListener(methodBinding
-                = app.createMethodBinding("#{baz.bop}",
-                        actionListenerSignature));
+        c.setAction(methodBinding = app.createMethodBinding("#{foo.bar}", null));
+        c.setActionListener(methodBinding = app.createMethodBinding("#{baz.bop}", actionListenerSignature));
     }
 
-    protected boolean listenersAreEqual(FacesContext context,
-            UICommand comp1,
-            UICommand comp2) {
+    protected boolean listenersAreEqual(FacesContext context, UICommand comp1, UICommand comp2) {
         ActionListener[] list1 = comp1.getActionListeners();
         ActionListener[] list2 = comp2.getActionListeners();
         // make sure they're either both null or both non-null
-        if ((null == list1 && null != list2)
-                || (null != list1 && null == list2)) {
+        if ((null == list1 && null != list2) || (null != list1 && null == list2)) {
             return false;
         }
         if (null == list1) {
@@ -513,24 +483,21 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         }
 
         @Override
-        public void encodeBegin(FacesContext context, UIComponent component)
-                throws IOException {
+        public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
             }
         }
 
         @Override
-        public void encodeChildren(FacesContext context, UIComponent component)
-                throws IOException {
+        public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
             }
         }
 
         @Override
-        public void encodeEnd(FacesContext context, UIComponent component)
-                throws IOException {
+        public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
             }
