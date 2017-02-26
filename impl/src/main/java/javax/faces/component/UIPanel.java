@@ -40,54 +40,48 @@
 
 package javax.faces.component;
 
-
 /**
- * <p><strong>UIPanel</strong> is a {@link UIComponent} that manages the
- * layout of its child components.</p>
+ * <p>
+ * <strong>UIPanel</strong> is a {@link UIComponent} that manages the layout of its child
+ * components.
+ * </p>
  */
-
 public class UIPanel extends UIComponentBase {
-
 
     // ------------------------------------------------------ Manifest Constants
 
-
     /**
-     * <p>The standard component type for this component.</p>
+     * <p>
+     * The standard component type for this component.
+     * </p>
      */
     public static final String COMPONENT_TYPE = "javax.faces.Panel";
 
-
     /**
-     * <p>The standard component family for this component.</p>
+     * <p>
+     * The standard component family for this component.
+     * </p>
      */
     public static final String COMPONENT_FAMILY = "javax.faces.Panel";
 
-
     // ------------------------------------------------------------ Constructors
 
-
     /**
-     * <p>Create a new {@link UIPanel} instance with default property
-     * values.</p>
+     * <p>
+     * Create a new {@link UIPanel} instance with default property values.
+     * </p>
      */
     public UIPanel() {
-
         super();
         setRendererType(null);
-
     }
-
+    
 
     // -------------------------------------------------- UIComponent Properties
 
-
     @Override
     public String getFamily() {
-
-        return (COMPONENT_FAMILY);
-
+        return COMPONENT_FAMILY;
     }
-
 
 }
