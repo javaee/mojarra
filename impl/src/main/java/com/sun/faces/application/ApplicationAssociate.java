@@ -55,6 +55,7 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Face
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsResourceResolver;
 import static com.sun.faces.el.ELUtils.buildFacesResolver;
 import static com.sun.faces.el.FacesCompositeELResolver.ELResolverChainType.Faces;
+import static com.sun.faces.facelets.impl.DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME;
 import static com.sun.faces.facelets.util.ReflectionUtil.decorateInstance;
 import static com.sun.faces.facelets.util.ReflectionUtil.forName;
 import static com.sun.faces.lifecycle.ELResolverInitPhaseListener.populateFacesELResolverForJsp;
@@ -102,7 +103,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
-import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.PreDestroyCustomScopeEvent;
 import javax.faces.event.ScopeContext;
@@ -164,7 +164,7 @@ public class ApplicationAssociate {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
-    private ApplicationImpl app = null;
+    private ApplicationImpl app;
 
     /**
      * Overall Map containing <code>from-view-id</code> key and <code>Set</code> of
@@ -172,16 +172,16 @@ public class ApplicationAssociate {
      * this map will be stored as specified in the configuration file - some of them will have a
      * trailing asterisk "*" signifying wild card, and some may be specified as an asterisk "*".
      */
-    private Map<String, Set<NavigationCase>> navigationMap = null;
+    private Map<String, Set<NavigationCase>> navigationMap;
 
     /*
      * The FacesComponentTagLibrary uses the information in this map to help it fabricate tag
      * handlers for components annotated with FacesComponent. Key: namespace
      */
-    private Map<String, List<FacesComponentUsage>> facesComponentsByNamespace = null;
+    private Map<String, List<FacesComponentUsage>> facesComponentsByNamespace;
 
     // Flag indicating that a response has been rendered.
-    private boolean responseRendered = false;
+    private boolean responseRendered;
 
     private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX + "ApplicationAssociate";
 
@@ -192,27 +192,27 @@ public class ApplicationAssociate {
         }
     };
 
-    private List<ELResolver> elResolversFromFacesConfig = null;
+    private List<ELResolver> elResolversFromFacesConfig;
 
-    private List<SearchKeywordResolver> searchKeywordResolversFromFacesConfig = null;
-
-    @SuppressWarnings("deprecation")
-    private VariableResolver legacyVRChainHead = null;
-
-    private VariableResolverChainWrapper legacyVRChainHeadWrapperForJsp = null;
-
-    private VariableResolverChainWrapper legacyVRChainHeadWrapperForFaces = null;
+    private List<SearchKeywordResolver> searchKeywordResolversFromFacesConfig;
 
     @SuppressWarnings("deprecation")
-    private PropertyResolver legacyPRChainHead = null;
-    private ExpressionFactory expressionFactory = null;
+    private VariableResolver legacyVRChainHead;
+
+    private VariableResolverChainWrapper legacyVRChainHeadWrapperForJsp;
+
+    private VariableResolverChainWrapper legacyVRChainHeadWrapperForFaces;
 
     @SuppressWarnings("deprecation")
-    private PropertyResolver legacyPropertyResolver = null;
+    private PropertyResolver legacyPRChainHead;
+    private ExpressionFactory expressionFactory;
 
     @SuppressWarnings("deprecation")
-    private VariableResolver legacyVariableResolver = null;
-    private FacesCompositeELResolver facesELResolverForJsp = null;
+    private PropertyResolver legacyPropertyResolver;
+
+    @SuppressWarnings("deprecation")
+    private VariableResolver legacyVariableResolver;
+    private FacesCompositeELResolver facesELResolverForJsp;
 
     private InjectionProvider injectionProvider;
     private ResourceCache resourceCache;
@@ -242,6 +242,11 @@ public class ApplicationAssociate {
     private Map<String, String> definingDocumentIdsToTruncatedJarUrls;
 
     private long timeOfInstantiation;
+    
+    private Map<String, List<String>> resourceLibraryContracts;
+    
+    Map<String, ApplicationResourceBundle> resourceBundles = new HashMap<>();
+    
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
@@ -288,9 +293,7 @@ public class ApplicationAssociate {
         return app;
     }
 
-    private Map<String, List<String>> resourceLibraryContracts;
-
-    public void setResourceLibraryContracts(HashMap<String, List<String>> map) {
+    public void setResourceLibraryContracts(Map<String, List<String>> map) {
         this.resourceLibraryContracts = map;
     }
 
@@ -302,7 +305,7 @@ public class ApplicationAssociate {
         }
 
         @Override
-        public void processEvent(SystemEvent event) throws AbortProcessingException {
+        public void processEvent(SystemEvent event) {
             ApplicationAssociate.this.initializeFacelets();
 
             if (ApplicationAssociate.this.flowHandler == null) {
@@ -744,8 +747,7 @@ public class ApplicationAssociate {
      * <p/>
      * values: ResourceBundleBean instances.
      */
-
-    Map<String, ApplicationResourceBundle> resourceBundles = new HashMap<>();
+    
 
     public void addResourceBundle(String var, ApplicationResourceBundle bundle) {
         resourceBundles.put(var, bundle);
@@ -831,8 +833,8 @@ public class ApplicationAssociate {
         // If our resourceResolver is not the one we created above
         // and the use of this ResousrecResolver for Composite Components
         // is acceptable.
-        if (!(resolver == defaultResourceResolver) && webConfig.isOptionEnabled(EnableFaceletsResourceResolverResolveCompositeComponents)) {
-            ctx.getExternalContext().getApplicationMap().put(DefaultResourceResolver.NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME, resolver);
+        if (resolver != defaultResourceResolver && webConfig.isOptionEnabled(EnableFaceletsResourceResolverResolveCompositeComponents)) {
+            ctx.getExternalContext().getApplicationMap().put(NON_DEFAULT_RESOURCE_RESOLVER_PARAM_NAME, resolver);
         }
 
         FaceletCache cache = null;
