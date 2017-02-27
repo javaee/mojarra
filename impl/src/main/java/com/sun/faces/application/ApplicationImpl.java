@@ -218,18 +218,19 @@ public class ApplicationImpl extends Application {
 
     // Relationship Instance Variables
 
-    private ApplicationAssociate associate = null;
+    private ApplicationAssociate associate;
     private ProjectStage projectStage;
 
-    private volatile ActionListener actionListener = null;
-    private volatile NavigationHandler navigationHandler = null;
-    private volatile PropertyResolverImpl propertyResolver = null;
-    volatile VariableResolverImpl variableResolver = null;
-    private volatile ViewHandler viewHandler = null;
+    private volatile ActionListener actionListener;
+    private volatile NavigationHandler navigationHandler;
+    private volatile PropertyResolverImpl propertyResolver;
+    volatile VariableResolverImpl variableResolver;
+    private volatile ViewHandler viewHandler;
     private volatile ResourceHandler resourceHandler;
-    private volatile StateManager stateManager = null;
-    private volatile ArrayList<Locale> supportedLocales = null;
-    private volatile Locale defaultLocale = null;
+    private volatile StateManager stateManager;
+    private volatile ArrayList<Locale> supportedLocales;
+    private volatile Locale defaultLocale;
+    
     //
     // This map stores reference expression | value binding instance
     // mappings.
@@ -244,20 +245,20 @@ public class ApplicationImpl extends Application {
     private ViewMemberInstanceFactoryMetadataMap<String, Object> converterIdMap;
     private ViewMemberInstanceFactoryMetadataMap<String, Object> validatorMap;
 
-    private Map<Class<?>, Object> converterTypeMap = null;
-    private Set<String> defaultValidatorIds = null;
-    private volatile Map<String, String> defaultValidatorInfo = null;
-    private volatile String messageBundle = null;
+    private Map<Class<?>, Object> converterTypeMap;
+    private Set<String> defaultValidatorIds;
+    private volatile Map<String, String> defaultValidatorInfo;
+    private volatile String messageBundle;
 
-    private List<ELContextListener> elContextListeners = null;
-    CompositeELResolver elResolvers = null;
-    FacesCompositeELResolver compositeELResolver = null;
+    private List<ELContextListener> elContextListeners;
+    CompositeELResolver elResolvers;
+    FacesCompositeELResolver compositeELResolver;
     private final SystemEventHelper systemEventHelper = new SystemEventHelper();
     private final ComponentSystemEventHelper compSysEventHelper = new ComponentSystemEventHelper();
     private boolean passDefaultTimeZone;
     private boolean registerPropertyEditors;
     private TimeZone systemTimeZone;
-    CompositeSearchKeywordResolver searchKeywordResolvers = null;
+    CompositeSearchKeywordResolver searchKeywordResolvers;
 
     /**
      * Constructor
@@ -299,9 +300,11 @@ public class ApplicationImpl extends Application {
         WebConfiguration webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         passDefaultTimeZone = webConfig.isOptionEnabled(DateTimeConverterUsesSystemTimezone);
         registerPropertyEditors = webConfig.isOptionEnabled(RegisterConverterPropertyEditors);
+        
         if (passDefaultTimeZone) {
             systemTimeZone = TimeZone.getDefault();
         }
+        
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, "Created Application instance ");
         }
