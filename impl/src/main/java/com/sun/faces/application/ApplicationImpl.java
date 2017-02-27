@@ -55,6 +55,7 @@ import static com.sun.faces.util.Util.loadClass;
 import static com.sun.faces.util.Util.notNull;
 import static java.beans.Introspector.getBeanInfo;
 import static java.beans.PropertyEditorManager.findEditor;
+import static java.text.MessageFormat.format;
 import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.SEVERE;
@@ -183,6 +184,7 @@ import com.sun.faces.util.Util;
  */
 public class ApplicationImpl extends Application {
 
+    private static final String LISTENER = "listener";
     private static final String SOURCE = "source";
     private static final String SYSTEM_EVENT_CLASS = "systemEventClass";
     private static final String CONTEXT = "context";
@@ -215,6 +217,10 @@ public class ApplicationImpl extends Application {
             }
         }
     }
+    
+    private final String[] STANDARD_BY_TYPE_CONVERTER_CLASSES = { "java.math.BigDecimal", "java.lang.Boolean", "java.lang.Byte", "java.lang.Character",
+            "java.lang.Double", "java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.lang.Enum" };
+
 
     // Relationship Instance Variables
 
@@ -259,6 +265,11 @@ public class ApplicationImpl extends Application {
     private boolean registerPropertyEditors;
     private TimeZone systemTimeZone;
     CompositeSearchKeywordResolver searchKeywordResolvers;
+    
+    /**
+     * Stores the bean manager.
+     */
+    private BeanManager beanManager;
 
     /**
      * Constructor
@@ -296,8 +307,7 @@ public class ApplicationImpl extends Application {
             }
         }
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        WebConfiguration webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
+        WebConfiguration webConfig = WebConfiguration.getInstance(FacesContext.getCurrentInstance().getExternalContext());
         passDefaultTimeZone = webConfig.isOptionEnabled(DateTimeConverterUsesSystemTimezone);
         registerPropertyEditors = webConfig.isOptionEnabled(RegisterConverterPropertyEditors);
         
@@ -305,8 +315,8 @@ public class ApplicationImpl extends Application {
             systemTimeZone = TimeZone.getDefault();
         }
         
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, "Created Application instance ");
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, "Created Application instance ");
         }
     }
 
@@ -346,19 +356,17 @@ public class ApplicationImpl extends Application {
             // will create a SystemEvent object appropriate to event/source
             // combination. This event will be passed on subsequent invocations
             // of invokeListenersFor
-            SystemEvent event;
 
             // Look for and invoke any listeners stored on the source instance.
-            event = invokeComponentListenersFor(systemEventClass, source);
+            SystemEvent event = invokeComponentListenersFor(systemEventClass, source);
 
             // Look for and invoke any 'view' listeners
             event = invokeViewListenersFor(context, systemEventClass, event, source);
 
-            // look for and invoke any listeners stored on the application
-            // using source type.
+            // Look for and invoke any listeners stored on the application using source type.
             event = invokeListenersFor(systemEventClass, event, source, sourceBaseType, true);
 
-            // look for and invoke any listeners not specific to the source class
+            // Look for and invoke any listeners not specific to the source class
             invokeListenersFor(systemEventClass, event, source, null, false);
         } catch (AbortProcessingException ape) {
             context.getApplication().publishEvent(context, ExceptionQueuedEvent.class, new ExceptionQueuedEventContext(context, ape));
@@ -372,7 +380,7 @@ public class ApplicationImpl extends Application {
     public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass, Class<?> sourceClass, SystemEventListener listener) {
 
         notNull(SYSTEM_EVENT_CLASS, systemEventClass);
-        notNull("listener", listener);
+        notNull(LISTENER, listener);
 
         getListeners(systemEventClass, sourceClass).add(listener);
     }
@@ -392,7 +400,7 @@ public class ApplicationImpl extends Application {
     public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass, Class<?> sourceClass, SystemEventListener listener) {
 
         notNull(SYSTEM_EVENT_CLASS, systemEventClass);
-        notNull("listener", listener);
+        notNull(LISTENER, listener);
 
         Set<SystemEventListener> listeners = getListeners(systemEventClass, sourceClass);
         if (listeners != null) {
@@ -435,9 +443,9 @@ public class ApplicationImpl extends Application {
     public ELContextListener[] getELContextListeners() {
         if (!elContextListeners.isEmpty()) {
             return elContextListeners.toArray(new ELContextListener[elContextListeners.size()]);
-        } else {
-            return EMPTY_EL_CTX_LIST_ARRAY;
         }
+            
+        return EMPTY_EL_CTX_LIST_ARRAY;
     }
 
     /**
@@ -594,12 +602,10 @@ public class ApplicationImpl extends Application {
     public synchronized void setResourceHandler(ResourceHandler resourceHandler) {
 
         notNull("resourceHandler", resourceHandler);
-
-        if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(getExceptionMessageString(ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ResourceHandler"));
-        }
+        notRequestServiced("ResourceHandler");
 
         this.resourceHandler = resourceHandler;
+        
         if (LOGGER.isLoggable(FINE)) {
             LOGGER.log(FINE, "set ResourceHandler Instance to ''{0}''", resourceHandler.getClass().getName());
         }
@@ -620,10 +626,7 @@ public class ApplicationImpl extends Application {
     public synchronized void setStateManager(StateManager stateManager) {
 
         notNull("stateManager", stateManager);
-
-        if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(getExceptionMessageString(ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "StateManager"));
-        }
+        notRequestServiced("StateManager");
 
         this.stateManager = stateManager;
 
@@ -671,19 +674,6 @@ public class ApplicationImpl extends Application {
     }
 
     /**
-     * @see javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    public PropertyResolver getPropertyResolver() {
-        if (compositeELResolver == null) {
-            performOneTimeELInitialization();
-        }
-
-        return propertyResolver;
-    }
-
-    /**
      * @see javax.faces.application.Application#getResourceBundle(javax.faces.context.FacesContext,
      *      String)
      */
@@ -694,113 +684,6 @@ public class ApplicationImpl extends Application {
         notNull("var", var);
 
         return associate.getResourceBundle(context, var);
-    }
-
-    /**
-     * @see javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    public void setPropertyResolver(PropertyResolver resolver) {
-
-        // Throw Illegal State Exception if a PropertyResolver is set after
-        // a request has been processed.
-        if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(getExceptionMessageString(ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "PropertyResolver"));
-        }
-
-        if (resolver == null) {
-            String message = getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
-            throw new NullPointerException(message);
-        }
-
-        propertyResolver.setDelegate(ELUtils.getDelegatePR(associate, true));
-        associate.setLegacyPropertyResolver(resolver);
-        propertyResolver = new PropertyResolverImpl();
-
-        if (LOGGER.isLoggable(FINE)) {
-            LOGGER.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", resolver.getClass().getName()));
-        }
-    }
-
-    /**
-     * @see javax.faces.application.Application#createMethodBinding(String, Class[])
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    public MethodBinding createMethodBinding(String ref, Class<?> params[]) {
-
-        Util.notNull("ref", ref);
-
-        if (!(ref.startsWith("#{") && ref.endsWith("}"))) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine(MessageFormat.format("Expression ''{0}'' does not follow the syntax #{...}", ref));
-            }
-            throw new ReferenceSyntaxException(ref);
-        }
-        FacesContext context = FacesContext.getCurrentInstance();
-        MethodExpression result;
-        try {
-            // return a MethodBinding that wraps a MethodExpression.
-            if (null == params) {
-                params = RIConstants.EMPTY_CLASS_ARGS;
-            }
-            result = getExpressionFactory().createMethodExpression(context.getELContext(), ref, null, params);
-        } catch (ELException elex) {
-            throw new ReferenceSyntaxException(elex);
-        }
-        return new MethodBindingMethodExpressionAdapter(result);
-
-    }
-
-    /**
-     * @see javax.faces.application.Application#createValueBinding(String)
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    public ValueBinding createValueBinding(String ref) throws ReferenceSyntaxException {
-
-        Util.notNull("ref", ref);
-        ValueExpression result;
-        FacesContext context = FacesContext.getCurrentInstance();
-        // return a ValueBinding that wraps a ValueExpression.
-        try {
-            result = getExpressionFactory().createValueExpression(context.getELContext(), ref, Object.class);
-        } catch (ELException elex) {
-            throw new ReferenceSyntaxException(elex);
-        }
-        return new ValueBindingValueExpressionAdapter(result);
-
-    }
-
-    /**
-     * @see javax.faces.application.Application#getVariableResolver()
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    public VariableResolver getVariableResolver() {
-        if (compositeELResolver == null) {
-            performOneTimeELInitialization();
-        }
-
-        return variableResolver;
-    }
-
-    /**
-     * @see javax.faces.application.Application#setVariableResolver(javax.faces.el.VariableResolver)
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    public void setVariableResolver(VariableResolver resolver) {
-        notNull("variableResolver", resolver);
-        canSetAppArtifact(associate, "VariableResolver");
-
-        variableResolver.setDelegate(ELUtils.getDelegateVR(associate, true));
-        associate.setLegacyVariableResolver(resolver);
-
-        if (LOGGER.isLoggable(FINE)) {
-            LOGGER.fine(MessageFormat.format("set VariableResolver Instance to ''{0}''", variableResolver.getClass().getName()));
-        }
     }
 
     /**
@@ -849,6 +732,7 @@ public class ApplicationImpl extends Application {
             if (LOGGER.isLoggable(SEVERE)) {
                 LOGGER.log(SEVERE, "jsf.cannot_instantiate_behavior_error", params);
             }
+            
             throw new FacesException(getExceptionMessageString(NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
 
@@ -908,7 +792,7 @@ public class ApplicationImpl extends Application {
 
         UIComponent result = null;
 
-        // use the application defined in the FacesContext as we may be calling
+        // Use the application defined in the FacesContext as we may be calling
         // overriden methods
         Application app = context.getApplication();
 
@@ -972,8 +856,6 @@ public class ApplicationImpl extends Application {
         if (result == null) {
             result = app.createComponent("javax.faces.NamingContainer");
         }
-
-        assert result != null;
 
         result.setRendererType("javax.faces.Composite");
 
@@ -1066,7 +948,7 @@ public class ApplicationImpl extends Application {
             }
 
             if (result == null || createOne) {
-                result = this.createComponentApplyAnnotations(context, componentType, null, false);
+                result = createComponentApplyAnnotations(context, componentType, null, false);
                 componentBinding.setValue(context, result);
             }
         } catch (Exception ex) {
@@ -1129,7 +1011,7 @@ public class ApplicationImpl extends Application {
         }
 
         if (LOGGER.isLoggable(FINE)) {
-            LOGGER.fine(MessageFormat.format("added converter of type ''{0}'' and class ''{1}''", converterId, converterClass));
+            LOGGER.fine(format("added converter of type ''{0}'' and class ''{1}''", converterId, converterClass));
         }
     }
 
@@ -1156,79 +1038,8 @@ public class ApplicationImpl extends Application {
         }
 
         if (LOGGER.isLoggable(FINE)) {
-            LOGGER.fine(MessageFormat.format("added converter of class type ''{0}''", converterClass));
+            LOGGER.fine(format("added converter of class type ''{0}''", converterClass));
         }
-    }
-
-    private final String[] STANDARD_BY_TYPE_CONVERTER_CLASSES = { "java.math.BigDecimal", "java.lang.Boolean", "java.lang.Byte", "java.lang.Character",
-            "java.lang.Double", "java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.lang.Enum" };
-
-    /**
-     * Helper method to convert a value to a type as defined in PropertyDescriptor(s)
-     * 
-     * @param name
-     * @param value
-     * @param propertyDescriptors
-     * @return value
-     */
-    private Object convertValueToTypeIfNecessary(String name, Object value, PropertyDescriptor[] propertyDescriptors) {
-        for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-            if (propertyDescriptor.getName().equals(name)) {
-                value = getExpressionFactory().coerceToType(value, propertyDescriptor.getPropertyType());
-                break;
-            }
-        }
-
-        return value;
-    }
-
-    /**
-     * <p>
-     * To enable EL Coercion to use JSF Custom converters, this method will call
-     * <code>PropertyEditorManager.registerEditor()</code>, passing the
-     * <code>ConverterPropertyEditor</code> class for the <code>targetClass</code> if the target
-     * class is not one of the standard by-type converter target classes.
-     * 
-     * @param targetClass the target class for which a PropertyEditory may or may not be created
-     */
-    private void addPropertyEditorIfNecessary(Class<?> targetClass) {
-
-        if (!registerPropertyEditors) {
-            return;
-        }
-
-        PropertyEditor editor = findEditor(targetClass);
-        if (editor != null) {
-            return;
-        }
-        String className = targetClass.getName();
-
-        // Don't add a PropertyEditor for the standard by-type converters.
-        if (targetClass.isPrimitive()) {
-            return;
-        }
-
-        for (String standardClass : STANDARD_BY_TYPE_CONVERTER_CLASSES) {
-            if (standardClass.indexOf(className) != -1) {
-                return;
-            }
-        }
-
-        Class<?> editorClass = ConverterPropertyEditorFactory.getDefaultInstance().definePropertyEditorClassFor(targetClass);
-        if (editorClass != null) {
-            PropertyEditorManager.registerEditor(targetClass, editorClass);
-        } else {
-            if (LOGGER.isLoggable(WARNING)) {
-                LOGGER.warning(MessageFormat.format("definePropertyEditorClassFor({0}) returned null.", targetClass.getName()));
-            }
-        }
-    }
-
-    private void performOneTimeELInitialization() {
-        if (null != compositeELResolver) {
-            throw new IllegalStateException("Class invariant invalidated: " + "The Application instance's ELResolver is not null " + "and it should be.");
-        }
-        associate.initializeELResolverChains();
     }
 
     /**
@@ -1918,6 +1729,12 @@ public class ApplicationImpl extends Application {
         return result;
 
     }
+    
+    private void notRequestServiced(String artifactId) {
+        if (associate.hasRequestBeenServiced()) {
+            throw new IllegalStateException(getExceptionMessageString(ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, artifactId));
+        }
+    }
 
     /*
      * This class encapsulates the behavior to prevent infinite loops when the publishing of one
@@ -2131,6 +1948,75 @@ public class ApplicationImpl extends Application {
         }
 
         return value;
+    }
+    
+    
+    /**
+     * Helper method to convert a value to a type as defined in PropertyDescriptor(s)
+     * 
+     * @param name
+     * @param value
+     * @param propertyDescriptors
+     * @return value
+     */
+    private Object convertValueToTypeIfNecessary(String name, Object value, PropertyDescriptor[] propertyDescriptors) {
+        for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+            if (propertyDescriptor.getName().equals(name)) {
+                value = getExpressionFactory().coerceToType(value, propertyDescriptor.getPropertyType());
+                break;
+            }
+        }
+
+        return value;
+    }
+
+    /**
+     * <p>
+     * To enable EL Coercion to use JSF Custom converters, this method will call
+     * <code>PropertyEditorManager.registerEditor()</code>, passing the
+     * <code>ConverterPropertyEditor</code> class for the <code>targetClass</code> if the target
+     * class is not one of the standard by-type converter target classes.
+     * 
+     * @param targetClass the target class for which a PropertyEditory may or may not be created
+     */
+    private void addPropertyEditorIfNecessary(Class<?> targetClass) {
+
+        if (!registerPropertyEditors) {
+            return;
+        }
+
+        PropertyEditor editor = findEditor(targetClass);
+        if (editor != null) {
+            return;
+        }
+        String className = targetClass.getName();
+
+        // Don't add a PropertyEditor for the standard by-type converters.
+        if (targetClass.isPrimitive()) {
+            return;
+        }
+
+        for (String standardClass : STANDARD_BY_TYPE_CONVERTER_CLASSES) {
+            if (standardClass.indexOf(className) != -1) {
+                return;
+            }
+        }
+
+        Class<?> editorClass = ConverterPropertyEditorFactory.getDefaultInstance().definePropertyEditorClassFor(targetClass);
+        if (editorClass != null) {
+            PropertyEditorManager.registerEditor(targetClass, editorClass);
+        } else {
+            if (LOGGER.isLoggable(WARNING)) {
+                LOGGER.warning(MessageFormat.format("definePropertyEditorClassFor({0}) returned null.", targetClass.getName()));
+            }
+        }
+    }
+
+    private void performOneTimeELInitialization() {
+        if (null != compositeELResolver) {
+            throw new IllegalStateException("Class invariant invalidated: " + "The Application instance's ELResolver is not null " + "and it should be.");
+        }
+        associate.initializeELResolverChains();
     }
 
     private void setProjectStageFromValue(String value, ProjectStage defaultStage) {
@@ -2432,11 +2318,6 @@ public class ApplicationImpl extends Application {
     }
 
     /**
-     * Stores the bean manager.
-     */
-    private BeanManager beanManager;
-
-    /**
      * Get the bean manager.
      * 
      * @return the bean manager.
@@ -2479,5 +2360,130 @@ public class ApplicationImpl extends Application {
     public SearchKeywordResolver getSearchKeywordResolver() {
         return searchKeywordResolvers;
     }
+    
+    
+    
+    
+    
+    /**
+     * @see javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)
+     */
+    @Override
+    @Deprecated
+    public PropertyResolver getPropertyResolver() {
+        if (compositeELResolver == null) {
+            performOneTimeELInitialization();
+        }
+
+        return propertyResolver;
+    }
+    
+    /**
+     * @see javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)
+     */
+    @Override
+    @Deprecated
+    public void setPropertyResolver(PropertyResolver resolver) {
+
+        // Throw Illegal State Exception if a PropertyResolver is set after
+        // a request has been processed.
+        if (associate.hasRequestBeenServiced()) {
+            throw new IllegalStateException(getExceptionMessageString(ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "PropertyResolver"));
+        }
+
+        if (resolver == null) {
+            String message = getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
+            throw new NullPointerException(message);
+        }
+
+        propertyResolver.setDelegate(ELUtils.getDelegatePR(associate, true));
+        associate.setLegacyPropertyResolver(resolver);
+        propertyResolver = new PropertyResolverImpl();
+
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", resolver.getClass().getName()));
+        }
+    }
+
+    /**
+     * @see javax.faces.application.Application#createMethodBinding(String, Class[])
+     */
+    @Override
+    @Deprecated
+    public MethodBinding createMethodBinding(String ref, Class<?> params[]) {
+
+        Util.notNull("ref", ref);
+
+        if (!(ref.startsWith("#{") && ref.endsWith("}"))) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine(MessageFormat.format("Expression ''{0}'' does not follow the syntax #{...}", ref));
+            }
+            throw new ReferenceSyntaxException(ref);
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        MethodExpression result;
+        try {
+            // return a MethodBinding that wraps a MethodExpression.
+            if (null == params) {
+                params = RIConstants.EMPTY_CLASS_ARGS;
+            }
+            result = getExpressionFactory().createMethodExpression(context.getELContext(), ref, null, params);
+        } catch (ELException elex) {
+            throw new ReferenceSyntaxException(elex);
+        }
+        return new MethodBindingMethodExpressionAdapter(result);
+
+    }
+
+    /**
+     * @see javax.faces.application.Application#createValueBinding(String)
+     */
+    @Override
+    @Deprecated
+    public ValueBinding createValueBinding(String ref) throws ReferenceSyntaxException {
+
+        notNull("ref", ref);
+        ValueExpression result;
+        FacesContext context = FacesContext.getCurrentInstance();
+        // return a ValueBinding that wraps a ValueExpression.
+        try {
+            result = getExpressionFactory().createValueExpression(context.getELContext(), ref, Object.class);
+        } catch (ELException elex) {
+            throw new ReferenceSyntaxException(elex);
+        }
+        return new ValueBindingValueExpressionAdapter(result);
+
+    }
+
+    /**
+     * @see javax.faces.application.Application#getVariableResolver()
+     */
+    @Override
+    @Deprecated
+    public VariableResolver getVariableResolver() {
+        if (compositeELResolver == null) {
+            performOneTimeELInitialization();
+        }
+
+        return variableResolver;
+    }
+
+    /**
+     * @see javax.faces.application.Application#setVariableResolver(javax.faces.el.VariableResolver)
+     */
+    @Override
+    @Deprecated
+    public void setVariableResolver(VariableResolver resolver) {
+        notNull("variableResolver", resolver);
+        canSetAppArtifact(associate, "VariableResolver");
+
+        variableResolver.setDelegate(ELUtils.getDelegateVR(associate, true));
+        associate.setLegacyVariableResolver(resolver);
+
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.fine(MessageFormat.format("set VariableResolver Instance to ''{0}''", variableResolver.getClass().getName()));
+        }
+    }
+
 
 }
