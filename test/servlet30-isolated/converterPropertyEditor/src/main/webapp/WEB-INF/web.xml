@@ -43,6 +43,10 @@
 
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <context-param>
+	<param-name>com.sun.faces.expressionFactory</param-name>
+	<param-value>com.sun.el.ExpressionFactoryImpl</param-value>
+    </context-param>
+    <context-param>
         <param-name>com.sun.faces.registerConverterPropertyEditors</param-name>
         <param-value>true</param-value>
     </context-param>
