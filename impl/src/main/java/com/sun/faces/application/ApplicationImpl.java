@@ -40,7 +40,6 @@
 
 package com.sun.faces.application;
 
-
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.RegisterConverterPropertyEditors;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
@@ -176,13 +175,11 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
 
-
 /**
- * <p><strong>Application</strong> represents a per-web-application
- * singleton object where applications based on JavaServer Faces (or
- * implementations wishing to provide extended functionality) can
- * register application-wide singletons that provide functionality
- * required by JavaServer Faces.
+ * <p>
+ * <strong>Application</strong> represents a per-web-application singleton object where applications
+ * based on JavaServer Faces (or implementations wishing to provide extended functionality) can
+ * register application-wide singletons that provide functionality required by JavaServer Faces.
  */
 public class ApplicationImpl extends Application {
 
@@ -196,23 +193,21 @@ public class ApplicationImpl extends Application {
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
-    private static final ELContextListener[] EMPTY_EL_CTX_LIST_ARRAY = { };
+    private static final ELContextListener[] EMPTY_EL_CTX_LIST_ARRAY = {};
 
-    private static final Map<String,Class<?>[]> STANDARD_CONV_ID_TO_TYPE_MAP =
-         new HashMap<>(8, 1.0f);
-    private static final Map<Class<?>,String> STANDARD_TYPE_TO_CONV_ID_MAP =
-         new HashMap<>(16, 1.0f);
+    private static final Map<String, Class<?>[]> STANDARD_CONV_ID_TO_TYPE_MAP = new HashMap<>(8, 1.0f);
+    private static final Map<Class<?>, String> STANDARD_TYPE_TO_CONV_ID_MAP = new HashMap<>(16, 1.0f);
 
     static {
-        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Byte", new Class[] { Byte.TYPE, Byte.class});
-        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Boolean", new Class[] { Boolean.TYPE, Boolean.class});
-        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Character", new Class[] { Character.TYPE, Character.class});
+        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Byte", new Class[] { Byte.TYPE, Byte.class });
+        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Boolean", new Class[] { Boolean.TYPE, Boolean.class });
+        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Character", new Class[] { Character.TYPE, Character.class });
         STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Short", new Class[] { Short.TYPE, Short.class });
         STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Integer", new Class[] { Integer.TYPE, Integer.class });
         STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Long", new Class[] { Long.TYPE, Long.class });
         STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Float", new Class[] { Float.TYPE, Float.class });
         STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Double", new Class[] { Double.TYPE, Double.class });
-        for (Map.Entry<String,Class<?>[]> entry : STANDARD_CONV_ID_TO_TYPE_MAP.entrySet()) {
+        for (Map.Entry<String, Class<?>[]> entry : STANDARD_CONV_ID_TO_TYPE_MAP.entrySet()) {
             Class<?>[] types = entry.getValue();
             String key = entry.getKey();
             for (Class<?> clazz : types) {
@@ -239,19 +234,19 @@ public class ApplicationImpl extends Application {
     // This map stores reference expression | value binding instance
     // mappings.
     //
-    
+
     //
     // These four maps store store "identifier" | "class name"
     // mappings.
     //
-    private ViewMemberInstanceFactoryMetadataMap<String,Object> behaviorMap;
-    private ViewMemberInstanceFactoryMetadataMap<String,Object> componentMap;
-    private ViewMemberInstanceFactoryMetadataMap<String,Object> converterIdMap;
-    private ViewMemberInstanceFactoryMetadataMap<String,Object> validatorMap;
+    private ViewMemberInstanceFactoryMetadataMap<String, Object> behaviorMap;
+    private ViewMemberInstanceFactoryMetadataMap<String, Object> componentMap;
+    private ViewMemberInstanceFactoryMetadataMap<String, Object> converterIdMap;
+    private ViewMemberInstanceFactoryMetadataMap<String, Object> validatorMap;
 
-    private Map<Class<?>,Object> converterTypeMap = null;
+    private Map<Class<?>, Object> converterTypeMap = null;
     private Set<String> defaultValidatorIds = null;
-    private volatile Map<String,String> defaultValidatorInfo = null;
+    private volatile Map<String, String> defaultValidatorInfo = null;
     private volatile String messageBundle = null;
 
     private List<ELContextListener> elContextListeners = null;
@@ -312,7 +307,6 @@ public class ApplicationImpl extends Application {
         }
     }
 
-
     /**
      * @see javax.faces.application.Application#publishEvent(FacesContext, Class, Object)
      */
@@ -320,7 +314,6 @@ public class ApplicationImpl extends Application {
     public void publishEvent(FacesContext context, Class<? extends SystemEvent> systemEventClass, Object source) {
         publishEvent(context, systemEventClass, null, source);
     }
-
 
     /**
      * @see javax.faces.application.Application#publishEvent(FacesContext, Class, Object)
@@ -331,17 +324,16 @@ public class ApplicationImpl extends Application {
         notNull(CONTEXT, context);
         notNull(SYSTEM_EVENT_CLASS, systemEventClass);
         notNull(SOURCE, source);
-        
+
         if (!needsProcessing(context, systemEventClass)) {
             return;
         }
-        
+
         // Source is not compatible with the provided base type.
         // Log a warning that the types are incompatible and return.
         if (getProjectStage() == Development && sourceBaseType != null && !sourceBaseType.isInstance(source)) {
             if (LOGGER.isLoggable(WARNING)) {
-                LOGGER.log(WARNING, "jsf.application.publish.event.base_type_mismatch",
-                        new Object[] { source.getClass().getName(), sourceBaseType.getName() });
+                LOGGER.log(WARNING, "jsf.application.publish.event.base_type_mismatch", new Object[] { source.getClass().getName(), sourceBaseType.getName() });
             }
             return;
         }
@@ -349,14 +341,14 @@ public class ApplicationImpl extends Application {
         try {
             // The side-effect of calling invokeListenersFor
             // will create a SystemEvent object appropriate to event/source
-            // combination.  This event will be passed on subsequent invocations
+            // combination. This event will be passed on subsequent invocations
             // of invokeListenersFor
             SystemEvent event;
 
             // Look for and invoke any listeners stored on the source instance.
             event = invokeComponentListenersFor(systemEventClass, source);
 
-            // Look for and invoke any 'view' listeners 
+            // Look for and invoke any 'view' listeners
             event = invokeViewListenersFor(context, systemEventClass, event, source);
 
             // look for and invoke any listeners stored on the application
@@ -382,7 +374,6 @@ public class ApplicationImpl extends Application {
         getListeners(systemEventClass, sourceClass).add(listener);
     }
 
-
     /**
      * @see Application#subscribeToEvent(Class, javax.faces.event.SystemEventListener)
      */
@@ -391,10 +382,8 @@ public class ApplicationImpl extends Application {
         subscribeToEvent(systemEventClass, null, listener);
     }
 
-
     /**
-     * @see Application#unsubscribeFromEvent(Class, Class,
-     *      javax.faces.event.SystemEventListener)
+     * @see Application#unsubscribeFromEvent(Class, Class, javax.faces.event.SystemEventListener)
      */
     @Override
     public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass, Class<?> sourceClass, SystemEventListener listener) {
@@ -460,7 +449,7 @@ public class ApplicationImpl extends Application {
     public FlowHandler getFlowHandler() {
         return associate.getFlowHandler();
     }
-    
+
     @Override
     public synchronized void setFlowHandler(FlowHandler flowHandler) {
 
@@ -480,9 +469,7 @@ public class ApplicationImpl extends Application {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T evaluateExpressionGet(FacesContext context, String expression, Class<? extends T> expectedType) throws ELException {
-        return (T) getExpressionFactory()
-                        .createValueExpression(context.getELContext(), expression, expectedType)
-                        .getValue(context.getELContext());
+        return (T) getExpressionFactory().createValueExpression(context.getELContext(), expression, expectedType).getValue(context.getELContext());
     }
 
     @Override
@@ -515,15 +502,14 @@ public class ApplicationImpl extends Application {
     public void addELResolver(ELResolver resolver) {
 
         if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(getExceptionMessageString(
-                ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ELResolver"));
+            throw new IllegalStateException(getExceptionMessageString(ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ELResolver"));
         }
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if ("2.3".equals(getFacesConfigXmlVersion(facesContext)) || "4.0".equals(getWebXmlVersion(facesContext))) {
 
             javax.enterprise.inject.spi.BeanManager cdiBeanManager = getCdiBeanManager(facesContext);
-            
+
             if (cdiBeanManager != null && !resolver.equals(cdiBeanManager.getELResolver())) {
                 elResolvers.add(resolver);
             }
@@ -533,21 +519,21 @@ public class ApplicationImpl extends Application {
     }
 
     /**
-     * @see javax.faces.application.Application#getProjectStage() 
+     * @see javax.faces.application.Application#getProjectStage()
      */
     @Override
     public ProjectStage getProjectStage() {
 
         if (projectStage == null) {
             String value = fetchProjectStageFromConfig();
-            
+
             setProjectStageFromValue(value, Production);
-            
+
             if (projectStage == Development) {
                 subscribeToEvent(PostAddToViewEvent.class, new ValidateComponentNesting());
             }
         }
-        
+
         return projectStage;
     }
 
@@ -580,12 +566,11 @@ public class ApplicationImpl extends Application {
         notNull("viewHandler", viewHandler);
 
         if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(getExceptionMessageString(
-                ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ViewHandler"));
+            throw new IllegalStateException(getExceptionMessageString(ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ViewHandler"));
         }
 
         this.viewHandler = viewHandler;
-        
+
         if (LOGGER.isLoggable(FINE)) {
             LOGGER.log(FINE, MessageFormat.format("set ViewHandler Instance to ''{0}''", viewHandler.getClass().getName()));
         }
@@ -608,8 +593,7 @@ public class ApplicationImpl extends Application {
         notNull("resourceHandler", resourceHandler);
 
         if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(getExceptionMessageString(
-                ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ResourceHandler"));
+            throw new IllegalStateException(getExceptionMessageString(ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ResourceHandler"));
         }
 
         this.resourceHandler = resourceHandler;
@@ -635,12 +619,11 @@ public class ApplicationImpl extends Application {
         notNull("stateManager", stateManager);
 
         if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(getExceptionMessageString(
-                ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "StateManager"));
+            throw new IllegalStateException(getExceptionMessageString(ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "StateManager"));
         }
 
         this.stateManager = stateManager;
-        
+
         if (LOGGER.isLoggable(FINE)) {
             LOGGER.log(FINE, MessageFormat.format("set StateManager Instance to ''{0}''", stateManager.getClass().getName()));
         }
@@ -693,19 +676,20 @@ public class ApplicationImpl extends Application {
         if (compositeELResolver == null) {
             performOneTimeELInitialization();
         }
-        
+
         return propertyResolver;
     }
 
     /**
-     * @see javax.faces.application.Application#getResourceBundle(javax.faces.context.FacesContext, String)
+     * @see javax.faces.application.Application#getResourceBundle(javax.faces.context.FacesContext,
+     *      String)
      */
     @Override
     public ResourceBundle getResourceBundle(FacesContext context, String var) {
 
         notNull(CONTEXT, context);
         notNull("var", var);
-        
+
         return associate.getResourceBundle(context, var);
     }
 
@@ -715,14 +699,13 @@ public class ApplicationImpl extends Application {
     @SuppressWarnings("deprecation")
     @Override
     public void setPropertyResolver(PropertyResolver resolver) {
-        
+
         // Throw Illegal State Exception if a PropertyResolver is set after
         // a request has been processed.
         if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(getExceptionMessageString(
-                ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "PropertyResolver"));
+            throw new IllegalStateException(getExceptionMessageString(ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "PropertyResolver"));
         }
-        
+
         if (resolver == null) {
             String message = getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
             throw new NullPointerException(message);
@@ -736,7 +719,6 @@ public class ApplicationImpl extends Application {
             LOGGER.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", resolver.getClass().getName()));
         }
     }
-
 
     /**
      * @see javax.faces.application.Application#createMethodBinding(String, Class[])
@@ -760,10 +742,7 @@ public class ApplicationImpl extends Application {
             if (null == params) {
                 params = RIConstants.EMPTY_CLASS_ARGS;
             }
-            result =
-                  getExpressionFactory().
-                        createMethodExpression(context.getELContext(), ref, null,
-                                               params);
+            result = getExpressionFactory().createMethodExpression(context.getELContext(), ref, null, params);
         } catch (ELException elex) {
             throw new ReferenceSyntaxException(elex);
         }
@@ -771,44 +750,38 @@ public class ApplicationImpl extends Application {
 
     }
 
-
     /**
      * @see javax.faces.application.Application#createValueBinding(String)
      */
     @SuppressWarnings("deprecation")
     @Override
-    public ValueBinding createValueBinding(String ref)
-    throws ReferenceSyntaxException {
+    public ValueBinding createValueBinding(String ref) throws ReferenceSyntaxException {
 
         Util.notNull("ref", ref);
         ValueExpression result;
         FacesContext context = FacesContext.getCurrentInstance();
-         // return a ValueBinding that wraps a ValueExpression.
-         try {
-             result= getExpressionFactory().
-                     createValueExpression(context.getELContext(),ref,
-                     Object.class);     
-         } catch (ELException elex) {
+        // return a ValueBinding that wraps a ValueExpression.
+        try {
+            result = getExpressionFactory().createValueExpression(context.getELContext(), ref, Object.class);
+        } catch (ELException elex) {
             throw new ReferenceSyntaxException(elex);
-         } 
-         return new ValueBindingValueExpressionAdapter(result);
+        }
+        return new ValueBindingValueExpressionAdapter(result);
 
     }
-
 
     /**
      * @see javax.faces.application.Application#getVariableResolver()
      */
     @SuppressWarnings("deprecation")
     @Override
-    public VariableResolver getVariableResolver() {       
+    public VariableResolver getVariableResolver() {
         if (compositeELResolver == null) {
             performOneTimeELInitialization();
         }
 
         return variableResolver;
     }
-
 
     /**
      * @see javax.faces.application.Application#setVariableResolver(javax.faces.el.VariableResolver)
@@ -823,9 +796,7 @@ public class ApplicationImpl extends Application {
         associate.setLegacyVariableResolver(resolver);
 
         if (LOGGER.isLoggable(FINE)) {
-            LOGGER.fine(MessageFormat.format(
-                "set VariableResolver Instance to ''{0}''",
-                variableResolver.getClass().getName()));
+            LOGGER.fine(MessageFormat.format("set VariableResolver Instance to ''{0}''", variableResolver.getClass().getName()));
         }
     }
 
@@ -839,11 +810,10 @@ public class ApplicationImpl extends Application {
         notNull("behaviorClass", behaviorClass);
 
         if (LOGGER.isLoggable(FINE) && behaviorMap.containsKey(behaviorId)) {
-            LOGGER.log(FINE,
-               "behaviorId {0} has already been registered.  Replacing existing behavior class type {1} with {2}.",
-               new Object[] { behaviorId, behaviorMap.get(behaviorId), behaviorClass });
+            LOGGER.log(FINE, "behaviorId {0} has already been registered.  Replacing existing behavior class type {1} with {2}.",
+                    new Object[] { behaviorId, behaviorMap.get(behaviorId), behaviorClass });
         }
-        
+
         behaviorMap.put(behaviorId, behaviorClass);
 
         if (LOGGER.isLoggable(FINE)) {
@@ -858,9 +828,9 @@ public class ApplicationImpl extends Application {
     public Behavior createBehavior(String behaviorId) throws FacesException {
 
         notNull("behaviorId", behaviorId);
-        
+
         Behavior returnVal;
-        
+
         if (isJsf23()) {
             BeanManager beanManager = getBeanManager();
             returnVal = CdiUtils.createBehavior(beanManager, behaviorId);
@@ -868,25 +838,23 @@ public class ApplicationImpl extends Application {
                 return returnVal;
             }
         }
-        
+
         returnVal = (Behavior) newThing(behaviorId, behaviorMap);
-        
+
         if (returnVal == null) {
-            Object[] params = {behaviorId};
+            Object[] params = { behaviorId };
             if (LOGGER.isLoggable(SEVERE)) {
-                LOGGER.log(SEVERE,
-                    "jsf.cannot_instantiate_behavior_error", params);
+                LOGGER.log(SEVERE, "jsf.cannot_instantiate_behavior_error", params);
             }
             throw new FacesException(getExceptionMessageString(NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
-        
+
         if (LOGGER.isLoggable(FINE)) {
             LOGGER.fine(MessageFormat.format("created behavior of type ''{0}''", behaviorId));
         }
-        
-        associate.getAnnotationManager()
-                 .applyBehaviorAnnotations(FacesContext.getCurrentInstance(), returnVal);
-        
+
+        associate.getAnnotationManager().applyBehaviorAnnotations(FacesContext.getCurrentInstance(), returnVal);
+
         return returnVal;
     }
 
@@ -908,20 +876,16 @@ public class ApplicationImpl extends Application {
         notNull(COMPONENT_CLASS, componentClass);
 
         if (LOGGER.isLoggable(FINE) && componentMap.containsKey(componentType)) {
-            LOGGER.log(FINE,
-               "componentType {0} has already been registered.  Replacing existing component class type {1} with {2}.",
-               new Object[] { componentType, componentMap.get(componentType), componentClass });
+            LOGGER.log(FINE, "componentType {0} has already been registered.  Replacing existing component class type {1} with {2}.",
+                    new Object[] { componentType, componentMap.get(componentType), componentClass });
         }
-        
+
         componentMap.put(componentType, componentClass);
-        
+
         if (LOGGER.isLoggable(FINE)) {
-            LOGGER.fine(MessageFormat.format(
-                "added component of type ''{0}'' and class ''{1}''",
-                 componentType, componentClass));
+            LOGGER.fine(MessageFormat.format("added component of type ''{0}'' and class ''{1}''", componentType, componentClass));
         }
     }
-
 
     @Override
     public UIComponent createComponent(String componentType) throws FacesException {
@@ -930,7 +894,6 @@ public class ApplicationImpl extends Application {
 
         return createComponentApplyAnnotations(FacesContext.getCurrentInstance(), componentType, null, true);
     }
-
 
     @Override
     public UIComponent createComponent(FacesContext context, Resource componentResource) throws FacesException {
@@ -948,14 +911,14 @@ public class ApplicationImpl extends Application {
 
         ViewDeclarationLanguage vdl = app.getViewHandler().getViewDeclarationLanguage(context, context.getViewRoot().getViewId());
         BeanInfo componentMetadata = vdl.getComponentMetadata(context, componentResource);
-        
+
         if (componentMetadata != null) {
             BeanDescriptor componentBeanDescriptor = componentMetadata.getBeanDescriptor();
 
-            // Step 1.  See if the composite component author explicitly
+            // Step 1. See if the composite component author explicitly
             // gave a componentType as part of the composite component metadata
             ValueExpression valueExpression = (ValueExpression) componentBeanDescriptor.getValue(COMPOSITE_COMPONENT_TYPE_KEY);
-            
+
             if (valueExpression != null) {
                 String componentType = (String) valueExpression.getValue(context.getELContext());
                 if (!isEmpty(componentType)) {
@@ -964,8 +927,7 @@ public class ApplicationImpl extends Application {
             }
         }
 
-
-        // Step 2. If that didn't work, if a script based resource can be 
+        // Step 2. If that didn't work, if a script based resource can be
         // found for the scriptComponentResource,
         // see if a component can be generated from it
         if (result == null) {
@@ -977,7 +939,7 @@ public class ApplicationImpl extends Application {
         }
 
         // Step 3. Use the libraryName of the resource as the java package
-        // and use the resourceName as the class name.  See
+        // and use the resourceName as the class name. See
         // if a Java class can be loaded
         if (result == null) {
             String packageName = componentResource.getLibraryName();
@@ -1011,7 +973,7 @@ public class ApplicationImpl extends Application {
         assert result != null;
 
         result.setRendererType("javax.faces.Composite");
-        
+
         Map<String, Object> attrs = result.getAttributes();
         attrs.put(COMPONENT_RESOURCE_KEY, componentResource);
         attrs.put(BEANINFO_KEY, componentMetadata);
@@ -1023,33 +985,32 @@ public class ApplicationImpl extends Application {
     }
 
     /*
-     * This method makes it so that any cc:attribute elements that have
-     * a "default" attribute value have those values pushed into the
-     * composite component attribute map so that programmatic access 
-     * (as opposed to EL access) will find the attribute values.
+     * This method makes it so that any cc:attribute elements that have a "default" attribute value
+     * have those values pushed into the composite component attribute map so that programmatic
+     * access (as opposed to EL access) will find the attribute values.
      *
      */
     @SuppressWarnings("unchecked")
     private void pushDeclaredDefaultValuesToAttributesMap(FacesContext context, BeanInfo componentMetadata, Map<String, Object> attrs, UIComponent component) {
-        
+
         Collection<String> attributesWithDeclaredDefaultValues = null;
         PropertyDescriptor[] propertyDescriptors = null;
 
         for (PropertyDescriptor propertyDescriptor : componentMetadata.getPropertyDescriptors()) {
             Object defaultValue = propertyDescriptor.getValue("default");
-            
+
             if (defaultValue != null) {
                 String key = propertyDescriptor.getName();
                 boolean isLiteralText = false;
-                
+
                 if (defaultValue instanceof ValueExpression) {
-                    isLiteralText = ((ValueExpression)defaultValue).isLiteralText();
+                    isLiteralText = ((ValueExpression) defaultValue).isLiteralText();
                     if (isLiteralText) {
-                        defaultValue = ((ValueExpression)defaultValue).getValue(context.getELContext());
+                        defaultValue = ((ValueExpression) defaultValue).getValue(context.getELContext());
                     }
                 }
-                
-                // Ensure this attribute is not a method-signature.  method-signature
+
+                // Ensure this attribute is not a method-signature. method-signature
                 // declared default values are handled in retargetMethodExpressions.
                 if (propertyDescriptor.getValue("method-signature") == null || propertyDescriptor.getValue("type") != null) {
 
@@ -1063,7 +1024,7 @@ public class ApplicationImpl extends Application {
                     }
                     attributesWithDeclaredDefaultValues.add(key);
 
-                    // Only store the attribute if it is literal text.  If it
+                    // Only store the attribute if it is literal text. If it
                     // is a ValueExpression, it will be handled explicitly in
                     // CompositeComponentAttributesELResolver.ExpressionEvalMap.get().
                     // If it is a MethodExpression, it will be dealt with in
@@ -1076,7 +1037,7 @@ public class ApplicationImpl extends Application {
                         } catch (IntrospectionException e) {
                             throw new FacesException(e);
                         }
-                        
+
                         defaultValue = convertValueToTypeIfNecessary(key, defaultValue, propertyDescriptors);
                         attrs.put(key, defaultValue);
                     }
@@ -1084,9 +1045,6 @@ public class ApplicationImpl extends Application {
             }
         }
     }
-    
-
-        
 
     @SuppressWarnings("deprecation")
     @Override
@@ -1152,9 +1110,8 @@ public class ApplicationImpl extends Application {
         notNull("converterClass", converterClass);
 
         if (LOGGER.isLoggable(FINE) && converterIdMap.containsKey(converterId)) {
-            LOGGER.log(FINE, 
-                "converterId {0} has already been registered.  Replacing existing converter class type {1} with {2}.",
-                new Object[] { converterId, converterIdMap.get(converterId), converterClass });
+            LOGGER.log(FINE, "converterId {0} has already been registered.  Replacing existing converter class type {1} with {2}.",
+                    new Object[] { converterId, converterIdMap.get(converterId), converterClass });
         }
 
         converterIdMap.put(converterId, converterClass);
@@ -1173,7 +1130,6 @@ public class ApplicationImpl extends Application {
         }
     }
 
-
     /**
      * @see javax.faces.application.Application#addConverter(Class, String)
      */
@@ -1188,11 +1144,10 @@ public class ApplicationImpl extends Application {
             addConverter(converterId, converterClass);
         } else {
             if (LOGGER.isLoggable(FINE) && converterTypeMap.containsKey(targetClass)) {
-                LOGGER.log(FINE, 
-                    "converter target class {0} has already been registered.  Replacing existing converter class type {1} with {2}.",
-                    new Object[] { targetClass.getName(), converterTypeMap.get(targetClass), converterClass });
+                LOGGER.log(FINE, "converter target class {0} has already been registered.  Replacing existing converter class type {1} with {2}.",
+                        new Object[] { targetClass.getName(), converterTypeMap.get(targetClass), converterClass });
             }
-            
+
             converterTypeMap.put(targetClass, converterClass);
             addPropertyEditorIfNecessary(targetClass);
         }
@@ -1201,22 +1156,13 @@ public class ApplicationImpl extends Application {
             LOGGER.fine(MessageFormat.format("added converter of class type ''{0}''", converterClass));
         }
     }
-    
-    private final String [] STANDARD_BY_TYPE_CONVERTER_CLASSES = {
-      "java.math.BigDecimal",
-      "java.lang.Boolean",
-      "java.lang.Byte",
-      "java.lang.Character",
-      "java.lang.Double",
-      "java.lang.Float",
-      "java.lang.Integer",
-      "java.lang.Long",
-      "java.lang.Short",
-      "java.lang.Enum"
-    };
+
+    private final String[] STANDARD_BY_TYPE_CONVERTER_CLASSES = { "java.math.BigDecimal", "java.lang.Boolean", "java.lang.Byte", "java.lang.Character",
+            "java.lang.Double", "java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.lang.Enum" };
 
     /**
      * Helper method to convert a value to a type as defined in PropertyDescriptor(s)
+     * 
      * @param name
      * @param value
      * @param propertyDescriptors
@@ -1229,18 +1175,18 @@ public class ApplicationImpl extends Application {
                 break;
             }
         }
-        
+
         return value;
     }
 
     /**
-     * <p>To enable EL Coercion to use JSF Custom converters, this 
-     * method will call <code>PropertyEditorManager.registerEditor()</code>,
-     * passing the <code>ConverterPropertyEditor</code> class for the
-     * <code>targetClass</code> if the target class is not one of the standard
-     * by-type converter target classes.
-     * @param targetClass the target class for which a PropertyEditory may or
-     *  may not be created
+     * <p>
+     * To enable EL Coercion to use JSF Custom converters, this method will call
+     * <code>PropertyEditorManager.registerEditor()</code>, passing the
+     * <code>ConverterPropertyEditor</code> class for the <code>targetClass</code> if the target
+     * class is not one of the standard by-type converter target classes.
+     * 
+     * @param targetClass the target class for which a PropertyEditory may or may not be created
      */
     private void addPropertyEditorIfNecessary(Class<?> targetClass) {
 
@@ -1253,18 +1199,18 @@ public class ApplicationImpl extends Application {
             return;
         }
         String className = targetClass.getName();
-        
+
         // Don't add a PropertyEditor for the standard by-type converters.
         if (targetClass.isPrimitive()) {
             return;
         }
-        
+
         for (String standardClass : STANDARD_BY_TYPE_CONVERTER_CLASSES) {
             if (standardClass.indexOf(className) != -1) {
                 return;
             }
         }
-        
+
         Class<?> editorClass = ConverterPropertyEditorFactory.getDefaultInstance().definePropertyEditorClassFor(targetClass);
         if (editorClass != null) {
             PropertyEditorManager.registerEditor(targetClass, editorClass);
@@ -1277,13 +1223,10 @@ public class ApplicationImpl extends Application {
 
     private void performOneTimeELInitialization() {
         if (null != compositeELResolver) {
-            throw new IllegalStateException("Class invariant invalidated: " +
-                    "The Application instance's ELResolver is not null " +
-                    "and it should be.");
+            throw new IllegalStateException("Class invariant invalidated: " + "The Application instance's ELResolver is not null " + "and it should be.");
         }
         associate.initializeELResolverChains();
     }
-
 
     /**
      * @see javax.faces.application.Application#createConverter(String)
@@ -1293,7 +1236,7 @@ public class ApplicationImpl extends Application {
 
         Util.notNull("converterId", converterId);
         Converter returnVal;
-        
+
         if (isJsf23()) {
             BeanManager beanManager = getBeanManager();
             returnVal = CdiUtils.createConverter(beanManager, converterId);
@@ -1301,17 +1244,15 @@ public class ApplicationImpl extends Application {
                 return returnVal;
             }
         }
-        
+
         returnVal = (Converter) newThing(converterId, converterIdMap);
-        
+
         if (returnVal == null) {
-            Object[] params = {converterId};
+            Object[] params = { converterId };
             if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                        "jsf.cannot_instantiate_converter_error", converterId);
+                LOGGER.log(Level.SEVERE, "jsf.cannot_instantiate_converter_error", converterId);
             }
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine(MessageFormat.format("created converter of type ''{0}''", converterId));
@@ -1331,7 +1272,7 @@ public class ApplicationImpl extends Application {
 
         Util.notNull("targetClass", targetClass);
         Converter returnVal = null;
-        
+
         if (isJsf23()) {
             BeanManager beanManager = getBeanManager();
             returnVal = CdiUtils.createConverter(beanManager, targetClass);
@@ -1339,37 +1280,31 @@ public class ApplicationImpl extends Application {
                 return returnVal;
             }
         }
-        
-        returnVal = (Converter) newConverter(targetClass,
-                                                   converterTypeMap,targetClass);
+
+        returnVal = (Converter) newConverter(targetClass, converterTypeMap, targetClass);
         if (returnVal != null) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
-                                                 returnVal.getClass().getName()));
+                LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''", returnVal.getClass().getName()));
             }
-            if (passDefaultTimeZone
-                && returnVal instanceof DateTimeConverter) {
+            if (passDefaultTimeZone && returnVal instanceof DateTimeConverter) {
                 ((DateTimeConverter) returnVal).setTimeZone(systemTimeZone);
             }
             associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
             return returnVal;
-        } 
+        }
 
-        //Search for converters registered to interfaces implemented by
-        //targetClass
+        // Search for converters registered to interfaces implemented by
+        // targetClass
         Class<?>[] interfaces = targetClass.getInterfaces();
         if (interfaces != null) {
             for (int i = 0; i < interfaces.length; i++) {
                 returnVal = createConverterBasedOnClass(interfaces[i], targetClass);
                 if (returnVal != null) {
-                   if (LOGGER.isLoggable(Level.FINE)) {
-                       LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
-                                                        returnVal.getClass().getName()));
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''", returnVal.getClass().getName()));
                     }
-                    if (passDefaultTimeZone
-                        && returnVal instanceof DateTimeConverter) {
-                        ((DateTimeConverter) returnVal)
-                              .setTimeZone(systemTimeZone);
+                    if (passDefaultTimeZone && returnVal instanceof DateTimeConverter) {
+                        ((DateTimeConverter) returnVal).setTimeZone(systemTimeZone);
                     }
                     associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
                     return returnVal;
@@ -1377,17 +1312,15 @@ public class ApplicationImpl extends Application {
             }
         }
 
-        //Search for converters registered to superclasses of targetClass
+        // Search for converters registered to superclasses of targetClass
         Class<?> superclass = targetClass.getSuperclass();
         if (superclass != null) {
             returnVal = createConverterBasedOnClass(superclass, targetClass);
             if (returnVal != null) {
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
-                                                     returnVal.getClass().getName()));
+                    LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''", returnVal.getClass().getName()));
                 }
-                if (passDefaultTimeZone
-                    && returnVal instanceof DateTimeConverter) {
+                if (passDefaultTimeZone && returnVal instanceof DateTimeConverter) {
                     ((DateTimeConverter) returnVal).setTimeZone(systemTimeZone);
                 }
                 associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
@@ -1398,72 +1331,64 @@ public class ApplicationImpl extends Application {
         return returnVal;
     }
 
-    protected Converter createConverterBasedOnClass(Class<?> targetClass,
-            Class<?> baseClass) {
-        
-        Converter returnVal = (Converter) newConverter(targetClass,
-                converterTypeMap, baseClass);
+    protected Converter createConverterBasedOnClass(Class<?> targetClass, Class<?> baseClass) {
+
+        Converter returnVal = (Converter) newConverter(targetClass, converterTypeMap, baseClass);
         if (returnVal != null) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
-                                                 returnVal.getClass().getName()));
+                LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''", returnVal.getClass().getName()));
             }
             return returnVal;
-        } 
+        }
 
-        //Search for converters registered to interfaces implemented by
-        //targetClass
+        // Search for converters registered to interfaces implemented by
+        // targetClass
         Class<?>[] interfaces = targetClass.getInterfaces();
         if (interfaces != null) {
             for (int i = 0; i < interfaces.length; i++) {
                 returnVal = createConverterBasedOnClass(interfaces[i], null);
                 if (returnVal != null) {
-                   if (LOGGER.isLoggable(Level.FINE)) {
-                       LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
-                                                        returnVal.getClass().getName()));
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''", returnVal.getClass().getName()));
                     }
                     return returnVal;
                 }
             }
         }
 
-        //Search for converters registered to superclasses of targetClass
+        // Search for converters registered to superclasses of targetClass
         Class<?> superclass = targetClass.getSuperclass();
         if (superclass != null) {
             returnVal = createConverterBasedOnClass(superclass, targetClass);
             if (returnVal != null) {
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
-                                                     returnVal.getClass().getName()));
+                    LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''", returnVal.getClass().getName()));
                 }
                 return returnVal;
             }
-        } 
+        }
         return returnVal;
     }
-
 
     /**
      * @see javax.faces.application.Application#getConverterIds()
      */
     @Override
     public Iterator<String> getConverterIds() {
-       
-        return converterIdMap.keySet().iterator();
-        
-    }
 
+        return converterIdMap.keySet().iterator();
+
+    }
 
     /**
      * @see javax.faces.application.Application#getConverterTypes()
      */
     @Override
     public Iterator<Class<?>> getConverterTypes() {
-                
-        return converterTypeMap.keySet().iterator();
-        
-    }
 
+        return converterTypeMap.keySet().iterator();
+
+    }
 
     /**
      * @see javax.faces.application.Application#getSupportedLocales()
@@ -1471,14 +1396,13 @@ public class ApplicationImpl extends Application {
     @Override
     public Iterator<Locale> getSupportedLocales() {
 
-            if (null != supportedLocales) {
-                return supportedLocales.iterator();
-            } else {
-                return Collections.<Locale>emptyList().iterator();
-            }
+        if (null != supportedLocales) {
+            return supportedLocales.iterator();
+        } else {
+            return Collections.<Locale>emptyList().iterator();
+        }
 
     }
-
 
     /**
      * @see javax.faces.application.Application#setSupportedLocales(java.util.Collection)
@@ -1491,12 +1415,10 @@ public class ApplicationImpl extends Application {
         supportedLocales = new ArrayList<>(newLocales);
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, MessageFormat.format("set Supported Locales ''{0}''",
-                                                        supportedLocales.toString()));
+            LOGGER.log(Level.FINE, MessageFormat.format("set Supported Locales ''{0}''", supportedLocales.toString()));
         }
 
     }
-
 
     /**
      * @see javax.faces.application.Application#getDefaultLocale()
@@ -1505,7 +1427,6 @@ public class ApplicationImpl extends Application {
     public Locale getDefaultLocale() {
         return defaultLocale;
     }
-
 
     /**
      * @see javax.faces.application.Application#setDefaultLocale(java.util.Locale)
@@ -1518,14 +1439,11 @@ public class ApplicationImpl extends Application {
         defaultLocale = locale;
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, MessageFormat.format("set defaultLocale ''{0}''",
-                                                         defaultLocale.getClass().getName()));
+            LOGGER.log(Level.FINE, MessageFormat.format("set defaultLocale ''{0}''", defaultLocale.getClass().getName()));
         }
     }
 
-
     protected String defaultRenderKitId = null;
-
 
     /**
      * @see javax.faces.application.Application#getDefaultRenderKitId()
@@ -1535,7 +1453,6 @@ public class ApplicationImpl extends Application {
         return defaultRenderKitId;
     }
 
-
     /**
      * @see javax.faces.application.Application#setDefaultRenderKitId(String)
      */
@@ -1543,7 +1460,6 @@ public class ApplicationImpl extends Application {
     public void setDefaultRenderKitId(String renderKitId) {
         defaultRenderKitId = renderKitId;
     }
-
 
     /**
      * @see javax.faces.application.Application#addValidator(String, String)
@@ -1555,21 +1471,17 @@ public class ApplicationImpl extends Application {
         Util.notNull("validatorClass", validatorClass);
 
         if (LOGGER.isLoggable(Level.FINE) && validatorMap.containsKey(validatorId)) {
-            LOGGER.log(Level.FINE,
-                       "validatorId {0} has already been registered.  Replacing existing validator class type {1} with {2}.",
-                       new Object[] { validatorId, validatorMap.get(validatorId), validatorClass });    
+            LOGGER.log(Level.FINE, "validatorId {0} has already been registered.  Replacing existing validator class type {1} with {2}.",
+                    new Object[] { validatorId, validatorMap.get(validatorId), validatorClass });
         }
 
         validatorMap.put(validatorId, validatorClass);
-        
+
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("added validator of type ''{0}'' class ''{1}''",
-                                             validatorId,
-                                             validatorClass));
+            LOGGER.fine(MessageFormat.format("added validator of type ''{0}'' class ''{1}''", validatorId, validatorClass));
         }
 
     }
-
 
     /**
      * @see javax.faces.application.Application#createValidator(String)
@@ -1591,31 +1503,27 @@ public class ApplicationImpl extends Application {
 
         returnVal = (Validator) newThing(validatorId, validatorMap);
         if (returnVal == null) {
-            Object[] params = {validatorId};
+            Object[] params = { validatorId };
             if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                        "jsf.cannot_instantiate_validator_error", params);
+                LOGGER.log(Level.SEVERE, "jsf.cannot_instantiate_validator_error", params);
             }
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("created validator of type ''{0}''",
-                                             validatorId));
+            LOGGER.fine(MessageFormat.format("created validator of type ''{0}''", validatorId));
         }
         associate.getAnnotationManager().applyValidatorAnnotations(FacesContext.getCurrentInstance(), returnVal);
         return returnVal;
     }
 
-
     /**
      * @see javax.faces.application.Application#getValidatorIds()
      */
     @Override
-    public Iterator<String> getValidatorIds() {        
-        
+    public Iterator<String> getValidatorIds() {
+
         return validatorMap.keySet().iterator();
-               
+
     }
 
     /**
@@ -1631,10 +1539,10 @@ public class ApplicationImpl extends Application {
     }
 
     /**
-     * @see javax.faces.application.Application#getDefaultValidatorInfo() 
+     * @see javax.faces.application.Application#getDefaultValidatorInfo()
      */
     @Override
-    public Map<String,String> getDefaultValidatorInfo() {
+    public Map<String, String> getDefaultValidatorInfo() {
 
         if (defaultValidatorInfo == null) {
             synchronized (this) {
@@ -1657,8 +1565,7 @@ public class ApplicationImpl extends Application {
                     }
                 }
             }
-            defaultValidatorInfo =
-                  Collections.unmodifiableMap(defaultValidatorInfo);
+            defaultValidatorInfo = Collections.unmodifiableMap(defaultValidatorInfo);
         }
 
         return defaultValidatorInfo;
@@ -1675,11 +1582,9 @@ public class ApplicationImpl extends Application {
         this.messageBundle = messageBundle;
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, MessageFormat.format("set messageBundle ''{0}''",
-                                                        messageBundle));
+            LOGGER.log(Level.FINE, MessageFormat.format("set messageBundle ''{0}''", messageBundle));
         }
     }
-
 
     /**
      * @see javax.faces.application.Application#getMessageBundle()
@@ -1688,21 +1593,24 @@ public class ApplicationImpl extends Application {
     public String getMessageBundle() {
         return messageBundle;
     }
-    
-    
+
     /**
-     * <p>PRECONDITIONS: the values in the Map are either Strings
-     * representing fully qualified java class names, or java.lang.Class
-     * instances.</p>
-     * <p>ALGORITHM: Look in the argument map for a value for the argument
-     * key.  If found, if the value is instanceof String, assume the String
-     * specifies a fully qualified java class name and obtain the
-     * java.lang.Class instance for that String using Util.loadClass().
-     * Replace the String instance in the argument map with the Class
-     * instance.  If the value is instanceof Class, proceed.  Assert that the
-     * value is either instanceof java.lang.Class or java.lang.String.</p>
-     * <p>Now that you have a java.lang.class, call its newInstance and
-     * return it as the result of this method.</p>
+     * <p>
+     * PRECONDITIONS: the values in the Map are either Strings representing fully qualified java
+     * class names, or java.lang.Class instances.
+     * </p>
+     * <p>
+     * ALGORITHM: Look in the argument map for a value for the argument key. If found, if the value
+     * is instanceof String, assume the String specifies a fully qualified java class name and
+     * obtain the java.lang.Class instance for that String using Util.loadClass(). Replace the
+     * String instance in the argument map with the Class instance. If the value is instanceof
+     * Class, proceed. Assert that the value is either instanceof java.lang.Class or
+     * java.lang.String.
+     * </p>
+     * <p>
+     * Now that you have a java.lang.class, call its newInstance and return it as the result of this
+     * method.
+     * </p>
      *
      * @param key Used to look up the value in the <code>Map</code>.
      * @param map The <code>Map</code> that will be searched.
@@ -1721,20 +1629,20 @@ public class ApplicationImpl extends Application {
         }
         assert value instanceof String || value instanceof Class;
         if (value instanceof String) {
-             String cValue = (String) value;
-             try {
-               clazz = Util.loadClass(cValue, value);
+            String cValue = (String) value;
+            try {
+                clazz = Util.loadClass(cValue, value);
                 if (!associate.isDevModeEnabled()) {
                     map.put(key, clazz);
-                } 
+                }
                 assert clazz != null;
-             } catch (Exception e) {
-                 throw new FacesException(e.getMessage(), e);
-             }
+            } catch (Exception e) {
+                throw new FacesException(e.getMessage(), e);
+            }
         } else {
             clazz = (Class) value;
         }
-        
+
         try {
             result = clazz.newInstance();
         } catch (Throwable t) {
@@ -1742,42 +1650,46 @@ public class ApplicationImpl extends Application {
             do {
                 previousT = t;
                 if (LOGGER.isLoggable(Level.SEVERE)) {
-                	LOGGER.log(Level.SEVERE, "Unable to load class: ", t);
+                    LOGGER.log(Level.SEVERE, "Unable to load class: ", t);
                 }
             } while (null != (t = t.getCause()));
             t = previousT;
-            
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
-                  clazz.getName()), t);
+
+            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, clazz.getName()), t);
         }
 
         return result;
     }
-    
+
     /**
-     * <p>The same as newThing except that a single argument constructor
-     * that accepts a Class is looked for before calling the no-arg version.</p>
+     * <p>
+     * The same as newThing except that a single argument constructor that accepts a Class is looked
+     * for before calling the no-arg version.
+     * </p>
      *
-     * <p>PRECONDITIONS: the values in the Map are either Strings
-     * representing fully qualified java class names, or java.lang.Class
-     * instances.</p>
-     * <p>ALGORITHM: Look in the argument map for a value for the argument
-     * key.  If found, if the value is instanceof String, assume the String
-     * specifies a fully qualified java class name and obtain the
-     * java.lang.Class instance for that String using Util.loadClass().
-     * Replace the String instance in the argument map with the Class
-     * instance.  If the value is instanceof Class, proceed.  Assert that the
-     * value is either instanceof java.lang.Class or java.lang.String.</p>
-     * <p>Now that you have a java.lang.class, call its newInstance and
-     * return it as the result of this method.</p>
+     * <p>
+     * PRECONDITIONS: the values in the Map are either Strings representing fully qualified java
+     * class names, or java.lang.Class instances.
+     * </p>
+     * <p>
+     * ALGORITHM: Look in the argument map for a value for the argument key. If found, if the value
+     * is instanceof String, assume the String specifies a fully qualified java class name and
+     * obtain the java.lang.Class instance for that String using Util.loadClass(). Replace the
+     * String instance in the argument map with the Class instance. If the value is instanceof
+     * Class, proceed. Assert that the value is either instanceof java.lang.Class or
+     * java.lang.String.
+     * </p>
+     * <p>
+     * Now that you have a java.lang.class, call its newInstance and return it as the result of this
+     * method.
+     * </p>
      *
      * @param key Used to look up the value in the <code>Map</code>.
      * @param map The <code>Map</code> that will be searched.
      * @param targetClass the target class for the single argument ctor
      * @return The new object instance.
      */
-    protected Object newConverter(Class<?> key, Map<Class<?>,Object> map, Class<?> targetClass) {
+    protected Object newConverter(Class<?> key, Map<Class<?>, Object> map, Class<?> targetClass) {
         assert key != null && map != null;
 
         Object result = null;
@@ -1791,21 +1703,20 @@ public class ApplicationImpl extends Application {
         assert value instanceof String || value instanceof Class;
         if (value instanceof String) {
             String cValue = (String) value;
-             try {
+            try {
                 clazz = Util.loadClass(cValue, value);
                 if (!associate.isDevModeEnabled()) {
                     map.put(key, clazz);
                 }
                 assert clazz != null;
-             } catch (Exception e) {
-                 throw new FacesException(e.getMessage(), e);
-             }
+            } catch (Exception e) {
+                throw new FacesException(e.getMessage(), e);
+            }
         } else {
             clazz = (Class) value;
         }
-        
-        Constructor ctor = 
-              ReflectionUtils.lookupConstructor(clazz, Class.class);
+
+        Constructor ctor = ReflectionUtils.lookupConstructor(clazz, Class.class);
         Throwable cause = null;
         if (ctor != null) {
             try {
@@ -1819,26 +1730,20 @@ public class ApplicationImpl extends Application {
             } catch (InstantiationException | IllegalAccessException e) {
                 cause = e;
             }
-        }       
-        
-        if (null != cause) {           
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, 
-                    clazz.getName()), cause);
-            
+        }
+
+        if (null != cause) {
+            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, clazz.getName()), cause);
+
         }
         return result;
     }
 
-
     // --------------------------------------------------------- Private Methods
 
-    public static final String THIS_LIBRARY = 
-            "com.sun.faces.composite.this.library";
+    public static final String THIS_LIBRARY = "com.sun.faces.composite.this.library";
 
-    private UIComponent createComponentFromScriptResource(FacesContext context,
-                                                          Resource scriptComponentResource,
-                                                          Resource componentResource) {
+    private UIComponent createComponentFromScriptResource(FacesContext context, Resource scriptComponentResource, Resource componentResource) {
 
         UIComponent result = null;
 
@@ -1857,67 +1762,54 @@ public class ApplicationImpl extends Application {
             }
             result = (UIComponent) componentClass.newInstance();
         } catch (IllegalAccessException | InstantiationException | ClassNotFoundException ex) {
-        	if (LOGGER.isLoggable(Level.SEVERE)) {
-        		LOGGER.log(Level.SEVERE, null, ex);
-        	}
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
         }
 
         if (result != null) {
             // Make sure the resource is there for the annotation processor.
-            result.getAttributes().put(Resource.COMPONENT_RESOURCE_KEY, 
-                componentResource);
-            // In case there are any "this" references, 
+            result.getAttributes().put(Resource.COMPONENT_RESOURCE_KEY, componentResource);
+            // In case there are any "this" references,
             // make sure they can be resolved.
-            context.getAttributes().put(THIS_LIBRARY,
-                    componentResource.getLibraryName());
+            context.getAttributes().put(THIS_LIBRARY, componentResource.getLibraryName());
             try {
-                associate.getAnnotationManager()
-                        .applyComponentAnnotations(context, result);
-            }
-            finally {
+                associate.getAnnotationManager().applyComponentAnnotations(context, result);
+            } finally {
                 context.getAttributes().remove(THIS_LIBRARY);
             }
         }
 
         return result;
-        
+
     }
 
-
     /**
-     * Leveraged by {@link Application#createComponent(String)} and {@link Application#createComponent(javax.faces.context.FacesContext, String, String)}
-     * This method will apply any component and render annotations that may be present.
+     * Leveraged by {@link Application#createComponent(String)} and
+     * {@link Application#createComponent(javax.faces.context.FacesContext, String, String)} This
+     * method will apply any component and render annotations that may be present.
      */
-    private UIComponent createComponentApplyAnnotations(FacesContext ctx,
-                                                        String componentType,
-                                                        String rendererType,
-                                                        boolean applyAnnotations) {
+    private UIComponent createComponentApplyAnnotations(FacesContext ctx, String componentType, String rendererType, boolean applyAnnotations) {
 
         UIComponent c;
         try {
             c = (UIComponent) newThing(componentType, componentMap);
         } catch (Exception ex) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                           "jsf.cannot_instantiate_component_error",
-                           componentType);
+                LOGGER.log(Level.SEVERE, "jsf.cannot_instantiate_component_error", componentType);
             }
             throw new FacesException(ex);
         }
         if (c == null) {
-            Object[] params = {componentType};
+            Object[] params = { componentType };
             if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                               "jsf.cannot_instantiate_component_error",
-                               params);
+                LOGGER.log(Level.SEVERE, "jsf.cannot_instantiate_component_error", params);
             }
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, MessageFormat.format("Created component with component type of ''{0}''",
-                                                        componentType));
+            LOGGER.log(Level.FINE, MessageFormat.format("Created component with component type of ''{0}''", componentType));
         }
 
         if (applyAnnotations) {
@@ -1927,29 +1819,23 @@ public class ApplicationImpl extends Application {
 
     }
 
-
     /**
-     * Leveraged by {@link Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)} and
+     * Leveraged by
+     * {@link Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)}
+     * and
      * {@link Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String, String)}.
      * This method will apply any component and render annotations that may be present.
      */
-    private UIComponent createComponentApplyAnnotations(FacesContext ctx,
-                                                        ValueExpression componentExpression,
-                                                        String componentType,
-                                                        String rendererType,
-                                                        boolean applyAnnotations) {
+    private UIComponent createComponentApplyAnnotations(FacesContext ctx, ValueExpression componentExpression, String componentType, String rendererType,
+            boolean applyAnnotations) {
 
         UIComponent c;
 
         try {
-            c = (UIComponent) componentExpression
-                  .getValue(ctx.getELContext());
-            
+            c = (UIComponent) componentExpression.getValue(ctx.getELContext());
+
             if (c == null) {
-                c = this.createComponentApplyAnnotations(ctx,
-                                                         componentType,
-                                                         rendererType,
-                                                         applyAnnotations);
+                c = this.createComponentApplyAnnotations(ctx, componentType, rendererType, applyAnnotations);
                 componentExpression.setValue(ctx.getELContext(), c);
             } else if (applyAnnotations) {
                 this.applyAnnotations(ctx, rendererType, c);
@@ -1962,17 +1848,13 @@ public class ApplicationImpl extends Application {
 
     }
 
-
     /**
      * Process any annotations associated with this component/renderer.
      */
-    private void applyAnnotations(FacesContext ctx,
-                                  String rendererType,
-                                  UIComponent c) {
+    private void applyAnnotations(FacesContext ctx, String rendererType, UIComponent c) {
 
         if (c != null && ctx != null) {
-            associate.getAnnotationManager()
-                  .applyComponentAnnotations(ctx, c);
+            associate.getAnnotationManager().applyComponentAnnotations(ctx, c);
             if (rendererType != null) {
                 RenderKit rk = ctx.getRenderKit();
                 Renderer r = null;
@@ -1980,29 +1862,25 @@ public class ApplicationImpl extends Application {
                     r = rk.getRenderer(c.getFamily(), rendererType);
                     if (r != null) {
                         c.setRendererType(rendererType);
-                        associate.getAnnotationManager()
-                           .applyRendererAnnotations(ctx, r, c);
+                        associate.getAnnotationManager().applyRendererAnnotations(ctx, r, c);
                     }
                 }
                 if ((rk == null || r == null) && LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                       "Unable to create Renderer with rendererType {0} for component with component type of {1}",
-                       new Object[] { rendererType, c.getFamily() });
+                    LOGGER.log(Level.FINE, "Unable to create Renderer with rendererType {0} for component with component type of {1}",
+                            new Object[] { rendererType, c.getFamily() });
                 }
             }
         }
     }
 
     /**
-     * @return the SystemEventListeners that should be used for the
-     * provided combination of SystemEvent and source.
+     * @return the SystemEventListeners that should be used for the provided combination of
+     *         SystemEvent and source.
      */
-    private Set<SystemEventListener> getListeners(Class<? extends SystemEvent> systemEvent,
-                                                  Class<?> sourceClass) {
+    private Set<SystemEventListener> getListeners(Class<? extends SystemEvent> systemEvent, Class<?> sourceClass) {
 
         Set<SystemEventListener> listeners = null;
-        EventInfo sourceInfo =
-              systemEventHelper.getEventInfo(systemEvent, sourceClass);
+        EventInfo sourceInfo = systemEventHelper.getEventInfo(systemEvent, sourceClass);
         if (sourceInfo != null) {
             listeners = sourceInfo.getListeners();
         }
@@ -2011,17 +1889,13 @@ public class ApplicationImpl extends Application {
 
     }
 
-    private SystemEvent invokeViewListenersFor(FacesContext ctx,
-                                               Class<? extends SystemEvent> systemEventClass,
-                                               SystemEvent event,
-                                               Object source) {
+    private SystemEvent invokeViewListenersFor(FacesContext ctx, Class<? extends SystemEvent> systemEventClass, SystemEvent event, Object source) {
         SystemEvent result = event;
 
         if (listenerInvocationGuard.isGuardSet(ctx, systemEventClass)) {
             return result;
         }
         listenerInvocationGuard.setGuard(ctx, systemEventClass);
-
 
         UIViewRoot root = ctx.getViewRoot();
         try {
@@ -2031,14 +1905,9 @@ public class ApplicationImpl extends Application {
                     return null;
                 }
 
-                EventInfo rootEventInfo =
-                        systemEventHelper.getEventInfo(systemEventClass,
-                        UIViewRoot.class);
+                EventInfo rootEventInfo = systemEventHelper.getEventInfo(systemEventClass, UIViewRoot.class);
                 // process view listeners
-                result = processListenersAccountingForAdds(listeners,
-                        event,
-                        source,
-                        rootEventInfo);
+                result = processListenersAccountingForAdds(listeners, event, source, rootEventInfo);
             }
         } finally {
             listenerInvocationGuard.clearGuard(ctx, systemEventClass);
@@ -2048,10 +1917,9 @@ public class ApplicationImpl extends Application {
     }
 
     /*
-     * This class encapsulates the behavior to prevent infinite loops
-     * when the publishing of one event leads to the queueing of another
-     * event of the same type.  Special provision is made to allow the
-     * case where this guaring mechanims happens on a per-FacesContext,
+     * This class encapsulates the behavior to prevent infinite loops when the publishing of one
+     * event leads to the queueing of another event of the same type. Special provision is made to
+     * allow the case where this guaring mechanims happens on a per-FacesContext,
      * per-SystemEvent.class type basis.
      */
 
@@ -2076,17 +1944,15 @@ public class ApplicationImpl extends Application {
         public void clearGuard(FacesContext ctx, Class<? extends SystemEvent> systemEventClass) {
             Map<Class<? extends SystemEvent>, Boolean> data = getDataStructure(ctx);
             data.put(systemEventClass, Boolean.FALSE);
-            
+
         }
 
         private Map<Class<? extends SystemEvent>, Boolean> getDataStructure(FacesContext ctx) {
             Map<Class<? extends SystemEvent>, Boolean> result = null;
             Map<Object, Object> ctxMap = ctx.getAttributes();
-            final String IS_PROCESSING_LISTENERS_KEY =
-                    "com.sun.faces.application.ApplicationImpl.IS_PROCESSING_LISTENERS";
+            final String IS_PROCESSING_LISTENERS_KEY = "com.sun.faces.application.ApplicationImpl.IS_PROCESSING_LISTENERS";
 
-            if (null == (result = (Map<Class<? extends SystemEvent>, Boolean>)
-                         ctxMap.get(IS_PROCESSING_LISTENERS_KEY))) {
+            if (null == (result = (Map<Class<? extends SystemEvent>, Boolean>) ctxMap.get(IS_PROCESSING_LISTENERS_KEY))) {
                 result = new HashMap<>(12);
                 ctxMap.put(IS_PROCESSING_LISTENERS_KEY, result);
             }
@@ -2097,12 +1963,10 @@ public class ApplicationImpl extends Application {
     }
 
     /**
-     * @return process any listeners for the specified SystemEventListenerHolder
-     *  and return any SystemEvent that may have been created as a side-effect
-     *  of processing the listeners.
+     * @return process any listeners for the specified SystemEventListenerHolder and return any
+     *         SystemEvent that may have been created as a side-effect of processing the listeners.
      */
-    private SystemEvent invokeComponentListenersFor(Class<? extends SystemEvent> systemEventClass,
-                                                    Object source) {
+    private SystemEvent invokeComponentListenersFor(Class<? extends SystemEvent> systemEventClass, Object source) {
 
         if (source instanceof SystemEventListenerHolder) {
 
@@ -2110,35 +1974,23 @@ public class ApplicationImpl extends Application {
             if (null == listeners) {
                 return null;
             }
-            EventInfo eventInfo =
-                  compSysEventHelper.getEventInfo(systemEventClass,
-                                                  source.getClass());
-            return processListeners(listeners,
-                                    null,
-                                    source,
-                                    eventInfo);
+            EventInfo eventInfo = compSysEventHelper.getEventInfo(systemEventClass, source.getClass());
+            return processListeners(listeners, null, source, eventInfo);
         }
         return null;
 
     }
 
     /**
-     * Traverse the <code>List</code> of listeners and invoke any that are relevent
-     * for the specified source.
+     * Traverse the <code>List</code> of listeners and invoke any that are relevent for the
+     * specified source.
      *
      * @throws javax.faces.event.AbortProcessingException propagated from the listener invocation
      */
-    private SystemEvent invokeListenersFor(Class<? extends SystemEvent> systemEventClass,
-                                           SystemEvent event,
-                                           Object source,
-                                           Class<?> sourceBaseType,
-                                           boolean useSourceLookup)
-    throws AbortProcessingException {
+    private SystemEvent invokeListenersFor(Class<? extends SystemEvent> systemEventClass, SystemEvent event, Object source, Class<?> sourceBaseType,
+            boolean useSourceLookup) throws AbortProcessingException {
 
-        EventInfo eventInfo = systemEventHelper.getEventInfo(systemEventClass,
-                                                             source,
-                                                             sourceBaseType,
-                                                             useSourceLookup);
+        EventInfo eventInfo = systemEventHelper.getEventInfo(systemEventClass, source, sourceBaseType, useSourceLookup);
         if (eventInfo != null) {
             Set<SystemEventListener> listeners = eventInfo.getListeners();
             event = processListeners(listeners, event, source, eventInfo);
@@ -2149,18 +2001,14 @@ public class ApplicationImpl extends Application {
     }
 
     /**
-     * Iterate through and invoke the listeners.  If the passed event was
-     * <code>null</code>, create the event, and return it.
+     * Iterate through and invoke the listeners. If the passed event was <code>null</code>, create
+     * the event, and return it.
      */
-    private SystemEvent processListeners(Collection<SystemEventListener> listeners,
-                                         SystemEvent event,
-                                         Object source,
-                                         EventInfo eventInfo) {
+    private SystemEvent processListeners(Collection<SystemEventListener> listeners, SystemEvent event, Object source, EventInfo eventInfo) {
 
-          if (listeners != null && !listeners.isEmpty()) {
-            ArrayList<SystemEventListener> list = 
-                    new ArrayList<>(listeners);
-            
+        if (listeners != null && !listeners.isEmpty()) {
+            ArrayList<SystemEventListener> list = new ArrayList<>(listeners);
+
             for (SystemEventListener curListener : list) {
                 if (curListener != null && curListener.isListenerForSource(source)) {
                     if (event == null) {
@@ -2178,64 +2026,56 @@ public class ApplicationImpl extends Application {
 
     }
 
-    private SystemEvent processListenersAccountingForAdds(List<SystemEventListener> listeners,
-                                         SystemEvent event,
-                                         Object source,
-                                         EventInfo eventInfo) {
+    private SystemEvent processListenersAccountingForAdds(List<SystemEventListener> listeners, SystemEvent event, Object source, EventInfo eventInfo) {
 
-          if (listeners != null && !listeners.isEmpty()) {
+        if (listeners != null && !listeners.isEmpty()) {
 
-              // copy listeners
-              // go thru copy completely
-              // compare copy to original
-              // if original differs from copy, make a new copy.
-              // The new copy consists of the original list - processed
+            // copy listeners
+            // go thru copy completely
+            // compare copy to original
+            // if original differs from copy, make a new copy.
+            // The new copy consists of the original list - processed
 
-              SystemEventListener listenersCopy[] =
-                      new SystemEventListener[listeners.size()];
-              int i = 0;
-              for (i = 0; i < listenersCopy.length; i++) {
-                  listenersCopy[i] = listeners.get(i);
-              }
+            SystemEventListener listenersCopy[] = new SystemEventListener[listeners.size()];
+            int i = 0;
+            for (i = 0; i < listenersCopy.length; i++) {
+                listenersCopy[i] = listeners.get(i);
+            }
 
-              Map<SystemEventListener, Boolean> processedListeners =
-                      new HashMap<>(listeners.size());
-              boolean processedSomeEvents = false,
-                      originalDiffersFromCopy = false;
+            Map<SystemEventListener, Boolean> processedListeners = new HashMap<>(listeners.size());
+            boolean processedSomeEvents = false, originalDiffersFromCopy = false;
 
-              do {
-                  i = 0;
-                  originalDiffersFromCopy = false;
-                  if (0 < listenersCopy.length) {
-                      for (i = 0; i < listenersCopy.length; i++) {
-                          SystemEventListener curListener = listenersCopy[i];
-                          if (curListener != null && curListener.isListenerForSource(source)) {
-                              if (event == null) {
-                                  event = eventInfo.createSystemEvent(source);
-                              }
-                              assert event != null;
-                              if (!processedListeners.containsKey(curListener)
-                                       && event.isAppropriateListener(curListener)) {
-                                  processedSomeEvents = true;
-                                  event.processListener(curListener);
-                                  processedListeners.put(curListener, Boolean.TRUE);
-                              }
-                          }
-                      }
-                      if (originalDiffersFromCopy(listeners, listenersCopy)) {
-                          originalDiffersFromCopy = true;
-                          listenersCopy = copyListWithExclusions(listeners, processedListeners);
-                      }
-                  }
-              } while (originalDiffersFromCopy && processedSomeEvents);
+            do {
+                i = 0;
+                originalDiffersFromCopy = false;
+                if (0 < listenersCopy.length) {
+                    for (i = 0; i < listenersCopy.length; i++) {
+                        SystemEventListener curListener = listenersCopy[i];
+                        if (curListener != null && curListener.isListenerForSource(source)) {
+                            if (event == null) {
+                                event = eventInfo.createSystemEvent(source);
+                            }
+                            assert event != null;
+                            if (!processedListeners.containsKey(curListener) && event.isAppropriateListener(curListener)) {
+                                processedSomeEvents = true;
+                                event.processListener(curListener);
+                                processedListeners.put(curListener, Boolean.TRUE);
+                            }
+                        }
+                    }
+                    if (originalDiffersFromCopy(listeners, listenersCopy)) {
+                        originalDiffersFromCopy = true;
+                        listenersCopy = copyListWithExclusions(listeners, processedListeners);
+                    }
+                }
+            } while (originalDiffersFromCopy && processedSomeEvents);
         }
 
         return event;
 
     }
 
-    private boolean originalDiffersFromCopy(Collection<SystemEventListener> original,
-            SystemEventListener copy[]) {
+    private boolean originalDiffersFromCopy(Collection<SystemEventListener> original, SystemEventListener copy[]) {
         boolean foundDifference = false;
         int i = 0, originalLen = original.size(), copyLen = copy.length;
 
@@ -2254,10 +2094,8 @@ public class ApplicationImpl extends Application {
         return foundDifference;
     }
 
-    private SystemEventListener [] copyListWithExclusions(Collection<SystemEventListener> original,
-            Map<SystemEventListener, Boolean> excludes) {
-        SystemEventListener [] result = null,
-                temp = new SystemEventListener[original.size()];
+    private SystemEventListener[] copyListWithExclusions(Collection<SystemEventListener> original, Map<SystemEventListener, Boolean> excludes) {
+        SystemEventListener[] result = null, temp = new SystemEventListener[original.size()];
         int i = 0;
         for (SystemEventListener cur : original) {
             if (!excludes.containsKey(cur)) {
@@ -2269,15 +2107,15 @@ public class ApplicationImpl extends Application {
 
         return result;
     }
-    
-	private boolean needsProcessing(FacesContext context, Class<? extends SystemEvent> systemEventClass) {
-		return context.isProcessingEvents() || ExceptionQueuedEvent.class.isAssignableFrom(systemEventClass);
-	}
-	
+
+    private boolean needsProcessing(FacesContext context, Class<? extends SystemEvent> systemEventClass) {
+        return context.isProcessingEvents() || ExceptionQueuedEvent.class.isAssignableFrom(systemEventClass);
+    }
+
     private String fetchProjectStageFromConfig() {
         WebConfiguration webConfig = WebConfiguration.getInstance(FacesContext.getCurrentInstance().getExternalContext());
         String value = webConfig.getEnvironmentEntry(WebConfiguration.WebEnvironmentEntry.ProjectStage);
-        
+
         if (value != null) {
             if (LOGGER.isLoggable(FINE)) {
                 LOGGER.log(FINE, "ProjectStage configured via JNDI: {0}", value);
@@ -2288,10 +2126,10 @@ public class ApplicationImpl extends Application {
                 LOGGER.log(FINE, "ProjectStage configured via servlet context init parameter: {0}", value);
             }
         }
-        
+
         return value;
     }
-    
+
     private void setProjectStageFromValue(String value, ProjectStage defaultStage) {
         if (value != null) {
             try {
@@ -2302,15 +2140,13 @@ public class ApplicationImpl extends Application {
                 }
             }
         }
-        
+
         if (projectStage == null) {
             projectStage = defaultStage;
         }
     }
 
-
     // ----------------------------------------------------------- Inner Classes
-
 
     /**
      * Utility class for dealing with application events.
@@ -2319,31 +2155,22 @@ public class ApplicationImpl extends Application {
 
         private final Cache<Class<? extends SystemEvent>, SystemEventInfo> systemEventInfoCache;
 
-
         // -------------------------------------------------------- Constructors
-
 
         public SystemEventHelper() {
 
-            systemEventInfoCache =
-                  new Cache<>(
-                        new Factory<Class<? extends SystemEvent>, SystemEventInfo>() {
-                            @Override
-                            public SystemEventInfo newInstance(final Class<? extends SystemEvent> arg)
-                                  throws InterruptedException {
-                                return new SystemEventInfo(arg);
-                            }
-                        }
-                  );
+            systemEventInfoCache = new Cache<>(new Factory<Class<? extends SystemEvent>, SystemEventInfo>() {
+                @Override
+                public SystemEventInfo newInstance(final Class<? extends SystemEvent> arg) throws InterruptedException {
+                    return new SystemEventInfo(arg);
+                }
+            });
 
         }
 
-
         // ------------------------------------------------------ Public Methods
 
-
-        public EventInfo getEventInfo(Class<? extends SystemEvent> systemEventClass,
-                                      Class<?> sourceClass) {
+        public EventInfo getEventInfo(Class<? extends SystemEvent> systemEventClass, Class<?> sourceClass) {
 
             EventInfo info = null;
             SystemEventInfo systemEventInfo = systemEventInfoCache.get(systemEventClass);
@@ -2355,98 +2182,71 @@ public class ApplicationImpl extends Application {
 
         }
 
+        public EventInfo getEventInfo(Class<? extends SystemEvent> systemEventClass, Object source, Class<?> sourceBaseType, boolean useSourceForLookup) {
 
-        public EventInfo getEventInfo(Class<? extends SystemEvent> systemEventClass,
-                                      Object source,
-                                      Class<?> sourceBaseType,
-                                      boolean useSourceForLookup) {
-
-            Class<?> sourceClass =
-                  (useSourceForLookup ?
-                       (sourceBaseType != null
-                                          ? sourceBaseType
-                                          : source.getClass())
-                                        : Void.class);
+            Class<?> sourceClass = (useSourceForLookup ? (sourceBaseType != null ? sourceBaseType : source.getClass()) : Void.class);
             return getEventInfo(systemEventClass, sourceClass);
 
         }
 
-
     } // END SystemEventHelper
-
 
     /**
      * Utility class for dealing with {@link javax.faces.component.UIComponent} events.
      */
     private static class ComponentSystemEventHelper {
 
-        private Cache<Class<?>,Cache<Class<? extends SystemEvent>,EventInfo>> sourceCache;
-
+        private Cache<Class<?>, Cache<Class<? extends SystemEvent>, EventInfo>> sourceCache;
 
         // -------------------------------------------------------- Constructors
-
 
         public ComponentSystemEventHelper() {
 
             // Initialize the 'sources' cache for, ahem, readability...
             // ~generics++
-            Factory<Class<?>, Cache<Class<? extends SystemEvent>, EventInfo>> eventCacheFactory =
-                  new Factory<Class<?>, Cache<Class<? extends SystemEvent>, EventInfo>>() {
-                      @Override
-                      public Cache<Class<? extends SystemEvent>, EventInfo> newInstance(
-                            final Class<?> sourceClass)
-                            throws InterruptedException {
-                          Factory<Class<? extends SystemEvent>, EventInfo> eventInfoFactory =
-                                new Factory<Class<? extends SystemEvent>, EventInfo>() {
-                                    @Override
-                                    public EventInfo newInstance(final Class<? extends SystemEvent> systemEventClass)
-                                          throws InterruptedException {
-                                        return new EventInfo(systemEventClass, sourceClass);
-                                    }
-                                };
-                          return new Cache<>(eventInfoFactory);
-                      }
-                  };
+            Factory<Class<?>, Cache<Class<? extends SystemEvent>, EventInfo>> eventCacheFactory = new Factory<Class<?>, Cache<Class<? extends SystemEvent>, EventInfo>>() {
+                @Override
+                public Cache<Class<? extends SystemEvent>, EventInfo> newInstance(final Class<?> sourceClass) throws InterruptedException {
+                    Factory<Class<? extends SystemEvent>, EventInfo> eventInfoFactory = new Factory<Class<? extends SystemEvent>, EventInfo>() {
+                        @Override
+                        public EventInfo newInstance(final Class<? extends SystemEvent> systemEventClass) throws InterruptedException {
+                            return new EventInfo(systemEventClass, sourceClass);
+                        }
+                    };
+                    return new Cache<>(eventInfoFactory);
+                }
+            };
             sourceCache = new Cache<>(eventCacheFactory);
 
         }
 
         // ------------------------------------------------------ Public Methods
 
+        public EventInfo getEventInfo(Class<? extends SystemEvent> systemEvent, Class<?> sourceClass) {
 
-        public EventInfo getEventInfo(Class<? extends SystemEvent> systemEvent,
-                                      Class<?> sourceClass) {
-
-            Cache<Class<? extends SystemEvent>, EventInfo> eventsCache =
-                  sourceCache.get(sourceClass);
+            Cache<Class<? extends SystemEvent>, EventInfo> eventsCache = sourceCache.get(sourceClass);
             return eventsCache.get(systemEvent);
 
         }
 
     } // END ComponentSystemEventHelper
 
-
     /**
-     * Simple wrapper class for application level SystemEvents.  It provides the
-     * structure to map a single SystemEvent to multiple sources which are
-     * represented by <code>SourceInfo</code> instances.
+     * Simple wrapper class for application level SystemEvents. It provides the structure to map a
+     * single SystemEvent to multiple sources which are represented by <code>SourceInfo</code>
+     * instances.
      */
     private static class SystemEventInfo {
 
-        private Cache<Class<?>,EventInfo> cache = new Cache<>(
-              new Factory<Class<?>, EventInfo>() {
-                  @Override
-                  public EventInfo newInstance(Class<?> arg)
-                        throws InterruptedException {
-                      return new EventInfo(systemEvent, arg);
-                  }
-              }
-        );
+        private Cache<Class<?>, EventInfo> cache = new Cache<>(new Factory<Class<?>, EventInfo>() {
+            @Override
+            public EventInfo newInstance(Class<?> arg) throws InterruptedException {
+                return new EventInfo(systemEvent, arg);
+            }
+        });
         private Class<? extends SystemEvent> systemEvent;
 
-
         // -------------------------------------------------------- Constructors
-
 
         private SystemEventInfo(Class<? extends SystemEvent> systemEvent) {
 
@@ -2454,9 +2254,7 @@ public class ApplicationImpl extends Application {
 
         }
 
-
         // ------------------------------------------------------ Public Methods
-
 
         public EventInfo getEventInfo(Class<?> source) {
 
@@ -2467,24 +2265,21 @@ public class ApplicationImpl extends Application {
 
     } // END SystemEventInfo
 
-
     /**
-     * Represent a logical association between a SystemEvent and a Source.
-     * This call will contain the Listeners specific to this association
-     * as well as provide a method to construct new SystemEvents as required.
+     * Represent a logical association between a SystemEvent and a Source. This call will contain
+     * the Listeners specific to this association as well as provide a method to construct new
+     * SystemEvents as required.
      */
     private static class EventInfo {
         private Class<? extends SystemEvent> systemEvent;
         private Class<?> sourceClass;
         private Set<SystemEventListener> listeners;
         private Constructor eventConstructor;
-        private Map<Class<?>,Constructor> constructorMap;
+        private Map<Class<?>, Constructor> constructorMap;
 
         // -------------------------------------------------------- Constructors
 
-
-        public EventInfo(Class<? extends SystemEvent> systemEvent,
-                         Class<?> sourceClass) {
+        public EventInfo(Class<? extends SystemEvent> systemEvent, Class<?> sourceClass) {
 
             this.systemEvent = systemEvent;
             this.sourceClass = sourceClass;
@@ -2498,13 +2293,11 @@ public class ApplicationImpl extends Application {
 
         // ------------------------------------------------------ Public Methods
 
-
         public Set<SystemEventListener> getListeners() {
 
             return listeners;
 
         }
-
 
         public SystemEvent createSystemEvent(Object source) {
 
@@ -2520,9 +2313,7 @@ public class ApplicationImpl extends Application {
 
         }
 
-
         // ----------------------------------------------------- Private Methods
-
 
         private Constructor getCachedConstructor(Class<?> source) {
 
@@ -2540,7 +2331,6 @@ public class ApplicationImpl extends Application {
             }
 
         }
-
 
         private Constructor getEventConstructor(Class<?> source) {
 
@@ -2561,9 +2351,8 @@ public class ApplicationImpl extends Application {
                     }
                 }
                 if (eventConstructor == null && LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                        "Unable to find Constructor within {0} that accepts {1} instances.",
-                        new Object[] { systemEvent.getName(), sourceClass.getName() });
+                    LOGGER.log(Level.FINE, "Unable to find Constructor within {0} that accepts {1} instances.",
+                            new Object[] { systemEvent.getName(), sourceClass.getName() });
                 }
             }
             return ctor;
@@ -2572,12 +2361,12 @@ public class ApplicationImpl extends Application {
 
     } // END SourceInfo
 
-
-    private static final class ComponentResourceClassNotFound { }
+    private static final class ComponentResourceClassNotFound {
+    }
 
     private Boolean isJsf23;
-    
-        /**
+
+    /**
      * Get the faces-config.xml version (if any).
      *
      * @param facesContext the Faces context.
@@ -2638,31 +2427,30 @@ public class ApplicationImpl extends Application {
             return null;
         }
     }
-    
+
     /**
      * Stores the bean manager.
      */
     private BeanManager beanManager;
-    
+
     /**
      * Get the bean manager.
      * 
      * @return the bean manager.
      */
     private BeanManager getBeanManager() {
-        if (beanManager == null) {        
+        if (beanManager == null) {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             beanManager = Util.getCdiBeanManager(facesContext);
-        }       
+        }
         return beanManager;
     }
-    
 
     @Override
     public SearchExpressionHandler getSearchExpressionHandler() {
         return associate.getSearchExpressionHandler();
     }
-    
+
     @Override
     public void setSearchExpressionHandler(SearchExpressionHandler searchExpressionHandler) {
         Util.notNull("searchExpressionHandler", searchExpressionHandler);
@@ -2670,22 +2458,20 @@ public class ApplicationImpl extends Application {
         associate.setSearchExpressionHandler(searchExpressionHandler);
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("set SearchExpressionHandler Instance to ''{0}''",
-                                             searchExpressionHandler.getClass().getName()));
+            LOGGER.fine(MessageFormat.format("set SearchExpressionHandler Instance to ''{0}''", searchExpressionHandler.getClass().getName()));
         }
     }
-    
+
     @Override
     public void addSearchKeywordResolver(SearchKeywordResolver resolver) {
         if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "SearchKeywordResolver"));
+                    MessageUtils.getExceptionMessageString(MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "SearchKeywordResolver"));
         }
 
         searchKeywordResolvers.add(resolver);
     }
-    
+
     @Override
     public SearchKeywordResolver getSearchKeywordResolver() {
         return searchKeywordResolvers;
