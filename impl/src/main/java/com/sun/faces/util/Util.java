@@ -43,12 +43,14 @@
 package com.sun.faces.util;
 
 import static com.sun.faces.util.MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID;
+import static com.sun.faces.util.MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID;
 import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
 import static com.sun.faces.util.MessageUtils.NULL_VIEW_ID_ERROR_MESSAGE_ID;
 import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
 import static com.sun.faces.util.RequestStateManager.INVOCATION_PATH;
 import static java.util.Collections.emptyList;
 import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.SEVERE;
 
 import java.beans.FeatureDescriptor;
 import java.io.IOException;
@@ -443,6 +445,19 @@ public class Util {
             throw new IllegalArgumentException(
                     getExceptionMessageString(
                         NULL_VIEW_ID_ERROR_MESSAGE_ID));
+        }
+    }
+    
+    public static void notNullNamedObject(Object object, String objectId, String logMsg) {
+        if (object == null) {
+            Object[] params = { objectId };
+            if (LOGGER.isLoggable(SEVERE)) {
+                LOGGER.log(SEVERE, logMsg, params);
+            }
+            
+            throw new FacesException(
+                    getExceptionMessageString(
+                        NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
     }
     

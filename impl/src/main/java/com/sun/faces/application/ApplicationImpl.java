@@ -44,7 +44,6 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.RegisterConverterPropertyEditors;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
 import static com.sun.faces.util.MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID;
-import static com.sun.faces.util.MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID;
 import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
 import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
 import static com.sun.faces.util.Util.canSetAppArtifact;
@@ -53,6 +52,7 @@ import static com.sun.faces.util.Util.getWebXmlVersion;
 import static com.sun.faces.util.Util.isEmpty;
 import static com.sun.faces.util.Util.loadClass;
 import static com.sun.faces.util.Util.notNull;
+import static com.sun.faces.util.Util.notNullNamedObject;
 import static java.beans.Introspector.getBeanInfo;
 import static java.beans.PropertyEditorManager.findEditor;
 import static java.text.MessageFormat.format;
@@ -184,6 +184,8 @@ import com.sun.faces.util.Util;
  */
 public class ApplicationImpl extends Application {
 
+    public static final String THIS_LIBRARY = "com.sun.faces.composite.this.library";
+    
     private static final String LISTENER = "listener";
     private static final String SOURCE = "source";
     private static final String SYSTEM_EVENT_CLASS = "systemEventClass";
@@ -715,34 +717,22 @@ public class ApplicationImpl extends Application {
 
         notNull("behaviorId", behaviorId);
 
-        Behavior returnVal;
-
-        if (isJsf23()) {
-            BeanManager beanManager = getBeanManager();
-            returnVal = CdiUtils.createBehavior(beanManager, behaviorId);
-            if (returnVal != null) {
-                return returnVal;
-            }
+        Behavior behavior = createCDIBehavior(behaviorId);
+        if (behavior != null) {
+            return behavior;
         }
 
-        returnVal = (Behavior) newThing(behaviorId, behaviorMap);
-
-        if (returnVal == null) {
-            Object[] params = { behaviorId };
-            if (LOGGER.isLoggable(SEVERE)) {
-                LOGGER.log(SEVERE, "jsf.cannot_instantiate_behavior_error", params);
-            }
-            
-            throw new FacesException(getExceptionMessageString(NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
-        }
+        behavior = newThing(behaviorId, behaviorMap);
+        
+        notNullNamedObject(behavior, behaviorId, "jsf.cannot_instantiate_behavior_error");
 
         if (LOGGER.isLoggable(FINE)) {
             LOGGER.fine(MessageFormat.format("created behavior of type ''{0}''", behaviorId));
         }
 
-        associate.getAnnotationManager().applyBehaviorAnnotations(FacesContext.getCurrentInstance(), returnVal);
+        associate.getAnnotationManager().applyBehaviorAnnotations(FacesContext.getCurrentInstance(), behavior);
 
-        return returnVal;
+        return behavior;
     }
 
     /**
@@ -1046,36 +1036,30 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#createConverter(String)
      */
     @Override
-    public Converter createConverter(String converterId) {
+    public Converter<?> createConverter(String converterId) {
 
-        Util.notNull("converterId", converterId);
-        Converter returnVal;
-
-        if (isJsf23()) {
-            BeanManager beanManager = getBeanManager();
-            returnVal = CdiUtils.createConverter(beanManager, converterId);
-            if (returnVal != null) {
-                return returnVal;
-            }
+        notNull("converterId", converterId);
+        
+        Converter<?> converter = createCDIConverter(converterId);
+        if (converter != null) {
+            return converter;
         }
 
-        returnVal = (Converter) newThing(converterId, converterIdMap);
-
-        if (returnVal == null) {
-            Object[] params = { converterId };
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "jsf.cannot_instantiate_converter_error", converterId);
-            }
-            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
-        }
-        if (LOGGER.isLoggable(Level.FINE)) {
+        converter = newThing(converterId, converterIdMap);
+        
+        notNullNamedObject(converter, converterId, "jsf.cannot_instantiate_converter_error");
+        
+        if (LOGGER.isLoggable(FINE)) {
             LOGGER.fine(MessageFormat.format("created converter of type ''{0}''", converterId));
         }
-        if (passDefaultTimeZone && returnVal instanceof DateTimeConverter) {
-            ((DateTimeConverter) returnVal).setTimeZone(systemTimeZone);
+        
+        if (passDefaultTimeZone && converter instanceof DateTimeConverter) {
+            ((DateTimeConverter) converter).setTimeZone(systemTimeZone);
         }
-        associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
-        return returnVal;
+        
+        associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), converter);
+        
+        return converter;
     }
 
     /**
@@ -1301,33 +1285,26 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#createValidator(String)
      */
     @Override
-    public Validator createValidator(String validatorId) throws FacesException {
+    public Validator<?> createValidator(String validatorId) throws FacesException {
 
-        Util.notNull("validatorId", validatorId);
+        notNull("validatorId", validatorId);
 
-        Validator returnVal;
-
-        if (isJsf23()) {
-            BeanManager beanManager = getBeanManager();
-            returnVal = CdiUtils.createValidator(beanManager, validatorId);
-            if (returnVal != null) {
-                return returnVal;
-            }
+        Validator<?> validator = createCDIValidator(validatorId);
+        if (validator != null) {
+            return validator;
         }
 
-        returnVal = (Validator) newThing(validatorId, validatorMap);
-        if (returnVal == null) {
-            Object[] params = { validatorId };
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "jsf.cannot_instantiate_validator_error", params);
-            }
-            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
-        }
-        if (LOGGER.isLoggable(Level.FINE)) {
+        validator = newThing(validatorId, validatorMap);
+        
+        notNullNamedObject(validator, validatorId, "jsf.cannot_instantiate_validator_error");
+        
+        if (LOGGER.isLoggable(FINE)) {
             LOGGER.fine(MessageFormat.format("created validator of type ''{0}''", validatorId));
         }
-        associate.getAnnotationManager().applyValidatorAnnotations(FacesContext.getCurrentInstance(), returnVal);
-        return returnVal;
+        
+        associate.getAnnotationManager().applyValidatorAnnotations(FacesContext.getCurrentInstance(), validator);
+        
+        return validator;
     }
 
     /**
@@ -1430,8 +1407,8 @@ public class ApplicationImpl extends Application {
      * @param map The <code>Map</code> that will be searched.
      * @return The new object instance.
      */
-    private Object newThing(String key, ViewMemberInstanceFactoryMetadataMap<String, Object> map) {
-        assert key != null && map != null;
+    @SuppressWarnings("unchecked")
+    private <T> T newThing(String key, ViewMemberInstanceFactoryMetadataMap<String, Object> map) {
 
         Object result;
         Class<?> clazz;
@@ -1472,7 +1449,7 @@ public class ApplicationImpl extends Application {
             throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, clazz.getName()), t);
         }
 
-        return result;
+        return (T) result;
     }
 
     /**
@@ -1552,10 +1529,11 @@ public class ApplicationImpl extends Application {
         }
         return result;
     }
+    
+    
 
     // --------------------------------------------------------- Private Methods
-
-    public static final String THIS_LIBRARY = "com.sun.faces.composite.this.library";
+    
 
     private UIComponent createComponentFromScriptResource(FacesContext context, Resource scriptComponentResource, Resource componentResource) {
 
@@ -1605,32 +1583,27 @@ public class ApplicationImpl extends Application {
      */
     private UIComponent createComponentApplyAnnotations(FacesContext ctx, String componentType, String rendererType, boolean applyAnnotations) {
 
-        UIComponent c;
+        UIComponent component;
         try {
-            c = (UIComponent) newThing(componentType, componentMap);
+            component = newThing(componentType, componentMap);
         } catch (Exception ex) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
+            if (LOGGER.isLoggable(SEVERE)) {
                 LOGGER.log(Level.SEVERE, "jsf.cannot_instantiate_component_error", componentType);
             }
             throw new FacesException(ex);
         }
-        if (c == null) {
-            Object[] params = { componentType };
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "jsf.cannot_instantiate_component_error", params);
-            }
-            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
-        }
+        
+        notNullNamedObject(component, componentType, "jsf.cannot_instantiate_component_error");
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, MessageFormat.format("Created component with component type of ''{0}''", componentType));
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, MessageFormat.format("Created component with component type of ''{0}''", componentType));
         }
 
         if (applyAnnotations) {
-            applyAnnotations(ctx, rendererType, c);
+            applyAnnotations(ctx, rendererType, component);
         }
-        return c;
-
+        
+        return component;
     }
 
     /**
@@ -2034,7 +2007,39 @@ public class ApplicationImpl extends Application {
             projectStage = defaultStage;
         }
     }
+    
+    private Behavior createCDIBehavior(String behaviorId) {
+        if (isJsf23()) {
+            return CdiUtils.createBehavior(getBeanManager(), behaviorId);
+        }
+        
+        return null;
+    }
+    
+    private Converter<?> createCDIConverter(String converterId) {
+        if (isJsf23()) {
+            return CdiUtils.createConverter(getBeanManager(), converterId);
+        }
+        
+        return null;
+    }
+    
+    private Validator<?> createCDIValidator(String validatorId) {
+        if (isJsf23()) {
+            return CdiUtils.createValidator(getBeanManager(), validatorId);
+        }
+        
+        return null;
+    }
+    
+  
 
+    
+    
+    
+    
+    
+    
     // ----------------------------------------------------------- Inner Classes
 
     /**
