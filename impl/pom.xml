@@ -59,7 +59,11 @@
                                     to delete any src/main directory anymore
                                 
                                 -->
-                                <delete dir="src/main/resources"/>
+                                <delete dir="src/main/resources/com"/>
+                                <delete dir="src/main/resources/javax"/>
+                                <delete>
+                                    <fileset dir="src/main/resources/META-INF" includes="*"/>
+                                </delete>
                                 <delete dir="src/main/doc"/>
                                 <!--
                                 
@@ -127,19 +131,7 @@
                                         <include name="*.taglib.xml" /> 
                                     </fileset>
                                 </copy>
-                                
-                                <!--
-                                
-                                    Copy META-INF/services files to src/main/resources
-                                
-                                -->
-                                <copy file="${jsf-ri-dir}/conf/share/javax.servlet.ServletContainerInitializer"
-                                    toDir="src/main/resources/META-INF/services" />
-                                <copy file="${jsf-ri-dir}/conf/share/javax.enterprise.inject.spi.Extension"
-                                    toDir="src/main/resources/META-INF/services" />
-                                <copy file="${jsf-ri-dir}/conf/share/com.sun.faces.util.cdi11.CDIUtil"
-                                    toDir="src/main/resources/META-INF/services" />
-                                
+                                                                
                                 <!--
                                 
                                     Copy other static resources to src/main/resources

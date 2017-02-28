@@ -31,5 +31,6 @@ nbactions.xml
 .idea/
 Mojarra.iml
 /impl/src/main/doc/
-/impl/src/main/resources/
+/impl/src/main/resources/com/
+/impl/src/main/resources/javax/
 /impl/src/main/template/
