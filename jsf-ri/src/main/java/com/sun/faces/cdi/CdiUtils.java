@@ -49,6 +49,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.ContextNotActiveException;
 import javax.enterprise.context.spi.Context;
@@ -65,13 +67,19 @@ import javax.faces.convert.Converter;
 import javax.faces.model.DataModel;
 import javax.faces.validator.Validator;
 
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
 /**
  * A static utility class for CDI.
  */
 public final class CdiUtils {
-    
+
+    /**
+     * Stores the logger.
+     */
+    private static final Logger LOGGER = FacesLogger.APPLICATION_VIEW.getLogger();
+
     private final static Type CONVERTER_TYPE = 
         new TypeLiteral<Converter<?>>() { private static final long serialVersionUID = 1L;}.getType();
         
@@ -275,12 +283,20 @@ public final class CdiUtils {
                 return Optional.of(annotationType.cast(annotation));
             }
 
-            if (beanManager.isStereotype(annotation.annotationType())) {
-                annotations.addAll(
-                    beanManager.getStereotypeDefinition(
-                        annotation.annotationType()
-                    )
-                );
+            try {
+                if (beanManager.isStereotype(annotation.annotationType())) {
+                    annotations.addAll(
+                        beanManager.getStereotypeDefinition(
+                             annotation.annotationType()
+                        )
+                     );
+                }
+            } catch (Exception e) {
+                // Log and continue, if it's not allowed to test if it's a stereo type
+                // we're unlikely to be interested in this annotation
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.warning("Exception happened when finding an annotation: " + e);
+                }
             }
         }
 
