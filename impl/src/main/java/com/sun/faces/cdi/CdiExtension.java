@@ -53,6 +53,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
@@ -71,7 +73,7 @@ import javax.faces.model.FacesDataModel;
 import com.sun.faces.push.WebsocketChannelManager;
 import com.sun.faces.push.WebsocketSessionManager;
 import com.sun.faces.push.WebsocketUserManager;
-
+import com.sun.faces.util.FacesLogger;
 
 
 /**
@@ -87,6 +89,11 @@ public class CdiExtension implements Extension {
     private Set<Type> managedPropertyTargetTypes = new HashSet<>();
 
     private boolean addBeansForJSFImplicitObjects;
+
+    /**
+     * Stores the logger.
+     */
+    private static final Logger LOGGER = FacesLogger.APPLICATION_VIEW.getLogger();
 
     /**
      * Before bean discovery.
@@ -159,15 +166,23 @@ public class CdiExtension implements Extension {
 
     public <T> void collect(@Observes ProcessManagedBean<T> eventIn, BeanManager beanManager) {
 
-        ProcessManagedBean<T> event = eventIn; // JDK8 u60 workaround
+        try {
+            ProcessManagedBean<T> event = eventIn; // JDK8 u60 workaround
 
-        getAnnotation(beanManager, event.getAnnotated(), FacesConfig.class)
-            .ifPresent(config ->
-                setAddBeansForJSFImplicitObjects(config.version().ordinal() >= JSF_2_3.ordinal()));
+            getAnnotation(beanManager, event.getAnnotated(), FacesConfig.class)
+                    .ifPresent(config ->
+                            setAddBeansForJSFImplicitObjects(config.version().ordinal() >= JSF_2_3.ordinal()));
 
-        for (AnnotatedField<? super T> field : event.getAnnotatedBeanClass().getFields()) {
-            if (field.isAnnotationPresent(ManagedProperty.class) && (field.getBaseType() instanceof Class || field.getBaseType() instanceof ParameterizedType)) {
-                managedPropertyTargetTypes.add(field.getBaseType());
+            for (AnnotatedField<? super T> field : event.getAnnotatedBeanClass().getFields()) {
+                if (field.isAnnotationPresent(ManagedProperty.class) && (field.getBaseType() instanceof Class || field.getBaseType() instanceof ParameterizedType)) {
+                    managedPropertyTargetTypes.add(field.getBaseType());
+                }
+            }
+        } catch (Exception e) {
+            // Log and continue; if we are not allowed somehow to investigate this ManagedBean, we're unlikely to be interested in it anyway
+            // but logging at SEVERE level is important
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning("Exception happened when collecting: " + e);
             }
         }
     }
