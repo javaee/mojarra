@@ -4,7 +4,6 @@
 target/
 /bin/
 /dist/
-/test/quality/
 /test/unit/src/main/java/com/
 /test/unit/src/main/java/javax/
 /test/unit/src/main/resources/com/
