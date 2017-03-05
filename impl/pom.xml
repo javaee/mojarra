@@ -62,7 +62,9 @@
                                 <delete dir="src/main/resources/com"/>
                                 <delete dir="src/main/resources/javax"/>
                                 <delete>
-                                    <fileset dir="src/main/resources/META-INF" includes="*"/>
+                                    <fileset dir="src/main/resources/META-INF" 
+                                             excludes="mojarra-jsf-api-probe-provider.xml"
+                                             includes="*"/>
                                 </delete>
                                 <delete dir="src/main/doc"/>
                                 <!--
@@ -166,14 +168,6 @@
                                 </copy>
                                 <copy file="${jsf-ri-dir}/resources/empty-faces-config.xml"
                                     todir="src/main/resources/com/sun/faces" />
-                                
-                                <!--
-                                
-                                    Copy API probe provider to src/main/resources
-                                    
-                                -->
-                                <copy todir="src/main/resources/META-INF" 
-                                      file="${jsf-api-dir}/src/main/resources/mojarra-jsf-api-probe-provider.xml"/>
                                 
                                 <!--
                                 
