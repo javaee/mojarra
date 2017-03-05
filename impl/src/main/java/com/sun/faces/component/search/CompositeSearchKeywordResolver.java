@@ -40,6 +40,8 @@
 package com.sun.faces.component.search;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.search.SearchExpressionContext;
 import javax.faces.component.search.SearchKeywordContext;
@@ -49,7 +51,7 @@ public class CompositeSearchKeywordResolver extends SearchKeywordResolver {
 
     private static final int NUMBER_OF_DEFAULT_IMPLEMENTATIONS = 12;
     
-    private final ArrayList<SearchKeywordResolver> resolvers;
+    private final List<SearchKeywordResolver> resolvers;
 
     public CompositeSearchKeywordResolver() {
         this.resolvers = new ArrayList<>(NUMBER_OF_DEFAULT_IMPLEMENTATIONS);

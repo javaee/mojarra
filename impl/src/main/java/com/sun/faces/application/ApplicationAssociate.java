@@ -474,9 +474,9 @@ public class ApplicationAssociate {
 
     public void initializeELResolverChains() {
         // 1. initialize the chains with default values
-        if (app.compositeELResolver == null) {
-            app.compositeELResolver = new DemuxCompositeELResolver(Faces);
-            buildFacesResolver(app.compositeELResolver, this);
+        if (app.getCompositeELResolver() == null) {
+            app.setCompositeELResolver(new DemuxCompositeELResolver(Faces));
+            buildFacesResolver(app.getCompositeELResolver(), this);
             populateFacesELResolverForJsp(app, this);
         }
     }
