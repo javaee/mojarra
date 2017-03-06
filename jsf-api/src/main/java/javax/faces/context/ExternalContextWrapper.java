@@ -863,5 +863,17 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
     public Flash getFlash() {
         return getWrapped().getFlash();
     }
-    
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExternalContext#isSecure()}  on the wrapped {@link ExternalContext}
+     * object.</p?
+     *
+     * @see ExternalContext#isSecure()
+     */
+    @Override
+    public boolean isSecure() {
+        return getWrapped().isSecure();
+    }
+
 }
