@@ -45,7 +45,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>javax.faces</groupId>
     <artifactId>javax.faces-api</artifactId>
-    <version>2.3-prd</version>
+    <version>2.3-pfd</version>
     <packaging>jar</packaging>
     <name>
         Oracle's implementation of the JSF 2.3 specification API.
