@@ -53,8 +53,7 @@ import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.RequestStateManager;
 
 /**
- * Helper class to aid the ConverterPropertyEditorBase in converting
- * properties.
+ * Helper class to aid the ConverterPropertyEditorBase in converting properties.
  *
  * @author Mike Youngstrom
  */
@@ -67,8 +66,8 @@ public class PropertyEditorHelper {
     }
 
     /**
-     * Convert the <code>textValue</code> to an object of type targetClass by
-     * delegating to a converter.
+     * Convert the <code>textValue</code> to an object of type targetClass by delegating to a
+     * converter.
      */
     public Object convertToObject(Class<?> targetClass, String textValue) {
         UIComponent component = getComponent();
@@ -76,11 +75,7 @@ public class PropertyEditorHelper {
         if (null == converter) {
             // PENDING(edburns): I18N
             FacesException e = new FacesException(
-                  "Cannot create Converter to convert value "
-                  + textValue
-                  + " to instance of target class "
-                  + targetClass.getName()
-                  + '.');
+                    "Cannot create Converter to convert value " + textValue + " to instance of target class " + targetClass.getName() + '.');
             throw e;
         }
         FacesContext currentInstance = FacesContext.getCurrentInstance();
@@ -93,19 +88,15 @@ public class PropertyEditorHelper {
     }
 
     /**
-     * Convert an object of type targetClass to text by delegating to a converter
-     * obtained from the Faces application.
+     * Convert an object of type targetClass to text by delegating to a converter obtained from the
+     * Faces application.
      */
     public String convertToString(Class<?> targetClass, Object value) {
         UIComponent component = getComponent();
         Converter converter = app.createConverter(targetClass);
         if (null == converter) {
             // PENDING(edburns): I18N
-            throw new FacesException("Cannot create Converter to convert "
-                                     + targetClass.getName()
-                                     + " value "
-                                     + value
-                                     + " to string.");
+            throw new FacesException("Cannot create Converter to convert " + targetClass.getName() + " value " + value + " to string.");
         }
         FacesContext currentInstance = FacesContext.getCurrentInstance();
         try {
@@ -117,31 +108,26 @@ public class PropertyEditorHelper {
     }
 
     /**
-     * Return the {@link javax.faces.component.UIComponent} that is currently being
-     * processed.
+     * Return the {@link javax.faces.component.UIComponent} that is currently being processed.
      *
      * @return the current component, or null.
      */
     protected UIComponent getComponent() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (context != null) {
-            return ((UIComponent) RequestStateManager
-                  .get(context, RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME));
+            return ((UIComponent) RequestStateManager.get(context, RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME));
         }
         return null;
     }
 
     /**
-     * Add a conversion error message in the case of a PropertyEditor based
-     * conversion error.
+     * Add a conversion error message in the case of a PropertyEditor based conversion error.
      *
      * @param context
      * @param component
      * @param ce
      */
-    protected void addConversionErrorMessage(FacesContext context,
-                                             UIComponent component,
-                                             ConverterException ce) {
+    protected void addConversionErrorMessage(FacesContext context, UIComponent component, ConverterException ce) {
         String converterMessageString = null;
         FacesMessage message;
         UIInput input;
@@ -151,19 +137,16 @@ public class PropertyEditorHelper {
             input.setValid(false);
         }
         if (null != converterMessageString) {
-            message =
-                  new FacesMessage(FacesMessage.SEVERITY_ERROR, converterMessageString, converterMessageString);
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, converterMessageString, converterMessageString);
         } else {
             message = ce.getFacesMessage();
             if (message == null) {
-                message = MessageFactory
-                      .getMessage(context, UIInput.CONVERSION_MESSAGE_ID);
+                message = MessageFactory.getMessage(context, UIInput.CONVERSION_MESSAGE_ID);
                 if (message.getDetail() == null) {
                     message.setDetail(ce.getMessage());
                 }
             }
         }
-        context.addMessage(component != null
-                           ? component.getClientId(context) : null, message);
-	}
+        context.addMessage(component != null ? component.getClientId(context) : null, message);
+    }
 }

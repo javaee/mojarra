@@ -52,24 +52,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
-
 /**
- * <p>This class is used by {@link javax.faces.application.ViewHandler#createView} to obtain the
- * text that exists after the &lt;f:view&gt; tag.</p>
+ * <p>
+ * This class is used by {@link javax.faces.application.ViewHandler#createView} to obtain the text
+ * that exists after the &lt;f:view&gt; tag.
+ * </p>
  */
-
 public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
 
     private ByteArrayWebOutputStream basos;
-    private WebPrintWriter pw ;
+    private WebPrintWriter pw;
     private CharArrayWriter caw;
     private int status = HttpServletResponse.SC_OK;
-
 
     public ViewHandlerResponseWrapper(HttpServletResponse wrapped) {
         super(wrapped);
     }
-
 
     @Override
     public void sendError(int sc, String msg) throws IOException {
@@ -94,7 +92,6 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
         super.setStatus(sc, sm);
         status = sc;
     }
-
 
     @Override
     public int getStatus() {
@@ -144,16 +141,15 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
             caw.reset();
         } else if (null != basos) {
             try {
-                basos.writeTo(wrapped.getWriter(),
-                              wrapped.getCharacterEncoding());
+                basos.writeTo(wrapped.getWriter(), wrapped.getCharacterEncoding());
             } catch (IllegalStateException ise) {
                 basos.writeTo(wrapped.getOutputStream());
-            }           
+            }
             basos.resetByteArray();
         }
 
     }
-    
+
     public void flushToWriter(Writer writer, String encoding) throws IOException {
         if (null != caw) {
             pw.flush();
@@ -201,6 +197,5 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
 
         return pw;
     }
-
 
 } // end of class ViewHandlerResponseWrapper

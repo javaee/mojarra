@@ -62,25 +62,23 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.flow.FlowDiscoveryCDIExtension;
 import com.sun.faces.util.FacesLogger;
 
-
 class JavaFlowLoaderHelper {
-    
+
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     synchronized void loadFlows(FacesContext context, FlowHandler flowHandler) throws IOException {
         BeanManager beanManager = getCdiBeanManager(context);
-        
+
         Bean<?> extensionImpl = beanManager.resolve(beanManager.getBeans(FlowDiscoveryCDIExtension.class));
-        
+
         if (extensionImpl == null) {
             if (LOGGER.isLoggable(SEVERE)) {
-                LOGGER.log(SEVERE, 
-                    "Unable to obtain {0} from CDI implementation.  Flows described with {1} are unavailable.",
-                    new String[] { FlowDiscoveryCDIExtension.class.getName(), FlowDefinition.class.getName() });
+                LOGGER.log(SEVERE, "Unable to obtain {0} from CDI implementation.  Flows described with {1} are unavailable.",
+                        new String[] { FlowDiscoveryCDIExtension.class.getName(), FlowDefinition.class.getName() });
             }
             return;
         }
-        
+
         CreationalContext<?> creationalContext = beanManager.createCreationalContext(extensionImpl);
         FlowDiscoveryCDIExtension myExtension = (FlowDiscoveryCDIExtension) beanManager.getReference(extensionImpl, FlowDiscoveryCDIExtension.class,
                 creationalContext);
@@ -107,19 +105,18 @@ class JavaFlowLoaderHelper {
         WebConfiguration config = WebConfiguration.getInstance(context.getExternalContext());
 
         String optionValue = config.getOptionValue(ClientWindowMode);
-        
+
         boolean clientWindowNeedsEnabling = false;
         if ("none".equals(optionValue)) {
             clientWindowNeedsEnabling = true;
-            
-            LOGGER.log(WARNING, 
-                "{0} was set to none, but Faces Flows requires {0} is enabled.  Setting to ''url''.",
-                new Object[] { ClientWindowMode.getQualifiedName() });
-            
+
+            LOGGER.log(WARNING, "{0} was set to none, but Faces Flows requires {0} is enabled.  Setting to ''url''.",
+                    new Object[] { ClientWindowMode.getQualifiedName() });
+
         } else if (optionValue == null) {
             clientWindowNeedsEnabling = true;
         }
-        
+
         if (clientWindowNeedsEnabling) {
             config.setOptionValue(ClientWindowMode, "url");
         }

@@ -51,9 +51,9 @@ import javax.faces.view.StateManagementStrategy;
 import javax.faces.view.ViewDeclarationLanguage;
 
 /**
- * <p> A
- * <code>StateManager</code> implementation to meet the requirements of the
- * specification. </p>
+ * <p>
+ * A <code>StateManager</code> implementation to meet the requirements of the specification.
+ * </p>
  */
 public class StateManagerImpl extends StateManager {
 
@@ -72,9 +72,7 @@ public class StateManagerImpl extends StateManager {
             StateManagementStrategy strategy = null;
             String viewId = viewRoot.getViewId();
 
-            ViewDeclarationLanguage vdl =
-                    context.getApplication().getViewHandler().
-                    getViewDeclarationLanguage(context, viewId);
+            ViewDeclarationLanguage vdl = context.getApplication().getViewHandler().getViewDeclarationLanguage(context, viewId);
 
             if (vdl != null) {
                 strategy = vdl.getStateManagementStrategy(context, viewId);
@@ -120,16 +118,15 @@ public class StateManagerImpl extends StateManager {
      * @param viewId the view id.
      * @param renderKitId the render kit id.
      * @return the view root.
-     * @see StateManager#restoreView(javax.faces.context.FacesContext, java.lang.String, java.lang.String) 
+     * @see StateManager#restoreView(javax.faces.context.FacesContext, java.lang.String,
+     *      java.lang.String)
      */
     @Override
     public UIViewRoot restoreView(FacesContext context, String viewId, String renderKitId) {
         UIViewRoot result;
         StateManagementStrategy strategy = null;
 
-        ViewDeclarationLanguage vdl =
-                context.getApplication().getViewHandler().
-                getViewDeclarationLanguage(context, viewId);
+        ViewDeclarationLanguage vdl = context.getApplication().getViewHandler().getViewDeclarationLanguage(context, viewId);
 
         if (vdl != null) {
             strategy = vdl.getStateManagementStrategy(context, viewId);

@@ -87,7 +87,7 @@ public class NamedEventManager {
     @SuppressWarnings("unchecked")
     public Class<? extends SystemEvent> getNamedEvent(String name) {
         Class<? extends SystemEvent> namedEvent = namedEvents.get(name);
-        
+
         if (namedEvent == null) {
             try {
                 namedEvent = (Class<? extends SystemEvent>) loadClass(name, this);
@@ -95,7 +95,7 @@ public class NamedEventManager {
                 throw new FacesException("An unknown event type was specified:  " + name, ex);
             }
         }
-        
+
         if (!ComponentSystemEvent.class.isAssignableFrom(namedEvent)) {
             throw new ClassCastException();
         }
@@ -106,13 +106,13 @@ public class NamedEventManager {
     public void addDuplicateName(String name, Class<? extends SystemEvent> event) {
         Class<? extends SystemEvent> registeredEvent = namedEvents.remove(name);
         Set<Class<? extends SystemEvent>> events = duplicateNames.get(name);
-        
+
         if (events == null) {
             events = new HashSet<>();
             duplicateNames.put(name, events);
         }
         events.add(event);
-        
+
         if (registeredEvent != null) {
             events.add(registeredEvent);
         }

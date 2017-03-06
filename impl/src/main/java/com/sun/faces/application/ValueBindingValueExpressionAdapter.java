@@ -262,5 +262,4 @@ public class ValueBindingValueExpressionAdapter extends ValueBinding implements 
         return valueExpression;
     }
 
-
 }

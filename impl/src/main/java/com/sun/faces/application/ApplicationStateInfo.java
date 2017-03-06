@@ -51,18 +51,15 @@ import java.util.Set;
 import com.sun.faces.config.WebConfiguration;
 
 /**
- * This class maintains per-application information pertaining
- * to partail or full state saving as a whole or partial state saving
- * with some views using full state saving.
+ * This class maintains per-application information pertaining to partail or full state saving as a
+ * whole or partial state saving with some views using full state saving.
  */
 public class ApplicationStateInfo {
 
     private boolean partialStateSaving;
     private Set<String> fullStateViewIds;
 
-
     // ------------------------------------------------------------ Constructors
-
 
     public ApplicationStateInfo() {
 
@@ -74,18 +71,16 @@ public class ApplicationStateInfo {
             fullStateViewIds = new HashSet<>(viewIds.length, 1.0f);
             fullStateViewIds.addAll(asList(viewIds));
         }
-        
+
     }
 
-
     // --------------------------------------------------------- Private Methods
-
 
     /**
      * @param viewId the view ID to check
      * @throws IllegalArgumentException if viewId is null
-     * @return <code>true</code> if partial state saving should be used for the
-     *  specified view ID, otherwise <code>false</code>
+     * @return <code>true</code> if partial state saving should be used for the specified view ID,
+     *         otherwise <code>false</code>
      */
     public boolean usePartialStateSaving(String viewId) {
         notNullViewId(viewId);

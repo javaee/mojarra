@@ -45,9 +45,8 @@ import java.io.PrintWriter;
 import java.io.Writer;
 
 /**
- * A simple PrintWriter implementation to allow us to query
- * whether or not the writer has been flushed or closed.  This is necessary
- * to better mimic the actual Servlet response.
+ * A simple PrintWriter implementation to allow us to query whether or not the writer has been
+ * flushed or closed. This is necessary to better mimic the actual Servlet response.
  */
 public class WebPrintWriter extends PrintWriter {
 
@@ -74,10 +73,10 @@ public class WebPrintWriter extends PrintWriter {
 
     // ----------------------------------------------------------- Inner Classes
 
-
     private static class NoOpWriter extends Writer {
 
-        public NoOpWriter() {}
+        public NoOpWriter() {
+        }
 
         @Override
         public void write(char cbuf[], int off, int len) throws IOException {
@@ -124,8 +123,7 @@ public class WebPrintWriter extends PrintWriter {
         }
 
         @Override
-        public Writer append(CharSequence csq, int start, int end)
-        throws IOException {
+        public Writer append(CharSequence csq, int start, int end) throws IOException {
             return this;
         }
 

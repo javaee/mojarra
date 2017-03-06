@@ -82,8 +82,8 @@ import com.sun.faces.util.Util;
  * This is the default implementation for JSF 1.2.
  * </p>
  * <p>
- * While this class isn't used by the 2.0 runtime, it's kept for binary
- * compatibility with those that extend from this class directly.
+ * While this class isn't used by the 2.0 runtime, it's kept for binary compatibility with those
+ * that extend from this class directly.
  * </p>
  *
  * @deprecated Refer to {@link com.sun.faces.application.view.MultiViewHandler}
@@ -100,19 +100,18 @@ public class ViewHandlerImpl extends ViewHandler {
 
     public ViewHandlerImpl() {
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE,"Created ViewHandler instance ");
+            LOGGER.log(Level.FINE, "Created ViewHandler instance ");
         }
         WebConfiguration config = WebConfiguration.getInstance();
-        String defaultSuffixConfig =
-              config.getOptionValue(WebConfiguration.WebContextInitParameter.DefaultSuffix);
+        String defaultSuffixConfig = config.getOptionValue(WebConfiguration.WebContextInitParameter.DefaultSuffix);
         Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
         configuredExtensions = Util.split(appMap, defaultSuffixConfig, " ");
     }
-    
 
     /**
-     * Do not call the default implementation of {@link ViewHandler#initView(javax.faces.context.FacesContext)}
-     * if the {@link javax.faces.context.ExternalContext#getRequestCharacterEncoding()} returns a
+     * Do not call the default implementation of
+     * {@link ViewHandler#initView(javax.faces.context.FacesContext)} if the
+     * {@link javax.faces.context.ExternalContext#getRequestCharacterEncoding()} returns a
      * <code>non-null</code> result.
      *
      * @see ViewHandler#initView(javax.faces.context.FacesContext)
@@ -123,14 +122,11 @@ public class ViewHandlerImpl extends ViewHandler {
         if (context.getExternalContext().getRequestCharacterEncoding() == null) {
             super.initView(context);
         }
-        
+
     }
 
-
     @Override
-    public void renderView(FacesContext context,
-            UIViewRoot viewToRender) throws IOException,
-            FacesException {
+    public void renderView(FacesContext context, UIViewRoot viewToRender) throws IOException, FacesException {
 
         // suppress rendering if "rendered" property on the component is
         // false
@@ -156,45 +152,31 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, "Completed building view for : \n" +
-                    viewToRender.getViewId());
+            LOGGER.log(Level.FINE, "Completed building view for : \n" + viewToRender.getViewId());
         }
 
         // set up the ResponseWriter
 
-        RenderKitFactory renderFactory = (RenderKitFactory)
-        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit renderKit =
-                renderFactory.getRenderKit(context, viewToRender.getRenderKitId());
+        RenderKitFactory renderFactory = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderFactory.getRenderKit(context, viewToRender.getRenderKitId());
 
         ResponseWriter oldWriter = context.getResponseWriter();
 
         if (bufSize == -1) {
-            WebConfiguration webConfig =
-                  WebConfiguration
-                        .getInstance(context.getExternalContext());
+            WebConfiguration webConfig = WebConfiguration.getInstance(context.getExternalContext());
             try {
-                bufSize = Integer
-                      .parseInt(webConfig.getOptionValue(
-                            WebContextInitParameter.ResponseBufferSize));
+                bufSize = Integer.parseInt(webConfig.getOptionValue(WebContextInitParameter.ResponseBufferSize));
             } catch (NumberFormatException nfe) {
-                bufSize = Integer
-                      .parseInt(WebContextInitParameter.ResponseBufferSize.getDefaultValue());
+                bufSize = Integer.parseInt(WebContextInitParameter.ResponseBufferSize.getDefaultValue());
             }
         }
 
-
-        WriteBehindStateWriter stateWriter =
-              new WriteBehindStateWriter(response.getWriter(),
-                                         context,
-                                         bufSize);
+        WriteBehindStateWriter stateWriter = new WriteBehindStateWriter(response.getWriter(), context, bufSize);
         ResponseWriter newWriter;
         if (null != oldWriter) {
             newWriter = oldWriter.cloneWithWriter(stateWriter);
         } else {
-            newWriter = renderKit.createResponseWriter(stateWriter,
-                                                       null,
-                                                       request.getCharacterEncoding());
+            newWriter = renderKit.createResponseWriter(stateWriter, null, request.getCharacterEncoding());
         }
         context.setResponseWriter(newWriter);
 
@@ -211,12 +193,11 @@ public class ViewHandlerImpl extends ViewHandler {
             if (stateWriter.stateWritten()) {
                 stateWriter.flushToWriter();
             }
-        }
-        finally {
-            
+        } finally {
+
             // clear the ThreadLocal reference.
             stateWriter.release();
-            
+
             if (null != oldWriter) {
                 context.setResponseWriter(oldWriter);
             }
@@ -225,12 +206,10 @@ public class ViewHandlerImpl extends ViewHandler {
         // write any AFTER_VIEW_CONTENT to the response
         // side effect: AFTER_VIEW_CONTENT removed
         Map<String, Object> stateMap = RequestStateManager.getStateMap(context);
-        ViewHandlerResponseWrapper wrapper = (ViewHandlerResponseWrapper)
-                stateMap.remove(RequestStateManager.AFTER_VIEW_CONTENT);
+        ViewHandlerResponseWrapper wrapper = (ViewHandlerResponseWrapper) stateMap.remove(RequestStateManager.AFTER_VIEW_CONTENT);
 
         if (null != wrapper) {
-            wrapper.flushToWriter(response.getWriter(),
-                    response.getCharacterEncoding());
+            wrapper.flushToWriter(response.getWriter(), response.getCharacterEncoding());
         }
 
         response.flushBuffer();
@@ -238,32 +217,38 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
     /**
-     * <p>This is a separate method to account for handling the content
-     * after the view tag.</p>
+     * <p>
+     * This is a separate method to account for handling the content after the view tag.
+     * </p>
      *
-     * <p>Create a new ResponseWriter around this response's Writer.
-     * Set it into the FacesContext, saving the old one aside.</p>
+     * <p>
+     * Create a new ResponseWriter around this response's Writer. Set it into the FacesContext,
+     * saving the old one aside.
+     * </p>
      *
-     * <p>call encodeBegin(), encodeChildren(), encodeEnd() on the
-     * argument <code>UIViewRoot</code>.</p>
+     * <p>
+     * call encodeBegin(), encodeChildren(), encodeEnd() on the argument <code>UIViewRoot</code>.
+     * </p>
      *
-     * <p>Restore the old ResponseWriter into the FacesContext.</p>
+     * <p>
+     * Restore the old ResponseWriter into the FacesContext.
+     * </p>
      *
-     * <p>Write out the after view content to the response's writer.</p>
+     * <p>
+     * Write out the after view content to the response's writer.
+     * </p>
      *
-     * <p>Flush the response buffer, and remove the after view content
-     * from the request scope.</p>
+     * <p>
+     * Flush the response buffer, and remove the after view content from the request scope.
+     * </p>
      *
      * @param context the <code>FacesContext</code> for the current request
      * @param viewToRender the view to render
      * @throws IOException if an error occurs rendering the view to the client
-     * @throws FacesException if some error occurs within the framework
-     *  processing
+     * @throws FacesException if some error occurs within the framework processing
      */
 
-    private void doRenderView(FacesContext context,
-                              UIViewRoot viewToRender)
-    throws IOException, FacesException {
+    private void doRenderView(FacesContext context, UIViewRoot viewToRender) throws IOException, FacesException {
 
         ApplicationAssociate associate = getAssociate(context);
 
@@ -278,12 +263,10 @@ public class ViewHandlerImpl extends ViewHandler {
         viewToRender.encodeAll(context);
     }
 
-
     @Override
     public UIViewRoot restoreView(FacesContext context, String viewId) {
         if (context == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+            String message = MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
 
@@ -302,8 +285,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
         // maping could be null if a non-faces request triggered
         // this response.
-        if (extContext.getRequestPathInfo() == null && mapping != null &&
-            Util.isPrefixMapped(mapping)) {
+        if (extContext.getRequestPathInfo() == null && mapping != null && Util.isPrefixMapped(mapping)) {
             // this was probably an initial request
             // send them off to the root of the web application
             try {
@@ -317,36 +299,29 @@ public class ViewHandlerImpl extends ViewHandler {
             }
         } else {
             // this is necessary to allow decorated impls.
-            ViewHandler outerViewHandler =
-                    context.getApplication().getViewHandler();
-            String renderKitId =
-                    outerViewHandler.calculateRenderKitId(context);
-            viewRoot = Util.getStateManager(context).restoreView(context,
-                                                                 viewId,
-                                                                 renderKitId);
+            ViewHandler outerViewHandler = context.getApplication().getViewHandler();
+            String renderKitId = outerViewHandler.calculateRenderKitId(context);
+            viewRoot = Util.getStateManager(context).restoreView(context, viewId, renderKitId);
         }
 
         return viewRoot;
     }
 
-
     @Override
     public UIViewRoot createView(FacesContext context, String viewId) {
         if (context == null) {
-            String message = MessageUtils.getExceptionMessageString
-                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+            String message = MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
 
-        UIViewRoot result = (UIViewRoot)
-                context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
+        UIViewRoot result = (UIViewRoot) context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
 
         if (viewId != null) {
             String mapping = Util.getFacesMapping(context);
 
             if (mapping != null) {
                 if (!Util.isPrefixMapped(mapping)) {
-                   viewId = convertViewId(context, viewId);
+                    viewId = convertViewId(context, viewId);
                 } else {
                     viewId = normalizeRequestURI(viewId, mapping);
                     if (!Util.isPortletRequest(context) && viewId.equals(mapping)) {
@@ -383,33 +358,24 @@ public class ViewHandlerImpl extends ViewHandler {
         // if there was no locale from the previous view, calculate the locale
         // for this view.
         if (locale == null) {
-            locale =
-                context.getApplication().getViewHandler().calculateLocale(
-                    context);
+            locale = context.getApplication().getViewHandler().calculateLocale(context);
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Locale for this view as determined by calculateLocale "
-                            + locale.toString());
+                LOGGER.fine("Locale for this view as determined by calculateLocale " + locale.toString());
             }
         } else {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Using locale from previous view "
-                            + locale.toString());
+                LOGGER.fine("Using locale from previous view " + locale.toString());
             }
         }
 
         if (renderKitId == null) {
-            renderKitId =
-                context.getApplication().getViewHandler().calculateRenderKitId(
-                    context);
-           if (LOGGER.isLoggable(Level.FINE)) {
-               LOGGER.fine(
-               "RenderKitId for this view as determined by calculateRenderKitId "
-               + renderKitId);
+            renderKitId = context.getApplication().getViewHandler().calculateRenderKitId(context);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("RenderKitId for this view as determined by calculateRenderKitId " + renderKitId);
             }
         } else {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Using renderKitId from previous view "
-                            + renderKitId);
+                LOGGER.fine("Using renderKitId from previous view " + renderKitId);
             }
         }
 
@@ -420,38 +386,32 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
     /**
-     * Execute the target view.  If the HTTP status code range is
-     * not 2xx, then return true to indicate the response should be
-     * immediately flushed by the caller so that conditions such as 404
-     * are properly handled.
+     * Execute the target view. If the HTTP status code range is not 2xx, then return true to
+     * indicate the response should be immediately flushed by the caller so that conditions such as
+     * 404 are properly handled.
+     * 
      * @param context the <code>FacesContext</code> for the current request
      * @param viewToExecute the view to build
-     * @return <code>true</code> if the response should be immediately flushed
-     *  to the client, otherwise <code>false</code>
+     * @return <code>true</code> if the response should be immediately flushed to the client,
+     *         otherwise <code>false</code>
      * @throws IOException if an error occurs executing the page
      */
-    private boolean executePageToBuildView(FacesContext context,
-                                        UIViewRoot viewToExecute)
-    throws IOException {
+    private boolean executePageToBuildView(FacesContext context, UIViewRoot viewToExecute) throws IOException {
 
         if (null == context) {
-            String message = MessageUtils.getExceptionMessageString
-                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+            String message = MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
         if (null == viewToExecute) {
-            String message = MessageUtils.getExceptionMessageString
-                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "viewToExecute");
+            String message = MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "viewToExecute");
             throw new NullPointerException(message);
         }
 
         ExternalContext extContext = context.getExternalContext();
         Map<String, Object> stateMap = RequestStateManager.getStateMap(context);
 
-
         if ("/*".equals(stateMap.get(RequestStateManager.INVOCATION_PATH))) {
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
+            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
         }
 
         String requestURI = viewToExecute.getViewId();
@@ -465,9 +425,7 @@ public class ViewHandlerImpl extends ViewHandler {
         // before the JSTL setBundle tag is called because that is when the
         // new LocalizationContext object is created based on the locale.
         if (extContext.getRequest() instanceof ServletRequest) {
-            Config.set((ServletRequest)
-            extContext.getRequest(),
-                       Config.FMT_LOCALE, context.getViewRoot().getLocale());
+            Config.set((ServletRequest) extContext.getRequest(), Config.FMT_LOCALE, context.getViewRoot().getLocale());
         }
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Before dispacthMessage to viewId " + requestURI);
@@ -502,20 +460,17 @@ public class ViewHandlerImpl extends ViewHandler {
 
         // Put the AFTER_VIEW_CONTENT into request scope
         // temporarily
-        stateMap.put(RequestStateManager.AFTER_VIEW_CONTENT,
-                                wrapped);
+        stateMap.put(RequestStateManager.AFTER_VIEW_CONTENT, wrapped);
 
         return false;
 
     }
 
-
     @Override
     public Locale calculateLocale(FacesContext context) {
 
         if (context == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+            String message = MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
 
@@ -542,13 +497,11 @@ public class ViewHandlerImpl extends ViewHandler {
         return result;
     }
 
-
     @Override
     public String calculateRenderKitId(FacesContext context) {
 
         if (context == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+            String message = MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
 
@@ -563,15 +516,13 @@ public class ViewHandlerImpl extends ViewHandler {
         return result;
     }
 
-
     /**
-     * Attempts to find a matching locale based on <code>pref</code> and
-     * list of supported locales, using the matching algorithm
-     * as described in JSTL 8.3.2.
+     * Attempts to find a matching locale based on <code>pref</code> and list of supported locales,
+     * using the matching algorithm as described in JSTL 8.3.2.
+     * 
      * @param context the <code>FacesContext</code> for the current request
      * @param pref the preferred locale
-     * @return the Locale based on pref and the matching alogritm specified
-     *  in JSTL 8.3.2
+     * @return the Locale based on pref and the matching alogritm specified in JSTL 8.3.2
      */
     protected Locale findMatch(FacesContext context, Locale pref) {
         Locale result = null;
@@ -589,8 +540,7 @@ public class ViewHandlerImpl extends ViewHandler {
                 // preferred locale is "en-US", if one of supported
                 // locales is "en-UK", even though its language matches
                 // that of the preferred locale, we must ignore it.
-                if (pref.getLanguage().equals(supportedLocale.getLanguage()) &&
-                     supportedLocale.getCountry().length() == 0) {
+                if (pref.getLanguage().equals(supportedLocale.getLanguage()) && supportedLocale.getCountry().length() == 0) {
                     result = supportedLocale;
                 }
             }
@@ -599,7 +549,7 @@ public class ViewHandlerImpl extends ViewHandler {
         if (null == result) {
             Locale defaultLocale = context.getApplication().getDefaultLocale();
             if (defaultLocale != null) {
-                if ( pref.equals(defaultLocale)) {
+                if (pref.equals(defaultLocale)) {
                     // exact match
                     result = defaultLocale;
                 } else {
@@ -608,8 +558,7 @@ public class ViewHandlerImpl extends ViewHandler {
                     // preferred locale is "en-US", if one of supported
                     // locales is "en-UK", even though its language matches
                     // that of the preferred locale, we must ignore it.
-                    if (pref.getLanguage().equals(defaultLocale.getLanguage()) &&
-                         defaultLocale.getCountry().length() == 0) {
+                    if (pref.getLanguage().equals(defaultLocale.getLanguage()) && defaultLocale.getCountry().length() == 0) {
                         result = defaultLocale;
                     }
                 }
@@ -619,18 +568,15 @@ public class ViewHandlerImpl extends ViewHandler {
         return result;
     }
 
-
     @Override
     public void writeState(FacesContext context) throws IOException {
         if (context == null) {
-           String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+            String message = MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("Begin writing marker for viewId " +
-                        context.getViewRoot().getViewId());
+            LOGGER.fine("Begin writing marker for viewId " + context.getViewRoot().getViewId());
         }
 
         WriteBehindStateWriter writer = WriteBehindStateWriter.getCurrentInstance();
@@ -639,36 +585,29 @@ public class ViewHandlerImpl extends ViewHandler {
         }
         context.getResponseWriter().write(RIConstants.SAVESTATE_FIELD_MARKER);
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("End writing marker for viewId " +
-                        context.getViewRoot().getViewId());
+            LOGGER.fine("End writing marker for viewId " + context.getViewRoot().getViewId());
         }
 
     }
-
 
     @Override
     public String getActionURL(FacesContext context, String viewId) {
 
         if (context == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+            String message = MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
         if (viewId == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "viewId");
+            String message = MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "viewId");
             throw new NullPointerException(message);
         }
 
         if (0 == viewId.length() || viewId.charAt(0) != '/') {
-            String message =
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.ILLEGAL_VIEW_ID_ID,
-                        viewId);
+            String message = MessageUtils.getExceptionMessageString(MessageUtils.ILLEGAL_VIEW_ID_ID, viewId);
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, "jsf.illegal_view_id_error", viewId);
             }
-        throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(message);
         }
 
         // Acquire the context path, which we will prefix on all results
@@ -702,7 +641,6 @@ public class ViewHandlerImpl extends ViewHandler {
 
     }
 
-
     @Override
     public String getResourceURL(FacesContext context, String path) {
         ExternalContext extContext = context.getExternalContext();
@@ -714,18 +652,18 @@ public class ViewHandlerImpl extends ViewHandler {
 
     }
 
-    
     @Override
     public String getWebsocketURL(FacesContext context, String channel) {
         throw new UnsupportedOperationException();
     }
-    
 
     /**
-     * <p>if the specified mapping is a prefix mapping, and the provided
-     * request URI (usually the value from <code>ExternalContext.getRequestServletPath()</code>)
-     * starts with <code>mapping + '/'</code>, prune the mapping from the
-     * URI and return it, otherwise, return the original URI.
+     * <p>
+     * if the specified mapping is a prefix mapping, and the provided request URI (usually the value
+     * from <code>ExternalContext.getRequestServletPath()</code>) starts with
+     * <code>mapping + '/'</code>, prune the mapping from the URI and return it, otherwise, return
+     * the original URI.
+     * 
      * @param uri the servlet request path
      * @param mapping the FacesServlet mapping used for this request
      * @return the URI without additional FacesServlet mappings
@@ -744,9 +682,7 @@ public class ViewHandlerImpl extends ViewHandler {
             while (uri.startsWith(mappingMod)) {
                 if (!logged && LOGGER.isLoggable(Level.WARNING)) {
                     logged = true;
-                    LOGGER.log(Level.WARNING,
-                               "jsf.viewhandler.requestpath.recursion",
-                               new Object[] {uri, mapping});
+                    LOGGER.log(Level.WARNING, "jsf.viewhandler.requestpath.recursion", new Object[] { uri, mapping });
                 }
                 uri = uri.substring(length - 1);
             }
@@ -755,8 +691,7 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
     private void send404Error(FacesContext context) {
-        HttpServletResponse response = (HttpServletResponse)
-             context.getExternalContext().getResponse();
+        HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
         try {
             context.responseComplete();
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -765,12 +700,13 @@ public class ViewHandlerImpl extends ViewHandler {
         }
     }
 
-
     /**
-     * <p>Adjust the viewID per the requirements of {@link #renderView}.</p>
+     * <p>
+     * Adjust the viewID per the requirements of {@link #renderView}.
+     * </p>
      *
      * @param context current {@link FacesContext}
-     * @param viewId  incoming view ID
+     * @param viewId incoming view ID
      * @return the view ID with an altered suffix mapping (if necessary)
      */
     private String convertViewId(FacesContext context, String viewId) {
@@ -800,19 +736,16 @@ public class ViewHandlerImpl extends ViewHandler {
                 }
             } catch (MalformedURLException e) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                               e.toString(),
-                               e);
+                    LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
             }
         }
 
         // unable to find any resource match that the default ViewHandler
-        // can deal with.  Return the viewId as it was passed.  There is
+        // can deal with. Return the viewId as it was passed. There is
         // probably another ViewHandler in the stack that will handle this.
         return viewId;
     }
-
 
     private ApplicationAssociate getAssociate(FacesContext context) {
         if (associate == null) {
@@ -820,7 +753,6 @@ public class ViewHandlerImpl extends ViewHandler {
         }
         return associate;
     }
-
 
     private static ViewHandlerResponseWrapper getWrapper(ExternalContext extContext) {
         Object response = extContext.getResponse();
@@ -834,16 +766,13 @@ public class ViewHandlerImpl extends ViewHandler {
     // ----------------------------------------------------------- Inner Classes
 
     /**
-     * Thanks to the Facelets folks for some of the concepts incorporated
-     * into this class.
+     * Thanks to the Facelets folks for some of the concepts incorporated into this class.
      */
     private static final class WriteBehindStateWriter extends Writer {
         // length of the state marker
-        private static final int STATE_MARKER_LEN =
-              RIConstants.SAVESTATE_FIELD_MARKER.length();
+        private static final int STATE_MARKER_LEN = RIConstants.SAVESTATE_FIELD_MARKER.length();
 
-        private static final ThreadLocal<WriteBehindStateWriter> CUR_WRITER =
-             new ThreadLocal<>();
+        private static final ThreadLocal<WriteBehindStateWriter> CUR_WRITER = new ThreadLocal<>();
         private Writer out;
         private Writer orig;
         private FastStringWriter fWriter;
@@ -852,9 +781,7 @@ public class ViewHandlerImpl extends ViewHandler {
         private char[] buf;
         private FacesContext context;
 
-
         // -------------------------------------------------------- Constructors
-
 
         public WriteBehindStateWriter(Writer out, FacesContext context, int bufSize) {
             this.out = out;
@@ -865,65 +792,52 @@ public class ViewHandlerImpl extends ViewHandler {
             CUR_WRITER.set(this);
         }
 
-
         // ------------------------------------------------- Methods from Writer
-
-
 
         @Override
         public void write(int c) throws IOException {
             out.write(c);
         }
 
-
         @Override
         public void write(char cbuf[]) throws IOException {
             out.write(cbuf);
         }
-
 
         @Override
         public void write(String str) throws IOException {
             out.write(str);
         }
 
-
         @Override
         public void write(String str, int off, int len) throws IOException {
             out.write(str, off, len);
         }
-
 
         @Override
         public void write(char cbuf[], int off, int len) throws IOException {
             out.write(cbuf, off, len);
         }
 
-
         @Override
         public void flush() throws IOException {
             // no-op
         }
 
-
         @Override
         public void close() throws IOException {
-           // no-op
+            // no-op
         }
 
-
         // ------------------------------------------------------ Public Methods
-
 
         public static WriteBehindStateWriter getCurrentInstance() {
             return CUR_WRITER.get();
         }
 
-
         public void release() {
             CUR_WRITER.remove();
         }
-
 
         public void writingState() {
             if (!stateWritten) {
@@ -937,8 +851,10 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         /**
-         * <p> Write directly from our FastStringWriter to the provided
-         * writer.</p>
+         * <p>
+         * Write directly from our FastStringWriter to the provided writer.
+         * </p>
+         * 
          * @throws IOException if an error occurs
          */
         public void flushToWriter() throws IOException {
@@ -947,9 +863,7 @@ public class ViewHandlerImpl extends ViewHandler {
             // multiple forms.
             StateManager stateManager = Util.getStateManager(context);
             ResponseWriter origWriter = context.getResponseWriter();
-            FastStringWriter state =
-                  new FastStringWriter((stateManager.isSavingStateInClient(
-                        context)) ? bufSize : 128);
+            FastStringWriter state = new FastStringWriter((stateManager.isSavingStateInClient(context)) ? bufSize : 128);
             context.setResponseWriter(origWriter.cloneWithWriter(state));
             stateManager.writeState(context, stateManager.saveView(context));
             context.setResponseWriter(origWriter);
@@ -976,38 +890,29 @@ public class ViewHandlerImpl extends ViewHandler {
                         // now check to see if the state saving string is
                         // at the begining of pos, if so, write our
                         // state out.
-                        if (builder.indexOf(
-                              RIConstants.SAVESTATE_FIELD_MARKER,
-                              pos) == tildeIdx) {
+                        if (builder.indexOf(RIConstants.SAVESTATE_FIELD_MARKER, pos) == tildeIdx) {
                             // buf is effectively zero'd out at this point
                             int statePos = 0;
                             while (statePos < stateLen) {
                                 if ((stateLen - statePos) > bufSize) {
                                     // enough state to fill the buffer
-                                    stateBuilder.getChars(statePos,
-                                                          (statePos + bufSize),
-                                                          buf,
-                                                          0);
+                                    stateBuilder.getChars(statePos, (statePos + bufSize), buf, 0);
                                     orig.write(buf);
                                     statePos += bufSize;
                                 } else {
                                     int slen = (stateLen - statePos);
-                                    stateBuilder.getChars(statePos,
-                                                          stateLen,
-                                                          buf,
-                                                          0);
+                                    stateBuilder.getChars(statePos, stateLen, buf, 0);
                                     orig.write(buf, 0, slen);
                                     statePos += slen;
                                 }
 
                             }
-                             // push us past the last '~' at the end of the marker
+                            // push us past the last '~' at the end of the marker
                             pos += (len + STATE_MARKER_LEN);
                             tildeIdx = getNextDelimiterIndex(builder, pos);
                         } else {
                             pos = tildeIdx;
-                            tildeIdx = getNextDelimiterIndex(builder,
-                                                             tildeIdx + 1);
+                            tildeIdx = getNextDelimiterIndex(builder, tildeIdx + 1);
 
                         }
                     }
@@ -1029,19 +934,16 @@ public class ViewHandlerImpl extends ViewHandler {
                 }
             }
 
-            // all state has been written.  Have 'out' point to the
+            // all state has been written. Have 'out' point to the
             // response so that all subsequent writes will make it to the
             // browser.
             out = orig;
         }
 
-        private static int getNextDelimiterIndex(StringBuilder builder,
-                                                 int offset) {
-            return builder.indexOf(RIConstants.SAVESTATE_FIELD_DELIMITER,
-                                   offset);
+        private static int getNextDelimiterIndex(StringBuilder builder, int offset) {
+            return builder.indexOf(RIConstants.SAVESTATE_FIELD_DELIMITER, offset);
         }
 
     }
-
 
 }

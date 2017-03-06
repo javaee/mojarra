@@ -75,16 +75,19 @@ import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 
 /**
- * <p>Central location for web application lifecycle events.<p>  
- * <p>The main purpose of this class is detect when we
- * should be invoking methods marked with the
- * <code>@PreDestroy</code> annotation.</p>
+ * <p>
+ * Central location for web application lifecycle events.
+ * <p>
+ * <p>
+ * The main purpose of this class is detect when we should be invoking methods marked with the
+ * <code>@PreDestroy</code> annotation.
+ * </p>
  */
 public class WebappLifecycleListener {
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
-    
+
     private ServletContext servletContext;
     private ApplicationAssociate applicationAssociate;
     private ActiveSessions activeSessions;
@@ -96,8 +99,8 @@ public class WebappLifecycleListener {
 
         private List<HttpSession> activeSessions;
 
-        public ActiveSessions() { 
-            activeSessions = new ArrayList<>(); 
+        public ActiveSessions() {
+            activeSessions = new ArrayList<>();
         }
 
         public synchronized void add(HttpSession hs) {
@@ -116,14 +119,13 @@ public class WebappLifecycleListener {
         public synchronized List<HttpSession> get() {
             return new ArrayList<>(activeSessions);
         }
-   
+
     }
 
     // ------------------------------------------------------------ Constructors
 
-
     public WebappLifecycleListener() {
-        this.activeSessions = new ActiveSessions(); 
+        this.activeSessions = new ActiveSessions();
     }
 
     public WebappLifecycleListener(ServletContext servletContext) {
@@ -132,7 +134,6 @@ public class WebappLifecycleListener {
         this.activeSessions = new ActiveSessions();
 
     }
-
 
     // ---------------------------------------------------------- Public Methods
 
@@ -147,21 +148,19 @@ public class WebappLifecycleListener {
             ServletRequest request = event.getServletRequest();
             for (Enumeration e = request.getAttributeNames(); e.hasMoreElements();) {
                 String beanName = (String) e.nextElement();
-                handleAttributeEvent(beanName,
-                        request.getAttribute(beanName),
-                        ELUtils.Scope.REQUEST);
+                handleAttributeEvent(beanName, request.getAttribute(beanName), ELUtils.Scope.REQUEST);
             }
             WebConfiguration config = WebConfiguration.getInstance(event.getServletContext());
             if (config.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.EnableAgressiveSessionDirtying)) {
                 syncSessionScopedBeans(request);
             }
-            
+
             /*
-             * If we are distributable and we have an active view map force the
-             * ACTIVE_VIEW_MAPS session entry to be replicated.
+             * If we are distributable and we have an active view map force the ACTIVE_VIEW_MAPS
+             * session entry to be replicated.
              */
             boolean distributable = config.isOptionEnabled(EnableDistributable);
-            
+
             if (distributable) {
                 HttpSession session = ((HttpServletRequest) request).getSession(false);
                 if (session != null && session.getAttribute(ACTIVE_VIEW_MAPS) != null) {
@@ -170,13 +169,10 @@ public class WebappLifecycleListener {
             }
         } catch (Throwable t) {
             FacesContext context = new InitFacesContext(event.getServletContext());
-            ExceptionQueuedEventContext eventContext =
-                    new ExceptionQueuedEventContext(context, t);
-            context.getApplication().publishEvent(context,
-                    ExceptionQueuedEvent.class, eventContext);
+            ExceptionQueuedEventContext eventContext = new ExceptionQueuedEventContext(context, t);
+            context.getApplication().publishEvent(context, ExceptionQueuedEvent.class, eventContext);
             context.getExceptionHandler().handle();
-        }
-        finally {
+        } finally {
             ApplicationAssociate.setCurrentInstance(null);
         }
     }
@@ -200,6 +196,7 @@ public class WebappLifecycleListener {
 
     /**
      * Notfication that a session has been created.
+     * 
      * @param event the notification event
      */
     public void sessionCreated(HttpSessionEvent event) {
@@ -209,7 +206,7 @@ public class WebappLifecycleListener {
             activeSessions.add(event.getSession());
         }
         boolean doCreateToken = true;
-        
+
         // Try to avoid creating the token unless we actually have protected views
         if (null != associate) {
             Application application = associate.getApplication();
@@ -222,16 +219,14 @@ public class WebappLifecycleListener {
         }
     }
 
-
-
     /**
      * Notification that a session is about to be invalidated.
      *
      * @param event the notification event
      */
-    public void sessionDestroyed(HttpSessionEvent event) {        
+    public void sessionDestroyed(HttpSessionEvent event) {
         activeSessions.remove(event.getSession());
-                
+
         if (Util.isCdiAvailable(servletContext)) {
             FlowCDIContext.sessionDestroyed(event);
         }
@@ -243,19 +238,18 @@ public class WebappLifecycleListener {
     }
 
     /**
-     * Notification that an existing attribute has been removed from the
-     * servlet request. Called after the attribute is removed.
+     * Notification that an existing attribute has been removed from the servlet request. Called
+     * after the attribute is removed.
+     * 
      * @param event the notification event
      */
     public void attributeRemoved(ServletRequestAttributeEvent event) {
-        handleAttributeEvent(event.getName(),
-                             event.getValue(),
-                             ELUtils.Scope.REQUEST);
+        handleAttributeEvent(event.getName(), event.getValue(), ELUtils.Scope.REQUEST);
     }
 
     /**
-     * Notification that an attribute was replaced on the
-     * servlet request. Called after the attribute is replaced.
+     * Notification that an attribute was replaced on the servlet request. Called after the
+     * attribute is replaced.
      *
      * @param event the notification event
      */
@@ -266,30 +260,25 @@ public class WebappLifecycleListener {
         // perhaps a bit paranoid, but since the javadocs are a bit vague,
         // only handle the event if oldValue and newValue are not the
         // exact same object
-        //noinspection ObjectEquality
+        // noinspection ObjectEquality
         if (event.getValue() != newValue) {
-            handleAttributeEvent(attrName,
-                                 event.getValue(),
-                                 ELUtils.Scope.REQUEST);
+            handleAttributeEvent(attrName, event.getValue(), ELUtils.Scope.REQUEST);
         }
     }
-    
 
     /**
-     * Notification that an attribute has been removed from a session.
-     * Called after the attribute is removed.
+     * Notification that an attribute has been removed from a session. Called after the attribute is
+     * removed.
      *
      * @param event the nofication event
      */
     public void attributeRemoved(HttpSessionBindingEvent event) {
-        handleAttributeEvent(event.getName(),
-                             event.getValue(),
-                             ELUtils.Scope.SESSION);
+        handleAttributeEvent(event.getName(), event.getValue(), ELUtils.Scope.SESSION);
     }
 
     /**
-     * Notification that an attribute has been replaced in a session.
-     * Called after the attribute is replaced.
+     * Notification that an attribute has been replaced in a session. Called after the attribute is
+     * replaced.
      *
      * @param event the notification event
      */
@@ -301,31 +290,26 @@ public class WebappLifecycleListener {
         // perhaps a bit paranoid, but since the javadocs are a bit vague,
         // only handle the event if oldValue and newValue are not the
         // exact same object
-        //noinspection ObjectEquality
+        // noinspection ObjectEquality
         if (event.getValue() != newValue) {
-            handleAttributeEvent(attrName,
-                                 event.getValue(),
-                                 ELUtils.Scope.SESSION);
+            handleAttributeEvent(attrName, event.getValue(), ELUtils.Scope.SESSION);
         }
 
     }
 
-
     /**
-     * Notification that an existing attribute has been removed from the servlet context.
-     * Called after the attribute is removed.
+     * Notification that an existing attribute has been removed from the servlet context. Called
+     * after the attribute is removed.
      *
      * @param event the notification event
      */
     public void attributeRemoved(ServletContextAttributeEvent event) {
-        handleAttributeEvent(event.getName(),
-                             event.getValue(),
-                             ELUtils.Scope.APPLICATION);
+        handleAttributeEvent(event.getName(), event.getValue(), ELUtils.Scope.APPLICATION);
     }
 
     /**
-     * Notification that an attribute on the servlet context has been replaced.
-     * Called after the attribute is replaced.
+     * Notification that an attribute on the servlet context has been replaced. Called after the
+     * attribute is replaced.
      *
      * @param event the notification event
      */
@@ -337,17 +321,13 @@ public class WebappLifecycleListener {
         // perhaps a bit paranoid, but since the javadocs are a bit vague,
         // only handle the event if oldValue and newValue are not the
         // exact same object
-        //noinspection ObjectEquality
+        // noinspection ObjectEquality
         if (event.getValue() != newValue) {
-            handleAttributeEvent(attrName,
-                                 event.getValue(),
-                                 ELUtils.Scope.APPLICATION);
+            handleAttributeEvent(attrName, event.getValue(), ELUtils.Scope.APPLICATION);
         }
     }
 
-    private void handleAttributeEvent(String beanName,
-                                      Object bean,
-                                      ELUtils.Scope scope) {
+    private void handleAttributeEvent(String beanName, Object bean, ELUtils.Scope scope) {
 
         ApplicationAssociate associate = getAssociate();
         try {
@@ -355,22 +335,16 @@ public class WebappLifecycleListener {
                 BeanManager beanManager = associate.getBeanManager();
                 if (beanManager != null && beanManager.isManaged(beanName)) {
                     beanManager.destroy(beanName, bean);
-                }              
+                }
             }
         } catch (Exception e) {
             String className = e.getClass().getName();
-            String message = e.getMessage();            
+            String message = e.getMessage();
             if (message == null) {
                 message = "";
             }
             if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO,
-                           "jsf.config.listener.predestroy.error",
-                           new Object[]{
-                                 className,
-                                 beanName,
-                                 scope,
-                                 message});
+                LOGGER.log(Level.INFO, "jsf.config.listener.predestroy.error", new Object[] { className, beanName, scope, message });
             }
             if (LOGGER.isLoggable(Level.FINE)) {
                 FastStringWriter writer = new FastStringWriter(128);
@@ -382,11 +356,9 @@ public class WebappLifecycleListener {
     } // END handleAttributeEvent
 
     /**
-     * Notification that the web application initialization
-     * process is starting.
-     * All ServletContextListeners are notified of context
-     * initialization before any filter or servlet in the web
-     * application is initialized.
+     * Notification that the web application initialization process is starting. All
+     * ServletContextListeners are notified of context initialization before any filter or servlet
+     * in the web application is initialized.
      *
      * @param event the notification event
      */
@@ -397,33 +369,26 @@ public class WebappLifecycleListener {
     }
 
     /**
-     * Notification that the servlet context is about to be shut down.
-     * All servlets and filters have been destroy()ed before any
-     * ServletContextListeners are notified of context
-     * destruction.
+     * Notification that the servlet context is about to be shut down. All servlets and filters have
+     * been destroy()ed before any ServletContextListeners are notified of context destruction.
      *
      * @param event the nofication event
      */
     public void contextDestroyed(ServletContextEvent event) {
-        
-        for (Enumeration e = servletContext.getAttributeNames(); e.hasMoreElements(); ) {
-            String beanName = (String)e.nextElement();
-            handleAttributeEvent(beanName, 
-                                 servletContext.getAttribute(beanName), 
-                                 ELUtils.Scope.APPLICATION);
+
+        for (Enumeration e = servletContext.getAttributeNames(); e.hasMoreElements();) {
+            String beanName = (String) e.nextElement();
+            handleAttributeEvent(beanName, servletContext.getAttribute(beanName), ELUtils.Scope.APPLICATION);
         }
         this.applicationAssociate = null;
 
     }
 
-
     public List<HttpSession> getActiveSessions() {
         return activeSessions.get();
     }
 
-
     // --------------------------------------------------------- Private Methods
-
 
     private ApplicationAssociate getAssociate() {
 
@@ -434,10 +399,9 @@ public class WebappLifecycleListener {
         return applicationAssociate;
     }
 
-
     /**
-     * This method ensures that session scoped managed beans will be
-     * synchronized properly in a clustered environment.
+     * This method ensures that session scoped managed beans will be synchronized properly in a
+     * clustered environment.
      *
      * @param request the current <code>ServletRequest</code>
      */
@@ -452,12 +416,10 @@ public class WebappLifecycleListener {
                 }
                 BeanManager manager = associate.getBeanManager();
                 if (manager != null) {
-                    for (Enumeration e = session.getAttributeNames();
-                         e.hasMoreElements();) {
+                    for (Enumeration e = session.getAttributeNames(); e.hasMoreElements();) {
                         String name = (String) e.nextElement();
                         if (manager.isManaged(name)) {
-                            session
-                                  .setAttribute(name, session.getAttribute(name));
+                            session.setAttribute(name, session.getAttribute(name));
                         }
                     }
                 }

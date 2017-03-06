@@ -102,7 +102,7 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
     }
 
     public Class<?> getType(FacesContext context) throws MethodNotFoundException {
-        
+
         if (context == null) {
             throw new NullPointerException("FacesConext -> null");
         }
@@ -122,7 +122,7 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
         if (this == other) {
             return true;
         }
-        
+
         if (other instanceof MethodBindingMethodExpressionAdapter) {
             return methodExpression.equals(((MethodBindingMethodExpressionAdapter) other).getWrapped());
         } else if (other instanceof MethodBinding) {
@@ -191,7 +191,7 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
         if (context == null) {
             throw new NullPointerException();
         }
-        
+
         Object result = null;
         if (!tranzient) {
             if (methodExpression instanceof StateHolder) {
@@ -199,7 +199,7 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
 
                 // save the actual state of our wrapped methodExpression
                 stateStruct[0] = ((StateHolder) methodExpression).saveState(context);
-                
+
                 // save the class name of the methodExpression impl
                 stateStruct[1] = methodExpression.getClass().getName();
 
@@ -216,7 +216,7 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
         if (context == null) {
             throw new NullPointerException();
         }
-        
+
         if (state == null) {
             return;
         }
@@ -226,9 +226,9 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
             Object savedState = stateStruct[0];
             String className = stateStruct[1].toString();
             MethodExpression result = null;
-            
+
             if (className != null) {
-                
+
                 Class<?> toRestoreClass = loadClass2(className, this);
 
                 if (toRestoreClass != null) {
@@ -250,6 +250,5 @@ public class MethodBindingMethodExpressionAdapter extends MethodBinding implemen
     public MethodExpression getWrapped() {
         return methodExpression;
     }
-
 
 }

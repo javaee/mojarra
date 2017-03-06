@@ -56,11 +56,10 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.util.FacesLogger;
 
 /**
- * This {@link javax.faces.application.ApplicationFactory} is responsible for injecting the
- * default {@link Application} instance into the top-level {@link Application}
- * as configured by the runtime.  Doing this allows us to preserve backwards
- * compatibility as the API evolves without having the API rely on implementation
- * specific details.
+ * This {@link javax.faces.application.ApplicationFactory} is responsible for injecting the default
+ * {@link Application} instance into the top-level {@link Application} as configured by the runtime.
+ * Doing this allows us to preserve backwards compatibility as the API evolves without having the
+ * API rely on implementation specific details.
  */
 public class InjectionApplicationFactory extends ApplicationFactory {
 
@@ -70,37 +69,32 @@ public class InjectionApplicationFactory extends ApplicationFactory {
     private Field defaultApplicationField;
     private volatile Application application;
 
-
     // ------------------------------------------------------------ Constructors
-
 
     public InjectionApplicationFactory(ApplicationFactory delegate) {
         super(delegate);
         notNull("applicationFactory", delegate);
     }
 
-
     // ----------------------------------------- Methods from ApplicationFactory
-
 
     @Override
     public Application getApplication() {
 
         if (application == null) {
             application = getWrapped().getApplication();
-            
+
             if (application == null) {
-                throw new IllegalStateException(format(
-                    "Delegate ApplicationContextFactory, {0}, returned null when calling getApplication().",
-                    getWrapped().getClass().getName()));
+                throw new IllegalStateException(
+                        format("Delegate ApplicationContextFactory, {0}, returned null when calling getApplication().", getWrapped().getClass().getName()));
             }
-            
+
             injectDefaultApplication();
         }
-        
+
         return application;
     }
-    
+
     @Override
     public synchronized void setApplication(Application application) {
         this.application = application;
@@ -108,18 +102,15 @@ public class InjectionApplicationFactory extends ApplicationFactory {
         injectDefaultApplication();
     }
 
-
     // --------------------------------------------------------- Private Methods
-
 
     private void injectDefaultApplication() {
 
         if (defaultApplication == null) {
             FacesContext ctx = FacesContext.getCurrentInstance();
-            defaultApplication = InjectionApplicationFactory.removeApplicationInstance(ctx.getExternalContext()
-                                                            .getApplicationMap());
+            defaultApplication = InjectionApplicationFactory.removeApplicationInstance(ctx.getExternalContext().getApplicationMap());
         }
-        
+
         if (defaultApplication != null) {
             try {
                 if (defaultApplicationField == null) {
@@ -143,10 +134,7 @@ public class InjectionApplicationFactory extends ApplicationFactory {
     // ------------------------------------------------- Package private Methods
 
     static void setApplicationInstance(Application app) {
-        FacesContext.getCurrentInstance()
-                    .getExternalContext()
-                    .getApplicationMap()
-                    .put(InjectionApplicationFactory.class.getName(), app);
+        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(InjectionApplicationFactory.class.getName(), app);
     }
 
     static Application removeApplicationInstance(Map<String, Object> appMap) {

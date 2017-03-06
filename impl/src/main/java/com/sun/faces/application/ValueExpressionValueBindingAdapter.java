@@ -272,7 +272,6 @@ public class ValueExpressionValueBindingAdapter extends ValueExpression implemen
         tranzient = newTransientValue;
     }
 
-
     //
     // methods used by classes aware of this class's wrapper nature
     //

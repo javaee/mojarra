@@ -59,9 +59,9 @@ import javax.servlet.WriteListener;
 import com.sun.faces.util.FacesLogger;
 
 /**
- * This steam converts byte content to character.  This implementation allows us
- * to query whether or not the writer has been flushed or closed.  This is
- * necessary to better mimic the actual Servlet response.
+ * This steam converts byte content to character. This implementation allows us to query whether or
+ * not the writer has been flushed or closed. This is necessary to better mimic the actual Servlet
+ * response.
  */
 class ByteArrayWebOutputStream extends ServletOutputStream {
 
@@ -83,7 +83,9 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
     }
 
     /**
-     * <p>It's important to not expose this as reset.</p>
+     * <p>
+     * It's important to not expose this as reset.
+     * </p>
      */
 
     public void resetByteArray() {
@@ -95,18 +97,15 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
     }
 
     /**
-     * Converts the buffered bytes into chars based on the
-     * specified encoding and writes them to the provided Writer.
+     * Converts the buffered bytes into chars based on the specified encoding and writes them to the
+     * provided Writer.
      *
-     * @param writer   target Writer
+     * @param writer target Writer
      * @param encoding character encoding
      */
     public void writeTo(Writer writer, String encoding) {
         if (LOGGER.isLoggable(FINE)) {
-            LOGGER.fine(
-                "Converting buffered ServletOutputStream bytes" + 
-                " to chars using " + encoding
-            );
+            LOGGER.fine("Converting buffered ServletOutputStream bytes" + " to chars using " + encoding);
         }
 
         ByteBuffer byteBuffer = baos.getByteBuffer();
@@ -135,7 +134,9 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
     }
 
     /**
-     * <p>Write the buffered bytes to the provided OutputStream.</p>
+     * <p>
+     * Write the buffered bytes to the provided OutputStream.
+     * </p>
      *
      * @param stream the stream to write to
      */
@@ -149,7 +150,7 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
 
     @Override
     public boolean isReady() {
-        throw new UnsupportedOperationException("Not supported"); 
+        throw new UnsupportedOperationException("Not supported");
     }
 
     @Override
@@ -161,17 +162,14 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
 
         // -------------------------------------------------------- Constructors
 
-
         public DirectByteArrayOutputStream(int initialCapacity) {
             super(initialCapacity);
         }
 
         // ------------------------------------------------------- PublicMethods
 
-
         /**
-         * Return the buffer backing this ByteArrayOutputStream as a
-         * ByteBuffer.
+         * Return the buffer backing this ByteArrayOutputStream as a ByteBuffer.
          *
          * @return buf wrapped in a ByteBuffer
          */
@@ -180,7 +178,6 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
         }
 
     }
-
 
     private static class NoOpOutputStream extends ServletOutputStream {
 
