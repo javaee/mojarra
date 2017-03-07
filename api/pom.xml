@@ -229,11 +229,13 @@
                     <execution>
                         <id>attach-javadocs</id>
                         <configuration>
-                            <doctitle>JavaServer Faces 2.3 PRD API</doctitle>
+                            <doctitle>JavaServer Faces 2.3 API</doctitle>
                             <excludePackageNames>com</excludePackageNames>
+                            <!--
                             <footer>DRAFT DRAFT DRAFT DRAFT</footer>
                             <header>DRAFT DRAFT DRAFT DRAFT</header>
-                            <windowtitle>JavaServer Faces 2.3 PRD API</windowtitle>
+                            -->
+                            <windowtitle>JavaServer Faces 2.3 API</windowtitle>
                         </configuration>
                         <goals>
                             <goal>jar</goal>

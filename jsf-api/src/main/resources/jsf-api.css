@@ -47,7 +47,7 @@ Overall document style
 
 body {
     background-color:#ffffff;
-    background: url(expert-draft-bg.png); 
+    /*background: url(expert-draft-bg.png); */
     color:#353833;
     font-family:'DejaVu Sans', Arial, Helvetica, sans-serif;
     font-size:14px;
