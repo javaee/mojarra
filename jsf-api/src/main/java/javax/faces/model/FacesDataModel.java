@@ -99,12 +99,11 @@ import javax.inject.Qualifier;
  * <p>
  * The only requirement here is that <code>A</code> appears before <code>B</code>, since <code>A</code> is a subclass of 
  * <code>B</code>.
+ *
+ * <p>The specification does not define a public method to obtain an
+ * instance of the "most specific DataModel for a given type".  Such an
+ * instance can be obtained using code similar to the following.</p>
  * 
- * <p>
- * The specification does not define a public method to obtain an instance of the "most specific DataModel for a given type".  
- * Such an instance can be obtained using code similar to the following.
- * 
- * <p>
  * <pre>
  * <code>
  *   &#64;SuppressWarnings("unchecked")
@@ -123,8 +122,7 @@ import javax.inject.Qualifier;
  * </code>
  * </pre>
  *
- * <p>
- * For example:
+ * <p>For example:</p>
  * 
  * <pre>
  * <code>
@@ -181,8 +179,7 @@ import javax.inject.Qualifier;
  * </code>
  * </pre>
  * 
- * <p>
- * Then the following must work:
+ * <p>Then the following must work:</p>
  * 
  * <pre>
  * <code>
@@ -192,10 +189,8 @@ import javax.inject.Qualifier;
  * </code>
  * </pre>
  * 
- * <p>
- * The result printed should be e.g.:
- *
- * <code>"class test.jsf23.Child1Model"</code>
+ * <p>The result printed should be e.g.: <code>"class
+ * test.jsf23.Child1Model"</code></p>
  * 
  * </div>
  * 
