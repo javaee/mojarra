@@ -40,6 +40,8 @@
 
 package javax.faces;
 
+import static javax.faces.ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_NAME;
+
 /**
  * <p>
  * <strong class="changed_modified_2_0 changed_modified_2_1 changed_modified_2_2
@@ -51,46 +53,46 @@ package javax.faces;
  * 
  * <ul>
  * 
- * <li>
- * <p>
- * If the JavaServer Faces configuration file bundled into the <code>WEB-INF</code> directory of the
- * webapp contains a <code>factory</code> entry of the given factory class name, that factory is
- * used.
- * <p>
- * </li>
+ *   <li>
+ *     <p>
+ *     If the JavaServer Faces configuration file bundled into the <code>WEB-INF</code> directory of the
+ *     webapp contains a <code>factory</code> entry of the given factory class name, that factory is
+ *     used.
+ *     <p>
+ *   </li>
  * 
- * <li>
- * <p>
- * If the JavaServer Faces configuration files named by the <code>javax.faces.CONFIG_FILES</code>
- * <code>ServletContext</code> init parameter contain any <code>factory</code> entries of the given
- * factory class name, those injectionProvider are used, with the last one taking precedence.
- * </p>
- * </li>
+ *   <li>
+ *   <p>
+ *     If the JavaServer Faces configuration files named by the <code>javax.faces.CONFIG_FILES</code>
+ *     <code>ServletContext</code> init parameter contain any <code>factory</code> entries of the given
+ *     factory class name, those injectionProvider are used, with the last one taking precedence.
+ *   </p>
+ *   </li>
  * 
- * <li>
- * <p>
- * If there are any JavaServer Faces configuration files bundled into the <code>META-INF</code>
- * directory of any jars on the <code>ServletContext</code>'s resource paths, the
- * <code>factory</code> entries of the given factory class name in those files are used, with the
- * last one taking precedence.
- * </p>
- * </li>
+ *   <li>
+ *     <p>
+ *     If there are any JavaServer Faces configuration files bundled into the <code>META-INF</code>
+ *     directory of any jars on the <code>ServletContext</code>'s resource paths, the
+ *     <code>factory</code> entries of the given factory class name in those files are used, with the
+ *     last one taking precedence.
+ *     </p>
+ *   </li>
  * 
- * <li>
- * <p>
- * If a <code>META-INF/services/{factory-class-name}</code> resource is visible to the web
- * application class loader for the calling application (typically as a injectionProvider of being
- * present in the manifest of a JAR file), its first line is read and assumed to be the name of the
- * factory implementation class to use.
- * </p>
- * </li>
+ *   <li>
+ *     <p>
+ *     If a <code>META-INF/services/{factory-class-name}</code> resource is visible to the web
+ *     application class loader for the calling application (typically as a injectionProvider of being
+ *     present in the manifest of a JAR file), its first line is read and assumed to be the name of the
+ *     factory implementation class to use.
+ *     </p>
+ *   </li>
  * 
- * <li>
- * <p>
- * If none of the above steps yield a match, the JavaServer Faces implementation specific class is
- * used.
- * </p>
- * </li>
+ *   <li>
+ *     <p>
+ *     If none of the above steps yield a match, the JavaServer Faces implementation specific class is
+ *     used.
+ *     </p>
+ *   </li>
  * 
  * </ul>
  * 
@@ -121,7 +123,6 @@ package javax.faces;
  * libraries.
  * </p>
  */
-
 public final class FactoryFinder {
 
     // ----------------------------------------------------------- Constructors
@@ -291,19 +292,20 @@ public final class FactoryFinder {
     public static Object getFactory(String factoryName) throws FacesException {
 
         FactoryFinderInstance manager;
+        
         // Bug 20458755: If the factory being requested is the special
         // SERVLET_CONTEXT_FINDER, do not lazily create the FactoryFinderInstance.
-        if (null != factoryName && factoryName.equals(ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_NAME)) {
+        if (SERVLET_CONTEXT_FINDER_NAME.equals(factoryName)) {
             manager = FACTORIES_CACHE.getApplicationFactoryManager(false);
         } else {
             manager = FACTORIES_CACHE.getApplicationFactoryManager();
         }
-        Object result = null;
-        if (null != manager) {
-            result = manager.getFactory(factoryName);
+        
+        if (manager != null) {
+            return manager.getFactory(factoryName);
         }
-        return result;
-
+        
+        return null;
     }
 
     /**
@@ -332,10 +334,7 @@ public final class FactoryFinder {
      *            {@code factoryName}.
      */
     public static void setFactory(String factoryName, String implName) {
-
-        FactoryFinderInstance manager = FACTORIES_CACHE.getApplicationFactoryManager();
-        manager.addFactory(factoryName, implName);
-
+        FACTORIES_CACHE.getApplicationFactoryManager().addFactory(factoryName, implName);
     }
 
     /**
@@ -352,9 +351,7 @@ public final class FactoryFinder {
         synchronized (FACTORIES_CACHE) {
 
             if (!FACTORIES_CACHE.applicationMap.isEmpty()) {
-
-                FactoryFinderInstance fm = FACTORIES_CACHE.getApplicationFactoryManager();
-                fm.releaseFactories();
+                FACTORIES_CACHE.getApplicationFactoryManager().releaseFactories();
             }
 
             FACTORIES_CACHE.removeApplicationFactoryManager();
@@ -364,6 +361,7 @@ public final class FactoryFinder {
     // -------------------------------------------------------- Private Methods
 
     // Called via reflection from automated tests.
+    @SuppressWarnings("unused")
     private static void reInitializeFactoryManager() {
         FACTORIES_CACHE.resetSpecialInitializationCaseFlags();
     }

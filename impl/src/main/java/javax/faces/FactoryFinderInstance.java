@@ -41,37 +41,64 @@
 
 package javax.faces;
 
-import com.sun.faces.spi.InjectionProvider;
+import static com.sun.faces.util.Util.isAnyNull;
+import static com.sun.faces.util.Util.isOneOf;
+import static java.text.MessageFormat.format;
+import static java.util.Arrays.binarySearch;
+import static java.util.Arrays.sort;
+import static java.util.logging.Level.SEVERE;
+import static javax.faces.FactoryFinder.APPLICATION_FACTORY;
+import static javax.faces.FactoryFinder.CLIENT_WINDOW_FACTORY;
+import static javax.faces.FactoryFinder.EXCEPTION_HANDLER_FACTORY;
+import static javax.faces.FactoryFinder.EXTERNAL_CONTEXT_FACTORY;
+import static javax.faces.FactoryFinder.FACELET_CACHE_FACTORY;
+import static javax.faces.FactoryFinder.FACES_CONTEXT_FACTORY;
+import static javax.faces.FactoryFinder.FACTORIES_CACHE;
+import static javax.faces.FactoryFinder.FLASH_FACTORY;
+import static javax.faces.FactoryFinder.FLOW_HANDLER_FACTORY;
+import static javax.faces.FactoryFinder.LIFECYCLE_FACTORY;
+import static javax.faces.FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY;
+import static javax.faces.FactoryFinder.RENDER_KIT_FACTORY;
+import static javax.faces.FactoryFinder.SEARCH_EXPRESSION_CONTEXT_FACTORY;
+import static javax.faces.FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY;
+import static javax.faces.FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY;
+import static javax.faces.FactoryFinder.VISIT_CONTEXT_FACTORY;
+import static javax.faces.ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_NAME;
+import static javax.faces.ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_REMOVAL_NAME;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.context.FacesContext;
 
+import com.sun.faces.spi.InjectionProvider;
+
 final class FactoryFinderInstance {
+    
+    private static final String INJECTION_PROVIDER_KEY = FactoryFinder.class.getPackage().getName() + "INJECTION_PROVIDER_KEY";
+    
     private final Map<String, Object> factories;
     private final Map<String, List<String>> savedFactoryNames;
     private final ReentrantReadWriteLock lock;
+    
     private ServletContextFacesContextFactory servletContextFinder;
-    private static final String INJECTION_PROVIDER_KEY = FactoryFinder.class.getPackage().getName() + "INJECTION_PROVIDER_KEY";
+   
 
     /**
      * <p>
@@ -87,50 +114,54 @@ final class FactoryFinderInstance {
      * Map of Class instances for the our factory names.
      * </p>
      */
-    private final static Map<String, Class> FACTORY_CLASSES;
+    private final static Map<String, Class<?>> FACTORY_CLASSES;
 
     private static final Logger LOGGER;
 
     static {
 
-        Map<String, Class> buildUpFactoryClasses;
+        Map<String, Class<?>> buildUpFactoryClasses;
+        
         buildUpFactoryClasses = new HashMap<>();
-        buildUpFactoryClasses.put(FactoryFinder.APPLICATION_FACTORY, javax.faces.application.ApplicationFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.VISIT_CONTEXT_FACTORY, javax.faces.component.visit.VisitContextFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.EXCEPTION_HANDLER_FACTORY, javax.faces.context.ExceptionHandlerFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.EXTERNAL_CONTEXT_FACTORY, javax.faces.context.ExternalContextFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.FACES_CONTEXT_FACTORY, javax.faces.context.FacesContextFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.FLASH_FACTORY, javax.faces.context.FlashFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY, javax.faces.context.PartialViewContextFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.LIFECYCLE_FACTORY, javax.faces.lifecycle.LifecycleFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.CLIENT_WINDOW_FACTORY, javax.faces.lifecycle.ClientWindowFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.RENDER_KIT_FACTORY, javax.faces.render.RenderKitFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY, javax.faces.view.ViewDeclarationLanguageFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.FACELET_CACHE_FACTORY, javax.faces.view.facelets.FaceletCacheFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY, javax.faces.view.facelets.TagHandlerDelegateFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.FLOW_HANDLER_FACTORY, javax.faces.flow.FlowHandlerFactory.class);
-        buildUpFactoryClasses.put(FactoryFinder.SEARCH_EXPRESSION_CONTEXT_FACTORY, javax.faces.component.search.SearchExpressionContextFactory.class);
+        buildUpFactoryClasses.put(APPLICATION_FACTORY, javax.faces.application.ApplicationFactory.class);
+        buildUpFactoryClasses.put(VISIT_CONTEXT_FACTORY, javax.faces.component.visit.VisitContextFactory.class);
+        buildUpFactoryClasses.put(EXCEPTION_HANDLER_FACTORY, javax.faces.context.ExceptionHandlerFactory.class);
+        buildUpFactoryClasses.put(EXTERNAL_CONTEXT_FACTORY, javax.faces.context.ExternalContextFactory.class);
+        buildUpFactoryClasses.put(FACES_CONTEXT_FACTORY, javax.faces.context.FacesContextFactory.class);
+        buildUpFactoryClasses.put(FLASH_FACTORY, javax.faces.context.FlashFactory.class);
+        buildUpFactoryClasses.put(PARTIAL_VIEW_CONTEXT_FACTORY, javax.faces.context.PartialViewContextFactory.class);
+        buildUpFactoryClasses.put(LIFECYCLE_FACTORY, javax.faces.lifecycle.LifecycleFactory.class);
+        buildUpFactoryClasses.put(CLIENT_WINDOW_FACTORY, javax.faces.lifecycle.ClientWindowFactory.class);
+        buildUpFactoryClasses.put(RENDER_KIT_FACTORY, javax.faces.render.RenderKitFactory.class);
+        buildUpFactoryClasses.put(VIEW_DECLARATION_LANGUAGE_FACTORY, javax.faces.view.ViewDeclarationLanguageFactory.class);
+        buildUpFactoryClasses.put(FACELET_CACHE_FACTORY, javax.faces.view.facelets.FaceletCacheFactory.class);
+        buildUpFactoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY, javax.faces.view.facelets.TagHandlerDelegateFactory.class);
+        buildUpFactoryClasses.put(FLOW_HANDLER_FACTORY, javax.faces.flow.FlowHandlerFactory.class);
+        buildUpFactoryClasses.put(SEARCH_EXPRESSION_CONTEXT_FACTORY, javax.faces.component.search.SearchExpressionContextFactory.class);
+        
         FACTORY_CLASSES = Collections.unmodifiableMap(buildUpFactoryClasses);
 
-        FACTORY_NAMES = new String[] { FactoryFinder.APPLICATION_FACTORY, FactoryFinder.VISIT_CONTEXT_FACTORY, FactoryFinder.EXCEPTION_HANDLER_FACTORY,
-                FactoryFinder.EXTERNAL_CONTEXT_FACTORY, FactoryFinder.FACES_CONTEXT_FACTORY, FactoryFinder.FLASH_FACTORY, FactoryFinder.FLOW_HANDLER_FACTORY,
-                FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY, FactoryFinder.CLIENT_WINDOW_FACTORY, FactoryFinder.LIFECYCLE_FACTORY,
-                FactoryFinder.RENDER_KIT_FACTORY, FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY, FactoryFinder.FACELET_CACHE_FACTORY,
-                FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY, FactoryFinder.SEARCH_EXPRESSION_CONTEXT_FACTORY };
+        FACTORY_NAMES = new String[] { APPLICATION_FACTORY, VISIT_CONTEXT_FACTORY, EXCEPTION_HANDLER_FACTORY,
+                EXTERNAL_CONTEXT_FACTORY, FACES_CONTEXT_FACTORY, FLASH_FACTORY, FLOW_HANDLER_FACTORY,
+                PARTIAL_VIEW_CONTEXT_FACTORY, CLIENT_WINDOW_FACTORY, LIFECYCLE_FACTORY,
+                RENDER_KIT_FACTORY, VIEW_DECLARATION_LANGUAGE_FACTORY, FACELET_CACHE_FACTORY,
+                TAG_HANDLER_DELEGATE_FACTORY, SEARCH_EXPRESSION_CONTEXT_FACTORY };
 
         // Optimize performance of validateFactoryName
-        Arrays.sort(FACTORY_NAMES);
+        sort(FACTORY_NAMES);
 
         LOGGER = Logger.getLogger("javax.faces", "javax.faces.LogStrings");
     }
 
-    // -------------------------------------------------------- Consturctors
+    
+    // -------------------------------------------------------- Constructors
+    
     FactoryFinderInstance() {
         lock = new ReentrantReadWriteLock(true);
         factories = new HashMap<>();
         savedFactoryNames = new HashMap<>();
         for (String name : FACTORY_NAMES) {
-            factories.put(name, new ArrayList(4)); // NOPMD
+            factories.put(name, new ArrayList<>(4)); // NOPMD
         }
         copyInjectionProviderFromFacesContext();
         servletContextFinder = new ServletContextFacesContextFactory();
@@ -144,20 +175,143 @@ final class FactoryFinderInstance {
         copyInjectionProviderFromFacesContext();
         servletContextFinder = new ServletContextFacesContextFactory();
     }
+  
+    
+
+    // ------------------------------------------------------ Package Private Methods
+    
+    Collection<Object> getFactories() {
+        return factories.values();
+    }
+
+    void addFactory(String factoryName, String implementation) {
+        validateFactoryName(factoryName);
+
+        Object result = factories.get(factoryName);
+        lock.writeLock().lock();
+        try {
+            if (result instanceof List) {
+                TypedCollections.dynamicallyCastList((List<?>) result, String.class).add(0, implementation);
+            }
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    void releaseFactories() {
+        InjectionProvider provider = getInjectionProvider();
+        
+        if (provider != null) {
+            lock.writeLock().lock();
+            try {
+                for (Entry<String, Object> entry : factories.entrySet()) {
+                    Object curFactory = entry.getValue();
+                    
+                    // If the current entry is not the injectionProvider itself
+                    // and the current entry has a non-null value
+                    // and the value is not a string...
+                    if (!INJECTION_PROVIDER_KEY.equals(entry.getKey()) && curFactory != null && !(curFactory instanceof String)) {
+                        try {
+                            provider.invokePreDestroy(curFactory);
+                        } catch (Exception ex) {
+                            logPreDestroyFail(entry.getValue(), ex);
+                        }
+                    }
+                }
+            } finally {
+                factories.clear();
+                lock.writeLock().unlock();
+            }
+
+        } else {
+            LOGGER.log(SEVERE,
+                "Unable to call @PreDestroy annotated methods because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
+        }
+    }
+
+    InjectionProvider getInjectionProvider() {
+        return (InjectionProvider) factories.get(INJECTION_PROVIDER_KEY);
+    }
+
+    void clearInjectionProvider() {
+        factories.remove(INJECTION_PROVIDER_KEY);
+    }
+
+    @SuppressWarnings("unchecked")
+    Object getFactory(String factoryName) {
+        validateFactoryName(factoryName);
+        
+        if (factoryName.equals(SERVLET_CONTEXT_FINDER_NAME)) {
+            return servletContextFinder;
+        }
+        
+        if (factoryName.equals(SERVLET_CONTEXT_FINDER_REMOVAL_NAME)) {
+            try {
+                lock.writeLock().lock();
+                servletContextFinder = null;
+                return null;
+            } finally {
+                lock.writeLock().unlock();
+            }
+        }
+
+        Object factoryOrList;
+        lock.readLock().lock();
+        try {
+            factoryOrList = factories.get(factoryName);
+            if (!(factoryOrList instanceof List)) {
+                return factoryOrList;
+            }
+        } finally {
+            lock.readLock().unlock();
+        }
+        
+        // Factory hasn't been constructed
+        lock.writeLock().lock();
+        try {
+            // Double check the current value. Another thread
+            // may have completed the initialization by the time
+            // this thread entered this block
+            factoryOrList = factories.get(factoryName);
+            if (!(factoryOrList instanceof List)) {
+                return factoryOrList;
+            }
+            
+            savedFactoryNames.put(factoryName, new ArrayList<String>((List<String>) factoryOrList));
+
+            Object factory = getImplementationInstance(getClassLoader(), factoryName, (List<String>) factoryOrList);
+            if (factory == null) {
+                logNoFactory(factoryName);
+                
+                factory = FACTORIES_CACHE.getFallbackFactory(this, factoryName);
+                
+                notNullFactory(factoryName, factory);
+            }
+            
+            // Record and return the new instance
+            factories.put(factoryName, factory);
+            
+            return factory;
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+    
+    
+    //   -------------------------------------------------------- Private methods
 
     private void copyInjectionProviderFromFacesContext() {
         InjectionProvider injectionProvider = null;
         FacesContext context = FacesContext.getCurrentInstance();
-        if (null != context) {
+        if (context != null) {
             injectionProvider = (InjectionProvider) context.getAttributes().get("com.sun.faces.config.ConfigManager_INJECTION_PROVIDER_TASK");
         }
-        if (null != injectionProvider) {
+        
+        if (injectionProvider != null) {
             factories.put(INJECTION_PROVIDER_KEY, injectionProvider);
         } else {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                        "Unable to obtain InjectionProvider from init time FacesContext. Does this container implement the Mojarra Injection SPI?");
-            }
+            LOGGER.log(SEVERE,
+                "Unable to obtain InjectionProvider from init time FacesContext. Does this container implement the Mojarra Injection SPI?");
         }
     }
 
@@ -217,39 +371,38 @@ final class FactoryFinderInstance {
      * @throws FacesException if an instance of the specified implementation class cannot be
      *             instantiated
      */
-    private Object getImplementationInstance(ClassLoader classLoader, String factoryName, List implementations) throws FacesException {
+    private Object getImplementationInstance(ClassLoader classLoader, String factoryName, List<String> implementations) throws FacesException {
 
-        Object result = null;
+        Object implementation = null;
         String curImplClass;
         int len;
 
         // step 1.
-        if (null != implementations && (1 < (len = implementations.size()) || 1 == len)) {
-            curImplClass = (String) implementations.remove(len - 1);
+        if (implementations != null && (1 < (len = implementations.size()) || 1 == len)) {
+            curImplClass = implementations.remove(len - 1);
             // since this is the hard coded implementation default,
             // there is no preceding implementation, so don't bother
-            // with a non-zero-arg ctor.
-            result = getImplGivenPreviousImpl(classLoader, factoryName, curImplClass, null);
+            // with a non-zero-argument ctor.
+            implementation = getImplGivenPreviousImpl(classLoader, factoryName, curImplClass, null);
         }
 
         // step 2.
         List<String> fromServices = getImplNameFromServices(classLoader, factoryName);
         if (fromServices != null) {
             for (String name : fromServices) {
-                result = getImplGivenPreviousImpl(classLoader, factoryName, name, result);
+                implementation = getImplGivenPreviousImpl(classLoader, factoryName, name, implementation);
             }
         }
 
         // step 3.
-        if (null != implementations) {
+        if (implementations != null) {
             for (len = (implementations.size() - 1); 0 <= len; len--) {
-                curImplClass = (String) implementations.remove(len);
-                result = getImplGivenPreviousImpl(classLoader, factoryName, curImplClass, result);
+                curImplClass = implementations.remove(len);
+                implementation = getImplGivenPreviousImpl(classLoader, factoryName, curImplClass, implementation);
             }
         }
 
-        return result;
-
+        return implementation;
     }
 
     /**
@@ -261,41 +414,29 @@ final class FactoryFinderInstance {
     private List<String> getImplNameFromServices(ClassLoader classLoader, String factoryName) {
 
         // Check for a services definition
-        List<String> result = null;
+        List<String> implementationNames = new ArrayList<>();
         String resourceName = "META-INF/services/" + factoryName;
+        
         try {
-            Enumeration<URL> e = classLoader.getResources(resourceName);
-            while (e.hasMoreElements()) {
-                URL url = e.nextElement();
-                URLConnection conn = url.openConnection();
-                conn.setUseCaches(false);
-                try (InputStream stream = conn.getInputStream()) {
+            Enumeration<URL> resources = classLoader.getResources(resourceName);
+            while (resources.hasMoreElements()) {
+                URL url = resources.nextElement();
+                URLConnection connection = url.openConnection();
+                connection.setUseCaches(false);
+                
+                try (InputStream stream = connection.getInputStream()) {
                     if (stream != null) {
-                        if (result == null) {
-                            result = new ArrayList<>(3);
-                        }
-                        // Deal with systems whose native encoding is possibly
-                        // different from the way that the services entry was created
-                        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {
-                            result.add(reader.readLine());
-                        } catch (UnsupportedEncodingException uee) {
-                            // The DM_DEFAULT_ENCODING warning is acceptable here
-                            // because we explicitly *want* to use the Java runtime's
-                            // default encoding.
-                            try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
-                                result.add(reader.readLine());
-                            }
-                        }
+                        implementationNames.add(readLineFromStream(stream));
                     }
                 }
             }
         } catch (IOException | SecurityException e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, e.toString(), e);
+            if (LOGGER.isLoggable(SEVERE)) {
+                LOGGER.log(SEVERE, e.toString(), e);
             }
         }
-        return result;
-
+        
+        return implementationNames;
     }
 
     /**
@@ -320,193 +461,105 @@ final class FactoryFinderInstance {
      *            constructor of the new factory.
      */
     private Object getImplGivenPreviousImpl(ClassLoader classLoader, String factoryName, String implName, Object previousImpl) {
-        Class clazz;
-        Class factoryClass = null;
-        Class[] getCtorArg;
-        Object[] newInstanceArgs = new Object[1];
-        Constructor ctor;
-        Object result = null;
-
-        // if we have a previousImpl and the appropriate one arg ctor.
-        if ((null != previousImpl) && (null != (factoryClass = getFactoryClass(factoryName)))) {
+        
+        Object implementation = null;
+        
+        Class<?> factoryClass = getFactoryClass(factoryName);
+        
+        if (!isAnyNull(previousImpl, factoryClass)) {
+            
+            // We have a previousImpl AND the appropriate one argument ctor.
+            
             try {
-                clazz = Class.forName(implName, false, classLoader);
-                getCtorArg = new Class[1];
-                getCtorArg[0] = factoryClass;
-                ctor = clazz.getConstructor(getCtorArg);
-                newInstanceArgs[0] = previousImpl;
-                result = ctor.newInstance(newInstanceArgs);
+                implementation = Class.forName(implName, false, classLoader)
+                                      .getConstructor(factoryClass)
+                                      .newInstance(previousImpl);
+                
             } catch (NoSuchMethodException nsme) {
                 // fall through to "zero-arg-ctor" case
                 factoryClass = null;
-            } catch (ClassNotFoundException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException e) {
+            } catch (ClassNotFoundException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 throw new FacesException(implName, e);
             }
         }
-        if (null == previousImpl || null == factoryClass) {
-            // we have either no previousImpl or no appropriate one arg
-            // ctor.
+        
+        if (isAnyNull(previousImpl, factoryClass)) {
+            
+            // We have either no previousImpl or no appropriate one argument ctor.
+            
             try {
-                clazz = Class.forName(implName, false, classLoader);
-                // since this is the hard coded implementation default,
-                // there is no preceding implementation, so don't bother
-                // with a non-zero-arg ctor.
-                result = clazz.newInstance();
+                
+                // Since this is the hard coded implementation default, there is no preceding implementation, 
+                // so don't bother with a non-zero-argument ctor.
+                
+                implementation = Class.forName(implName, false, classLoader)
+                                      .newInstance();
+                
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 throw new FacesException(implName, e);
             }
         }
 
-        if (null != result) {
-            InjectionProvider provider = getInjectionProvider();
-            if (null != provider) {
-                try {
-                    provider.inject(result);
-                    provider.invokePostConstruct(result);
-                } catch (Exception e) {
-                    throw new FacesException(implName, e);
-                }
-            } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                            "Unable to inject {0} because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?", result);
-                }
-            }
-        }
+        injectImplementation(implName, implementation);
 
-        return result;
-
+        return implementation;
     }
 
     /**
      * @return the <code>java.lang.Class</code> for the argument factory.
      */
-    private Class getFactoryClass(String factoryClassName) {
-
+    private Class<?> getFactoryClass(String factoryClassName) {
         return FACTORY_CLASSES.get(factoryClassName);
-
     }
-
-    // ------------------------------------------------------ Package Private Methods
-    Collection<Object> getFactories() {
-        return factories.values();
-    }
-
-    void addFactory(String factoryName, String implementation) {
-        validateFactoryName(factoryName);
-
-        Object result = factories.get(factoryName);
-        lock.writeLock().lock();
-        try {
-            if (result instanceof List) {
-                TypedCollections.dynamicallyCastList((List) result, String.class).add(0, implementation);
+    
+    private String readLineFromStream(InputStream stream) throws IOException {
+        // Deal with systems whose native encoding is possibly
+        // different from the way that the services entry was created
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {
+            return reader.readLine();
+        } catch (UnsupportedEncodingException uee) {
+            // The DM_DEFAULT_ENCODING warning is acceptable here
+            // because we explicitly *want* to use the Java runtime's
+            // default encoding.
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
+                return reader.readLine();
             }
-        } finally {
-            lock.writeLock().unlock();
         }
     }
-
-    void releaseFactories() {
-        InjectionProvider provider = getInjectionProvider();
-        if (null != provider) {
-            lock.writeLock().lock();
-            try {
-                for (Map.Entry entry : factories.entrySet()) {
-                    Object curFactory = entry.getValue();
-                    // If the current entry is not the injectionProvider itself
-                    // and the current entry has a non-null value
-                    // and the value is not a string...
-                    if (!INJECTION_PROVIDER_KEY.equals(entry.getKey()) && null != curFactory && !(curFactory instanceof String)) {
-                        try {
-                            provider.invokePreDestroy(curFactory);
-                        } catch (Exception ex) {
-                            if (LOGGER.isLoggable(Level.SEVERE)) {
-                                String message = MessageFormat.format("Unable to invoke @PreDestroy annotated methods on {0}.", entry.getValue());
-                                LOGGER.log(Level.SEVERE, message, ex);
-                            }
-                        }
-                    }
+    
+    private void injectImplementation(String implementationName, Object implementation) {
+        if (implementation != null) {
+            InjectionProvider provider = getInjectionProvider();
+            if (provider != null) {
+                try {
+                    provider.inject(implementation);
+                    provider.invokePostConstruct(implementation);
+                } catch (Exception e) {
+                    throw new FacesException(implementationName, e);
                 }
-            } finally {
-                factories.clear();
-                lock.writeLock().unlock();
-            }
-
-        } else {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                        "Unable to call @PreDestroy annotated methods because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
+            } else {
+                LOGGER.log(SEVERE,
+                    "Unable to inject {0} because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?", implementation);
             }
         }
     }
-
-    InjectionProvider getInjectionProvider() {
-        InjectionProvider result = (InjectionProvider) factories.get(INJECTION_PROVIDER_KEY);
-        return result;
-    }
-
-    void clearInjectionProvider() {
-        factories.remove(INJECTION_PROVIDER_KEY);
-    }
-
-    Object getFactory(String factoryName) {
-        validateFactoryName(factoryName);
-        if (factoryName.equals(ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_NAME)) {
-            return servletContextFinder;
-        } else if (factoryName.equals(ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_REMOVAL_NAME)) {
-            try {
-                lock.writeLock().lock();
-                servletContextFinder = null;
-                return null;
-            } finally {
-                lock.writeLock().unlock();
-            }
+    
+    private void logNoFactory(String factoryName) {
+        if (LOGGER.isLoggable(SEVERE)) {
+            LOGGER.log(SEVERE, format(LOGGER.getResourceBundle().getString("severe.no_factory"), factoryName));
         }
-
-        Object factoryOrList;
-        lock.readLock().lock();
-        try {
-            factoryOrList = factories.get(factoryName);
-            if (!(factoryOrList instanceof List)) {
-                return factoryOrList;
-            }
-        } finally {
-            lock.readLock().unlock();
+    }
+    
+    private void logPreDestroyFail(Object factory, Exception ex) {
+        if (LOGGER.isLoggable(SEVERE)) {
+            LOGGER.log(SEVERE, format("Unable to invoke @PreDestroy annotated methods on {0}.", factory), ex);
         }
-        // factory hasn't been constructed
-        lock.writeLock().lock();
-        try {
-            // double check the current value. Another thread
-            // may have completed the initialization by the time
-            // this thread entered this block
-            factoryOrList = factories.get(factoryName);
-            if (!(factoryOrList instanceof List)) {
-                return factoryOrList;
-            }
-            savedFactoryNames.put(factoryName, new ArrayList((List) factoryOrList));
-            ClassLoader cl = getClassLoader();
-
-            Object factory = getImplementationInstance(cl, factoryName, (List) factoryOrList);
-            if (factory == null) {
-                ResourceBundle rb = LOGGER.getResourceBundle();
-                String message = rb.getString("severe.no_factory");
-                message = MessageFormat.format(message, factoryName);
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, message);
-                }
-                factory = FactoryFinder.FACTORIES_CACHE.getFallbackFactory(this, factoryName);
-                if (null == factory) {
-                    message = rb.getString("severe.no_factory_backup_failed");
-                    message = MessageFormat.format(message, factoryName);
-                    throw new IllegalStateException(message);
-                }
-            }
-            // Record and return the new instance
-            factories.put(factoryName, factory);
-            return factory;
-        } finally {
-            lock.writeLock().unlock();
+    }
+    
+    private void notNullFactory(String factoryName, Object factory) {
+        if (factory == null) {
+            throw new IllegalStateException(
+                format(LOGGER.getResourceBundle().getString("severe.no_factory_backup_failed"), factoryName));
         }
     }
 
@@ -515,12 +568,12 @@ final class FactoryFinderInstance {
         // J2EE 1.3 (and later) containers are required to make the
         // web application class loader visible through the context
         // class loader of the current thread.
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        if (cl == null) {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        if (classLoader == null) {
             throw new FacesException("getContextClassLoader");
         }
-        return (cl);
-
+        
+        return classLoader;
     }
 
     private void validateFactoryName(String factoryName) {
@@ -528,15 +581,14 @@ final class FactoryFinderInstance {
         if (factoryName == null) {
             throw new NullPointerException();
         }
-        if (factoryName.equals(ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_NAME)
-                || factoryName.equals(ServletContextFacesContextFactory.SERVLET_CONTEXT_FINDER_REMOVAL_NAME)) {
+        
+        if (isOneOf(factoryName, SERVLET_CONTEXT_FINDER_NAME, SERVLET_CONTEXT_FINDER_REMOVAL_NAME)) {
             return;
         }
 
-        if (Arrays.binarySearch(FACTORY_NAMES, factoryName) < 0) {
+        if (binarySearch(FACTORY_NAMES, factoryName) < 0) {
             throw new IllegalArgumentException(factoryName);
         }
-
     }
 
-} // END FactoryFinderInstance
+}
