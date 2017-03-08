@@ -63,7 +63,7 @@
                                 <delete dir="src/main/resources/javax"/>
                                 <delete>
                                     <fileset dir="src/main/resources/META-INF" 
-                                             excludes="mojarra-jsf-api-probe-provider.xml"
+                                             excludes="mojarra-jsf-api-probe-provider.xml,jsf_core.tld"
                                              includes="*"/>
                                 </delete>
                                 <delete dir="src/main/doc"/>
@@ -141,7 +141,6 @@
                                 -->
                                 <copy todir="src/main/resources/META-INF">
                                     <fileset dir="${jsf-ri-dir}/conf/share">
-                                        <include name="jsf_core.tld"/>
                                         <include name="beans.xml"/>
                                         <include name="mojarra_ext.tld"/>
                                         <include name="mojarra_ext.taglib.xml"/>
