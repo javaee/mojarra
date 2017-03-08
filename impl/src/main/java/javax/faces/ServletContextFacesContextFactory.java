@@ -66,12 +66,12 @@ import javax.servlet.ServletContext;
  * so that the init FacesContext can be correctly looked up regardless of 
  * thread re-use.
  */
-final class ServletContextFacesContextFactory  extends FacesContextFactory {
+final class ServletContextFacesContextFactory extends FacesContextFactory {
     static final String SERVLET_CONTEXT_FINDER_NAME = "com.sun.faces.ServletContextFacesContextFactory";
     static final String SERVLET_CONTEXT_FINDER_REMOVAL_NAME = "com.sun.faces.ServletContextFacesContextFactory_Removal";
-    
+
     private static final Logger LOGGER;
-    
+
     static {
         LOGGER = Logger.getLogger("javax.faces", "javax.faces.LogStrings");
     }
@@ -85,15 +85,15 @@ final class ServletContextFacesContextFactory  extends FacesContextFactory {
             Field instanceField = FacesContext.class.getDeclaredField("instance");
             instanceField.setAccessible(true);
             facesContextCurrentInstance = (ThreadLocal<FacesContext>) instanceField.get(null);
-            
+
             Field threadInitContextMapField = FacesContext.class.getDeclaredField("threadInitContext");
             threadInitContextMapField.setAccessible(true);
             facesContextThreadInitContextMap = (ConcurrentHashMap<Thread, FacesContext>) threadInitContextMapField.get(null);
-            
+
             Field initContextServletContextMapField = FacesContext.class.getDeclaredField("initContextServletContext");
             initContextServletContextMapField.setAccessible(true);
             initContextServletContextMap = (ConcurrentHashMap<FacesContext, ServletContext>) initContextServletContextMapField.get(null);
-            
+
         } catch (IllegalAccessException ex) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, "Unable to access instance field of FacesContext", ex);
@@ -112,10 +112,10 @@ final class ServletContextFacesContextFactory  extends FacesContextFactory {
             }
         }
     }
-    
+
     /*
-     * This method does what FacesContext.getCurrentInstance() did *before*
-     * the fix for Bug 20458755.
+     * This method does what FacesContext.getCurrentInstance() did *before* the fix for Bug
+     * 20458755.
      */
     FacesContext getFacesContextWithoutServletContextLookup() {
         FacesContext result = facesContextCurrentInstance.get();
@@ -126,12 +126,11 @@ final class ServletContextFacesContextFactory  extends FacesContextFactory {
         }
         return result;
     }
-    
+
     /*
-     * Consult the initContextServletContextMap (reflectively obtained from
-     * the FacesContext in our ctor).  If it is non-empty, obtain
-     * the ServletContext corresponding to the current Thread's context ClassLoader.
-     * If found, use the initContextServletContextMap to find the FacesContext
+     * Consult the initContextServletContextMap (reflectively obtained from the FacesContext in our
+     * ctor). If it is non-empty, obtain the ServletContext corresponding to the current Thread's
+     * context ClassLoader. If found, use the initContextServletContextMap to find the FacesContext
      * corresponding to that ServletContext.
      */
 
@@ -149,10 +148,8 @@ final class ServletContextFacesContextFactory  extends FacesContextFactory {
                 }
             }
         }
-            
+
         return result;
     }
-    
-    
 
 }
