@@ -162,7 +162,7 @@ public class ApplicationImpl extends Application {
 
     private ArrayList<ELContextListener> elContextListeners = null;
     CompositeELResolver elResolvers = null;
-    FacesCompositeELResolver compositeELResolver = null;
+    volatile FacesCompositeELResolver compositeELResolver = null;
     private boolean registerPropertyEditors;
 
     /**
@@ -267,7 +267,11 @@ public class ApplicationImpl extends Application {
     public ELResolver getELResolver() {
 
         if (compositeELResolver == null) {
-            performOneTimeELInitialization();
+            synchronized(this) {
+                if (compositeELResolver == null) {
+                    performOneTimeELInitialization();
+                }
+            }
         }
 
         return compositeELResolver;
