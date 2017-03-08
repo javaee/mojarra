@@ -40,16 +40,26 @@
 
 package javax.faces.webapp;
 
+import static java.util.Collections.emptySet;
+import static java.util.EnumSet.allOf;
+import static java.util.EnumSet.range;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.FINER;
+import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
+import static javax.faces.FactoryFinder.FACES_CONTEXT_FACTORY;
+import static javax.faces.FactoryFinder.LIFECYCLE_FACTORY;
+import static javax.faces.lifecycle.LifecycleFactory.DEFAULT_LIFECYCLE;
+import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -235,39 +245,6 @@ import javax.servlet.http.HttpServletResponse;
 @MultipartConfig
 public final class FacesServlet implements Servlet {
 
-    /*
-     * A white space separated list of case sensitive HTTP method names that are allowed to be
-     * processed by this servlet. * means allow all
-     */
-    private static final String ALLOWED_HTTP_METHODS_ATTR = "com.sun.faces.allowedHttpMethods";
-
-    // Http method names must be upper case. http://www.w3.org/Protocols/HTTP/NoteMethodCS.html
-    // List of valid methods in Http 1.1 http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9
-
-    private enum HttpMethod {
-
-        OPTIONS("OPTIONS"), GET("GET"), HEAD("HEAD"), POST("POST"), PUT("PUT"), DELETE("DELETE"), TRACE("TRACE"), CONNECT("CONNECT");
-
-        private String name;
-
-        HttpMethod(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-
-    }
-
-    private Set<String> allowedUnknownHttpMethods;
-    private Set<HttpMethod> allowedKnownHttpMethods;
-    final private Set<HttpMethod> defaultAllowedHttpMethods = EnumSet.range(HttpMethod.OPTIONS, HttpMethod.CONNECT);
-    private Set<HttpMethod> allHttpMethods;
-
-    private boolean allowAllMethods;
-
     /**
      * <p>
      * Context initialization parameter name for a comma delimited list of context-relative resource
@@ -303,73 +280,71 @@ public final class FacesServlet implements Servlet {
      * The <code>Logger</code> for this class.
      */
     private static final Logger LOGGER = Logger.getLogger("javax.faces.webapp", "javax.faces.LogStrings");
+    
+    /**
+     * A white space separated list of case sensitive HTTP method names that are allowed to be
+     * processed by this servlet. * means allow all
+     */
+    private static final String ALLOWED_HTTP_METHODS_ATTR = "com.sun.faces.allowedHttpMethods";
 
+    // Http method names must be upper case. http://www.w3.org/Protocols/HTTP/NoteMethodCS.html
+    // List of valid methods in Http 1.1 http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9
+
+    private enum HttpMethod {
+
+        OPTIONS("OPTIONS"), GET("GET"), HEAD("HEAD"), POST("POST"), PUT("PUT"), DELETE("DELETE"), TRACE("TRACE"), CONNECT("CONNECT");
+
+        private String name;
+
+        HttpMethod(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+
+    }
+
+    private final Set<HttpMethod> defaultAllowedHttpMethods = range(HttpMethod.OPTIONS, HttpMethod.CONNECT);
+
+    private Set<String> allowedUnknownHttpMethods;
+    private Set<HttpMethod> allowedKnownHttpMethods;
+    private Set<HttpMethod> allHttpMethods;
+
+    private boolean allowAllMethods;
+    
     /**
      * <p>
      * Factory for {@link FacesContext} instances.
      * </p>
      */
-    private FacesContextFactory facesContextFactory = null;
+    private FacesContextFactory facesContextFactory;
 
     /**
      * <p>
      * The {@link Lifecycle} instance to use for request processing.
      * </p>
      */
-    private Lifecycle lifecycle = null;
+    private Lifecycle lifecycle;
 
     /**
      * <p>
      * The <code>ServletConfig</code> instance for this servlet.
      * </p>
      */
-    private ServletConfig servletConfig = null;
+    private ServletConfig servletConfig;
 
     /**
      * From GLASSFISH-15632. If true, the FacesContext instance left over from startup time has been
      * released.
      */
-    private boolean initFacesContextReleased = false;
-
-    /**
-     * <p>
-     * Release all resources acquired at startup time.
-     * </p>
-     */
-    @Override
-    public void destroy() {
-
-        facesContextFactory = null;
-        lifecycle = null;
-        servletConfig = null;
-        uninitHttpMethodValidityVerification();
-
-    }
-
-    /**
-     * <p>
-     * Return the <code>ServletConfig</code> instance for this servlet.
-     * </p>
-     */
-    @Override
-    public ServletConfig getServletConfig() {
-
-        return (this.servletConfig);
-
-    }
-
-    /**
-     * <p>
-     * Return information about this Servlet.
-     * </p>
-     */
-    @Override
-    public String getServletInfo() {
-
-        return (this.getClass().getName());
-
-    }
-
+    private boolean initFacesContextReleased;
+    
+    
+  
+    
     /**
      * <p>
      * Acquire the factory instances we will require.
@@ -386,143 +361,12 @@ public final class FacesServlet implements Servlet {
         this.servletConfig = servletConfig;
 
         // Acquire our FacesContextFactory instance
-        try {
-            facesContextFactory = (FacesContextFactory) FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-        } catch (FacesException e) {
-            ResourceBundle rb = LOGGER.getResourceBundle();
-            String msg = rb.getString("severe.webapp.facesservlet.init_failed");
-            Throwable rootCause = (e.getCause() != null) ? e.getCause() : e;
-            LOGGER.log(Level.SEVERE, msg, rootCause);
-            throw new UnavailableException(msg);
-        }
-
+        facesContextFactory = acquireFacesContextFactory();
+        
         // Acquire our Lifecycle instance
-        try {
-            LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-            String lifecycleId;
-
-            // First look in the servlet init-param set
-            if (null == (lifecycleId = servletConfig.getInitParameter(LIFECYCLE_ID_ATTR))) {
-                // If not found, look in the context-param set
-                lifecycleId = servletConfig.getServletContext().getInitParameter(LIFECYCLE_ID_ATTR);
-            }
-
-            if (lifecycleId == null) {
-                lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
-            }
-            lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
-            initHttpMethodValidityVerification();
-        } catch (FacesException e) {
-            Throwable rootCause = e.getCause();
-            if (rootCause == null) {
-                throw e;
-            } else {
-                throw new ServletException(e.getMessage(), rootCause);
-            }
-        }
-
-    }
-
-    private void initHttpMethodValidityVerification() {
-
-        assert (null == allowedUnknownHttpMethods);
-        assert (null != defaultAllowedHttpMethods);
-        assert (null == allHttpMethods);
-        allHttpMethods = EnumSet.allOf(HttpMethod.class);
-
-        // Configure our permitted HTTP methods
-
-        allowedUnknownHttpMethods = Collections.emptySet();
-        allowedKnownHttpMethods = defaultAllowedHttpMethods;
-
-        String[] methods;
-        String allowedHttpMethodsString = servletConfig.getServletContext().getInitParameter(ALLOWED_HTTP_METHODS_ATTR);
-        if (null != allowedHttpMethodsString) {
-            methods = allowedHttpMethodsString.split("\\s+");
-            assert (null != methods); // assuming split always returns a non-null array result
-            allowedUnknownHttpMethods = new HashSet(methods.length);
-            List<String> allowedKnownHttpMethodsStringList = new ArrayList<>();
-            // validate input against allHttpMethods data structure
-            for (String cur : methods) {
-                if (cur.equals("*")) {
-                    allowAllMethods = true;
-                    allowedUnknownHttpMethods = Collections.emptySet();
-                    return;
-                }
-                boolean isKnownHttpMethod;
-                try {
-                    HttpMethod.valueOf(cur);
-                    isKnownHttpMethod = true;
-                } catch (IllegalArgumentException e) {
-                    isKnownHttpMethod = false;
-                }
-
-                if (!isKnownHttpMethod) {
-                    if (LOGGER.isLoggable(Level.WARNING)) {
-                        HttpMethod[] values = HttpMethod.values();
-                        Object[] arg = new Object[values.length + 1];
-                        arg[0] = cur;
-                        System.arraycopy(values, HttpMethod.OPTIONS.ordinal(), arg, 1, values.length);
-                        LOGGER.log(Level.WARNING, "warning.webapp.facesservlet.init_invalid_http_method", arg);
-                    }
-                    // prevent duplicates
-                    if (!allowedUnknownHttpMethods.contains(cur)) {
-                        allowedUnknownHttpMethods.add(cur);
-                    }
-                } else {
-                    // prevent duplicates
-                    if (!allowedKnownHttpMethodsStringList.contains(cur)) {
-                        allowedKnownHttpMethodsStringList.add(cur);
-                    }
-                }
-            }
-            // Optimally initialize allowedKnownHttpMethods
-            if (5 == allowedKnownHttpMethodsStringList.size()) {
-                allowedKnownHttpMethods = EnumSet.of(HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
-                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)), HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(2)),
-                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(3)), HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(4)));
-            } else if (4 == allowedKnownHttpMethodsStringList.size()) {
-                allowedKnownHttpMethods = EnumSet.of(HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
-                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)), HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(2)),
-                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(3)));
-
-            } else if (3 == allowedKnownHttpMethodsStringList.size()) {
-                allowedKnownHttpMethods = EnumSet.of(HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
-                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)), HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(2)));
-
-            } else if (2 == allowedKnownHttpMethodsStringList.size()) {
-                allowedKnownHttpMethods = EnumSet.of(HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
-                        HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)));
-
-            } else if (1 == allowedKnownHttpMethodsStringList.size()) {
-                allowedKnownHttpMethods = EnumSet.of(HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)));
-
-            } else {
-                List<HttpMethod> restList = new ArrayList<>(allowedKnownHttpMethodsStringList.size() - 1);
-                for (int i = 1; i < allowedKnownHttpMethodsStringList.size() - 1; i++) {
-                    restList.add(HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(i)));
-                }
-                HttpMethod first = HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0));
-                HttpMethod[] rest = new HttpMethod[restList.size()];
-                restList.toArray(rest);
-                allowedKnownHttpMethods = EnumSet.of(first, rest);
-
-            }
-        }
-    }
-
-    private void uninitHttpMethodValidityVerification() {
-        assert (null != allowedUnknownHttpMethods);
-        assert (null != defaultAllowedHttpMethods);
-        assert (null != allHttpMethods);
-
-        allowedUnknownHttpMethods.clear();
-        allowedUnknownHttpMethods = null;
-        allowedKnownHttpMethods.clear();
-        allowedKnownHttpMethods = null;
-        allHttpMethods.clear();
-        allHttpMethods = null;
-
+        lifecycle = acquireLifecycle();
+        
+        initHttpMethodValidityVerificationWithCatch();
     }
 
     /**
@@ -546,17 +390,14 @@ public final class FacesServlet implements Servlet {
      * <code>HttpServletResponse.SC_NOT_FOUND</code> as the argument.
      * </p>
      *
-     *
      * <pre>
      * <code>
-    /WEB-INF/
-    /WEB-INF
-    /META-INF/
-    /META-INF
-    </code>
+     * /WEB-INF/
+     * /WEB-INF
+     * /META-INF/
+     * /META-INF
+     * </code>
      * </pre>
-     *
-     *
      * 
      * <p>
      * If none of the cases described above in the specification for this method apply to the
@@ -570,19 +411,23 @@ public final class FacesServlet implements Servlet {
      * <p>
      * Acquire the <code>ResourceHandler</code> for this request by calling
      * {@link javax.faces.application.Application#getResourceHandler}. Call
-     * {@link javax.faces.application.ResourceHandler#isResourceRequest}. If this returns
-     * <code>true</code> call {@link javax.faces.application.ResourceHandler#handleResourceRequest}.
-     * If this returns <code>false</code>, <span class="changed_added_2_2">call
-     * {@link javax.faces.lifecycle.Lifecycle#attachWindow} followed by </span>
-     * {@link javax.faces.lifecycle.Lifecycle#execute} followed by
-     * {@link javax.faces.lifecycle.Lifecycle#render}. If a {@link javax.faces.FacesException} is
-     * thrown in either case, extract the cause from the <code>FacesException</code>. If the cause
-     * is <code>null</code> extract the message from the <code>FacesException</code>, put it inside
+     * {@link javax.faces.application.ResourceHandler#isResourceRequest}. 
+     * 
+     * If this returns <code>true</code> call {@link javax.faces.application.ResourceHandler#handleResourceRequest}.
+     * 
+     * If this returns <code>false</code>, <span class="changed_added_2_2">call {@link javax.faces.lifecycle.Lifecycle#attachWindow} 
+     * followed by </span> {@link javax.faces.lifecycle.Lifecycle#execute} followed by
+     * {@link javax.faces.lifecycle.Lifecycle#render}. 
+     * 
+     * If a {@link javax.faces.FacesException} is thrown in either case, extract the cause from the <code>FacesException</code>.
+     * 
+     * If the cause is <code>null</code> extract the message from the <code>FacesException</code>, put it inside
      * of a new <code>ServletException</code> instance, and pass the <code>FacesException</code>
-     * instance as the root cause, then rethrow the <code>ServletException</code> instance. If the
-     * cause is an instance of <code>ServletException</code>, rethrow the cause. If the cause is an
-     * instance of <code>IOException</code>, rethrow the cause. Otherwise, create a new
-     * <code>ServletException</code> instance, passing the message from the cause, as the first
+     * instance as the root cause, then rethrow the <code>ServletException</code> instance. 
+     * If the cause is an instance of <code>ServletException</code>, rethrow the cause. 
+     * If the cause is an instance of <code>IOException</code>, rethrow the cause. 
+     * 
+     * Otherwise, create a new <code>ServletException</code> instance, passing the message from the cause, as the first
      * argument, and the cause itself as the second argument.
      * </p>
      * 
@@ -609,29 +454,250 @@ public final class FacesServlet implements Servlet {
         requestStart(request.getRequestURI()); // V3 Probe hook
 
         if (!isHttpMethodValid(request)) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            response.sendError(SC_BAD_REQUEST);
             return;
         }
+        
+        logIfThreadInterruped();
+
+        // If prefix mapped, then ensure requests for /WEB-INF are not processed.
+        if (notProcessWebInfIfPrefixMapped(request, response)) {
+            return;
+        }
+        
+        releaseFacesInitContextIfNeeded();
+
+        // Acquire the FacesContext instance for this request
+        FacesContext context = acquireFacesContext(request, response);
+
+        // Execute the request processing lifecycle for this request
+        try {
+            executeLifecyle(context);
+        } finally {
+            // Release the FacesContext instance for this request
+            context.release();
+        }
+        
+        requestEnd(); // V3 Probe hook
+    }
+    
+    /**
+     * <p>
+     * Release all resources acquired at startup time.
+     * </p>
+     */
+    @Override
+    public void destroy() {
+        facesContextFactory = null;
+        lifecycle = null;
+        servletConfig = null;
+        uninitHttpMethodValidityVerification();
+    }
+
+    /**
+     * <p>
+     * Return the <code>ServletConfig</code> instance for this servlet.
+     * </p>
+     */
+    @Override
+    public ServletConfig getServletConfig() {
+        return servletConfig;
+    }
+
+    /**
+     * <p>
+     * Return information about this Servlet.
+     * </p>
+     */
+    @Override
+    public String getServletInfo() {
+        return getClass().getName();
+    }
+    
+    
+    
+    // --------------------------------------------------------- Private Methods
+
+    
+    private FacesContextFactory acquireFacesContextFactory() throws UnavailableException {
+        try {
+            return (FacesContextFactory) FactoryFinder.getFactory(FACES_CONTEXT_FACTORY);
+        } catch (FacesException e) {
+            String msg = LOGGER.getResourceBundle().getString("severe.webapp.facesservlet.init_failed");
+            LOGGER.log(SEVERE, msg, e.getCause() != null ? e.getCause() : e);
+           
+            throw new UnavailableException(msg);
+        }
+    }
+    
+    private Lifecycle acquireLifecycle() throws ServletException {
+        try {
+            LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder.getFactory(LIFECYCLE_FACTORY);
+            
+            // First look in the servlet init-param set
+            String lifecycleId = servletConfig.getInitParameter(LIFECYCLE_ID_ATTR);
+
+            if (lifecycleId == null) {
+                // If not found, look in the context-param set
+                lifecycleId = servletConfig.getServletContext().getInitParameter(LIFECYCLE_ID_ATTR);
+            }
+
+            if (lifecycleId == null) {
+                // If still not found, use the default
+                lifecycleId = DEFAULT_LIFECYCLE;
+            }
+            
+           return lifecycleFactory.getLifecycle(lifecycleId);
+            
+        } catch (FacesException e) {
+            Throwable rootCause = e.getCause();
+            if (rootCause == null) {
+                throw e;
+            }
+                
+            throw new ServletException(e.getMessage(), rootCause);
+        }
+    }
+    
+    private FacesContext acquireFacesContext(HttpServletRequest request, HttpServletResponse response) {
+        return facesContextFactory.getFacesContext(servletConfig.getServletContext(), request, response, lifecycle);
+    }
+    
+    private void initHttpMethodValidityVerificationWithCatch() throws ServletException {
+        try {
+            initHttpMethodValidityVerification();
+        } catch (FacesException e) {
+            Throwable rootCause = e.getCause();
+            if (rootCause == null) {
+                throw e;
+            } else {
+                throw new ServletException(e.getMessage(), rootCause);
+            }
+        }
+    }
+
+    private void initHttpMethodValidityVerification() {
+
+        allHttpMethods = allOf(HttpMethod.class);
+
+        // Configure our permitted HTTP methods
+
+        allowedUnknownHttpMethods = emptySet();
+        allowedKnownHttpMethods = defaultAllowedHttpMethods;
+
+        String allowedHttpMethodsString = servletConfig.getServletContext().getInitParameter(ALLOWED_HTTP_METHODS_ATTR);
+        if (allowedHttpMethodsString != null) {
+            String[] methods = allowedHttpMethodsString.split("\\s+");
+            
+            allowedUnknownHttpMethods = new HashSet<>(methods.length);
+            List<String> allowedKnownHttpMethodsStringList = new ArrayList<>();
+            
+            // Validate input against allHttpMethods data structure
+            for (String httpMethod : methods) {
+                if (httpMethod.equals("*")) {
+                    allowAllMethods = true;
+                    allowedUnknownHttpMethods = emptySet();
+                    return;
+                }
+
+                if (!isKnownHttpMethod(httpMethod)) {
+                    
+                    logUnknownHttpMethod(httpMethod);
+                    
+                    // prevent duplicates
+                    if (!allowedUnknownHttpMethods.contains(httpMethod)) {
+                        allowedUnknownHttpMethods.add(httpMethod);
+                    }
+                } else {
+                    // prevent duplicates
+                    if (!allowedKnownHttpMethodsStringList.contains(httpMethod)) {
+                        allowedKnownHttpMethodsStringList.add(httpMethod);
+                    }
+                }
+            }
+            
+            // Optimally initialize allowedKnownHttpMethods
+            initializeAllowedKnownHttpMethods(allowedKnownHttpMethodsStringList);
+        }
+    }
+    
+    public void initializeAllowedKnownHttpMethods(List<String> allowedKnownHttpMethodsStringList) {
+        if (5 == allowedKnownHttpMethodsStringList.size()) {
+            allowedKnownHttpMethods = EnumSet.of(
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)), 
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(2)),
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(3)),
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(4)));
+            
+        } else if (4 == allowedKnownHttpMethodsStringList.size()) {
+            allowedKnownHttpMethods = EnumSet.of(
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)), 
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(2)),
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(3)));
+
+        } else if (3 == allowedKnownHttpMethodsStringList.size()) {
+            allowedKnownHttpMethods = EnumSet.of(
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)), 
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(2)));
+
+        } else if (2 == allowedKnownHttpMethodsStringList.size()) {
+            allowedKnownHttpMethods = EnumSet.of(
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)),
+                    HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(1)));
+
+        } else if (1 == allowedKnownHttpMethodsStringList.size()) {
+            allowedKnownHttpMethods = 
+                    EnumSet.of(HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0)));
+
+        } else {
+            List<HttpMethod> restList = new ArrayList<>(allowedKnownHttpMethodsStringList.size() - 1);
+            
+            for (int i = 1; i < allowedKnownHttpMethodsStringList.size() - 1; i++) {
+                restList.add(HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(i)));
+            }
+            
+            HttpMethod first = HttpMethod.valueOf(allowedKnownHttpMethodsStringList.get(0));
+            HttpMethod[] rest = new HttpMethod[restList.size()];
+            restList.toArray(rest);
+            allowedKnownHttpMethods = EnumSet.of(first, rest);
+        }
+    }
+    
+    private void logIfThreadInterruped() {
         if (Thread.currentThread().isInterrupted()) {
-            if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.log(Level.FINE, "Thread {0} given to FacesServlet.service() in interrupted state", Thread.currentThread().getName());
+            if (LOGGER.isLoggable(FINER)) {
+                LOGGER.log(FINE, "Thread {0} given to FacesServlet.service() in interrupted state", Thread.currentThread().getName());
             }
         }
-
-        // If prefix mapped, then ensure requests for /WEB-INF are
-        // not processed.
-        String pathInfo = request.getPathInfo();
-        if (pathInfo != null) {
-            pathInfo = pathInfo.toUpperCase();
-            if (pathInfo.contains("/WEB-INF/") || pathInfo.contains("/WEB-INF") || pathInfo.contains("/META-INF/") || pathInfo.contains("/META-INF")) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return;
-            }
+    }
+    
+    private void logUnknownHttpMethod(String httpMethod) {
+        if (LOGGER.isLoggable(WARNING)) {
+            HttpMethod[] values = HttpMethod.values();
+            Object[] arg = new Object[values.length + 1];
+            arg[0] = httpMethod;
+            System.arraycopy(values, HttpMethod.OPTIONS.ordinal(), arg, 1, values.length);
+            
+            LOGGER.log(WARNING, "warning.webapp.facesservlet.init_invalid_http_method", arg);
         }
-
+    }
+    
+    private boolean isKnownHttpMethod(String httpMethod) {
+        try {
+            HttpMethod.valueOf(httpMethod);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+    
+    private void releaseFacesInitContextIfNeeded() {
         if (!initFacesContextReleased) {
             FacesContext initFacesContext = FacesContext.getCurrentInstance();
-            if (null != initFacesContext) {
+            if (initFacesContext != null) {
                 initFacesContext.release();
             }
             // Bug 20458755: ensure the special factory is removed, so as not
@@ -640,11 +706,22 @@ public final class FacesServlet implements Servlet {
             FactoryFinder.getFactory("com.sun.faces.ServletContextFacesContextFactory_Removal");
             initFacesContextReleased = true;
         }
-
-        // Acquire the FacesContext instance for this request
-        FacesContext context = facesContextFactory.getFacesContext(servletConfig.getServletContext(), request, response, lifecycle);
-
-        // Execute the request processing lifecycle for this request
+    }
+    
+    private boolean notProcessWebInfIfPrefixMapped(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String pathInfo = request.getPathInfo();
+        if (pathInfo != null) {
+            pathInfo = pathInfo.toUpperCase();
+            if (pathInfo.contains("/WEB-INF/") || pathInfo.contains("/WEB-INF") || pathInfo.contains("/META-INF/") || pathInfo.contains("/META-INF")) {
+                response.sendError(SC_NOT_FOUND);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    private void executeLifecyle(FacesContext context) throws IOException, ServletException {
         try {
             ResourceHandler handler = context.getApplication().getResourceHandler();
             if (handler.isResourceRequest(context)) {
@@ -656,23 +733,35 @@ public final class FacesServlet implements Servlet {
             }
         } catch (FacesException e) {
             Throwable t = e.getCause();
+            
             if (t == null) {
                 throw new ServletException(e.getMessage(), e);
-            } else {
-                if (t instanceof ServletException) {
-                    throw ((ServletException) t);
-                } else if (t instanceof IOException) {
-                    throw ((IOException) t);
-                } else {
-                    throw new ServletException(t.getMessage(), t);
-                }
-            }
-        } finally {
-            // Release the FacesContext instance for this request
-            context.release();
+            } 
+            
+            if (t instanceof ServletException) {
+                throw (ServletException) t;
+            } 
+            
+            if (t instanceof IOException) {
+                throw (IOException) t;
+            } 
+                
+            throw new ServletException(t.getMessage(), t);
         }
+    }
 
-        requestEnd(); // V3 Probe hook
+    private void uninitHttpMethodValidityVerification() {
+        assert (null != allowedUnknownHttpMethods);
+        assert (null != defaultAllowedHttpMethods);
+        assert (null != allHttpMethods);
+
+        allowedUnknownHttpMethods.clear();
+        allowedUnknownHttpMethods = null;
+        allowedKnownHttpMethods.clear();
+        allowedKnownHttpMethods = null;
+        allHttpMethods.clear();
+        allHttpMethods = null;
+
     }
 
     private boolean isHttpMethodValid(HttpServletRequest request) {
@@ -700,12 +789,9 @@ public final class FacesServlet implements Servlet {
         return result;
     }
 
-    // --------------------------------------------------------- Private Methods
-
     /**
      * DO NOT REMOVE. Necessary for V3 probe monitoring.
      */
-    @SuppressWarnings({ "UnusedDeclaration" })
     private void requestStart(String requestUri) {
     }
 
