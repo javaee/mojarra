@@ -33,9 +33,6 @@ Mojarra.iml
 /impl/src/main/doc/
 /impl/src/main/resources/com/
 /impl/src/main/resources/javax/
-/impl/src/main/template/
 /impl/src/main/resources/META-INF/facelet*.xml
 /impl/src/main/resources/META-INF/LICENSE.txt
-/impl/src/main/resources/META-INF/mojarra_ext.tld
 /impl/src/main/resources/META-INF/error-include.xhtml
-/impl/src/main/resources/META-INF/mojarra_ext.taglib.xml
