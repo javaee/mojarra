@@ -364,6 +364,24 @@ public class Util {
         }
     }
 
+    /**
+     * <p>
+     * Identify and return the class loader that is associated with the calling web application.
+     * </p>
+     *
+     * @throws FacesException if the web application class loader cannot be identified
+     */
+    public static ClassLoader getContextClassLoader2() throws FacesException {
+        // J2EE 1.3 (and later) containers are required to make the
+        // web application class loader visible through the context
+        // class loader of the current thread.
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        if (classLoader == null) {
+            throw new FacesException("getContextClassLoader");
+        }
+        
+        return classLoader;
+    }
 
     public static String removeAllButLastSlashPathSegment(String input) {
         // Trim the leading lastSlash, if any.

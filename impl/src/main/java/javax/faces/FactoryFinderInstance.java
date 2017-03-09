@@ -41,6 +41,7 @@
 
 package javax.faces;
 
+import static com.sun.faces.util.Util.getContextClassLoader2;
 import static com.sun.faces.util.Util.isAnyNull;
 import static com.sun.faces.util.Util.isOneOf;
 import static java.text.MessageFormat.format;
@@ -279,7 +280,7 @@ final class FactoryFinderInstance {
             
             savedFactoryNames.put(factoryName, new ArrayList<String>((List<String>) factoryOrList));
 
-            Object factory = getImplementationInstance(getClassLoader(), factoryName, (List<String>) factoryOrList);
+            Object factory = getImplementationInstance(getContextClassLoader2(), factoryName, (List<String>) factoryOrList);
             if (factory == null) {
                 logNoFactory(factoryName);
                 
@@ -561,19 +562,6 @@ final class FactoryFinderInstance {
             throw new IllegalStateException(
                 format(LOGGER.getResourceBundle().getString("severe.no_factory_backup_failed"), factoryName));
         }
-    }
-
-    private ClassLoader getClassLoader() throws FacesException {
-
-        // J2EE 1.3 (and later) containers are required to make the
-        // web application class loader visible through the context
-        // class loader of the current thread.
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        if (classLoader == null) {
-            throw new FacesException("getContextClassLoader");
-        }
-        
-        return classLoader;
     }
 
     private void validateFactoryName(String factoryName) {
