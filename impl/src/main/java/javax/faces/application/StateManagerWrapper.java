@@ -91,6 +91,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
     public StateManager getWrapped() {
         return wrapped;
     }
+    
 
     // ----------------------- Methods from javax.faces.application.StateManager
 
@@ -106,9 +107,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      */
     @Override
     public SerializedView saveSerializedView(FacesContext context) {
-
         return getWrapped().saveSerializedView(context);
-
     }
 
     /**
@@ -138,9 +137,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      */
     @Override
     protected Object getTreeStructureToSave(FacesContext context) {
-
         return getWrapped().getTreeStructureToSave(context);
-
     }
 
     /**
@@ -155,9 +152,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      */
     @Override
     protected Object getComponentStateToSave(FacesContext context) {
-
         return getWrapped().getComponentStateToSave(context);
-
     }
 
     /**
@@ -172,9 +167,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      */
     @Override
     public void writeState(FacesContext context, Object state) throws IOException {
-
         getWrapped().writeState(context, state);
-
     }
 
     /**
@@ -190,9 +183,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      */
     @Override
     public void writeState(FacesContext context, SerializedView state) throws IOException {
-
         getWrapped().writeState(context, state);
-
     }
 
     /**
@@ -207,9 +198,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      */
     @Override
     public UIViewRoot restoreView(FacesContext context, String viewId, String renderKitId) {
-
         return getWrapped().restoreView(context, viewId, renderKitId);
-
     }
 
     /**
@@ -224,9 +213,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      */
     @Override
     protected UIViewRoot restoreTreeStructure(FacesContext context, String viewId, String renderKitId) {
-
         return getWrapped().restoreTreeStructure(context, viewId, renderKitId);
-
     }
 
     /**
@@ -242,9 +229,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      */
     @Override
     protected void restoreComponentState(FacesContext context, UIViewRoot viewRoot, String renderKitId) {
-
         getWrapped().restoreComponentState(context, viewRoot, renderKitId);
-
     }
 
     /**
@@ -259,9 +244,7 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      */
     @Override
     public boolean isSavingStateInClient(FacesContext context) {
-
         return getWrapped().isSavingStateInClient(context);
-
     }
 
     /**
@@ -275,8 +258,6 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
      */
     @Override
     public String getViewState(FacesContext context) {
-
         return getWrapped().getViewState(context);
-
     }
 }

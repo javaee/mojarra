@@ -50,7 +50,6 @@ import java.net.URL;
  * @since 2.2
  * 
  */
-
 public abstract class ViewResource {
 
     /**

@@ -93,6 +93,7 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
         return wrapped;
     }
 
+    
     // -------------------------------------------- Methods from ResourceHandler
 
     /**

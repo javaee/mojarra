@@ -40,14 +40,16 @@
 
 package javax.faces.application;
 
+import static java.lang.Boolean.TRUE;
+
+import java.io.IOException;
+
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.ResponseStateManager;
-
-import java.io.IOException;
 
 /**
  * <p>
@@ -56,12 +58,13 @@ import java.io.IOException;
  * between requests. <span class="changed_added_2_0">An implementation of this class must be
  * thread-safe.</span> The {@link StateManager} instance for an application is retrieved from the
  * {@link Application} instance, and thus cannot know any details of the markup language created by
- * the {@link RenderKit} being used to render a view. The {@link StateManager} utilizes a helper
+ * the {@link RenderKit} being used to render a view. 
+ * 
+ * The {@link StateManager} utilizes a helper
  * object ({@link ResponseStateManager}), that is provided by the {@link RenderKit} implementation
  * and is therefore aware of the markup language details.
  * </p>
  */
-
 public abstract class StateManager {
 
     // ------------------------------------------------------ Manifest Constants
@@ -122,7 +125,6 @@ public abstract class StateManager {
      *
      * @since 2.0
      */
-
     public static final String PARTIAL_STATE_SAVING_PARAM_NAME = "javax.faces.PARTIAL_STATE_SAVING";
 
     /**
@@ -170,7 +172,6 @@ public abstract class StateManager {
      * 
      * @since 2.2
      */
-
     public static final String SERIALIZE_SERVER_STATE_PARAM_NAME = "javax.faces.SERIALIZE_SERVER_STATE";
 
     /**
@@ -191,9 +192,13 @@ public abstract class StateManager {
      */
     public static final String STATE_SAVING_METHOD_SERVER = "server";
 
-    // ---------------------------------------------------- State Saving Methods
 
     private static final String IS_CALLED_FROM_API_CLASS = "javax.faces.ensureOverriddenInvocation";
+    
+    private Boolean savingStateInClient;
+    
+    
+    // ---------------------------------------------------- State Saving Methods
 
     /**
      * <p>
@@ -230,7 +235,7 @@ public abstract class StateManager {
      */
     public SerializedView saveSerializedView(FacesContext context) {
 
-        context.getAttributes().put(IS_CALLED_FROM_API_CLASS, Boolean.TRUE);
+        context.getAttributes().put(IS_CALLED_FROM_API_CLASS, TRUE);
         Object stateObj = null;
         try {
             stateObj = saveView(context);
@@ -239,14 +244,13 @@ public abstract class StateManager {
         }
 
         SerializedView result = null;
-        if (null != stateObj) {
-            if (stateObj instanceof Object[]) {
-                Object[] state = (Object[]) stateObj;
-                if (state.length == 2) {
-                    result = new SerializedView(state[0], state[1]);
-                }
+        if (stateObj instanceof Object[]) {
+            Object[] state = (Object[]) stateObj;
+            if (state.length == 2) {
+                result = new SerializedView(state[0], state[1]);
             }
         }
+        
         return result;
     }
 
@@ -294,10 +298,11 @@ public abstract class StateManager {
 
         if (!context.getAttributes().containsKey(IS_CALLED_FROM_API_CLASS)) {
             SerializedView view = saveSerializedView(context);
-            if (null != view) {
+            if (view != null) {
                 stateArray = new Object[] { view.getStructure(), view.getState() };
             }
         }
+        
         return stateArray;
     }
 
@@ -378,9 +383,9 @@ public abstract class StateManager {
      * @since 1.2
      */
     public void writeState(FacesContext context, Object state) throws IOException {
-        if (null != state && state.getClass().isArray() && state.getClass().getComponentType().equals(Object.class)) {
+        if (state != null && state.getClass().isArray() && state.getClass().getComponentType().equals(Object.class)) {
             Object stateArray[] = (Object[]) state;
-            if (2 == stateArray.length) {
+            if (stateArray.length == 2) {
                 SerializedView view = new SerializedView(stateArray[0], stateArray[1]);
                 writeState(context, view);
             }
@@ -419,12 +424,11 @@ public abstract class StateManager {
      *
      */
     public void writeState(FacesContext context, SerializedView state) throws IOException {
-
         if (state != null) {
             writeState(context, new Object[] { state.getStructure(), state.getState() });
         }
-
     }
+    
 
     // ------------------------------------------------- State Restoring Methods
 
@@ -503,8 +507,6 @@ public abstract class StateManager {
      */
     protected void restoreComponentState(FacesContext context, UIViewRoot viewRoot, String renderKitId) {
     }
-
-    private Boolean savingStateInClient = null;
 
     /**
      * <p>

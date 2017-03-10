@@ -67,10 +67,13 @@ import javax.faces.view.ViewDeclarationLanguage;
  * changed_modified_2_3"> ViewHandler</span></strong> is the pluggablity mechanism for allowing
  * implementations of or applications using the JavaServer Faces specification to provide their own
  * handling of the activities in the <em>Render Response</em> and <em>Restore View</em> phases of
- * the request processing lifecycle. This allows for implementations to support different response
+ * the request processing lifecycle. 
+ * 
+ * This allows for implementations to support different response
  * generation technologies, as well as alternative strategies for saving and restoring the state of
- * each view. <span class="changed_added_2_0">An implementation of this class must be
- * thread-safe.</span>
+ * each view. 
+ * 
+ * <span class="changed_added_2_0">An implementation of this class must be thread-safe.</span>
  * </p>
  *
  * <p>
@@ -92,6 +95,7 @@ import javax.faces.view.ViewDeclarationLanguage;
 public abstract class ViewHandler {
 
     private static final Logger log = Logger.getLogger("javax.faces.application");
+    
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -247,6 +251,8 @@ public abstract class ViewHandler {
      * @since 2.0
      */
     public static final String DISABLE_FACELET_JSF_VIEWHANDLER_PARAM_NAME = "javax.faces.DISABLE_FACELET_JSF_VIEWHANDLER";
+    
+    
 
     // ---------------------------------------------------------- Public Methods
 
@@ -278,7 +284,6 @@ public abstract class ViewHandler {
      *             Portlet technology when the encoding is not supported.
      *
      */
-
     public void initView(FacesContext context) throws FacesException {
         String encoding = context.getExternalContext().getRequestCharacterEncoding();
         if (encoding != null) {
@@ -424,14 +429,15 @@ public abstract class ViewHandler {
         String contentType = headerMap.get("Content-Type");
         String charEnc = null;
 
-        // look for a charset in the Content-Type header first.
+        // Look for a charset in the Content-Type header first.
         if (contentType != null) {
-            // see if this header had a charset
+            
+            // See if this header had a charset
             String charsetStr = "charset=";
             int len = charsetStr.length();
             int idx = contentType.indexOf(charsetStr);
 
-            // if we have a charset in this Content-Type header AND it
+            // If we have a charset in this Content-Type header AND it
             // has a non-zero length.
             if (idx != -1 && idx + len < contentType.length()) {
                 charEnc = contentType.substring(idx + len);

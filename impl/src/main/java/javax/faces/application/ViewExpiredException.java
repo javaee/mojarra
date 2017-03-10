@@ -54,9 +54,23 @@ import javax.faces.FacesException;
 
 public class ViewExpiredException extends FacesException {
 
-    // ----------------------------------------------------------- Constructors
 
     private static final long serialVersionUID = 5175808310270035833L;
+    
+    
+    
+    // ----------------------------------------------------- Instance Variables
+
+    /**
+     * <p>
+     * The view identifier of the view that could not be restored.
+     * </p>
+     */
+    private String viewId;
+    
+    
+    
+    // ----------------------------------------------------------- Constructors
 
     /**
      * <p>
@@ -64,9 +78,7 @@ public class ViewExpiredException extends FacesException {
      * </p>
      */
     public ViewExpiredException() {
-
         super();
-
     }
 
     /**
@@ -77,9 +89,7 @@ public class ViewExpiredException extends FacesException {
      * @param viewId The view identifier for this exception
      */
     public ViewExpiredException(String viewId) {
-
         this.viewId = viewId;
-
     }
 
     /**
@@ -91,10 +101,8 @@ public class ViewExpiredException extends FacesException {
      * @param viewId The view identifier for this exception
      */
     public ViewExpiredException(String message, String viewId) {
-
         super(message);
         this.viewId = viewId;
-
     }
 
     /**
@@ -107,10 +115,8 @@ public class ViewExpiredException extends FacesException {
      * @param viewId The view identifier for this exception
      */
     public ViewExpiredException(Throwable cause, String viewId) {
-
         super(cause);
         this.viewId = viewId;
-
     }
 
     /**
@@ -123,20 +129,11 @@ public class ViewExpiredException extends FacesException {
      * @param viewId The view identifier for this exception
      */
     public ViewExpiredException(String message, Throwable cause, String viewId) {
-
         super(message, cause);
         this.viewId = viewId;
-
     }
 
-    // ----------------------------------------------------- Instance Variables
-
-    /**
-     * <p>
-     * The view identifier of the view that could not be restored.
-     * </p>
-     */
-    private String viewId = null;
+   
 
     // --------------------------------------------------------- Public Methods
 
@@ -149,9 +146,7 @@ public class ViewExpiredException extends FacesException {
      * @return the view id, or <code>null</code>.
      */
     public String getViewId() {
-
-        return (this.viewId);
-
+        return viewId;
     }
 
     /**
@@ -164,12 +159,11 @@ public class ViewExpiredException extends FacesException {
      */
     @Override
     public String getMessage() {
-
         if (viewId != null) {
             return "viewId:" + viewId + " - " + super.getMessage();
         }
+        
         return super.getMessage();
-
     }
 
 }

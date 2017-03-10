@@ -72,13 +72,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
     private ViewHandler wrapped;
 
-    /**
-     * @deprecated Use the other constructor taking the implementation being wrapped.
-     */
-    @Deprecated
-    public ViewHandlerWrapper() {
-
-    }
+ 
 
     /**
      * <p class="changed_added_2_3">
@@ -98,6 +92,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     public ViewHandler getWrapped() {
         return wrapped;
     }
+    
 
     // ------------------------ Methods from javax.faces.application.ViewHandler
 
@@ -416,6 +411,23 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     @Override
     public void writeState(FacesContext context) throws IOException {
         getWrapped().writeState(context);
+    }
+    
+    
+    
+    
+    
+    
+    
+    // ------------------------------------------------------------- Deprecated methods
+    
+    
+    /**
+     * @deprecated Use the other constructor taking the implementation being wrapped.
+     */
+    @Deprecated
+    public ViewHandlerWrapper() {
+
     }
 
 }

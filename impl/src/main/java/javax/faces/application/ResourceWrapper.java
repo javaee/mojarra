@@ -67,13 +67,6 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
 
     private Resource wrapped;
 
-    /**
-     * @deprecated Use the other constructor taking the implementation being wrapped.
-     */
-    @Deprecated
-    public ResourceWrapper() {
-
-    }
 
     /**
      * <p class="changed_added_2_3">
@@ -94,6 +87,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
         return wrapped;
     }
 
+    
     // --------------------------------------------------- Methods from Resource
 
     /**
@@ -104,9 +98,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      */
     @Override
     public InputStream getInputStream() throws IOException {
-
         return getWrapped().getInputStream();
-
     }
 
     /**
@@ -117,9 +109,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      */
     @Override
     public URL getURL() {
-
         return getWrapped().getURL();
-
     }
 
     /**
@@ -130,9 +120,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      */
     @Override
     public Map<String, String> getResponseHeaders() {
-
         return getWrapped().getResponseHeaders();
-
     }
 
     /**
@@ -143,9 +131,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      */
     @Override
     public String getRequestPath() {
-
         return getWrapped().getRequestPath();
-
     }
 
     /**
@@ -156,9 +142,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      */
     @Override
     public boolean userAgentNeedsUpdate(FacesContext context) {
-
         return getWrapped().userAgentNeedsUpdate(context);
-
     }
 
     /**
@@ -169,9 +153,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      */
     @Override
     public String getContentType() {
-
         return getWrapped().getContentType();
-
     }
 
     /**
@@ -182,9 +164,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      */
     @Override
     public void setContentType(String contentType) {
-
         getWrapped().setContentType(contentType);
-
     }
 
     /**
@@ -195,9 +175,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      */
     @Override
     public String getLibraryName() {
-
         return getWrapped().getLibraryName();
-
     }
 
     /**
@@ -208,9 +186,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      */
     @Override
     public void setLibraryName(String libraryName) {
-
         getWrapped().setLibraryName(libraryName);
-
     }
 
     /**
@@ -221,9 +197,7 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      */
     @Override
     public String getResourceName() {
-
         return getWrapped().getResourceName();
-
     }
 
     /**
@@ -234,8 +208,21 @@ public abstract class ResourceWrapper extends Resource implements FacesWrapper<R
      */
     @Override
     public void setResourceName(String resourceName) {
-
         getWrapped().setResourceName(resourceName);
+    }
+    
+    
+    
+    
+    
+    // --------------------------------------------------- Deprecated methods
+    
+    
+    /**
+     * @deprecated Use the other constructor taking the implementation being wrapped.
+     */
+    @Deprecated
+    public ResourceWrapper() {
 
     }
 
