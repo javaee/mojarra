@@ -42,14 +42,16 @@ package javax.faces.application;
 import javax.faces.FacesException;
 
 /**
- * <p class="changed_added_2_2">This exception is thrown by the runtime
- * when a violation of the view protection mechanism is encountered.</p>
+ * <p class="changed_added_2_2">
+ * This exception is thrown by the runtime when a violation of the view protection mechanism is
+ * encountered.
+ * </p>
  * 
  * @since 2.2
  */
 
 public class ProtectedViewException extends FacesException {
-    
+
     private static final long serialVersionUID = -1906819977415598769L;
 
     public ProtectedViewException(Throwable rootCause) {
@@ -66,5 +68,5 @@ public class ProtectedViewException extends FacesException {
 
     public ProtectedViewException() {
     }
-    
+
 }

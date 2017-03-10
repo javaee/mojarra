@@ -40,17 +40,21 @@
 
 package javax.faces.application;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
- * <p class="changed_added_2_0">Container annotation to specify multiple
- * {@link ResourceDependency} annotations on a single class.  Example:</p>
-
-<pre><code>
+ * <p class="changed_added_2_0">
+ * Container annotation to specify multiple {@link ResourceDependency} annotations on a single
+ * class. Example:
+ * </p>
+ * 
+ * <pre>
+ * <code>
 &#0064;ResourceDependencies( {
   &#0064;ResourceDependency(library="corporate", name="css_master.css"),
   &#0064;ResourceDependency(library="client01", name="layout.css"),
@@ -61,21 +65,23 @@ import java.lang.annotation.Inherited;
   &#0064;ResourceDependency(library="fancy", name="progressBar.css"),
   &#0064;ResourceDependency(library="fancy", name="css_ns6up.css")
                        })
-</code></pre>
-
-
+</code>
+ * </pre>
+ * 
+ * 
  * <div class="changed_added_2_0">
-
- * <p>The action described in {@link ResourceDependency} must be taken for each
- * <code>&#0064;ResourceDependency</code> present in the container
- * annotation. </p>
-
+ * 
+ * <p>
+ * The action described in {@link ResourceDependency} must be taken for each
+ * <code>&#0064;ResourceDependency</code> present in the container annotation.
+ * </p>
+ * 
  * </div>
  */
-@Retention(value=RetentionPolicy.RUNTIME)
-@Target(value=ElementType.TYPE)
+@Retention(RUNTIME)
+@Target(TYPE)
 @Inherited
 public @interface ResourceDependencies {
-    
+
     ResourceDependency[] value();
 }
