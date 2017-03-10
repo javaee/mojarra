@@ -50,11 +50,12 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0"><strong class="changed_modified_2_2">
- * NavigationCase</strong>
- * represents a <code>&lt;navigation-case&gt;</code> in the navigation
- * rule base, as well as the <span class="changed_modified_2_2"><code>&lt;from-view-id&gt;</code> with
- * which this <code>&lt;navigation-case&gt;</code> is a sibling</span>.</p>
+ * <p class="changed_added_2_0">
+ * <strong class="changed_modified_2_2"> NavigationCase</strong> represents a
+ * <code>&lt;navigation-case&gt;</code> in the navigation rule base, as well as the
+ * <span class="changed_modified_2_2"><code>&lt;from-view-id&gt;</code> with which this
+ * <code>&lt;navigation-case&gt;</code> is a sibling</span>.
+ * </p>
  *
  * @since 2.0
  */
@@ -66,7 +67,7 @@ public class NavigationCase {
     private final String condition;
     private final String toViewId;
     private final String toFlowDocumentId;
-    private final Map<String,List<String>> parameters;
+    private final Map<String, List<String>> parameters;
     private final boolean redirect;
     private final boolean includeViewParams;
 
@@ -75,34 +76,27 @@ public class NavigationCase {
     private String toString;
     private int hashCode;
 
-
     // ------------------------------------------------------------ Constructors
 
-
     /**
-     * <p class="changed_added_2_0"> Construct a new
-     * <code>NavigationCase</code> based on the provided arguments.  See
-     * section JSF.7.4.2 for how a <code>NavigationCase</code> is used
-     * by the standard {@link ConfigurableNavigationHandler}</p>
+     * <p class="changed_added_2_0">
+     * Construct a new <code>NavigationCase</code> based on the provided arguments. See section
+     * JSF.7.4.2 for how a <code>NavigationCase</code> is used by the standard
+     * {@link ConfigurableNavigationHandler}
+     * </p>
      *
      * @param fromViewId return from {@link #getFromViewId}
      * @param fromAction return from {@link #getFromAction}
      * @param fromOutcome return from {@link #getFromOutcome}
-     * @param condition A string to be interpreted as a
-     * <code>ValueExpression</code> by a call to {@link #getCondition}
+     * @param condition A string to be interpreted as a <code>ValueExpression</code> by a call to
+     *            {@link #getCondition}
      * @param toViewId return from {@link #getToViewId}
      * @param parameters return from {@link #getParameters}
      * @param redirect return from {@link #isRedirect}
      * @param includeViewParams return {@link #isIncludeViewParams}
      */
-    public NavigationCase(String fromViewId,
-                          String fromAction,
-                          String fromOutcome,
-                          String condition,
-                          String toViewId,
-                          Map<String,List<String>> parameters,
-                          boolean redirect,
-                          boolean includeViewParams) {
+    public NavigationCase(String fromViewId, String fromAction, String fromOutcome, String condition, String toViewId, Map<String, List<String>> parameters,
+            boolean redirect, boolean includeViewParams) {
 
         this.fromViewId = fromViewId;
         this.fromAction = fromAction;
@@ -116,33 +110,26 @@ public class NavigationCase {
 
     }
 
-
     /**
-     * <p class="changed_added_2_0"> Construct a new
-     * <code>NavigationCase</code> based on the provided arguments.  See
-     * section JSF.7.4.2 for how a <code>NavigationCase</code> is used
-     * by the standard {@link ConfigurableNavigationHandler}</p>
+     * <p class="changed_added_2_0">
+     * Construct a new <code>NavigationCase</code> based on the provided arguments. See section
+     * JSF.7.4.2 for how a <code>NavigationCase</code> is used by the standard
+     * {@link ConfigurableNavigationHandler}
+     * </p>
      *
      * @param fromViewId return from {@link #getFromViewId}
      * @param fromAction return from {@link #getFromAction}
      * @param fromOutcome return from {@link #getFromOutcome}
-     * @param condition A string to be interpreted as a
-     * <code>ValueExpression</code> by a call to {@link #getCondition}
+     * @param condition A string to be interpreted as a <code>ValueExpression</code> by a call to
+     *            {@link #getCondition}
      * @param toViewId return from {@link #getToViewId}
      * @param toFlowDocumentId the toFlow documentId.
      * @param parameters return from {@link #getParameters}
      * @param redirect return from {@link #isRedirect}
      * @param includeViewParams return {@link #isIncludeViewParams}
      */
-    public NavigationCase(String fromViewId,
-                          String fromAction,
-                          String fromOutcome,
-                          String condition,
-                          String toViewId,
-                          String toFlowDocumentId,
-                          Map<String,List<String>> parameters,
-                          boolean redirect,
-                          boolean includeViewParams) {
+    public NavigationCase(String fromViewId, String fromAction, String fromOutcome, String condition, String toViewId, String toFlowDocumentId,
+            Map<String, List<String>> parameters, boolean redirect, boolean includeViewParams) {
 
         this.fromViewId = fromViewId;
         this.fromAction = fromAction;
@@ -156,111 +143,94 @@ public class NavigationCase {
 
     }
 
-
     // ---------------------------------------------------------- Public Methods
 
-
     /**
-     * <p class="changed_added_2_0">Construct an absolute URL to this
-     * <code>NavigationCase</code> instance using {@link
-     * javax.faces.application.ViewHandler#getActionURL} on the path
-     * portion of the url.</p>
+     * <p class="changed_added_2_0">
+     * Construct an absolute URL to this <code>NavigationCase</code> instance using
+     * {@link javax.faces.application.ViewHandler#getActionURL} on the path portion of the url.
+     * </p>
      *
      * @param context the {@link FacesContext} for the current request
      * @return the action URL.
-     * @throws MalformedURLException if the process of constructing the
-     * URL causes this exception to be thrown.
+     * @throws MalformedURLException if the process of constructing the URL causes this exception to
+     *             be thrown.
      */
     public URL getActionURL(FacesContext context) throws MalformedURLException {
 
         ExternalContext extContext = context.getExternalContext();
-        return new URL(extContext.getRequestScheme(),
-                extContext.getRequestServerName(),
-                extContext.getRequestServerPort(),
+        return new URL(extContext.getRequestScheme(), extContext.getRequestServerName(), extContext.getRequestServerPort(),
                 context.getApplication().getViewHandler().getActionURL(context, getToViewId(context)));
-        
+
     }
 
-
     /**
-     * <p class="changed_added_2_0">Construct an absolute URL to this
-     * <code>NavigationCase</code> instance using {@link
-     * javax.faces.application.ViewHandler#getResourceURL} on the path
-     * portion of the url.</p>
+     * <p class="changed_added_2_0">
+     * Construct an absolute URL to this <code>NavigationCase</code> instance using
+     * {@link javax.faces.application.ViewHandler#getResourceURL} on the path portion of the url.
+     * </p>
      *
      * @param context the {@link FacesContext} for the current request
      * @return the resource URL.
-     * @throws MalformedURLException if the process of constructing the
-     * URL causes this exception to be thrown.
+     * @throws MalformedURLException if the process of constructing the URL causes this exception to
+     *             be thrown.
      */
     public URL getResourceURL(FacesContext context) throws MalformedURLException {
-        
+
         ExternalContext extContext = context.getExternalContext();
 
-        return new URL(extContext.getRequestScheme(),
-                extContext.getRequestServerName(),
-                extContext.getRequestServerPort(),
+        return new URL(extContext.getRequestScheme(), extContext.getRequestServerName(), extContext.getRequestServerPort(),
                 context.getApplication().getViewHandler().getResourceURL(context, getToViewId(context)));
 
     }
 
-
     /**
-     * <p class="changed_added_2_0">Construct an absolute URL suitable for a
-     * "redirect" to this <code>NavigationCase</code> instance using {@link
-     * javax.faces.application.ViewHandler#getRedirectURL} on the path
-     * portion of the url.</p>
+     * <p class="changed_added_2_0">
+     * Construct an absolute URL suitable for a "redirect" to this <code>NavigationCase</code>
+     * instance using {@link javax.faces.application.ViewHandler#getRedirectURL} on the path portion
+     * of the url.
+     * </p>
      *
      * @param context the {@link FacesContext} for the current request
      * @return the redirect URL.
-     * @throws MalformedURLException if the process of constructing the
-     * URL causes this exception to be thrown.
+     * @throws MalformedURLException if the process of constructing the URL causes this exception to
+     *             be thrown.
      */
     public URL getRedirectURL(FacesContext context) throws MalformedURLException {
 
         ExternalContext extContext = context.getExternalContext();
 
-        return new URL(extContext.getRequestScheme(),
-                extContext.getRequestServerName(),
-                extContext.getRequestServerPort(),
-                context.getApplication().getViewHandler().getRedirectURL(context,
-                                                                         getToViewId(context),
-                                                                         SharedUtils.evaluateExpressions(context, getParameters()),
-                                                                         isIncludeViewParams()));
+        return new URL(extContext.getRequestScheme(), extContext.getRequestServerName(), extContext.getRequestServerPort(),
+                context.getApplication().getViewHandler().getRedirectURL(context, getToViewId(context),
+                        SharedUtils.evaluateExpressions(context, getParameters()), isIncludeViewParams()));
 
     }
 
-
     /**
-     * <p class="changed_added_2_0">Construct an absolute URL suitable for a
-     * bookmarkable link to this <code>NavigationCase</code> instance using {@link
-     * javax.faces.application.ViewHandler#getBookmarkableURL} on the path
-     * portion of the url.  This URL may include view parameters specified
-     * as metadata within the view.</p>
+     * <p class="changed_added_2_0">
+     * Construct an absolute URL suitable for a bookmarkable link to this
+     * <code>NavigationCase</code> instance using
+     * {@link javax.faces.application.ViewHandler#getBookmarkableURL} on the path portion of the
+     * url. This URL may include view parameters specified as metadata within the view.
+     * </p>
      *
      * @param context the {@link FacesContext} for the current request
      * @return the bookmarkable URL.
-     * @throws MalformedURLException if the process of constructing the
-     * URL causes this exception to be thrown.
+     * @throws MalformedURLException if the process of constructing the URL causes this exception to
+     *             be thrown.
      */
     public URL getBookmarkableURL(FacesContext context) throws MalformedURLException {
 
         ExternalContext extContext = context.getExternalContext();
-        return new URL(extContext.getRequestScheme(),
-                extContext.getRequestServerName(),
-                extContext.getRequestServerPort(),
-                context.getApplication().getViewHandler().getBookmarkableURL(context,
-                                                                             getToViewId(context),
-                                                                             getParameters(),
-                                                                             isIncludeViewParams()));
+        return new URL(extContext.getRequestScheme(), extContext.getRequestServerName(), extContext.getRequestServerPort(),
+                context.getApplication().getViewHandler().getBookmarkableURL(context, getToViewId(context), getParameters(), isIncludeViewParams()));
     }
 
-    
     /**
-     * <p class="changed_added_2_0">Return the
-     * <code>&lt;from-view-id&gt;</code> of the
-     * <code>&lt;navigation-rule&gt;</code> inside which this
-     * <code>&lt;navigation-case&gt;</code> is nested.</p>
+     * <p class="changed_added_2_0">
+     * Return the <code>&lt;from-view-id&gt;</code> of the <code>&lt;navigation-rule&gt;</code>
+     * inside which this <code>&lt;navigation-case&gt;</code> is nested.
+     * </p>
      * 
      * @return the from viedId.
      */
@@ -270,10 +240,10 @@ public class NavigationCase {
 
     }
 
-
     /**
-     * <p class="changed_added_2_0">Return the <code>&lt;from-action&gt;</code>
-     * for this <code>&lt;navigation-case&gt;</code></p>
+     * <p class="changed_added_2_0">
+     * Return the <code>&lt;from-action&gt;</code> for this <code>&lt;navigation-case&gt;</code>
+     * </p>
      * 
      * @return the from action.
      */
@@ -283,10 +253,10 @@ public class NavigationCase {
 
     }
 
-
     /**
-     * <p class="changed_added_2_0">Return the <code>&lt;from-outcome&gt;</code>
-     * for this <code>&lt;navigation-case&gt;</code></p>
+     * <p class="changed_added_2_0">
+     * Return the <code>&lt;from-outcome&gt;</code> for this <code>&lt;navigation-case&gt;</code>
+     * </p>
      * 
      * @return the from outcome.
      */
@@ -296,10 +266,10 @@ public class NavigationCase {
 
     }
 
-
     /**
-     * <p class="changed_added_2_0">Evaluates the <code>&lt;to-view-id&gt;</code>
-     * for this <code>&lt;navigation-case&gt;</code></p>
+     * <p class="changed_added_2_0">
+     * Evaluates the <code>&lt;to-view-id&gt;</code> for this <code>&lt;navigation-case&gt;</code>
+     * </p>
      *
      * @param context the {@link FacesContext} for the current request
      *
@@ -308,11 +278,8 @@ public class NavigationCase {
     public String getToViewId(FacesContext context) {
 
         if (toViewIdExpr == null) {
-            ExpressionFactory factory =
-                  context.getApplication().getExpressionFactory();
-            toViewIdExpr = factory.createValueExpression(context.getELContext(),
-                                                         toViewId,
-                                                         String.class);
+            ExpressionFactory factory = context.getApplication().getExpressionFactory();
+            toViewIdExpr = factory.createValueExpression(context.getELContext(), toViewId, String.class);
         }
         String result = (String) toViewIdExpr.getValue(context.getELContext());
         if (result.charAt(0) != '/') {
@@ -323,14 +290,14 @@ public class NavigationCase {
 
     }
 
-
     /**
-     * <p class="changed_added_2_2">If this navigation case represents 
-     * a flow invocation, this property is the documentId in which the flow
-     * whose id is given by the return from {@link #getFromOutcome()} is 
-     * defined.  Implementations must override this method to return
-     * the value defined in the corresponding application configuration resources
-     * element.  The base implementation returns the empty string.</p>
+     * <p class="changed_added_2_2">
+     * If this navigation case represents a flow invocation, this property is the documentId in
+     * which the flow whose id is given by the return from {@link #getFromOutcome()} is defined.
+     * Implementations must override this method to return the value defined in the corresponding
+     * application configuration resources element. The base implementation returns the empty
+     * string.
+     * </p>
      *
      * @return the toFlow documentId.
      * @since 2.2
@@ -340,14 +307,13 @@ public class NavigationCase {
         return toFlowDocumentId;
 
     }
-    
+
     /**
-     * <p class="changed_added_2_0">Test if this navigation case has an
-     * associated <code>&lt;if&gt;</code> element.
+     * <p class="changed_added_2_0">
+     * Test if this navigation case has an associated <code>&lt;if&gt;</code> element.
      *
-     * @return <code>true</code> if there's an <code>&lt;if&gt;</code>
-     *  element associated with this <code>&lt;navigation-case&gt;</code>,
-     *  otherwise <code>false</code>
+     * @return <code>true</code> if there's an <code>&lt;if&gt;</code> element associated with this
+     *         <code>&lt;navigation-case&gt;</code>, otherwise <code>false</code>
      */
     public boolean hasCondition() {
 
@@ -355,48 +321,41 @@ public class NavigationCase {
 
     }
 
-
     /**
-     * <p class="changed_added_2_0">Evaluates the
-     * <code>&lt;if&gt;</code> for this
-     * <code>&lt;navigation-case&gt;</code>, if any.  The expression to
-     * be evaluated is passed into the constructor as a string.  When
-     * the expression is evaluated, its value must be coerced into a
-     * <code>boolean</code> per the normal EL coercion rules.</p>
+     * <p class="changed_added_2_0">
+     * Evaluates the <code>&lt;if&gt;</code> for this <code>&lt;navigation-case&gt;</code>, if any.
+     * The expression to be evaluated is passed into the constructor as a string. When the
+     * expression is evaluated, its value must be coerced into a <code>boolean</code> per the normal
+     * EL coercion rules.
+     * </p>
      *
-     * Note throws any exceptions encountered during the process of
-     * evaluating the expression or obtaining its value.
+     * Note throws any exceptions encountered during the process of evaluating the expression or
+     * obtaining its value.
      *
      * @param context the {@link FacesContext} for the current request
      *
-     * @return <code>null</code> if there is no <code>&lt;if&gt;</code> element
-     *  associated with this <code>&lt;navigation-case&gt;</code>, otherwise
-     *  return the evaluation result of the condition
+     * @return <code>null</code> if there is no <code>&lt;if&gt;</code> element associated with this
+     *         <code>&lt;navigation-case&gt;</code>, otherwise return the evaluation result of the
+     *         condition
      */
     public Boolean getCondition(FacesContext context) {
 
         if (conditionExpr == null && condition != null) {
-            ExpressionFactory factory =
-                  context.getApplication().getExpressionFactory();
-            conditionExpr = factory.createValueExpression(context.getELContext(),
-                                                          condition,
-                                                          Boolean.class);
+            ExpressionFactory factory = context.getApplication().getExpressionFactory();
+            conditionExpr = factory.createValueExpression(context.getELContext(), condition, Boolean.class);
         }
 
-        return ((conditionExpr != null)
-                ? (Boolean) conditionExpr.getValue(context.getELContext())
-                : null);
+        return ((conditionExpr != null) ? (Boolean) conditionExpr.getValue(context.getELContext()) : null);
 
     }
 
-
     /**
-     * <p class="changed_added_2_0">Return the parameters to be included
-     * for navigation cases requiring a redirect.  If no parameters are
-     * defined, <code>null</code> will be returned.  The keys in the
-     * <code>Map</code> are parameter names.  For each key, the
-     * corresponding value is a <code>List</code> of unconverted
-     * values.</p>
+     * <p class="changed_added_2_0">
+     * Return the parameters to be included for navigation cases requiring a redirect. If no
+     * parameters are defined, <code>null</code> will be returned. The keys in the <code>Map</code>
+     * are parameter names. For each key, the corresponding value is a <code>List</code> of
+     * unconverted values.
+     * </p>
      * 
      * @return the list of parameters, or <code>null</code>
      */
@@ -406,13 +365,12 @@ public class NavigationCase {
 
     }
 
-
     /**
-     * <p class="changed_added_2_0">Return the
-     * <code>&lt;redirect&gt;</code> value for this
-     * <code>&lt;navigation-case&gt;</code>.  This will be
-     * <code>true</code> if the new view should be navigated to via a
-     * {@link javax.faces.context.ExternalContext#redirect(String)}</p>
+     * <p class="changed_added_2_0">
+     * Return the <code>&lt;redirect&gt;</code> value for this <code>&lt;navigation-case&gt;</code>.
+     * This will be <code>true</code> if the new view should be navigated to via a
+     * {@link javax.faces.context.ExternalContext#redirect(String)}
+     * </p>
      * 
      * @return <code>true</code> if this is a redirect, <code>false</code> otherwise.
      */
@@ -422,22 +380,21 @@ public class NavigationCase {
 
     }
 
-
     /**
-     * <p class="changed_added_2_0">Return the
-     * <code>&lt;redirect&gt;</code> value for this
-     * <code>&lt;navigation-case&gt;</code>.  This will be
-     * <code>true</code> if the view parametets should be encoded into
-     * the redirect URL (only applies to redirect case)</p>
+     * <p class="changed_added_2_0">
+     * Return the <code>&lt;redirect&gt;</code> value for this <code>&lt;navigation-case&gt;</code>.
+     * This will be <code>true</code> if the view parametets should be encoded into the redirect URL
+     * (only applies to redirect case)
+     * </p>
      * 
-     * @return <code>true</code> if view parameters are to be included, <code>false</code> otherwise.
+     * @return <code>true</code> if view parameters are to be included, <code>false</code>
+     *         otherwise.
      */
     public boolean isIncludeViewParams() {
 
         return includeViewParams;
 
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -451,46 +408,24 @@ public class NavigationCase {
 
         NavigationCase that = (NavigationCase) o;
 
-        return (redirect == that.redirect
-               && !(fromAction != null
-                    ? !fromAction.equals(that.fromAction)
-                    : that.fromAction != null)
-               && !(fromOutcome != null
-                    ? !fromOutcome.equals(that.fromOutcome)
-                    : that.fromOutcome != null)
-               && !(condition != null
-                    ? !condition.equals(that.condition)
-                    : that.condition != null)
-               && !(fromViewId != null
-                    ? !fromViewId.equals(that.fromViewId)
-                    : that.fromViewId != null)
-               && !(toViewId != null
-                    ? !toViewId.equals(that.toViewId)
-                    : that.toViewId != null)
-               && !(toFlowDocumentId != null
-                    ? !toFlowDocumentId.equals(that.toFlowDocumentId)
-                    : that.toFlowDocumentId != null)
-               && !(parameters != null
-                    ? !parameters.equals(that.parameters)
-                    : that.parameters != null));
+        return (redirect == that.redirect && !(fromAction != null ? !fromAction.equals(that.fromAction) : that.fromAction != null)
+                && !(fromOutcome != null ? !fromOutcome.equals(that.fromOutcome) : that.fromOutcome != null)
+                && !(condition != null ? !condition.equals(that.condition) : that.condition != null)
+                && !(fromViewId != null ? !fromViewId.equals(that.fromViewId) : that.fromViewId != null)
+                && !(toViewId != null ? !toViewId.equals(that.toViewId) : that.toViewId != null)
+                && !(toFlowDocumentId != null ? !toFlowDocumentId.equals(that.toFlowDocumentId) : that.toFlowDocumentId != null)
+                && !(parameters != null ? !parameters.equals(that.parameters) : that.parameters != null));
 
     }
 
-    
     @Override
     public int hashCode() {
 
         if (hashCode == 0) {
             int result = fromViewId != null ? fromViewId.hashCode() : 0;
-            result = 31 * result + (fromAction != null
-                                    ? fromAction.hashCode()
-                                    : 0);
-            result = 31 * result + (fromOutcome != null
-                                    ? fromOutcome.hashCode()
-                                    : 0);
-            result = 31 * result + (condition != null
-                                    ? condition.hashCode()
-                                    : 0);
+            result = 31 * result + (fromAction != null ? fromAction.hashCode() : 0);
+            result = 31 * result + (fromOutcome != null ? fromOutcome.hashCode() : 0);
+            result = 31 * result + (condition != null ? condition.hashCode() : 0);
             result = 31 * result + (toViewId != null ? toViewId.hashCode() : 0);
             result = 31 * result + (toFlowDocumentId != null ? toFlowDocumentId.hashCode() : 0);
             result = 31 * result + (redirect ? 1 : 0);
@@ -500,7 +435,6 @@ public class NavigationCase {
         return hashCode;
 
     }
-
 
     @Override
     public String toString() {
@@ -522,5 +456,5 @@ public class NavigationCase {
         return toString;
 
     }
- 
+
 }
