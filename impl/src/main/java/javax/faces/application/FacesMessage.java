@@ -40,16 +40,17 @@
 
 package javax.faces.application;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableMap;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 /**
  * <p>
@@ -93,7 +94,6 @@ import java.util.HashMap;
  * </blockquote>
  *
  */
-
 public class FacesMessage implements Serializable {
 
     // --------------------------------------------------------------- Constants
@@ -120,6 +120,7 @@ public class FacesMessage implements Serializable {
     public static final Severity SEVERITY_INFO = new Severity(SEVERITY_INFO_NAME);
 
     private static final String SEVERITY_WARN_NAME = "WARN";
+    
     /**
      * <p>
      * Message severity level indicating that an error might have occurred.
@@ -128,6 +129,7 @@ public class FacesMessage implements Serializable {
     public static final Severity SEVERITY_WARN = new Severity(SEVERITY_WARN_NAME);
 
     private static final String SEVERITY_ERROR_NAME = "ERROR";
+    
     /**
      * <p>
      * Message severity level indicating that an error has occurred.
@@ -136,6 +138,7 @@ public class FacesMessage implements Serializable {
     public static final Severity SEVERITY_ERROR = new Severity(SEVERITY_ERROR_NAME);
 
     private static final String SEVERITY_FATAL_NAME = "FATAL";
+    
     /**
      * <p>
      * Message severity level indicating that a serious error has occurred.
@@ -157,7 +160,7 @@ public class FacesMessage implements Serializable {
      * instances, in ascending order of their ordinal value.
      * </p>
      */
-    public static final List VALUES = Collections.unmodifiableList(Arrays.asList(values));
+    public static final List VALUES = unmodifiableList(asList(values));
 
     private static Map<String, Severity> _MODIFIABLE_MAP = new HashMap<>(4, 1.0f);
 
@@ -173,9 +176,18 @@ public class FacesMessage implements Serializable {
      * instances, keyed by name.
      * </p>
      */
-    public final static Map VALUES_MAP = Collections.unmodifiableMap(_MODIFIABLE_MAP);
+    public final static Map VALUES_MAP = unmodifiableMap(_MODIFIABLE_MAP);
 
     private static final long serialVersionUID = -1180773928220076822L;
+    
+    
+    // ------------------------------------------------------ Instance Variables
+
+    private transient Severity severity = SEVERITY_INFO;
+    private transient String summary = null;
+    private transient String detail = null;
+    private transient boolean rendered;
+    
 
     // ------------------------------------------------------------ Constructors
 
@@ -186,9 +198,7 @@ public class FacesMessage implements Serializable {
      * </p>
      */
     public FacesMessage() {
-
         super();
-
     }
 
     /**
@@ -200,7 +210,6 @@ public class FacesMessage implements Serializable {
      * @param summary the summary.
      */
     public FacesMessage(String summary) {
-
         super();
         setSummary(summary);
     }
@@ -218,11 +227,9 @@ public class FacesMessage implements Serializable {
      *             values
      */
     public FacesMessage(String summary, String detail) {
-
         super();
         setSummary(summary);
         setDetail(detail);
-
     }
 
     /**
@@ -238,20 +245,12 @@ public class FacesMessage implements Serializable {
      *             values
      */
     public FacesMessage(Severity severity, String summary, String detail) {
-
         super();
         setSeverity(severity);
         setSummary(summary);
         setDetail(detail);
-
     }
 
-    // ------------------------------------------------------ Instance Variables
-
-    private transient Severity severity = FacesMessage.SEVERITY_INFO;
-    private transient String summary = null;
-    private transient String detail = null;
-    private transient boolean rendered;
 
     // ---------------------------------------------------------- Public Methods
 
@@ -265,12 +264,11 @@ public class FacesMessage implements Serializable {
      */
     public String getDetail() {
 
-        if (this.detail == null) {
-            return (this.summary);
-        } else {
-            return (this.detail);
-        }
-
+        if (detail == null) {
+            return summary;
+        } 
+        
+        return detail;
     }
 
     /**
@@ -281,9 +279,7 @@ public class FacesMessage implements Serializable {
      * @param detail The new localized detail text
      */
     public void setDetail(String detail) {
-
         this.detail = detail;
-
     }
 
     /**
@@ -294,9 +290,7 @@ public class FacesMessage implements Serializable {
      * @return the severity level.
      */
     public Severity getSeverity() {
-
-        return (this.severity);
-
+        return severity;
     }
 
     /**
@@ -311,11 +305,11 @@ public class FacesMessage implements Serializable {
      */
     public void setSeverity(Severity severity) {
 
-        if ((severity.getOrdinal() < SEVERITY_INFO.getOrdinal()) || (severity.getOrdinal() > SEVERITY_FATAL.getOrdinal())) {
+        if (severity.getOrdinal() < SEVERITY_INFO.getOrdinal() || severity.getOrdinal() > SEVERITY_FATAL.getOrdinal()) {
             throw new IllegalArgumentException(String.valueOf(severity));
         }
+        
         this.severity = severity;
-
     }
 
     /**
@@ -326,9 +320,7 @@ public class FacesMessage implements Serializable {
      * @return the localized summary text.
      */
     public String getSummary() {
-
-        return (this.summary);
-
+        return summary;
     }
 
     /**
@@ -339,9 +331,7 @@ public class FacesMessage implements Serializable {
      * @param summary The new localized summary text
      */
     public void setSummary(String summary) {
-
         this.summary = summary;
-
     }
 
     /**
@@ -351,9 +341,7 @@ public class FacesMessage implements Serializable {
      * @since 2.0
      */
     public boolean isRendered() {
-
         return rendered;
-
     }
 
     /**
@@ -364,9 +352,7 @@ public class FacesMessage implements Serializable {
      * @since 2.0
      */
     public void rendered() {
-
         this.rendered = true;
-
     }
 
     /**
@@ -405,14 +391,15 @@ public class FacesMessage implements Serializable {
         detail = null;
         int ordinal = in.readInt();
         if (ordinal == SEVERITY_INFO.getOrdinal()) {
-            severity = FacesMessage.SEVERITY_INFO;
+            severity = SEVERITY_INFO;
         } else if (ordinal == SEVERITY_WARN.getOrdinal()) {
-            severity = FacesMessage.SEVERITY_WARN;
+            severity = SEVERITY_WARN;
         } else if (ordinal == SEVERITY_ERROR.getOrdinal()) {
-            severity = FacesMessage.SEVERITY_ERROR;
+            severity = SEVERITY_ERROR;
         } else if (ordinal == SEVERITY_FATAL.getOrdinal()) {
-            severity = FacesMessage.SEVERITY_FATAL;
+            severity = SEVERITY_FATAL;
         }
+        
         summary = (String) in.readObject();
         detail = (String) in.readObject();
         rendered = (Boolean) in.readObject();
@@ -450,7 +437,7 @@ public class FacesMessage implements Serializable {
          * The (optional) name for this severity.
          * </p>
          */
-        String severityName = null;
+        String severityName;
 
         // ----------------------------------------------------- Public Methods
 
@@ -476,7 +463,7 @@ public class FacesMessage implements Serializable {
          * @return the ordinal.
          */
         public int getOrdinal() {
-            return (this.ordinal);
+            return ordinal;
         }
 
         /**
@@ -486,10 +473,11 @@ public class FacesMessage implements Serializable {
          */
         @Override
         public String toString() {
-            if (null == severityName) {
-                return (String.valueOf(this.ordinal));
+            if (severityName == null) {
+                return (String.valueOf(ordinal));
             }
-            return (String.valueOf(this.severityName) + ' ' + this.ordinal);
+            
+            return (String.valueOf(severityName) + ' ' + ordinal);
         }
 
         // --------------------------------------------------- Static Variables

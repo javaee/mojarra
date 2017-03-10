@@ -40,12 +40,14 @@
 
 package javax.faces.application;
 
+import static javax.faces.application.SharedUtils.evaluateExpressions;
+
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
+
 import javax.el.ValueExpression;
-import javax.el.ExpressionFactory;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -159,9 +161,12 @@ public class NavigationCase {
     public URL getActionURL(FacesContext context) throws MalformedURLException {
 
         ExternalContext extContext = context.getExternalContext();
-        return new URL(extContext.getRequestScheme(), extContext.getRequestServerName(), extContext.getRequestServerPort(),
-                context.getApplication().getViewHandler().getActionURL(context, getToViewId(context)));
-
+        
+        return new URL(
+            extContext.getRequestScheme(), 
+            extContext.getRequestServerName(), 
+            extContext.getRequestServerPort(),
+            context.getApplication().getViewHandler().getActionURL(context, getToViewId(context)));
     }
 
     /**
@@ -179,9 +184,11 @@ public class NavigationCase {
 
         ExternalContext extContext = context.getExternalContext();
 
-        return new URL(extContext.getRequestScheme(), extContext.getRequestServerName(), extContext.getRequestServerPort(),
-                context.getApplication().getViewHandler().getResourceURL(context, getToViewId(context)));
-
+        return new URL(
+            extContext.getRequestScheme(), 
+            extContext.getRequestServerName(), 
+            extContext.getRequestServerPort(),
+            context.getApplication().getViewHandler().getResourceURL(context, getToViewId(context)));
     }
 
     /**
@@ -200,10 +207,12 @@ public class NavigationCase {
 
         ExternalContext extContext = context.getExternalContext();
 
-        return new URL(extContext.getRequestScheme(), extContext.getRequestServerName(), extContext.getRequestServerPort(),
-                context.getApplication().getViewHandler().getRedirectURL(context, getToViewId(context),
-                        SharedUtils.evaluateExpressions(context, getParameters()), isIncludeViewParams()));
-
+        return new URL(
+            extContext.getRequestScheme(), 
+            extContext.getRequestServerName(), 
+            extContext.getRequestServerPort(),
+            context.getApplication().getViewHandler().getRedirectURL(
+                context, getToViewId(context), evaluateExpressions(context, getParameters()), isIncludeViewParams()));
     }
 
     /**
@@ -222,8 +231,12 @@ public class NavigationCase {
     public URL getBookmarkableURL(FacesContext context) throws MalformedURLException {
 
         ExternalContext extContext = context.getExternalContext();
-        return new URL(extContext.getRequestScheme(), extContext.getRequestServerName(), extContext.getRequestServerPort(),
-                context.getApplication().getViewHandler().getBookmarkableURL(context, getToViewId(context), getParameters(), isIncludeViewParams()));
+        return new URL(
+            extContext.getRequestScheme(), 
+            extContext.getRequestServerName(), 
+            extContext.getRequestServerPort(),
+            context.getApplication().getViewHandler().getBookmarkableURL(
+                context, getToViewId(context), getParameters(), isIncludeViewParams()));
     }
 
     /**
@@ -235,9 +248,7 @@ public class NavigationCase {
      * @return the from viedId.
      */
     public String getFromViewId() {
-
         return fromViewId;
-
     }
 
     /**
@@ -248,9 +259,7 @@ public class NavigationCase {
      * @return the from action.
      */
     public String getFromAction() {
-
         return fromAction;
-
     }
 
     /**
@@ -261,9 +270,7 @@ public class NavigationCase {
      * @return the from outcome.
      */
     public String getFromOutcome() {
-
         return fromOutcome;
-
     }
 
     /**
@@ -278,16 +285,17 @@ public class NavigationCase {
     public String getToViewId(FacesContext context) {
 
         if (toViewIdExpr == null) {
-            ExpressionFactory factory = context.getApplication().getExpressionFactory();
-            toViewIdExpr = factory.createValueExpression(context.getELContext(), toViewId, String.class);
+            toViewIdExpr = context.getApplication()
+                                  .getExpressionFactory()
+                                  .createValueExpression(context.getELContext(), toViewId, String.class);
         }
-        String result = (String) toViewIdExpr.getValue(context.getELContext());
-        if (result.charAt(0) != '/') {
-            result = '/' + result;
+        
+        String newToViewId = (String) toViewIdExpr.getValue(context.getELContext());
+        if (newToViewId.charAt(0) != '/') {
+            newToViewId = '/' + newToViewId;
         }
 
-        return result;
-
+        return newToViewId;
     }
 
     /**
@@ -303,9 +311,7 @@ public class NavigationCase {
      * @since 2.2
      */
     public String getToFlowDocumentId() {
-
         return toFlowDocumentId;
-
     }
 
     /**
@@ -316,9 +322,7 @@ public class NavigationCase {
      *         <code>&lt;navigation-case&gt;</code>, otherwise <code>false</code>
      */
     public boolean hasCondition() {
-
-        return (condition != null);
-
+        return condition != null;
     }
 
     /**
@@ -341,12 +345,12 @@ public class NavigationCase {
     public Boolean getCondition(FacesContext context) {
 
         if (conditionExpr == null && condition != null) {
-            ExpressionFactory factory = context.getApplication().getExpressionFactory();
-            conditionExpr = factory.createValueExpression(context.getELContext(), condition, Boolean.class);
+            conditionExpr = context.getApplication()
+                                   .getExpressionFactory()
+                                   .createValueExpression(context.getELContext(), condition, Boolean.class);
         }
 
-        return ((conditionExpr != null) ? (Boolean) conditionExpr.getValue(context.getELContext()) : null);
-
+        return conditionExpr != null ? (Boolean) conditionExpr.getValue(context.getELContext()) : null;
     }
 
     /**
@@ -360,9 +364,7 @@ public class NavigationCase {
      * @return the list of parameters, or <code>null</code>
      */
     public Map<String, List<String>> getParameters() {
-
         return parameters;
-
     }
 
     /**
@@ -375,9 +377,7 @@ public class NavigationCase {
      * @return <code>true</code> if this is a redirect, <code>false</code> otherwise.
      */
     public boolean isRedirect() {
-
         return redirect;
-
     }
 
     /**
@@ -391,9 +391,7 @@ public class NavigationCase {
      *         otherwise.
      */
     public boolean isIncludeViewParams() {
-
         return includeViewParams;
-
     }
 
     @Override
@@ -453,8 +451,8 @@ public class NavigationCase {
             sb.append('}');
             toString = sb.toString();
         }
+        
         return toString;
-
     }
 
 }
