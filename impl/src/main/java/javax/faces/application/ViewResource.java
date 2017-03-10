@@ -43,25 +43,25 @@ package javax.faces.application;
 import java.net.URL;
 
 /**
- * <p class="changed_added_2_2">Superclass of {@link Resource} that is only
- * for use with views.</p>
+ * <p class="changed_added_2_2">
+ * Superclass of {@link Resource} that is only for use with views.
+ * </p>
  * 
  * @since 2.2
  * 
  */
 
 public abstract class ViewResource {
-    
+
     /**
-     * <p class="changed_added_2_2">Return an actual <code>URL</code>
-     * instance that refers to this resource instance.</p>
+     * <p class="changed_added_2_2">
+     * Return an actual <code>URL</code> instance that refers to this resource instance.
+     * </p>
      *
-     * @return Return an actual <code>URL</code> instance that refers to
-     * this resource instance.
+     * @return Return an actual <code>URL</code> instance that refers to this resource instance.
      * 
      * @since 2.2
      */
     public abstract URL getURL();
 
-    
 }

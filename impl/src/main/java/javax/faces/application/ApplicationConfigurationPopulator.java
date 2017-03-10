@@ -43,46 +43,47 @@ package javax.faces.application;
 import org.w3c.dom.Document;
 
 /**
-
- * <p class="changed_added_2_2">This class defines a {@code java.util.ServiceLoader}
- * service which enables programmatic configuration of the JSF runtime using the existing
- * Application Configuration Resources schema. See the section "Application Startup
- * Behavior" in the specification prose document for the specification on when
- * and how implementations of this service are used.</p>
+ * 
+ * <p class="changed_added_2_2">
+ * This class defines a {@code java.util.ServiceLoader} service which enables programmatic
+ * configuration of the JSF runtime using the existing Application Configuration Resources schema.
+ * See the section "Application Startup Behavior" in the specification prose document for the
+ * specification on when and how implementations of this service are used.
+ * </p>
  * 
  * @since 2.2
  * 
  */
 public abstract class ApplicationConfigurationPopulator {
-    
+
     /**
-     * <p class="changed_added_2_2">Service providers that implement
-     * this service must be called by the JSF runtime exactly once for
-     * each implementation, at startup, before any requests have been
-     * serviced.  Before calling the {@link
-     * #populateApplicationConfiguration} method, the runtime must
-     * ensure that the {@code Document} argument is empty aside from
-     * being pre-configured to be in the proper namespace for an
-     * Application Configuration Resources file: {@code
-     * http://xmlns.jcp.org/xml/ns/javaee}.  Implementations of this
-     * service must ensure that any changes made to the argument {@code
-     * Document} conform to that schema as defined in the specification.
-     * The JSF runtime is not required to validate the {@code Document}
-     * after control returns from the service implementation, though it
-     * may do so.</p>
+     * <p class="changed_added_2_2">
+     * Service providers that implement this service must be called by the JSF runtime exactly once
+     * for each implementation, at startup, before any requests have been serviced. Before calling
+     * the {@link #populateApplicationConfiguration} method, the runtime must ensure that the
+     * {@code Document} argument is empty aside from being pre-configured to be in the proper
+     * namespace for an Application Configuration Resources file: {@code
+     * http://xmlns.jcp.org/xml/ns/javaee}. Implementations of this service must ensure that any
+     * changes made to the argument {@code
+     * Document} conform to that schema as defined in the specification. The JSF runtime is not
+     * required to validate the {@code Document} after control returns from the service
+     * implementation, though it may do so.
+     * </p>
      * 
      * <div class="changed_added_2_2">
      * 
-     * <p>Ordering of Artifacts</p>
+     * <p>
+     * Ordering of Artifacts
+     * </p>
      * 
-     * <p>If the document is made to contain an {@code <ordering>} element,
-     * as specified in the section <em>Ordering of Artifacts</em> in the
-     * specification prose document, the document will be prioritized
-     * accordingly.  Otherwise, the runtime must place the document in the
-     * list of other Application Configuration Resources documents at the
-     * "lowest" priority, meaning any conflicts that may arise between the
-     * argument document and any other Application Configuration Resources
-     * are resolved in favor of the other document.</p>
+     * <p>
+     * If the document is made to contain an {@code <ordering>} element, as specified in the section
+     * <em>Ordering of Artifacts</em> in the specification prose document, the document will be
+     * prioritized accordingly. Otherwise, the runtime must place the document in the list of other
+     * Application Configuration Resources documents at the "lowest" priority, meaning any conflicts
+     * that may arise between the argument document and any other Application Configuration
+     * Resources are resolved in favor of the other document.
+     * </p>
      * 
      * </div>
      * 
@@ -90,7 +91,7 @@ public abstract class ApplicationConfigurationPopulator {
      * 
      * @since 2.2
      */
-    
+
     public abstract void populateApplicationConfiguration(Document toPopulate);
-    
+
 }

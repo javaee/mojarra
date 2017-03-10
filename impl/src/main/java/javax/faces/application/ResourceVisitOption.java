@@ -55,5 +55,5 @@ public enum ResourceVisitOption {
      * to serve a request as opposed to those that can only be used for includes.
      */
     TOP_LEVEL_VIEWS_ONLY
-    
+
 }

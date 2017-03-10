@@ -42,24 +42,27 @@ package javax.faces.application;
 
 import javax.faces.FacesWrapper;
 
-
 /**
- * <p><strong class="changed_modified_2_0 changed_modified_2_3">ApplicationFactory</strong> is a
- * factory object that creates
- * (if needed) and returns {@link Application} instances.  Implementations of
- * JavaServer Faces must provide at least a default implementation of
- * {@link Application}.</p>
+ * <p>
+ * <strong class="changed_modified_2_0 changed_modified_2_3">ApplicationFactory</strong> is a
+ * factory object that creates (if needed) and returns {@link Application} instances.
+ * Implementations of JavaServer Faces must provide at least a default implementation of
+ * {@link Application}.
+ * </p>
  *
- * <p>There must be one {@link ApplicationFactory} instance per web
- * application that is utilizing JavaServer Faces.  This instance can be
- * acquired, in a portable manner, by calling:</p>
+ * <p>
+ * There must be one {@link ApplicationFactory} instance per web application that is utilizing
+ * JavaServer Faces. This instance can be acquired, in a portable manner, by calling:
+ * </p>
+ * 
  * <pre>
- *   ApplicationFactory factory = (ApplicationFactory)
- *    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+ * ApplicationFactory factory = (ApplicationFactory) FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
  * </pre>
  *
- * <p class="changed_added_2_3">Usage: extend this class and push the implementation being wrapped to the
- * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
+ * <p class="changed_added_2_3">
+ * Usage: extend this class and push the implementation being wrapped to the constructor and use
+ * {@link #getWrapped} to access the instance being wrapped.
+ * </p>
  */
 
 public abstract class ApplicationFactory implements FacesWrapper<ApplicationFactory> {
@@ -75,9 +78,11 @@ public abstract class ApplicationFactory implements FacesWrapper<ApplicationFact
     }
 
     /**
-     * <p class="changed_added_2_3">If this factory has been decorated,
-     * the implementation doing the decorating should push the implementation being wrapped to this constructor.
-     * The {@link #getWrapped()} will then return the implementation being wrapped.</p>
+     * <p class="changed_added_2_3">
+     * If this factory has been decorated, the implementation doing the decorating should push the
+     * implementation being wrapped to this constructor. The {@link #getWrapped()} will then return
+     * the implementation being wrapped.
+     * </p>
      *
      * @param wrapped The implementation being wrapped.
      */
@@ -86,9 +91,10 @@ public abstract class ApplicationFactory implements FacesWrapper<ApplicationFact
     }
 
     /**
-     * <p class="changed_modified_2_3">If this factory has been decorated, the
-     * implementation doing the decorating may override this method to provide
-     * access to the implementation being wrapped.</p>
+     * <p class="changed_modified_2_3">
+     * If this factory has been decorated, the implementation doing the decorating may override this
+     * method to provide access to the implementation being wrapped.
+     * </p>
      *
      * @since 2.0
      */
@@ -98,24 +104,23 @@ public abstract class ApplicationFactory implements FacesWrapper<ApplicationFact
     }
 
     /**
-     * <p>Create (if needed) and return an {@link Application} instance
-     * for this web application.</p>
+     * <p>
+     * Create (if needed) and return an {@link Application} instance for this web application.
+     * </p>
      *
      * @return the application.
      */
     public abstract Application getApplication();
 
-
     /**
-     * <p>Replace the {@link Application} instance that will be
-     * returned for this web application.</p>
+     * <p>
+     * Replace the {@link Application} instance that will be returned for this web application.
+     * </p>
      *
-     * @throws NullPointerException if <code>application</code>
-     *  is <code>null</code>.
-
+     * @throws NullPointerException if <code>application</code> is <code>null</code>.
+     * 
      * @param application The replacement {@link Application} instance
      */
     public abstract void setApplication(Application application);
-
 
 }
