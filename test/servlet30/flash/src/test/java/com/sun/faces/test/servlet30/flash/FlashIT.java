@@ -70,7 +70,7 @@ public class FlashIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @JsfTest(value = JSF_2_2_0_M02, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})

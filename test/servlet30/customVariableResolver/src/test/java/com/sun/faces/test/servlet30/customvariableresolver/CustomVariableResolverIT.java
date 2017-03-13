@@ -58,7 +58,7 @@ public class CustomVariableResolverIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     /**

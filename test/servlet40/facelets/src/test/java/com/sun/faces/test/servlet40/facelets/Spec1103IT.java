@@ -65,7 +65,7 @@ public class Spec1103IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

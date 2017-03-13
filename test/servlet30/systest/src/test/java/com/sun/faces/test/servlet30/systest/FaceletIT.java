@@ -59,30 +59,30 @@ public class FaceletIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test
     public void testIssue955CompositionNotFound() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/facelets/compositionnotfound.xhtml");
         assertEquals(500, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testIssue955DecorateNotFound() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/facelets/decoratenotfound.xhtml");
         assertEquals(500, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testIssue955IncludeNotFound() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/facelets/includenotfound.xhtml");
         assertEquals(500, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 }

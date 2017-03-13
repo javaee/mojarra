@@ -90,7 +90,7 @@ public class Issue3341IT {
      */
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     // Enable when running against a GlassFish that has 19296686 fixed

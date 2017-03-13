@@ -73,7 +73,7 @@ public class ProcessAsJspxIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     private String getRawMarkup(String path) throws Exception {

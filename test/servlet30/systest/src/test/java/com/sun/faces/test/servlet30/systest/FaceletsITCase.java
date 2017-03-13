@@ -47,6 +47,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
@@ -185,7 +186,7 @@ public class FaceletsITCase extends HtmlUnitFacesITCase {
         getAllElementsOfGivenClass(page, output, HtmlSpan.class);
         assertTrue(output.size() == 1);
         HtmlSpan span = output.get(0);
-        assertTrue(span.getStyleAttribute().length() == 0);
+        assertTrue(span.getAttribute("style").length() == 0);
         HtmlSubmitInput add = (HtmlSubmitInput) getInputContainingGivenId(page, "form:add");
         page = add.click();
 
@@ -194,7 +195,7 @@ public class FaceletsITCase extends HtmlUnitFacesITCase {
         getAllElementsOfGivenClass(page, output, HtmlSpan.class);
         assertTrue(output.size() == 1);
         span = output.get(0);
-        assertEquals("color:red", span.getStyleAttribute());
+        assertEquals("color:red", span.getAttribute("style"));
 
         // ensure the style is not rendered once again after the attribute value
         // is set to "".
@@ -204,7 +205,7 @@ public class FaceletsITCase extends HtmlUnitFacesITCase {
         getAllElementsOfGivenClass(page, output, HtmlSpan.class);
         assertTrue(output.size() == 1);
         span = output.get(0);
-        assertTrue(span.getStyleAttribute().length() == 0);
+        assertTrue(span.getAttribute("style").length() == 0);
 
     }
 
@@ -244,7 +245,7 @@ public class FaceletsITCase extends HtmlUnitFacesITCase {
 
         HtmlUnorderedList list = (HtmlUnorderedList) page.getElementById("form1:messages1");
         int count = 0;
-        for (HtmlElement element : list.getAllHtmlChildElements()) {
+        for (DomElement element : list.getChildElements()) {
             count++;
             assertEquals("form1:input: Validation Error: Length is less than allowable minimum of '5'", element.asText());
             if (count > 1) {
@@ -260,12 +261,12 @@ public class FaceletsITCase extends HtmlUnitFacesITCase {
         submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form2:sub");
         page = submit.click();
 
-        HtmlElement list1 = page.getElementById("form2:messages2");
+        HtmlElement list1 = (HtmlElement) page.getElementById("form2:messages2");
         assertTrue(list1 instanceof HtmlDivision); // if it's not, it means messages where displayed
         HtmlUnorderedList list2 = (HtmlUnorderedList) page.getElementById("form2:messages3");
-        assertFalse(list1.getAllHtmlChildElements().iterator().hasNext());
+        assertFalse(list1.getChildElements().iterator().hasNext());
         count = 0;
-        for (HtmlElement element : list2.getAllHtmlChildElements()) {
+        for (DomElement element : list2.getChildElements()) {
             count++;
             assertEquals("form2:input2: Validation Error: Length is less than allowable minimum of '5'", element.asText());
             if (count > 1) {

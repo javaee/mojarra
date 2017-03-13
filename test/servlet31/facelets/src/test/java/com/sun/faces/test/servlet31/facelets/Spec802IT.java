@@ -72,7 +72,7 @@ public class Spec802IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
@@ -122,7 +122,7 @@ public class Spec802IT {
     @JsfTest(value = JsfVersion.JSF_2_2_0, excludes = {JsfServerExclude.WEBLOGIC_12_1_3})
     @Test
     public void testFileUploadMultipleTimes() throws Exception {
-        webClient = new WebClient(BrowserVersion.FIREFOX_31);
+        webClient = new WebClient(BrowserVersion.FIREFOX_45);
         HtmlPage page = webClient.getPage(webUrl + "faces/uploadMultipleTimes.xhtml");
 
         String basedir = System.getProperty("basedir");

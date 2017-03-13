@@ -60,7 +60,7 @@ public class ValidatorIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     /*
@@ -80,17 +80,17 @@ public class ValidatorIT {
 
     @Test
     public void testValidator02() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/converter02.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testValidator03() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/converter03.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 }

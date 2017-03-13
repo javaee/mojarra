@@ -101,7 +101,7 @@ public class FormELITCase extends HtmlUnitFacesITCase {
     // ------------------------------------------------- Individual Test Methods
 
     public void testFormEnctype() throws Exception {
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/jsp/formEl.jsp");
         List forms = page.getForms();
         assertEquals("multipart/form-data", ((HtmlForm) forms.get(0)).getEnctypeAttribute());

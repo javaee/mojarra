@@ -68,7 +68,7 @@ public class JspFlashIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @JsfTest(value = JsfVersion.JSF_2_3_0_M02, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})

@@ -67,7 +67,7 @@ public class IssueReplaceVariableResolverAndAddELResolverProgrammaticallyIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test
@@ -79,7 +79,7 @@ public class IssueReplaceVariableResolverAndAddELResolverProgrammaticallyIT {
         assertTrue(-1 != page.asText().indexOf("result: isReadOnly invoked directly."));
         assertTrue(-1 != page.asText().indexOf("Invoking the EL resolver via chain: true."));
         assertTrue(-1 != page.asText().indexOf("result: isReadOnly invoked thru chain."));
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("reload", true);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("reload");
         page = (HtmlPage) button.click();
         String text = page.asXml();
         text = text.replaceAll(":[0-9]*\\)", "\\)");

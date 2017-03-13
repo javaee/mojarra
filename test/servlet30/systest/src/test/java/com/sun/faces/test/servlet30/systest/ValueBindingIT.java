@@ -60,7 +60,7 @@ public class ValueBindingIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
     
     /*

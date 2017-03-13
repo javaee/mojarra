@@ -67,7 +67,7 @@ public class NestedLoadBundlesIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

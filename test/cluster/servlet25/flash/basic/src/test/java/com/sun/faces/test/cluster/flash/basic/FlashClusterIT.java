@@ -69,7 +69,7 @@ public class FlashClusterIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
 

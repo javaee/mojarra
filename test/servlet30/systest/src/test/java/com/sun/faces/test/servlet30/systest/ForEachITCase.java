@@ -40,16 +40,15 @@
 
 package com.sun.faces.test.servlet30.systest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
-import java.util.ArrayList;
-import java.util.List;
-import static junit.framework.TestCase.assertTrue;
 
 /**
  * <p>Test that invalid values don't cause valueChangeEvents to occur.</p>
@@ -155,9 +154,9 @@ public class ForEachITCase extends HtmlUnitFacesITCase {
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
         assertTrue(spans.size() == 2);
         HtmlSpan span = spans.get(0);
-        assertTrue(span.getIdAttribute().matches(".*:idfrag1:frag1"));
+        assertTrue(span.getAttribute("id").matches(".*:idfrag1:frag1"));
         span = spans.get(1);
-        assertTrue(span.getIdAttribute().matches(".*:idfrag2:frag2"));
+        assertTrue(span.getAttribute("id").matches(".*:idfrag2:frag2"));
 
         // submit the form to ensure no duplicate ID exceptions are
         // raised during post-back
@@ -172,9 +171,9 @@ public class ForEachITCase extends HtmlUnitFacesITCase {
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
         assertTrue(spans.size() == 2);
         span = spans.get(0);
-        assertTrue(span.getIdAttribute().matches(".*:idfrag1:frag1"));
+        assertTrue(span.getAttribute("id").matches(".*:idfrag1:frag1"));
         span = spans.get(1);
-        assertTrue(span.getIdAttribute().matches(".*:idfrag2:frag2"));
+        assertTrue(span.getAttribute("id").matches(".*:idfrag2:frag2"));
 
     }
 

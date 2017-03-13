@@ -241,7 +241,7 @@ public class ViewParametersITCase extends HtmlUnitFacesITCase {
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("story2RememberSelectionNavCase");
         page = (HtmlPage) button.click();
         pageText = page.asText();
-        URL requestUrl = page.getWebResponse().getRequestUrl();
+        URL requestUrl = page.getWebResponse().getWebRequest().getUrl();
         assertTrue(-1 != pageText.indexOf("Story 2"));
         assertTrue(-1 != pageText.indexOf("bar is: foo"));
         return page;

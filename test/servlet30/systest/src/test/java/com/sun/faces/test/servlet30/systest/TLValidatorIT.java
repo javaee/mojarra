@@ -67,71 +67,71 @@ public class TLValidatorIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test
     public void testHtmlBasicValidatorFail() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestHtmlBasicValidatorFail.jsp");
         assertEquals(500, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testHtmlBasicValidatorFail2() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "TestHtmlBasicValidatorFail.jsp");
         assertEquals(500, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testHtmlBasicValidatorSucceed() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestHtmlBasicValidatorSucceed.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testCoreValidatorFail() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestCoreValidatorFail.jsp");
         assertEquals(500, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testCoreValidatorFail2() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "TestCoreValidatorFail.jsp");
         assertEquals(500, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testCoreValidatorSucceed() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestCoreValidatorSucceed.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testCoreValidatorIfFail() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestCoreValidatorIfFail.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testCoreValidatorIfSucceed() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestCoreValidatorIfSucceed.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     /*
@@ -144,10 +144,10 @@ public class TLValidatorIT {
     @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     @Test
     public void testElValidatorActionRefFail() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestElValidatorActionRefFail.jsp");
         assertEquals(500, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     /*
@@ -160,65 +160,65 @@ public class TLValidatorIT {
     @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     @Test
     public void testElValidatorComponentFail() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestElValidatorComponentFail.jsp");
         assertEquals(500, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testElValidatorIdFail() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestElValidatorIdFail.jsp");
         assertEquals(500, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testElValidatorValueRefFail() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestElValidatorValueRefFail.jsp");
         assertEquals(500, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testElValidatorActionRefSucceed() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestElValidatorActionRefSucceed.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testElValidatorComponentSucceed() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestElValidatorComponentSucceed.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testElValidatorIdSucceed() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestElValidatorIdSucceed.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testElValidatorValueRefSucceed() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/TestElValidatorValueRefSucceed.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 
     @Test
     public void testTlvTest01() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/jsp/tlvTest01.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
 }

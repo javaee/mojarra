@@ -100,7 +100,7 @@ public class Issue3341IT {
      */
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @JsfTest(value=JSF_2_2_0, excludes={GLASSFISH_3_1_2_2, GLASSFISH_4_0, WEBLOGIC_12_1_1, WEBLOGIC_12_1_2, WEBLOGIC_12_1_3})

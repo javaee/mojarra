@@ -29,23 +29,8 @@
 
 package com.sun.faces.test.servlet30.systest;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.CookieManager;
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
-import com.gargoylesoftware.htmlunit.ProxyConfig;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebRequestSettings;
-import com.gargoylesoftware.htmlunit.WebResponse;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import java.util.logging.Level;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static com.gargoylesoftware.htmlunit.BrowserVersion.FIREFOX_45;
+import static com.gargoylesoftware.htmlunit.BrowserVersion.INTERNET_EXPLORER;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,7 +40,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.CookieManager;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.ProxyConfig;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebRequest;
+import com.gargoylesoftware.htmlunit.WebResponse;
+import com.gargoylesoftware.htmlunit.html.DomElement;
+import com.gargoylesoftware.htmlunit.html.HtmlBody;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -160,13 +165,13 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         String browser = System.getProperty("browser");
 
         if ("FF3".equals(browser)) {
-            browserVersion = BrowserVersion.FIREFOX_3;
+            browserVersion = FIREFOX_45;
         } else if ("FF2".equals(browser)) {
-            browserVersion = BrowserVersion.FIREFOX_2;
+            browserVersion = FIREFOX_45;
         } else if ("IE6".equals(browser)) {
-            browserVersion = BrowserVersion.INTERNET_EXPLORER_6;
+            browserVersion = INTERNET_EXPLORER;
         } else {
-            browserVersion = BrowserVersion.INTERNET_EXPLORER_7;
+            browserVersion = INTERNET_EXPLORER;
         }
         
         String proxyHost = System.getProperty("proxyHost");
@@ -177,12 +182,12 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         // Add an ajax controller to synchronize all ajax calls
         client.setAjaxController(new NicelyResynchronizingAjaxController());
         domainURL = getURL("/");
-        WebRequestSettings settings = new WebRequestSettings(domainURL);
+        WebRequest settings = new WebRequest(domainURL);
         if (null != proxyHost && null != proxyPort) {
             settings.setProxyHost(proxyHost);
             int proxyPortInt = Integer.parseInt(proxyPort);
             settings.setProxyPort(proxyPortInt);
-            ProxyConfig config = client.getProxyConfig();
+            ProxyConfig config = client.getOptions().getProxyConfig();
             config.setProxyHost(proxyHost);
             config.setProxyPort(proxyPortInt);
         }
@@ -232,8 +237,7 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
      */
     protected String getBodyText(HtmlPage page) {
 
-        Object body =
-                page.getDocumentElement().getHtmlElementsByTagName("body").get(0);
+        Object body = page.getDocumentElement().getElementsByTagName("body").get(0);
 
         if (body != null) {
             if (body instanceof HtmlBody) {
@@ -494,7 +498,7 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         Iterator forms = page.getForms().iterator();
         while (forms.hasNext()) {
             HtmlForm form = (HtmlForm) forms.next();
-            if (id.equals(form.getAttributeValue("id"))) {
+            if (id.equals(form.getAttribute("id"))) {
                 return (form);
             }
         }
@@ -529,8 +533,8 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         if (null == list) {
             list = new ArrayList();
         }
-        Iterable<HtmlElement> iterable = root.getAllHtmlChildElements();
-        Iterator<HtmlElement> iter = iterable.iterator();
+        Iterable<DomElement> iterable = root.getChildElements();
+        Iterator<DomElement> iter = iterable.iterator();
         while (iter.hasNext()) {
             getAllElementsOfGivenClass((HtmlElement) iter.next(), list,
                     matchClass);
@@ -552,7 +556,7 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         list = getAllElementsOfGivenClass(root, null, HtmlInput.class);
         for (i = 0; i < list.size(); i++) {
             result = (HtmlInput) list.get(i);
-            if (-1 != result.getIdAttribute().indexOf(id)) {
+            if (-1 != result.getAttribute("id").indexOf(id)) {
                 break;
             }
             result = null;
@@ -571,7 +575,7 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         list = getAllElementsOfGivenClass(root, null, HtmlInput.class);
         for (i = 0; i < list.size(); i++) {
             result = (HtmlInput) list.get(i);
-            if (-1 != result.getIdAttribute().indexOf(id) &&
+            if (-1 != result.getAttribute("id").indexOf(id) &&
                     hitCount++ == whichInput) {
                 break;
             }
@@ -591,7 +595,7 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         list = getAllElementsOfGivenClass(root, null, HtmlInput.class);
         for (i = list.size() - 1; i >= 0; i--) {
             result = (HtmlInput) list.get(i);
-            if (-1 != result.getIdAttribute().indexOf(id) &&
+            if (-1 != result.getAttribute("id").indexOf(id) &&
                     hitCount++ == whichInput) {
                 break;
             }

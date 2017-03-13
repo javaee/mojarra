@@ -63,7 +63,7 @@ public class CoreTagsTestIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     public void testListenerPage() throws Exception {

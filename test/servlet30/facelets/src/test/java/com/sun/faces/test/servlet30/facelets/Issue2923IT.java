@@ -66,7 +66,7 @@ public class Issue2923IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
     
     @JsfTest(value=JsfVersion.JSF_2_2_2, excludes={JsfServerExclude.WEBLOGIC_12_1_3})

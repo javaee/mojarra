@@ -60,7 +60,7 @@ public class ComponentIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test
@@ -71,10 +71,10 @@ public class ComponentIT {
     
     @Test
     public void testProcessSaveRestoreState() throws Exception {
-        webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = webClient.getPage(webUrl + "faces/ProcessSaveRestoreStateTest.jsp");
         assertEquals(200, page.getWebResponse().getStatusCode());
-        webClient.setThrowExceptionOnFailingStatusCode(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
     }
     
     @Test

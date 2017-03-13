@@ -40,20 +40,20 @@
 
 package com.sun.faces.test.servlet30.faceletsViewAction;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import java.util.ArrayList;
+import static java.lang.System.getProperty;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
 /**
  * Test cases for Facelets functionality
@@ -65,6 +65,7 @@ public class Spec758IT {
      * Stores the web URL.
      */
     private String webUrl;
+    
     /**
      * Stores the web webClient.
      */
@@ -94,7 +95,7 @@ public class Spec758IT {
      */
     @Before
     public void setUp() {
-        webUrl = System.getProperty("integration.url");
+        webUrl = getProperty("integration.url");
         webClient = new WebClient();
     }
 
@@ -107,18 +108,14 @@ public class Spec758IT {
      */
     @Test
     public void testViewParameters() throws Exception {
-
         doTestExtensionMapped(0);
         doTestExtensionMapped(1);
-        
     }
 
     @Test
     public void testViewParametersValidation() throws Exception {
-
         HtmlPage page = webClient.getPage(webUrl + "page02.faces?id=0");
         assertTrue(page.asText().contains("Invalid headline. (The id parameter is not a positive number)"));
-
     }
     
     
@@ -168,8 +165,7 @@ public class Spec758IT {
 
         assertOnHomePage(pageText);
         
-        List<HtmlAnchor> anchors = new ArrayList<HtmlAnchor>();
-        anchors = (List<HtmlAnchor>) page.getByXPath("//a");
+        List<HtmlAnchor> anchors = page.getByXPath("//a");
         HtmlAnchor toClick = anchors.get(i);
         page = (HtmlPage) toClick.click();
         

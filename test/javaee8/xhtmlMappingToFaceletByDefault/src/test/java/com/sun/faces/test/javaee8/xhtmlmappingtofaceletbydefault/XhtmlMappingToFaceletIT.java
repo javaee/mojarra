@@ -59,7 +59,7 @@ public class XhtmlMappingToFaceletIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

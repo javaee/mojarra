@@ -69,7 +69,7 @@ public class TestMapping extends HtmlUnitTestCase {
         for (int i = 0; i < 11; i++) {
 
             assertTrue(greetingPage.getTitleText().equals("Hello"));
-            for (HtmlElement element : greetingPage.getAllHtmlChildElements()) {
+            for (HtmlElement element : greetingPage.getChildElements()) {
                 if (element.getTagName().equalsIgnoreCase("img")) {
                     assertTrue(element.getAttributeValue("id").equals(
                           "helloForm" +
@@ -110,7 +110,7 @@ public class TestMapping extends HtmlUnitTestCase {
 
             assertTrue(resultPage.getTitleText().equals("Guess The Number"));
 
-            for (HtmlElement element : resultPage.getAllHtmlChildElements()) {
+            for (HtmlElement element : resultPage.getChildElements()) {
 
                 // check to see if we guessed correctly or not
                 if (element.getTagName().equalsIgnoreCase("h2")) {
@@ -176,7 +176,7 @@ public class TestMapping extends HtmlUnitTestCase {
                                                                              "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
         HtmlPage resultPage = submit.click();
         assertTrue(resultPage != null);
-        for (HtmlElement element : resultPage.getAllHtmlChildElements()) {
+        for (HtmlElement element : resultPage.getChildElements()) {
             if (element.asText().trim().equals("Sorry, null is incorrect.")) {
                 numberFound++;
                 System.out.println("Incorrect guess 'null'.");
@@ -208,7 +208,7 @@ public class TestMapping extends HtmlUnitTestCase {
         HtmlPage failed = submit.click();
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
-        for (HtmlElement element : failed.getAllHtmlChildElements()) {
+        for (HtmlElement element : failed.getChildElements()) {
             if (element.getTagName().equalsIgnoreCase("span")) {
                 testFailed = true;
                 assertTrue(element.getAttributeValue("style").startsWith(
@@ -235,7 +235,7 @@ public class TestMapping extends HtmlUnitTestCase {
         failed = submit.click();
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
-        for (HtmlElement element : failed.getAllHtmlChildElements()) {
+        for (HtmlElement element : failed.getChildElements()) {
             if (element.getTagName().equalsIgnoreCase("span")) {
                 testFailed = true;
                 assertTrue(element.getAttributeValue("style").startsWith(

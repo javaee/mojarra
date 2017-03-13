@@ -172,7 +172,7 @@ public class DynamicStateITCase extends HtmlUnitFacesITCase {
     public void testDynamicAdditionTransietSubTree() throws Exception {
 
         // any exception thrown here will fail the test
-        client.setThrowExceptionOnFailingStatusCode(true);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(true);
         getPage("/faces/state/dynamicAdditionTransientSubTree.xhtml");
 
     }

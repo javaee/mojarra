@@ -111,9 +111,9 @@ public class DataTableITCase extends HtmlUnitFacesITCase {
         for (int i = 0, len = rows.size(); i < len; i++) {
             HtmlTableRow row = rows.get(i);
             if (i % 2 == 0) {
-            	assertEquals("b1",row.getClassAttribute());
+            	assertEquals("b1",row.getAttribute("class"));
             } else {
-            	assertEquals("b2",row.getClassAttribute());
+            	assertEquals("b2",row.getAttribute("class"));
             }
         }
 

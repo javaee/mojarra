@@ -304,7 +304,7 @@ public class TestComponents extends HtmlUnitTestCase {
 
     private String getImageMapWelcomeText(HtmlPage page) {
         String result = null;
-        for (HtmlElement element : page.getAllHtmlChildElements()) {
+        for (HtmlElement element : page.getChildElements()) {
             if (element instanceof HtmlTable) {
                 HtmlTable table = (HtmlTable) element;
                 result = table.getCellAt(0, 0).asText().trim();

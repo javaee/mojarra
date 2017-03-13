@@ -99,10 +99,10 @@ public class TagIvarITCase extends HtmlUnitFacesITCase {
         HtmlPage page;
 
         // ignore the exception intentionally thrown by the first page.
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         page = getPage("/faces/tag-ivars1.jsp");
 
-        client.setThrowExceptionOnFailingStatusCode(true);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(true);
         page = getPage("/faces/tag-ivars2.jsp");
 
     }

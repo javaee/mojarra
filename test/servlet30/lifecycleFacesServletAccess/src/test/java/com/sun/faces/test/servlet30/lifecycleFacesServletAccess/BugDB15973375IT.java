@@ -60,7 +60,7 @@ public class BugDB15973375IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

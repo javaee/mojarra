@@ -112,7 +112,8 @@ public class NavigationITCase extends HtmlUnitFacesITCase {
 
     // Test dynamically adding and removing components
     public void testRedirect() throws Exception {
-        client.setRedirectEnabled(false);
+        client.getOptions().setRedirectEnabled(false);
+        
         // the navigation-case for this url is set up to cause a redirect
         HtmlPage page = getPage("/faces/redirect.jsp");
         HtmlForm form = getFormById(page, "redirect");

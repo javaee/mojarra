@@ -40,14 +40,14 @@
 
 package com.sun.faces.test.servlet30.systest;
 
+import java.util.List;
+
+import com.gargoylesoftware.htmlunit.html.DomText;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.gargoylesoftware.htmlunit.html.*;
-
-import java.util.List;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertTrue;
 
 /**
  * Unit tests for Composite Component Attributes
@@ -110,16 +110,16 @@ public class CompositeAttributeITCase extends HtmlUnitFacesITCase {
         HtmlPage page = getPage("/faces/composite/defaultAttributeValueExpression_1966.xhtml");
 
         // Test with empty list as items
-        HtmlElement dataTable = page.getElementById("WithValueEmptyList:DataTable");
-        List<DomText> content = (List<DomText>) dataTable.getByXPath("./tbody/tr/td/text()");
+        HtmlElement dataTable = (HtmlElement) page.getElementById("WithValueEmptyList:DataTable");
+        List<DomText> content = dataTable.getByXPath("./tbody/tr/td/text()");
         assertTrue("Table should conain max. 1 empty cell.", content.size() <= 1);
         for (DomText text : content) {
             assertTrue("Cells should be empty", text.asText().length() == 0);
         }
 
         // Test with null value as items
-        dataTable = page.getElementById("WithValueNull:DataTable");
-        content = (List<DomText>) dataTable.getByXPath("./tbody/tr/td/text()");
+        dataTable = (HtmlElement) page.getElementById("WithValueNull:DataTable");
+        content = dataTable.getByXPath("./tbody/tr/td/text()");
         assertEquals("Table should contain 2 cells", 2, content.size());
         for (int i = 0; i < 2; i++) {
             assertEquals("---Item " + (i + 1) + "---", content.get(i).toString());
@@ -163,12 +163,10 @@ public class CompositeAttributeITCase extends HtmlUnitFacesITCase {
      *  tested.
      * @param expected the expected content
      */
-    private void assertElementContentEquals(final HtmlPage page,
-            final String elementId, final String expected) {
-        HtmlElement element = page.getElementById(elementId);
+    private void assertElementContentEquals(final HtmlPage page, final String elementId, final String expected) {
+        HtmlElement element = (HtmlElement) page.getElementById(elementId);
         assertNotNull(element);
-        assertEquals("Testing element content of #" + elementId,
-                expected, element.getTextContent());
+        assertEquals("Testing element content of #" + elementId, expected, element.getTextContent());
     }
 
 
@@ -182,13 +180,9 @@ public class CompositeAttributeITCase extends HtmlUnitFacesITCase {
      * @param attributeName the name of the attribute to be tested
      * @param expected the expected content
      */
-    private void assertElementAttributeEquals(final HtmlPage page,
-            final String elementId,final String attributeName,
-            final String expected) {
-        HtmlElement element = page.getElementById(elementId);
+    private void assertElementAttributeEquals(final HtmlPage page, final String elementId, final String attributeName, final String expected) {
+        HtmlElement element = (HtmlElement) page.getElementById(elementId);
         assertNotNull(element);
-        assertEquals("Testing attribute '" +  attributeName + "' of #"
-                + elementId,
-                expected, element.getAttribute(attributeName));
+        assertEquals("Testing attribute '" + attributeName + "' of #" + elementId, expected, element.getAttribute(attributeName));
     }
 }

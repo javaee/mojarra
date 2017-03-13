@@ -66,7 +66,7 @@ public class ExternalContextIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

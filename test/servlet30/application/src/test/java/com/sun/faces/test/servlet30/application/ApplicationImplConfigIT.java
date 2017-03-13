@@ -60,7 +60,7 @@ public class ApplicationImplConfigIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

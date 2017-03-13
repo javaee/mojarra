@@ -100,14 +100,14 @@ public class LinkTypeAttributeITCase extends HtmlUnitFacesITCase {
         String type ="type=\"type\"";
         HtmlPage page = getPage("/faces/standard/linkTypeAttribute.xhtml");
 
-        HtmlElement link = page.getElementById("form:clink");
+        HtmlElement link = (HtmlElement) page.getElementById("form:clink");
         String xml = link.asXml();
         int idx = xml.indexOf(type);
         assertTrue(idx != -1);
         idx = xml.indexOf(type, idx + type.length());
         assertTrue(idx == -1);
 
-        link = page.getElementById("form:link");
+        link = (HtmlElement) page.getElementById("form:link");
         xml = link.asXml();
         idx = xml.indexOf(type);
         assertTrue(idx != -1);

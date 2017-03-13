@@ -39,15 +39,16 @@
  */
 package com.sun.faces.test.servlet30.facelets;
 
+import static org.junit.Assert.assertTrue;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class Issue2717IT {
 
@@ -62,7 +63,7 @@ public class Issue2717IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test
@@ -70,9 +71,11 @@ public class Issue2717IT {
         HtmlPage page = webClient.getPage(webUrl + "faces/repeatResetNull.xhtml");
         assertTrue(page.asText().contains("myString")); 
         assertTrue(page.asText().contains("isnull Or Empty ? false"));
+        
         HtmlTextInput input = (HtmlTextInput)page.getHtmlElementById("repeat:0:input1");
-        page = (HtmlPage)input.setValueAttribute("");
+        input.setValueAttribute("");
         assertTrue(!page.asText().contains("myString")); 
+        
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("submit");
         page = button.click();
         webClient.waitForBackgroundJavaScript(120000);

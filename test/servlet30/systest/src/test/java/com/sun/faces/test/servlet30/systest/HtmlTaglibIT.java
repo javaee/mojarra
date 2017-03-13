@@ -60,7 +60,7 @@ public class HtmlTaglibIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

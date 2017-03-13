@@ -66,7 +66,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
 
             assertTrue(greetingPage.getTitleText().equals("Hello"));
             boolean foundImage = false;
-            for (HtmlElement element : greetingPage.getAllHtmlChildElements()) {
+            for (HtmlElement element : greetingPage.getChildElements()) {
                 if (element.getTagName().equalsIgnoreCase("img")) {
                     if (element.getAttributeValue("id").equals(
                           "helloForm" +
@@ -106,7 +106,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             assertTrue(resultPage.getTitleText().equals("Guess The Number"));
 
             foundImage = false;
-            for (HtmlElement element : resultPage.getAllHtmlChildElements()) {
+            for (HtmlElement element : resultPage.getChildElements()) {
 
                 // check to see if we guessed correctly or not
                 if (element.getTagName().equalsIgnoreCase("h2")) {
@@ -170,7 +170,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
                                                                                  "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
         HtmlPage resultPage = submit.click();
         assertTrue(resultPage != null);
-        for (HtmlElement element : resultPage.getAllHtmlChildElements()) {
+        for (HtmlElement element : resultPage.getChildElements()) {
             if (element.asText().trim()
                   .equals("Sorry, null is incorrect. Try a larger number.")) {
                 numberFound++;
@@ -203,7 +203,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         HtmlPage failed = submit.click();
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
-        for (HtmlElement element : failed.getAllHtmlChildElements()) {
+        for (HtmlElement element : failed.getChildElements()) {
             if (element.getTagName().equalsIgnoreCase("span")) {
                 if (element.getAttributeValue("id").equals("helloForm" +
                     NamingContainer.SEPARATOR_CHAR + "errors1")) {
@@ -233,7 +233,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         failed = submit.click();
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
-        for (HtmlElement element : failed.getAllHtmlChildElements()) {
+        for (HtmlElement element : failed.getChildElements()) {
             if (element.getTagName().equalsIgnoreCase("span")) {
                 if (element.getAttributeValue("id").equals("helloForm" +
                     NamingContainer.SEPARATOR_CHAR + "errors1")) {

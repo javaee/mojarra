@@ -240,7 +240,7 @@ public class SelectComponentValueITCase extends HtmlUnitFacesITCase {
         radio3 = (HtmlRadioButtonInput) radioList.get(2);
         for (int i = 0; i < submitList.size(); i++) {
             HtmlSubmitInput result = (HtmlSubmitInput) submitList.get(i);
-            if (-1 != result.getIdAttribute().indexOf("nonImmediate")) {
+            if (-1 != result.getAttribute("id").indexOf("nonImmediate")) {
                 nonImmediateButton = result;
             } else {
                 immediateButton = result;

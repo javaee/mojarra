@@ -58,7 +58,7 @@ public class Issue3146IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test(expected = FailingHttpStatusCodeException.class)

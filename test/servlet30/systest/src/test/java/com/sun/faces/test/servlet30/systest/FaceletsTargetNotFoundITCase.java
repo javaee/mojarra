@@ -105,7 +105,7 @@ public class FaceletsTargetNotFoundITCase extends HtmlUnitFacesITCase {
     public void testFaillingCode() throws Exception {
 
         WebClient client = new WebClient();
-        client.setThrowExceptionOnFailingStatusCode(true);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(true);
         HtmlPage page;
         int code;
 
@@ -135,7 +135,7 @@ public class FaceletsTargetNotFoundITCase extends HtmlUnitFacesITCase {
 
     public void testNotFoundCode() throws Exception {
         WebClient client = new WebClient();
-        client.setThrowExceptionOnFailingStatusCode(true);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(true);
         HtmlPage page;
         int code;
 

@@ -142,7 +142,7 @@ public class CompositeComponentsWithEE6DependenciesITCase extends HtmlUnitFacesI
 
     public void testInvalidArgsToCCExpression() throws Exception {
 
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/invalidMeArgs.xhtml");
         assertTrue(page.asText().contains("value=\"#{cc.attrs.custom(cc.attrs.arg1)}\" Illegal attempt to pass arguments to a composite component lookup expression"));
 

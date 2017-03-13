@@ -121,7 +121,7 @@ public class AjaxErrorITCase extends HtmlUnitFacesITCase {
             assertNotNull(button);
 
             HtmlPage page1 = button.click();
-            HtmlElement element = page1.getElementById("statusArea");
+            HtmlElement element = (HtmlElement) page1.getElementById("statusArea");
             assertNotNull(element);
             String statusText = element.getAttribute("value");
             assertTrue(statusText.equals("Name: form:error Error: serverError "));

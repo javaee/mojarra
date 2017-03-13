@@ -59,7 +59,7 @@ public class ReleaseIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

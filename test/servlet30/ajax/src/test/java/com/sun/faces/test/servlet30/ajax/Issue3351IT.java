@@ -67,7 +67,7 @@ public class Issue3351IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @JsfTest(JsfVersion.JSF_2_3_0_M02)

@@ -63,7 +63,7 @@ public class PropertyResolverJspIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

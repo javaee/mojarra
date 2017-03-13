@@ -61,7 +61,7 @@ public class ReturnNaviToOtherNodesIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

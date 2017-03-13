@@ -90,7 +90,7 @@ public class Isuse3787IT {
      */
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

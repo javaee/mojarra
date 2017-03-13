@@ -62,7 +62,7 @@ public class FindResourcesInJarIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

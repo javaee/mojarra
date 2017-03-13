@@ -94,7 +94,7 @@ public class Issue4124IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
 }

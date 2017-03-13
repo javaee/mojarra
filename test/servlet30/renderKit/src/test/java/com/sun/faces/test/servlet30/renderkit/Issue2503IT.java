@@ -40,12 +40,16 @@
 
 package com.sun.faces.test.servlet30.renderkit; 
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
+import static com.gargoylesoftware.htmlunit.BrowserVersion.FIREFOX_45;
+import static java.lang.System.getProperty;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
-import org.junit.*;
-import static org.junit.Assert.*;
 
 public class Issue2503IT {
 
@@ -53,6 +57,7 @@ public class Issue2503IT {
      * Stores the web URL.
      */
     private String webUrl;
+    
     /**
      * Stores the web client.
      */
@@ -60,13 +65,13 @@ public class Issue2503IT {
 
     @Before
     public void setUp() {
-        webUrl = System.getProperty("integration.url");
+        webUrl = getProperty("integration.url");
         webClient = new WebClient();
     }
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
 
@@ -82,7 +87,7 @@ public class Issue2503IT {
          * We don't want this to be simulated as an IE browser since IE
          * does some automatic replacing.
          */
-        webClient = new WebClient(BrowserVersion.FIREFOX_31);
+        webClient = new WebClient(FIREFOX_45);
         HtmlPage page = webClient.getPage(webUrl+"faces/outputEscape1.xhtml");
         assertTrue(page.asXml().contains(expected1));
         assertTrue(page.asXml().contains(expected2));

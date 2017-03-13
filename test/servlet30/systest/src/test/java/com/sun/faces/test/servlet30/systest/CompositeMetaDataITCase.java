@@ -114,7 +114,7 @@ public class CompositeMetaDataITCase extends HtmlUnitFacesITCase {
    public void testDirectlyAccessedCompositeComponent() throws Exception {
 
 //       HtmlPage page = null;
-//       client.setThrowExceptionOnFailingStatusCode(false);
+//       client.getOptions().setThrowExceptionOnFailingStatusCode(false);
 //       page = getPage("/faces/resources/composite/jsr276Correct01.xhtml");
 //       String text = page.asText();
 //       assertTrue(text.contains("Component Not Found for identifier"));

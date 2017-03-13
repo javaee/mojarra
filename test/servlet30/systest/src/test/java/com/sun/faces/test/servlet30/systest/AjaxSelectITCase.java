@@ -40,9 +40,10 @@
 
 package com.sun.faces.test.servlet30.systest;
 
-import com.gargoylesoftware.htmlunit.html.ClickableElement;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -85,7 +86,7 @@ public class AjaxSelectITCase extends HtmlUnitFacesITCase {
 
         checkTrue("out", "Pending");
 
-        ClickableElement click = lastpage.getHtmlElementById("form:s1rad:0");
+        HtmlElement click = lastpage.getHtmlElementById("form:s1rad:0");
 
         lastpage = click.click();
 

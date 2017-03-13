@@ -98,7 +98,7 @@ public class MissingViewITCase extends HtmlUnitFacesITCase {
     // ------------------------------------------------- Individual Test Methods
 
     public void testMissingView() throws Exception {
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/jsp/missing-view.jsp");
         assertTrue(-1 != page.asText().indexOf("UIViewRoot"));
         assertTrue(-1 != page.asText().indexOf("UIForm"));

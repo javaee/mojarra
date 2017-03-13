@@ -149,7 +149,7 @@ public class Spec790WithNamespacedViewIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
 }

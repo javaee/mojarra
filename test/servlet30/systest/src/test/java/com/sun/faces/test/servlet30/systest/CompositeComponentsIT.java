@@ -39,7 +39,21 @@
  */
 package com.sun.faces.test.servlet30.systest;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.fail;
+
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlListItem;
@@ -47,15 +61,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
-import java.util.List;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertTrue;
-import static junit.framework.TestCase.fail;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.Ignore;
 
 public class CompositeComponentsIT {
 
@@ -70,7 +75,7 @@ public class CompositeComponentsIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test
@@ -174,12 +179,12 @@ public class CompositeComponentsIT {
             String messagePrefix,
             String messageSuffix) {
 
-        List<HtmlUnorderedList> list = page.getBody().getHtmlElementsByTagName("ul");
-        HtmlUnorderedList ulist = list.get(0);
+        DomNodeList<HtmlElement> list = page.getBody().getElementsByTagName("ul");
+        HtmlUnorderedList ulist = (HtmlUnorderedList) list.get(0);
         assertEquals("messages", ulist.getId());
         int count = 0;
         String message = (messagePrefix + " : " + messageSuffix);
-        for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+        for (DomElement e : ulist.getChildElements()) {
             if (count > 1) {
                 fail("Expected only one message to be displayed");
             }
@@ -189,8 +194,8 @@ public class CompositeComponentsIT {
         }
 
         if (list.size() == 2) {
-            ulist = list.get(1);
-            for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+            ulist = (HtmlUnorderedList) list.get(1);
+            for (DomElement e : ulist.getChildElements()) {
                 fail("Messages have been redisplayed");
             }
         }
@@ -215,11 +220,10 @@ public class CompositeComponentsIT {
          * When systest migrated this test was found not to be working on client side state saving
          * and when serializing the server state.
          */
-        if (!page.asXml().contains("State Saving Method: client") &&
-                !page.asXml().contains("Serializing Server State: true")) {
+        if (!page.asXml().contains("State Saving Method: client") && !page.asXml().contains("Serializing Server State: true")) {
             page = webClient.getPage(webUrl + "faces/composite/nesting08.xhtml");
             HtmlForm form = page.getForms().get(0);
-            HtmlSubmitInput button = (HtmlSubmitInput) form.getHtmlElementById("form:submit");
+            HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
             assertNotNull(button);
             page = button.click();
             assertTrue(page.asText().contains("Action invoked"));
@@ -473,13 +477,13 @@ public class CompositeComponentsIT {
 
     private void validateConverterMessages(HtmlPage page, String[] messageSuffixes) {
 
-        List<HtmlUnorderedList> list = page.getBody().getHtmlElementsByTagName("ul");
+        List<HtmlElement> list = page.getBody().getElementsByTagName("ul");
 
-        HtmlUnorderedList ulist = list.get(0);
+        HtmlUnorderedList ulist = (HtmlUnorderedList) list.get(0);
         assertEquals("messages", ulist.getId());
         int count = 0;
 
-        for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+        for (DomElement e : ulist.getChildElements()) {
             if (count > messageSuffixes.length) {
                 fail("Expected only four message to be displayed");
             }
@@ -490,8 +494,8 @@ public class CompositeComponentsIT {
         }
 
         if (list.size() == 2) {
-            ulist = list.get(1);
-            for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+            ulist = (HtmlUnorderedList) list.get(1);
+            for (DomElement e : ulist.getChildElements()) {
                 fail("Messages have been redisplayed");
             }
         }

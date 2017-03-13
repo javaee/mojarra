@@ -68,7 +68,7 @@ public class FlashViewParamIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     /**

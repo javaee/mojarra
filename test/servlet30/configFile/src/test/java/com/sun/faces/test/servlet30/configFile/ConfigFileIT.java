@@ -77,7 +77,7 @@ public class ConfigFileIT {
      */
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

@@ -66,7 +66,7 @@ public class NeverUnwrapExceptionsIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @JsfTest(value = JsfVersion.JSF_2_2_0_M02,

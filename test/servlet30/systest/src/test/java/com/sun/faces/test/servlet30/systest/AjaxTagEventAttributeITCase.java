@@ -93,7 +93,7 @@ public class AjaxTagEventAttributeITCase extends HtmlUnitFacesITCase {
         checkTrue("out2","0");
 
         HtmlInput input = (HtmlInput) lastpage.getHtmlElementById("in1");
-        lastpage = (HtmlPage) input.setValueAttribute("test");
+        input.setValueAttribute("test");
 
         checkTrue("out3","test");
 

@@ -40,6 +40,8 @@
 package com.sun.faces.test.servlet30.composite;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
@@ -63,28 +65,28 @@ public class Issue1943IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test
     public void testIssue1943() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue1943.xhtml");
 
-        List<HtmlSelect> selectList = page.getDocumentElement().getHtmlElementsByTagName("select");
-        HtmlSelect select = selectList.get(0);
+        DomNodeList<HtmlElement> selectList = page.getDocumentElement().getElementsByTagName("select");
+        HtmlSelect select = (HtmlSelect) selectList.get(0);
         List<HtmlOption> options = select.getOptions();
         select.setSelectedAttribute(options.get(0), true);
-        List<HtmlSubmitInput> buttonList = page.getDocumentElement().getHtmlElementsByTagName("input");
-        HtmlSubmitInput submitButton = buttonList.get(1);
+        DomNodeList<HtmlElement> buttonList = page.getDocumentElement().getElementsByTagName("input");
+        HtmlSubmitInput submitButton = (HtmlSubmitInput) buttonList.get(1);
         page = (HtmlPage) submitButton.click();
         assertTrue(page.asText().contains("valueChange Called"));
 
         page = webClient.getPage(webUrl + "faces/issue1943-action.xhtml");
-        buttonList = page.getDocumentElement().getHtmlElementsByTagName("input");
-        HtmlSubmitInput submitButton1 = buttonList.get(1);
+        buttonList = page.getDocumentElement().getElementsByTagName("input");
+        HtmlSubmitInput submitButton1 = (HtmlSubmitInput) buttonList.get(1);
         page = (HtmlPage) submitButton1.click();
         assertTrue(page.asText().contains("removeGroup Called"));
-        HtmlSubmitInput submitButton2 = buttonList.get(2);
+        HtmlSubmitInput submitButton2 = (HtmlSubmitInput) buttonList.get(2);
         page = (HtmlPage) submitButton2.click();
         assertTrue(!page.asText().contains("removeGroup Called"));
     }

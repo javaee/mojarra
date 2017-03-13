@@ -372,7 +372,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
               HtmlAnchor.class,
               HtmlBreak.class
         };
-        for (HtmlElement element : div.getChildElements()) {
+        for (DomElement element : div.getChildElements()) {
             if (count > 2) {
                 fail("Expected two children of the div");
             }
@@ -420,7 +420,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
     public void testInsertFacetRequired01() throws Exception {
 
         // facet required but not present
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/insertfacetrequired01.xhtml");
         assertTrue(page.asText().contains("Unable to find facet named 'header'"));
 
@@ -430,7 +430,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
     public void testInsertFacetRequired02() throws Exception {
 
         // facet required but not present
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/insertfacetrequired02.xhtml");
         assertTrue(page.asText().contains("Unable to find facet named 'header'"));
 
@@ -440,7 +440,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
     public void testInsertFacetRequired03() throws Exception {
 
         // facet not required and not present
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/insertfacetrequired03.xhtml");
         assertTrue(!page.asText().contains("Unable to find facet named 'header'"));
 
@@ -450,7 +450,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
     public void testRenderFacetRequired01() throws Exception {
 
         // facet required but not present
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/renderfacetrequired01.xhtml");
         assertTrue(page.asText().contains("Unable to find facet named 'header'"));
 
@@ -460,7 +460,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
     public void testRenderFacetRequired02() throws Exception {
 
         // facet required but not present
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/renderfacetrequired02.xhtml");
         assertTrue(page.asText().contains("Unable to find facet named 'header'"));
 
@@ -470,7 +470,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
     public void testRenderFacetRequired03() throws Exception {
 
         // facet not required and not present
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/renderfacetrequired03.xhtml");
         assertTrue(!page.asText().contains("Unable to find facet named 'header'"));
 
@@ -480,7 +480,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
     public void testInsertChildrenRequired01() throws Exception {
 
         // facet required but not present
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/insertchildrenrequired01.xhtml");
         assertTrue(page.asText().contains("Unable to find any children components nested within parent composite component"));
 
@@ -490,7 +490,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
     public void testInsertChildrenRequired02() throws Exception {
 
         // facet required but not present
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/insertchildrenrequired02.xhtml");
         assertTrue(page.asText().contains("Unable to find any children components nested within parent composite component"));
 
@@ -500,7 +500,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
     public void testInsertChildrenRequired03() throws Exception {
 
         // facet not required and not present
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/insertchildrenrequired03.xhtml");
         assertTrue(!page.asText().contains("Unable to find any children components nested within parent composite component"));
 
@@ -708,7 +708,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
      * ProjectStage.Development.
      */
     public void testMissingRequiredAttribute() throws Exception {
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/requiredAttribute.xhtml");
         String text = page.asText();
         if (page.asXml().contains("Development")) {
@@ -723,7 +723,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
      * ProjectStage.Development.
      */
     public void testMissingRequiredFacet() throws Exception {
-        client.setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/requiredFacet.xhtml");
         String text = page.asText();
         if (page.asXml().contains("Development")) {
@@ -814,7 +814,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
         assertEquals("messages", ulist.getId());
         int count = 0;
 
-        for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+        for (DomElement e : ulist.getChildElements()) {
             if (count > messageSuffixes.length) {
                 fail("Expected only four message to be displayed");
             }
@@ -826,7 +826,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
 
         if (list.size() == 2) {
             ulist = list.get(1);
-            for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+            for (DomElement e : ulist.getChildElements()) {
                 fail("Messages have been redisplayed");
             }
         }
@@ -855,7 +855,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
         assertEquals("messages", ulist.getId());
         int count = 0;
         String message = (messagePrefix + " : " + messageSuffix);
-        for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+        for (DomElement e : ulist.getChildElements()) {
             if (count > 1) {
                 fail("Expected only one message to be displayed");
             }
@@ -866,7 +866,7 @@ public class CompositeComponentsITCase extends HtmlUnitFacesITCase {
 
         if (list.size() == 2) {
             ulist = list.get(1);
-            for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+            for (DomElement e : ulist.getChildElements()) {
                 fail("Messages have been redisplayed");
             }
         }

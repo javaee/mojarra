@@ -66,7 +66,7 @@ public class AdminGUIIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

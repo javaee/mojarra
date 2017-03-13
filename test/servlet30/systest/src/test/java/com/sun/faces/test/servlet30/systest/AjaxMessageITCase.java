@@ -40,8 +40,12 @@
 
 package com.sun.faces.test.servlet30.systest;
 
-import com.gargoylesoftware.htmlunit.html.*;
-import com.gargoylesoftware.htmlunit.javascript.host.Node;
+import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 

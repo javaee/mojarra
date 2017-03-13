@@ -68,7 +68,7 @@ public class MethodValidationIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @JsfTest(value = JSF_2_2_0, excludes = {GLASSFISH_5_0})

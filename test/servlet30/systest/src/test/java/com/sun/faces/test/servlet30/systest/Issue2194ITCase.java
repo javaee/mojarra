@@ -40,19 +40,13 @@
 
 package com.sun.faces.test.servlet30.systest;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.component.NamingContainer;
-import static junit.framework.TestCase.assertTrue;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 public class Issue2194ITCase extends HtmlUnitFacesITCase {
 
@@ -102,14 +96,14 @@ public class Issue2194ITCase extends HtmlUnitFacesITCase {
         assertTrue(page.asText().contains("button2 was pressed"));
         HtmlInput input = (HtmlInput)
             form.getInputByName("input1");
-        page = (HtmlPage) input.setValueAttribute("Foo");
+        input.setValueAttribute("Foo");
         submit = (HtmlSubmitInput)
             form.getInputByName("submit");
         page = (HtmlPage) submit.click();
         assertTrue(page.asText().contains("input1 value was changed"));
         input = (HtmlInput)
             form.getInputByName("input2");
-        page = (HtmlPage) input.setValueAttribute("Bar");
+        input.setValueAttribute("Bar");
         submit = (HtmlSubmitInput)
             form.getInputByName("submit");
         page = (HtmlPage) submit.click();

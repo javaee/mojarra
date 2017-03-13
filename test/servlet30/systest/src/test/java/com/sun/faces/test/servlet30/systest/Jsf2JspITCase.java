@@ -112,7 +112,7 @@ public class Jsf2JspITCase extends HtmlUnitFacesITCase {
     }
     
     private void assert500Response(String urlFragment) throws Exception {
-        client.setThrowExceptionOnFailingStatusCode(true);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(true);
         HtmlPage page = null;
         int code;
         try {
@@ -125,7 +125,7 @@ public class Jsf2JspITCase extends HtmlUnitFacesITCase {
     }
 
     private void assert200Response(String urlFragment) throws Exception {
-        client.setThrowExceptionOnFailingStatusCode(true);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(true);
         HtmlPage page = null;
         int code;
         try {

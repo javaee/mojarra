@@ -59,7 +59,7 @@ public class Issue3144IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
     
     @Test

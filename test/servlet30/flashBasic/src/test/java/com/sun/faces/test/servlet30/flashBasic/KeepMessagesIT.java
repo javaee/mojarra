@@ -66,7 +66,7 @@ public class KeepMessagesIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
 

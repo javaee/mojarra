@@ -77,7 +77,7 @@ public class Issue2711IT {
      */
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     // This tests the following markup:

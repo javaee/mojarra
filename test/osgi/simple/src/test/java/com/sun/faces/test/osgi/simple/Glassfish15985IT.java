@@ -59,7 +59,7 @@ public class Glassfish15985IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

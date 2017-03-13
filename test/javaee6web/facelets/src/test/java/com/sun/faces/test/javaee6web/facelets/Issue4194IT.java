@@ -39,34 +39,35 @@
  */
 package com.sun.faces.test.javaee6web.facelets;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class Issue4194IT {
 
     private String webUrl;
     private WebClient webClient;
-    private List receivedAlerts;
-    private List expectedAlerts;
+    private List<String> receivedAlerts;
+    private List<String> expectedAlerts;
 
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
-        webClient = new WebClient(BrowserVersion.INTERNET_EXPLORER_11);
-        receivedAlerts = new ArrayList();
+        webClient = new WebClient(BrowserVersion.INTERNET_EXPLORER);
+        receivedAlerts = new ArrayList<>();
         webClient.setAlertHandler(new CollectingAlertHandler(receivedAlerts));
-        expectedAlerts = new ArrayList();
+        expectedAlerts = new ArrayList<>();
         expectedAlerts.add("static onSubmit triggered");
         expectedAlerts.add("static onSubmit triggered");
         expectedAlerts.add("dynamic onSubmit triggered");
@@ -98,7 +99,7 @@ public class Issue4194IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
 }

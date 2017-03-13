@@ -86,14 +86,14 @@ public class IdRefITCase extends HtmlUnitFacesITCase {
     private Map mapElementsByAttribute(HtmlElement docElem, String tagName,
                                        String attName, String filterAtt, String filterValue) {
         Map elems = new TreeMap();
-        List tags = docElem.getHtmlElementsByTagName(tagName);
+        List tags = docElem.getElementsByTagName(tagName);
         for (Iterator tagIt = tags.iterator(); tagIt.hasNext();) {
             HtmlElement tag = (HtmlElement) tagIt.next();
             if (filterAtt != null && filterValue != null &&
-                    !filterValue.equals(tag.getAttributeValue(filterAtt))) {
+                    !filterValue.equals(tag.getAttribute(filterAtt))) {
                 continue;
             }
-            String attValue = tag.getAttributeValue(attName);
+            String attValue = tag.getAttribute(attName);
             assertNotNull(attName + " attribute of " + tagName, attValue);
             assertNotSame(attName + " attribute of " + tagName, 0, attValue.length());
             assertFalse("More than one " + tagName + " contains " + attName
@@ -105,10 +105,10 @@ public class IdRefITCase extends HtmlUnitFacesITCase {
 
     private Map mapMessagesById(HtmlElement docElem) {
         Map elems = new TreeMap();
-        List tags = docElem.getHtmlElementsByTagName("span");
+        List tags = docElem.getElementsByTagName("span");
         for (Iterator tagIt = tags.iterator(); tagIt.hasNext();) {
             HtmlSpan tag = (HtmlSpan) tagIt.next();
-            if ("message".equals(tag.getClassAttribute())) {
+            if ("message".equals(tag.getAttribute("class"))) {
                 String text = tag.asText();
                 assertNotSame(
                         "expect validation message to start with component id",

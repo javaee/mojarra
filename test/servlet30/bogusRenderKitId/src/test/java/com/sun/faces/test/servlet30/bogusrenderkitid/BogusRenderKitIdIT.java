@@ -64,7 +64,7 @@ public class BogusRenderKitIdIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

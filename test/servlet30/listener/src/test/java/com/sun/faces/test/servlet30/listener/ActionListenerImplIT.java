@@ -77,7 +77,7 @@ public class ActionListenerImplIT {
      */
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test

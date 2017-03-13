@@ -50,7 +50,7 @@ import com.gargoylesoftware.htmlunit.IncorrectnessListener;
  */
 public class IgnoringIncorrectnessListener implements IncorrectnessListener {
 
-    @Override
-    public void notify(String string, Object o) {
+    public void notify(String message, Object origin) {
     }
+
 }

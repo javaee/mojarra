@@ -39,17 +39,19 @@
  */
 package com.sun.faces.test.servlet30.facelets;
 
+import static java.lang.System.getProperty;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.test.junit.JsfTestRunner;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.Ignore;
-import static org.junit.Assert.*;
-import org.junit.runner.RunWith;
 
 @RunWith(JsfTestRunner.class)
 public class Issue3205IT {
@@ -59,22 +61,22 @@ public class Issue3205IT {
 
     @Before
     public void setUp() {
-        webUrl = System.getProperty("integration.url");
+        webUrl = getProperty("integration.url");
         webClient = new WebClient();
     }
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test
     public void testNotFound() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/viewParamListener_first.xhtml");
-        HtmlAnchor link = page.getElementById("myHref", true);
+        HtmlAnchor link = (HtmlAnchor) page.getElementById("myHref");
         page = link.click();
         
-        HtmlSubmitInput button = page.getElementById("postbackButton", true);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("postbackButton");
         button.click();
         assertTrue(true);
     }

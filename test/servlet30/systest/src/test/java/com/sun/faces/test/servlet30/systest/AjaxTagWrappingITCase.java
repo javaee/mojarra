@@ -40,9 +40,15 @@
 
 package com.sun.faces.test.servlet30.systest;
 
+import com.gargoylesoftware.htmlunit.html.DomElement;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.gargoylesoftware.htmlunit.html.*;
 
 public class AjaxTagWrappingITCase extends HtmlUnitFacesITCase {
 
@@ -151,7 +157,7 @@ public class AjaxTagWrappingITCase extends HtmlUnitFacesITCase {
         verifyContent(xml);
 
         String timestampBefore = sampleTimestamp(timestampPrefix, xml);
-        ClickableElement clickable = (ClickableElement) page.getElementById(clickableElementId);
+        DomElement clickable = page.getElementById(clickableElementId);
         page = clickable.click();
 
         xml = page.asXml();
@@ -159,7 +165,6 @@ public class AjaxTagWrappingITCase extends HtmlUnitFacesITCase {
         String timestampAfter = sampleTimestamp(timestampPrefix, xml);
 
         assertTrue(!timestampBefore.equals(timestampAfter));
-
     }
 
     private String sampleTimestamp(String timestampPrefix, String xml) {

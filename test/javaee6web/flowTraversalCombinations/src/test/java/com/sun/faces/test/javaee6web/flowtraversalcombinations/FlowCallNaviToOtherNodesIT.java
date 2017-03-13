@@ -60,7 +60,7 @@ public class FlowCallNaviToOtherNodesIT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
     
     @Test
