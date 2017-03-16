@@ -40,11 +40,11 @@
 
 package com.sun.faces.test.servlet30.systest;
 
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.gargoylesoftware.htmlunit.html.*;
-import java.util.regex.Pattern;
-import static junit.framework.TestCase.assertTrue;
 
 
 /**
@@ -92,9 +92,19 @@ public class DynamicAddITCase extends HtmlUnitFacesITCase {
 
         HtmlPage page = getPage("/faces/dynamicComponents.xhtml");
         String text = page.asXml();
-        assertTrue(Pattern.matches("(?s).*\\s*<ul>\\s*\\s*<p>\\s*Dynamic Component dynamic1\\s*<ul>\\s*\\s*<p>\\s*Dynamic Component dynamic2\\s*<ul>\\s*\\s*<p>\\s*Dynamic Component dynamic3\\s*<ul>\\s*\\s*<p>\\s*Dynamic Component dynamic4\\s*<ul>\\s*\\s*<p>\\s*Dynamic Component dynamic5\\s*</p>\\s*\\s*</ul>\\s*\\s*</p>\\s*\\s*</ul>\\s*\\s*</p>\\s*\\s*</ul>\\s*\\s*</p>\\s*\\s*</ul>\\s*\\s*</p>\\s*\\s*</ul>\\s*.*",
-                text));
-
+        
+        int indexOf1 = text.indexOf("Dynamic Component dynamic1");
+        int indexOf2 = text.indexOf("Dynamic Component dynamic2");
+        int indexOf3 = text.indexOf("Dynamic Component dynamic3");
+        int indexOf4 = text.indexOf("Dynamic Component dynamic4");
+        int indexOf5 = text.indexOf("Dynamic Component dynamic5");
+        
+        assertTrue(indexOf1 != -1);
+        
+        assertTrue(indexOf1 < indexOf2);
+        assertTrue(indexOf2 < indexOf3);
+        assertTrue(indexOf3 < indexOf4); 
+        assertTrue(indexOf4 < indexOf5);
     }
 
     public void testDynamicAddHandlesViewIdChanges() throws Exception {

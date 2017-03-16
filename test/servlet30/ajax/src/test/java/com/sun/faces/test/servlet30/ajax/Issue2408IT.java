@@ -40,16 +40,22 @@
 
 package com.sun.faces.test.servlet30.ajax; 
 
+import static java.lang.System.getProperty;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.*;
-import static org.junit.Assert.*;
 
 public class Issue2408IT {
 
@@ -57,6 +63,7 @@ public class Issue2408IT {
      * Stores the web URL.
      */
     private String webUrl;
+    
     /**
      * Stores the web client.
      */
@@ -64,7 +71,7 @@ public class Issue2408IT {
 
     @Before
     public void setUp() {
-        webUrl = System.getProperty("integration.url");
+        webUrl = getProperty("integration.url");
         webClient = new WebClient();
     }
 
@@ -83,29 +90,20 @@ public class Issue2408IT {
     @Test
     public void testSelectManyCheckboxInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxInComposite.xhtml");
-        final List<HtmlCheckBoxInput> checkBoxes = new ArrayList();
-        final DomNodeList<DomElement> elements = page.getElementsByTagName("input");
-        for (DomElement elem : elements) {
-            if (elem instanceof HtmlCheckBoxInput) {
-                checkBoxes.add((HtmlCheckBoxInput)elem);
-            }
-        }
-        HtmlCheckBoxInput cbox1 = checkBoxes.get(0);
-        HtmlCheckBoxInput cbox2 = checkBoxes.get(1);
-        HtmlCheckBoxInput cbox3 = checkBoxes.get(2);
+        
         // This will ensure JavaScript finishes before evaluating the page.
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: Pending"));
 
-        page = cbox1.click();
+        page = getCheckBoxes(page).get(0).click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: mcheck-1"));
 
-        page = cbox2.click();
+        page = getCheckBoxes(page).get(1).click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: mcheck-1 mcheck-2"));
 
-        page = cbox3.click();
+        page = getCheckBoxes(page).get(2).click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: mcheck-1 mcheck-2 mcheck-3"));
     }
@@ -117,23 +115,22 @@ public class Issue2408IT {
     @Test
     public void testSelectManyCheckboxIdsInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxIdsInComposite.xhtml");
-        
-        HtmlCheckBoxInput cbox1 = (HtmlCheckBoxInput)page.getElementById("form:compId:cbox:0");
-        HtmlCheckBoxInput cbox2 = (HtmlCheckBoxInput)page.getElementById("form:compId:cbox:1");
-        HtmlCheckBoxInput cbox3 = (HtmlCheckBoxInput)page.getElementById("form:compId:cbox:2");
 
         // This will ensure JavaScript finishes before evaluating the page.
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: Pending"));
 
+        HtmlCheckBoxInput cbox1 = (HtmlCheckBoxInput)page.getElementById("form:compId:cbox:0");
         page = cbox1.click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: mcheck-1"));
 
+        HtmlCheckBoxInput cbox2 = (HtmlCheckBoxInput)page.getElementById("form:compId:cbox:1");
         page = cbox2.click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: mcheck-1 mcheck-2"));
 
+        HtmlCheckBoxInput cbox3 = (HtmlCheckBoxInput)page.getElementById("form:compId:cbox:2");
         page = cbox3.click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: mcheck-1 mcheck-2 mcheck-3"));
@@ -145,29 +142,20 @@ public class Issue2408IT {
     @Test
     public void testSelectManyCheckboxNoComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectManyCheckboxNoComposite.xhtml");
-        final List<HtmlCheckBoxInput> checkBoxes = new ArrayList();
-        final DomNodeList<DomElement> elements = page.getElementsByTagName("input");
-        for (DomElement elem : elements) {
-            if (elem instanceof HtmlCheckBoxInput) {
-                checkBoxes.add((HtmlCheckBoxInput)elem);
-            }
-        }
-        HtmlCheckBoxInput cbox1 = checkBoxes.get(0);
-        HtmlCheckBoxInput cbox2 = checkBoxes.get(1);
-        HtmlCheckBoxInput cbox3 = checkBoxes.get(2);
+        
         // This will ensure JavaScript finishes before evaluating the page.
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: Pending"));
 
-        page = cbox1.click();
+        page = getCheckBoxes(page).get(0).click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: mcheck-1"));
 
-        page = cbox2.click();
+        page = getCheckBoxes(page).get(1).click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: mcheck-1 mcheck-2"));
 
-        page = cbox3.click();
+        page = getCheckBoxes(page).get(2).click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: mcheck-1 mcheck-2 mcheck-3"));
     }
@@ -179,30 +167,20 @@ public class Issue2408IT {
     @Test
     public void testSelectOneRadioInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneRadioInComposite.xhtml");
-        final List<HtmlRadioButtonInput> radios = new ArrayList();
-        final DomNodeList<DomElement> elements = page.getElementsByTagName("input");
-        for (DomElement elem : elements) {
-            if (elem instanceof HtmlRadioButtonInput) {
-                radios.add((HtmlRadioButtonInput)elem);
-            }
-        }
-        HtmlRadioButtonInput radio1 = radios.get(0);
-        HtmlRadioButtonInput radio2 = radios.get(1);
-        HtmlRadioButtonInput radio3 = radios.get(2);
 
         // This will ensure JavaScript finishes before evaluating the page.
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: Pending"));
 
-        page = radio1.click();
+        page = getRadios(page).get(0).click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: radio-1"));
 
-        page = radio2.click();
+        page = getRadios(page).get(1).click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: radio-2"));
 
-        page = radio3.click();
+        page = getRadios(page).get(2).click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: radio-3"));
     }
@@ -215,22 +193,21 @@ public class Issue2408IT {
     public void testSelectOneRadioIdsInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneRadioIdsInComposite.xhtml");
 
-        HtmlRadioButtonInput radio1 = (HtmlRadioButtonInput)page.getElementById("form:compId:radio:0");
-        HtmlRadioButtonInput radio2 = (HtmlRadioButtonInput)page.getElementById("form:compId:radio:1");
-        HtmlRadioButtonInput radio3 = (HtmlRadioButtonInput)page.getElementById("form:compId:radio:2");
-
         // This will ensure JavaScript finishes before evaluating the page.
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: Pending"));
 
+        HtmlRadioButtonInput radio1 = (HtmlRadioButtonInput)page.getElementById("form:compId:radio:0");
         page = radio1.click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: radio-1"));
 
+        HtmlRadioButtonInput radio2 = (HtmlRadioButtonInput)page.getElementById("form:compId:radio:1");
         page = radio2.click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: radio-2"));
 
+        HtmlRadioButtonInput radio3 = (HtmlRadioButtonInput)page.getElementById("form:compId:radio:2");
         page = radio3.click();
         webClient.waitForBackgroundJavaScript(60000);
         assertTrue(page.asXml().contains("Status: radio-3"));
@@ -242,32 +219,46 @@ public class Issue2408IT {
     @Test
     public void testSelectOneRadioNoComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/selectOneRadioNoComposite.xhtml");
-        final List<HtmlRadioButtonInput> radios = new ArrayList();
+
+        // This will ensure JavaScript finishes before evaluating the page.
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.asXml().contains("Status: Pending"));
+
+        page = getRadios(page).get(0).click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.asXml().contains("Status: radio-1"));
+
+        page = getRadios(page).get(1).click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.asXml().contains("Status: radio-2"));
+
+        page = getRadios(page).get(2).click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.asXml().contains("Status: radio-3"));
+    }
+    
+    private List<HtmlCheckBoxInput> getCheckBoxes(final HtmlPage page) {
+        final List<HtmlCheckBoxInput> checkBoxes = new ArrayList<>();
+        final DomNodeList<DomElement> elements = page.getElementsByTagName("input");
+        for (DomElement elem : elements) {
+            if (elem instanceof HtmlCheckBoxInput) {
+                checkBoxes.add((HtmlCheckBoxInput) elem);
+            }
+        }
+
+        return checkBoxes;
+    }
+    
+    private List<HtmlRadioButtonInput> getRadios(final HtmlPage page) {
+        final List<HtmlRadioButtonInput> radios = new ArrayList<>();
         final DomNodeList<DomElement> elements = page.getElementsByTagName("input");
         for (DomElement elem : elements) {
             if (elem instanceof HtmlRadioButtonInput) {
                 radios.add((HtmlRadioButtonInput)elem);
             }
         }
-        HtmlRadioButtonInput radio1 = radios.get(0);
-        HtmlRadioButtonInput radio2 = radios.get(1);
-        HtmlRadioButtonInput radio3 = radios.get(2);
-
-        // This will ensure JavaScript finishes before evaluating the page.
-        webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.asXml().contains("Status: Pending"));
-
-        page = radio1.click();
-        webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.asXml().contains("Status: radio-1"));
-
-        page = radio2.click();
-        webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.asXml().contains("Status: radio-2"));
-
-        page = radio3.click();
-        webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.asXml().contains("Status: radio-3"));
+        
+        return radios;
     }
 
 }

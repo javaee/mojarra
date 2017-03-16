@@ -68,7 +68,7 @@ public class AjaxMessageITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxMessageITCase.class));
+        return new TestSuite(AjaxMessageITCase.class);
     }
 
 
@@ -132,12 +132,12 @@ public class AjaxMessageITCase extends HtmlUnitFacesITCase {
 
 
         HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("testform1:in1");
-
-        in1.type("1");
+        in1.setText("1");
 
         // Submit the ajax request
         HtmlSubmitInput button2 = (HtmlSubmitInput) lastpage.getHtmlElementById("testform1:button2");
         lastpage = (HtmlPage) button2.click();
+        getClient().waitForBackgroundJavaScript(60000);
 
         // Check that the ajax request succeeds
         checkTrue("testform1:in1","1");
@@ -151,12 +151,12 @@ public class AjaxMessageITCase extends HtmlUnitFacesITCase {
 
 
         in1 = (HtmlTextInput) lastpage.getHtmlElementById("testform1:in1");
-
-        in1.type("a");
+        in1.setText("1a");
 
         // Submit the ajax request
         button2 = (HtmlSubmitInput) lastpage.getHtmlElementById("testform1:button2");
         lastpage = (HtmlPage) button2.click();
+        getClient().waitForBackgroundJavaScript(60000);
 
         HtmlUnorderedList ul = (HtmlUnorderedList) lastpage.getHtmlElementById("testform1:msgs");
         DomNode node = ul.getFirstChild();
@@ -170,10 +170,6 @@ public class AjaxMessageITCase extends HtmlUnitFacesITCase {
         checkTrue("testform3:in1","0");
         checkTrue("testform3a:in1","0");
         checkTrue("testform4:in1","0");
-
-        // RELEASE_PENDING
-        // FINISH WRITING TESTS FOR OTHER 5 TEST CASES
-
         
     }
 }

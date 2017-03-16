@@ -179,6 +179,7 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
 
         client = new WebClient(browserVersion);
         cmanager = client.getCookieManager();
+        
         // Add an ajax controller to synchronize all ajax calls
         client.setAjaxController(new NicelyResynchronizingAjaxController());
         domainURL = getURL("/");
@@ -195,10 +196,15 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         WebResponse response = client.getWebConnection().getResponse(settings);
     }
 
+    protected WebClient getClient() {
+        return client;
+    }
+
     protected List<Integer> getInstanceNumbers() {
-        if (null == instanceNumbers) {
+        if (instanceNumbers == null) {
             instanceNumbers = new ArrayList<Integer>();
         }
+        
         return instanceNumbers;
     }
 
@@ -207,7 +213,7 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(HtmlUnitFacesITCase.class));
+        return new TestSuite(HtmlUnitFacesITCase.class);
     }
 
 
@@ -505,6 +511,10 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         return (null);
 
     }
+    
+    protected <T> List<T> getAllElementsOfGivenClass(HtmlPage root, Class<T> matchClass) {
+        return getAllElementsOfGivenClass(root.getDocumentElement(), null, matchClass);
+    }
 
 
     /**
@@ -512,21 +522,15 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
      *
      * @see #getAllElementsOfGivenClass(com.gargoylesoftware.htmlunit.html.HtmlElement, java.util.List, Class)
      */
-    protected List getAllElementsOfGivenClass(HtmlPage root, List list,
-                                              Class matchClass) {
-
-        return getAllElementsOfGivenClass(root.getDocumentElement(),
-                list,
-                matchClass);
-
+    protected List getAllElementsOfGivenClass(HtmlPage root, List list, Class matchClass) {
+        return getAllElementsOfGivenClass(root.getDocumentElement(), list, matchClass);
     }
 
     /**
      * Depth first search from root to find all children that are
      * instances of HtmlInput.  Add them to the list.
      */
-    protected List getAllElementsOfGivenClass(HtmlElement root, List list,
-                                              Class matchClass) {
+    protected List getAllElementsOfGivenClass(HtmlElement root, List list, Class matchClass) {
         if (null == root) {
             return list;
         }
@@ -536,8 +540,7 @@ public abstract class HtmlUnitFacesITCase extends TestCase {
         Iterable<DomElement> iterable = root.getChildElements();
         Iterator<DomElement> iter = iterable.iterator();
         while (iter.hasNext()) {
-            getAllElementsOfGivenClass((HtmlElement) iter.next(), list,
-                    matchClass);
+            getAllElementsOfGivenClass((HtmlElement) iter.next(), list, matchClass);
         }
         if (matchClass.isInstance(root)) {
             if (!list.contains(root)) {

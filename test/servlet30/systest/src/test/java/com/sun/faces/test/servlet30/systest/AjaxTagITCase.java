@@ -40,9 +40,13 @@
 
 package com.sun.faces.test.servlet30.systest;
 
+import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.gargoylesoftware.htmlunit.html.*;
 
 public class AjaxTagITCase extends HtmlUnitFacesITCase {
 
@@ -62,7 +66,7 @@ public class AjaxTagITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxTagITCase.class));
+        return new TestSuite(AjaxTagITCase.class);
     }
 
 
@@ -554,15 +558,19 @@ public class AjaxTagITCase extends HtmlUnitFacesITCase {
         lastpage = (HtmlPage) error.click();
 
         // Check that events were written to the page.
-        String statusArea = "Name: countForm:button1 Event: begin ";
-        statusArea = statusArea + "Name: countForm:button1 Event: complete " ;
-        statusArea = statusArea + "Name: countForm:button1 Event: success " ;
-        statusArea = statusArea + "Name: countForm:error Event: begin " ;
-        statusArea = statusArea + "Name: countForm:error Event: complete " ;
-        statusArea = statusArea + "Name: countForm:error Event: success " ;
-        //System.out.println(statusArea);
-        //System.out.println(getText("statusArea");
-        checkTrue("statusArea",statusArea);
+        String expectedStatusArea = "Name: countForm:button1 Event: begin ";
+        expectedStatusArea = expectedStatusArea + "Name: countForm:button1 Event: complete " ;
+        expectedStatusArea = expectedStatusArea + "Name: countForm:button1 Event: success " ;
+        expectedStatusArea = expectedStatusArea + "Name: countForm:error Event: begin " ;
+        expectedStatusArea = expectedStatusArea + "Name: countForm:error Event: complete " ;
+        expectedStatusArea = expectedStatusArea + "Name: countForm:error Event: success" ;
+        
+        String actualTextArea = getText("statusArea");
+        if (actualTextArea != null) {
+            actualTextArea = actualTextArea.trim();
+        }
+        
+        assertEquals(expectedStatusArea, actualTextArea);
     }
 
     public void testAjaxTagDisabled() throws Exception {

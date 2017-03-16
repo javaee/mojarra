@@ -40,6 +40,7 @@
 
 package com.sun.faces.test.servlet30.ajax; 
 
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
@@ -66,6 +67,7 @@ public class Issue1581IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
+        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
     }
 
     @After
@@ -75,6 +77,7 @@ public class Issue1581IT {
 
 
     // ------------------------------------------------------------ Test Methods
+    
 
     /**
      * This test verifies correct function of SelectManyCheckbox in a Composite
@@ -83,36 +86,49 @@ public class Issue1581IT {
     @Test
     public void testSelectManyCheckboxInComposite() throws Exception {
         HtmlPage page = webClient.getPage(webUrl+"faces/issue1581.xhtml");
-        final List<HtmlCheckBoxInput> checkBoxes = new ArrayList();
-        final DomNodeList<DomElement> elements = page.getElementsByTagName("input");
+        
+        final List<HtmlCheckBoxInput> checkBoxes = getCheckboxes(page);
+        
+        HtmlCheckBoxInput cbox1 = getCheckboxes(page).get(0);
+       
+        
+        // This will ensure JavaScript finishes before evaluating the page.
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.asXml().contains("JAVASERVERFACES-1 false, JAVASERVERFACES-2 false, JAVASERVERFACES-3 false, JAVASERVERFACES-4 false")); 
+        
+        page = cbox1.click();
+        webClient.waitForBackgroundJavaScript(60000);
+        
+        
+        System.out.println("\n\n\n\n ++++++++++++++++++++++ \n \n \nResponse Body: " + page.getWebResponse().getContentAsString());
+        
+        assertTrue(page.asXml().contains("JAVASERVERFACES-1 true, JAVASERVERFACES-2 false, JAVASERVERFACES-3 false, JAVASERVERFACES-4 false")); 
+
+        page = getCheckboxes(page).get(1).click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.asXml().contains("JAVASERVERFACES-1 true, JAVASERVERFACES-2 true, JAVASERVERFACES-3 false, JAVASERVERFACES-4 false")); 
+
+        page = getCheckboxes(page).get(2).click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.asXml().contains("JAVASERVERFACES-1 true, JAVASERVERFACES-2 true, JAVASERVERFACES-3 true, JAVASERVERFACES-4 false")); 
+
+        page = getCheckboxes(page).get(3).click();
+        webClient.waitForBackgroundJavaScript(60000);
+        assertTrue(page.asXml().contains("JAVASERVERFACES-1 true, JAVASERVERFACES-2 true, JAVASERVERFACES-3 true, JAVASERVERFACES-4 true")); 
+    }
+    
+    private List<HtmlCheckBoxInput> getCheckboxes(HtmlPage page) {
+        List<HtmlCheckBoxInput> checkBoxes = new ArrayList<>();
+        
+        DomNodeList<DomElement> elements = page.getElementsByTagName("input");
         for (Iterator<DomElement> it = elements.iterator(); it.hasNext();) {
             DomElement elem = it.next();
             if (elem instanceof HtmlCheckBoxInput) {
                 checkBoxes.add((HtmlCheckBoxInput)elem);
             }
         }
-        HtmlCheckBoxInput cbox1 = checkBoxes.get(0);
-        HtmlCheckBoxInput cbox2 = checkBoxes.get(1);
-        HtmlCheckBoxInput cbox3 = checkBoxes.get(2);
-        HtmlCheckBoxInput cbox4 = checkBoxes.get(3);
-        // This will ensure JavaScript finishes before evaluating the page.
-        webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.asXml().contains("JAVASERVERFACES-1 false, JAVASERVERFACES-2 false, JAVASERVERFACES-3 false, JAVASERVERFACES-4 false")); 
-        page = cbox1.click();
-        webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.asXml().contains("JAVASERVERFACES-1 true, JAVASERVERFACES-2 false, JAVASERVERFACES-3 false, JAVASERVERFACES-4 false")); 
-
-        page = cbox2.click();
-        webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.asXml().contains("JAVASERVERFACES-1 true, JAVASERVERFACES-2 true, JAVASERVERFACES-3 false, JAVASERVERFACES-4 false")); 
-
-        page = cbox3.click();
-        webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.asXml().contains("JAVASERVERFACES-1 true, JAVASERVERFACES-2 true, JAVASERVERFACES-3 true, JAVASERVERFACES-4 false")); 
-
-        page = cbox4.click();
-        webClient.waitForBackgroundJavaScript(60000);
-        assertTrue(page.asXml().contains("JAVASERVERFACES-1 true, JAVASERVERFACES-2 true, JAVASERVERFACES-3 true, JAVASERVERFACES-4 true")); 
+        
+        return checkBoxes;
     }
 
 }

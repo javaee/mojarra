@@ -42,7 +42,11 @@ package com.sun.faces.test.servlet30.systest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import static com.gargoylesoftware.htmlunit.javascript.host.event.Event.TYPE_CHANGE;
+
 import com.gargoylesoftware.htmlunit.html.*;
+import com.gargoylesoftware.htmlunit.javascript.host.event.Event;
 
 public class AjaxTagEventAttributeITCase extends HtmlUnitFacesITCase {
 
@@ -62,7 +66,7 @@ public class AjaxTagEventAttributeITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxTagEventAttributeITCase.class));
+        return new TestSuite(AjaxTagEventAttributeITCase.class);
     }
 
 
@@ -92,8 +96,10 @@ public class AjaxTagEventAttributeITCase extends HtmlUnitFacesITCase {
         checkTrue("out1","0");
         checkTrue("out2","0");
 
-        HtmlInput input = (HtmlInput) lastpage.getHtmlElementById("in1");
-        input.setValueAttribute("test");
+        HtmlTextInput input = (HtmlTextInput) lastpage.getHtmlElementById("in1");
+        input.setText("test");
+        input.fireEvent(TYPE_CHANGE);
+        getClient().waitForBackgroundJavaScript(6000);
 
         checkTrue("out3","test");
 

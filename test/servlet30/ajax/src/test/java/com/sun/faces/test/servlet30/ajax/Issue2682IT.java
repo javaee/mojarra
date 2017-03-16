@@ -39,15 +39,25 @@
  */
 package com.sun.faces.test.servlet30.ajax;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Ignore;
+
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.sun.faces.test.htmlunit.DebugHelper;
 
 public class Issue2682IT {
 
@@ -57,9 +67,10 @@ public class Issue2682IT {
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
-        webClient = new WebClient();
+        webClient = new WebClient(BrowserVersion.INTERNET_EXPLORER);
         webClient.getOptions().setJavaScriptEnabled(true);
-        webClient.setJavaScriptTimeout(60000);
+        webClient.getCookieManager().setCookiesEnabled(true);
+        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
     }
 
     @After
@@ -69,24 +80,41 @@ public class Issue2682IT {
 
     @Test
     public void testIssue2682() throws Exception {
+        
+        DebugHelper debugHelper = new DebugHelper(webClient, "issue2682.xhtml");
+        
         HtmlPage page = webClient.getPage(webUrl + "faces/issue2682.xhtml");
-        webClient.waitForBackgroundJavaScript(120000);
+        System.out.println("\n\n\n ****************************" + webClient.getCookieManager().getCookies());
+        
         assertTrue(page.asText().contains("Check Box Status: false"));
-        HtmlCheckBoxInput cbox = (HtmlCheckBoxInput) page.getHtmlElementById("cbox");
-        page = cbox.click();
+        
+        HtmlCheckBoxInput cbox = (HtmlCheckBoxInput) page.getElementById("form:cbox");
+        
+        HtmlPage page1 = cbox.click();
         webClient.waitForBackgroundJavaScript(120000);
+        
+        debugHelper.print(page1, "After cbox click");
+        
         assertTrue(page.asText().contains("Check Box Status: true"));
-        HtmlSubmitInput input = (HtmlSubmitInput) page.getHtmlElementById("button");
-        page = input.click();
+        
+        HtmlSubmitInput input = (HtmlSubmitInput) page1.getHtmlElementById("form:button");
+        
+        page1 = input.click();
+        
+        debugHelper.print(page1, "After button click");
+        
+        assertTrue(page1.asText().contains("Check Box Status: true"));
+        
+        cbox = (HtmlCheckBoxInput) page1.getHtmlElementById("form:cbox");
+        page1 = cbox.click();
         webClient.waitForBackgroundJavaScript(120000);
-        assertTrue(page.asText().contains("Check Box Status: true"));
-        cbox = (HtmlCheckBoxInput) page.getHtmlElementById("cbox");
-        page = cbox.click();
+        assertTrue(page1.asText().contains("Check Box Status: false"));
+        
+        input = (HtmlSubmitInput) page1.getHtmlElementById("form:button");
+        page1 = input.click();
         webClient.waitForBackgroundJavaScript(120000);
-        assertTrue(page.asText().contains("Check Box Status: false"));
-        input = (HtmlSubmitInput) page.getHtmlElementById("button");
-        page = input.click();
-        webClient.waitForBackgroundJavaScript(120000);
-        assertTrue(page.asText().contains("Check Box Status: false"));
+        assertTrue(page1.asText().contains("Check Box Status: false"));
     }
+    
+   
 }

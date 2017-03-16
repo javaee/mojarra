@@ -40,19 +40,18 @@
 
 package com.sun.faces.test.servlet30.systest;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlOption;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-
 public class SelectManyCollectionITCase extends HtmlUnitFacesITCase {
-
 
     /**
      * Construct a new instance of this test case.
@@ -63,7 +62,6 @@ public class SelectManyCollectionITCase extends HtmlUnitFacesITCase {
         super(name);
     }
 
-
     /**
      * Set up instance variables required by this test case.
      */
@@ -71,14 +69,12 @@ public class SelectManyCollectionITCase extends HtmlUnitFacesITCase {
         super.setUp();
     }
 
-
     /**
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(SelectManyCollectionITCase.class));
+        return new TestSuite(SelectManyCollectionITCase.class);
     }
-
 
     /**
      * Tear down instance variables required by this test case.
@@ -87,108 +83,59 @@ public class SelectManyCollectionITCase extends HtmlUnitFacesITCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------------ Test Methods
-
 
     public void testSelectManyCollections() throws Exception {
 
         HtmlPage page = getPage("/faces/standard/selectmany05.xhtml");
-        String[] selectIds = {
-              "array",
-              "list",
-              "set",
-              "sortedset",
-              "collection",
-              "ilist",
-              "ilist2",
-              "iset",
-              "isortedset",
-              "icollection",
-              "hintString",
-              "hintClass",
-              "object",
-              "intList1",
-              "integerList1",
-              "escape01",
-              "escape02",
-              "emptyItems",
-        };
-        int[] totalNumberOfSelections = {
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              4,
-              1,
-        };
-        String[][] initialSelections = {
-              new String[0],
-              new String[0],
-              new String[0],
-              new String[0],
-              new String[0],
-              new String[] { "Bilbo", "Pippin", "Merry" },
-              new String[] { "Bilbo", "Pippin", "Merry" },
-              new String[] { "Frodo" },
-              new String[] { "Pippin", "Frodo" },
-              new String[] { "Bilbo", "Merry" },
-              new String[0],
-              new String[0],
-              new String[0],
-              new String[0],
-              new String[0],
-              new String[] { "Frodo - &lt;Ring Bearer&gt;" },
-              new String[] { "Frodo -" },
-              new String[0],
-        };
+        String[] selectIds = { "array", // 0
+                "list", // 1
+                "set", // 2
+                "sortedset", // 3
+                "collection", // 4
+                "ilist", // 5
+                "ilist2", // 6
+                "iset", // 7
+                "isortedset", // 8
+                "icollection", // 9
+                "hintString", "hintClass", "object", "intList1", "integerList1", "escape01", "escape02", "emptyItems", };
+        int[] totalNumberOfSelections = { 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, };
+        String[][] initialSelectionLabelFragments = { new String[0], // 0
+                new String[0], // 1
+                new String[0], // 2
+                new String[0], // 3
+                new String[0], // 4
+                new String[] { "Bilbo", "Pippin", "Merry" }, // 5
+                new String[] { "Bilbo", "Pippin", "Merry" }, // 6
+                new String[] { "Frodo" }, // 7
+                new String[] { "Pippin", "Frodo" }, // 8
+                new String[] { "Bilbo", "Merry" }, // 9
+                new String[0], new String[0], new String[0], new String[0], new String[0],
+                new String[] { "Bilbo - &lt;Ring Finder&gt;", "Merry - &lt;Trouble Maker&gt;" },
+                // Unescaped label fragments. Fragments since difficult to get raw representation
+                // using HtmlUnit
+                // Can't check for <trouble maker since it's duplicate
+                new String[] { "<ring finder", "Merry" }, new String[0], };
 
-        String[][] postBackSelections = {
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "Bilbo" },
-              new String[] { "2" },
-              new String[] { "3" },
-              new String[] { "Bilbo - &lt;Ring Finder&gt;" },
-              new String[] {  },
-              new String[] {  },
-        };
+        String[][] postBackSelections = { new String[] { "Bilbo" }, new String[] { "Bilbo" }, new String[] { "Bilbo" }, new String[] { "Bilbo" },
+                new String[] { "Bilbo" }, new String[] { "Bilbo" }, new String[] { "Bilbo" }, new String[] { "Bilbo" }, new String[] { "Bilbo" },
+                new String[] { "Bilbo" }, new String[] { "Bilbo" }, new String[] { "Bilbo" }, new String[] { "Bilbo" }, new String[] { "2" },
+                new String[] { "3" }, new String[] { "Bilbo - &lt;Ring Finder&gt;" }, new String[] {}, new String[] {}, };
 
         // =====================================================================
-        //  Validate initial page state
+        // Validate initial page state
         //
         List<HtmlSelect> selects = new ArrayList<HtmlSelect>(18);
         getAllElementsOfGivenClass(page, selects, HtmlSelect.class);
         assertTrue(selects.size() == 18);
         for (int i = 0; i < selectIds.length; i++) {
             String id = selectIds[i];
-            System.out.println("Validating HtmlSelect with ID: " + id);
-            String[] initialSelection = initialSelections[i];
+            // System.out.println("Validating HtmlSelect with ID: " + id);
+            String[] initialSelection = initialSelectionLabelFragments[i];
             String[] newSelection = postBackSelections[i];
             HtmlSelect select = getHtmlSelectForId(selects, id);
             assertNotNull(select);
+
             validateState(select, totalNumberOfSelections[i], initialSelection);
             updateSelections(select, totalNumberOfSelections[i], newSelection);
         }
@@ -212,15 +159,12 @@ public class SelectManyCollectionITCase extends HtmlUnitFacesITCase {
             assertNotNull(select);
             validateState(select, totalNumberOfSelections[i], newSelection);
         }
-        
-    }
 
+    }
 
     // --------------------------------------------------------- Private Methods
 
-    private void updateSelections(HtmlSelect select,
-                                  int totalNumberOfOptions,
-                                  String[] selectedOptions) {
+    private void updateSelections(HtmlSelect select, int totalNumberOfOptions, String[] selectedOptions) {
 
         assertNotNull(select);
         List<HtmlOption> options = select.getOptions();
@@ -232,31 +176,37 @@ public class SelectManyCollectionITCase extends HtmlUnitFacesITCase {
         }
     }
 
-
-    private void validateState(HtmlSelect select,
-                               int totalNumberOfOptions,
-                               String[] selectedOptions) {
+    private void validateState(HtmlSelect select, int totalNumberOfOptions, String[] labelFragmentToLookFor) {
 
         assertNotNull(select);
         List<HtmlOption> options = select.getOptions();
+
         assertTrue(options.size() == totalNumberOfOptions);
-        if (selectedOptions == null || selectedOptions.length == 0) {
+        if (labelFragmentToLookFor == null || labelFragmentToLookFor.length == 0) {
             for (HtmlOption option : options) {
-                System.out.println(option.asText());
+                // System.out.println(option.asText());
                 assertTrue(!option.isSelected());
             }
         } else {
-            for (String text : selectedOptions) {
+            for (String labelFragment : labelFragmentToLookFor) {
+
+                // System.out.println("*** text to look for:" + text);
+
                 for (HtmlOption option : options) {
-                    if (text.equals(option.asText())) {
+//                    System.out.println("*** option as text:" + option.asText());
+//                    System.out.println("*** option as xml:" + option.asXml());
+//
+//                    System.out.println("*** label attribute:" + option.getLabelAttribute());
+
+                    if (option.asXml().contains(labelFragment)) {
                         assertTrue(option.isSelected());
-                    } 
+                    }
+
                 }
             }
         }
 
     }
-
 
     private HtmlSelect getHtmlSelectForId(List<HtmlSelect> selects, String id) {
 
@@ -265,9 +215,8 @@ public class SelectManyCollectionITCase extends HtmlUnitFacesITCase {
                 return select;
             }
         }
-        
-        return null;
 
+        return null;
     }
 
 }

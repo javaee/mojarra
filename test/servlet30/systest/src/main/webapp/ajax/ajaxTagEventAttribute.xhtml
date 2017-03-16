@@ -101,8 +101,10 @@
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxtag.reset}">
             <f:ajax execute="reset"/>
         </h:commandButton>
+        
         <h:commandButton id="reload" value="reload" />
     </h:form>
+    
     <!-- Contained outside the form - shouldn't update except for full page load -->
     <h:outputText id="out4" value="#{ajaxtag.count}"/>
 

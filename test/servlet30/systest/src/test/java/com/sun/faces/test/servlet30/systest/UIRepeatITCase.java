@@ -40,20 +40,17 @@
 
 package com.sun.faces.test.servlet30.systest;
 
-import com.gargoylesoftware.htmlunit.WebWindow;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
-import java.util.ArrayList;
-import java.util.List;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
 
 /**
  * Test cases for Facelets functionality
@@ -134,6 +131,7 @@ public class UIRepeatITCase extends HtmlUnitFacesITCase {
         List<HtmlAnchor> anchors = new ArrayList<HtmlAnchor>(4);
         getAllElementsOfGivenClass(page, anchors, HtmlAnchor.class);
         assertEquals("Expected to find only 4 HtmlAnchors", 4, anchors.size());
+        
         String[] expectedValues = {
               "Index: 0",
               "Index: 1",
@@ -142,9 +140,15 @@ public class UIRepeatITCase extends HtmlUnitFacesITCase {
         };
 
         for (int i = 0, len = expectedValues.length; i < len; i++) {
-            HtmlAnchor anchor = anchors.get(i);
+            HtmlAnchor anchor = getAllElementsOfGivenClass(page, HtmlAnchor.class).get(i);
+            
             page = anchor.click();
-            assertTrue(page.asText().contains(expectedValues[i]));
+            
+            assertTrue(
+                "Page as text: \n\n" + page.asText()   +
+                "\nDid not contain: \n " + expectedValues[i],
+                page.asText().contains(expectedValues[i])
+            );
         }
 
     }

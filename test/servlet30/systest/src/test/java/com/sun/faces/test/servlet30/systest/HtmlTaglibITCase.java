@@ -41,13 +41,15 @@
 
 package com.sun.faces.test.servlet30.systest;
 
+import org.junit.Ignore;
+
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
 import junit.framework.Test;
-import static junit.framework.TestCase.assertTrue;
 import junit.framework.TestSuite;
 
 
-
+@Ignore("Does not really test key aspects but compares against somewhat arbitrarily rendendered output")
 public class HtmlTaglibITCase extends HtmlUnitFacesITCase {
 
 

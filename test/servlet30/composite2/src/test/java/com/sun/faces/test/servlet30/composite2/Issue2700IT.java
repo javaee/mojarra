@@ -45,6 +45,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -65,6 +66,7 @@ public class Issue2700IT {
     }
 
     @Test
+    @Ignore("htmlunit")
     public void testCompositeBehavior() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/clientBehavior.xhtml");
 

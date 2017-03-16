@@ -39,26 +39,36 @@
  */
 package com.sun.faces.test.servlet30.passthrough;
 
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.StatusHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlEmailInput;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlResetInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTelInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.test.htmlunit.IgnoringIncorrectnessListener;
-import java.util.Arrays;
-import java.util.List;
-import org.junit.*;
-import static org.junit.Assert.*;
 
 public class Issue1111IT {
 
@@ -331,7 +341,7 @@ public class Issue1111IT {
         name.focus();
         name.setText("Horst");
 
-        HtmlTextInput tel = (HtmlTextInput)page.getElementById("tel");
+        HtmlTelInput tel = (HtmlTelInput) page.getElementById("tel");
         tel.focus();
 
         waiter.waitForSuccess();
@@ -341,7 +351,7 @@ public class Issue1111IT {
 
         tel.setText("4711");
         
-        HtmlTextInput email = (HtmlTextInput)page.getElementById("email");
+        HtmlEmailInput email = (HtmlEmailInput) page.getElementById("email");
         email.focus();
 
         waiter.waitForSuccess();

@@ -40,17 +40,15 @@
 
 package com.sun.faces.test.servlet30.systest;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-
 import java.util.ArrayList;
 import java.util.List;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertTrue;
+
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * Test h:link and h:button.
@@ -79,7 +77,7 @@ public class OutputTargetsITCase extends HtmlUnitFacesITCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(OutputTargetsITCase.class));
+        return new TestSuite(OutputTargetsITCase.class);
     }
 
 
@@ -108,75 +106,93 @@ public class OutputTargetsITCase extends HtmlUnitFacesITCase {
         String onclick = button.getOnClickAttribute();
         assertEquals("button", button.getTypeAttribute());
         assertEquals("button1", button.getAttribute("id"));
-        assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml'; return false;",
-                     onclick);
+        assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml'; return false;", onclick);
         page = button.click();
         assertEquals("outcometarget01", page.getTitleText());
 
+        
         // ---------------------------------------------------------------------
 
-        button = buttonList.get(1);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        button = getAllElementsOfGivenClass(page, HtmlInput.class).get(1);
         onclick = button.getOnClickAttribute();
         assertEquals("button", button.getTypeAttribute());
         assertEquals("button2", button.getAttribute("id"));
         assertEquals("window.location.href='/jsf-systest/faces/standard/nav1.xhtml'; return false;", onclick);
+        
         page = button.click();
         assertEquals("nav1", page.getTitleText());
+        
         page = getPage("/faces/standard/outcometarget01.xhtml");
 
+        
         // ---------------------------------------------------------------------
 
-        button = buttonList.get(2);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        button = getAllElementsOfGivenClass(page, HtmlInput.class).get(2);
         onclick = button.getOnClickAttribute();
         assertEquals("button", button.getTypeAttribute());
         assertEquals("button3", button.getAttribute("id"));
-        assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml?id=page&id2=view#about'; return false;",
-                     onclick);
+        assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml?id=page&id2=view#about'; return false;", onclick);
+        
         page = button.click();
         assertEquals("outcometarget01", page.getTitleText());
 
+        
         // ---------------------------------------------------------------------
 
-        button = buttonList.get(3);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        button = getAllElementsOfGivenClass(page, HtmlInput.class).get(3);
         onclick = button.getOnClickAttribute();
         assertEquals("button", button.getTypeAttribute());
         assertEquals("button4", button.getAttribute("id"));
         assertEquals("alert('foo'); window.location.href='/jsf-systest/faces/standard/nav2.xhtml'; return false;", onclick);
+        
         page = button.click();
         assertEquals("nav2", page.getTitleText());
 
+        
         // ---------------------------------------------------------------------
 
-        button = buttonList.get(4);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        System.out.println("**************************************" + page.asXml());
+        button = getAllElementsOfGivenClass(page, HtmlInput.class).get(4);
         onclick = button.getOnClickAttribute();
+        
         assertEquals("button", button.getTypeAttribute());
         assertEquals("button5", button.getAttribute("id"));
         assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml?id=page'; return false;", onclick);
+        
         page = button.click();
         assertEquals("outcometarget01", page.getTitleText());
 
+        
         // ---------------------------------------------------------------------
 
-        button = buttonList.get(5);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        button = getAllElementsOfGivenClass(page, HtmlInput.class).get(5);
         onclick = button.getOnClickAttribute();
+        
         assertEquals("button", button.getTypeAttribute());
         assertEquals("button6", button.getAttribute("id"));
         assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml?id=page&id2=view'; return false;", onclick);
+        
         page = button.click();
         assertEquals("outcometarget01", page.getTitleText());
 
+       
         // ---------------------------------------------------------------------
 
-        button = buttonList.get(6);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        button = getAllElementsOfGivenClass(page, HtmlInput.class).get(6);
         onclick = button.getOnClickAttribute();
         assertEquals("button", button.getTypeAttribute());
         assertEquals("button7", button.getAttribute("id"));
         assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml?id=config&id2=view'; return false;", onclick);
+        
         page = button.click();
         assertEquals("outcometarget01", page.getTitleText());
-
     }
-
 
     public void testOutputTargetLink() throws Exception {
 
@@ -189,7 +205,7 @@ public class OutputTargetsITCase extends HtmlUnitFacesITCase {
         getAllElementsOfGivenClass(page, linkList, HtmlAnchor.class);
         assertTrue(linkList.size() == 7);
 
-        HtmlAnchor link = linkList.get(0);
+        HtmlAnchor link = getAllElementsOfGivenClass(page, HtmlAnchor.class).get(0);
         String onclick = link.getOnClickAttribute();
         assertEquals("link1", link.getAttribute("id"));
         assertEquals("", onclick);
@@ -197,20 +213,23 @@ public class OutputTargetsITCase extends HtmlUnitFacesITCase {
         page = link.click();
         assertEquals("outcometarget01", page.getTitleText());
 
+        
         // ---------------------------------------------------------------------
 
-        link = linkList.get(1);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        link = getAllElementsOfGivenClass(page, HtmlAnchor.class).get(1);
         onclick = link.getOnClickAttribute();
         assertEquals("link2", link.getAttribute("id"));
         assertEquals("", onclick);
         assertEquals("/jsf-systest/faces/standard/nav1.xhtml", link.getHrefAttribute());
         page = link.click();
         assertEquals("nav1", page.getTitleText());
-        page = getPage("/faces/standard/outcometarget01.xhtml");
 
+        
         // ---------------------------------------------------------------------
 
-        link = linkList.get(2);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        link = getAllElementsOfGivenClass(page, HtmlAnchor.class).get(2);
         onclick = link.getOnClickAttribute();
         assertEquals("link3", link.getAttribute("id"));
         assertEquals("", onclick);
@@ -221,40 +240,46 @@ public class OutputTargetsITCase extends HtmlUnitFacesITCase {
 
         // ---------------------------------------------------------------------
 
-        link = linkList.get(3);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        link = getAllElementsOfGivenClass(page, HtmlAnchor.class).get(3);
         onclick = link.getOnClickAttribute();
         assertEquals("link4", link.getAttribute("id"));
         assertEquals("alert('foo');", onclick);
         assertEquals("/jsf-systest/faces/standard/nav2.xhtml", link.getHrefAttribute());
         page = link.click();
         assertEquals("nav2", page.getTitleText());
+        
 
         // ---------------------------------------------------------------------
 
-        link = linkList.get(4);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        link = getAllElementsOfGivenClass(page, HtmlAnchor.class).get(4);
         onclick = link.getOnClickAttribute();
         assertEquals("link5", link.getAttribute("id"));
         assertEquals("/jsf-systest/faces/standard/outcometarget01.xhtml?id=page", link.getHrefAttribute());
         page = link.click();
         assertEquals("outcometarget01", page.getTitleText());
+        
 
         // ---------------------------------------------------------------------
 
-        link = linkList.get(5);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        link = getAllElementsOfGivenClass(page, HtmlAnchor.class).get(5);
         onclick = link.getOnClickAttribute();
         assertEquals("link6", link.getAttribute("id"));
         assertEquals("/jsf-systest/faces/standard/outcometarget01.xhtml?id=page&id2=view", link.getHrefAttribute());
         page = link.click();
         assertEquals("outcometarget01", page.getTitleText());
+        
 
         // ---------------------------------------------------------------------
 
-        link = linkList.get(6);
+        page = getPage("/faces/standard/outcometarget01.xhtml");
+        link = getAllElementsOfGivenClass(page, HtmlAnchor.class).get(6);
         onclick = link.getOnClickAttribute();
         assertEquals("link7", link.getAttribute("id"));
         assertEquals("/jsf-systest/faces/standard/outcometarget01.xhtml?id=config&id2=view", link.getHrefAttribute());
         page = link.click();
         assertEquals("outcometarget01", page.getTitleText());
-
     }
 }

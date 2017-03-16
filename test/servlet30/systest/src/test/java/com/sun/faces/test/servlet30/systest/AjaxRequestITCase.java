@@ -40,13 +40,12 @@
 
 package com.sun.faces.test.servlet30.systest;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import static junit.framework.TestCase.assertTrue;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 public class AjaxRequestITCase extends HtmlUnitFacesITCase {
 
@@ -477,15 +476,15 @@ public class AjaxRequestITCase extends HtmlUnitFacesITCase {
 
     public void testAjaxEvent() throws Exception {
         getPage("/faces/ajax/ajaxEvent.xhtml");
-        System.out.println("Start ajax event test");
 
         // First we'll check the first page was output correctly
-        assertTrue(check("countForm:out1","0"));
-        assertTrue(check("out2","1"));
+        assertTrue(check("countForm:out1","0")); // counter inside form
+        assertTrue(check("out2","1")); // counter connected to same bean property, but outside form
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button1");
-        HtmlPage lastpage = (HtmlPage) button1.click();
+        lastpage = (HtmlPage) button1.click();
+        getClient().waitForBackgroundJavaScript(6000);
 
         // Check that the ajax request succeeds
         assertTrue(check("countForm:out1","2"));
@@ -494,12 +493,17 @@ public class AjaxRequestITCase extends HtmlUnitFacesITCase {
         assertTrue(check("out2","1"));
 
         // Check that events were written to the page.
-        String statusArea = "Name: countForm:button1 Event: begin ";
-        statusArea = statusArea + "Name: countForm:button1 Event: complete " ;
-        statusArea = statusArea + "Name: countForm:button1 Event: success " ;
-        //System.out.println(statusArea);
-        //System.out.println(getText("statusArea"));
-        assertTrue(check("statusArea",statusArea));
+        String expectedStatusArea = "Name: countForm:button1 Event: begin ";
+        expectedStatusArea = expectedStatusArea + "Name: countForm:button1 Event: complete " ;
+        expectedStatusArea = expectedStatusArea + "Name: countForm:button1 Event: success" ;
+        
+        String actualStatusArea = getText("statusArea");
+        if (actualStatusArea != null) {
+            actualStatusArea = actualStatusArea.trim();
+        }
+        
+        assertEquals(expectedStatusArea, actualStatusArea);
+        
     }
 
 }

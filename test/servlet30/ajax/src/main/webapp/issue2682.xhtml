@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -39,10 +39,8 @@
     holder.
 
 -->
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
@@ -50,7 +48,7 @@
         <title>Issue #2682</title>
     </h:head>
     <h:body>
-        <h:form id="form" prependId="false">
+        <h:form id="form">
             <h:selectBooleanCheckbox id="cbox" value="#{issue2682Bean.chkStatus}" >
                 <f:ajax execute="@this" render="@this backedBeanValue" />
             </h:selectBooleanCheckbox>

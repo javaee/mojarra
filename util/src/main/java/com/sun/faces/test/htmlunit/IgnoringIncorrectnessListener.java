@@ -51,6 +51,7 @@ import com.gargoylesoftware.htmlunit.IncorrectnessListener;
 public class IgnoringIncorrectnessListener implements IncorrectnessListener {
 
     public void notify(String message, Object origin) {
+        
     }
 
 }

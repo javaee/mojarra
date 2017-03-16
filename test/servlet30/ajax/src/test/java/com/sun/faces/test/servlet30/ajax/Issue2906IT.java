@@ -77,7 +77,6 @@ public class Issue2906IT {
         HtmlAnchor anchor = (HtmlAnchor) anchors.get(9);
         page = anchor.click();
         webClient.waitForBackgroundJavaScript(60000);
-        anchors.clear();
         anchors = page.getAnchors();
         assertTrue(page.asText().contains("3   3   3   3   3   3   3   3   3"));
         assertTrue(anchors.size() == 9);
@@ -85,7 +84,7 @@ public class Issue2906IT {
         anchor = (HtmlAnchor) anchors.get(8);
         page = anchor.click();
         webClient.waitForBackgroundJavaScript(60000);
-        anchors.clear();
+        
         anchors = page.getAnchors();
         assertTrue(page.asText().contains("4   4   4   4   4   4   4   4"));
         assertTrue(anchors.size() == 8);
@@ -93,7 +92,7 @@ public class Issue2906IT {
         anchor = (HtmlAnchor) anchors.get(7);
         page = anchor.click();
         webClient.waitForBackgroundJavaScript(60000);
-        anchors.clear();
+        
         anchors = page.getAnchors();
         assertTrue(page.asText().contains("5   5   5   5   5   5   5"));
         assertTrue(anchors.size() == 7);
@@ -101,7 +100,7 @@ public class Issue2906IT {
         anchor = (HtmlAnchor) anchors.get(0);
         page = anchor.click();
         webClient.waitForBackgroundJavaScript(60000);
-        anchors.clear();
+        
         anchors = page.getAnchors();
         assertTrue(page.asText().contains("6   6   6   6   6   6"));
         assertTrue(anchors.size() == 6);
@@ -109,7 +108,7 @@ public class Issue2906IT {
         anchor = (HtmlAnchor) anchors.get(2);
         page = anchor.click();
         webClient.waitForBackgroundJavaScript(60000);
-        anchors.clear();
+        
         anchors = page.getAnchors();
         assertTrue(page.asText().contains("7   7   7   7   7"));
         assertTrue(anchors.size() == 5);
