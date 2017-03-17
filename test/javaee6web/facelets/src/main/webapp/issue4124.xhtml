@@ -45,29 +45,27 @@
 
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
 
 <f:view>
-    <h:body>
-	<h:form prependId="false" id="hForm">
-	<h:dataTable prependId="false" id="duplicatesTable"
-		binding="#{duplicateController.dataTable}"
-		value="#{duplicateController.itemsList}" 
-                var="s" rowKey="#{s}">
+	<h:body>
+		<h:form prependId="false" id="hForm">
+			<h:dataTable prependId="false" id="duplicatesTable" binding="#{duplicateController.dataTable}"
+				value="#{duplicateController.itemsList}" var="s" rowKey="#{s}">
 
-		<h:column prependId="false" id="pColumn">
-                     <f:facet name="header">
-			<h:commandButton prependId="false" id="pSplitButton"
-			actionListener="#{duplicateController.createNewRow}"
-			update="duplicatesTable" value="Add Row">
-			</h:commandButton>
-                     </f:facet>
-			<h:outputText id="hOutputText" value="#{s}" />
-		</h:column>
-	</h:dataTable>
-	</h:form>
-    </h:body>
+				<h:column prependId="false" id="pColumn">
+					<f:facet name="header">
+						<h:commandButton prependId="false" id="pSplitButton" actionListener="#{duplicateController.createNewRow}"
+							update="duplicatesTable" value="Add Row">
+						</h:commandButton>
+					</f:facet>
+					<h:outputText id="hOutputText" value="#{s}" />
+				</h:column>
+				
+			</h:dataTable>
+		</h:form>
+	</h:body>
 </f:view>
 </html>

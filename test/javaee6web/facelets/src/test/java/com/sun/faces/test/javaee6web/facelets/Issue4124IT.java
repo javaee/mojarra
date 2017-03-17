@@ -39,20 +39,19 @@
  */
 package com.sun.faces.test.javaee6web.facelets;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.DomElement;
-import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.sun.faces.test.htmlunit.IgnoringIncorrectnessListener;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import java.util.Iterator;
-import static org.junit.Assert.*;
+
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class Issue4124IT {
 
@@ -71,27 +70,58 @@ public class Issue4124IT {
     public void testIssue4124() throws Exception {
 
         HtmlPage page = webClient.getPage(webUrl + "faces/issue4124.xhtml");
-        DomNode dn = page.getHtmlElementById("duplicatesTable").getLastChild();
-        int count = dn.getChildNodes().size();
-        assertTrue(count == 1);
+        
+        
+        DomNode tbody = getTbody(page.getHtmlElementById("duplicatesTable"));
+        int count = getRows(tbody).size();
+        
+        assertTrue(
+            "On Page \n" + page.asXml() +
+            "\nDomNode " + tbody.asXml() + " should have 1 child, but has " + count,
+            count == 1
+        );
         
         page = page.getHtmlElementById("duplicatesTable:pSplitButton").click();
-        dn = page.getHtmlElementById("duplicatesTable").getLastChild();
-        count = dn.getChildNodes().size();
+        tbody = getTbody(page.getHtmlElementById("duplicatesTable"));
+        count = getRows(tbody).size();
         assertTrue(count == 1);
 
         page = page.getHtmlElementById("duplicatesTable:pSplitButton").click();
-        dn = page.getHtmlElementById("duplicatesTable").getLastChild();
-        count = dn.getChildNodes().size();
+        tbody = getTbody(page.getHtmlElementById("duplicatesTable"));
+        count = getRows(tbody).size();
         assertTrue(count == 2);
 
         page = page.getHtmlElementById("duplicatesTable:pSplitButton").click();
-        dn = page.getHtmlElementById("duplicatesTable").getLastChild();
-        count = dn.getChildNodes().size();
+        tbody = getTbody(page.getHtmlElementById("duplicatesTable"));
+        count = getRows(tbody).size();
         assertTrue(count == 3);
-
     }
 
+    private DomNode getTbody(HtmlElement table) {
+        for (DomNode tablechild : table.getChildNodes()) {
+            if ("tbody".equals(tablechild.getLocalName())) {
+                return tablechild;
+            }
+        }
+        
+        assertTrue("No tbody found", false);
+        
+        return null;
+    }
+    
+    private List<DomNode> getRows(DomNode body) {
+        List<DomNode> rows = new ArrayList<>(); 
+                
+        for (DomNode bodyChild : body.getChildNodes()) {
+            if ("tr".equals(bodyChild.getLocalName())) {
+                rows.add(bodyChild);
+            }
+        }
+        
+        return rows;
+    }
+    
+    
     @After
     public void tearDown() {
         webClient.close();
