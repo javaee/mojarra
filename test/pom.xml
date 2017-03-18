@@ -29,18 +29,21 @@
     </properties>
     
     <modules>
-        <module>cluster</module>
-        <module>glassfish</module>
-        <module>javaee6</module>
-        <module>javaee6web</module>
-        <module>javaee7</module>
-        <module>javaee8</module>
-        <module>osgi</module>
-        <module>protocolaware</module>
         <module>servlet30</module>
         <module>servlet30-isolated</module>
         <module>servlet31</module>
         <module>servlet40</module>
+        <module>javaee6</module>
+        <module>javaee6web</module>
+        <module>javaee7</module>
+        <module>javaee8</module>
+        <module>javaee8</module>
+        <module>htmlunitaware</module>
+        
+        <module>cluster</module>
+        <module>osgi</module>
+        <module>protocolaware</module>
+        <module>glassfish</module>
         <module>weblogic</module>
     </modules>
     
