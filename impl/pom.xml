@@ -139,7 +139,6 @@
                                 -->
                                 <copy todir="src/main/resources/META-INF">
                                     <fileset dir="${jsf-ri-dir}/conf/share">
-                                        <include name="beans.xml"/>
                                         <include name="facelet-dev*.xml"/>
                                         <include name="error-include.xhtml"/>
                                     </fileset>
