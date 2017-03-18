@@ -140,8 +140,6 @@
                                 <copy todir="src/main/resources/META-INF">
                                     <fileset dir="${jsf-ri-dir}/conf/share">
                                         <include name="beans.xml"/>
-                                        <include name="mojarra_ext.tld"/>
-                                        <include name="mojarra_ext.taglib.xml"/>
                                         <include name="facelet-dev*.xml"/>
                                         <include name="error-include.xhtml"/>
                                     </fileset>
