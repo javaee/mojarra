@@ -37,7 +37,6 @@
         <module>javaee6web</module>
         <module>javaee7</module>
         <module>javaee8</module>
-        <module>javaee8</module>
         <module>htmlunitaware</module>
         
         <module>cluster</module>
