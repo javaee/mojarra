@@ -61,7 +61,7 @@
                                 <delete dir="src/main/resources/javax"/>
                                 <delete>
                                     <fileset dir="src/main/resources/META-INF" 
-                                             excludes="mojarra-jsf-api-probe-provider.xml,jsf_core.tld,mojarra_ext.taglib.xml,mojarra_ext.tld"
+                                             excludes="mojarra-jsf-api-probe-provider.xml,jsf_core.tld,mojarra_ext.taglib.xml,mojarra_ext.tld,error-include.xhtml"
                                              includes="*"/>
                                 </delete>
                                 <delete dir="src/main/doc"/>
@@ -140,7 +140,6 @@
                                 <copy todir="src/main/resources/META-INF">
                                     <fileset dir="${jsf-ri-dir}/conf/share">
                                         <include name="facelet-dev*.xml"/>
-                                        <include name="error-include.xhtml"/>
                                     </fileset>
                                 </copy>
                                 <copy file="${jsf-ri-dir}/conf/xslt/jsf1_0-1_1toSchema.xsl"
