@@ -41,30 +41,27 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.StringWriter;
 import java.util.Collections;
-import javax.faces.application.Application;
-import javax.faces.application.ProjectStage;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.html.HtmlBody;
+import javax.faces.component.html.HtmlHead;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.easymock.EasyMock.expect;
 import org.junit.Test;
 import org.powermock.api.easymock.PowerMock;
 
 /**
- * The JUnit tests for the BodyRenderer class.
+ * The JUnit tests for the HeadRenderer class.
  */
-public class BodyRendererTest {
+public class HeadRendererTest {
 
     /**
      * Test decode method.
      */
     @Test
     public void testDecode() {
-        BodyRenderer bodyRenderer = new BodyRenderer();
-        bodyRenderer.decode(null, null);
+        HeadRenderer headRenderer = new HeadRenderer();
+        headRenderer.decode(null, null);
     }
 
     /**
@@ -74,21 +71,13 @@ public class BodyRendererTest {
      */
     @Test
     public void testEncodeBegin() throws Exception {
-        StringWriter writer = new StringWriter();
-        ResponseWriter testResponseWriter = new TestResponseWriter(writer);
-        FacesContext facesContext = PowerMock.createPartialMock(FacesContext.class, "getResponseWriter");
-        BodyRenderer bodyRenderer = new BodyRenderer();
-        HtmlBody htmlBody = new HtmlBody();
-        htmlBody.getAttributes().put("styleClass", "myclass");
-        
-        expect(facesContext.getResponseWriter()).andReturn(testResponseWriter).anyTimes();
-        
-        PowerMock.replay(facesContext);
-        bodyRenderer.encodeBegin(facesContext, htmlBody);
-        PowerMock.verify(facesContext);
-        String html = writer.toString();
-        assertTrue(html.contains("<body"));
-        assertTrue(html.contains("class=\"myclass\""));
+        //
+        // TODO: Note we are not testing this method as its complexity is too 
+        // high, because it uses WebConfiguration.getInstance to get
+        // configuration information that should be readily available to the
+        // renderer through either the FacesContext or the component being
+        // rendered.
+        //
     }
 
     /**
@@ -98,8 +87,8 @@ public class BodyRendererTest {
      */
     @Test
     public void testEncodeChildren() throws Exception {
-        BodyRenderer bodyRenderer = new BodyRenderer();
-        bodyRenderer.encodeChildren(null, null);
+        HeadRenderer headRenderer = new HeadRenderer();
+        headRenderer.encodeChildren(null, null);
     }
 
     /**
@@ -119,32 +108,17 @@ public class BodyRendererTest {
         ResponseWriter testResponseWriter = new TestResponseWriter(writer);
         FacesContext facesContext = PowerMock.createPartialMockForAllMethodsExcept(FacesContext.class, "getCurrentInstance");
         UIViewRoot viewRoot = PowerMock.createMock(UIViewRoot.class);
-        Application application = PowerMock.createMock(Application.class);
-        BodyRenderer bodyRenderer = new BodyRenderer();
-        HtmlBody htmlBody = new HtmlBody();
+        HeadRenderer headRenderer = new HeadRenderer();
+        HtmlHead htmlHead = new HtmlHead();
         
-        expect(facesContext.getApplication()).andReturn(application).anyTimes();
-        expect(facesContext.getClientIdsWithMessages()).andReturn(Collections.EMPTY_LIST.iterator()).anyTimes();
         expect(facesContext.getResponseWriter()).andReturn(testResponseWriter).anyTimes();
         expect(facesContext.getViewRoot()).andReturn(viewRoot).anyTimes();
-        expect(facesContext.isProjectStage(ProjectStage.Development)).andReturn(false).anyTimes();
-        expect(viewRoot.getComponentResources(facesContext, "body")).andReturn(Collections.EMPTY_LIST).anyTimes();
-       
-        PowerMock.replay(facesContext, viewRoot, application);
-        bodyRenderer.encodeEnd(facesContext, htmlBody);
-        PowerMock.verify(facesContext, viewRoot, application);
+        expect(viewRoot.getComponentResources(facesContext, "head")).andReturn(Collections.EMPTY_LIST).anyTimes();
+        
+        PowerMock.replay(facesContext, viewRoot);
+        headRenderer.encodeEnd(facesContext, htmlHead);
+        PowerMock.verify(facesContext, viewRoot);
         String html = writer.toString();
-        assertTrue(html.contains("</body>"));
-    }
-
-    /**
-     * Test getRendersChildren method.
-     *
-     * @throws Exception when a serious error occurs.
-     */
-    @Test
-    public void testGetRendersChildren() throws Exception {
-        BodyRenderer bodyRenderer = new BodyRenderer();
-        assertFalse(bodyRenderer.getRendersChildren());
+        assertTrue(html.contains("</head>"));
     }
 }
