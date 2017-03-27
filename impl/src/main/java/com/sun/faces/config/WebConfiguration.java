@@ -1093,10 +1093,6 @@ public class WebConfiguration {
         WebAppContractsDirectory(
               ResourceHandler.WEBAPP_CONTRACTS_DIRECTORY_PARAM_NAME,
               "/contracts"
-        ),
-        WebsocketEndpointPort(
-            PushContext.WEBSOCKET_ENDPOINT_PORT_PARAM_NAME,
-            ""
         );
 
 
@@ -1273,10 +1269,6 @@ public class WebConfiguration {
             true,
             true,
             null
-        ),
-        SendPoweredByHeader(
-              "com.sun.faces.sendPoweredByHeader",
-              false
         ),
         EnableJSStyleHiding(
             "com.sun.faces.enableJSStyleHiding",

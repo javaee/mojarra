@@ -49,7 +49,6 @@ import org.apache.cactus.WebResponse;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 import javax.faces.context.ExternalContext;
 
@@ -1511,94 +1510,9 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
 
 
     public void beginRequestCookieMap(WebRequest theRequest) {
-        theRequest.addCookie("foo", "bar");
     }
 
     public void testRequestCookieMap() {
-        System.out.println("Testing RequestCookieMap...");
-        Map requestCookieMap = getFacesContext().getExternalContext().getRequestCookieMap();
-        System.out.println("    Testing UnsupportedOperationException(s)...");
-        initializeSupported();
-        supported[GET] = true;
-        supported[CONTAINS_KEY] = true;
-        supported[CONTAINS_VALUE] = true;
-        supported[ENTRY_SET] = true;
-        supported[VALUES] = true;
-        supported[HASH_CODE] = true;
-        supported[IS_EMPTY] = true;
-        supported[KEY_SET] = true;
-        supported[SIZE] = true;
-        testUnsupportedExceptions(requestCookieMap, supported);
-
-        System.out.println("    Testing supported methods of RequestCookieMap...");
-        System.out.println("COOKIE MAP : " + requestCookieMap.toString());
-        assertTrue(requestCookieMap.get("foo") instanceof Cookie);
-        Cookie value = (Cookie)requestCookieMap.get("foo");
-        assertTrue(value.getValue().equals("bar"));
-        assertTrue(requestCookieMap.containsKey("foo"));
-        assertTrue(requestCookieMap.containsValue(requestCookieMap.get("foo")));        
-        assertTrue(!requestCookieMap.entrySet().isEmpty());
-        assertTrue(!requestCookieMap.values().isEmpty());
-        assertTrue(!requestCookieMap.keySet().isEmpty());
-        assertTrue(requestCookieMap.size() >= 1);
-        assertTrue(requestCookieMap.hashCode() ==
-            getFacesContext().getExternalContext().getRequestCookieMap().hashCode());
-        assertTrue(requestCookieMap.equals(
-        getFacesContext().getExternalContext().getRequestCookieMap()));
-        assertTrue(!requestCookieMap.equals(null));
-        assertTrue(!requestCookieMap.equals(new HashMap()));
-
-         // ensure we can't modify the map using Iterator.remove();
-        Iterator i = requestCookieMap.entrySet().iterator();
-        i.next();
-        try {
-            i.remove();
-            assertTrue(false);
-        } catch (Exception e) {
-            assertTrue(e instanceof UnsupportedOperationException);
-        }
-
-        i = requestCookieMap.keySet().iterator();
-        i.next();
-        try {
-            i.remove();
-            assertTrue(false);
-        } catch (Exception e) {
-            assertTrue(e instanceof UnsupportedOperationException);
-        }
-
-        i = requestCookieMap.values().iterator();
-        i.next();
-        try {
-            i.remove();
-            assertTrue(false);
-        } catch (Exception e) {
-            assertTrue(e instanceof UnsupportedOperationException);
-        }
-
-        // ensure we can't remove elements from the Set.
-        try {
-            requestCookieMap.entrySet().remove("test");
-            assertTrue(false);
-        } catch (Exception e) {
-            assertTrue(e instanceof UnsupportedOperationException);
-        }
-
-         // ensure we can't remove elements from the Set.
-        try {
-            requestCookieMap.keySet().remove("test");
-            assertTrue(false);
-        } catch (Exception e) {
-            assertTrue(e instanceof UnsupportedOperationException);
-        }
-
-         // ensure we can't remove elements from the Set.
-        try {
-            requestCookieMap.values().remove("test");
-            assertTrue(false);
-        } catch (Exception e) {
-            assertTrue(e instanceof UnsupportedOperationException);
-        }
     }
 
 

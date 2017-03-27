@@ -41,10 +41,6 @@
 package com.sun.faces.context;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableDistributable;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SendPoweredByHeader;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.WebsocketEndpointPort;
 import com.sun.faces.context.flash.ELFlash;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
@@ -144,18 +140,20 @@ public class ExternalContextImpl extends ExternalContext {
         this.servletContext = sc;
         this.request = request;        
         this.response = response;
-        WebConfiguration config = WebConfiguration.getInstance(sc);
-        if (config.isOptionEnabled(SendPoweredByHeader)) {
+
+        boolean enabled = ContextParamUtils.getValue(servletContext, ContextParam.SendPoweredByHeader, Boolean.class);
+        if (enabled) {
             ((HttpServletResponse) response).addHeader("X-Powered-By", "JSF/2.2");
         }
-        distributable = config.isOptionEnabled(EnableDistributable);
+
+        distributable = ContextParamUtils.getValue(servletContext, ContextParam.EnableDistributable, Boolean.class);
+
         fallbackContentTypeMap = new HashMap<>(3, 1.0f);
         fallbackContentTypeMap.put("js", "text/javascript");
         fallbackContentTypeMap.put("css", "text/css");
         fallbackContentTypeMap.put("properties", "text/plain");
         
     }
-
 
     // -------------------------------------------- Methods from ExternalContext
 
@@ -664,18 +662,12 @@ public class ExternalContextImpl extends ExternalContext {
         }
 
         HttpServletRequest request = (HttpServletRequest) getRequest();
-        int port = 0;
-
-        WebConfiguration webConfiguration = WebConfiguration.getInstance();
-
-        if (webConfiguration.isSet(WebsocketEndpointPort)) {
-            port = Integer.parseInt(webConfiguration.getOptionValue(WebsocketEndpointPort));
-        }
+        int port = ContextParamUtils.getValue(servletContext, ContextParam.WebsocketEndpointPort, int.class);
 
         try {
             URL requestURL = new URL(request.getRequestURL().toString());
 
-            if (port <= 0) {
+            if (port <= 0 && port != 80) {
                 port = requestURL.getPort();
             }
 
