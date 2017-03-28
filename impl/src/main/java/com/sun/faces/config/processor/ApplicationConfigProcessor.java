@@ -247,15 +247,15 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     private static final String SOURCE_CLASS = "source-class";
 
     public ApplicationConfigProcessor() {
-        actionListeners = new CopyOnWriteArrayList<ActionListener>();
-        navigationHandlers = new CopyOnWriteArrayList<NavigationHandler>();
-        viewHandlers = new CopyOnWriteArrayList<ViewHandler>();
-        stateManagers = new CopyOnWriteArrayList<StateManager>();
-        resourceHandlers = new CopyOnWriteArrayList<ResourceHandler>();
-        elResolvers = new CopyOnWriteArrayList<ELResolver>();
-        systemEventListeners = new CopyOnWriteArrayList<SystemEventListener>();
-        searchExpressionHandlers = new CopyOnWriteArrayList<SearchExpressionHandler>();
-        searchKeywordResolvers = new CopyOnWriteArrayList<SearchKeywordResolver>();
+        actionListeners = new CopyOnWriteArrayList<>();
+        navigationHandlers = new CopyOnWriteArrayList<>();
+        viewHandlers = new CopyOnWriteArrayList<>();
+        stateManagers = new CopyOnWriteArrayList<>();
+        resourceHandlers = new CopyOnWriteArrayList<>();
+        elResolvers = new CopyOnWriteArrayList<>();
+        systemEventListeners = new CopyOnWriteArrayList<>();
+        searchExpressionHandlers = new CopyOnWriteArrayList<>();
+        searchKeywordResolvers = new CopyOnWriteArrayList<>();
     }
 
     // -------------------------------------------- Methods from ConfigProcessor
