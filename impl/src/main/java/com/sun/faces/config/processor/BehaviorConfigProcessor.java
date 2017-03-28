@@ -59,8 +59,8 @@ import java.util.logging.Logger;
 
 /**
  * <p>
- *  This <code>ConfigProcessor</code> handles all elements defined under
- *  <code>/faces-config/behavior</code>.
+ * This <code>ConfigProcessor</code> handles all elements defined under
+ * <code>/faces-config/behavior</code>.
  * </p>
  */
 public class BehaviorConfigProcessor extends AbstractConfigProcessor {
@@ -68,30 +68,33 @@ public class BehaviorConfigProcessor extends AbstractConfigProcessor {
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     /**
-     * <p>/faces-config/behavior</p>
+     * <p>
+     * /faces-config/behavior
+     * </p>
      */
     private static final String BEHAVIOR = "behavior";
 
     /**
-     * <p>/faces-config/behavior/behavior-id</p>
+     * <p>
+     * /faces-config/behavior/behavior-id
+     * </p>
      */
     private static final String BEHAVIOR_ID = "behavior-id";
 
     /**
-     * <p>/faces-config/behavior/behavior-class</p>
+     * <p>
+     * /faces-config/behavior/behavior-class
+     * </p>
      */
     private static final String BEHAVIOR_CLASS = "behavior-class";
 
-
     // -------------------------------------------- Methods from ConfigProcessor
-
 
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception {
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
 
         // process annotated Behaviors first as Behaviors configured
         // via config files take precedence
@@ -99,16 +102,11 @@ public class BehaviorConfigProcessor extends AbstractConfigProcessor {
 
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                "Processing behavior elements for document: ''{0}''",
-                                documentInfos[i].getSourceURI()));
+                LOGGER.log(Level.FINE, MessageFormat.format("Processing behavior elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
-            String namespace = document.getDocumentElement()
-                 .getNamespaceURI();
-            NodeList behaviors = document.getDocumentElement()
-                 .getElementsByTagNameNS(namespace, BEHAVIOR);
+            String namespace = document.getDocumentElement().getNamespaceURI();
+            NodeList behaviors = document.getDocumentElement().getElementsByTagNameNS(namespace, BEHAVIOR);
             if (behaviors != null && behaviors.getLength() > 0) {
                 addBehaviors(behaviors, namespace);
             }
@@ -119,45 +117,36 @@ public class BehaviorConfigProcessor extends AbstractConfigProcessor {
 
     // --------------------------------------------------------- Private Methods
 
-
-    private void addBehaviors(NodeList behaviors, String namespace)
-    throws XPathExpressionException {
+    private void addBehaviors(NodeList behaviors, String namespace) throws XPathExpressionException {
 
         Application app = getApplication();
         Verifier verifier = Verifier.getCurrentInstance();
         for (int i = 0, size = behaviors.getLength(); i < size; i++) {
             Node behavior = behaviors.item(i);
 
-            NodeList children = ((Element) behavior)
-                 .getElementsByTagNameNS(namespace, "*");
+            NodeList children = ((Element) behavior).getElementsByTagNameNS(namespace, "*");
             String behaviorId = null;
             String behaviorClass = null;
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 if (n.getNodeType() == Node.ELEMENT_NODE) {
                     switch (n.getLocalName()) {
-                        case BEHAVIOR_ID:
-                            behaviorId = getNodeText(n);
-                            break;
-                        case BEHAVIOR_CLASS:
-                            behaviorClass = getNodeText(n);
-                            break;
+                    case BEHAVIOR_ID:
+                        behaviorId = getNodeText(n);
+                        break;
+                    case BEHAVIOR_CLASS:
+                        behaviorClass = getNodeText(n);
+                        break;
                     }
                 }
             }
 
             if (behaviorId != null && behaviorClass != null) {
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               MessageFormat.format(
-                                    "Calling Application.addBehavior({0},{1})",
-                                    behaviorId,
-                                    behaviorClass));
+                    LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.addBehavior({0},{1})", behaviorId, behaviorClass));
                 }
                 if (verifier != null) {
-                    verifier.validateObject(Verifier.ObjectType.BEHAVIOR,
-                                            behaviorClass,
-                                            Behavior.class);
+                    verifier.validateObject(Verifier.ObjectType.BEHAVIOR, behaviorClass, Behavior.class);
                 }
                 app.addBehavior(behaviorId, behaviorClass);
             }

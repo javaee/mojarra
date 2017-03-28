@@ -40,15 +40,20 @@
 
 package com.sun.faces.config.processor;
 
-import javax.naming.InitialContext;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
-import java.util.LinkedHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,48 +64,43 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
+import javax.faces.component.search.SearchExpressionHandler;
+import javax.faces.component.search.SearchKeywordResolver;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
-import javax.faces.event.SystemEventListener;
-import javax.faces.event.SystemEvent;
 import javax.faces.event.NamedEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
+import javax.faces.validator.BeanValidator;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationResourceBundle;
+import com.sun.faces.config.ConfigurationException;
+import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.el.ChainAwareVariableResolver;
 import com.sun.faces.el.DummyPropertyResolverImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import com.sun.faces.config.ConfigurationException;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.DocumentInfo;
-
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-import javax.faces.validator.BeanValidator;
-import javax.validation.Validator;
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
-import javax.faces.component.search.SearchExpressionHandler;
-import javax.faces.component.search.SearchKeywordResolver;
-
-import javax.naming.Context;
-import javax.naming.NamingException;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Document;
 
 /**
  * <p>
- *  This <code>ConfigProcessor</code> handles all elements defined under
- *  <code>/faces-config/application</code>.
+ * This <code>ConfigProcessor</code> handles all elements defined under
+ * <code>/faces-config/application</code>.
  * </p>
  */
 public class ApplicationConfigProcessor extends AbstractConfigProcessor {
@@ -110,167 +110,141 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     /**
      * <code>/faces-config/application</code>
      */
-    private static final String APPLICATION =
-         "application";
+    private static final String APPLICATION = "application";
 
     /**
      * <code>/faces-config/application/action-listener</code>
      */
-    private static final String ACTION_LISTENER
-         = "action-listener";
+    private static final String ACTION_LISTENER = "action-listener";
     private List<ActionListener> actionListeners;
 
     /**
      * <code>/faces-config/application/default-render-kit-id
      */
-    private static final String DEFAULT_RENDERKIT_ID
-         = "default-render-kit-id";
+    private static final String DEFAULT_RENDERKIT_ID = "default-render-kit-id";
 
     /**
      * <code>/faces-config/application/default-validators</code>
      */
-    private static final String DEFAULT_VALIDATORS
-        = "default-validators";
+    private static final String DEFAULT_VALIDATORS = "default-validators";
 
     /**
      * <code>/faces-config/application/default-validators/validator-id</code>
      */
-    private static final String VALIDATOR_ID
-        = "validator-id";
+    private static final String VALIDATOR_ID = "validator-id";
 
     /**
      * <code>/faces-config/application/message-bundle
      */
-    private static final String MESSAGE_BUNDLE
-         = "message-bundle";
+    private static final String MESSAGE_BUNDLE = "message-bundle";
 
     /**
      * <code>/faces-config/application/navigation-handler</code>
      */
-    private static final String NAVIGATION_HANDLER
-         = "navigation-handler";
+    private static final String NAVIGATION_HANDLER = "navigation-handler";
     private List<NavigationHandler> navigationHandlers;
 
     /**
      * <code>/faces-config/application/view-handler</code>
      */
-    private static final String VIEW_HANDLER
-         = "view-handler";
+    private static final String VIEW_HANDLER = "view-handler";
     private List<ViewHandler> viewHandlers;
 
     /**
      * <code>/faces-config/application/state-manager</code>
      */
-    private static final String STATE_MANAGER
-         = "state-manager";
+    private static final String STATE_MANAGER = "state-manager";
     private List<StateManager> stateManagers;
 
     /**
      * <code>/faces-config/application/resource-handler</code>
      */
-    private static final String RESOURCE_HANDLER
-         = "resource-handler";
+    private static final String RESOURCE_HANDLER = "resource-handler";
     private List<ResourceHandler> resourceHandlers;
 
     /**
      * <code>/faces-config/application/el-resolver</code>
      */
-    private static final String EL_RESOLVER
-         = "el-resolver";
+    private static final String EL_RESOLVER = "el-resolver";
     private List<ELResolver> elResolvers;
-    
+
     /**
      * <code>/faces-config/application/search-expression-handler</code>
      */
-    private static final String SEARCH_EXPRESSION_HANDLER
-         = "search-expression-handler";
+    private static final String SEARCH_EXPRESSION_HANDLER = "search-expression-handler";
     private List<SearchExpressionHandler> searchExpressionHandlers;
-    
+
     /**
      * <code>/faces-config/application/search-keyword-resolver</code>
      */
-    private static final String SEARCH_KEYWORD_RESOLVER
-         = "search-keyword-resolver";
+    private static final String SEARCH_KEYWORD_RESOLVER = "search-keyword-resolver";
     private List<SearchKeywordResolver> searchKeywordResolvers;
 
     /**
      * <code>/faces-config/application/property-resolver</code>
      */
-    private static final String PROPERTY_RESOLVER
-         = "property-resolver";
+    private static final String PROPERTY_RESOLVER = "property-resolver";
 
     /**
      * <code>/faces-config/application/variable-resolver</code>
      */
-    private static final String VARIABLE_RESOLVER
-         = "variable-resolver";
+    private static final String VARIABLE_RESOLVER = "variable-resolver";
 
     /**
      * <code>/faces-config/application/locale-config/default-locale</code>
      */
-    private static final String DEFAULT_LOCALE
-         = "default-locale";
+    private static final String DEFAULT_LOCALE = "default-locale";
 
     /**
      * <code>/faces-config/application/locale-config/supported-locale</code>
      */
-    private static final String SUPPORTED_LOCALE
-         = "supported-locale";
+    private static final String SUPPORTED_LOCALE = "supported-locale";
 
     /**
      * <code>/faces-config/application/resource-bundle</code>
      */
-    private static final String RESOURCE_BUNDLE
-         = "resource-bundle";
+    private static final String RESOURCE_BUNDLE = "resource-bundle";
 
     /**
      * <code>/faces-config/application/resource-bundle/base-name</code>
      */
-    private static final String BASE_NAME
-         = "base-name";
+    private static final String BASE_NAME = "base-name";
 
     /**
      * <code>/faces-config/application/resource-bundle/var</code>
      */
-    private static final String VAR
-         = "var";
+    private static final String VAR = "var";
 
     /**
      * <code>/faces-config/application/resource-bundle/description</code>
      */
-    private static final String RES_DESCRIPTIONS
-         = "description";
+    private static final String RES_DESCRIPTIONS = "description";
 
     /**
      * <code>/faces-config/application/resource-bundle/display-name</code>
      */
-    private static final String RES_DISPLAY_NAMES
-         = "display-name";
+    private static final String RES_DISPLAY_NAMES = "display-name";
 
     /**
      * <code>/faces-config/application/system-event-listener</code>
      */
-    private static final String SYSTEM_EVENT_LISTENER
-         = "system-event-listener";
+    private static final String SYSTEM_EVENT_LISTENER = "system-event-listener";
     private List<SystemEventListener> systemEventListeners;
 
     /**
      * <code>/faces-config/application/system-event-listener/system-event-listener-class</code>
      */
-    private static final String SYSTEM_EVENT_LISTENER_CLASS
-         = "system-event-listener-class";
+    private static final String SYSTEM_EVENT_LISTENER_CLASS = "system-event-listener-class";
 
     /**
      * <code>/faces-config/application/system-event-listener/system-event-class</code>
      */
-    private static final String SYSTEM_EVENT_CLASS
-         = "system-event-class";
+    private static final String SYSTEM_EVENT_CLASS = "system-event-class";
 
     /**
      * <code>/faces-config/application/system-event-listener/source-class</code>
      */
-    private static final String SOURCE_CLASS
-         = "source-class";
+    private static final String SOURCE_CLASS = "source-class";
 
     public ApplicationConfigProcessor() {
         actionListeners = new CopyOnWriteArrayList<ActionListener>();
@@ -283,107 +257,95 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         searchExpressionHandlers = new CopyOnWriteArrayList<SearchExpressionHandler>();
         searchKeywordResolvers = new CopyOnWriteArrayList<SearchKeywordResolver>();
     }
-    
-    // -------------------------------------------- Methods from ConfigProcessor
 
+    // -------------------------------------------- Methods from ConfigProcessor
 
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception {
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
 
         Application app = getApplication();
-        ApplicationAssociate associate =
-              ApplicationAssociate.getInstance(
-                    FacesContext.getCurrentInstance().getExternalContext());
-        LinkedHashMap<String,Node> viewHandlers = new LinkedHashMap<>();
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(FacesContext.getCurrentInstance().getExternalContext());
+        LinkedHashMap<String, Node> viewHandlers = new LinkedHashMap<>();
         LinkedHashSet<String> defaultValidatorIds = null;
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           MessageFormat.format("Processing application elements for document: ''{0}''",
-                                                documentInfos[i].getSourceURI()));
+                LOGGER.log(Level.FINE, MessageFormat.format("Processing application elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
-            String namespace =
-                 document.getDocumentElement().getNamespaceURI();
-            NodeList applicationElements = document.getDocumentElement()
-                 .getElementsByTagNameNS(namespace, APPLICATION);
-            if (applicationElements != null
-                && applicationElements.getLength() > 0) {
-                for (int a = 0, asize = applicationElements.getLength();
-                     a < asize;
-                     a++) {
+            String namespace = document.getDocumentElement().getNamespaceURI();
+            NodeList applicationElements = document.getDocumentElement().getElementsByTagNameNS(namespace, APPLICATION);
+            if (applicationElements != null && applicationElements.getLength() > 0) {
+                for (int a = 0, asize = applicationElements.getLength(); a < asize; a++) {
                     Node appElement = applicationElements.item(a);
-                    NodeList children = ((Element) appElement)
-                         .getElementsByTagNameNS(namespace, "*");
+                    NodeList children = ((Element) appElement).getElementsByTagNameNS(namespace, "*");
                     if (children != null && children.getLength() > 0) {
-                        for (int c = 0, csize = children.getLength();
-                             c < csize;
-                             c++) {
+                        for (int c = 0, csize = children.getLength(); c < csize; c++) {
                             Node n = children.item(c);
                             switch (n.getLocalName()) {
-                                case MESSAGE_BUNDLE:
-                                    setMessageBundle(app, n);
-                                    break;
-                                case DEFAULT_RENDERKIT_ID:
-                                    setDefaultRenderKitId(app, n);
-                                    break;
-                                case ACTION_LISTENER:
-                                    addActionListener(sc, app, n);
-                                    break;
-                                case NAVIGATION_HANDLER:
-                                    setNavigationHandler(sc, app, n);
-                                    break;
-                                case VIEW_HANDLER:
-                                    String viewHandler = getNodeText(n);
-                                    if (viewHandler != null) {
-                                        viewHandlers.put(viewHandler, n);
-                                    }   break;
-                                case STATE_MANAGER:
-                                    setStateManager(sc, app, n);
-                                    break;
-                                case EL_RESOLVER:
-                                    addELResolver(sc, associate, n);
-                                    break;
-                                case PROPERTY_RESOLVER:
-                                    addPropertyResolver(sc, associate, n);
-                                    break;
-                                case VARIABLE_RESOLVER:
-                                    addVariableResolver(sc, associate, n);
-                                    break;
-                                case DEFAULT_LOCALE:
-                                    setDefaultLocale(app, n);
-                                    break;
-                                case SUPPORTED_LOCALE:
-                                    addSupportedLocale(app, n);
-                                    break;
-                                case RESOURCE_BUNDLE:
-                                    addResouceBundle(associate, n);
-                                    break;
-                                case RESOURCE_HANDLER:
-                                    setResourceHandler(sc, app, n);
-                                    break;
-                                case SYSTEM_EVENT_LISTENER:
-                                    addSystemEventListener(sc, app, n);
-                                    break;
-                                case DEFAULT_VALIDATORS:
-                                    if (defaultValidatorIds == null) {
-                                        defaultValidatorIds = new LinkedHashSet<>();
-                                    } else {
-                                        defaultValidatorIds.clear();
-                                    }   break;
-                                case VALIDATOR_ID:
-                                    defaultValidatorIds.add(getNodeText(n));
-                                    break;
-                                case SEARCH_EXPRESSION_HANDLER:
-                                    setSearchExpressionHandler(sc, app, n);
-                                    break;
-                                case SEARCH_KEYWORD_RESOLVER:
-                                    addSearchKeywordResolver(sc, associate, n);
-                                    break;
+                            case MESSAGE_BUNDLE:
+                                setMessageBundle(app, n);
+                                break;
+                            case DEFAULT_RENDERKIT_ID:
+                                setDefaultRenderKitId(app, n);
+                                break;
+                            case ACTION_LISTENER:
+                                addActionListener(sc, app, n);
+                                break;
+                            case NAVIGATION_HANDLER:
+                                setNavigationHandler(sc, app, n);
+                                break;
+                            case VIEW_HANDLER:
+                                String viewHandler = getNodeText(n);
+                                if (viewHandler != null) {
+                                    viewHandlers.put(viewHandler, n);
+                                }
+                                break;
+                            case STATE_MANAGER:
+                                setStateManager(sc, app, n);
+                                break;
+                            case EL_RESOLVER:
+                                addELResolver(sc, associate, n);
+                                break;
+                            case PROPERTY_RESOLVER:
+                                addPropertyResolver(sc, associate, n);
+                                break;
+                            case VARIABLE_RESOLVER:
+                                addVariableResolver(sc, associate, n);
+                                break;
+                            case DEFAULT_LOCALE:
+                                setDefaultLocale(app, n);
+                                break;
+                            case SUPPORTED_LOCALE:
+                                addSupportedLocale(app, n);
+                                break;
+                            case RESOURCE_BUNDLE:
+                                addResouceBundle(associate, n);
+                                break;
+                            case RESOURCE_HANDLER:
+                                setResourceHandler(sc, app, n);
+                                break;
+                            case SYSTEM_EVENT_LISTENER:
+                                addSystemEventListener(sc, app, n);
+                                break;
+                            case DEFAULT_VALIDATORS:
+                                if (defaultValidatorIds == null) {
+                                    defaultValidatorIds = new LinkedHashSet<>();
+                                } else {
+                                    defaultValidatorIds.clear();
+                                }
+                                break;
+                            case VALIDATOR_ID:
+                                defaultValidatorIds.add(getNodeText(n));
+                                break;
+                            case SEARCH_EXPRESSION_HANDLER:
+                                setSearchExpressionHandler(sc, app, n);
+                                break;
+                            case SEARCH_KEYWORD_RESOLVER:
+                                addSearchKeywordResolver(sc, associate, n);
+                                break;
                             }
                         }
                     }
@@ -415,10 +377,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         destroyInstances(sc, systemEventListeners);
         destroyInstances(sc, searchExpressionHandlers);
         destroyInstances(sc, searchKeywordResolvers);
-        
+
         destroyNext(sc);
     }
-    
+
     private void destroyInstances(ServletContext sc, List instances) {
         for (Object cur : instances) {
             destroyInstance(sc, cur.getClass().getName(), cur);
@@ -429,9 +391,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     // --------------------------------------------------------- Private Methods
 
     /**
-     * If defaultValidatorIds is null, then no &lt;default-validators&gt; element appeared in any configuration file.
-     * In that case, add javax.faces.Bean if Bean Validation is available. If the &lt;default-validators&gt; appeared
-     * at least once, don't add the default (and empty &lt;default-validator&gt; element disabled default validators)
+     * If defaultValidatorIds is null, then no &lt;default-validators&gt; element appeared in any
+     * configuration file. In that case, add javax.faces.Bean if Bean Validation is available. If
+     * the &lt;default-validators&gt; appeared at least once, don't add the default (and empty
+     * &lt;default-validator&gt; element disabled default validators)
      */
     private void registerDefaultValidatorIds(Application application, LinkedHashSet<String> defaultValidatorIds) {
         if (defaultValidatorIds == null) {
@@ -446,22 +409,18 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
         for (String validatorId : defaultValidatorIds) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                        MessageFormat.format(
-                        "Calling Application.addDefaultValidatorId({0})",
-                        validatorId));
+                LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.addDefaultValidatorId({0})", validatorId));
             }
             application.addDefaultValidatorId(validatorId);
         }
     }
 
     static boolean isBeanValidatorAvailable() {
-        
+
         boolean result = false;
-        final String beansValidationAvailabilityCacheKey = 
-                "javax.faces.BEANS_VALIDATION_AVAILABLE";
-        Map<String,Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
-        
+        final String beansValidationAvailabilityCacheKey = "javax.faces.BEANS_VALIDATION_AVAILABLE";
+        Map<String, Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+
         if (appMap.containsKey(beansValidationAvailabilityCacheKey)) {
             result = (Boolean) appMap.get(beansValidationAvailabilityCacheKey);
         } else {
@@ -469,14 +428,15 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 Thread.currentThread().getContextClassLoader().loadClass("javax.validation.MessageInterpolator");
                 // Check if the Implementation is available.
                 Object cachedObject = appMap.get(BeanValidator.VALIDATOR_FACTORY_KEY);
-                if(cachedObject instanceof ValidatorFactory) {
+                if (cachedObject instanceof ValidatorFactory) {
                     result = true;
                 } else {
                     Context initialContext = null;
                     try {
                         initialContext = new InitialContext();
                     } catch (NoClassDefFoundError nde) {
-                        // on google app engine InitialContext is forbidden to use and GAE throws NoClassDefFoundError 
+                        // on google app engine InitialContext is forbidden to use and GAE throws
+                        // NoClassDefFoundError
                         if (LOGGER.isLoggable(Level.FINE)) {
                             LOGGER.log(Level.FINE, nde.toString(), nde);
                         }
@@ -485,7 +445,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                             LOGGER.log(Level.WARNING, ne.toString(), ne);
                         }
                     }
-                    
+
                     try {
                         Object validatorFactory = initialContext.lookup("java:comp/ValidatorFactory");
                         if (null != validatorFactory) {
@@ -494,19 +454,18 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                         }
                     } catch (NamingException root) {
                         if (LOGGER.isLoggable(Level.FINE)) {
-                            String msg = "Could not build a default Bean Validator factory: " 
-                                    + root.getMessage();
-                            LOGGER.fine(msg);                       
+                            String msg = "Could not build a default Bean Validator factory: " + root.getMessage();
+                            LOGGER.fine(msg);
                         }
                     }
-                    
+
                     if (!result) {
                         try {
                             ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
                             Validator validator = factory.getValidator();
                             appMap.put(BeanValidator.VALIDATOR_FACTORY_KEY, factory);
                             result = true;
-                        } catch(Throwable throwable) {
+                        } catch (Throwable throwable) {
                         }
                     }
                 }
@@ -521,18 +480,14 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         return result;
     }
 
-    private void setMessageBundle(Application application,
-                                  Node messageBundle) {
+    private void setMessageBundle(Application application, Node messageBundle) {
 
         if (messageBundle != null) {
             String bundle = getNodeText(messageBundle);
             if (bundle != null) {
 
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               MessageFormat.format(
-                                    "Calling Application.setMessageBundle({0})",
-                                    bundle));
+                    LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.setMessageBundle({0})", bundle));
                 }
                 application.setMessageBundle(bundle);
             }
@@ -540,18 +495,13 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
-    private void setDefaultRenderKitId(Application application,
-                                       Node defaultId) {
+    private void setDefaultRenderKitId(Application application, Node defaultId) {
 
         if (defaultId != null) {
             String id = getNodeText(defaultId);
             if (id != null) {
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               MessageFormat.format(
-                                    "Calling Application.setDefaultRenderKitId({0})",
-                                    id));
+                    LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.setDefaultRenderKitId({0})", id));
                 }
                 application.setDefaultRenderKitId(id);
             }
@@ -559,93 +509,66 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void addActionListener(ServletContext sc, Application application,
-                                   Node actionListener) {
+    private void addActionListener(ServletContext sc, Application application, Node actionListener) {
 
         if (actionListener != null) {
 
             String listener = getNodeText(actionListener);
             if (listener != null) {
-                boolean [] didPerformInjection = { false };
-                ActionListener instance = (ActionListener) createInstance(sc, listener,
-                                                 ActionListener.class,
-                                                 application.getActionListener(),
-                                                 actionListener, true, didPerformInjection);
+                boolean[] didPerformInjection = { false };
+                ActionListener instance = (ActionListener) createInstance(sc, listener, ActionListener.class, application.getActionListener(), actionListener,
+                        true, didPerformInjection);
                 if (instance != null) {
                     if (didPerformInjection[0]) {
                         actionListeners.add(instance);
                     }
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "Calling Application.setActionListeners({0})",
-                                        listener));
+                        LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.setActionListeners({0})", listener));
                     }
-                    application
-                         .setActionListener(instance);
+                    application.setActionListener(instance);
                 }
             }
         }
     }
 
-
-    private void setNavigationHandler(ServletContext sc, Application application,
-                                      Node navigationHandler) {
+    private void setNavigationHandler(ServletContext sc, Application application, Node navigationHandler) {
 
         if (navigationHandler != null) {
 
             String handler = getNodeText(navigationHandler);
             if (handler != null) {
-                Class<?> rootType = findRootType(sc, handler,
-                                                 navigationHandler,
-                                                 new Class[] {
-                                                       ConfigurableNavigationHandler.class,
-                                                       NavigationHandler.class
-                                                     });
-                boolean [] didPerformInjection = { false };
-                NavigationHandler instance = (NavigationHandler) createInstance(sc, handler,
-                                                 ((rootType != null) ? rootType : NavigationHandler.class),
-                                                 application.getNavigationHandler(),
-                                                 navigationHandler, true, didPerformInjection);
+                Class<?> rootType = findRootType(sc, handler, navigationHandler, new Class[] { ConfigurableNavigationHandler.class, NavigationHandler.class });
+                boolean[] didPerformInjection = { false };
+                NavigationHandler instance = (NavigationHandler) createInstance(sc, handler, ((rootType != null) ? rootType : NavigationHandler.class),
+                        application.getNavigationHandler(), navigationHandler, true, didPerformInjection);
                 if (instance != null) {
                     if (didPerformInjection[0]) {
                         navigationHandlers.add(instance);
                     }
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "Calling Application.setNavigationHandlers({0})",
-                                        handler));
+                        LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.setNavigationHandlers({0})", handler));
                     }
-                    application
-                         .setNavigationHandler(instance);
+                    application.setNavigationHandler(instance);
                 }
             }
         }
 
     }
 
-
-    private void setStateManager(ServletContext sc, Application application,
-                                 Node stateManager) {
+    private void setStateManager(ServletContext sc, Application application, Node stateManager) {
 
         if (stateManager != null) {
             String manager = getNodeText(stateManager);
             if (manager != null) {
-                boolean [] didPerformInjection = { false };
-                StateManager instance = (StateManager) createInstance(sc, manager,
-                                                 StateManager.class,
-                                                 application.getStateManager(),
-                                                 stateManager, true, didPerformInjection);
+                boolean[] didPerformInjection = { false };
+                StateManager instance = (StateManager) createInstance(sc, manager, StateManager.class, application.getStateManager(), stateManager, true,
+                        didPerformInjection);
                 if (instance != null) {
                     if (didPerformInjection[0]) {
                         stateManagers.add(instance);
                     }
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "Calling Application.setStateManagers({0})",
-                                        manager));
+                        LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.setStateManagers({0})", manager));
                     }
                     application.setStateManager(instance);
                 }
@@ -654,26 +577,20 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void setViewHandler(ServletContext sc, Application application,
-                                Node viewHandler) {
+    private void setViewHandler(ServletContext sc, Application application, Node viewHandler) {
 
         if (viewHandler != null) {
             String handler = getNodeText(viewHandler);
             if (handler != null) {
-                boolean [] didPerformInjection = { false };
-                ViewHandler instance = (ViewHandler) createInstance(sc, handler,
-                                                 ViewHandler.class,
-                                                 application.getViewHandler(),
-                                                 viewHandler, true, didPerformInjection);
+                boolean[] didPerformInjection = { false };
+                ViewHandler instance = (ViewHandler) createInstance(sc, handler, ViewHandler.class, application.getViewHandler(), viewHandler, true,
+                        didPerformInjection);
                 if (instance != null) {
                     if (didPerformInjection[0]) {
                         viewHandlers.add(instance);
                     }
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "Calling Application.setViewHandler({0})",
-                                        handler));
+                        LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.setViewHandler({0})", handler));
                     }
                     application.setViewHandler(instance);
                 }
@@ -682,35 +599,26 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
-    private void addELResolver(ServletContext sc, ApplicationAssociate associate,
-                               Node elResolver) {
+    private void addELResolver(ServletContext sc, ApplicationAssociate associate, Node elResolver) {
 
         if (elResolver != null) {
             if (associate != null) {
-                List<ELResolver> resolvers = associate
-                     .getELResolversFromFacesConfig();
+                List<ELResolver> resolvers = associate.getELResolversFromFacesConfig();
                 if (resolvers == null) {
-                    //noinspection CollectionWithoutInitialCapacity
+                    // noinspection CollectionWithoutInitialCapacity
                     resolvers = new ArrayList<>();
                     associate.setELResolversFromFacesConfig(resolvers);
                 }
                 String elResolverClass = getNodeText(elResolver);
                 if (elResolverClass != null) {
-                    boolean [] didPerformInjection = { false };
-                    ELResolver elRes = (ELResolver) createInstance(sc, elResolverClass,
-                                                  ELResolver.class,
-                                                  null,
-                                                  elResolver, true, didPerformInjection);
+                    boolean[] didPerformInjection = { false };
+                    ELResolver elRes = (ELResolver) createInstance(sc, elResolverClass, ELResolver.class, null, elResolver, true, didPerformInjection);
                     if (elRes != null) {
                         if (didPerformInjection[0]) {
                             elResolvers.add(elRes);
                         }
                         if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.log(Level.FINE,
-                                       MessageFormat.format(
-                                            "Adding ''{0}'' to ELResolver chain",
-                                            elResolverClass));
+                            LOGGER.log(Level.FINE, MessageFormat.format("Adding ''{0}'' to ELResolver chain", elResolverClass));
                         }
                         resolvers.add(elRes);
                     }
@@ -720,69 +628,52 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void setSearchExpressionHandler(ServletContext sc, Application application,
-                                      Node searchExpressionHandler) {
+    private void setSearchExpressionHandler(ServletContext sc, Application application, Node searchExpressionHandler) {
 
         if (searchExpressionHandler != null) {
 
             String handler = getNodeText(searchExpressionHandler);
             if (handler != null) {
-                Class<?> rootType = findRootType(sc, handler,
-                                                 searchExpressionHandler,
-                                                 new Class[] {
-                                                       SearchExpressionHandler.class
-                                                     });
-                boolean [] didPerformInjection = { false };
+                Class<?> rootType = findRootType(sc, handler, searchExpressionHandler, new Class[] { SearchExpressionHandler.class });
+                boolean[] didPerformInjection = { false };
                 SearchExpressionHandler instance = (SearchExpressionHandler) createInstance(sc, handler,
-                                                 ((rootType != null) ? rootType : SearchExpressionHandler.class),
-                                                 application.getSearchExpressionHandler(),
-                                                 searchExpressionHandler, true, didPerformInjection);
+                        ((rootType != null) ? rootType : SearchExpressionHandler.class), application.getSearchExpressionHandler(), searchExpressionHandler,
+                        true, didPerformInjection);
                 if (instance != null) {
                     if (didPerformInjection[0]) {
                         searchExpressionHandlers.add(instance);
                     }
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "Calling Application.setSearchExpressionHandler({0})",
-                                        handler));
+                        LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.setSearchExpressionHandler({0})", handler));
                     }
-                    application
-                         .setSearchExpressionHandler(instance);
+                    application.setSearchExpressionHandler(instance);
                 }
             }
         }
 
     }
-    
-    private void addSearchKeywordResolver(ServletContext sc, ApplicationAssociate associate,
-                               Node searchKeywordResolver) {
+
+    private void addSearchKeywordResolver(ServletContext sc, ApplicationAssociate associate, Node searchKeywordResolver) {
 
         if (searchKeywordResolver != null) {
             if (associate != null) {
-                List<SearchKeywordResolver> resolvers = associate
-                     .getSearchKeywordResolversFromFacesConfig();
+                List<SearchKeywordResolver> resolvers = associate.getSearchKeywordResolversFromFacesConfig();
                 if (resolvers == null) {
-                    //noinspection CollectionWithoutInitialCapacity
+                    // noinspection CollectionWithoutInitialCapacity
                     resolvers = new ArrayList<>();
                     associate.setSearchKeywordResolversFromFacesConfig(resolvers);
                 }
                 String searchKeywordResolverClass = getNodeText(searchKeywordResolver);
                 if (searchKeywordResolverClass != null) {
-                    boolean [] didPerformInjection = { false };
-                    SearchKeywordResolver skRes = (SearchKeywordResolver) createInstance(sc, searchKeywordResolverClass,
-                                                  SearchKeywordResolver.class,
-                                                  null,
-                                                  searchKeywordResolver, true, didPerformInjection);
+                    boolean[] didPerformInjection = { false };
+                    SearchKeywordResolver skRes = (SearchKeywordResolver) createInstance(sc, searchKeywordResolverClass, SearchKeywordResolver.class, null,
+                            searchKeywordResolver, true, didPerformInjection);
                     if (skRes != null) {
                         if (didPerformInjection[0]) {
                             searchKeywordResolvers.add(skRes);
                         }
                         if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.log(Level.FINE,
-                                       MessageFormat.format(
-                                            "Adding ''{0}'' to SearchKeywordResolver chain",
-                                            searchKeywordResolverClass));
+                            LOGGER.log(Level.FINE, MessageFormat.format("Adding ''{0}'' to SearchKeywordResolver chain", searchKeywordResolverClass));
                         }
                         resolvers.add(skRes);
                     }
@@ -793,8 +684,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
     @SuppressWarnings("deprecation")
-    private void addPropertyResolver(ServletContext sc, ApplicationAssociate associate,
-                                     Node propertyResolver) {
+    private void addPropertyResolver(ServletContext sc, ApplicationAssociate associate, Node propertyResolver) {
 
         if (propertyResolver != null) {
             if (associate != null) {
@@ -805,31 +695,22 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
                 String resolver = getNodeText(propertyResolver);
                 if (resolver != null) {
-                    boolean [] didPerformInjection = { false };
-                    resolverImpl = createInstance(sc, resolver,
-                                                  PropertyResolver.class,
-                                                  resolverImpl,
-                                                  propertyResolver, false, didPerformInjection);
+                    boolean[] didPerformInjection = { false };
+                    resolverImpl = createInstance(sc, resolver, PropertyResolver.class, resolverImpl, propertyResolver, false, didPerformInjection);
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "Adding ''{0}'' to PropertyResolver chain",
-                                        resolverImpl));
+                        LOGGER.log(Level.FINE, MessageFormat.format("Adding ''{0}'' to PropertyResolver chain", resolverImpl));
                     }
                 }
                 if (resolverImpl != null) {
-                    associate
-                         .setLegacyPRChainHead((PropertyResolver) resolverImpl);
+                    associate.setLegacyPRChainHead((PropertyResolver) resolverImpl);
                 }
             }
         }
 
     }
 
-
     @SuppressWarnings("deprecation")
-    private void addVariableResolver(ServletContext sc, ApplicationAssociate associate,
-                                     Node variableResolver) {
+    private void addVariableResolver(ServletContext sc, ApplicationAssociate associate, Node variableResolver) {
 
         if (variableResolver != null) {
             if (associate != null) {
@@ -839,40 +720,28 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 }
                 String resolver = getNodeText(variableResolver);
                 if (resolver != null) {
-                    boolean [] didPerformInjection = { false };
-                    resolverImpl = createInstance(sc, resolver,
-                                                  VariableResolver.class,
-                                                  resolverImpl,
-                                                  variableResolver, false, didPerformInjection);
+                    boolean[] didPerformInjection = { false };
+                    resolverImpl = createInstance(sc, resolver, VariableResolver.class, resolverImpl, variableResolver, false, didPerformInjection);
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "Adding ''{0}'' to VariableResolver chain",
-                                        resolverImpl));
+                        LOGGER.log(Level.FINE, MessageFormat.format("Adding ''{0}'' to VariableResolver chain", resolverImpl));
                     }
                 }
                 if (resolverImpl != null) {
-                    associate
-                         .setLegacyVRChainHead((VariableResolver) resolverImpl);
+                    associate.setLegacyVRChainHead((VariableResolver) resolverImpl);
                 }
             }
         }
 
     }
 
-
-    private void setDefaultLocale(Application application,
-                                  Node defaultLocale) {
+    private void setDefaultLocale(Application application, Node defaultLocale) {
         if (defaultLocale != null) {
             String defLocale = getNodeText(defaultLocale);
             if (defLocale != null) {
                 Locale def = Util.getLocaleFromString(defLocale);
                 if (def != null) {
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "Setting default Locale to ''{0}''",
-                                        defLocale));
+                        LOGGER.log(Level.FINE, MessageFormat.format("Setting default Locale to ''{0}''", defLocale));
                     }
                     application.setDefaultLocale(def);
                 }
@@ -880,9 +749,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         }
     }
 
-
-    private void addSupportedLocale(Application application,
-                                    Node supportedLocale) {
+    private void addSupportedLocale(Application application, Node supportedLocale) {
 
         if (supportedLocale != null) {
             Set<Locale> sLocales = getCurrentLocales(application);
@@ -891,10 +758,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 Locale loc = Util.getLocaleFromString(locString);
                 if (loc != null) {
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "Adding supported Locale ''{0}''",
-                                        locString));
+                        LOGGER.log(Level.FINE, MessageFormat.format("Adding supported Locale ''{0}''", locString));
                     }
                     sLocales.add(loc);
                 }
@@ -904,10 +768,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
-
-    private void addResouceBundle(ApplicationAssociate associate,
-                                  Node resourceBundle) {
+    private void addResouceBundle(ApplicationAssociate associate, Node resourceBundle) {
 
         if (resourceBundle != null) {
             NodeList children = resourceBundle.getChildNodes();
@@ -920,69 +781,59 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                     Node n = children.item(i);
                     if (n.getNodeType() == Node.ELEMENT_NODE) {
                         switch (n.getLocalName()) {
-                            case BASE_NAME:
-                                baseName = getNodeText(n);
-                                break;
-                            case VAR:
-                                var = getNodeText(n);
-                                break;
-                            case RES_DESCRIPTIONS:
-                                if (descriptions == null) {
-                                    descriptions = new ArrayList<>(2);
-                                }   descriptions.add(n);
-                                break;
-                            case RES_DISPLAY_NAMES:
-                                if (displayNames == null) {
-                                    displayNames = new ArrayList<>(2);
-                                }   displayNames.add(n);
-                                break;
+                        case BASE_NAME:
+                            baseName = getNodeText(n);
+                            break;
+                        case VAR:
+                            var = getNodeText(n);
+                            break;
+                        case RES_DESCRIPTIONS:
+                            if (descriptions == null) {
+                                descriptions = new ArrayList<>(2);
+                            }
+                            descriptions.add(n);
+                            break;
+                        case RES_DISPLAY_NAMES:
+                            if (displayNames == null) {
+                                displayNames = new ArrayList<>(2);
+                            }
+                            displayNames.add(n);
+                            break;
                         }
                     }
                 }
                 if ((baseName != null) && (var != null)) {
-                    associate.addResourceBundle(var,
-                                                new ApplicationResourceBundle(
-                                                     baseName,
-                                                     getTextMap(displayNames),
-                                                     getTextMap(descriptions)));
+                    associate.addResourceBundle(var, new ApplicationResourceBundle(baseName, getTextMap(displayNames), getTextMap(descriptions)));
                 }
             }
         }
     }
 
-
     private Set<Locale> getCurrentLocales(Application application) {
 
-        //noinspection CollectionWithoutInitialCapacity
+        // noinspection CollectionWithoutInitialCapacity
         Set<Locale> supportedLocales = new HashSet<>();
-        for (Iterator<Locale> i = application.getSupportedLocales();
-             i.hasNext();) {
+        for (Iterator<Locale> i = application.getSupportedLocales(); i.hasNext();) {
             supportedLocales.add(i.next());
         }
         return supportedLocales;
 
     }
 
-
     private void setResourceHandler(ServletContext sc, Application application, Node resourceHandler) {
 
         if (resourceHandler != null) {
             String handler = getNodeText(resourceHandler);
             if (handler != null) {
-                boolean [] didPerformInjection = { false };
-                ResourceHandler instance = (ResourceHandler) createInstance(sc, handler,
-                                                 ResourceHandler.class,
-                                                 application.getResourceHandler(),
-                                                 resourceHandler, true, didPerformInjection);
+                boolean[] didPerformInjection = { false };
+                ResourceHandler instance = (ResourceHandler) createInstance(sc, handler, ResourceHandler.class, application.getResourceHandler(),
+                        resourceHandler, true, didPerformInjection);
                 if (instance != null) {
                     if (didPerformInjection[0]) {
                         resourceHandlers.add(instance);
                     }
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "Calling Application.setResourceHandler({0})",
-                                        handler));
+                        LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.setResourceHandler({0})", handler));
                     }
                     application.setResourceHandler(instance);
                 }
@@ -990,9 +841,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         }
     }
 
-
-    private void addSystemEventListener(ServletContext sc, Application application,
-                                        Node systemEventListener) {
+    private void addSystemEventListener(ServletContext sc, Application application, Node systemEventListener) {
 
         NodeList children = systemEventListener.getChildNodes();
         String listenerClass = null;
@@ -1002,55 +851,40 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
             Node n = children.item(j);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
                 switch (n.getLocalName()) {
-                    case SYSTEM_EVENT_LISTENER_CLASS:
-                        listenerClass = getNodeText(n);
-                        break;
-                    case SYSTEM_EVENT_CLASS:
-                        eventClass = getNodeText(n);
-                        break;
-                    case SOURCE_CLASS:
-                        sourceClass = getNodeText(n);
-                        break;
+                case SYSTEM_EVENT_LISTENER_CLASS:
+                    listenerClass = getNodeText(n);
+                    break;
+                case SYSTEM_EVENT_CLASS:
+                    eventClass = getNodeText(n);
+                    break;
+                case SOURCE_CLASS:
+                    sourceClass = getNodeText(n);
+                    break;
                 }
             }
         }
         if (listenerClass != null) {
-            SystemEventListener selInstance = (SystemEventListener)
-                  createInstance(sc, listenerClass,
-                                 SystemEventListener.class,
-                                 null,
-                                 systemEventListener);
+            SystemEventListener selInstance = (SystemEventListener) createInstance(sc, listenerClass, SystemEventListener.class, null, systemEventListener);
             if (selInstance != null) {
                 systemEventListeners.add(selInstance);
                 try {
                     // If there is an eventClass, use it, otherwise use
                     // SystemEvent.class
-                    //noinspection unchecked
+                    // noinspection unchecked
                     Class<? extends SystemEvent> eventClazz;
-                    
+
                     if (eventClass != null) {
                         eventClazz = (Class<? extends SystemEvent>) loadClass(sc, eventClass, this, null);
                     } else {
                         eventClazz = SystemEvent.class;
                     }
-                    
+
                     // If there is a sourceClass, use it, otherwise use null
-                    Class sourceClazz =
-                          (sourceClass != null && sourceClass.length() != 0)
-                          ? Util.loadClass(sourceClass, this.getClass())
-                          : null;
-                    application.subscribeToEvent(eventClazz,
-                                                 sourceClazz,
-                                                 selInstance);
+                    Class sourceClazz = (sourceClass != null && sourceClass.length() != 0) ? Util.loadClass(sourceClass, this.getClass()) : null;
+                    application.subscribeToEvent(eventClazz, sourceClazz, selInstance);
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   "Subscribing for event {0} and source {1} using listener {2}",
-                                   new Object[]{
-                                         eventClazz.getName(),
-                                         ((sourceClazz != null) ? sourceClazz
-                                               .getName() : "ANY"),
-                                         selInstance.getClass().getName()
-                                   });
+                        LOGGER.log(Level.FINE, "Subscribing for event {0} and source {1} using listener {2}", new Object[] { eventClazz.getName(),
+                                ((sourceClazz != null) ? sourceClazz.getName() : "ANY"), selInstance.getClass().getName() });
                     }
                 } catch (ClassNotFoundException cnfe) {
                     throw new ConfigurationException(cnfe);
@@ -1059,22 +893,17 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         }
     }
 
-
-    private void processViewHandlers(ServletContext sc, Application app,
-                                     LinkedHashMap<String, Node> viewHandlers) {
+    private void processViewHandlers(ServletContext sc, Application app, LinkedHashMap<String, Node> viewHandlers) {
         // take special action on the ViewHandlers that have been
-        // configured for the application.  If any of the ViewHandlers
+        // configured for the application. If any of the ViewHandlers
         // is the FaceletViewHandler, don't install the 2.0
-        // FaceletViewHandler.  Make the application behave as 1.2
+        // FaceletViewHandler. Make the application behave as 1.2
         // unless they use our ViewHandler
         WebConfiguration webConfig = WebConfiguration.getInstance();
-        if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler) &&
-                !webConfig.isOptionEnabled(DisableFaceletJSFViewHandlerDeprecated)) {
+        if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler) && !webConfig.isOptionEnabled(DisableFaceletJSFViewHandlerDeprecated)) {
             if (viewHandlers.containsKey("com.sun.facelets.FaceletViewHandler")) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.application.legacy_facelet_viewhandler_detected",
-                               "com.sun.facelets.FaceletViewHandler");
+                    LOGGER.log(Level.WARNING, "jsf.application.legacy_facelet_viewhandler_detected", "com.sun.facelets.FaceletViewHandler");
                 }
                 webConfig.overrideContextInitParameter(DisableFaceletJSFViewHandler, true);
             }

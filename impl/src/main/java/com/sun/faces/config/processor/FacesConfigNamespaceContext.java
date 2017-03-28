@@ -42,6 +42,7 @@ package com.sun.faces.config.processor;
 
 import java.util.Collections;
 import java.util.Iterator;
+
 import javax.xml.namespace.NamespaceContext;
 
 class FacesConfigNamespaceContext implements NamespaceContext {
@@ -60,5 +61,5 @@ class FacesConfigNamespaceContext implements NamespaceContext {
     public Iterator getPrefixes(String namespaceURI) {
         return Collections.emptyList().iterator();
     }
-    
+
 }

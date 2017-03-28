@@ -40,27 +40,27 @@
 
 package com.sun.faces.config.processor;
 
-import com.sun.faces.config.DocumentInfo;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.util.FacesLogger;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Document;
-
-import javax.servlet.ServletContext;
-
 import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.application.ViewHandler;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>
- *  This <code>ConfigProcessor</code> handles all elements defined under
- *  <code>/protected-views</code>.
+ * This <code>ConfigProcessor</code> handles all elements defined under
+ * <code>/protected-views</code>.
  * </p>
  */
 public class ProtectedViewsConfigProcessor extends AbstractConfigProcessor {
@@ -79,35 +79,26 @@ public class ProtectedViewsConfigProcessor extends AbstractConfigProcessor {
 
     // ------------------------------------------------------------ Constructors
 
-    
-    public ProtectedViewsConfigProcessor() { }
-
+    public ProtectedViewsConfigProcessor() {
+    }
 
     // -------------------------------------------- Methods from ConfigProcessor
-
 
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception {
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
 
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                "Processing protected-views element for document: ''{0}''",
-                                documentInfos[i].getSourceURI()));
+                LOGGER.log(Level.FINE, MessageFormat.format("Processing protected-views element for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
-            String namespace = document.getDocumentElement()
-                 .getNamespaceURI();
-            NodeList protectedViews = document.getDocumentElement()
-                 .getElementsByTagNameNS(namespace, PROTECTED_VIEWS);
+            String namespace = document.getDocumentElement().getNamespaceURI();
+            NodeList protectedViews = document.getDocumentElement().getElementsByTagNameNS(namespace, PROTECTED_VIEWS);
             if (protectedViews != null && protectedViews.getLength() > 0) {
-                processProtectedViews(protectedViews,
-                                 namespace, documentInfos[i]);
+                processProtectedViews(protectedViews, namespace, documentInfos[i]);
             }
         }
 
@@ -118,16 +109,13 @@ public class ProtectedViewsConfigProcessor extends AbstractConfigProcessor {
 
     // --------------------------------------------------------- Private Methods
 
-
-    private void processProtectedViews(NodeList protectedViews,
-                                  String namespace, DocumentInfo info) {
+    private void processProtectedViews(NodeList protectedViews, String namespace, DocumentInfo info) {
         WebConfiguration config = null;
         ViewHandler viewHandler = null;
 
         for (int i = 0, size = protectedViews.getLength(); i < size; i++) {
             Node urlPatterns = protectedViews.item(i);
-            NodeList children = ((Element) urlPatterns)
-                 .getElementsByTagNameNS(namespace, "*");
+            NodeList children = ((Element) urlPatterns).getElementsByTagNameNS(namespace, "*");
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 String urlPattern = null;
@@ -135,13 +123,12 @@ public class ProtectedViewsConfigProcessor extends AbstractConfigProcessor {
                     urlPattern = getNodeText(n);
                 } else {
                     if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING,
-                                MessageFormat.format(
+                        LOGGER.log(Level.WARNING, MessageFormat.format(
                                 "Processing protected-views elements for document: ''{0}'', encountered unexpected configuration ''{1}'', ignoring and continuing",
                                 info.getSourceURI(), getNodeText(n)));
                     }
                 }
-                
+
                 if (null != urlPattern) {
                     if (null == config) {
                         config = WebConfiguration.getInstance();
@@ -151,11 +138,10 @@ public class ProtectedViewsConfigProcessor extends AbstractConfigProcessor {
                         viewHandler = context.getApplication().getViewHandler();
                     }
                     viewHandler.addProtectedView(urlPattern);
-                    
+
                 } else {
                     if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING,
-                                MessageFormat.format(
+                        LOGGER.log(Level.WARNING, MessageFormat.format(
                                 "Processing protected-views elements for document: ''{0}'', encountered <url-pattern> element without expected children",
                                 info.getSourceURI()));
                     }
@@ -164,6 +150,5 @@ public class ProtectedViewsConfigProcessor extends AbstractConfigProcessor {
         }
 
     }
-
 
 }

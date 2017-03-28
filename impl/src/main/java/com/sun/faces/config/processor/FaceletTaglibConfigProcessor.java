@@ -40,42 +40,41 @@
 
 package com.sun.faces.config.processor;
 
-import com.sun.faces.util.FacesLogger;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.MessageFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.ConfigurationException;
+import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.tag.TagLibraryImpl;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagLibrary;
 import com.sun.faces.facelets.util.ReflectionUtil;
-import com.sun.faces.config.ConfigurationException;
-import com.sun.faces.config.DocumentInfo;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
-import org.w3c.dom.Document;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.text.MessageFormat;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.lang.reflect.Method;
-
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-import javax.servlet.ServletContext;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>
- *  This <code>ConfigProcessor</code> handles all elements defined under
- *  <code>/faces-taglib</code>.
+ * This <code>ConfigProcessor</code> handles all elements defined under <code>/faces-taglib</code>.
  * </p>
  */
 public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
-    
     /**
      * <p>
      * /facelet-taglib/library-class
@@ -154,117 +153,99 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     /**
      * <p>
-     *   <ul>
-     *     <li>/facelet-taglib/tag/tag-handler</li>
-     *     <li>/facelet-taglib/tag/converter/handler-class</li>
-     *     <li>/facelet-taglib/tag/validator/handler-class</li>
-     *     <li>/facelet-taglib/tag/component/handler-class</li>
-     *   </ul>
+     * <ul>
+     * <li>/facelet-taglib/tag/tag-handler</li>
+     * <li>/facelet-taglib/tag/converter/handler-class</li>
+     * <li>/facelet-taglib/tag/validator/handler-class</li>
+     * <li>/facelet-taglib/tag/component/handler-class</li>
+     * </ul>
      * </p>
      */
     private static final String HANDLER_CLASS = "handler-class";
 
-
     /**
      * <p>
-     *  /facelet-taglib/tag/validator/validator-id
+     * /facelet-taglib/tag/validator/validator-id
      * </p>
      */
     private static final String VALIDATOR_ID = "validator-id";
 
-
     /**
      * <p>
-     *  /facelet-taglib/tag/converter/converter-id
+     * /facelet-taglib/tag/converter/converter-id
      * </p>
      */
     private static final String CONVERTER_ID = "converter-id";
 
     /**
      * <p>
-     *  /facelet-taglib/tag/behavior/behavior-id
+     * /facelet-taglib/tag/behavior/behavior-id
      * </p>
      */
     private static final String BEHAVIOR_ID = "behavior-id";
 
     /**
      * <p>
-     *  /facelet-taglib/tag/component/component-type
+     * /facelet-taglib/tag/component/component-type
      * </p>
      */
     private static final String COMPONENT_TYPE = "component-type";
 
-
     /**
      * <p>
-     *  /facelet-taglib/tag/component/renderer-type
+     * /facelet-taglib/tag/component/renderer-type
      * </p>
      */
     private static final String RENDERER_TYPE = "renderer-type";
 
-
     /**
      * <p>
-     *  /facelet-taglib/tag/function/function-name
+     * /facelet-taglib/tag/function/function-name
      * </p>
      */
     private static final String FUNCTION_NAME = "function-name";
 
-
     /**
      * <p>
-     *  /facelet-taglib/tag/function/function-class
+     * /facelet-taglib/tag/function/function-class
      * </p>
      */
     private static final String FUNCTION_CLASS = "function-class";
 
-
     /**
      * <p>
-     *  /facelet-taglib/tag/function/function-signature
+     * /facelet-taglib/tag/function/function-signature
      * </p>
      */
     private static final String FUNCTION_SIGNATURE = "function-signature";
 
-
     /**
      * <p>
-     *  /facelet-taglib/composite-library-name
+     * /facelet-taglib/composite-library-name
      * </p>
      */
     private static final String COMPOSITE_LIBRARY_NAME = "composite-library-name";
 
-
-
     // -------------------------------------------- Methods from ConfigProcessor
-
 
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception {
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
 
-        ApplicationAssociate associate =
-              ApplicationAssociate.getInstance(FacesContext.getCurrentInstance().getExternalContext());
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(FacesContext.getCurrentInstance().getExternalContext());
         assert (associate != null);
         Compiler compiler = associate.getCompiler();
 
         for (int i = 0, length = documentInfos.length; i < length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                 "Processing facelet-taglibrary document: ''{0}''",
-                                 documentInfos[i].getSourceURI()));
+                LOGGER.log(Level.FINE, MessageFormat.format("Processing facelet-taglibrary document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
-            String namespace =
-                  document.getDocumentElement().getNamespaceURI();
+            String namespace = document.getDocumentElement().getNamespaceURI();
             Element documentElement = document.getDocumentElement();
-            NodeList libraryClass =
-                  documentElement
-                        .getElementsByTagNameNS(namespace, LIBRARY_CLASS);
+            NodeList libraryClass = documentElement.getElementsByTagNameNS(namespace, LIBRARY_CLASS);
             if (libraryClass != null && libraryClass.getLength() > 0) {
                 processTaglibraryClass(sc, libraryClass, compiler);
             } else {
@@ -276,12 +257,9 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
     // --------------------------------------------------------- Private Methods
 
-
-    private void processTaglibraryClass(ServletContext sc, NodeList libraryClass,
-                                        Compiler compiler) {
+    private void processTaglibraryClass(ServletContext sc, NodeList libraryClass, Compiler compiler) {
 
         Node n = libraryClass.item(0);
         String className = getNodeText(n);
@@ -290,10 +268,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
-    private void processTagLibrary(ServletContext sc, Element documentElement,
-                                   String namespace,
-                                   Compiler compiler) {
+    private void processTagLibrary(ServletContext sc, Element documentElement, String namespace, Compiler compiler) {
 
         NodeList children = documentElement.getChildNodes();
         if (children != null && children.getLength() > 0) {
@@ -303,41 +278,34 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 Node n = children.item(i);
                 if (n.getLocalName() != null) {
                     switch (n.getLocalName()) {
-                        case TAGLIB_NAMESPACE:
-                            taglibNamespace = getNodeText(n);
-                            break;
-                        case COMPOSITE_LIBRARY_NAME:
-                            compositeLibraryName = getNodeText(n);
-                            break;
+                    case TAGLIB_NAMESPACE:
+                        taglibNamespace = getNodeText(n);
+                        break;
+                    case COMPOSITE_LIBRARY_NAME:
+                        compositeLibraryName = getNodeText(n);
+                        break;
                     }
                 }
             }
 
             TagLibraryImpl taglibrary;
             if (compositeLibraryName != null) {
-                taglibrary = new CompositeComponentTagLibrary(taglibNamespace,
-                                                              compositeLibraryName);
+                taglibrary = new CompositeComponentTagLibrary(taglibNamespace, compositeLibraryName);
                 compiler.addTagLibrary(taglibrary);
             } else {
                 taglibrary = new TagLibraryImpl(taglibNamespace);
 
             }
-            NodeList tags =
-                  documentElement.getElementsByTagNameNS(namespace, TAG);
+            NodeList tags = documentElement.getElementsByTagNameNS(namespace, TAG);
             processTags(sc, documentElement, tags, taglibrary);
-            NodeList functions =
-                  documentElement
-                        .getElementsByTagNameNS(namespace, FUNCTION);
+            NodeList functions = documentElement.getElementsByTagNameNS(namespace, FUNCTION);
             processFunctions(sc, functions, taglibrary);
             compiler.addTagLibrary(taglibrary);
         }
 
     }
 
-
-    private void processTags(ServletContext sc, Element documentElement,
-                             NodeList tags,
-                             TagLibraryImpl taglibrary) {
+    private void processTags(ServletContext sc, Element documentElement, NodeList tags, TagLibraryImpl taglibrary) {
 
         if (tags != null && tags.getLength() > 0) {
             for (int i = 0, ilen = tags.getLength(); i < ilen; i++) {
@@ -355,27 +323,27 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                     // process the nodes to see what children we have
                     if (n.getLocalName() != null) {
                         switch (n.getLocalName()) {
-                            case TAG_NAME:
-                                tagName = getNodeText(n);
-                                break;
-                            case COMPONENT:
-                                component = n.getChildNodes();
-                                break;
-                            case CONVERTER:
-                                converter = n.getChildNodes();
-                                break;
-                            case VALIDATOR:
-                                validator = n.getChildNodes();
-                                break;
-                            case BEHAVIOR:
-                                behavior = n.getChildNodes();
-                                break;
-                            case SOURCE:
-                                source = n;
-                                break;
-                            case HANDLER_CLASS:
-                                handlerClass = n;
-                                break;
+                        case TAG_NAME:
+                            tagName = getNodeText(n);
+                            break;
+                        case COMPONENT:
+                            component = n.getChildNodes();
+                            break;
+                        case CONVERTER:
+                            converter = n.getChildNodes();
+                            break;
+                        case VALIDATOR:
+                            validator = n.getChildNodes();
+                            break;
+                        case BEHAVIOR:
+                            behavior = n.getChildNodes();
+                            break;
+                        case SOURCE:
+                            source = n;
+                            break;
+                        case HANDLER_CLASS:
+                            handlerClass = n;
+                            break;
                         }
                     }
                 }
@@ -397,9 +365,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
-    private void processBehavior(ServletContext sc, NodeList behavior, TagLibraryImpl taglibrary,
-			String tagName) {
+    private void processBehavior(ServletContext sc, NodeList behavior, TagLibraryImpl taglibrary, String tagName) {
         if (behavior != null && behavior.getLength() > 0) {
             String behaviorId = null;
             String handlerClass = null;
@@ -407,12 +373,12 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 Node n = behavior.item(i);
                 if (n.getLocalName() != null) {
                     switch (n.getLocalName()) {
-                        case BEHAVIOR_ID:
-                            behaviorId = getNodeText(n);
-                            break;
-                        case HANDLER_CLASS:
-                            handlerClass = getNodeText(n);
-                            break;
+                    case BEHAVIOR_ID:
+                        behaviorId = getNodeText(n);
+                        break;
+                    case HANDLER_CLASS:
+                        handlerClass = getNodeText(n);
+                        break;
                     }
                 }
             }
@@ -431,14 +397,11 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
-    private void processHandlerClass(ServletContext sc, Node handlerClass,
-                                     TagLibraryImpl taglibrary,
-                                     String name) {
+    private void processHandlerClass(ServletContext sc, Node handlerClass, TagLibraryImpl taglibrary, String name) {
 
         String className = getNodeText(handlerClass);
         if (className == null) {
-            throw new ConfigurationException("The tag named "+name+" from namespace "+taglibrary.getNamespace()+" has a null handler-class defined");
+            throw new ConfigurationException("The tag named " + name + " from namespace " + taglibrary.getNamespace() + " has a null handler-class defined");
         }
         try {
             Class<?> clazz;
@@ -447,12 +410,9 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 taglibrary.putTagHandler(name, clazz);
             } catch (NoClassDefFoundError defNotFound) {
                 String message = defNotFound.toString();
-                if (message.contains("com/sun/facelets/")
-                    || message.contains("com.sun.facelets.")) {
+                if (message.contains("com/sun/facelets/") || message.contains("com.sun.facelets.")) {
                     if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING,
-                                   "jsf.config.legacy.facelet.warning",
-                                   new Object[]{handlerClass,});
+                        LOGGER.log(Level.WARNING, "jsf.config.legacy.facelet.warning", new Object[] { handlerClass, });
                     }
                 } else {
                     throw defNotFound;
@@ -464,11 +424,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
-    private void processSource(Element documentElement,
-                               Node source,
-                               TagLibraryImpl taglibrary,
-                               String name) {
+    private void processSource(Element documentElement, Node source, TagLibraryImpl taglibrary, String name) {
 
         String docURI = documentElement.getOwnerDocument().getDocumentURI();
         String s = getNodeText(source);
@@ -481,19 +437,14 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void processResourceId(Element documentElement,
-                               Node compositeSource,
-                               TagLibraryImpl taglibrary,
-                               String name) {
+    private void processResourceId(Element documentElement, Node compositeSource, TagLibraryImpl taglibrary, String name) {
 
         String resourceId = getNodeText(compositeSource);
         taglibrary.putCompositeComponentTag(name, resourceId);
 
     }
 
-    private void processValidator(ServletContext sc, NodeList validator,
-                                  TagLibraryImpl taglibrary,
-                                  String name) {
+    private void processValidator(ServletContext sc, NodeList validator, TagLibraryImpl taglibrary, String name) {
 
         if (validator != null && validator.getLength() > 0) {
             String validatorId = null;
@@ -502,12 +453,12 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 Node n = validator.item(i);
                 if (n.getLocalName() != null) {
                     switch (n.getLocalName()) {
-                        case VALIDATOR_ID:
-                            validatorId = getNodeText(n);
-                            break;
-                        case HANDLER_CLASS:
-                            handlerClass = getNodeText(n);
-                            break;
+                    case VALIDATOR_ID:
+                        validatorId = getNodeText(n);
+                        break;
+                    case HANDLER_CLASS:
+                        handlerClass = getNodeText(n);
+                        break;
                     }
                 }
             }
@@ -517,12 +468,9 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                     taglibrary.putValidator(name, validatorId, clazz);
                 } catch (NoClassDefFoundError defNotFound) {
                     String message = defNotFound.toString();
-                    if (message.contains("com/sun/facelets/")
-                        || message.contains("com.sun.facelets.")) {
+                    if (message.contains("com/sun/facelets/") || message.contains("com.sun.facelets.")) {
                         if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.config.legacy.facelet.warning",
-                                       new Object[]{handlerClass,});
+                            LOGGER.log(Level.WARNING, "jsf.config.legacy.facelet.warning", new Object[] { handlerClass, });
                         }
                     } else {
                         throw defNotFound;
@@ -535,13 +483,10 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 taglibrary.putValidator(name, validatorId);
             }
         }
-        
+
     }
 
-    
-    private void processConverter(ServletContext sc, NodeList converter,
-                                  TagLibraryImpl taglibrary,
-                                  String name) {
+    private void processConverter(ServletContext sc, NodeList converter, TagLibraryImpl taglibrary, String name) {
 
         if (converter != null && converter.getLength() > 0) {
             String converterId = null;
@@ -550,12 +495,12 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 Node n = converter.item(i);
                 if (n.getLocalName() != null) {
                     switch (n.getLocalName()) {
-                        case CONVERTER_ID:
-                            converterId = getNodeText(n);
-                            break;
-                        case HANDLER_CLASS:
-                            handlerClass = getNodeText(n);
-                            break;
+                    case CONVERTER_ID:
+                        converterId = getNodeText(n);
+                        break;
+                    case HANDLER_CLASS:
+                        handlerClass = getNodeText(n);
+                        break;
                     }
                 }
             }
@@ -565,12 +510,9 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                     taglibrary.putConverter(name, converterId, clazz);
                 } catch (NoClassDefFoundError defNotFound) {
                     String message = defNotFound.toString();
-                    if (message.contains("com/sun/facelets/")
-                        || message.contains("com.sun.facelets.")) {
+                    if (message.contains("com/sun/facelets/") || message.contains("com.sun.facelets.")) {
                         if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.config.legacy.facelet.warning",
-                                       new Object[]{handlerClass,});
+                            LOGGER.log(Level.WARNING, "jsf.config.legacy.facelet.warning", new Object[] { handlerClass, });
                         }
                     } else {
                         throw defNotFound;
@@ -586,10 +528,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
-    private void processComponent(ServletContext sc, Element documentElement, NodeList component,
-                                  TagLibraryImpl taglibrary,
-                                  String name) {
+    private void processComponent(ServletContext sc, Element documentElement, NodeList component, TagLibraryImpl taglibrary, String name) {
 
         if (component != null && component.getLength() > 0) {
             String componentType = null;
@@ -600,36 +539,30 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 Node n = component.item(i);
                 if (n.getLocalName() != null) {
                     switch (n.getLocalName()) {
-                        case COMPONENT_TYPE:
-                            componentType = getNodeText(n);
-                            break;
-                        case RENDERER_TYPE:
-                            rendererType = getNodeText(n);
-                            break;
-                        case HANDLER_CLASS:
-                            handlerClass = getNodeText(n);
-                            break;
-                        case RESOURCE_ID:
-                            resourceId = n;
-                            break;
+                    case COMPONENT_TYPE:
+                        componentType = getNodeText(n);
+                        break;
+                    case RENDERER_TYPE:
+                        rendererType = getNodeText(n);
+                        break;
+                    case HANDLER_CLASS:
+                        handlerClass = getNodeText(n);
+                        break;
+                    case RESOURCE_ID:
+                        resourceId = n;
+                        break;
                     }
                 }
             }
             if (handlerClass != null) {
                 try {
                     Class<?> clazz = loadClass(sc, handlerClass, this, null);
-                    taglibrary.putComponent(name,
-                                            componentType,
-                                            rendererType,
-                                            clazz);
+                    taglibrary.putComponent(name, componentType, rendererType, clazz);
                 } catch (NoClassDefFoundError defNotFound) {
                     String message = defNotFound.toString();
-                    if (message.contains("com/sun/facelets/")
-                        || message.contains("com.sun.facelets.")) {
+                    if (message.contains("com/sun/facelets/") || message.contains("com.sun.facelets.")) {
                         if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.config.legacy.facelet.warning",
-                                       new Object[]{handlerClass,});
+                            LOGGER.log(Level.WARNING, "jsf.config.legacy.facelet.warning", new Object[] { handlerClass, });
                         }
                     } else {
                         throw defNotFound;
@@ -642,11 +575,10 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             } else {
                 taglibrary.putComponent(name, componentType, rendererType);
             }
-            
+
         }
 
     }
-
 
     private void processFunctions(ServletContext sc, NodeList functions, TagLibraryImpl taglibrary) {
 
@@ -660,15 +592,15 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                     Node n = children.item(j);
                     if (n.getLocalName() != null) {
                         switch (n.getLocalName()) {
-                            case FUNCTION_NAME:
-                                functionName = getNodeText(n);
-                                break;
-                            case FUNCTION_CLASS:
-                                functionClass = getNodeText(n);
-                                break;
-                            case FUNCTION_SIGNATURE:
-                                functionSignature = getNodeText(n);
-                                break;
+                        case FUNCTION_NAME:
+                            functionName = getNodeText(n);
+                            break;
+                        case FUNCTION_CLASS:
+                            functionClass = getNodeText(n);
+                            break;
+                        case FUNCTION_SIGNATURE:
+                            functionSignature = getNodeText(n);
+                            break;
                         }
                     }
                 }
@@ -684,25 +616,21 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
     private static Method createMethod(Class type, String signatureParam) throws Exception {
-        // formatted XML might cause \n\t characters - make sure we only have space characters left  
-        String signature = signatureParam.replaceAll("\\s+", " "); 
+        // formatted XML might cause \n\t characters - make sure we only have space characters left
+        String signature = signatureParam.replaceAll("\\s+", " ");
         int pos = signature.indexOf(' ');
         if (pos == -1) {
             throw new Exception("Must Provide Return Type: " + signature);
         } else {
             int pos2 = signature.indexOf('(', pos + 1);
             if (pos2 == -1) {
-                throw new Exception(
-                      "Must provide a method name, followed by '(': "
-                      + signature);
+                throw new Exception("Must provide a method name, followed by '(': " + signature);
             } else {
                 String mn = signature.substring(pos + 1, pos2).trim();
                 pos = signature.indexOf(')', pos2 + 1);
                 if (pos == -1) {
-                    throw new Exception("Must close parentheses, ')' missing: "
-                                        + signature);
+                    throw new Exception("Must close parentheses, ')' missing: " + signature);
                 } else {
                     String[] ps = signature.substring(pos2 + 1, pos).trim().split(",");
                     Class[] pc;
@@ -717,10 +645,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                     try {
                         return type.getMethod(mn, pc);
                     } catch (NoSuchMethodException e) {
-                        throw new Exception("No Function Found on type: "
-                                            + type.getName()
-                                            + " with signature: "
-                                            + signature);
+                        throw new Exception("No Function Found on type: " + type.getName() + " with signature: " + signature);
                     }
 
                 }

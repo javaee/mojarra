@@ -40,18 +40,6 @@
 
 package com.sun.faces.config.processor;
 
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.mgbean.ManagedBeanInfo;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.TypedCollections;
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.config.DocumentInfo;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Document;
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,10 +52,23 @@ import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.servlet.ServletContext;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.mgbean.BeanManager;
+import com.sun.faces.mgbean.ManagedBeanInfo;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.TypedCollections;
+
 /**
  * <p>
- *  This <code>ConfigProcessor</code> handles all elements defined under
- *  <code>/faces-config/managed-bean</code>.
+ * This <code>ConfigProcessor</code> handles all elements defined under
+ * <code>/faces-config/managed-bean</code>.
  * </p>
  */
 public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
@@ -75,194 +76,188 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     /**
-     * <p>/faces-config/managed-bean</p>
-     */
-    private static final String MANAGED_BEAN =
-         "managed-bean";
-
-    /**
-     * <p>/faces-config/managed-bean/description</p>
-     */
-    private static final String DESCRIPTION =
-         "description";
-
-    /**
-     * <p>/faces-config/mananged-bean/managed-bean-name</p>
-     */
-    private static final String MGBEAN_NAME =
-         "managed-bean-name";
-
-    /**
-     * <p>/faces-config/managed-bean/mananged-bean-class</p>
-     */
-    private static final String MGBEAN_CLASS =
-         "managed-bean-class";
-
-    /**
-     * <p>/faces-config/managed-bean/managed-bean-scope</p>
-     */
-    private static final String MGBEAN_SCOPE =
-         "managed-bean-scope";
-
-    /**
-     * <p>/faces-config/managed-bean/managed-property</p>
-     */
-    private static final String MG_PROPERTY =
-         "managed-property";
-
-    /**
-     * <p>/faces-config/managed-bean/managed-property/property-name</p>
-     */
-    private static final String MG_PROPERTY_NAME =
-         "property-name";
-
-    /**
-     * <p>/faces-config/managed-bean/managed-property/property-class</p>
-     */
-    private static final String MG_PROPERTY_TYPE =
-         "property-class";
-
-    /**
-     * <p>Handles:
-     * <ul>
-     *   <li>/faces-config/managed-bean/map-entries/map-entry/null-value</li>
-     *   <li>/faces-config/managed-bean/managed-property/null-value</li>
-     *   <li>/faces-config/managed-bean/managed-property/map-entries/map-entry/null-value</li>
-     *   <li>/faces-config/managed-bean/list-entries/null-value</li>
-     *   <li>/faces-config/managed-bean/managed-property/list-entries/null-value</li>
-     * </ul>
+     * <p>
+     * /faces-config/managed-bean
      * </p>
      */
-    private static final String NULL_VALUE =
-         "null-value";
-
-    /**
-     * <p>Handles:
-     * <ul>
-     *   <li>/faces-config/managed-bean/map-entries/map-entry/value</li>
-     *   <li>/faces-config/managed-bean/managed-property/value</li>
-     *   <li>/faces-config/managed-bean/managed-property/map-entries/map-entry/value</li>
-     *   <li>/faces-config/managed-bean/list-entries/value</li>
-     *   <li>/faces-config/managed-bean/managed-property/list-entries/value</li>
-     * </ul>
-     * </p>
-     */
-    private static final String VALUE =
-         "value";
-
-
-    /**
-     * <p>Handles:
-     * <ul>
-     *   <li>/faces-config/managed-bean/managed-property/map-entries/map-entry/key</li>
-     * </ul>
-     * </p>
-     */
-    private static final String KEY =
-          "key";
-
-    /**
-     * <p>Handles:
-     * <ul>
-     *   <li>/faces-config/managed-bean/map-entries/key-class</li>
-     *   <li>/faces-config/managed-bean/managed-property/map-entries/key-class</li>
-     * </ul>
-     * </p>
-     */
-    private static final String MAP_KEY_CLASS =
-         "key-class";
-
-    /**
-     * <p>Handles:
-     * <ul>
-     *   <li>/faces-config/managed-bean/map-entries/value-class</li>
-     *   <li>/faces-config/managed-bean/managed-property/map-entries/value-class</li>
-     *   <li>/faces-config/managed-bean/list-entries/value-class</li>
-     *   <li>/faces-config/managed-bean/managed-property/list-entries/value-class</li>
-     * </ul>
-     * </p>
-     */
-    private static final String VALUE_CLASS =
-         "value-class";
-
-    /**
-     * <p>Handles:
-     * <ul>
-     *   <li>/faces-config/managed-bean/map-entries/map-entry</li>
-     *   <li>/faces-config/managed-bean/managed-property/map-entries/map-entry</li>
-     * </ul>
-     * </p>
-     */
-    private static final String MAP_ENTRY =
-         "map-entry";
-
-    /**
-     * <p>Handles:
-     * <ul>
-     *   <li>/faces-config/managed-bean/map-entries</li>
-     *   <li>/faces-config/managed-bean/managed-property/map-entries</li>
-     * </ul>
-     * </p>
-     */
-    private static final String MAP_ENTRIES =
-         "map-entries";
-
-    /**
-     * <p>Handles:
-     * <ul>
-     *   <li>/faces-config/managed-bean/list-entries</li>
-     *   <li>/faces-config/managed-bean/managed-property/list-entries</li>     
-     * </ul>
-     * </p>
-     */
-    private static final String LIST_ENTRIES =
-         "list-entries";
-
+    private static final String MANAGED_BEAN = "managed-bean";
 
     /**
      * <p>
-     *  <code>eager</code> attribute defined in the managed-bean element.
+     * /faces-config/managed-bean/description
+     * </p>
+     */
+    private static final String DESCRIPTION = "description";
+
+    /**
+     * <p>
+     * /faces-config/mananged-bean/managed-bean-name
+     * </p>
+     */
+    private static final String MGBEAN_NAME = "managed-bean-name";
+
+    /**
+     * <p>
+     * /faces-config/managed-bean/mananged-bean-class
+     * </p>
+     */
+    private static final String MGBEAN_CLASS = "managed-bean-class";
+
+    /**
+     * <p>
+     * /faces-config/managed-bean/managed-bean-scope
+     * </p>
+     */
+    private static final String MGBEAN_SCOPE = "managed-bean-scope";
+
+    /**
+     * <p>
+     * /faces-config/managed-bean/managed-property
+     * </p>
+     */
+    private static final String MG_PROPERTY = "managed-property";
+
+    /**
+     * <p>
+     * /faces-config/managed-bean/managed-property/property-name
+     * </p>
+     */
+    private static final String MG_PROPERTY_NAME = "property-name";
+
+    /**
+     * <p>
+     * /faces-config/managed-bean/managed-property/property-class
+     * </p>
+     */
+    private static final String MG_PROPERTY_TYPE = "property-class";
+
+    /**
+     * <p>
+     * Handles:
+     * <ul>
+     * <li>/faces-config/managed-bean/map-entries/map-entry/null-value</li>
+     * <li>/faces-config/managed-bean/managed-property/null-value</li>
+     * <li>/faces-config/managed-bean/managed-property/map-entries/map-entry/null-value</li>
+     * <li>/faces-config/managed-bean/list-entries/null-value</li>
+     * <li>/faces-config/managed-bean/managed-property/list-entries/null-value</li>
+     * </ul>
+     * </p>
+     */
+    private static final String NULL_VALUE = "null-value";
+
+    /**
+     * <p>
+     * Handles:
+     * <ul>
+     * <li>/faces-config/managed-bean/map-entries/map-entry/value</li>
+     * <li>/faces-config/managed-bean/managed-property/value</li>
+     * <li>/faces-config/managed-bean/managed-property/map-entries/map-entry/value</li>
+     * <li>/faces-config/managed-bean/list-entries/value</li>
+     * <li>/faces-config/managed-bean/managed-property/list-entries/value</li>
+     * </ul>
+     * </p>
+     */
+    private static final String VALUE = "value";
+
+    /**
+     * <p>
+     * Handles:
+     * <ul>
+     * <li>/faces-config/managed-bean/managed-property/map-entries/map-entry/key</li>
+     * </ul>
+     * </p>
+     */
+    private static final String KEY = "key";
+
+    /**
+     * <p>
+     * Handles:
+     * <ul>
+     * <li>/faces-config/managed-bean/map-entries/key-class</li>
+     * <li>/faces-config/managed-bean/managed-property/map-entries/key-class</li>
+     * </ul>
+     * </p>
+     */
+    private static final String MAP_KEY_CLASS = "key-class";
+
+    /**
+     * <p>
+     * Handles:
+     * <ul>
+     * <li>/faces-config/managed-bean/map-entries/value-class</li>
+     * <li>/faces-config/managed-bean/managed-property/map-entries/value-class</li>
+     * <li>/faces-config/managed-bean/list-entries/value-class</li>
+     * <li>/faces-config/managed-bean/managed-property/list-entries/value-class</li>
+     * </ul>
+     * </p>
+     */
+    private static final String VALUE_CLASS = "value-class";
+
+    /**
+     * <p>
+     * Handles:
+     * <ul>
+     * <li>/faces-config/managed-bean/map-entries/map-entry</li>
+     * <li>/faces-config/managed-bean/managed-property/map-entries/map-entry</li>
+     * </ul>
+     * </p>
+     */
+    private static final String MAP_ENTRY = "map-entry";
+
+    /**
+     * <p>
+     * Handles:
+     * <ul>
+     * <li>/faces-config/managed-bean/map-entries</li>
+     * <li>/faces-config/managed-bean/managed-property/map-entries</li>
+     * </ul>
+     * </p>
+     */
+    private static final String MAP_ENTRIES = "map-entries";
+
+    /**
+     * <p>
+     * Handles:
+     * <ul>
+     * <li>/faces-config/managed-bean/list-entries</li>
+     * <li>/faces-config/managed-bean/managed-property/list-entries</li>
+     * </ul>
+     * </p>
+     */
+    private static final String LIST_ENTRIES = "list-entries";
+
+    /**
+     * <p>
+     * <code>eager</code> attribute defined in the managed-bean element.
      * </p>
      */
     private static final String EAGER_ATTRIBUTE = "eager";
 
-
     private static final String DEFAULT_SCOPE = "request";
 
-
     // -------------------------------------------- Methods from ConfigProcessor
-
 
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception {
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
 
         // process annotated managed beans first as managed beans configured
         // via config files take precedence
         processAnnotations(ManagedBean.class);
-        
-        BeanManager beanManager =
-              ApplicationAssociate.getInstance(sc).getBeanManager();
+
+        BeanManager beanManager = ApplicationAssociate.getInstance(sc).getBeanManager();
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                "Processing managed-bean elements for document: ''{0}''",
-                                documentInfos[i].getSourceURI()));
+                LOGGER.log(Level.FINE, MessageFormat.format("Processing managed-bean elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
-            NodeList managedBeans = document.getDocumentElement()
-                 .getElementsByTagNameNS(namespace, MANAGED_BEAN);
+            NodeList managedBeans = document.getDocumentElement().getElementsByTagNameNS(namespace, MANAGED_BEAN);
             if (managedBeans != null && managedBeans.getLength() > 0) {
-                for (int m = 0, size = managedBeans.getLength();
-                     m < size;
-                     m++) {
-                    addManagedBean(beanManager,
-                                   managedBeans.item(m));
+                for (int m = 0, size = managedBeans.getLength(); m < size; m++) {
+                    addManagedBean(beanManager, managedBeans.item(m));
                 }
 
             }
@@ -272,12 +267,9 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
     // --------------------------------------------------------- Private Methods
 
-
-    private void addManagedBean(BeanManager beanManager,
-                                Node managedBean) {
+    private void addManagedBean(BeanManager beanManager, Node managedBean) {
 
         NodeList children = managedBean.getChildNodes();
         String beanName = null;
@@ -292,72 +284,60 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
             Node n = children.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
                 switch (n.getLocalName()) {
-                    case MGBEAN_NAME:
-                        beanName = getNodeText(n);
-                        break;
-                    case MGBEAN_CLASS:
-                        beanClass = getNodeText(n);
-                        break;
-                    case MGBEAN_SCOPE:
-                        beanScope = getNodeText(n);
-                        if (beanScope == null) {
-                            beanScope = DEFAULT_SCOPE;
-                        }   break;
-                    case LIST_ENTRIES:
-                        listEntry = buildListEntry(n);
-                        break;
-                    case MAP_ENTRIES:
-                        mapEntry = buildMapEntry(n);
-                        break;
-                    case MG_PROPERTY:
-                        if (managedProperties == null) {
-                            managedProperties = new ArrayList<>(size);
-                        }   managedProperties.add(n);
-                        break;
-                    case DESCRIPTION:
-                        if (descriptions == null) {
-                            descriptions = new ArrayList<>(4);
-                        }   descriptions.add(n);
-                        break;
+                case MGBEAN_NAME:
+                    beanName = getNodeText(n);
+                    break;
+                case MGBEAN_CLASS:
+                    beanClass = getNodeText(n);
+                    break;
+                case MGBEAN_SCOPE:
+                    beanScope = getNodeText(n);
+                    if (beanScope == null) {
+                        beanScope = DEFAULT_SCOPE;
+                    }
+                    break;
+                case LIST_ENTRIES:
+                    listEntry = buildListEntry(n);
+                    break;
+                case MAP_ENTRIES:
+                    mapEntry = buildMapEntry(n);
+                    break;
+                case MG_PROPERTY:
+                    if (managedProperties == null) {
+                        managedProperties = new ArrayList<>(size);
+                    }
+                    managedProperties.add(n);
+                    break;
+                case DESCRIPTION:
+                    if (descriptions == null) {
+                        descriptions = new ArrayList<>(4);
+                    }
+                    descriptions.add(n);
+                    break;
                 }
             }
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {
-	        LOGGER.log(Level.FINE,
-	                   "Begin processing managed bean ''{0}''",
-	                   beanName);
+            LOGGER.log(Level.FINE, "Begin processing managed bean ''{0}''", beanName);
         }
-
 
         List<ManagedBeanInfo.ManagedProperty> properties = null;
         if (managedProperties != null && !managedProperties.isEmpty()) {
-             properties = new ArrayList<>(
-                 managedProperties.size());
+            properties = new ArrayList<>(managedProperties.size());
             for (Node managedProperty : managedProperties) {
                 properties.add(buildManagedProperty(managedProperty));
             }
         }
 
-        beanManager.register(new ManagedBeanInfo(beanName,
-                                                 beanClass,
-                                                 beanScope,
-                                                 isEager(managedBean,
-                                                         beanName,
-                                                         beanScope),
-                                                 mapEntry,
-                                                 listEntry,
-                                                 properties,
-                                                 getTextMap(descriptions)));
+        beanManager.register(new ManagedBeanInfo(beanName, beanClass, beanScope, isEager(managedBean, beanName, beanScope), mapEntry, listEntry, properties,
+                getTextMap(descriptions)));
 
         if (LOGGER.isLoggable(Level.FINE)) {
-	        LOGGER.log(Level.FINE,
-	                   "Completed processing bean ''{0}''",
-	                   beanName);
+            LOGGER.log(Level.FINE, "Completed processing bean ''{0}''", beanName);
         }
 
     }
-
 
     private ManagedBeanInfo.ListEntry buildListEntry(Node listEntry) {
 
@@ -369,42 +349,36 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
                 Node child = children.item(i);
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
                     switch (child.getLocalName()) {
-                        case VALUE_CLASS:
-                            valueClass = getNodeText(child);
-                            break;
-                        case VALUE:
-                            if (values == null) {
-                                values = new ArrayList<>(size);
-                            }   values.add(getNodeText(child));
-                            break;
-                        case NULL_VALUE:
-                            if (values == null) {
-                                values = new ArrayList<>(size);
-                            }   values.add(ManagedBeanInfo.NULL_VALUE);
-                            break;
+                    case VALUE_CLASS:
+                        valueClass = getNodeText(child);
+                        break;
+                    case VALUE:
+                        if (values == null) {
+                            values = new ArrayList<>(size);
+                        }
+                        values.add(getNodeText(child));
+                        break;
+                    case NULL_VALUE:
+                        if (values == null) {
+                            values = new ArrayList<>(size);
+                        }
+                        values.add(ManagedBeanInfo.NULL_VALUE);
+                        break;
                     }
                 }
             }
 
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                "Created ListEntry valueClass={1}, values={3}",
-                                valueClass,
-                                (values != null && !values.isEmpty())
-                                ? values.toString()
-                                : "none"));
+                LOGGER.log(Level.FINE, MessageFormat.format("Created ListEntry valueClass={1}, values={3}", valueClass,
+                        (values != null && !values.isEmpty()) ? values.toString() : "none"));
             }
             return (new ManagedBeanInfo.ListEntry(valueClass,
-                                                  (values == null)
-                                                  ? TypedCollections.dynamicallyCastList(Collections.emptyList(), String.class)
-                                                  : values));
+                    (values == null) ? TypedCollections.dynamicallyCastList(Collections.emptyList(), String.class) : values));
         }
 
         return null;
 
     }
-
 
     private ManagedBeanInfo.MapEntry buildMapEntry(Node mapEntry) {
 
@@ -417,57 +391,50 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
                 Node child = children.item(i);
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
                     switch (child.getLocalName()) {
-                        case VALUE_CLASS:
-                            valueClass = getNodeText(child);
-                            break;
-                        case MAP_KEY_CLASS:
-                            keyClass = getNodeText(child);
-                            break;
-                        case MAP_ENTRY:
-                            if (entries == null) {
-                                entries = new LinkedHashMap<>(8, 1.0f);
-                            }   NodeList c = child.getChildNodes();
-                            String key = null;
-                            String value = null;
-                            for (int j = 0, jsize = c.getLength(); j < jsize; j++) {
-                                Node node = c.item(j);
-                                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                                    switch (node.getLocalName()) {
-                                        case KEY:
-                                            key = getNodeText(node);
-                                            break;
-                                        case VALUE:
-                                            value = getNodeText(node);
-                                            break;
-                                        case NULL_VALUE:
-                                            value = ManagedBeanInfo.NULL_VALUE;
-                                            break;
-                                    }
+                    case VALUE_CLASS:
+                        valueClass = getNodeText(child);
+                        break;
+                    case MAP_KEY_CLASS:
+                        keyClass = getNodeText(child);
+                        break;
+                    case MAP_ENTRY:
+                        if (entries == null) {
+                            entries = new LinkedHashMap<>(8, 1.0f);
+                        }
+                        NodeList c = child.getChildNodes();
+                        String key = null;
+                        String value = null;
+                        for (int j = 0, jsize = c.getLength(); j < jsize; j++) {
+                            Node node = c.item(j);
+                            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                                switch (node.getLocalName()) {
+                                case KEY:
+                                    key = getNodeText(node);
+                                    break;
+                                case VALUE:
+                                    value = getNodeText(node);
+                                    break;
+                                case NULL_VALUE:
+                                    value = ManagedBeanInfo.NULL_VALUE;
+                                    break;
                                 }
-                            }   entries.put(key, value);
-                            break;
+                            }
+                        }
+                        entries.put(key, value);
+                        break;
                     }
                 }
             }
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                "Created MapEntry keyClass={0}, valueClass={1}, entries={3}",
-                                keyClass,
-                                valueClass,
-                                (entries != null)
-                                ? entries.toString()
-                                : "none"));
+                LOGGER.log(Level.FINE, MessageFormat.format("Created MapEntry keyClass={0}, valueClass={1}, entries={3}", keyClass, valueClass,
+                        (entries != null) ? entries.toString() : "none"));
             }
-            return (new ManagedBeanInfo.MapEntry(keyClass,
-                                                 valueClass,
-                                                 entries));
+            return (new ManagedBeanInfo.MapEntry(keyClass, valueClass, entries));
 
         }
 
         return null;
     }
-
 
     private ManagedBeanInfo.ManagedProperty buildManagedProperty(Node managedProperty) {
 
@@ -482,50 +449,38 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
                 Node child = children.item(i);
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
                     switch (child.getLocalName()) {
-                        case MG_PROPERTY_NAME:
-                            propertyName = getNodeText(child);
-                            break;
-                        case MG_PROPERTY_TYPE:
-                            propertyClass = getNodeText(child);
-                            break;
-                        case VALUE:
-                            value = getNodeText(child);
-                            break;
-                        case NULL_VALUE:
-                            value = ManagedBeanInfo.NULL_VALUE;
-                            break;
-                        case LIST_ENTRIES:
-                            listEntry = buildListEntry(child);
-                            break;
-                        case MAP_ENTRIES:
-                            mapEntry = buildMapEntry(child);
-                            break;
+                    case MG_PROPERTY_NAME:
+                        propertyName = getNodeText(child);
+                        break;
+                    case MG_PROPERTY_TYPE:
+                        propertyClass = getNodeText(child);
+                        break;
+                    case VALUE:
+                        value = getNodeText(child);
+                        break;
+                    case NULL_VALUE:
+                        value = ManagedBeanInfo.NULL_VALUE;
+                        break;
+                    case LIST_ENTRIES:
+                        listEntry = buildListEntry(child);
+                        break;
+                    case MAP_ENTRIES:
+                        mapEntry = buildMapEntry(child);
+                        break;
                     }
                 }
             }
 
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                "Adding ManagedProperty propertyName={0}, propertyClass={1}, propertyValue={2}, hasMapEntry={3}, hasListEntry={4}",
-                                propertyName,
-                                ((propertyClass != null)
-                                 ? propertyClass
-                                 : "inferred"),
-                                value,
-                                (mapEntry != null),
-                                (listEntry != null)));
+                        MessageFormat.format("Adding ManagedProperty propertyName={0}, propertyClass={1}, propertyValue={2}, hasMapEntry={3}, hasListEntry={4}",
+                                propertyName, ((propertyClass != null) ? propertyClass : "inferred"), value, (mapEntry != null), (listEntry != null)));
             }
-            return new ManagedBeanInfo.ManagedProperty(propertyName,
-                                                       propertyClass,
-                                                       value,
-                                                       mapEntry,
-                                                       listEntry);
+            return new ManagedBeanInfo.ManagedProperty(propertyName, propertyClass, value, mapEntry, listEntry);
         }
 
         return null;
     }
-
 
     private boolean isEager(Node managedBean, String beanName, String scope) {
 
@@ -536,9 +491,7 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
             eager = Boolean.valueOf(getNodeText(eagerNode));
             if (eager && (scope == null || !ELUtils.Scope.APPLICATION.toString().equals(scope))) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.configuration.illegal.eager.bean",
-                               new Object[]{beanName, scope});
+                    LOGGER.log(Level.WARNING, "jsf.configuration.illegal.eager.bean", new Object[] { beanName, scope });
                 }
                 eager = false;
             }
@@ -547,6 +500,5 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
         return eager;
 
     }
-   
 
 }

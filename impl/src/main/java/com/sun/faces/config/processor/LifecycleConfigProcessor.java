@@ -40,30 +40,31 @@
 
 package com.sun.faces.config.processor;
 
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.config.DocumentInfo;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Document;
+import java.text.MessageFormat;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.FactoryFinder;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.servlet.ServletContext;
-import java.text.MessageFormat;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>
- *  This <code>ConfigProcessor</code> handles all elements defined under
- *  <code>/faces-config/lifecycle</code>.
+ * This <code>ConfigProcessor</code> handles all elements defined under
+ * <code>/faces-config/lifecycle</code>.
  * </p>
  */
 public class LifecycleConfigProcessor extends AbstractConfigProcessor {
@@ -71,12 +72,16 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     /**
-     * <p>/faces-config/lifecycle</p>
+     * <p>
+     * /faces-config/lifecycle
+     * </p>
      */
     private static final String LIFECYCLE = "lifecycle";
 
     /**
-     * <p>/faces-config/lifecycle/phase-listener</p>
+     * <p>
+     * /faces-config/lifecycle/phase-listener
+     * </p>
      */
     private static final String PHASE_LISTENER = "phase-listener";
     private List<PhaseListener> appPhaseListeners;
@@ -84,14 +89,14 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
     public LifecycleConfigProcessor() {
         appPhaseListeners = new CopyOnWriteArrayList<PhaseListener>();
     }
-    
+
     @Override
     public void destroy(ServletContext sc) {
         destroyInstances(sc, appPhaseListeners);
-        
+
         destroyNext(sc);
     }
-    
+
     private void destroyInstances(ServletContext sc, List instances) {
         for (Object cur : instances) {
             destroyInstance(sc, cur.getClass().getName(), cur);
@@ -101,80 +106,60 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
 
     // -------------------------------------------- Methods from ConfigProcessor
 
-
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception {
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
 
-        LifecycleFactory factory = (LifecycleFactory)
-             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        LifecycleFactory factory = (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
 
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                "Processing lifecycle elements for document: ''{0}''",
-                                documentInfos[i].getSourceURI()));
+                LOGGER.log(Level.FINE, MessageFormat.format("Processing lifecycle elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
-            String namespace =
-                 document.getDocumentElement().getNamespaceURI();
-            NodeList lifecycles = 
-                 document.getElementsByTagNameNS(namespace, LIFECYCLE);
+            String namespace = document.getDocumentElement().getNamespaceURI();
+            NodeList lifecycles = document.getElementsByTagNameNS(namespace, LIFECYCLE);
             if (lifecycles != null) {
                 for (int c = 0, csize = lifecycles.getLength(); c < csize; c++) {
                     Node n = lifecycles.item(c);
                     if (n.getNodeType() == Node.ELEMENT_NODE) {
-                        NodeList listeners = ((Element) n).getElementsByTagNameNS(namespace,
-                                                                                  PHASE_LISTENER);
+                        NodeList listeners = ((Element) n).getElementsByTagNameNS(namespace, PHASE_LISTENER);
                         addPhaseListeners(sc, factory, listeners);
                     }
                 }
-            }            
+            }
         }
         invokeNext(sc, documentInfos);
 
     }
 
-    
     // --------------------------------------------------------- Private Methods
 
-
-    private void addPhaseListeners(ServletContext sc, LifecycleFactory factory,
-                                   NodeList phaseListeners) {
+    private void addPhaseListeners(ServletContext sc, LifecycleFactory factory, NodeList phaseListeners) {
 
         if (phaseListeners != null && phaseListeners.getLength() > 0) {
             for (int i = 0, size = phaseListeners.getLength(); i < size; i++) {
                 Node plNode = phaseListeners.item(i);
                 String pl = getNodeText(plNode);
                 if (pl != null) {
-                    boolean [] didPerformInjection = { false };
-                    PhaseListener plInstance = (PhaseListener) createInstance(sc, pl,
-                                                       PhaseListener.class,
-                                                       null,
-                                                       plNode, true, didPerformInjection);
+                    boolean[] didPerformInjection = { false };
+                    PhaseListener plInstance = (PhaseListener) createInstance(sc, pl, PhaseListener.class, null, plNode, true, didPerformInjection);
                     if (plInstance != null) {
                         if (didPerformInjection[0]) {
                             appPhaseListeners.add(plInstance);
                         }
-                        for (Iterator t = factory.getLifecycleIds(); t.hasNext();)
-                        {
+                        for (Iterator t = factory.getLifecycleIds(); t.hasNext();) {
                             String lfId = (String) t.next();
                             Lifecycle lifecycle = factory.getLifecycle(lfId);
                             if (LOGGER.isLoggable(Level.FINE)) {
-                                LOGGER.log(Level.FINE,
-                                           MessageFormat.format(
-                                                "Adding PhaseListener ''{0}'' to lifecycle ''{0}}",
-                                                pl,
-                                                lfId));
+                                LOGGER.log(Level.FINE, MessageFormat.format("Adding PhaseListener ''{0}'' to lifecycle ''{0}}", pl, lfId));
                             }
                             lifecycle.addPhaseListener(plInstance);
                         }
                     }
-                } 
+                }
             }
         }
 

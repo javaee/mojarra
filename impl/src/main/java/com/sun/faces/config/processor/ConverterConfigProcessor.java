@@ -61,8 +61,8 @@ import java.util.logging.Logger;
 
 /**
  * <p>
- *  This <code>ConfigProcessor</code> handles all elements defined
- *  under <code>/faces-config/converter</code>.
+ * This <code>ConfigProcessor</code> handles all elements defined under
+ * <code>/faces-config/converter</code>.
  * </p>
  */
 public class ConverterConfigProcessor extends AbstractConfigProcessor {
@@ -75,34 +75,29 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
     private static final String CONVERTER = "converter";
 
     /**
-     * <code>/faces-config/converter/converter-id</code>
-     * (mutually exclusive with converter-for-class)
+     * <code>/faces-config/converter/converter-id</code> (mutually exclusive with
+     * converter-for-class)
      */
-    private static final String CONVERTER_ID
-         = "converter-id";
+    private static final String CONVERTER_ID = "converter-id";
 
     /**
-     * <code>/faces-config/converter/converter-for-class</code>
-     * (mutually exclusive with converter-id)
+     * <code>/faces-config/converter/converter-for-class</code> (mutually exclusive with
+     * converter-id)
      */
-    private static final String CONVERTER_FOR_CLASS
-         = "converter-for-class";
+    private static final String CONVERTER_FOR_CLASS = "converter-for-class";
 
     /**
      * <code>/faces-config/converter/converter-class</code>
      */
-    private static final String CONVERTER_CLASS
-         = "converter-class";
+    private static final String CONVERTER_CLASS = "converter-class";
 
     // -------------------------------------------- Methods from ConfigProcessor
-
 
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception {
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
 
         // process annotated converters first as converters configured
         // via config files take precedence
@@ -110,16 +105,11 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
 
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                "Processing converter elements for document: ''{0}''",
-                                documentInfos[i].getSourceURI()));
+                LOGGER.log(Level.FINE, MessageFormat.format("Processing converter elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
-            String namespace = document.getDocumentElement()
-                 .getNamespaceURI();
-            NodeList nodes = document.getDocumentElement()
-                 .getElementsByTagNameNS(namespace, CONVERTER);
+            String namespace = document.getDocumentElement().getNamespaceURI();
+            NodeList nodes = document.getDocumentElement().getElementsByTagNameNS(namespace, CONVERTER);
             if (nodes != null && nodes.getLength() > 0) {
                 addConverters(nodes, namespace);
             }
@@ -130,62 +120,48 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
 
     // --------------------------------------------------------- Private Methods
 
-
     private void addConverters(NodeList converters, String namespace) {
 
         Application application = getApplication();
         Verifier verifier = Verifier.getCurrentInstance();
         for (int i = 0, size = converters.getLength(); i < size; i++) {
             Node converter = converters.item(i);
-            NodeList children = ((Element) converter)
-                 .getElementsByTagNameNS(namespace, "*");
+            NodeList children = ((Element) converter).getElementsByTagNameNS(namespace, "*");
             String converterId = null;
             String converterClass = null;
             String converterForClass = null;
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 switch (n.getLocalName()) {
-                    case CONVERTER_ID:
-                        converterId = getNodeText(n);
-                        break;
-                    case CONVERTER_CLASS:
-                        converterClass = getNodeText(n);
-                        break;
-                    case CONVERTER_FOR_CLASS:
-                        converterForClass = getNodeText(n);
-                        break;
+                case CONVERTER_ID:
+                    converterId = getNodeText(n);
+                    break;
+                case CONVERTER_CLASS:
+                    converterClass = getNodeText(n);
+                    break;
+                case CONVERTER_FOR_CLASS:
+                    converterForClass = getNodeText(n);
+                    break;
                 }
             }
 
             if (converterId != null && converterClass != null) {
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               MessageFormat.format(
-                                    "[Converter by ID] Calling Application.addConverter({0}, {1}",
-                                    converterId,
-                                    converterClass));
+                    LOGGER.log(Level.FINE, MessageFormat.format("[Converter by ID] Calling Application.addConverter({0}, {1}", converterId, converterClass));
                 }
                 if (verifier != null) {
-                    verifier.validateObject(Verifier.ObjectType.CONVERTER,
-                                            converterClass,
-                                            Converter.class);
+                    verifier.validateObject(Verifier.ObjectType.CONVERTER, converterClass, Converter.class);
                 }
                 application.addConverter(converterId, converterClass);
             } else if (converterClass != null && converterForClass != null) {
                 try {
-                    Class cfcClass = Util.loadClass(converterForClass,
-                                                    this.getClass());
+                    Class cfcClass = Util.loadClass(converterForClass, this.getClass());
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
-                                   MessageFormat.format(
-                                        "[Converter for Class] Calling Application.addConverter({0}, {1}",
-                                        converterForClass,
-                                        converterClass));
+                                MessageFormat.format("[Converter for Class] Calling Application.addConverter({0}, {1}", converterForClass, converterClass));
                     }
                     if (verifier != null) {
-                        verifier.validateObject(Verifier.ObjectType.CONVERTER,
-                                converterClass,
-                                Converter.class);
+                        verifier.validateObject(Verifier.ObjectType.CONVERTER, converterClass, Converter.class);
                     }
                     application.addConverter(cfcClass, converterClass);
                 } catch (ClassNotFoundException cnfe) {

@@ -40,26 +40,26 @@
 
 package com.sun.faces.config.processor;
 
-import com.sun.faces.config.DocumentInfo;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.util.FacesLogger;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Document;
-
-import javax.servlet.ServletContext;
-
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletContext;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>
- *  This <code>ConfigProcessor</code> handles all elements defined under
- *  <code>/faces-config/factory</code>.
+ * This <code>ConfigProcessor</code> handles all elements defined under
+ * <code>/faces-config/factory</code>.
  * </p>
  */
 public class FacesConfigExtensionProcessor extends AbstractConfigProcessor {
@@ -88,35 +88,27 @@ public class FacesConfigExtensionProcessor extends AbstractConfigProcessor {
 
     // ------------------------------------------------------------ Constructors
 
-    
-    public FacesConfigExtensionProcessor() { }
-
+    public FacesConfigExtensionProcessor() {
+    }
 
     // -------------------------------------------- Methods from ConfigProcessor
-
 
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception {
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
 
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                "Processing faces-config-extension elements for document: ''{0}''",
-                                documentInfos[i].getSourceURI()));
+                        MessageFormat.format("Processing faces-config-extension elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
-            String namespace = document.getDocumentElement()
-                 .getNamespaceURI();
-            NodeList facesConfigExtensions = document.getDocumentElement()
-                 .getElementsByTagNameNS(namespace, FACES_CONFIG_EXTENSION);
+            String namespace = document.getDocumentElement().getNamespaceURI();
+            NodeList facesConfigExtensions = document.getDocumentElement().getElementsByTagNameNS(namespace, FACES_CONFIG_EXTENSION);
             if (facesConfigExtensions != null && facesConfigExtensions.getLength() > 0) {
-                processFacesConfigExtensions(facesConfigExtensions,
-                                 namespace, documentInfos[i]);
+                processFacesConfigExtensions(facesConfigExtensions, namespace, documentInfos[i]);
             }
         }
 
@@ -127,34 +119,27 @@ public class FacesConfigExtensionProcessor extends AbstractConfigProcessor {
 
     // --------------------------------------------------------- Private Methods
 
-
-    private void processFacesConfigExtensions(NodeList facesConfigExtensions,
-                                  String namespace, DocumentInfo info) {
+    private void processFacesConfigExtensions(NodeList facesConfigExtensions, String namespace, DocumentInfo info) {
         WebConfiguration config = null;
 
         for (int i = 0, size = facesConfigExtensions.getLength(); i < size; i++) {
             Node facesConfigExtension = facesConfigExtensions.item(i);
-            NodeList children = ((Element) facesConfigExtension)
-                 .getElementsByTagNameNS(namespace, "*");
+            NodeList children = ((Element) facesConfigExtension).getElementsByTagNameNS(namespace, "*");
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 if (FACELETS_PROCESSING.equals(n.getLocalName())) {
                     Node faceletsProcessing = n;
-                    NodeList faceletsProcessingChildren = ((Element) faceletsProcessing)
-                           .getElementsByTagNameNS(namespace, "*");
+                    NodeList faceletsProcessingChildren = ((Element) faceletsProcessing).getElementsByTagNameNS(namespace, "*");
                     String fileExtension = null, processAs = null;
                     for (int fp = 0, fpsize = faceletsProcessingChildren.getLength(); fp < fpsize; fp++) {
                         Node childOfInterset = faceletsProcessingChildren.item(fp);
-                        if (null == fileExtension &&
-                            FILE_EXTENSION.equals(childOfInterset.getLocalName())) {
+                        if (null == fileExtension && FILE_EXTENSION.equals(childOfInterset.getLocalName())) {
                             fileExtension = getNodeText(childOfInterset);
-                        } else if (null == processAs &&
-                                   PROCESS_AS.equals(childOfInterset.getLocalName())) {
+                        } else if (null == processAs && PROCESS_AS.equals(childOfInterset.getLocalName())) {
                             processAs = getNodeText(childOfInterset);
                         } else {
                             if (LOGGER.isLoggable(Level.WARNING)) {
-                                LOGGER.log(Level.WARNING,
-                                        MessageFormat.format(
+                                LOGGER.log(Level.WARNING, MessageFormat.format(
                                         "Processing faces-config-extension elements for document: ''{0}'', encountered unexpected configuration ''{1}'', ignoring and continuing",
                                         info.getSourceURI(), getNodeText(childOfInterset)));
                             }
@@ -166,14 +151,13 @@ public class FacesConfigExtensionProcessor extends AbstractConfigProcessor {
                         if (null == config) {
                             config = WebConfiguration.getInstance();
                         }
-                        Map<String, String> faceletsProcessingMappings =
-                                config.getFacesConfigOptionValue(WebConfiguration.WebContextInitParameter.FaceletsProcessingFileExtensionProcessAs, true);
+                        Map<String, String> faceletsProcessingMappings = config
+                                .getFacesConfigOptionValue(WebConfiguration.WebContextInitParameter.FaceletsProcessingFileExtensionProcessAs, true);
                         faceletsProcessingMappings.put(fileExtension, processAs);
 
                     } else {
                         if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                    MessageFormat.format(
+                            LOGGER.log(Level.WARNING, MessageFormat.format(
                                     "Processing faces-config-extension elements for document: ''{0}'', encountered <facelets-processing> elemnet without expected children",
                                     info.getSourceURI()));
                         }
@@ -183,6 +167,5 @@ public class FacesConfigExtensionProcessor extends AbstractConfigProcessor {
         }
 
     }
-
 
 }

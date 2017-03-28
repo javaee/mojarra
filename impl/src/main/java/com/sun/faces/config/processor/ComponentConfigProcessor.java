@@ -59,41 +59,44 @@ import java.text.MessageFormat;
 
 /**
  * <p>
- *  This <code>ConfigProcessor</code> handles all elements defined under
- *  <code>/faces-config/component</code>.
+ * This <code>ConfigProcessor</code> handles all elements defined under
+ * <code>/faces-config/component</code>.
  * </p>
  */
 public class ComponentConfigProcessor extends AbstractConfigProcessor {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
-
     /**
-     * <p>/faces-config/component</p>
+     * <p>
+     * /faces-config/component
+     * </p>
      */
     private static final String COMPONENT = "component";
 
     /**
-     * <p>/faces-config/component/component-type</p>
+     * <p>
+     * /faces-config/component/component-type
+     * </p>
      */
     private static final String COMPONENT_TYPE = "component-type";
 
     /**
-     * <p>/faces-config/component/component-class</p>
+     * <p>
+     * /faces-config/component/component-class
+     * </p>
      */
     private static final String COMPONENT_CLASS = "component-class";
 
-
     // -------------------------------------------- Methods from ConfigProcessor
 
-
     /**
-     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])  @param sc
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[]) @param
+     *      sc
      * @param documentInfos
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception {
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
 
         // process annotated components first as components configured
         // via config files take precedence
@@ -101,16 +104,11 @@ public class ComponentConfigProcessor extends AbstractConfigProcessor {
 
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                "Processing component elements for document: ''{0}''",
-                                documentInfos[i].getSourceURI()));
+                LOGGER.log(Level.FINE, MessageFormat.format("Processing component elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
-            String namespace = document.getDocumentElement()
-                 .getNamespaceURI();
-            NodeList components = document.getDocumentElement()
-                 .getElementsByTagNameNS(namespace, COMPONENT);
+            String namespace = document.getDocumentElement().getNamespaceURI();
+            NodeList components = document.getDocumentElement().getElementsByTagNameNS(namespace, COMPONENT);
             if (components != null && components.getLength() > 0) {
                 addComponents(components, namespace);
             }
@@ -119,46 +117,35 @@ public class ComponentConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    
-
     // --------------------------------------------------------- Private Methods
 
-
-    private void addComponents(NodeList components, String namespace)
-    throws XPathExpressionException {
+    private void addComponents(NodeList components, String namespace) throws XPathExpressionException {
 
         Application app = getApplication();
         Verifier verifier = Verifier.getCurrentInstance();
         for (int i = 0, size = components.getLength(); i < size; i++) {
             Node componentNode = components.item(i);
-            NodeList children = ((Element) componentNode)
-                 .getElementsByTagNameNS(namespace, "*");
+            NodeList children = ((Element) componentNode).getElementsByTagNameNS(namespace, "*");
             String componentType = null;
             String componentClass = null;
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 switch (n.getLocalName()) {
-                    case COMPONENT_TYPE:
-                        componentType = getNodeText(n);
-                        break;
-                    case COMPONENT_CLASS:
-                        componentClass = getNodeText(n);
-                        break;
+                case COMPONENT_TYPE:
+                    componentType = getNodeText(n);
+                    break;
+                case COMPONENT_CLASS:
+                    componentClass = getNodeText(n);
+                    break;
                 }
             }
 
             if (componentType != null && componentClass != null) {
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               MessageFormat.format(
-                                    "Calling Application.addComponent({0},{1})",
-                                    componentType,
-                                    componentClass));
+                    LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.addComponent({0},{1})", componentType, componentClass));
                 }
                 if (verifier != null) {
-                    verifier.validateObject(Verifier.ObjectType.COMPONENT,
-                                            componentClass,
-                                            UIComponent.class);
+                    verifier.validateObject(Verifier.ObjectType.COMPONENT, componentClass, UIComponent.class);
                 }
                 app.addComponent(componentType, componentClass);
             }

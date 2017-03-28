@@ -40,31 +40,33 @@
 
 package com.sun.faces.config.processor;
 
-import com.sun.faces.config.ConfigurationException;
-import com.sun.faces.config.Verifier;
-import com.sun.faces.config.DocumentInfo;
-import com.sun.faces.util.FacesLogger;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Document;
-
-import javax.faces.application.Application;
-import javax.faces.validator.Validator;
-import javax.faces.validator.FacesValidator;
-import javax.servlet.ServletContext;
-import javax.xml.xpath.XPathExpressionException;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.faces.application.Application;
 import javax.faces.validator.BeanValidator;
+import javax.faces.validator.FacesValidator;
+import javax.faces.validator.Validator;
+import javax.servlet.ServletContext;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.sun.faces.config.ConfigurationException;
+import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.config.Verifier;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>
- *  This <code>ConfigProcessor</code> handles all elements defined under
- *  <code>/faces-config/valiator</code>.
+ * This <code>ConfigProcessor</code> handles all elements defined under
+ * <code>/faces-config/valiator</code>.
  * </p>
  */
 public class ValidatorConfigProcessor extends AbstractConfigProcessor {
@@ -72,30 +74,33 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     /**
-     * <p>/faces-config/validator</p>
+     * <p>
+     * /faces-config/validator
+     * </p>
      */
     private static final String VALIDATOR = "validator";
 
     /**
-     * <p>/faces-config/component/validator-id</p>
+     * <p>
+     * /faces-config/component/validator-id
+     * </p>
      */
     private static final String VALIDATOR_ID = "validator-id";
 
     /**
-     * <p>/faces-config/component/validator-class</p>
+     * <p>
+     * /faces-config/component/validator-class
+     * </p>
      */
     private static final String VALIDATOR_CLASS = "validator-class";
-    
 
     // -------------------------------------------- Methods from ConfigProcessor
-
 
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception {
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
 
         // process annotated Validators first as Validators configured
         // via config files take precedence
@@ -103,15 +108,11 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
 
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           MessageFormat.format(
-                                "Processing validator elements for document: ''{0}''",
-                                documentInfos[i].getSourceURI()));
+                LOGGER.log(Level.FINE, MessageFormat.format("Processing validator elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
-            NodeList validators = document.getDocumentElement()
-                 .getElementsByTagNameNS(namespace, VALIDATOR);
+            NodeList validators = document.getDocumentElement().getElementsByTagNameNS(namespace, VALIDATOR);
             if (validators != null && validators.getLength() > 0) {
                 addValidators(validators, namespace);
             }
@@ -127,11 +128,11 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
     private void processDefaultValidatorIds() {
 
         Application app = getApplication();
-        Map<String,String> defaultValidatorInfo = app.getDefaultValidatorInfo();
-        for (Map.Entry<String,String> info : defaultValidatorInfo.entrySet()) {
+        Map<String, String> defaultValidatorInfo = app.getDefaultValidatorInfo();
+        for (Map.Entry<String, String> info : defaultValidatorInfo.entrySet()) {
             String defaultValidatorId = info.getKey();
             boolean found = false;
-            for (Iterator<String> registered = app.getValidatorIds(); registered.hasNext(); ) {
+            for (Iterator<String> registered = app.getValidatorIds(); registered.hasNext();) {
                 if (defaultValidatorId.equals(registered.next())) {
                     found = true;
                     break;
@@ -142,54 +143,46 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
                 throw new ConfigurationException(msg);
             }
         }
-        
+
     }
 
-    private void addValidators(NodeList validators, String namespace)
-    throws XPathExpressionException {
+    private void addValidators(NodeList validators, String namespace) throws XPathExpressionException {
 
         Application app = getApplication();
         Verifier verifier = Verifier.getCurrentInstance();
         for (int i = 0, size = validators.getLength(); i < size; i++) {
             Node validator = validators.item(i);
 
-            NodeList children = ((Element) validator)
-                 .getElementsByTagNameNS(namespace, "*");
+            NodeList children = ((Element) validator).getElementsByTagNameNS(namespace, "*");
             String validatorId = null;
             String validatorClass = null;
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 if (n.getNodeType() == Node.ELEMENT_NODE) {
                     switch (n.getLocalName()) {
-                        case VALIDATOR_ID:
-                            validatorId = getNodeText(n);
-                            break;
-                        case VALIDATOR_CLASS:
-                            validatorClass = getNodeText(n);
-                            break;
+                    case VALIDATOR_ID:
+                        validatorId = getNodeText(n);
+                        break;
+                    case VALIDATOR_CLASS:
+                        validatorClass = getNodeText(n);
+                        break;
                     }
                 }
             }
 
             if (validatorId != null && validatorClass != null) {
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               MessageFormat.format(
-                                    "Calling Application.addValidator({0},{1})",
-                                    validatorId,
-                                    validatorClass));
+                    LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.addValidator({0},{1})", validatorId, validatorClass));
                 }
-                
+
                 boolean doAdd = true;
                 if (validatorId.equals(BeanValidator.VALIDATOR_ID)) {
                     doAdd = ApplicationConfigProcessor.isBeanValidatorAvailable();
                 }
-                
+
                 if (doAdd) {
                     if (verifier != null) {
-                        verifier.validateObject(Verifier.ObjectType.VALIDATOR,
-                                validatorClass,
-                                Validator.class);
+                        verifier.validateObject(Verifier.ObjectType.VALIDATOR, validatorClass, Validator.class);
                     }
                     app.addValidator(validatorId, validatorClass);
                 }
@@ -197,5 +190,5 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
 
         }
     }
-    
+
 }

@@ -46,17 +46,16 @@ import javax.servlet.ServletContext;
 
 /**
  * <p>
- *  This interface provides a CoR structure for processing JSF configuration
- *  resources.
+ * This interface provides a CoR structure for processing JSF configuration resources.
  * </p>
  */
 public interface ConfigProcessor {
 
     /**
      * <p>
-     *   Set the next <code>ConfigProcessor</code> to be invoked once
-     *   {@link ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])}
-     *   has completed.
+     * Set the next <code>ConfigProcessor</code> to be invoked once
+     * {@link ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])}
+     * has completed.
      * </p>
      *
      * @param nextProcessor the next processor in the chain to be invoked
@@ -64,41 +63,42 @@ public interface ConfigProcessor {
     public void setNext(ConfigProcessor nextProcessor);
 
     /**
-     * <p>Return the next config processor in the chain, or null.</p>
+     * <p>
+     * Return the next config processor in the chain, or null.
+     * </p>
      * 
      */
     public ConfigProcessor getNext();
-    
+
     /*
      * Called to initialize the per-application metadata used by the ConfigProcessor
      */
-    
+
     public void initializeClassMetadataMap(ServletContext sc);
 
     /**
      * <p>
-     *  Process the array of <code>Document</code>s.
+     * Process the array of <code>Document</code>s.
      * </p>
      *
      * @param sc the <code>ServletContext</code> for the application being configured
-     * @param documentInfos  @throws Exception if an error occurs during processing
+     * @param documentInfos @throws Exception if an error occurs during processing
      */
-    public void process(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception;
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception;
 
     public void destroy(ServletContext sc);
-    
+
     /**
      * <p>
-     *  Invoke the <code>ConfigProcess</code> specified by
-     *  a call to {@link ConfigProcessor#setNext(ConfigProcessor)}, if any.
+     * Invoke the <code>ConfigProcess</code> specified by a call to
+     * {@link ConfigProcessor#setNext(ConfigProcessor)}, if any.
      * </p>
+     * 
      * @param sc the <code>ServletContext</code> for the application being configured
-     * @param documentInfos  @throws Exception if an error occurs invoking the next processor
+     * @param documentInfos @throws Exception if an error occurs invoking the next processor
      */
-    public void invokeNext(ServletContext sc, DocumentInfo[] documentInfos)
-    throws Exception;
-    
+    public void invokeNext(ServletContext sc, DocumentInfo[] documentInfos) throws Exception;
+
     public void destroyNext(ServletContext sc);
 
 }
