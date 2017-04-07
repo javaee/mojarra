@@ -45,6 +45,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.lang.reflect.Array;
 import java.util.Iterator;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <p>
@@ -57,6 +59,8 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
 
     private boolean initialState;
     private List<T> attachedObjects = new ArrayList<T>(2);
+    private static Logger LOGGER = Logger.getLogger("javax.faces.component",
+            "javax.faces.LogStrings");
 
 
     // ------------------------------------- Methods from PartialStateHolder
@@ -166,6 +170,11 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
             if( attachedObjects.length != this.attachedObjects.size() ) {
               len = attachedObjects.length < this.attachedObjects.size() ? 
                     attachedObjects.length : this.attachedObjects.size() ;
+              LOGGER.log(Level.WARNING, "restoreState: 1:1 relation between attachedObjects and state is broken! \n" +
+                         "this.attachedObjects has " + this.attachedObjects.size() + "elements, \n" +
+                         "state has " + attachedObjects.length + "elements. \n" +
+                         "Using " + len + " to start the restoreState loop. \n"
+                        );
             }
             for (int i = 0; i < len; i++) {
                 T l = this.attachedObjects.get(i);
