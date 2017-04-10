@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+  <f:event listener="#{action.preRenderView}" type="preRenderView" />
+  <title>BugDemo</title>
+  <style>
+  th, td {
+    border: solid;
+    border-width: 1px;
+    }
+  </style>
+</h:head>
+
+<h:body>
+  <h3>BugDemo</h3>
+  <h:form id="form">
+    <table id="table">
+      <thead>
+        <tr>
+          <th>Text1</th>
+          <th>Text2</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <ui:repeat var="row" varStatus="st" value="#{form.rows}" id="repeat">
+          <tr>
+            <td id="td1"><h:outputText value="${row.text1}" id="output"/></td>
+            <td id="td2"><h:inputText value="${row.text2}" id="input"/></td>
+          </tr>
+        </ui:repeat>
+      </tbody>
+    </table>
+    <h:commandButton id="submit" action="#{action.action}" value="Test" />
+    <h:messages />
+  </h:form>
+</h:body>
+</html>
