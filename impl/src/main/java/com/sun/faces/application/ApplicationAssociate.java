@@ -116,6 +116,7 @@ import javax.faces.view.facelets.FaceletsResourceResolver;
 import javax.faces.view.facelets.ResourceResolver;
 import javax.faces.view.facelets.TagDecorator;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.annotation.AnnotationManager;
@@ -224,6 +225,7 @@ public class ApplicationAssociate {
     private BeanManager beanManager;
     private AnnotationManager annotationManager;
     private boolean devModeEnabled;
+    private boolean hasPushBuilder;
     private Compiler compiler;
     private DefaultFaceletFactory faceletFactory;
     private ResourceManager resourceManager;
@@ -274,6 +276,7 @@ public class ApplicationAssociate {
         annotationManager = new AnnotationManager();
 
         devModeEnabled = appImpl.getProjectStage() == Development;
+        hasPushBuilder = checkForPushBuilder();
 
         if (!devModeEnabled) {
             resourceCache = new ResourceCache();
@@ -287,6 +290,14 @@ public class ApplicationAssociate {
 
         definingDocumentIdsToTruncatedJarUrls = new ConcurrentHashMap<>();
         timeOfInstantiation = System.currentTimeMillis();
+    }
+    
+    private boolean checkForPushBuilder() {
+        try {
+            return HttpServletRequest.class.getMethod("newPushBuilder", (Class[]) null) != null;
+        } catch (NoSuchMethodException | SecurityException ex) {
+            return false;
+        }
     }
 
     public Application getApplication() {
@@ -492,6 +503,10 @@ public class ApplicationAssociate {
 
     public boolean isDevModeEnabled() {
         return devModeEnabled;
+    }
+    
+    public boolean isPushBuilderSupported() {
+        return hasPushBuilder;
     }
 
     /**
