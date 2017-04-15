@@ -126,6 +126,7 @@ import javax.faces.flow.FlowHandler;
 import javax.faces.flow.FlowHandlerFactory;
 import javax.faces.view.facelets.FaceletCacheFactory;
 import javax.faces.view.facelets.FaceletsResourceResolver;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -209,6 +210,7 @@ public class ApplicationAssociate {
     private GroovyHelper groovyHelper;
     private AnnotationManager annotationManager;
     private boolean devModeEnabled;
+    private boolean hasPushBuilder;
     private Compiler compiler;
     private DefaultFaceletFactory faceletFactory;
     private ResourceManager resourceManager;
@@ -263,6 +265,7 @@ public class ApplicationAssociate {
         groovyHelper = GroovyHelper.getCurrentInstance();
 
         devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
+        hasPushBuilder = checkForPushBuilder();
 
         if (!devModeEnabled) {
             resourceCache = new ResourceCache();
@@ -277,6 +280,17 @@ public class ApplicationAssociate {
         
         definingDocumentIdsToTruncatedJarUrls = new ConcurrentHashMap<>();
         timeOfInstantiation = System.currentTimeMillis();
+    }
+    
+    private boolean checkForPushBuilder() {
+        boolean result = false;
+        Class clazz = HttpServletRequest.class;
+        try {
+            result = null != clazz.getMethod("newPushBuilder", (Class[]) null);
+        } catch (NoSuchMethodException | SecurityException ex) {            
+        }
+        
+        return result;
     }
     
     public Application getApplication() {
@@ -500,6 +514,10 @@ public class ApplicationAssociate {
 
     public boolean isDevModeEnabled() {
         return devModeEnabled;
+    }
+    
+    public boolean isPushBuilderSupported() {
+        return hasPushBuilder;
     }
 
     /**

@@ -86,12 +86,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.context.flash.ELFlash;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
+import java.util.HashSet;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
@@ -118,6 +120,8 @@ public class ExternalContextImpl extends ExternalContext {
     private Map<String,String> fallbackContentTypeMap = null;
     private Flash flash;
     private boolean distributable;
+    private static final String PUSH_SUPPORTED_ATTRIBUTE_NAME = RIConstants.FACES_PREFIX + 
+            "ExternalContextImpl.PUSH_SUPPORTED";
 
     private enum ALLOWABLE_COOKIE_PROPERTIES {
         domain,
@@ -149,7 +153,7 @@ public class ExternalContextImpl extends ExternalContext {
         this.response = response;
         WebConfiguration config = WebConfiguration.getInstance(sc);
         if (config.isOptionEnabled(SendPoweredByHeader)) {
-            ((HttpServletResponse) response).addHeader("X-Powered-By", "JSF/2.2");
+            ((HttpServletResponse) response).addHeader("X-Powered-By", "JSF/2.3");
         }
         distributable = config.isOptionEnabled(EnableDistributable);
         fallbackContentTypeMap = new HashMap<>(3, 1.0f);
@@ -653,11 +657,81 @@ public class ExternalContextImpl extends ExternalContext {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "url");
             throw new NullPointerException(message);
         }
-
-        return ((HttpServletResponse) response).encodeURL(url);
+        
+        String result = ((HttpServletResponse) response).encodeURL(url);
+        pushIfPossibleAndNecessary(result);
+        
+        return result;
     }
     
-
+    private void pushIfPossibleAndNecessary(String result) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        Map<Object, Object> attrs = context.getAttributes();
+        Object val;
+        
+        // 1. check the request cache
+        if (null != (val = attrs.get(PUSH_SUPPORTED_ATTRIBUTE_NAME))) {
+            if (!(Boolean) val) {
+                return;
+            }
+        }
+        
+        // 2. Not in the request cache, see if PushBuilder is available in the container
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
+        if (!associate.isPushBuilderSupported()) {
+            // At least we won't have to hit the ApplicationAssociate every time
+            // on this request.
+            attrs.putIfAbsent(PUSH_SUPPORTED_ATTRIBUTE_NAME, Boolean.FALSE);
+            return;
+        }
+        
+        // 3. Don't bother trying to push if we've already pushed this URL
+        // for this request
+        Set<String> resourceUrls = (Set<String>) FacesContext.getCurrentInstance().
+                getAttributes().computeIfAbsent(RIConstants.PUSH_RESOURCE_URLS_KEY_NAME, k -> new HashSet<>());
+        if (resourceUrls.contains(result)) {
+            return;
+        }
+        resourceUrls.add(result);
+        
+        // 4. At this point we know 
+        // a) the container has PushBuilder
+        // b) we haven't pushed this URL for this request before
+        Object pbObj = getPushBuilder(context, extContext);
+        if (null != pbObj) {
+            // and now we also know c) there was no If-Modified-Since header
+            ((javax.servlet.http.PushBuilder)pbObj).path(result).push();
+        }
+        
+    }
+    
+    private Object getPushBuilder(FacesContext context, ExternalContext extContext) {
+        javax.servlet.http.PushBuilder result = null;
+        Object requestObj = extContext.getRequest();
+        if (requestObj instanceof HttpServletRequest) {
+            Map<Object, Object> attrs = context.getAttributes();
+            HttpServletRequest hreq = (HttpServletRequest) requestObj;
+            Object val;
+            boolean isPushSupported = false;
+            // Try to pull value from the request cache
+            if (null != (val = attrs.get(PUSH_SUPPORTED_ATTRIBUTE_NAME))) {
+                isPushSupported = (Boolean) val;
+            } else {
+                String ifModifiedSince = extContext.getRequestHeaderMap().get("If-Modified-Since");
+                // If the request has an If-Modified-Since header, 
+                // do not push, since it's possible the resources are already in 
+                // the cache.
+                isPushSupported = (null == ifModifiedSince || ifModifiedSince.isEmpty());
+            }
+            if (isPushSupported) {
+                isPushSupported = null != (result = hreq.newPushBuilder());
+            }
+            attrs.putIfAbsent(PUSH_SUPPORTED_ATTRIBUTE_NAME, isPushSupported);
+        }
+        return result;
+    }
+    
     /**
      * @see ExternalContext#encodeWebsocketURL(String)
      */
@@ -1261,4 +1335,3 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
 }
-

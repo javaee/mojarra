@@ -68,6 +68,7 @@
     <property name="vdldoc.version" value="1.0"/>
     <property name="jsdoc.version" value="2.0.2"/>
     <property name="javaee-api.version" value="7.0"/>
+    <property name="javax.servlet-api.version" value="4.0.0-b05"/>
     <property name="groovy.version" value="1.6.9"/>
     <property name="maven.repository.importer.version" value="1.2"/>
     <property name="yuicompressor.version" value="2.4.8"/>
@@ -100,6 +101,7 @@
     <property name="maven.repository.importer.jar"
               value="${dependency.jar.dir}/maven-repository-importer-${maven.repository.importer.version}.jar"/>
     <property name="javaee-api.jar" value="${dependency.jar.dir}/javaee-api-${javaee-api.version}.jar"/>
+    <property name="javax.servlet-api.jar" value="${dependency.jar.dir}/javax.servlet-api-${javax.servlet-api.version}.jar"/>
     <property name="groovy.jar" value="${dependency.jar.dir}/groovy-all-${groovy.version}.jar"/>
     <property name="glassfish.download.url" value="http://download.java.net/javaee5/v2ur1/promoted/"/>
     <property name="glassfish.installer.jar" value="glassfish-installer-v2ur1-b09d-"/>
@@ -330,6 +332,20 @@
                         dest="${dependency.base.dir}"/>
             </then>
         </if>
+
+        <!-- Servlet 4 API -->
+        <if>
+            <not>
+                <available file="${javax.servlet-api.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${central.maven2}/javax/servlet/javax.servlet-api/${javax.servlet-api.version}/javax.servlet-api-${javax.servlet-api.version}.jar"
+                     dest="${javax.servlet-api.jar}"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
+        
 
         <!-- JAVAEE API -->
         <if>
