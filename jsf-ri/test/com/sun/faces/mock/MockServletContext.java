@@ -64,7 +64,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.EventListener;
 
-// Mock Object for ServletContext (Version 2.3)
+// Mock Object for ServletContext (Version 4.0)
 
 public class MockServletContext implements ServletContext {
 
@@ -307,6 +307,42 @@ public class MockServletContext implements ServletContext {
     public boolean setInitParameter(String s, String s1) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public ServletRegistration.Dynamic addJspFile(String string, String string1) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getSessionTimeout() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setSessionTimeout(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getRequestCharacterEncoding() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setRequestCharacterEncoding(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getResponseCharacterEncoding() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setResponseCharacterEncoding(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+        
 
     public ServletRegistration.Dynamic addServlet(String s, String s1) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
