@@ -173,8 +173,9 @@ public final class ComponentSupport {
                 Map<String, Object> attrs = fc.getAttributes();
                 if (attrs.containsKey(MARK_DELETED)) {
                     itr.remove();
-                } else if (attrs.containsKey(IMPLICIT_PANEL) &&
-                           !curEntry.getKey().equals(UIViewRoot.METADATA_FACET_NAME)) {
+               } else if (UIComponent.COMPOSITE_FACET_NAME.equals(curEntry.getKey()) ||
+                          (attrs.containsKey(IMPLICIT_PANEL) &&
+                           !curEntry.getKey().equals(UIViewRoot.METADATA_FACET_NAME))) {
                     List<UIComponent> implicitPanelChildren = fc.getChildren();
                     UIComponent innerChild;
                     for (Iterator<UIComponent> innerItr = implicitPanelChildren.iterator();
@@ -421,14 +422,27 @@ public final class ComponentSupport {
 
         // mark all facets to be deleted
         if (c.getFacets().size() > 0) {
-            Collection col = c.getFacets().values();
+            Set col = c.getFacets().entrySet();
             UIComponent fc;
             for (Iterator itr = col.iterator(); itr.hasNext();) {
-                fc = (UIComponent) itr.next();
+               Map.Entry entry = (Map.Entry) itr.next();
+               String facet = (String) entry.getKey();
+                fc = (UIComponent) entry.getValue();
                 Map<String, Object> attrs = fc.getAttributes();
                 if (attrs.containsKey(MARK_CREATED)) {
                     attrs.put(MARK_DELETED, Boolean.TRUE);
-                } else if (attrs.containsKey(IMPLICIT_PANEL)) {
+                } else if (UIComponent.COMPOSITE_FACET_NAME.equals(facet)) {
+                   // mark the inner pannel components to be deleted
+                   sz = fc.getChildCount();
+                    if (sz > 0) {
+                        UIComponent cc = null;
+                        List cl = fc.getChildren();
+                        while (--sz >= 0) {
+                            cc = (UIComponent) cl.get(sz);
+                            cc.getAttributes().put(MARK_DELETED, Boolean.TRUE);
+                        }
+                    }
+               } else if (attrs.containsKey(IMPLICIT_PANEL)) {
                     List<UIComponent> implicitPanelChildren = fc.getChildren();
                     Map<String, Object> innerAttrs = null;
                     for (UIComponent cur : implicitPanelChildren) {
