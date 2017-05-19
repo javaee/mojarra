@@ -1,0 +1,22 @@
+input {
+   -moz-border-radius:6px;
+   -webkit-border-radius:6px;
+   border-radius:6px;
+   font-size:20px;
+   width:300px;
+   min-height:30px;
+}
+
+button {
+   -moz-border-radius:6px;
+   -webkit-border-radius:6px;
+   border-radius:6px;
+   font-size:20px;
+   width:300px;
+   min-height:30px;
+}
+
+output {
+   font-size:20px;
+}
+
