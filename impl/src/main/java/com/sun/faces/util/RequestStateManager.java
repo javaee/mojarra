@@ -45,6 +45,7 @@ import java.util.Map;
 
 import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
 
 import com.sun.faces.RIConstants;
 
@@ -183,7 +184,6 @@ public class RequestStateManager {
     private static final String[] ATTRIBUTES_TO_CLEAR_ON_CHANGE_OF_VIEW = {
         SCRIPT_STATE,
         PROCESSED_RESOURCE_DEPENDENCIES,
-        RENDERED_RESOURCE_DEPENDENCIES,
         PROCESSED_RADIO_BUTTON_GROUPS
     };
 
@@ -276,6 +276,11 @@ public class RequestStateManager {
             attrs.remove(key);
         }
 
+        PartialViewContext pvc = ctx.getPartialViewContext();
+        
+        if (!pvc.isAjaxRequest() || pvc.isRenderAll()) {
+            attrs.remove(RENDERED_RESOURCE_DEPENDENCIES);
+        }
     }
 
 
