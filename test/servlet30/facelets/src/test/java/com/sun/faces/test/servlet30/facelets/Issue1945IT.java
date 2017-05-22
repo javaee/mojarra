@@ -52,18 +52,18 @@ public class Issue1945IT {
     private String webUrl;
     private WebClient webClient;
 
-    @Before
+    //@Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
     }
 
-    @After
+    //@After
     public void tearDown() {
         webClient.closeAllWindows();
     }
 
-    @Test
+    //@Test
     public void testAbcInRepeatedInputTexts() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/repeatAbc.xhtml");
         HtmlInput input = page.getHtmlElementById("form:j_idt5:5:inputIn");
