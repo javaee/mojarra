@@ -262,12 +262,118 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
     // -------------------------------------------- Methods from ConfigProcessor
-
+    
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext servletContext, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
+
+        Application app = getApplication();
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(FacesContext.getCurrentInstance().getExternalContext());
+        LinkedHashMap<String, Node> viewHandlers = new LinkedHashMap<>();
+        LinkedHashSet<String> defaultValidatorIds = null;
+        for (int i = 0; i < documentInfos.length; i++) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, MessageFormat.format("Processing application elements for document: ''{0}''", documentInfos[i].getSourceURI()));
+            }
+            Document document = documentInfos[i].getDocument();
+            String namespace = document.getDocumentElement().getNamespaceURI();
+            NodeList applicationElements = document.getDocumentElement().getElementsByTagNameNS(namespace, APPLICATION);
+            if (applicationElements != null && applicationElements.getLength() > 0) {
+                for (int a = 0, asize = applicationElements.getLength(); a < asize; a++) {
+                    Node appElement = applicationElements.item(a);
+                    NodeList children = ((Element) appElement).getElementsByTagNameNS(namespace, "*");
+                    if (children != null && children.getLength() > 0) {
+                        for (int c = 0, csize = children.getLength(); c < csize; c++) {
+                            Node n = children.item(c);
+                            switch (n.getLocalName()) {
+                            case MESSAGE_BUNDLE:
+                                setMessageBundle(app, n);
+                                break;
+                            case DEFAULT_RENDERKIT_ID:
+                                setDefaultRenderKitId(app, n);
+                                break;
+                            case ACTION_LISTENER:
+                                addActionListener(sc, app, n);
+                                break;
+                            case NAVIGATION_HANDLER:
+                                setNavigationHandler(sc, app, n);
+                                break;
+                            case VIEW_HANDLER:
+                                String viewHandler = getNodeText(n);
+                                if (viewHandler != null) {
+                                    viewHandlers.put(viewHandler, n);
+                                }
+                                break;
+                            case STATE_MANAGER:
+                                setStateManager(sc, app, n);
+                                break;
+                            case EL_RESOLVER:
+                                addELResolver(sc, associate, n);
+                                break;
+                            case PROPERTY_RESOLVER:
+                                addPropertyResolver(sc, associate, n);
+                                break;
+                            case VARIABLE_RESOLVER:
+                                addVariableResolver(sc, associate, n);
+                                break;
+                            case DEFAULT_LOCALE:
+                                setDefaultLocale(app, n);
+                                break;
+                            case SUPPORTED_LOCALE:
+                                addSupportedLocale(app, n);
+                                break;
+                            case RESOURCE_BUNDLE:
+                                addResouceBundle(associate, n);
+                                break;
+                            case RESOURCE_HANDLER:
+                                setResourceHandler(sc, app, n);
+                                break;
+                            case SYSTEM_EVENT_LISTENER:
+                                addSystemEventListener(sc, app, n);
+                                break;
+                            case DEFAULT_VALIDATORS:
+                                if (defaultValidatorIds == null) {
+                                    defaultValidatorIds = new LinkedHashSet<>();
+                                } else {
+                                    defaultValidatorIds.clear();
+                                }
+                                break;
+                            case VALIDATOR_ID:
+                                defaultValidatorIds.add(getNodeText(n));
+                                break;
+                            case SEARCH_EXPRESSION_HANDLER:
+                                setSearchExpressionHandler(sc, app, n);
+                                break;
+                            case SEARCH_KEYWORD_RESOLVER:
+                                addSearchKeywordResolver(sc, associate, n);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        registerDefaultValidatorIds(app, defaultValidatorIds);
+
+        // perform any special processing for ViewHandlers...
+        processViewHandlers(sc, app, viewHandlers);
+
+        // process NamedEvent annotations, if any
+        processAnnotations(NamedEvent.class);
+
+        // continue processing...
+        invokeNext(sc, documentInfos);
+
+    }
+
+    /**
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
+     */
+    //@Override
+    public void processx(ServletContext servletContext, DocumentInfo[] documentInfos) throws Exception {
 
         Application application = getApplication();
         ApplicationAssociate associate = ApplicationAssociate.getInstance(FacesContext.getCurrentInstance().getExternalContext());
