@@ -284,6 +284,11 @@ public class ApplicationAssociate {
     
     private boolean checkForPushBuilder() {
         boolean result = false;
+        
+        if (!webConfig.isOptionEnabled(BooleanWebContextInitParameter.EnablePushResources)) {
+            return result;
+        }
+        
         Class clazz = HttpServletRequest.class;
         try {
             result = null != clazz.getMethod("newPushBuilder", (Class[]) null);
