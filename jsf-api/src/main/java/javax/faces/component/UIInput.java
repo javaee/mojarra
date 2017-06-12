@@ -963,7 +963,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         // zero-length Strings as null:
         //   call setSubmittedValue(null)
         if ((considerEmptyStringNull(context)
-             && submittedValue instanceof String 
+             && submittedValue instanceof String
              && ((String) submittedValue).length() == 0)) {
             setSubmittedValue(null);
             submittedValue = null;
@@ -977,6 +977,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         catch (ConverterException ce) {
             addConversionErrorMessage(context, ce);
             setValid(false);
+            if (submittedValue == null) {
+                setSubmittedValue("");
+            }
         }
 
         validateValue(context, newValue);
@@ -989,6 +992,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             setSubmittedValue(null);
             if (compareValues(previous, newValue)) {
                 queueEvent(new ValueChangeEvent(this, previous, newValue));
+            }
+        } else {
+            if (submittedValue == null) {
+                setSubmittedValue("");
             }
         }
 
