@@ -45,6 +45,8 @@ import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.context.StateContext;
+
+import javax.el.*;
 import javax.faces.view.facelets.Facelet;
 import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
@@ -72,10 +74,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.el.ExpressionFactory;
-import javax.el.MethodExpression;
-import javax.el.ValueExpression;
-import javax.el.VariableMapper;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Resource;
@@ -1983,8 +1981,14 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 assert (null != expectedReturnType);
                 assert (null != expectedParameters);
 
+                // JAVASERVERFACES-4073
+                ELContext elContext = (ELContext) ctx.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+                if (null == elContext) {
+                    elContext = ctx.getELContext();
+                }
+
                 MethodExpression me = f
-                      .createMethodExpression(ctx.getELContext(),
+                        .createMethodExpression(elContext ,
                                               ve.getExpressionString(),
                                               expectedReturnType,
                                               expectedParameters);
