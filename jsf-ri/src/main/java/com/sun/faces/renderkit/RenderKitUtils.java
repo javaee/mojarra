@@ -1082,16 +1082,11 @@ public class RenderKitUtils {
         }
         // Since we've now determined that it's not in the page, we need to add it.
 
-        ResourceHandler handler = context.getApplication().getResourceHandler();
-        Resource resource = handler.createResource(name, library);
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write('\n');
-        writer.startElement("script", null);
-        writer.writeAttribute("type", "text/javascript", null);
-        writer.writeAttribute("src", ((resource != null) ? resource.getRequestPath() : ""), null);
-        writer.endElement("script");
-        writer.append('\r');
-        writer.append('\n');
+        UIOutput output = new UIOutput();
+        output.setRendererType("javax.faces.resource.Script");
+        output.getAttributes().put("name", name);
+        output.getAttributes().put("library", library);
+        output.encodeAll(context);
 
         // Set the context to record script as included
         setScriptAsRendered(context);
