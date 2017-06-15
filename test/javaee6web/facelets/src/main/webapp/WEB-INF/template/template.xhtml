@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://java.sun.com/jsf/composite/t">
+
+<h:head>
+</h:head>
+<h:body>
+	<f:view>
+		<f:event type="preRenderView" listener="#{managedBean.initialize}" />
+		<h:form prependId="false">
+			<ui:insert name="content"></ui:insert>
+                        <h:outputText id="button2value" value="#{managedBean.button2SetValue}">
+                        </h:outputText>
+                </h:form>
+
+	</f:view>
+</h:body>
+</html>
