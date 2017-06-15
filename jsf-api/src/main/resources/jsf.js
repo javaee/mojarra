@@ -1386,7 +1386,6 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 if (bodyStart !== null) { // replace body tag
                     // First, try with XML manipulation
                     try {
-                        stripAndRunStylesheets(src);
                         // Get scripts from text
                         scripts = stripScripts(src);
                         // Remove scripts from text
