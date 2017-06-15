@@ -74,6 +74,7 @@ import javax.faces.event.PostKeepFlashValueEvent;
 import javax.faces.event.PostPutFlashValueEvent;
 import javax.faces.event.PreClearFlashEvent;
 import javax.faces.event.PreRemoveFlashValueEvent;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -1042,6 +1043,7 @@ public class ELFlash extends Flash {
             return;
         }
 
+        boolean isSecure = isSecure(extContext);
         // Don't try to write the cookie unless there is data in the flash.
         if (forceWrite || (null != nextFlash && !nextFlash.getFlashMap().isEmpty()) ||
             (null != prevFlash && !prevFlash.getFlashMap().isEmpty())) {
@@ -1063,7 +1065,7 @@ public class ELFlash extends Flash {
                 if (null != (val = toSet.getMaxAge())) {
                     properties.put("maxAge", val);
                 }
-                if (extContext.isSecure()) {
+                if (isSecure) {
                     properties.put("secure", Boolean.TRUE);
                 } else if (null != (val = toSet.getSecure())) {
                     properties.put("secure", val);
@@ -1080,6 +1082,27 @@ public class ELFlash extends Flash {
         } else {
             removeCookie(extContext, toSet);
         }
+    }
+
+    private boolean isSecure(ExternalContext extContext) {
+        // Bug 18611757: only use extContext.isSecure() if we
+        // absolutely must.  For example, if we are in a portlet
+        // environment.
+        boolean isSecure = false;
+        Object request = extContext.getRequest();
+        if (request instanceof ServletRequest) {
+            isSecure = ((ServletRequest)request).isSecure();
+        } else {
+            try {
+                isSecure = extContext.isSecure();
+            } catch (UnsupportedOperationException uoe) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "ExternalContext {0} does not implement isSecure().  Please implement this per the JSF 2.1 specification.",
+                            new Object [] { extContext });
+                }
+            }
+        }
+        return isSecure;
     }
     
     private void removeCookie(ExternalContext extContext, Cookie toRemove) {
