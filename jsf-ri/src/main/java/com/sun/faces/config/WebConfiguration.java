@@ -1242,10 +1242,6 @@ public class WebConfiguration {
               "com.sun.faces.enableCoreTagLibValidator",
               false
         ),
-        EnablePushResources(
-              "com.sun.faces.enablePushResources",
-              false
-        ),
         PreferXHTMLContentType(
               "com.sun.faces.preferXHTML",
               false
