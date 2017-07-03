@@ -92,7 +92,11 @@ class StateHolderSaver implements Serializable {
     }
 
     public StateHolderSaver(FacesContext context, Object toSave) {
-        className = toSave.getClass().getName();
+        if (toSave == null) {
+            className = null;
+        } else {
+            className = toSave.getClass().getName();
+        }
 
         if (toSave instanceof StateHolder) {
             // do not save an attached object that is marked transient.
