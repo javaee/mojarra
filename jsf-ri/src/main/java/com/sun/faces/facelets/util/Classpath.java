@@ -225,6 +225,11 @@ public final class Classpath {
             prefix = join(split, true);
             String end = join(split, false);
             int p = urlString.lastIndexOf(end);
+
+            if (p < 0) {
+                return;
+            }
+
             urlString = urlString.substring(0, p);
             for (String cur : PREFIXES_TO_EXCLUDE) {
                 if (urlString.startsWith(cur)) {
