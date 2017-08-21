@@ -6,13 +6,14 @@ Oracle's implementation of the JavaServer Faces specification
 ## Minimum Requirements
 
 - Java 1.8
-- Servlet 3.0
-- EL 3.0
-- CDI 1.2
-- JSONP 1.1 (only when `<f:websocket>` is used)
-- BV 1.1 (only when `<f:validateBean>` or `<f:validateWholeBean>` is used)
+- Servlet 3.0 (4.0 recommended)
+- EL 3.0 (3.1 recommended)
+- CDI 1.2 (2.0 recommended)
+- JSTL 1.2
+- JSONP 1.1 (optional, only when `<f:websocket>` is used)
+- BV 1.1 (2.0 recommended; optional, only when `<f:validateBean>` or `<f:validateWholeBean>` is used)
 
-Servlet 4.0 is optional and will enable JSF 2.3 to serve resources via HTTP/2 push. CDI 1.2 is explicitly required because the `javax.faces.bean.*` annotations such as `@ManagedBean` are **deprecated** since JSF 2.3.
+Servlet 4.0 will enable JSF 2.3 to serve resources via HTTP/2 push. CDI is explicitly required because since JSF 2.3 the `javax.faces.bean.*` annotations such as `@ManagedBean` are **deprecated**, and several implicit EL objects are produced via CDI producers, and `<f:websocket>` manages the WS sessions and events via CDI.
 
 
 ## Installation
@@ -31,8 +32,10 @@ Depending on the server used, JSF may already be built-in (full fledged Java EE 
 
     - [`javax.faces.2.3.x.jar`][9]
     - [`weld-servlet-shaded-3.0.0.Final.jar`][10]
-    - [`javax.json-api-1.1.jar`][11]
-    - [`jstl-1.2.jar`][12]
+    - [`jstl-1.2.jar`][11]
+    - [`javax.json-api-1.1.jar`][12] (optional, only when `<f:websocket>` is used)
+    - [`validation-api-2.0.0.Final.jar`][13](optional, only when `<f:validateBean>` or `<f:validateWholeBean>` is used)
+    - [`hibernate-validator-6.0.1.Final.jar`][14](optional, only when `<f:validateBean>` or `<f:validateWholeBean>` is used)
 
     Substitute `x` with latest 2.3.x version number.
 
@@ -51,7 +54,7 @@ In case you're using Maven, you can find below the necessary coordinates:
     </dependency>
     ```
 
-    Note that Java EE 8.0 is currently not available yet.
+    Note that Java EE 8.0 is currently not available yet. You should for now manually upgrade any JSF 2.2 library to JSF 2.3 depending on the server used.
 
 - **Servletcontainers (Tomcat, Jetty, etc)**
 
@@ -67,18 +70,23 @@ In case you're using Maven, you can find below the necessary coordinates:
         <version>3.0.0.Final</version>
     </dependency>
     <dependency>
-        <groupId>javax.json</groupId>
-        <artifactId>javax.json-api</artifactId>
-        <version>1.1</version>
-    </dependency>
-    <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>jstl</artifactId>
         <version>1.2</version>
     </dependency>
-    ```
+    <dependency> <!-- Optional, only when <f:websocket> is used. -->
+        <groupId>javax.json</groupId>
+        <artifactId>javax.json-api</artifactId>
+        <version>1.1</version>
+    </dependency>
+    <dependency> <!-- Optional, only when <f:validateBean> or <f:validateWholeBean> is used. -->
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>6.0.1.Final</version>
+    </dependency>
+    ```
 
-    You can check [`org.glassfish:javax.faces`][13] repository for current latest Mojarra release version.
+    You can check [`org.glassfish:javax.faces`][15] repository for current latest Mojarra release version.
 
 
 ## Hello World Example
@@ -101,7 +109,7 @@ First register the `FacesServlet` in `/WEB-INF/web.xml` as below:
 </servlet-mapping>
 ```
 
-Noted should be that JSF 2.2+ is already "implicitly" registered and mapped on `*.jsf`, `*.faces` and `/faces/*` when running on a Servlet 3.0+ container. This will be overridden altogether when explicitly registering as above. [The `*.xhtml` URL pattern is preferred over above for security and clarity reasons][14]. JSF 2.3+ adds `*.xhtml` to set of default patterns.
+Noted should be that JSF 2.2+ is already "implicitly" registered and mapped on `*.jsf`, `*.faces` and `/faces/*` when running on a Servlet 3.0+ container. This will be overridden altogether when explicitly registering as above. [The `*.xhtml` URL pattern is preferred over above for security and clarity reasons][16]. JSF 2.3+ adds `*.xhtml` to set of default patterns.
 
 ### Model
 
@@ -143,7 +151,7 @@ Noted should be that in reality in the average Java EE application the above "mo
 
 ### View
 
-Finally create a [Facelets][15] file `/hello.xhtml` as below:
+Finally create a [Facelets][17] file `/hello.xhtml` as below:
 
 ```xml
 <!DOCTYPE html>
@@ -175,12 +183,13 @@ Start the server and open it by `http://localhost:8080/contextname/hello.xhtml`.
 
 ## Resources
 
-- [JSF 2.3 Specification (JSR 372)][16]
+- [JSF 2.3 Specification (JSR 372)][18]
 - [JSF 2.3 API documentation][19]
 - [JSF 2.3 VDL documentation][20]
 - [JSF 2.3 JS documentation][21]
-- [Oracle Java EE 7 tutorial - JavaServer Faces Technology (JSF 2.2)][17]
-- [What's new in JSF 2.3?][18]
+- [Oracle Java EE 7 tutorial - JavaServer Faces Technology (JSF 2.2)][22]
+- [What's new in JSF 2.3?][23]
+
 
   [1]: http://wildfly.org/
   [2]: http://www.jboss.org/jbossas
@@ -192,15 +201,16 @@ Start the server and open it by `http://localhost:8080/contextname/hello.xhtml`.
   [8]: http://www.eclipse.org/jetty/
   [9]: http://central.maven.org/maven2/org/glassfish/javax.faces/
   [10]: http://central.maven.org/maven2/org/jboss/weld/servlet/weld-servlet-shaded/3.0.0.Final/weld-servlet-shaded-3.0.0.Final.jar
-  [11]: http://central.maven.org/maven2/javax/json/javax.json-api/1.1/javax.json-api-1.1.jar
-  [12]: http://central.maven.org/maven2/javax/servlet/jstl/1.2/jstl-1.2.jar
-  [13]: http://mvnrepository.com/artifact/org.glassfish/javax.faces
-  [14]: https://stackoverflow.com/q/3008395/157882
-  [15]: http://docs.oracle.com/javaee/7/tutorial/jsf-facelets.htm
-  [16]: http://download.oracle.com/otn-pub/jcp/jsf-2_3-final-eval-spec/JSF_2.3.pdf
-  [17]: http://docs.oracle.com/javaee/7/tutorial/jsf-intro.htm
-  [18]: http://arjan-tijms.omnifaces.org/p/jsf-23.html
+  [11]: http://central.maven.org/maven2/javax/servlet/jstl/1.2/jstl-1.2.jar
+  [12]: http://central.maven.org/maven2/javax/json/javax.json-api/1.1/javax.json-api-1.1.jar
+  [13]: http://central.maven.org/maven2/javax/validation/validation-api/2.0.0.Final/validation-api-2.0.0.Final.jar
+  [14]: http://central.maven.org/maven2/org/hibernate/validator/hibernate-validator/6.0.1.Final/hibernate-validator-6.0.1.Final.jar
+  [15]: http://mvnrepository.com/artifact/org.glassfish/javax.faces
+  [16]: https://stackoverflow.com/q/3008395/157882
+  [17]: http://docs.oracle.com/javaee/7/tutorial/jsf-facelets.htm
+  [18]: http://download.oracle.com/otn-pub/jcp/jsf-2_3-final-eval-spec/JSF_2.3.pdf
   [19]: https://javaserverfaces.github.io/docs/2.3/javadocs/index.html
   [20]: https://javaserverfaces.github.io/docs/2.3/vdldoc/index.html
   [21]: https://javaserverfaces.github.io/docs/2.3/jsdocs/index.html
-  
+  [22]: http://docs.oracle.com/javaee/7/tutorial/jsf-intro.htm
+  [23]: http://arjan-tijms.omnifaces.org/p/jsf-23.html
