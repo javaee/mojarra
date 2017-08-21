@@ -11,18 +11,20 @@ Oracle's implementation of the JavaServer Faces specification
 - CDI 1.2 (2.0 recommended)
 - JSTL 1.2
 - JSONP 1.1 (optional, only when `<f:websocket>` is used)
-- BV 1.1 (2.0 recommended; optional, only when `<f:validateBean>` or `<f:validateWholeBean>` is used)
+- BV 1.1 (optional, only when `<f:validateBean>` or `<f:validateWholeBean>` is used; 2.0 recommended)
 
 Servlet 4.0 will enable JSF 2.3 to serve resources via HTTP/2 push. CDI is explicitly required because since JSF 2.3 the `javax.faces.bean.*` annotations such as `@ManagedBean` are **deprecated**, and several implicit EL objects are produced via CDI producers, and `<f:websocket>` manages the WS sessions and events via CDI.
 
 
 ## Installation
 
-Depending on the server used, JSF may already be built-in (full fledged Java EE containers such as [WildFly][1], [JBoss AS/EAP][2], [TomEE][3], [Payara][4], [GlassFish][5], [Liberty][6], etc.), or not (barebones JSP/Servlet containers such as [Tomcat][7], [Jetty][8], etc.). If the server doesn't ship with JSF built-in, then you need to manually install JSF 2.3 along with CDI 1.2+, JSONP 1.1+ and JSTL 1.2+ as those servlet containers usually also don't even ship with those JSF dependencies.
+Depending on the server used, JSF may already be built-in (full fledged Java EE containers such as [WildFly][1], [JBoss EAP][2], [TomEE][3], [Payara][4], [GlassFish][5], [Liberty][6], etc.), or not (barebones JSP/Servlet containers such as [Tomcat][7], [Jetty][8], etc.). If the server doesn't ship with JSF built-in, then you need to manually install JSF 2.3 along with CDI 1.2+, JSONP 1.1+ and JSTL 1.2+ as those servlet containers usually also don't even ship with those JSF dependencies.
 
 ### Non-Maven
 
-- **Java EE containers (WildFly, JBoss, TomEE, Payara, GlassFish, WebSphere, etc)**
+In case you're manually carrying around JARs:
+
+- **Java EE containers (WildFly, JBoss EAP, TomEE, Payara, GlassFish, Liberty, etc)**
 
     You don't need to add any JARs to `/WEB-INF/lib`!
 
@@ -34,8 +36,8 @@ Depending on the server used, JSF may already be built-in (full fledged Java EE 
     - [`weld-servlet-shaded-3.0.0.Final.jar`][10]
     - [`jstl-1.2.jar`][11]
     - [`javax.json-api-1.1.jar`][12] (optional, only when `<f:websocket>` is used)
-    - [`validation-api-2.0.0.Final.jar`][13](optional, only when `<f:validateBean>` or `<f:validateWholeBean>` is used)
-    - [`hibernate-validator-6.0.1.Final.jar`][14](optional, only when `<f:validateBean>` or `<f:validateWholeBean>` is used)
+    - [`validation-api-2.0.0.Final.jar`][13] (optional, only when `<f:validateBean|validateWholeBean>` is used)
+    - [`hibernate-validator-6.0.1.Final.jar`][14] (optional, only when `<f:validateBean|validateWholeBean>` is used)
 
     Substitute `x` with latest 2.3.x version number.
 
@@ -62,7 +64,7 @@ In case you're using Maven, you can find below the necessary coordinates:
     <dependency>
         <groupId>org.glassfish</groupId>
         <artifactId>javax.faces</artifactId>
-        <version><!-- 2.3.x --></version>
+        <version><!-- Use latest 2.3.x version. --></version>
     </dependency>
     <dependency>
         <groupId>org.jboss.weld.servlet</groupId>
@@ -86,17 +88,16 @@ In case you're using Maven, you can find below the necessary coordinates:
     </dependency>
     ```
 
-    You can check [`org.glassfish:javax.faces`][15] repository for current latest Mojarra release version.
+    You can check [`org.glassfish:javax.faces`][15] repository to find current latest Mojarra 2.3.x version.
 
 
 ## Hello World Example
 
-We assume that you already know how to create an empty Maven WAR Project or Dynamic Web Project in your favourite IDE with a `/WEB-INF/web.xml` deployment descriptor file. Don't forget to add JSF JARs or configure pom.xml if necessary, as instructed in previous chapter.
-
+We assume that you already know how to create an empty Maven WAR Project or Dynamic Web Project in your favourite IDE with a `/WEB-INF/web.xml` deployment descriptor file. Don't forget to add JARs or configure pom.xml if necessary, as instructed in previous chapter.
 
 ### Controller
 
-First register the `FacesServlet` in `/WEB-INF/web.xml` as below:
+Optionally, register the `FacesServlet` in `/WEB-INF/web.xml` as below:
 
 ```xml
 <servlet>
@@ -109,7 +110,7 @@ First register the `FacesServlet` in `/WEB-INF/web.xml` as below:
 </servlet-mapping>
 ```
 
-Noted should be that JSF 2.2+ is already "implicitly" registered and mapped on `*.jsf`, `*.faces` and `/faces/*` when running on a Servlet 3.0+ container. This will be overridden altogether when explicitly registering as above. [The `*.xhtml` URL pattern is preferred over above for security and clarity reasons][16]. JSF 2.3+ adds `*.xhtml` to set of default patterns.
+Noted should be that JSF 2.2+ is already "implicitly" registered and mapped on `*.jsf`, `*.faces` and `/faces/*` when running on a Servlet 3.0+ container. This will be overridden altogether when explicitly registering as above. [The `*.xhtml` URL pattern is preferred over above for security and clarity reasons][16]. JSF 2.3+ adds `*.xhtml` to set of default patterns, hence the `FacesServlet` registration being optional. But when you don't explicitly map it on `*.xhtml`, then people can still access JSF pages using `*.jsf`, `*.faces` or `/faces/*` URL patterns. This is not nice for SEO as JSF by design doesn't 301-redirect them to a single mapping.
 
 ### Model
 
@@ -147,11 +148,11 @@ public class Hello {
 }
 ```
 
-Noted should be that in reality in the average Java EE application the above "model" is further breakdown into a JPA entity, an EJB service and a smaller backing bean. The JPA entity and EJB service then basically act as a true "model" and the backing bean becomes a "controller" for that model. This may in first place be confusing to starters, but it all depends on the point of view. See also [What components are MVC in JSF MVC framework?](https://stackoverflow.com/q/5104094/157882) and [JSF Controller, Service and DAO](https://stackoverflow.com/q/30639785/157882).
+Noted should be that in reality in the average Java EE application the above "model" is further breakdown into a JPA entity, an EJB service and a smaller backing bean. The JPA entity and EJB service then basically act as a true "model" and the backing bean becomes a "controller" for that model. This may in first place be confusing to starters, but it all depends on the point of view. See also [What components are MVC in JSF MVC framework?][17] and [JSF Controller, Service and DAO][18].
 
 ### View
 
-Finally create a [Facelets][17] file `/hello.xhtml` as below:
+Finally create a [Facelets][19] file `/hello.xhtml` as below:
 
 ```xml
 <!DOCTYPE html>
@@ -183,16 +184,17 @@ Start the server and open it by `http://localhost:8080/contextname/hello.xhtml`.
 
 ## Resources
 
-- [JSF 2.3 Specification (JSR 372)][18]
-- [JSF 2.3 API documentation][19]
-- [JSF 2.3 VDL documentation][20]
-- [JSF 2.3 JS documentation][21]
-- [Oracle Java EE 7 tutorial - JavaServer Faces Technology (JSF 2.2)][22]
-- [What's new in JSF 2.3?][23]
+- [JSF 2.3 Specification (JSR 372)][20]
+- [JSF 2.3 API documentation][21]
+- [JSF 2.3 VDL documentation][22]
+- [JSF 2.3 JS documentation][23]
+- [Oracle Java EE 7 tutorial - JavaServer Faces Technology][24] (currently still JSF 2.2)
+- [What's new in JSF 2.3?][25]
+- [Java EE Kickoff Application][26]
 
 
   [1]: http://wildfly.org/
-  [2]: http://www.jboss.org/jbossas
+  [2]: https://developers.redhat.com/products/eap/overview/
   [3]: http://tomee.apache.org
   [4]: http://www.payara.fish
   [5]: https://javaee.github.io/glassfish/
@@ -207,10 +209,13 @@ Start the server and open it by `http://localhost:8080/contextname/hello.xhtml`.
   [14]: http://central.maven.org/maven2/org/hibernate/validator/hibernate-validator/6.0.1.Final/hibernate-validator-6.0.1.Final.jar
   [15]: http://mvnrepository.com/artifact/org.glassfish/javax.faces
   [16]: https://stackoverflow.com/q/3008395/157882
-  [17]: http://docs.oracle.com/javaee/7/tutorial/jsf-facelets.htm
-  [18]: http://download.oracle.com/otn-pub/jcp/jsf-2_3-final-eval-spec/JSF_2.3.pdf
-  [19]: https://javaserverfaces.github.io/docs/2.3/javadocs/index.html
-  [20]: https://javaserverfaces.github.io/docs/2.3/vdldoc/index.html
-  [21]: https://javaserverfaces.github.io/docs/2.3/jsdocs/index.html
-  [22]: http://docs.oracle.com/javaee/7/tutorial/jsf-intro.htm
-  [23]: http://arjan-tijms.omnifaces.org/p/jsf-23.html
+  [17]: https://stackoverflow.com/q/5104094/157882
+  [18]: https://stackoverflow.com/q/30639785/157882
+  [19]: http://docs.oracle.com/javaee/7/tutorial/jsf-facelets.htm
+  [20]: http://download.oracle.com/otn-pub/jcp/jsf-2_3-final-eval-spec/JSF_2.3.pdf
+  [21]: https://javaserverfaces.github.io/docs/2.3/javadocs/index.html
+  [22]: https://javaserverfaces.github.io/docs/2.3/vdldoc/index.html
+  [23]: https://javaserverfaces.github.io/docs/2.3/jsdocs/index.html
+  [24]: http://docs.oracle.com/javaee/7/tutorial/jsf-intro.htm
+  [25]: http://arjan-tijms.omnifaces.org/p/jsf-23.html
+  [26]: https://github.com/javaeekickoff/java-ee-kickoff-app
