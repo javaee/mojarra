@@ -78,13 +78,13 @@ In case you're using Maven, you can find below the necessary coordinates:
         <groupId>javax.json</groupId>
         <artifactId>javax.json-api</artifactId>
         <version>1.1</version>
-    </dependency>
+    </dependency>
     <dependency> <!-- Optional, only when <f:validateBean> or <f:validateWholeBean> is used. -->
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-validator</artifactId>
         <version>6.0.1.Final</version>
     </dependency>
-    ```
+    ```
 
     You can check [`org.glassfish:javax.faces`][15] repository for current latest Mojarra release version.
 
