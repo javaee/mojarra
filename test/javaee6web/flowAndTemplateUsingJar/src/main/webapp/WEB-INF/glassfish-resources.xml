@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN" "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
+
+<resources>
+    <jdbc-connection-pool 
+        name="java:app/jdbc/jpaConnectionPool"
+        datasource-classname="org.apache.derby.jdbc.EmbeddedDataSource"
+        res-type="javax.sql.XADataSource"
+        ping="true">
+        <property name="DatabaseName" value="memory:jpa"/>
+        <property name="User" value="sa"/>
+        <property name="Password" value=""/>
+        <property name="connectionAttributes" value=";create=true"/>
+    </jdbc-connection-pool>
+    <jdbc-resource 
+        enabled="true" 
+        jndi-name="java:app/jdbc/jpaJdbcResource" 
+        object-type="user" 
+        pool-name="java:app/jdbc/jpaConnectionPool">
+    </jdbc-resource>
+</resources>
