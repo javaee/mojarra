@@ -72,7 +72,7 @@
         <module>emptyFlowDefinition</module>
         <module>facelets</module>
         <module>flowAndTemplateInJar</module>
-        <module>flowAndTemplateUsingJar</module>
+        <!--<module>flowAndTemplateUsingJar</module>-->
         <module>flowCall</module>
         <module>flowCallWithParameters</module>
         <module>flowDefiningDocumentId</module>
