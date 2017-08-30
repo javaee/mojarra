@@ -181,6 +181,10 @@ final class WriteBehindStateWriter extends Writer {
     public static WriteBehindStateWriter getCurrentInstance() {
         return CUR_WRITER.get();
     }
+    
+    public static void setCurrentInstance(WriteBehindStateWriter writer) {
+        CUR_WRITER.set(writer);
+    }
 
 
     /**
