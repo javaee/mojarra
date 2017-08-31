@@ -805,8 +805,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
         if (value.charAt(0) == '@') {
             // These are very common, so we use shared copies
             // of these collections instead of re-creating.
-            List<String> list;
-
+            
             if (ALL.equals(value)) {
                 return ALL_LIST;
             } else if (FORM.equals(value)){
