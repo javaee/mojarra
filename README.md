@@ -203,6 +203,38 @@ Finally create a [Facelets][20] file `/hello.xhtml` as below:
 
 Start the server and open it by `http://localhost:8080/contextname/hello.xhtml`.
 
+## Build
+### jsf 2.3 environment:
+* jdk1.8
+* ant
+* maven
+
+### jsf 2.2 environment:
+* jdk1.6
+* ant
+* maven
+
+### Configuration
+edit **build.properties** according to your environment,if build.properties not exist,create it:
+```bash
+# under the root dir of project
+cp build.properties.glassfish build.properties
+```
+
+### build scripts
+```bash
+# under the root dir of project
+ant main clean main
+```
+
+
+## Pull Request
+Please send a PR to branch 
+* MOJARRA_2_3X_ROLLING (2.3.x)
+* MOJARRA_2_2X_ROLLING (2.2.x).
+
+**Note never send a PR to branch master!**
+
 
 ## Resources
 
