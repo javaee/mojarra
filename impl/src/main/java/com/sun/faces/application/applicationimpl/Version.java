@@ -39,12 +39,18 @@
  */
 package com.sun.faces.application.applicationimpl;
 
+import static com.sun.faces.cdi.CdiUtils.getBeanReference;
+import static com.sun.faces.util.Util.getCdiBeanManager;
+import static com.sun.faces.util.Util.getWebXmlVersion;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
+import javax.enterprise.inject.spi.BeanManager;
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
@@ -52,6 +58,9 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.xml.sax.InputSource;
+
+import com.sun.faces.cdi.CdiExtension;
+
 
 public class Version {
 
@@ -63,10 +72,25 @@ public class Version {
      * @return true if we are, false otherwise.
      */
     public boolean isJsf23() {
+        
         if (isJsf23 == null) {
+            
             FacesContext facesContext = FacesContext.getCurrentInstance();
-            isJsf23 = getFacesConfigXmlVersion(facesContext).equals("2.3");
+            
+            BeanManager beanManager = getCdiBeanManager(facesContext);
+            
+            if (beanManager == null) {
+                // TODO: use version enum and >=
+                if (getFacesConfigXmlVersion(facesContext).equals("2.3") || getWebXmlVersion(facesContext).equals("4.0")) {
+                    throw new FacesException("Unable to find CDI BeanManager");
+                }
+                isJsf23 = false;
+            } else {
+                isJsf23 = getBeanReference(beanManager, CdiExtension.class).isAddBeansForJSFImplicitObjects();
+            }
+            
         }
+        
         return isJsf23;
     }
 

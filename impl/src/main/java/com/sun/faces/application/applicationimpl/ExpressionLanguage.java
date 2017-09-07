@@ -44,7 +44,6 @@ import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
 import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
 import static com.sun.faces.util.Util.canSetAppArtifact;
 import static com.sun.faces.util.Util.getCdiBeanManager;
-import static com.sun.faces.util.Util.getWebXmlVersion;
 import static com.sun.faces.util.Util.notNull;
 import static java.util.logging.Level.FINE;
 
@@ -157,7 +156,7 @@ public class ExpressionLanguage {
         }
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (version.isJsf23() || "4.0".equals(getWebXmlVersion(facesContext))) {
+        if (version.isJsf23()) {
 
             BeanManager cdiBeanManager = getCdiBeanManager(facesContext);
 
