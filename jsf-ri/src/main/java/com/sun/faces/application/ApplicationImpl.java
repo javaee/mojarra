@@ -89,6 +89,7 @@ import javax.faces.flow.FlowHandler;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.cdi.CdiExtension;
 import com.sun.faces.cdi.CdiUtils;
 import com.sun.faces.component.search.CompositeSearchKeywordResolver;
 import com.sun.faces.component.search.SearchKeywordResolverImplAll;
@@ -105,8 +106,14 @@ import com.sun.faces.component.search.SearchKeywordResolverImplRoot;
 import com.sun.faces.component.search.SearchKeywordResolverImplThis;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+
+import static com.sun.faces.cdi.CdiUtils.getBeanReference;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.RegisterConverterPropertyEditors;
+import static com.sun.faces.util.Util.getCdiBeanManager;
+import static com.sun.faces.util.Util.getFacesConfigXmlVersion;
+import static com.sun.faces.util.Util.getWebXmlVersion;
+
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
@@ -543,12 +550,10 @@ public class ApplicationImpl extends Application {
                         MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ELResolver"));
         }
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (Util.getFacesConfigXmlVersion(facesContext).equals("2.3") ||
-                Util.getWebXmlVersion(facesContext).equals("4.0")) {
+        if (isJsf23()) {
             
             javax.enterprise.inject.spi.BeanManager beanManager = 
-                Util.getCdiBeanManager(facesContext);
+                getCdiBeanManager(FacesContext.getCurrentInstance());
             
             if (beanManager != null && !resolver.equals(beanManager.getELResolver())) {
                 elResolvers.add(resolver);
@@ -2700,10 +2705,25 @@ public class ApplicationImpl extends Application {
      * @return true if we are, false otherwise.
      */
     private boolean isJsf23() {
+        
         if (isJsf23 == null) {
+            
             FacesContext facesContext = FacesContext.getCurrentInstance();
-            isJsf23 = getFacesConfigXmlVersion(facesContext).equals("2.3");
+            
+            BeanManager beanManager = getCdiBeanManager(facesContext);
+            
+            if (beanManager == null) {
+                // TODO: use version enum and >=
+                if (getFacesConfigXmlVersion(facesContext).equals("2.3") || getWebXmlVersion(facesContext).equals("4.0")) {
+                    throw new FacesException("Unable to find CDI BeanManager");
+                }
+                isJsf23 = false;
+            } else {
+                isJsf23 = getBeanReference(beanManager, CdiExtension.class).isAddBeansForJSFImplicitObjects();
+            }
+            
         }
+        
         return isJsf23;
     }
 
