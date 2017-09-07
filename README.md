@@ -204,24 +204,46 @@ Finally create a [Facelets][20] file `/hello.xhtml` as below:
 Start the server and open it by `http://localhost:8080/contextname/hello.xhtml`.
 
 ## Build
-### jsf 2.3 environment:
-* jdk1.8
-* ant
-* maven
+### JSF 2.3 environment:
+* JDK 1.8
+* Ant
+* Maven
 
-### jsf 2.2 environment:
-* jdk1.6
-* ant
-* maven
+#### Branch MOJARRA_2_3X_ROLLING and master ###
 
-### Configuration
-edit **build.properties** according to your environment,if build.properties not exist,create it:
+```bash
+# From the root dir of the project
+cd jsf-tools
+mvn clean install
+
+# Back to root
+cd ..
+
+cd impl
+mvn clean install
+```
+
+The binary is then `target/javax.faces-2.3.X.jar`
+
+### JSF 2.2 environment:
+* JDK 1.6
+* Ant
+* Maven
+
+#### Branch MOJARRA_2_2X_ROLLING ###
+
+##### Configuration
+
+Edit **build.properties** according to your environment. If `build.properties` does not exist create it as follows:
+
 ```bash
 # under the root dir of project
 cp build.properties.glassfish build.properties
 ```
 
-### build scripts
+Only `jsf.build.home=` is mandated to be edited.
+
+##### build scripts
 ```bash
 # under the root dir of project
 ant main clean main
@@ -230,10 +252,11 @@ ant main clean main
 
 ## Pull Request
 Please send a PR to branch 
+* master (JSF.next)
 * MOJARRA_2_3X_ROLLING (2.3.x)
 * MOJARRA_2_2X_ROLLING (2.2.x).
 
-**Note never send a PR to branch master!**
+**Note it's okay to send a PR to the master branch, but these are for JSF.next**
 
 
 ## Resources
