@@ -80,9 +80,9 @@ public class Spec1389IT {
     public void testInjectInitParameterMap() throws Exception {
 
         HtmlPage page = webClient.getPage(webUrl + "injectInitParameterMap.xhtml");
-
+    
         // Init parameter value should be printed on the page
-        assertTrue(page.asXml().contains("ENABLE_CDI_RESOLVER_CHAIN:true"));
+        assertTrue(page.asXml().contains("MY_TEST_PARAMETER:IS_THERE"));
     }
 
 }

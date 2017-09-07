@@ -15,9 +15,8 @@ public class InjectInitParameterMapBean {
     private Map<String, String> initParameterMap;
 
     public String getInitParameterValue() {
-        // javax.faces.ENABLE_CDI_RESOLVER_CHAIN set in web.xml, should be true
-        // otherwise injection will not resolve
-        return initParameterMap.get("javax.faces.ENABLE_CDI_RESOLVER_CHAIN");
+        // MY_TEST_PARAMETER set in web.xml, should be available
+        return initParameterMap.get("MY_TEST_PARAMETER");
     }
     
 }
