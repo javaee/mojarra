@@ -203,60 +203,56 @@ Finally create a [Facelets][20] file `/hello.xhtml` as below:
 
 Start the server and open it by `http://localhost:8080/contextname/hello.xhtml`.
 
-## Build
-### JSF 2.3 environment:
-* JDK 1.8
-* Ant
-* Maven
+## Building
 
-#### Branch MOJARRA_2_3X_ROLLING and master ###
+In case you want to checkout this repository and manually build from source yourself (if necessary after editing source code), here are the instructions:
 
-```bash
-# From the root dir of the project
-cd jsf-tools
-mvn clean install
+### JSF 2.3
 
-# Back to root
-cd ..
+1. Make sure that you have JDK 1.8, Ant and Maven installed.
+2. Checkout branch [`MOJARRA_2_3X_ROLLING`][29] or [`master`][28] (note: any pull requests on master branch are for JSF.next not JSF 2.3!).
+3. Run the following commands from the root directory of the project:
 
-cd impl
-mvn clean install
-```
+    ```bash
+    # under the root dir of project
+    cd jsf-tools
+    mvn clean install
+    cd ../impl
+    mvn clean install
+    ```
 
-The binary is then `target/javax.faces-2.3.X.jar`
+4. The binary is now available as `target/javax.faces-2.3.x-SNAPSHOT.jar`.
 
-### JSF 2.2 environment:
-* JDK 1.6
-* Ant
-* Maven
+### JSF 2.2
 
-#### Branch MOJARRA_2_2X_ROLLING ###
+1. Make sure that you have JDK 1.6, Ant and Maven installed.
+2. Checkout branch [`MOJARRA_2_2X_ROLLING`][30].
+3. Edit `build.properties` according to your environment. If `build.properties` does not exist, then create a copy of `build.properties.glassfish`, `build.properties.tomcat` or `build.properties.weblogic`, depending on your target server. Below example assumes GlassFish or Payara:
 
-##### Configuration
+    ```bash
+    cp build.properties.glassfish build.properties
+    ```
 
-Edit **build.properties** according to your environment. If `build.properties` does not exist create it as follows:
+   Only the `jsf.build.home` property is mandated to be edited in your `build.properties`. It must represent the absolute path to the root directory of the project.
+4. Run the following command from the root directory of the project:
 
-```bash
-# under the root dir of project
-cp build.properties.glassfish build.properties
-```
+    ```bash
+    # under the root dir of project
+    ant main clean main
+    ```
 
-Only `jsf.build.home=` is mandated to be edited.
-
-##### build scripts
-```bash
-# under the root dir of project
-ant main clean main
-```
+5. The binary is now available as `jsf-ri/build/mvn/target/javax.faces-2.2.x-SNAPSHOT.jar`.
 
 
-## Pull Request
-Please send a PR to branch 
-* master (JSF.next)
-* MOJARRA_2_3X_ROLLING (2.3.x)
-* MOJARRA_2_2X_ROLLING (2.2.x).
+## Pull Requests
 
-**Note it's okay to send a PR to the master branch, but these are for JSF.next**
+Pull requests are accepted on following branches:
+
+- [`master`][28] (JSF.next)
+- [`MOJARRA_2_3X_ROLLING`][29] (2.3.x)
+- [`MOJARRA_2_2X_ROLLING`][30] (2.2.x)
+
+Note that it's okay to send a PR to the master branch, but these are for JSF.next and not the current 2.3.x version!
 
 
 ## Resources
@@ -297,3 +293,6 @@ Please send a PR to branch
   [25]: http://docs.oracle.com/javaee/7/tutorial/jsf-intro.htm
   [26]: http://arjan-tijms.omnifaces.org/p/jsf-23.html
   [27]: https://github.com/javaeekickoff/java-ee-kickoff-app
+  [28]: https://github.com/javaserverfaces/mojarra
+  [29]: https://github.com/javaserverfaces/mojarra/tree/MOJARRA_2_3X_ROLLING
+  [30]: https://github.com/javaserverfaces/mojarra/tree/MOJARRA_2_2X_ROLLING
