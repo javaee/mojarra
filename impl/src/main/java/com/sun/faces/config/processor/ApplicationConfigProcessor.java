@@ -42,9 +42,6 @@ package com.sun.faces.config.processor;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
-import static java.util.logging.Level.FINE;
-import static java.util.logging.Level.WARNING;
-import static javax.faces.validator.BeanValidator.VALIDATOR_FACTORY_KEY;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -262,7 +259,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
     // -------------------------------------------- Methods from ConfigProcessor
-    
+
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
@@ -369,54 +366,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    /**
-     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
-     */
-    //@Override
-    public void processx(ServletContext servletContext, DocumentInfo[] documentInfos) throws Exception {
-
-        Application application = getApplication();
-        ApplicationAssociate associate = ApplicationAssociate.getInstance(FacesContext.getCurrentInstance().getExternalContext());
-        Map<String, Node> viewHandlerNameToNodeMap = new LinkedHashMap<>();
-        Set<String> defaultValidatorIds = null;
-        
-        for (int i = 0; i < documentInfos.length; i++) {
-            
-            logDocumentInfo(documentInfos[i]);
-            
-            Document document = documentInfos[i].getDocument();
-            String namespace = document.getDocumentElement().getNamespaceURI();
-            NodeList applicationElements = document.getDocumentElement().getElementsByTagNameNS(namespace, APPLICATION);
-            
-            if (applicationElements != null && applicationElements.getLength() > 0) {
-                for (int applicationElementNumber = 0, asize = applicationElements.getLength(); applicationElementNumber < asize; applicationElementNumber++) {
-                    Node appElement = applicationElements.item(applicationElementNumber);
-                    NodeList children = ((Element) appElement).getElementsByTagNameNS(namespace, "*");
-                    if (children != null && children.getLength() > 0) {
-                        for (int childNumber = 0, csize = children.getLength(); childNumber < csize; childNumber++) {
-                            Node childNode = children.item(childNumber);
-                            
-                            // Processing of the actual node
-                            defaultValidatorIds = processNode(childNode, servletContext, application, associate, viewHandlerNameToNodeMap, defaultValidatorIds);
-                            
-                        }
-                    }
-                }
-            }
-        }
-
-        registerDefaultValidatorIds(application, defaultValidatorIds);
-
-        // perform any special processing for ViewHandlers...
-        processViewHandlers(servletContext, application, viewHandlerNameToNodeMap);
-
-        // process NamedEvent annotations, if any
-        processAnnotations(NamedEvent.class);
-
-        // continue processing...
-        invokeNext(servletContext, documentInfos);
-    }
-
     @Override
     public void destroy(ServletContext sc) {
         destroyInstances(sc, actionListeners);
@@ -432,86 +381,14 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         destroyNext(sc);
     }
 
-    // --------------------------------------------------------- Private Methods
-    
-    private void destroyInstances(ServletContext servletContext, List<?> instances) {
-        for (Object instance : instances) {
-            destroyInstance(servletContext, instance.getClass().getName(), instance);
+    private void destroyInstances(ServletContext sc, List instances) {
+        for (Object cur : instances) {
+            destroyInstance(sc, cur.getClass().getName(), cur);
         }
-        
         instances.clear();
     }
-    
-    private Set<String> processNode(Node node, ServletContext servletContext, Application application, ApplicationAssociate associate, Map<String, Node> viewHandlerNameToNodeMap, Set<String> defaultValidatorIdsIn) {
-        
-        Set<String> defaultValidatorIdsOut = defaultValidatorIdsIn;
-        
-        switch (node.getLocalName()) {
-            case MESSAGE_BUNDLE:
-                setMessageBundle(application, node);
-                break;
-            case DEFAULT_RENDERKIT_ID:
-                setDefaultRenderKitId(application, node);
-                break;
-            case ACTION_LISTENER:
-                addActionListener(servletContext, application, node);
-                break;
-            case NAVIGATION_HANDLER:
-                setNavigationHandler(servletContext, application, node);
-                break;
-            case VIEW_HANDLER:
-                String viewHandler = getNodeText(node);
-                if (viewHandler != null) {
-                    viewHandlerNameToNodeMap.put(viewHandler, node);
-                }
-                break;
-            case STATE_MANAGER:
-                setStateManager(servletContext, application, node);
-                break;
-            case EL_RESOLVER:
-                addELResolver(servletContext, associate, node);
-                break;
-            case PROPERTY_RESOLVER:
-                addPropertyResolver(servletContext, associate, node);
-                break;
-            case VARIABLE_RESOLVER:
-                addVariableResolver(servletContext, associate, node);
-                break;
-            case DEFAULT_LOCALE:
-                setDefaultLocale(application, node);
-                break;
-            case SUPPORTED_LOCALE:
-                addSupportedLocale(application, node);
-                break;
-            case RESOURCE_BUNDLE:
-                addResouceBundle(associate, node);
-                break;
-            case RESOURCE_HANDLER:
-                setResourceHandler(servletContext, application, node);
-                break;
-            case SYSTEM_EVENT_LISTENER:
-                addSystemEventListener(servletContext, application, node);
-                break;
-            case DEFAULT_VALIDATORS:
-                if (defaultValidatorIdsOut == null) {
-                    defaultValidatorIdsOut = new LinkedHashSet<>();
-                } else {
-                    defaultValidatorIdsOut.clear();
-                }
-                break;
-            case VALIDATOR_ID:
-                defaultValidatorIdsOut.add(getNodeText(node));
-                break;
-            case SEARCH_EXPRESSION_HANDLER:
-                setSearchExpressionHandler(servletContext, application, node);
-                break;
-            case SEARCH_KEYWORD_RESOLVER:
-                addSearchKeywordResolver(servletContext, associate, node);
-                break;
-        }
-        
-        return defaultValidatorIdsOut;
-    }
+
+    // --------------------------------------------------------- Private Methods
 
     /**
      * If defaultValidatorIds is null, then no &lt;default-validators&gt; element appeared in any
@@ -519,19 +396,21 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
      * the &lt;default-validators&gt; appeared at least once, don't add the default (and empty
      * &lt;default-validator&gt; element disabled default validators)
      */
-    private void registerDefaultValidatorIds(Application application, Set<String> defaultValidatorIds) {
+    private void registerDefaultValidatorIds(Application application, LinkedHashSet<String> defaultValidatorIds) {
         if (defaultValidatorIds == null) {
             defaultValidatorIds = new LinkedHashSet<>();
             if (isBeanValidatorAvailable()) {
                 WebConfiguration webConfig = WebConfiguration.getInstance();
                 if (!webConfig.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableDefaultBeanValidator)) {
-                    defaultValidatorIds.add(VALIDATOR_ID);
+                    defaultValidatorIds.add(BeanValidator.VALIDATOR_ID);
                 }
             }
         }
 
         for (String validatorId : defaultValidatorIds) {
-            logAddValidatorId(validatorId);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.addDefaultValidatorId({0})", validatorId));
+            }
             application.addDefaultValidatorId(validatorId);
         }
     }
@@ -548,7 +427,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
             try {
                 Thread.currentThread().getContextClassLoader().loadClass("javax.validation.MessageInterpolator");
                 // Check if the Implementation is available.
-                Object cachedObject = appMap.get(VALIDATOR_FACTORY_KEY);
+                Object cachedObject = appMap.get(BeanValidator.VALIDATOR_FACTORY_KEY);
                 if (cachedObject instanceof ValidatorFactory) {
                     result = true;
                 } else {
@@ -558,23 +437,23 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                     } catch (NoClassDefFoundError nde) {
                         // on google app engine InitialContext is forbidden to use and GAE throws
                         // NoClassDefFoundError
-                        if (LOGGER.isLoggable(FINE)) {
-                            LOGGER.log(FINE, nde.toString(), nde);
+                        if (LOGGER.isLoggable(Level.FINE)) {
+                            LOGGER.log(Level.FINE, nde.toString(), nde);
                         }
                     } catch (NamingException ne) {
-                        if (LOGGER.isLoggable(WARNING)) {
-                            LOGGER.log(WARNING, ne.toString(), ne);
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING, ne.toString(), ne);
                         }
                     }
 
                     try {
                         Object validatorFactory = initialContext.lookup("java:comp/ValidatorFactory");
-                        if (validatorFactory != null) {
+                        if (null != validatorFactory) {
                             appMap.put(BeanValidator.VALIDATOR_FACTORY_KEY, validatorFactory);
                             result = true;
                         }
                     } catch (NamingException root) {
-                        if (LOGGER.isLoggable(FINE)) {
+                        if (LOGGER.isLoggable(Level.FINE)) {
                             String msg = "Could not build a default Bean Validator factory: " + root.getMessage();
                             LOGGER.fine(msg);
                         }
@@ -584,7 +463,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                         try {
                             ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
                             Validator validator = factory.getValidator();
-                            appMap.put(VALIDATOR_FACTORY_KEY, factory);
+                            appMap.put(BeanValidator.VALIDATOR_FACTORY_KEY, factory);
                             result = true;
                         } catch (Throwable throwable) {
                         }
@@ -592,13 +471,12 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 }
 
             } catch (Throwable t) { // CNFE or ValidationException or any other
-                if (LOGGER.isLoggable(FINE)) {
+                if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Unable to load Beans Validation");
                 }
             }
             appMap.put(beansValidationAvailabilityCacheKey, result);
         }
-        
         return result;
     }
 
@@ -1015,7 +893,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         }
     }
 
-    private void processViewHandlers(ServletContext sc, Application app, Map<String, Node> viewHandlers) {
+    private void processViewHandlers(ServletContext sc, Application app, LinkedHashMap<String, Node> viewHandlers) {
         // take special action on the ViewHandlers that have been
         // configured for the application. If any of the ViewHandlers
         // is the FaceletViewHandler, don't install the 2.0
@@ -1032,18 +910,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         }
         for (Node n : viewHandlers.values()) {
             setViewHandler(sc, app, n);
-        }
-    }
-    
-    private void logDocumentInfo(DocumentInfo documentInfo) {
-        if (LOGGER.isLoggable(FINE)) {
-            LOGGER.log(FINE, MessageFormat.format("Processing application elements for document: ''{0}''", documentInfo.getSourceURI()));
-        }
-    }
-    
-    private void logAddValidatorId(String validatorId) {
-        if (LOGGER.isLoggable(FINE)) {
-            LOGGER.log(FINE, MessageFormat.format("Calling Application.addDefaultValidatorId({0})", validatorId));
         }
     }
 
