@@ -681,7 +681,7 @@ public class ExternalContextImpl extends ExternalContext {
         }
 
         HttpServletRequest request = (HttpServletRequest) getRequest();
-        int port = ContextParamUtils.getValue(servletContext, ContextParam.WebsocketEndpointPort, int.class);
+        int port = ContextParamUtils.getValue(servletContext, ContextParam.WebsocketEndpointPort, Integer.class);
 
         try {
             URL requestURL = new URL(request.getRequestURL().toString());
