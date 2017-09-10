@@ -233,14 +233,15 @@ In case you want to checkout this repository and manually build from source your
     cp build.properties.glassfish build.properties
     ```
 
-   Only the `jsf.build.home` property is mandated to be edited in your `build.properties`.
+   Only the `jsf.build.home` property is mandated to be edited in your `build.properties`. It must represent the absolute path to the root directory of the project.
 4. Run the following command from the root directory of the project:
 
     ```bash
     # under the root dir of project
     ant main clean main
     ```
-5. The binary is now available as `jsf-ri/build/mvn/target/javax.faces-2.2.x-SNAPSHOT.jar
+
+5. The binary is now available as `jsf-ri/build/mvn/target/javax.faces-2.2.x-SNAPSHOT.jar`.
 
 
 ## Pull Requests
