@@ -64,7 +64,7 @@
     <property name="glassfish.version" value="v2.1.1-b31g-linux" />
 
     <property name="central.maven2" value="http://repo1.maven.org/maven2" />
-    <property name="userContent" value="http://slc03qna.us.oracle.com:7070/hudson/userContent" />
+    <property name="userContent" value="http://slc14xgm.us.oracle.com:7070/hudson/userContent" />
     <property name="userContentDownloads" value="${userContent}/downloads" />
 	
     <property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
