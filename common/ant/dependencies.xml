@@ -344,7 +344,7 @@
                 </not>
             </and>
             <then>
-                <get src="http://vdldoc.googlecode.com/files/vdldoc-${vdldoc.version}.jar"
+                <get src="http://vdldoc.omnifaces.org/downloads/vdldoc-${vdldoc.version}.jar"
                      dest="${vdldoc.jar}"
                      usetimestamp="true"/>
 
