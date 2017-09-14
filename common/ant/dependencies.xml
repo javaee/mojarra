@@ -363,7 +363,7 @@
                 </not>
             </and>
             <then>
-                <get src="http://jsdoc-toolkit.googlecode.com/files/jsdoc_toolkit-${jsdoc.version}.zip"
+                <get src="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jsdoc-toolkit/jsdoc_toolkit-${jsdoc.version}.zip"
                      dest="${dependency.base.dir}/downloads/jsdoc_toolkit-${jsdoc.version}.zip"
                      usetimestamp="true"/>
                 <unzip
