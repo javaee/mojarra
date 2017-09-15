@@ -40,6 +40,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.application.NavigationHandlerImpl;
 import com.sun.faces.flow.FlowHandlerImpl;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.Attribute;
@@ -142,10 +143,16 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
         }
         String toFlowDocumentId = (String) component.getAttributes().get(ActionListener.TO_FLOW_DOCUMENT_ID_ATTR_NAME);
         NavigationCase navCase = null;
-        if (null == toFlowDocumentId) {
-            navCase = ((ConfigurableNavigationHandler) navHandler).getNavigationCase(context, null, outcome);            
-        } else {
-            navCase = ((ConfigurableNavigationHandler) navHandler).getNavigationCase(context, null, outcome, toFlowDocumentId);            
+        NavigationHandlerImpl.setResetFlowHandlerStateIfUnset(context, false);
+        try {
+            if (null == toFlowDocumentId) {
+                navCase = ((ConfigurableNavigationHandler) navHandler).getNavigationCase(context, null, outcome);            
+            } else {
+                navCase = ((ConfigurableNavigationHandler) navHandler).getNavigationCase(context, null, outcome, toFlowDocumentId);            
+            }
+        }
+        finally {
+            NavigationHandlerImpl.unsetResetFlowHandlerState(context);
         }
 
         if (navCase == null && logger.isLoggable(Level.WARNING)) {
