@@ -51,12 +51,12 @@ In case you're using Maven, you can find below the necessary coordinates:
     <dependency>
         <groupId>javax</groupId>
         <artifactId>javaee-web-api</artifactId>
-        <version>7.0</version>
+        <version>8.0</version>
         <scope>provided</scope>
     </dependency>
     ```
 
-    Note that Java EE 8.0 is currently not available yet. You should for now manually upgrade any JSF 2.2 library to JSF 2.3 depending on the server used. In case of WildFly/JBoss EAP, [you need to manually package `jsf-api.jar` and `jsf-impl.jar` based on `javax.faces.jar` first][15]. In case of TomEE, just swap the `myfaces*.jar` files with `javax.faces.jar` in server's `/lib` folder. In case of Payara/GlassFish, just swap the `javax.faces.jar` file in server's `/glassfish/modules` folder.
+    In case you're targeting a Java EE 7.0 runtime, then you should manually upgrade any runtime-provided JSF 2.2 library to JSF 2.3 depending on the server used. In case of WildFly/JBoss EAP, [you need to manually package `jsf-api.jar` and `jsf-impl.jar` based on `javax.faces.jar` first][15]. In case of TomEE, just swap the `myfaces*.jar` files with `javax.faces.jar` in server's `/lib` folder. In case of Payara/GlassFish, just swap the `javax.faces.jar` file in server's `/glassfish/modules` folder.
 
 - **Servletcontainers (Tomcat, Jetty, etc)**
 
