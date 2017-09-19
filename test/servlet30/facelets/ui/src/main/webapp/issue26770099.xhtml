@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+
+<head>
+    <title><h:outputText value="TESTCASE4" /></title>
+</head>
+
+<body>
+    <h:form id="form">
+   			<ui:repeat var="tbl_normal_info_detail1Item" value="#{sampleBean.list}" varStatus="loop" id="repeat">
+                        <h:inputHidden value="#{oneBean.val}" id="hidden1"></h:inputHidden>
+		      			<h:inputHidden value="0" id="hidden2"></h:inputHidden>
+		      			<h:inputText value="#{sampleBean.list[loop.index].key}" id="value1"/>
+		      			<h:inputText value="#{sampleBean.list[loop.index].value}" id="value2"/>
+                        <h:outputText value="#{anotherBean.name}" id="output1"/>
+                        <h:outputText value="abc" id="output2"/>
+		      </ui:repeat>
+      <h:commandButton action="#{sampleBean.method}" value="submit" />
+    </h:form>
+</body>
+</html>

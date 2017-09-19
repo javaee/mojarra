@@ -466,7 +466,8 @@ public class UIRepeat extends UINamingContainer {
             if (ss != null) {
                 ss.apply(evh);
             } else {
-                NULL_STATE.apply(evh);
+                if(c.getValueExpression("value") != null)
+                    NULL_STATE.apply(evh);
             }
         }
 
