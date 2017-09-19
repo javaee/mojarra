@@ -70,7 +70,6 @@ import java.util.TreeSet;
 import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
-import javax.faces.application.Application;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.AjaxBehavior;
@@ -138,7 +137,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
  * </p>
  * @version $Id: AjaxHandler.java 5369 2008-09-08 19:53:45Z rogerk $
  */
-public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderAttachedObjectHandler {
+public class AjaxHandler extends TagHandlerImpl implements BehaviorHolderAttachedObjectHandler {
 
     private final TagAttribute event;
     private final TagAttribute execute;
@@ -354,9 +353,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
 
     // Construct our AjaxBehavior from tag parameters.
     private AjaxBehavior createAjaxBehavior(FaceletContext ctx, String eventName) {
-        Application application = ctx.getFacesContext().getApplication();
-        AjaxBehavior behavior = (AjaxBehavior)application.createBehavior(
-                                                  AjaxBehavior.BEHAVIOR_ID);
+		AjaxBehavior behavior = constructAjaxBehavior(ctx, eventName);
 
         setBehaviorAttribute(ctx, behavior, this.onevent, String.class);
         setBehaviorAttribute(ctx, behavior, this.onerror, String.class);
@@ -374,6 +371,17 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
         }
 
         return behavior;
+    }
+    
+    /**
+     * Override this method to construct a different implementation of {@link AjaxBehavior}.
+     * 
+     * @param ctx the current {@link FaceletContext}
+     * @param eventName the name of the event for which the {@link AjaxBehavior} is to be constructed
+     * @return an implementation of {@link AjaxBehavior}
+     */
+    protected AjaxBehavior constructAjaxBehavior(FaceletContext ctx, String eventName) {
+        return (AjaxBehavior) ctx.getFacesContext().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
     }
 
     // Sets the value from the TagAttribute on the behavior
