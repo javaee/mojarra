@@ -45,7 +45,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.glassfish</groupId>
     <artifactId>javax.faces</artifactId>
-    <version>2.2.8-22-SNAPSHOT</version>
+    <version>2.2.8-24-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>
         Oracle's implementation of the JSF 2.2 specification.
@@ -180,7 +180,7 @@
                   <configuration>
                     <artifacts>
                       <artifact>
-                        <file>target/javax.faces-2.2.8-22-SNAPSHOT-javadoc.jar</file>
+                        <file>target/javax.faces-2.2.8-24-SNAPSHOT-javadoc.jar</file>
                         <type>jar</type>
                         <classifier>javadoc</classifier>
                       </artifact>
