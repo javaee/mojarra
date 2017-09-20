@@ -112,6 +112,29 @@ import com.sun.faces.util.Util;
 
 public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
+    // Private Constants
+    private static final String RESET_FLOW_HANDLER_STATE_KEY = NavigationHandlerImpl.class.getName() +
+        "_RESET_FLOW_HANDLER_STATE_KEY";
+
+    public static boolean isResetFlowHandlerState(FacesContext facesContext) {
+
+        Boolean obtainingNavigationCase = (Boolean) FacesContext.getCurrentInstance().getAttributes()
+            .get(RESET_FLOW_HANDLER_STATE_KEY);
+        return obtainingNavigationCase != null && obtainingNavigationCase;
+    }
+
+    public static void setResetFlowHandlerStateIfUnset(FacesContext facesContext, boolean resetFlowHandlerState) {
+        Map<Object, Object> attributes = facesContext.getAttributes();
+
+        if (!attributes.containsKey(RESET_FLOW_HANDLER_STATE_KEY)) {
+            attributes.put(RESET_FLOW_HANDLER_STATE_KEY, resetFlowHandlerState);
+        }
+    }
+
+    public static void unsetResetFlowHandlerState(FacesContext facesContext) {
+        facesContext.getAttributes().remove(RESET_FLOW_HANDLER_STATE_KEY);
+    }
+
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
@@ -161,16 +184,21 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
     @Override
     public NavigationCase getNavigationCase(FacesContext context, String fromAction, String outcome, String toFlowDocumentId) {
-        notNull("context", context);
-        notNull("toFlowDocumentId", toFlowDocumentId);
+        Util.notNull("context", context);
+        Util.notNull("toFlowDocumentId", toFlowDocumentId);
 
-        CaseStruct caseStruct = getViewId(context, fromAction, outcome, toFlowDocumentId);
+        setResetFlowHandlerStateIfUnset(context, true);
+        try {
+            CaseStruct caseStruct = getViewId(context, fromAction, outcome, toFlowDocumentId);
+            if (null != caseStruct) {
+                return caseStruct.navCase;
+            }
 
-        if (caseStruct != null) {
-            return caseStruct.navCase;
+            return null;
         }
-
-        return null;
+        finally {
+            unsetResetFlowHandlerState(context);
+        }
     }
 
     /**
@@ -178,7 +206,16 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      */
     @Override
     public Map<String, Set<NavigationCase>> getNavigationCases() {
-        return getNavigationMap(FacesContext.getCurrentInstance());
+        FacesContext context = FacesContext.getCurrentInstance();
+        setResetFlowHandlerStateIfUnset(context, true);
+        try {
+            Map<String, Set<NavigationCase>> result = getNavigationMap(context);
+
+            return result;
+        }
+        finally {
+            unsetResetFlowHandlerState(context);
+        }
     }
 
     @Override

@@ -81,6 +81,7 @@
         <module>flowSwitchCall</module>
         <module>flowTraversalCombinations</module>
         <module>flowViewNodeDifferent</module>
+        <module>getNavigationCase-not-idempotent-issue-4279</module>
         <module>implicitFlow</module>
         <module>injectArtifacts</module>
         <module>injection</module>

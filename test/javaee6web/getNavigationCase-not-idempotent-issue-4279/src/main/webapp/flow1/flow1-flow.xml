@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+	<flow-definition id="flow1">
+		<flow-return id="returnFromFlow1">
+			<from-outcome>/index.xhtml</from-outcome>
+		</flow-return>
+		<flow-call id="callFlow2">
+			<flow-reference>
+				<flow-id>flow2</flow-id>
+			</flow-reference>
+		</flow-call>
+	</flow-definition>
+</faces-config>

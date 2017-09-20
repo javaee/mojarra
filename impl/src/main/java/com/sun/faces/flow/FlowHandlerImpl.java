@@ -40,6 +40,7 @@
  */
 package com.sun.faces.flow;
 
+import com.sun.faces.application.NavigationHandlerImpl;
 import com.sun.faces.util.Util;
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -570,6 +571,23 @@ public class FlowHandlerImpl extends FlowHandler {
             }
             
         }
+
+        private void decrementMaxReturnDepth() {
+            FacesContext context = FacesContext.getCurrentInstance();
+            Map<Object, Object> attrs = context.getAttributes();
+            if (attrs.containsKey(FLOW_RETURN_DEPTH_PARAM_NAME)) {
+
+                Integer cur = (Integer) attrs.get(FLOW_RETURN_DEPTH_PARAM_NAME);
+
+                if (cur > 1) {
+                    attrs.put(FLOW_RETURN_DEPTH_PARAM_NAME, (Integer) cur - 1);
+                }
+                else {
+                    attrs.remove(FLOW_RETURN_DEPTH_PARAM_NAME);
+                }
+            }
+
+        }
         
         public void pushReturnMode() {
             this.incrementMaxReturnDepth();
@@ -577,6 +595,15 @@ public class FlowHandlerImpl extends FlowHandler {
         }
         
         public void popReturnMode() {
+
+            // Mojarra #4279 If ConfigureableNavigationHandler is attempting to obtain a NavigationCase outside of
+            // OutcomeTargetRenderer, then this method must perform exactly the reverse of pushReturnMode() to ensure
+            // that ConfigureableNavigationHandler's calls are idempotent. For more details, see
+            // https://github.com/javaserverfaces/mojarra/issues/4279
+            if (NavigationHandlerImpl.isResetFlowHandlerState(FacesContext.getCurrentInstance())) {
+                this.decrementMaxReturnDepth();
+            }
+
             this.returnDepth--;
         }
 
