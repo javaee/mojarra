@@ -210,7 +210,7 @@ In case you want to checkout this repository and manually build from source your
 ### JSF 2.3
 
 1. Make sure that you have JDK 1.8, Ant and Maven installed.
-2. Checkout branch [`MOJARRA_2_3X_ROLLING`][29] or [`master`][28] (note: any pull requests on master branch are for JSF.next not JSF 2.3!).
+2. Checkout branch [`MOJARRA_2_3X_ROLLING`][29].
 3. Run the following commands from the root directory of the project:
 
     ```bash
