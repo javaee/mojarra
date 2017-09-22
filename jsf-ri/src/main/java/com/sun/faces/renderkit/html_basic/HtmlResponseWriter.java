@@ -869,7 +869,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         writer.write("<!--");
         String str = comment.toString();
         ensureTextBufferCapacity(str);
-        HtmlUtils.writeText(writer, true, true, buffer, str, textBuffer);
+        HtmlUtils.writeText(writer, true, true, false, buffer, str, textBuffer);
         writer.write("-->");
 
     }
