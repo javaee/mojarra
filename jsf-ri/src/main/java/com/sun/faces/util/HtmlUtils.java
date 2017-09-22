@@ -76,13 +76,22 @@ public class HtmlUtils {
         writeText(out, escapeUnicode, escapeIsocode, buffer, text, 0, text.length);
     }
 
+    static public void writeText(Writer out,
+                                 boolean escapeUnicode,
+                                 boolean escapeIsocode, char[] buff,
+                                 char[] text,
+                                 int start,
+                                 int length) throws IOException {
+        writeText(out, escapeUnicode, escapeIsocode, true, buff, text, start, length);
+    }
 
     /**
      * Write char array text.
      */
     static public void writeText(Writer out,
                                  boolean escapeUnicode,
-                                 boolean escapeIsocode, char[] buff,
+                                 boolean escapeIsocode,
+                                 boolean escapeSyntax, char[] buff,
                                  char[] text,
                                  int start,
                                  int length) throws IOException {
@@ -91,19 +100,28 @@ public class HtmlUtils {
 
         int end = start + length;
         for (int i = start; i < end; i++) {
-            buffIndex = writeTextChar(out, escapeUnicode, escapeIsocode, text[i], buffIndex, buff, buffLength);
+            buffIndex = writeTextChar(out, escapeUnicode, escapeIsocode, escapeSyntax, text[i], buffIndex, buff, buffLength);
         }
 
         flushBuffer(out, buff, buffIndex);
     }
 
 
+    static public void writeText(Writer out,
+                                 boolean escapeUnicode,
+                                 boolean escapeIsocode, char[] buff,
+                                 String text,
+                                 char[] textBuff) throws IOException {
+        writeText(out, escapeUnicode, escapeIsocode, true, buff, text, textBuff);
+    }
+    
     /**
      * Write String text.  
      */
     static public void writeText(Writer out,
                                  boolean escapeUnicode,
-                                 boolean escapeIsocode, char[] buff,
+                                 boolean escapeIsocode,
+                                 boolean escapeSyntax, char[] buff,
                                  String text,
                                  char[] textBuff) throws IOException {
 
@@ -111,13 +129,13 @@ public class HtmlUtils {
 
         if (length >= 16) {
             text.getChars(0, length, textBuff, 0);
-            writeText(out, escapeUnicode, escapeIsocode, buff, textBuff, 0, length);
+            writeText(out, escapeUnicode, escapeIsocode, escapeSyntax, buff, textBuff, 0, length);
         } else {
             int buffLength = buff.length;
             int buffIndex = 0;
             for (int i = 0; i < length; i++) {
                 char ch = text.charAt(i);
-                buffIndex = writeTextChar(out, escapeUnicode, escapeIsocode, ch, buffIndex, buff, buffLength);
+                buffIndex = writeTextChar(out, escapeUnicode, escapeIsocode, escapeSyntax, ch, buffIndex, buff, buffLength);
             }
             flushBuffer(out, buff, buffIndex);
         }
@@ -128,6 +146,7 @@ public class HtmlUtils {
     private static int writeTextChar(Writer out,
                                      boolean escapeUnicode,
                                      boolean escapeIsocode,
+                                     boolean escapeSyntax,
                                      char ch,
                                      int buffIndex,
                                      char[] buff,
@@ -139,49 +158,53 @@ public class HtmlUtils {
             }
         }
         if (ch < 0xA0) {
-            // If "?" or over, no escaping is needed (this covers
-            // most of the Latin alphabet)
-            if (ch >= 0x3f) {
-                nextIndex = addToBuffer(out, buff, buffIndex,
-                                        buffLength, ch);
-            } else if (ch >= 0x27) {  // If above "'"...
-                // If between "'" and ";", no escaping is needed
-                if (ch < 0x3c) {
+            if (escapeSyntax) {
+                // If "?" or over, no escaping is needed (this covers
+                // most of the Latin alphabet)
+                if (ch >= 0x3f) {
                     nextIndex = addToBuffer(out, buff, buffIndex,
                                             buffLength, ch);
-                } else if (ch == '<') {
-                    nextIndex = addToBuffer(out,
-                                            buff,
-                                            buffIndex,
-                                            buffLength,
-                                            LT_CHARS);
-                } else if (ch == '>') {
-                    nextIndex = addToBuffer(out,
-                                            buff,
-                                            buffIndex,
-                                            buffLength,
-                                            GT_CHARS);
+                } else if (ch >= 0x27) {  // If above "'"...
+                    // If between "'" and ";", no escaping is needed
+                    if (ch < 0x3c) {
+                        nextIndex = addToBuffer(out, buff, buffIndex,
+                                                buffLength, ch);
+                    } else if (ch == '<') {
+                        nextIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                LT_CHARS);
+                    } else if (ch == '>') {
+                        nextIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                GT_CHARS);
+                    } else {
+                        nextIndex = addToBuffer(out, buff, buffIndex,
+                                                buffLength, ch);
+                    }
                 } else {
-                    nextIndex = addToBuffer(out, buff, buffIndex,
-                                            buffLength, ch);
+                    if (ch == '&') {
+                        nextIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                AMP_CHARS);
+                    } else if (ch == '"') {
+                            nextIndex = addToBuffer(out,
+                                 buff,
+                                 buffIndex,
+                                 buffLength,
+                                 "\"".toCharArray());
+                    } else {
+                        nextIndex = addToBuffer(out, buff, buffIndex,
+                                                buffLength, ch);
+                    }
                 }
             } else {
-                if (ch == '&') {
-                    nextIndex = addToBuffer(out,
-                                            buff,
-                                            buffIndex,
-                                            buffLength,
-                                            AMP_CHARS);
-                } else if (ch == '"') {
-                        nextIndex = addToBuffer(out,
-                             buff,
-                             buffIndex,
-                             buffLength,
-                             "\"".toCharArray());
-                } else {
-                    nextIndex = addToBuffer(out, buff, buffIndex,
-                                            buffLength, ch);
-                }
+                nextIndex = addToBuffer(out, buff, buffIndex, buffLength, ch);
             }
         } else if (ch <= 0xff) {
             if (escapeIsocode) {
