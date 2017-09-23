@@ -185,6 +185,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     private transient Boolean validateEmptyFields;
 
+    private transient Boolean isSetAlwaysValidateRequired;
+
     enum PropertyKeys {
         /**
      * <p>The "localValueSet" state for this component.
@@ -945,7 +947,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         // at all".  
         Object submittedValue = getSubmittedValue();
         if (submittedValue == null) {
-            return;
+            if (isRequired() && isSetAlwaysValidateRequired(context)) {
+                // continue as below
+            } else {
+                return;
+            }
         }
 
         // If non-null, an instanceof String, and we're configured to treat
@@ -981,6 +987,22 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             }
         }
 
+    }
+
+    private boolean isSetAlwaysValidateRequired(FacesContext context) {
+        if (null != isSetAlwaysValidateRequired) {
+            return isSetAlwaysValidateRequired;
+        }
+
+        Boolean bool = (Boolean) context.getAttributes().get("javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE");
+        if (null != bool) {
+            isSetAlwaysValidateRequired = bool;
+        } else {
+            String val = context.getExternalContext().getInitParameter("javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE");
+            isSetAlwaysValidateRequired = Boolean.valueOf(val);
+        }
+
+        return isSetAlwaysValidateRequired;
     }
 
     /**
