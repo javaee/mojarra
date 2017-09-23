@@ -42,6 +42,7 @@ package com.sun.faces.context;
 
 
 import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AlwaysPerformValidationWhenRequiredTrue;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceAlwaysWriteFlashCookie;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
 import com.sun.faces.facelets.impl.DefaultResourceResolver;
@@ -117,6 +118,9 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
         String val = extContext.getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
         boolean setCurrentComponent = Boolean.valueOf(val);
         Map<Object, Object> attrs = context.getAttributes();
+        attrs.put("javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE",
+                webConfig.isOptionEnabled(AlwaysPerformValidationWhenRequiredTrue) ?
+                Boolean.TRUE : Boolean.FALSE);
         attrs.put(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME, 
                 setCurrentComponent ? Boolean.TRUE : Boolean.FALSE);
         attrs.put(PartialStateSaving, webConfig.isOptionEnabled(PartialStateSaving) ?
