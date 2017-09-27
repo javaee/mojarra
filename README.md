@@ -7,7 +7,7 @@ Oracle's implementation of the JavaServer Faces specification
 
 - Java 1.8
 - Servlet 3.0 (4.0 recommended)
-- EL 3.0 (3.1 recommended)
+- EL 3.0
 - CDI 1.2 (2.0 recommended)
 - JSTL 1.2
 - JSONP 1.1 (optional, only when `<f:websocket>` is used)
