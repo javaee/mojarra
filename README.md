@@ -207,6 +207,19 @@ Start the server and open it by `http://localhost:8080/contextname/hello.xhtml`.
 
 In case you want to checkout this repository and manually build from source yourself (if necessary after editing source code), here are the instructions:
 
+### JSF 2.4 (JSF.Next)
+
+1. Make sure that you have JDK 1.8, Ant and Maven installed.
+2. Checkout branch [`master`][28].
+3. Run the following commands from the root directory of the project:
+
+    ```bash
+    # under the root dir of project
+    mvn clean install
+    ```
+
+4. The binary is now available as `impl/target/javax.faces-2.4.0-m01-SNAPSHOT.jar`.
+
 ### JSF 2.3
 
 1. Make sure that you have JDK 1.8, Ant and Maven installed.
@@ -221,7 +234,7 @@ In case you want to checkout this repository and manually build from source your
     mvn clean install
     ```
 
-4. The binary is now available as `target/javax.faces-2.3.x-SNAPSHOT.jar`.
+4. The binary is now available as `impl/target/javax.faces-2.3.x-SNAPSHOT.jar`.
 
 ### JSF 2.2
 
