@@ -203,11 +203,25 @@ Finally create a [Facelets][20] file `/hello.xhtml` as below:
 
 Start the server and open it by `http://localhost:8080/contextname/hello.xhtml`.
 
+## Activating CDI in JSF 2.3
+
+By default, JSF 2.3 will run in JSF 2.2 modus as to CDI support. Even when you use a JSF 2.3 compatible `faces-config.xml`. In other words, the new JSF 2.3 feature of injection and EL resolving of JSF artifacts ([spec issue 1316](https://github.com/javaee/javaserverfaces-spec/issues/1316)) won't work until you explicitly activate this. In other words, `@Inject FacesContext` doesn't work by default. This is necessary in order for JSF 2.3 to be fully backwards compatible.
+
+There is currently only one way to activate CDI in JSF 2.3 and herewith make JSF 2.3 to run in full JSF 2.3 modus. Put the `@FacesConfig` annotation on an arbitrary CDI managed bean. For example, a general startup/configuration bean.
+
+```
+@FacesConfig
+@ApplicationScoped
+public class YourApplicationConfig {
+    // ...
+}
+```
+
 ## Building
 
 In case you want to checkout this repository and manually build from source yourself (if necessary after editing source code), here are the instructions:
 
-### JSF 2.4 (JSF.Next)
+### JSF 2.4 (JSF.next)
 
 1. Make sure that you have JDK 1.8, Ant and Maven installed.
 2. Checkout branch [`master`][28].
