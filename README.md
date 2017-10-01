@@ -77,8 +77,8 @@ In case you're using Maven, you can find below the necessary coordinates:
         <version>1.2</version>
     </dependency>
     <dependency> <!-- Optional, only when <f:websocket> is used. -->
-        <groupId>javax.json</groupId>
-        <artifactId>javax.json-api</artifactId>
+        <groupId>org.glassfish</groupId>
+        <artifactId>javax.json</artifactId>
         <version>1.1</version>
     </dependency>
     <dependency> <!-- Optional, only when <f:validateBean> or <f:validateWholeBean> is used. -->
@@ -232,7 +232,7 @@ In case you want to checkout this repository and manually build from source your
     mvn clean install
     ```
 
-4. The binary is now available as `impl/target/javax.faces-2.4.0-m01-SNAPSHOT.jar`.
+4. The binary is now available as `impl/target/javax.faces-2.4.x-SNAPSHOT.jar`.
 
 ### JSF 2.3
 
