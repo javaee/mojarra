@@ -149,6 +149,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
          "javax.faces.component.UIInput.UPDATE";
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
 
+    private transient Boolean isSetAlwaysValidateRequired;
+
     /**
      * The <code>Logger</code> for this class.
      */
@@ -859,7 +861,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         // at all";  validation should not continue
         Object submittedValue = getSubmittedValue();
         if (submittedValue == null) {
-            return;
+            if (isRequired() && isSetAlwaysValidateRequired(context)) {
+                // continue as below
+            } else {
+                return;
+            }
         }
 
         Object newValue = null;
@@ -885,6 +891,22 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             }
         }
 
+    }
+
+    private boolean isSetAlwaysValidateRequired(FacesContext context) {
+        if (null != isSetAlwaysValidateRequired) {
+            return isSetAlwaysValidateRequired;
+        }
+
+        Boolean bool = (Boolean) context.getExternalContext().getRequestMap().get("javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE");
+        if (null != bool) {
+            isSetAlwaysValidateRequired = bool;
+        } else {
+            String val = context.getExternalContext().getInitParameter("javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE");
+            isSetAlwaysValidateRequired = Boolean.valueOf(val);
+        }
+
+        return isSetAlwaysValidateRequired;
     }
 
     /**

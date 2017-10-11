@@ -737,6 +737,9 @@ public class WebConfiguration {
         // *must* appear after the one that is taking
         // its place.  The reporting logic depends on this
 
+        AlwaysPerformValidationWhenRequiredTrue(
+              "javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE",
+              false),
         DisplayConfiguration(
               "com.sun.faces.displayConfiguration",
               false

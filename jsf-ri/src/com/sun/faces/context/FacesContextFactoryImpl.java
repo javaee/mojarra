@@ -40,6 +40,8 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AlwaysPerformValidationWhenRequiredTrue;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.RequestStateManager;
@@ -51,6 +53,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import java.util.Map;
 
 public class FacesContextFactoryImpl extends FacesContextFactory {
 
@@ -118,6 +121,13 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
         RequestStateManager.set(ctx,
                                 RequestStateManager.EXTERNALCONTEXT_IMPL_ATTR_NAME,
                                 ctx.getExternalContext());
+
+        WebConfiguration webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
+        Map<String, Object> attrs = ctx.getExternalContext().getRequestMap();
+        attrs.put("javax.faces.ALWAYS_PERFORM_VALIDATION_WHEN_REQUIRED_IS_TRUE",
+           webConfig.isOptionEnabled(AlwaysPerformValidationWhenRequiredTrue) ?
+           Boolean.TRUE : Boolean.FALSE);
+
         return ctx;
 
     }
