@@ -66,14 +66,14 @@ public class Issue3793IT {
 
     @After
     public void tearDown() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
     @Test
-    @JsfTest(value = JsfVersion.JSF_2_3_0_M01,
-            excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
+    @JsfTest(value = JsfVersion.JSF_2_3_0_M01, excludes = { WEBLOGIC_12_1_4, WEBLOGIC_12_2_1 })
     public void testFacesConfig23() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/mojarraFacesConfigVersion.xhtml");
-        assertTrue(page.asXml().contains("2.3"));
+        
+        assertTrue(!page.asXml().contains("2.3"));
     }
 }
