@@ -131,7 +131,7 @@ would make that file accessible like this.</p>
       xmlns:h="http://xmlns.jcp.org/jsf/html"<br />
       xmlns:f="http://xmlns.jcp.org/jsf/core"<br />
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"<br />
-      xmlns:ez="<i><b>http://domain.com/path/namespace</b></i>"&gt;<br />
+      xmlns:ez="<i><b>http://domain.com/path</b></i>"&gt;<br />
 ...<br />
 </code></pre>
 
