@@ -153,14 +153,12 @@ public class AttributeTag extends TagSupport {
 	    }
         }
 	
-        if (component.getAttributes().get(nameVal) == null) {
 	    if (isLiteral) {
 		component.getAttributes().put(nameVal, valueVal);
 	    }
 	    else {
 		component.setValueExpression(nameVal, value);
 	    }
-        }
         return (SKIP_BODY);
 
     }
