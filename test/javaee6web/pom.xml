@@ -59,7 +59,6 @@
     <name>Mojarra ${project.version} - Test - JavaEE 6 Web</name>
 
     <modules>
-        <module>adf</module>
         <module>ajax</module>
         <module>basicFlow</module>
         <module>faceletDefaultSuffix</module>
@@ -88,7 +87,6 @@
         <module>multiPageFlowInJar</module>
         <module>multiPageFlowUsingJar</module>
         <module>nestedFlow</module>
-        <module>servletMappingForADF</module>
         <module>viewScope</module>
         <module>disallowDoctypeDecl</module>
     </modules>
