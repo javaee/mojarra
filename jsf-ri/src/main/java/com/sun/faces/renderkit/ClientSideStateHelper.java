@@ -68,12 +68,11 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.io.Base64InputStream;
-import com.sun.faces.io.Base64OutputStreamWriter;
 import com.sun.faces.util.DebugObjectOutputStream;
 import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import java.util.Base64;
 
 /**
  * <p>
@@ -133,8 +132,8 @@ public class ClientSideStateHelper extends StateHelper {
      * @see {@link com.sun.faces.config.WebConfiguration.WebContextInitParameter#ClientStateWriteBufferSize}
      */
     private int csBuffSize;
-    
-    
+
+
     private boolean debugSerializedState;
 
 
@@ -147,7 +146,7 @@ public class ClientSideStateHelper extends StateHelper {
     public ClientSideStateHelper() {
 
         init();
-        
+
     }
 
 
@@ -215,11 +214,11 @@ public class ClientSideStateHelper extends StateHelper {
     public Object getState(FacesContext ctx, String viewId) throws IOException {
 
         String stateString = getStateParamValue(ctx);
-        
+
         if (stateString == null) {
             return null;
         }
-        
+
         if ("stateless".equals(stateString)) {
             return "stateless";
         }
@@ -239,20 +238,17 @@ public class ClientSideStateHelper extends StateHelper {
      * @return the view state reconstructed from <code>stateString</code>
      */
     protected Object doGetState(FacesContext ctx, String stateString) {
-        
+
         if ("stateless".equals(stateString)) {
             return null;
         }
-        
+
         ObjectInputStream ois = null;
-        InputStream bis = new Base64InputStream(stateString);
+        InputStream bis = null;
         try {
             if (guard != null) {
                 byte[] bytes = stateString.getBytes(RIConstants.CHAR_ENCODING);
-                int numRead = bis.read(bytes, 0, bytes.length);
-                byte[] decodedBytes = new byte[numRead];
-                bis.reset();
-                bis.read(decodedBytes, 0, decodedBytes.length);
+                byte[] decodedBytes = Base64.getDecoder().decode(bytes);
 
                 bytes = guard.decrypt(ctx, decodedBytes);
                 if (bytes == null) return null;
@@ -260,10 +256,14 @@ public class ClientSideStateHelper extends StateHelper {
             }
 
 
-            if (compressViewState) {
+            if (null != bis && compressViewState) {
                 bis = new GZIPInputStream(bis);
             }
-            
+
+            if (null == bis) {
+                throw new FacesException("Unable to encode stateString");
+            }
+
             ois = serialProvider.createObjectInputStream(bis);
 
             long stateTime = 0;
@@ -341,13 +341,13 @@ public class ClientSideStateHelper extends StateHelper {
      */
     protected void doWriteState(FacesContext facesContext, Object state, Writer writer)
     throws IOException {
-        
+
         if (facesContext.getViewRoot().isTransient()) {
             writer.write("stateless");
             writer.flush();
             return;
         }
-        
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         OutputStream base = null;
         if (compressViewState) {
@@ -378,9 +378,9 @@ public class ClientSideStateHelper extends StateHelper {
                         out.writeObject(stateToWrite[0]);
                 } catch (Exception e) {
                     throw new FacesException(
-                            "Serialization error. Path to offending instance: " 
+                            "Serialization error. Path to offending instance: "
                             + out.getStack(), e);
-                }            
+                }
 
             }
 
@@ -397,9 +397,9 @@ public class ClientSideStateHelper extends StateHelper {
                 } catch (Exception e) {
                     DebugUtil.printState((Map)stateToWrite[1], LOGGER);
                     throw new FacesException(
-                            "Serialization error. Path to offending instance: " 
+                            "Serialization error. Path to offending instance: "
                             + out.getStack(), e);
-                }            
+                }
 
             }
 
@@ -419,15 +419,13 @@ public class ClientSideStateHelper extends StateHelper {
             }
 
             // Base 64 encode
-            Base64OutputStreamWriter bos =
-                new Base64OutputStreamWriter(bytes.length, writer);
-            bos.write(bytes, 0, bytes.length);
-            bos.finish();
+            String encodedBytes = new String(Base64.getEncoder().encode(bytes));
+            writer.write(encodedBytes);
 
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            "Client State: total number of characters written: {0}",
-                           bos.getTotalCharsWritten());
+                           encodedBytes.length());
             }
         } finally {
             if (oos != null) {
@@ -535,7 +533,7 @@ public class ClientSideStateHelper extends StateHelper {
 
     /**
      * Is stateless.
-     * 
+     *
      * @param facesContext the Faces context.
      * @param viewId the view id.
      * @return true if stateless, false otherwise.
@@ -557,7 +555,7 @@ public class ClientSideStateHelper extends StateHelper {
 
             return false;
         }
-        
+
         throw new IllegalStateException("Cannot determine whether or not the request is stateless");
     }
 
