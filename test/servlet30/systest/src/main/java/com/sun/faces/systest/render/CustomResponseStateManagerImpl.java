@@ -50,6 +50,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Base64;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -68,7 +69,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
     //
     private static final String FACES_VIEW_STATE =
         "com.sun.faces.FACES_VIEW_STATE";
-    
+
      private static final String COMPRESS_STATE_PARAM =
         "com.sun.faces.COMPRESS_STATE";
     //
@@ -80,20 +81,20 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
     //
     private Boolean compressStateSet = null;
 
-    
+
     //
     // Ivars used during actual client lifetime
     //
 
     // Relationship Instance Variables
 
-    
+
     //
-    // Constructors and Initializers    
+    // Constructors and Initializers
     //
 
     public CustomResponseStateManagerImpl() {
-        super();       
+        super();
     }
 
 
@@ -134,26 +135,26 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
     private Object getTreeStructure(FacesContext context,
                                             String treeId) {
 	StateManager stateManager = Util.getStateManager(context);
-        
+
 	Map requestParamMap = context.getExternalContext()
 	    .getRequestParameterMap();
-	
+
 	String viewString = (String) requestParamMap.get(
 							 javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
 	Object structure = null;
 	if (viewString == null) {
 	    return null;
 	}
-	
+
 	if (stateManager.isSavingStateInClient(context)) {
 	    Object state = null;
 	    ByteArrayInputStream bis = null;
 	    GZIPInputStream gis = null;
 	    ObjectInputStream ois = null;
 	    boolean compress = isCompressStateSet(context);
-	   
+
 	    try {
-                 byte[] bytes = Base64.decode(viewString.getBytes());
+                 byte[] bytes = Base64.getDecoder().decode(viewString.getBytes());
 		bis = new ByteArrayInputStream(bytes);
 		if (isCompressStateSet(context)) {
 		    gis = new GZIPInputStream(bis);
@@ -203,18 +204,18 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
         throws IOException {
         String hiddenField = null;
 	StateManager stateManager = Util.getStateManager(context);
-	
+
 	if (stateManager.isSavingStateInClient(context)) {
 	    GZIPOutputStream zos = null;
 	    ObjectOutputStream oos = null;
 	    boolean compress = isCompressStateSet(context);
-	    
+
 	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	    if (compress) {
 		zos = new GZIPOutputStream(bos);
 		oos = new ObjectOutputStream(zos);
 	    } else {
-		oos = new ObjectOutputStream(bos);    
+		oos = new ObjectOutputStream(bos);
 	    }
 	    oos.writeObject(view.getStructure());
 	    oos.writeObject(view.getState());
@@ -224,10 +225,10 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 	    }
             byte[] securedata = bos.toByteArray();
 	    bos.close();
-	    
+
 	    hiddenField = " <input type=\"hidden\" name=\""
 		+ javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM + "\"" + " value=\"" +
-                    (new String(Base64.encode(securedata), "ISO-8859-1"))
+                    (new String(Base64.getEncoder().encode(securedata), "ISO-8859-1"))
 		+ "\" />\n ";
 	}
 	else {
@@ -235,12 +236,12 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 		+ javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM + "\"" + " value=\"" +
 		view.getStructure() +
 		"\" />\n ";
-	    
+
 	}
         context.getResponseWriter().write(hiddenField);
 
         // write this out regardless of state saving mode
-        // Only write it out if there is a default specified, and 
+        // Only write it out if there is a default specified, and
         // this render kit identifier is not the default.
         String result = context.getApplication().getDefaultRenderKitId();
         if ((null != result && !result.equals("CUSTOM")) || result == null) {
@@ -250,7 +251,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
             context.getResponseWriter().write(hiddenField);
         }
     }
-    
+
     private boolean isCompressStateSet(FacesContext context) {
 	if (null != compressStateSet) {
 	    return compressStateSet.booleanValue();
