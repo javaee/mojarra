@@ -488,19 +488,14 @@ public class TestRenderKit extends ServletFacesTestCase {
              new ApplicationConfigProcessor(),
              new RenderKitConfigProcessor(),
         };
-        for (int i = 0; i < configProcessors.length; i++) {
-            ConfigProcessor p = configProcessors[i];
-            if ((i + 1) < configProcessors.length) {
-                p.setNext(configProcessors[i + 1]);
-            }
-        }
         
         InjectionProvider containerConnector =
                 InjectionProviderFactory.createInstance(ctx.getExternalContext());
         ctx.getAttributes().put("com.sun.faces.config.ConfigManager_INJECTION_PROVIDER_TASK", 
                 containerConnector);
         
-        configProcessors[0].process(servletContext, new DocumentInfo[] {
+        for (int i=0; i<configProcessors.length; i++)
+        configProcessors[i].process(servletContext, ctx, new DocumentInfo[] {
                                            new DocumentInfo(defaultDoc, new URI(runtime.toExternalForm())),
                                            new DocumentInfo(renderKitDoc, new URI(renderkit.toExternalForm())) });
 

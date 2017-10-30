@@ -91,6 +91,10 @@ public class MockExternalContext extends ExternalContext {
 	return context.getServletContextName();
     }
 
+    @Override
+    public String getApplicationContextPath() {
+        return context.getContextPath();
+    }
     
     
     public Object getRequest() {
@@ -120,7 +124,6 @@ public class MockExternalContext extends ExternalContext {
         }
         return (applicationMap);
     }
-    
 
     private Map sessionMap = null;
     public Map getSessionMap() {

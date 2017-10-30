@@ -41,44 +41,32 @@
 package com.sun.faces.config;
 
 import java.net.URI;
+
 import org.w3c.dom.Document;
-
-
 
 /**
  * Associates a Document with a source URL.
  */
 public class DocumentInfo {
 
-    private Document document;
-    private URI sourceURI;
-
+    private final Document document;
+    private final URI sourceURI;
 
     // ------------------------------------------------------------ Constructors
 
-
     public DocumentInfo(Document document, URI sourceURL) {
-
         this.document = document;
         this.sourceURI = sourceURL;
-
     }
-
 
     // ---------------------------------------------------------- Public Methods
 
-
     public Document getDocument() {
-
         return document;
-
     }
-
 
     public URI getSourceURI() {
-
         return sourceURI;
-
     }
-    
+
 }

@@ -84,7 +84,7 @@ public class MockServletContext implements ServletContext {
     }
 
     public String getContextPath() {
-        throw new UnsupportedOperationException();
+        return "test";
     }
 
     public String getInitParameter(String name) {

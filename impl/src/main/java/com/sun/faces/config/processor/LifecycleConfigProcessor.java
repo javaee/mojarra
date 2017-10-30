@@ -40,14 +40,16 @@
 
 package com.sun.faces.config.processor;
 
-import java.text.MessageFormat;
+import static java.text.MessageFormat.format;
+import static java.util.logging.Level.FINE;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FactoryFinder;
+import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
@@ -90,19 +92,6 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
         appPhaseListeners = new CopyOnWriteArrayList<PhaseListener>();
     }
 
-    @Override
-    public void destroy(ServletContext sc) {
-        destroyInstances(sc, appPhaseListeners);
-
-        destroyNext(sc);
-    }
-
-    private void destroyInstances(ServletContext sc, List instances) {
-        for (Object cur : instances) {
-            destroyInstance(sc, cur.getClass().getName(), cur);
-        }
-        instances.clear();
-    }
 
     // -------------------------------------------- Methods from ConfigProcessor
 
@@ -110,59 +99,83 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext servletContext, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {
 
         LifecycleFactory factory = (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
 
         for (int i = 0; i < documentInfos.length; i++) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, MessageFormat.format("Processing lifecycle elements for document: ''{0}''", documentInfos[i].getSourceURI()));
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, format("Processing lifecycle elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
+            
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
             NodeList lifecycles = document.getElementsByTagNameNS(namespace, LIFECYCLE);
+            
             if (lifecycles != null) {
                 for (int c = 0, csize = lifecycles.getLength(); c < csize; c++) {
-                    Node n = lifecycles.item(c);
-                    if (n.getNodeType() == Node.ELEMENT_NODE) {
-                        NodeList listeners = ((Element) n).getElementsByTagNameNS(namespace, PHASE_LISTENER);
-                        addPhaseListeners(sc, factory, listeners);
+                    Node lifecyleNode = lifecycles.item(c);
+                    if (lifecyleNode.getNodeType() == Node.ELEMENT_NODE) {
+                        NodeList listeners = ((Element) lifecyleNode).getElementsByTagNameNS(namespace, PHASE_LISTENER);
+                        addPhaseListeners(servletContext, facesContext, factory, listeners);
                     }
                 }
             }
         }
-        invokeNext(sc, documentInfos);
 
     }
+    
+    @Override
+    public void destroy(ServletContext sc, FacesContext facesContext) {
+        destroyInstances(sc, facesContext, appPhaseListeners);
+    }
+  
 
     // --------------------------------------------------------- Private Methods
+    
 
-    private void addPhaseListeners(ServletContext sc, LifecycleFactory factory, NodeList phaseListeners) {
+    private void addPhaseListeners(ServletContext sc, FacesContext facesContext, LifecycleFactory factory, NodeList phaseListeners) {
 
         if (phaseListeners != null && phaseListeners.getLength() > 0) {
             for (int i = 0, size = phaseListeners.getLength(); i < size; i++) {
-                Node plNode = phaseListeners.item(i);
-                String pl = getNodeText(plNode);
-                if (pl != null) {
+                Node phaseListenerNode = phaseListeners.item(i);
+                String phaseListenerClassName = getNodeText(phaseListenerNode);
+                
+                if (phaseListenerClassName != null) {
                     boolean[] didPerformInjection = { false };
-                    PhaseListener plInstance = (PhaseListener) createInstance(sc, pl, PhaseListener.class, null, plNode, true, didPerformInjection);
-                    if (plInstance != null) {
+                    
+                    PhaseListener phaseListener = (PhaseListener) 
+                        createInstance(
+                                sc, facesContext, phaseListenerClassName, 
+                                PhaseListener.class, null, phaseListenerNode, 
+                                true, didPerformInjection);
+                    
+                    if (phaseListener != null) {
                         if (didPerformInjection[0]) {
-                            appPhaseListeners.add(plInstance);
+                            appPhaseListeners.add(phaseListener);
                         }
-                        for (Iterator t = factory.getLifecycleIds(); t.hasNext();) {
+                        
+                        for (Iterator<String> t = factory.getLifecycleIds(); t.hasNext();) {
                             String lfId = (String) t.next();
                             Lifecycle lifecycle = factory.getLifecycle(lfId);
-                            if (LOGGER.isLoggable(Level.FINE)) {
-                                LOGGER.log(Level.FINE, MessageFormat.format("Adding PhaseListener ''{0}'' to lifecycle ''{0}}", pl, lfId));
+                            if (LOGGER.isLoggable(FINE)) {
+                                LOGGER.log(FINE, format("Adding PhaseListener ''{0}'' to lifecycle ''{0}}", phaseListenerClassName, lfId));
                             }
-                            lifecycle.addPhaseListener(plInstance);
+                            
+                            lifecycle.addPhaseListener(phaseListener);
                         }
                     }
                 }
             }
         }
-
+    }
+    
+    private void destroyInstances(ServletContext sc, FacesContext facesContext, List<?> instances) {
+        for (Object instance : instances) {
+            destroyInstance(sc, facesContext, instance.getClass().getName(), instance);
+        }
+        
+        instances.clear();
     }
 
 }

@@ -40,21 +40,23 @@
 
 package com.sun.faces.spi;
 
+import static java.util.logging.Level.WARNING;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Enumeration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.ExternalContext;
 import javax.servlet.ServletContext;
@@ -126,14 +128,10 @@ public class InjectionProviderFactory {
             }
             return provider;
         } else if (WebContainerInjectionProvider.class.equals(provider.getClass())) {
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.info("jsf.core.injection.provider_generic_web_configured");
-            }
+            LOGGER.info("jsf.core.injection.provider_generic_web_configured");
             return provider;
         } else {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING, "jsf.spi.injection.no_injection");
-            }
+            LOGGER.log(WARNING, "jsf.spi.injection.no_injection");
             return provider;
         }
 

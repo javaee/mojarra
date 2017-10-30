@@ -200,6 +200,7 @@
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
                         <inherited>true</inherited>
+                        
                         <executions>
                             <execution>
                                 <id>start-container</id>
@@ -222,16 +223,26 @@
                                 </configuration>
                             </execution>
                         </executions>                        
+                        
                         <configuration>
                             <container>
                                 <containerId>${glassfish.cargo.id}</containerId>
                                 <type>installed</type>
                                 <home>${glassfish.cargo.home}</home>
-                                <timeout>2400000</timeout>
+                                <timeout>24000000</timeout>
                             </container>
                             <configuration>
                                 <type>${glassfish.cargo.configType}</type>
                                 <home>${glassfish.cargo.config}</home>
+                                <!-- 
+                                <xmlReplacements>
+                                    <xmlReplacement>
+                                      <file>domain1/config/domain.xml</file>
+                                      <xpathExpression>//configs/config/java-config/jvm-options[1]</xpathExpression>
+                                      <value>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=9009</value>
+                                    </xmlReplacement>
+                                 </xmlReplacements>
+                                  -->
                                 <properties>
                                     <cargo.hostname>${glassfish.cargo.serverName}</cargo.hostname>
                                     <cargo.servlet.port>${glassfish.cargo.servletPort}</cargo.servlet.port>
@@ -785,7 +796,7 @@
                                     <goal>start</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>2400000</timeout>
+                                    <timeout>24000000</timeout>
                                 </configuration>
                             </execution>
                             <execution>
@@ -795,7 +806,7 @@
                                     <goal>stop</goal>
                                 </goals>
                                 <configuration>
-                                    <timeout>2400000</timeout>
+                                    <timeout>24000000</timeout>
                                 </configuration>
                             </execution>
                         </executions>                        

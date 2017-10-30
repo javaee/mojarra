@@ -84,6 +84,9 @@ public class Spec329IT {
         HtmlRadioButtonInput inDataTableWithEntityListRadio = (HtmlRadioButtonInput) page.getHtmlElementById("inDataTableWithEntityList:table:1:radio");
         inDataTableWithEntityListRadio.setChecked(true);
         page = ((HtmlSubmitInput) page.getHtmlElementById("inDataTableWithEntityList:button")).click();
+        
+        System.out.println("\n\n***** " + page.getHtmlElementById("messages").asText() + "\n\n\n");
+        
         assertTrue(page.getHtmlElementById("messages").asText().isEmpty());
         assertEquals("two", page.getHtmlElementById("inDataTableWithEntityList:selectedItem").asText());
 

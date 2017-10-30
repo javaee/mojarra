@@ -67,7 +67,6 @@ import javax.faces.lifecycle.Lifecycle;
  * constructor and use {@link #getWrapped} to access the instance being wrapped.</p>
  *
  */
-
 public abstract class FacesContextFactory implements FacesWrapper<FacesContextFactory> {
 
     private FacesContextFactory wrapped;
@@ -149,10 +148,7 @@ public abstract class FacesContextFactory implements FacesWrapper<FacesContextFa
      * @throws NullPointerException if any of the parameters
      *  are <code>null</code>
      */
-    public abstract FacesContext getFacesContext
-        (Object context, Object request,
-         Object response, Lifecycle lifecycle)
-        throws FacesException;
+    public abstract FacesContext getFacesContext(Object context, Object request, Object response, Lifecycle lifecycle) throws FacesException;
 
 
 }

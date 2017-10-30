@@ -40,15 +40,19 @@
 
 package com.sun.faces.application;
 
-import static com.sun.faces.util.MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID;
-import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
+import static com.sun.faces.util.Util.generateCreatedBy;
+import static com.sun.faces.util.Util.notNull;
+import static java.text.MessageFormat.format;
 import static java.util.logging.Level.FINE;
 
-import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
 
@@ -61,18 +65,18 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
 
     
     // Attribute Instance Variables
-
-    private volatile Application application;
+    
+    private final Map<String, Application> applicationHolder = new ConcurrentHashMap<>(1);
+    
+    private final String createdBy;
 
     
     // Constructors and Initializers
 
     public ApplicationFactoryImpl() {
         super(null);
-        application = null;
-        if (LOGGER.isLoggable(FINE)) {
-            LOGGER.log(FINE, "Created ApplicationFactory ");
-        }
+        createdBy = generateCreatedBy(FacesContext.getCurrentInstance());
+        LOGGER.log(FINE, "Created ApplicationFactory ");
     }
 
     /**
@@ -81,18 +85,24 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
      */
     @Override
     public Application getApplication() {
-
-        if (application == null) {
-            application = new ApplicationImpl();
-            InjectionApplicationFactory.setApplicationInstance(application);
-            if (LOGGER.isLoggable(FINE)) {
-                LOGGER.fine(MessageFormat.format(
-                                "Created Application instance ''{0}''",
-                                application));
-            }
+        
+        ApplicationFactoryImpl applicationFactoryImpl = this;
+        
+        if (!applicationHolder.containsKey("default")) {
+            int a;
+            a = 4;
+            
         }
         
-        return application;
+        return applicationHolder.computeIfAbsent("default", e -> {
+            Application applicationImpl = new ApplicationImpl();
+            InjectionApplicationFactory.setApplicationInstance(applicationImpl);
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.fine(format("Created Application instance ''{0}''", applicationHolder));
+            }
+            
+            return applicationImpl;
+        });
     }
 
     /**
@@ -102,18 +112,19 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
      * @param application The replacement {@link Application} instance
      */
     @Override
-    public synchronized void setApplication(Application application) {
-        if (application == null) {
-            throw new NullPointerException(getExceptionMessageString(
-                NULL_PARAMETERS_ERROR_MESSAGE_ID, "application"));
-        }
-
-        this.application = application;
+    public void setApplication(Application application) {
+        
+        notNull("application", application);
+        
+        applicationHolder.put("default", application);
         
         if (LOGGER.isLoggable(FINE)) {
-            LOGGER.fine(MessageFormat.format(
-                            "set Application Instance to ''{0}''", 
-                            application.getClass().getName()));
+            LOGGER.fine(format("set Application Instance to ''{0}''", application.getClass().getName()));
         }
+    }
+    
+    @Override
+    public String toString() {
+        return super.toString() + " created by " + createdBy;
     }
 }

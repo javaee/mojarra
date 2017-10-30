@@ -40,102 +40,124 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.RIConstants;
 import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
+import static com.sun.faces.RIConstants.FACES_PREFIX;
+import static com.sun.faces.RIConstants.JAVAEE_XMLNS;
+import static com.sun.faces.config.DbfFactory.FACES_ENTITY_RESOLVER;
+import static com.sun.faces.config.DbfFactory.FACES_ERROR_HANDLER;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandlerDeprecated;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
-import com.sun.faces.spi.ConfigurationResourceProvider;
-import com.sun.faces.spi.ConfigurationResourceProviderFactory;
-import com.sun.faces.spi.AnnotationProvider;
-import com.sun.faces.spi.AnnotationProviderFactory;
-import com.sun.faces.spi.HighAvailabilityEnabler;
-import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.*;
-import com.sun.faces.config.configprovider.MetaInfFacesConfigResourceProvider;
-import com.sun.faces.config.configprovider.MojarraFacesConfigResourceProvider;
-import com.sun.faces.config.configprovider.WebFacesConfigResourceProvider;
-import com.sun.faces.config.configprovider.MetaInfFaceletTaglibraryConfigProvider;
-import com.sun.faces.config.configprovider.WebAppFlowConfigResourceProvider;
-import com.sun.faces.config.configprovider.WebFaceletTaglibResourceProvider;
-import com.sun.faces.config.processor.ApplicationConfigProcessor;
-import com.sun.faces.config.processor.BehaviorConfigProcessor;
-import com.sun.faces.config.processor.ComponentConfigProcessor;
-import com.sun.faces.config.processor.ConfigProcessor;
-import com.sun.faces.config.processor.ConverterConfigProcessor;
-import com.sun.faces.config.processor.FactoryConfigProcessor;
-import com.sun.faces.config.processor.LifecycleConfigProcessor;
-import com.sun.faces.config.processor.ManagedBeanConfigProcessor;
-import com.sun.faces.config.processor.NavigationConfigProcessor;
-import com.sun.faces.config.processor.RenderKitConfigProcessor;
-import com.sun.faces.config.processor.ValidatorConfigProcessor;
-import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
-import com.sun.faces.config.processor.FacesConfigExtensionProcessor;
-import com.sun.faces.config.processor.FacesFlowDefinitionConfigProcessor;
-import com.sun.faces.config.processor.ProtectedViewsConfigProcessor;
-import com.sun.faces.config.processor.ResourceLibraryContractsConfigProcessor;
-import com.sun.faces.el.ELContextImpl;
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.spi.InjectionProvider;
-import com.sun.faces.spi.InjectionProviderFactory;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Timer;
-import com.sun.faces.util.Util;
-import org.xml.sax.InputSource;
-
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.event.PostConstructApplicationEvent;
-import javax.faces.application.Application;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
+import static com.sun.faces.spi.ConfigurationResourceProviderFactory.createProviders;
+import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.FaceletConfig;
+import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.FacesConfig;
+import static com.sun.faces.util.Util.createTransformerFactory;
+import static com.sun.faces.util.Util.isEmpty;
+import static java.text.MessageFormat.format;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.unmodifiableList;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.lang.annotation.Annotation;
-import java.net.URI;
-import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import java.util.ServiceLoader;
 import javax.el.ELContext;
 import javax.el.ELContextEvent;
 import javax.el.ELContextListener;
 import javax.el.ExpressionFactory;
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
 import javax.faces.application.ApplicationConfigurationPopulator;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PostConstructApplicationEvent;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.ServletContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
-import org.w3c.dom.*;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.configprovider.MetaInfFaceletTaglibraryConfigProvider;
+import com.sun.faces.config.configprovider.MetaInfFacesConfigResourceProvider;
+import com.sun.faces.config.configprovider.WebAppFlowConfigResourceProvider;
+import com.sun.faces.config.configprovider.WebFaceletTaglibResourceProvider;
+import com.sun.faces.config.configprovider.WebFacesConfigResourceProvider;
+import com.sun.faces.config.processor.ApplicationConfigProcessor;
+import com.sun.faces.config.processor.BehaviorConfigProcessor;
+import com.sun.faces.config.processor.ComponentConfigProcessor;
+import com.sun.faces.config.processor.ConfigProcessor;
+import com.sun.faces.config.processor.ConverterConfigProcessor;
+import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
+import com.sun.faces.config.processor.FacesConfigExtensionProcessor;
+import com.sun.faces.config.processor.FacesFlowDefinitionConfigProcessor;
+import com.sun.faces.config.processor.FactoryConfigProcessor;
+import com.sun.faces.config.processor.LifecycleConfigProcessor;
+import com.sun.faces.config.processor.ManagedBeanConfigProcessor;
+import com.sun.faces.config.processor.NavigationConfigProcessor;
+import com.sun.faces.config.processor.ProtectedViewsConfigProcessor;
+import com.sun.faces.config.processor.RenderKitConfigProcessor;
+import com.sun.faces.config.processor.ResourceLibraryContractsConfigProcessor;
+import com.sun.faces.config.processor.ValidatorConfigProcessor;
+import com.sun.faces.el.ELContextImpl;
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.spi.AnnotationProvider;
+import com.sun.faces.spi.AnnotationProviderFactory;
+import com.sun.faces.spi.ConfigurationResourceProvider;
+import com.sun.faces.spi.ConfigurationResourceProviderFactory;
+import com.sun.faces.spi.HighAvailabilityEnabler;
+import com.sun.faces.spi.InjectionProvider;
+import com.sun.faces.spi.InjectionProviderFactory;
+import com.sun.faces.spi.ThreadContext;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Timer;
+import com.sun.faces.util.Util;
 
 /**
  * <p>
@@ -144,28 +166,23 @@ import org.xml.sax.SAXParseException;
  * </p>
  */
 public class ConfigManager {
-
+    
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
+    
+    /**
+     * The initialization time FacesContext scoped key under which the
+     * InjectionProvider is stored.
+     */
+    public static final String INJECTION_PROVIDER_KEY = ConfigManager.class.getName() + "_INJECTION_PROVIDER_TASK";
+
+    /**
+     * Name of the attribute added by ParseTask to indicate a
+     * {@link Document} instance as a representation of
+     * <code>/WEB-INF/faces-config.xml</code>.
+     */
+    public static final String WEB_INF_MARKER = "com.sun.faces.webinf";
 
     private static final Pattern JAR_PATTERN = Pattern.compile("(.*/(\\S*\\.jar)).*(/faces-config.xml|/*.\\.faces-config.xml)");
-
-    /**
-     * <p>
-     * A List of resource providers that search for faces-config documents.
-     * By default, this contains a provider for the Mojarra, and two other
-     * providers to satisfy the requirements of the specification.
-     * </p>
-     */
-    private final List<ConfigurationResourceProvider> FACES_CONFIG_RESOURCE_PROVIDERS;
-
-    /**
-     * <p>
-     * A List of resource providers that search for faces-config documents.
-     * By default, this contains a provider for the Mojarra, and one other
-     * providers to satisfy the requirements of the specification.
-     * </p>
-     */
-    private final List<ConfigurationResourceProvider> FACELET_TAGLIBRARY_RESOURCE_PROVIDERS;
 
     /**
      * <p>
@@ -177,59 +194,13 @@ public class ConfigManager {
      */
     private static final int NUMBER_OF_TASK_THREADS = 5;
 
-    private static final String CONFIG_MANAGER_INSTANCE_KEY = RIConstants.FACES_PREFIX + "CONFIG_MANAGER_KEY";
+    private static final String CONFIG_MANAGER_INSTANCE_KEY = FACES_PREFIX + "CONFIG_MANAGER_KEY";
 
     /**
      * The application-scoped key under which the Future responsible for annotation
      * scanning is associated with.
      */
-    private static final String ANNOTATIONS_SCAN_TASK_KEY =
-          ConfigManager.class.getName() + "_ANNOTATION_SCAN_TASK";
-
-
-    /**
-     * The initialization time FacesContext scoped key under which the
-     * InjectionProvider is stored.
-     */
-    public static final String INJECTION_PROVIDER_KEY =
-          ConfigManager.class.getName() + "_INJECTION_PROVIDER_TASK";
-
-
-    /**
-     * Name of the attribute added by ParseTask to indicate a
-     * {@link Document} instance as a representation of
-     * <code>/WEB-INF/faces-config.xml</code>.
-     */
-    public static final String WEB_INF_MARKER = "com.sun.faces.webinf";
-
-
-    /**
-     * <p>
-     *   Contains each <code>ServletContext</code> that we've initialized.
-     *   The <code>ServletContext</code> will be removed when the application
-     *   is destroyed.
-     * </p>
-     */
-    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
-    private List<ServletContext> initializedContexts =
-         new CopyOnWriteArrayList<>();
-
-    /**
-     * <p>
-     *  The chain of {@link ConfigProcessor} instances to processing of
-     *  faces-config documents.
-     * </p>
-     */
-    private final ConfigProcessor FACES_CONFIG_PROCESSOR_CHAIN;
-
-
-    /**
-     * <p>
-     *  The chain of {@link ConfigProcessor} instances to processing of
-     *  facelet-taglib documents.
-     * </p>
-     */
-    private final ConfigProcessor FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN;
+    private static final String ANNOTATIONS_SCAN_TASK_KEY = ConfigManager.class.getName() + "_ANNOTATION_SCAN_TASK";
 
     /**
      * Stylesheet to convert 1.0 and 1.1 based faces-config documents
@@ -250,324 +221,426 @@ public class ConfigManager {
 
     private static final String FACELETS_1_0_DEFAULT_NS =
           "http://java.sun.com/JSF/Facelet";
+    
+    /**
+     * <p>
+     *   Contains each <code>ServletContext</code> that we've initialized.
+     *   The <code>ServletContext</code> will be removed when the application
+     *   is destroyed.
+     * </p>
+     */
+    private List<ServletContext> initializedContexts = new CopyOnWriteArrayList<>();
 
+    private final List<ConfigProcessor> configProcessors = unmodifiableList(asList(
+            new FactoryConfigProcessor(),
+            new LifecycleConfigProcessor(),
+            new ApplicationConfigProcessor(),
+            new ComponentConfigProcessor(),
+            new ConverterConfigProcessor(),
+            new ValidatorConfigProcessor(),
+            new ManagedBeanConfigProcessor(),
+            new RenderKitConfigProcessor(),
+            new NavigationConfigProcessor(),
+            new BehaviorConfigProcessor(),
+            new FacesConfigExtensionProcessor(),
+            new ProtectedViewsConfigProcessor(),
+            new FacesFlowDefinitionConfigProcessor(),
+            new ResourceLibraryContractsConfigProcessor()));
+    
+    /**
+     * <p>
+     * A List of resource providers that search for faces-config documents.
+     * By default, this contains a provider for the Mojarra, and two other
+     * providers to satisfy the requirements of the specification.
+     * </p>
+     */
+    private final List<ConfigurationResourceProvider> facesConfigProviders = unmodifiableList(asList(
+            new MetaInfFacesConfigResourceProvider(),
+            new WebAppFlowConfigResourceProvider(),
+            new WebFacesConfigResourceProvider()
+    ));
 
-    public ConfigManager() {
+    /**
+     * <p>
+     * A List of resource providers that search for faces-config documents.
+     * By default, this contains a provider for the Mojarra, and one other
+     * providers to satisfy the requirements of the specification.
+     * </p>
+     */
+    private final List<ConfigurationResourceProvider> facesletsTagLibConfigProviders = unmodifiableList(asList(
+            new MetaInfFaceletTaglibraryConfigProvider(),
+            new WebFaceletTaglibResourceProvider()
+    ));
+    
+    /**
+     * <p>
+     *  The chain of {@link ConfigProcessor} instances to processing of
+     *  facelet-taglib documents.
+     * </p>
+     */
+    private final ConfigProcessor faceletTaglibConfigProcessor = new FaceletTaglibConfigProcessor();
 
-        // initialize the resource providers for faces-config documents
-        List<ConfigurationResourceProvider> facesConfigProviders =
-          new ArrayList<>(3);
-        facesConfigProviders.add(new MojarraFacesConfigResourceProvider());
-        facesConfigProviders.add(new MetaInfFacesConfigResourceProvider());
-        facesConfigProviders.add(new WebAppFlowConfigResourceProvider());
-        facesConfigProviders.add(new WebFacesConfigResourceProvider());
-        FACES_CONFIG_RESOURCE_PROVIDERS = Collections.unmodifiableList(facesConfigProviders);
-
-        // initialize the resource providers for facelet-taglib documents
-        List<ConfigurationResourceProvider> faceletTaglibProviders =
-              new ArrayList<>(3);
-        faceletTaglibProviders.add(new MetaInfFaceletTaglibraryConfigProvider());
-        faceletTaglibProviders.add(new WebFaceletTaglibResourceProvider());
-        FACELET_TAGLIBRARY_RESOURCE_PROVIDERS = Collections.unmodifiableList(faceletTaglibProviders);
-
-        // initialize the config processors for faces-config documents
-        ConfigProcessor[] configProcessors = {
-             new FactoryConfigProcessor(),
-             new LifecycleConfigProcessor(),
-             new ApplicationConfigProcessor(),
-             new ComponentConfigProcessor(),
-             new ConverterConfigProcessor(),
-             new ValidatorConfigProcessor(),
-             new ManagedBeanConfigProcessor(),
-             new RenderKitConfigProcessor(),
-             new NavigationConfigProcessor(),
-             new BehaviorConfigProcessor(),
-             new FacesConfigExtensionProcessor(),
-             new ProtectedViewsConfigProcessor(),
-             new FacesFlowDefinitionConfigProcessor(),
-             new ResourceLibraryContractsConfigProcessor()
-        };
-        for (int i = 0; i < configProcessors.length; i++) {
-            ConfigProcessor p = configProcessors[i];
-            if ((i + 1) < configProcessors.length) {
-                p.setNext(configProcessors[i + 1]);
-            }
-        }
-        FACES_CONFIG_PROCESSOR_CHAIN = configProcessors[0];
-
-        // initialize the config processor for facelet-taglib documents
-        FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN = new FaceletTaglibConfigProcessor();
-
-    }
+    
 
     // ---------------------------------------------------------- Public Methods
 
-
-    /**
-     * @return a <code>ConfigManager</code> instance
-     */
-    public static ConfigManager getInstance(ServletContext sc) {
-        return (ConfigManager) sc.getAttribute(CONFIG_MANAGER_INSTANCE_KEY);
-    }
-    
-    public static ConfigManager createInstance(ServletContext sc) {
+    public static ConfigManager createInstance(ServletContext servletContext) {
         ConfigManager result = new ConfigManager();
-        sc.setAttribute(CONFIG_MANAGER_INSTANCE_KEY, result);
+        servletContext.setAttribute(CONFIG_MANAGER_INSTANCE_KEY, result);
         return result;
     }
     
-    public static void removeInstance(ServletContext sc) {
-        sc.removeAttribute(CONFIG_MANAGER_INSTANCE_KEY);
+    /**
+     * @return a <code>ConfigManager</code> instance
+     */
+    public static ConfigManager getInstance(ServletContext servletContext) {
+        return (ConfigManager) servletContext.getAttribute(CONFIG_MANAGER_INSTANCE_KEY);
     }
     
-    private void initializeConfigProcessers(ServletContext sc) {
-        ConfigProcessor p = FACES_CONFIG_PROCESSOR_CHAIN;
-        do {
-            p.initializeClassMetadataMap(sc);
-            
-        } while (null != (p = p.getNext()));
-
+    public static void removeInstance(ServletContext servletContext) {
+        servletContext.removeAttribute(CONFIG_MANAGER_INSTANCE_KEY);
     }
-
 
     /**
      * <p>
      *   This method bootstraps JSF based on the parsed configuration resources.
      * </p>
      *
-     * @param sc the <code>ServletContext</code> for the application that
+     * @param servletContext the <code>ServletContext</code> for the application that
      *  requires initialization
      */
-    public void initialize(ServletContext sc) {
+    public void initialize(ServletContext servletContext, InitFacesContext facesContext) {
 
-        if (!hasBeenInitialized(sc)) {
-            initializedContexts.add(sc);
-            initializeConfigProcessers(sc);
+        if (!hasBeenInitialized(servletContext)) {
+            
+            initializedContexts.add(servletContext);
+            initializeConfigProcessers(servletContext, facesContext);
             ExecutorService executor = null;
+            
             try {
-                WebConfiguration webConfig = WebConfiguration.getInstance(sc);
+                WebConfiguration webConfig = WebConfiguration.getInstance(servletContext);
                 boolean validating = webConfig.isOptionEnabled(ValidateFacesConfigFiles);
-                if (useThreads(sc)) {
+                
+                if (useThreads(servletContext)) {
                     executor = createExecutorService();
                 }
 
-                DocumentInfo[] facesDocuments =
-                      getConfigDocuments(sc,
-                                         getFacesConfigResourceProviders(),
-                                         executor,
-                                         validating);
-
-                FacesConfigInfo lastFacesConfigInfo =
-                      new FacesConfigInfo(facesDocuments[facesDocuments.length - 1]);
+                DocumentInfo[] facesDocuments = getConfigDocuments(servletContext, getFacesConfigResourceProviders(), executor, validating);
+                
+                // Merge the programmatic documents into the faces documents array
+                facesDocuments = mergeDocuments(facesDocuments, getProgrammaticDocuments());
+                
+                FacesConfigInfo lastFacesConfigInfo = new FacesConfigInfo(facesDocuments[facesDocuments.length - 1]);
 
                 facesDocuments = sortDocuments(facesDocuments, lastFacesConfigInfo);
-                InitFacesContext context = (InitFacesContext) FacesContext.getCurrentInstance();
 
-                InjectionProvider containerConnector =
-                        InjectionProviderFactory.createInstance(context.getExternalContext());
-                context.getAttributes().put(INJECTION_PROVIDER_KEY, containerConnector);
+                InjectionProvider containerConnector = InjectionProviderFactory.createInstance(facesContext.getExternalContext());
+                facesContext.getAttributes().put(INJECTION_PROVIDER_KEY, containerConnector);
 
-                boolean isFaceletsDisabled;
+                boolean isFaceletsDisabled = isFaceletsDisabled(webConfig, lastFacesConfigInfo);
                 
-                // Don't perform the check unless lastFacesConfigInfo is indeed
-                // *the* WEB-INF/faces-config.xml
-                if (lastFacesConfigInfo.isWebInfFacesConfig()) {
-                    isFaceletsDisabled = 
-                            isFaceletsDisabled(webConfig, lastFacesConfigInfo);
-                } else {
-                    isFaceletsDisabled = webConfig.isOptionEnabled(DisableFaceletJSFViewHandler) ||
-                            webConfig.isOptionEnabled(DisableFaceletJSFViewHandlerDeprecated);
-                }
                 if (!lastFacesConfigInfo.isWebInfFacesConfig() || !lastFacesConfigInfo.isMetadataComplete()) {
-                    // execute the Task responsible for finding annotation classes
-                    ProvideMetadataToAnnotationScanTask taskMetadata = new ProvideMetadataToAnnotationScanTask(facesDocuments, containerConnector);
-                    Future<Map<Class<? extends Annotation>,Set<Class<?>>>> annotationScan;
-                    if (executor != null) {
-                        annotationScan = executor.submit(new AnnotationScanTask(sc, context, taskMetadata));
-                        pushTaskToContext(sc, annotationScan);
-                    } else {
-                        annotationScan =
-                              new FutureTask<>(new AnnotationScanTask(sc, context, taskMetadata));
-                        ((FutureTask) annotationScan).run();
-                    }
-                    pushTaskToContext(sc, annotationScan);
+                    findAnnotations(facesDocuments, containerConnector, servletContext, facesContext, executor);
                 }
 
-                //see if the app is running in a HA enabled env               
+                // See if the app is running in a HA enabled env               
                 if (containerConnector instanceof HighAvailabilityEnabler) {                   
-                    ((HighAvailabilityEnabler)containerConnector).enableHighAvailability(sc);
+                    ((HighAvailabilityEnabler)containerConnector).enableHighAvailability(servletContext);
                 }
+               
+                
+                // Process the ordered and merged documents
+                // This invokes a chain or processors where each processor grabs its own elements of interest
+                // from each document.
+                
+                boolean hasKey = facesContext.getExternalContext().getApplicationMap().containsKey(RIConstants.FACES_PREFIX + "ApplicationAssociate");
+                
+                DocumentInfo[] facesDocuments2 = facesDocuments;
+                configProcessors.subList(0, 3).stream().forEach(e -> {
+                    try {
+                        
 
-                ServiceLoader<ApplicationConfigurationPopulator> populators = 
-                        ServiceLoader.load(ApplicationConfigurationPopulator.class);
-                Document newDoc;
-                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                dbf.setNamespaceAware(true);
-                DocumentBuilder builder = dbf.newDocumentBuilder();
-                DOMImplementation domImpl = builder.getDOMImplementation();
-                List<DocumentInfo> programmaticDocuments = new ArrayList<>();
-                DocumentInfo newDocInfo;
-                for (ApplicationConfigurationPopulator pop : populators) {
-                    newDoc = domImpl.createDocument(RIConstants.JAVAEE_XMLNS, "faces-config", null);
-                    Attr versionAttribute = newDoc.createAttribute("version");
-                    versionAttribute.setValue("2.2");
-                    newDoc.getDocumentElement().getAttributes().setNamedItem(versionAttribute);
+                        boolean hasKeyx = facesContext.getExternalContext().getApplicationMap().containsKey(RIConstants.FACES_PREFIX + "ApplicationAssociate");
+                        
+                        e.process(servletContext, facesContext, facesDocuments2);
+                    } catch (Exception e2) {
+                        // TODO Auto-generated catch block
+                        e2.printStackTrace();
+                    }
+                });
+                
+                long parentThreadId = Thread.currentThread().getId();
+                ClassLoader parentContextClassLoader = Thread.currentThread().getContextClassLoader();
+                
+                ThreadContext threadContext = getThreadContext(containerConnector);
+                Object parentWebContext = threadContext != null ? threadContext.getParentWebContext() : null;
+                            
+                configProcessors.subList(3, configProcessors.size()).stream().forEach(e -> {
+                    
+                    long currentThreadId = Thread.currentThread().getId();
+                    
+                    InitFacesContext initFacesContext = null;
+                    if (currentThreadId != parentThreadId) {
+                        Thread.currentThread().setContextClassLoader(parentContextClassLoader);
+                        initFacesContext = InitFacesContext.getInstance(servletContext);
+                        if (parentWebContext != null) {
+                            threadContext.propagateWebContextToChild(parentWebContext);
+                        }
+                    
+                    } else {
+                        initFacesContext = facesContext;
+                    }
+                    
+                    boolean hasKeyx = initFacesContext.getExternalContext().getApplicationMap().containsKey(RIConstants.FACES_PREFIX + "ApplicationAssociate");
                     
                     try {
-                        pop.populateApplicationConfiguration(newDoc);
-                        newDocInfo = new DocumentInfo(newDoc, null);
-                        programmaticDocuments.add(newDocInfo);
-                    } catch (Throwable e) {
-                        if (LOGGER.isLoggable(Level.INFO)) {
-                            LOGGER.log(Level.INFO, "{0} thrown when invoking {1}.populateApplicationConfigurationResources: {2}", 
-                                    new String [] {
-                                        e.getClass().getName(),
-                                        pop.getClass().getName(),
-                                        e.getMessage()
-                                    }
-                            );
+                        e.process(servletContext, facesContext, facesDocuments2);
+                    } catch (Exception e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    } finally {
+                        if (currentThreadId != parentThreadId) {
+                            Thread.currentThread().setContextClassLoader(null);
+                            if (parentWebContext != null) {
+                                threadContext.clearChildContext();
+                            }
                         }
+                        
                     }
-                }
-                if (!programmaticDocuments.isEmpty()) {
-                    DocumentInfo [] newDocumentInfo = new DocumentInfo[facesDocuments.length + programmaticDocuments.size()];
-                    System.arraycopy(facesDocuments, 0, newDocumentInfo, 0, facesDocuments.length);
-                    int i = facesDocuments.length;
-                    for (DocumentInfo cur : programmaticDocuments) {
-                        newDocumentInfo[i] = cur;
-                    }
-                    facesDocuments = newDocumentInfo;
-                }
+                });
                 
-                // process the ordered documents
-                FACES_CONFIG_PROCESSOR_CHAIN.process(sc, facesDocuments);
+                
                 if (!isFaceletsDisabled) {
-                    FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN.process(
-                          sc, getConfigDocuments(sc,
-                                             getFaceletConfigResourceProviders(),
-                                             executor,
-                                             validating));
+                    faceletTaglibConfigProcessor.process(
+                          servletContext, 
+                          facesContext,
+                          getConfigDocuments(
+                              servletContext,
+                              getFaceletConfigResourceProviders(),
+                              executor,
+                              validating));
                 }
 
             } catch (Exception e) {
-                // clear out any configured factories
+                // Clear out any configured factories
                 releaseFactories();
+                
                 Throwable t = e;
                 if (!(e instanceof ConfigurationException)) {
                     t = new ConfigurationException("CONFIGURATION FAILED! " + t.getMessage(), t);
                 }
+                
                 throw (ConfigurationException)t;
             } finally {
                 if (executor != null) {
                     executor.shutdown();
                 }
-                sc.removeAttribute(ANNOTATIONS_SCAN_TASK_KEY);
+                servletContext.removeAttribute(ANNOTATIONS_SCAN_TASK_KEY);
             }
         }
 
-        DbfFactory.removeSchemaMap(sc);
+        DbfFactory.removeSchemaMap(servletContext);
     }
     
-
-
-
+    
+    
+    // --------------------------------------------------------- Private Methods
+    
+    private ThreadContext getThreadContext(InjectionProvider containerConnector) {
+        if (containerConnector instanceof ThreadContext) {
+            return (ThreadContext) containerConnector;
+        }
+        
+        return null;
+    }
+    
+    
+    private void initializeConfigProcessers(ServletContext servletContext, FacesContext facesContext) {
+        configProcessors.stream().parallel().forEach(e -> e.initializeClassMetadataMap(servletContext, facesContext));
+    }
+    
+    private List<ApplicationConfigurationPopulator> getConfigPopulators() {
+        
+        List<ApplicationConfigurationPopulator> configPopulators = new ArrayList<>();
+        
+        try {
+            configPopulators.add( (ApplicationConfigurationPopulator)
+                Class.forName("com.sun.faces.config.configpopulator.JsfRIRuntimePopulator_Generated")
+                     .newInstance());
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e1) {
+            throw new FacesException(e1);
+        }
+        
+        ServiceLoader.load(ApplicationConfigurationPopulator.class)
+                     .forEach(e -> configPopulators.add(e));
+        
+        return configPopulators;
+    }
+    
+    private DOMImplementation createDOMImplementation() throws ParserConfigurationException {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setNamespaceAware(true);
+        
+        return documentBuilderFactory.newDocumentBuilder()
+                                     .getDOMImplementation();
+    }
+    
+    private Document createEmptyFacesConfigDocument(DOMImplementation domImpl) {
+        Document document = domImpl.createDocument(JAVAEE_XMLNS, "faces-config", null);
+        
+        Attr versionAttribute = document.createAttribute("version");
+        versionAttribute.setValue("2.2");
+        document.getDocumentElement()
+                .getAttributes()
+                .setNamedItem(versionAttribute);
+        
+        return document;
+    }
+    
+    private List<DocumentInfo> getProgrammaticDocuments() throws ParserConfigurationException {
+        
+        List<DocumentInfo> programmaticDocuments = new ArrayList<>();
+        
+        DOMImplementation domImpl = createDOMImplementation();
+        for (ApplicationConfigurationPopulator populator : getConfigPopulators()) {
+            
+            Document facesConfigDoc = createEmptyFacesConfigDocument(domImpl);
+            
+            try {
+                populator.populateApplicationConfiguration(facesConfigDoc);
+                
+                programmaticDocuments.add(new DocumentInfo(facesConfigDoc, null));
+            } catch (Throwable e) {
+                if (LOGGER.isLoggable(INFO)) {
+                    LOGGER.log(INFO, 
+                        "{0} thrown when invoking {1}.populateApplicationConfigurationResources: {2}", 
+                        new String [] {
+                            e.getClass().getName(),
+                            populator.getClass().getName(),
+                            e.getMessage()
+                        }
+                    );
+                }
+            }
+        }
+        
+        return programmaticDocuments;
+    }
+    
+    private DocumentInfo[] mergeDocuments(DocumentInfo[] facesDocuments, List<DocumentInfo> programmaticDocuments) {
+        
+        if (programmaticDocuments.isEmpty()) {
+            return facesDocuments;
+        }
+        
+        if (isEmpty(facesDocuments)) {
+            return programmaticDocuments.toArray(new DocumentInfo[0]);
+        }
+            
+        List<DocumentInfo> mergedDocuments = new ArrayList<>(facesDocuments.length + programmaticDocuments.size());
+        
+        // The first programmaticDocuments element represents jsf-ri-runtime, 
+        // and should be the first one in the merged list
+        mergedDocuments.add(programmaticDocuments.get(0));
+        
+        // Copy the existing facesDocuments next to the merged list
+        mergedDocuments.addAll(asList(facesDocuments));
+        
+        // Copy the programmaticDocuments next, but skip the first one as we've already added that
+        mergedDocuments.addAll(programmaticDocuments.subList(1, programmaticDocuments.size()));
+        
+        return mergedDocuments.toArray(new DocumentInfo[0]);
+    }
+    
+    
     /**
-     * <p>
-     *   This method will remove any information about the application.
-     * </p>
-     * @param sc the <code>ServletContext</code> for the application that
-     *  needs to be removed
+     * Execute the Task responsible for finding annotation classes
+     * 
      */
-    public void destroy(ServletContext sc) {
-
-        // Do not call releaseFactories() here because that is done by the 
-        // caller.
+    private void findAnnotations(DocumentInfo[] facesDocuments, InjectionProvider containerConnector, ServletContext servletContext, InitFacesContext context, ExecutorService executor) {
         
-        FACES_CONFIG_PROCESSOR_CHAIN.destroy(sc);
+        ProvideMetadataToAnnotationScanTask taskMetadata = new ProvideMetadataToAnnotationScanTask(facesDocuments, containerConnector);
         
-        initializedContexts.remove(sc);
-
+        Future<Map<Class<? extends Annotation>, Set<Class<?>>>> annotationScan;
+        
+        if (executor != null) {
+            annotationScan = executor.submit(new AnnotationScanTask(servletContext, context, taskMetadata));
+        } else {
+            annotationScan = new FutureTask<>(new AnnotationScanTask(servletContext, context, taskMetadata));
+            ((FutureTask<Map<Class<? extends Annotation>, Set<Class<?>>>>) annotationScan).run();
+        }
+        
+        pushTaskToContext(servletContext, annotationScan);
     }
 
+    /**
+     * This method will remove any information about the application.
+     * 
+     * @param facesContext
+     *            the <code>FacesContext</code> for the application that needs to be removed
+     * @param servletContext
+     *            the <code>ServletContext</code> for the application that needs to be removed
+     */
+    public void destroy(ServletContext servletContext, FacesContext facesContext) {
+        configProcessors.stream().forEach(e -> e.destroy(servletContext, facesContext));
+        initializedContexts.remove(servletContext);
+    }
 
     /**
-     * @param sc the <code>ServletContext</code> for the application in question
-     * @return <code>true</code> if this application has already been initialized,
-     *  otherwise returns </code>fase</code>
+     * @param sc
+     *            the <code>ServletContext</code> for the application in question
+     * @return <code>true</code> if this application has already been initialized, otherwise returns </code>fase</code>
      */
     public boolean hasBeenInitialized(ServletContext sc) {
-
-        return (initializedContexts.contains(sc));
-
+        return initializedContexts.contains(sc);
     }
-
 
     /**
      * @return the results of the annotation scan task
      */
-    public static Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(FacesContext ctx) {
+    public static Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClasses(FacesContext ctx) {
 
-        Map<String, Object> appMap =
-              ctx.getExternalContext().getApplicationMap();
-        //noinspection unchecked
-        Future<Map<Class<? extends Annotation>,Set<Class<?>>>> scanTask =
-              (Future<Map<Class<? extends Annotation>,Set<Class<?>>>>) appMap.get(ANNOTATIONS_SCAN_TASK_KEY);
+        Map<String, Object> appMap = ctx.getExternalContext().getApplicationMap();
+
+        @SuppressWarnings("unchecked")
+        Future<Map<Class<? extends Annotation>, Set<Class<?>>>> scanTask = (Future<Map<Class<? extends Annotation>, Set<Class<?>>>>) 
+            appMap.get(ANNOTATIONS_SCAN_TASK_KEY);
+        
         try {
-            return ((scanTask != null)
-                    ? scanTask.get()
-                    : Collections.<Class<? extends Annotation>,Set<Class<?>>>emptyMap());
+            return scanTask != null ? scanTask.get() : emptyMap();
         } catch (InterruptedException | ExecutionException e) {
             throw new FacesException(e);
         }
 
     }
 
-
-    // --------------------------------------------------------- Private Methods
-
-
     private static boolean useThreads(ServletContext ctx) {
-
-        WebConfiguration config = WebConfiguration.getInstance(ctx);
-        return config.isOptionEnabled(EnableThreading);
-
+        return WebConfiguration.getInstance(ctx).isOptionEnabled(EnableThreading);
     }
-
 
     private List<ConfigurationResourceProvider> getFacesConfigResourceProviders() {
-
-        return getConfigurationResourceProviders(FACES_CONFIG_RESOURCE_PROVIDERS,
-                                                 FacesConfig);
-
+        return getConfigurationResourceProviders(facesConfigProviders, FacesConfig);
     }
-
 
     private List<ConfigurationResourceProvider> getFaceletConfigResourceProviders() {
-
-        return getConfigurationResourceProviders(FACELET_TAGLIBRARY_RESOURCE_PROVIDERS,
-                                                 FaceletConfig);
-
+        return getConfigurationResourceProviders(facesletsTagLibConfigProviders, FaceletConfig);
     }
 
+    private List<ConfigurationResourceProvider> getConfigurationResourceProviders(List<ConfigurationResourceProvider> defaultProviders, ConfigurationResourceProviderFactory.ProviderType providerType) {
 
-    private List<ConfigurationResourceProvider> getConfigurationResourceProviders(List<ConfigurationResourceProvider> defaultProviders,
-                                                                                  ConfigurationResourceProviderFactory.ProviderType providerType) {
-
-        ConfigurationResourceProvider[] custom =
-              ConfigurationResourceProviderFactory.createProviders(providerType);
-        if (custom.length == 0) {
+        ConfigurationResourceProvider[] customProviders = createProviders(providerType);
+        if (customProviders.length == 0) {
             return defaultProviders;
-        } else {
-            List<ConfigurationResourceProvider> list = new ArrayList<>();
-            list.addAll(defaultProviders);
-            // insert the custom providers after the META-INF providers and
-            // before those that scan /WEB-INF
-            list.addAll((defaultProviders.size() - 1), Arrays.asList(custom));
-            return Collections.unmodifiableList(list);
-        }
-
+        } 
+            
+        List<ConfigurationResourceProvider> providers = new ArrayList<>(defaultProviders);
+        
+        // Insert the custom providers after the META-INF providers and
+        // before those that scan /WEB-INF
+        providers.addAll((defaultProviders.size() - 1), asList(customProviders));
+        
+        return unmodifiableList(providers);
     }
-
 
     /**
      * <p>
@@ -583,42 +656,44 @@ public class ConfigManager {
      *
      * @return the sorted documents
      */
-    private DocumentInfo[] sortDocuments(DocumentInfo[] facesDocuments,
-                                         FacesConfigInfo webInfFacesConfig) {
+    private DocumentInfo[] sortDocuments(DocumentInfo[] facesDocuments, FacesConfigInfo webInfFacesConfig) {
 
-
-        int len = (webInfFacesConfig.isWebInfFacesConfig()
-                     ? facesDocuments.length - 1
-                     : facesDocuments.length);
+        int len = webInfFacesConfig.isWebInfFacesConfig() ? facesDocuments.length - 1 : facesDocuments.length;
 
         List<String> absoluteOrdering = webInfFacesConfig.getAbsoluteOrdering();
 
         if (len > 1) {
-            List<DocumentOrderingWrapper> list =
-                  new ArrayList<>();
+            List<DocumentOrderingWrapper> list = new ArrayList<>();
             for (int i = 1; i < len; i++) {
                 list.add(new DocumentOrderingWrapper(facesDocuments[i]));
             }
-            DocumentOrderingWrapper[] ordering =
-                  list.toArray(new DocumentOrderingWrapper[list.size()]);
+            
+            DocumentOrderingWrapper[] ordering = list.toArray(new DocumentOrderingWrapper[list.size()]);
             if (absoluteOrdering == null) {
                 DocumentOrderingWrapper.sort(ordering);
-                // sorting complete, now update the appropriate locations within
+                
+                // Sorting complete, now update the appropriate locations within
                 // the original array with the sorted documentation.
                 for (int i = 1; i < len; i++) {
                     facesDocuments[i] = ordering[i - 1].getDocument();
                 }
+                
                 return facesDocuments;
             } else {
-                DocumentOrderingWrapper[] result =
-                      DocumentOrderingWrapper.sort(ordering, absoluteOrdering);
-                DocumentInfo[] ret = new DocumentInfo[((webInfFacesConfig.isWebInfFacesConfig()) ? (result.length + 2) : (result.length + 1))];
+                DocumentOrderingWrapper[] result = DocumentOrderingWrapper.sort(ordering, absoluteOrdering);
+                DocumentInfo[] ret = new DocumentInfo[
+                                          webInfFacesConfig.isWebInfFacesConfig() ? 
+                                          result.length + 2 : 
+                                          result.length + 1];
+                
                 for (int i = 1; i < len; i++) {
                     ret[i] = result[i - 1].getDocument();
                 }
-                // add the impl specific config file
+                
+                // Add the impl specific config file
                 ret[0] = facesDocuments[0];
-                // add the WEB-INF if necessary
+                
+                // Add the WEB-INF if necessary
                 if (webInfFacesConfig.isWebInfFacesConfig()) {
                     ret[ret.length - 1] = facesDocuments[facesDocuments.length - 1];
                 }
@@ -628,11 +703,30 @@ public class ConfigManager {
 
         return facesDocuments;
     }
+    
+    /**
+     * Utility method to check if JSF 2.0 Facelets should be disabled, but that doesn't perform <em>the</em> 
+     * check unless <code>lastFacesConfigInfo</code> is indeed *the* WEB-INF/faces-config.xml
+     * 
+     * @param webConfig configuration for this application
+     * @param lastFacesConfigInfo object representing WEB-INF/faces-config.xml
+     * @return <code>true</code> if Facelets should be disabled
+     */
+    private boolean isFaceletsDisabled(WebConfiguration webConfig, FacesConfigInfo lastFacesConfigInfo) {
+        if (lastFacesConfigInfo.isWebInfFacesConfig()) {
+            return _isFaceletsDisabled(webConfig, lastFacesConfigInfo);
+        } 
+            
+        return 
+            webConfig.isOptionEnabled(DisableFaceletJSFViewHandler) || 
+            webConfig.isOptionEnabled(DisableFaceletJSFViewHandlerDeprecated);
+    }
 
 
     /**
-     * <p>
      * Utility method to check if JSF 2.0 Facelets should be disabled.
+     * 
+     * <p>
      * If it's not explicitly disabled by the context init parameter, then
      * check the version of the WEB-INF/faces-config.xml document.  If the version
      * is less than 2.0, then override the default value for the context init
@@ -641,7 +735,7 @@ public class ConfigManager {
      * </p>
      *
      * <p>
-     * NOTE:  Since this method overrides a configuration value, it should
+     * <em>NOTE:</em> Since this method overrides a configuration value, it should
      * be called before *any* document parsing is performed the configuration
      * value may be queried by the <code>ConfigParser</code>s.
      * </p>
@@ -650,32 +744,29 @@ public class ConfigManager {
      * @param facesConfigInfo object representing WEB-INF/faces-config.xml
      * @return <code>true</code> if Facelets should be disabled
      */
-    private boolean isFaceletsDisabled(WebConfiguration webconfig,
-                                       FacesConfigInfo facesConfigInfo) {
+    private boolean _isFaceletsDisabled(WebConfiguration webconfig, FacesConfigInfo facesConfigInfo) {
 
-        boolean isFaceletsDisabled = webconfig.isOptionEnabled(DisableFaceletJSFViewHandler) ||
-                webconfig.isOptionEnabled(DisableFaceletJSFViewHandlerDeprecated);
+        boolean isFaceletsDisabled = 
+            webconfig.isOptionEnabled(DisableFaceletJSFViewHandler) ||
+            webconfig.isOptionEnabled(DisableFaceletJSFViewHandlerDeprecated);
+        
         if (!isFaceletsDisabled) {
             // if not explicitly disabled, make a sanity check against
             // /WEB-INF/faces-config.xml
             isFaceletsDisabled = !facesConfigInfo.isVersionGreaterOrEqual(2.0);
             webconfig.overrideContextInitParameter(DisableFaceletJSFViewHandler, isFaceletsDisabled);
         }
+        
         return isFaceletsDisabled;
-
     }
 
 
     /**
      * Push the provided <code>Future</code> to the specified <code>ServletContext</code>.
      */
-    private void pushTaskToContext(ServletContext sc,
-                                   Future<Map<Class<? extends Annotation>,Set<Class<?>>>> scanTask) {
-
+    private void pushTaskToContext(ServletContext sc, Future<Map<Class<? extends Annotation>, Set<Class<?>>>> scanTask) {
         sc.setAttribute(ANNOTATIONS_SCAN_TASK_KEY, scanTask);
-
     }
-
 
     /**
      * Publishes a {@link javax.faces.event.PostConstructApplicationEvent} event for the current
@@ -685,42 +776,41 @@ public class ConfigManager {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         Application app = ctx.getApplication();
-        if (null == ((InitFacesContext)ctx).getELContext()) {
+        
+        if (null == ((InitFacesContext) ctx).getELContext()) {
             ELContext elContext = new ELContextImpl(app.getELResolver());
             elContext.putContext(FacesContext.class, ctx);
             ExpressionFactory exFactory = ELUtils.getDefaultExpressionFactory(ctx);
             if (null != exFactory) {
                 elContext.putContext(ExpressionFactory.class, exFactory);
             }
+            
             UIViewRoot root = ctx.getViewRoot();
             if (null != root) {
                 elContext.setLocale(root.getLocale());
             }
+            
             ELContextListener[] listeners = app.getELContextListeners();
             if (listeners.length > 0) {
                 ELContextEvent event = new ELContextEvent(elContext);
-                for (ELContextListener listener: listeners) {
+                for (ELContextListener listener : listeners) {
                     listener.contextCreated(event);
                 }
             }
-            ((InitFacesContext)ctx).setELContext(elContext);
+            
+            ((InitFacesContext) ctx).setELContext(elContext);
         }
-        
-        app.publishEvent(ctx,
-                         PostConstructApplicationEvent.class,
-                         Application.class,
-                         app);
 
+        app.publishEvent(ctx, PostConstructApplicationEvent.class, Application.class, app);
     }
 
 
     /**
      * <p>
      *   Obtains an array of <code>Document</code>s to be processed
-     *   by {@link ConfigManager#FACES_CONFIG_PROCESSOR_CHAIN}.
      * </p>
      *
-     * @param sc the <code>ServletContext</code> for the application to be
+     * @param servletContext the <code>ServletContext</code> for the application to be
      *  processed
      * @param providers <code>List</code> of <code>ConfigurationResourceProvider</code>
      *  instances that provide the URL of the documents to parse.
@@ -730,38 +820,37 @@ public class ConfigManager {
      *  should be validated
      * @return an array of <code>DocumentInfo</code>s
      */
-    private static DocumentInfo[] getConfigDocuments(ServletContext sc,
-                                                 List<ConfigurationResourceProvider> providers,
-                                                 ExecutorService executor,
-                                                 boolean validating) {
-
-        List<FutureTask<Collection<URI>>> urlTasks =
-             new ArrayList<>(providers.size());
-        for (ConfigurationResourceProvider p : providers) {
-            FutureTask<Collection<URI>> t =
-                 new FutureTask<>(new URITask(p, sc));
-            urlTasks.add(t);
+    private static DocumentInfo[] getConfigDocuments(ServletContext servletContext, List<ConfigurationResourceProvider> providers, ExecutorService executor, boolean validating) {
+        
+        // Query all configuration providers to give us a URL to the configuration they are providing
+        
+        List<FutureTask<Collection<URI>>> uriTasks = new ArrayList<>(providers.size());
+        
+        for (ConfigurationResourceProvider provider : providers) {
+            FutureTask<Collection<URI>> uriTask = new FutureTask<>(new URITask(provider, servletContext));
+            uriTasks.add(uriTask);
+            
             if (executor != null) {
-                executor.execute(t);
+                executor.execute(uriTask);
             } else {
-                t.run();
+                uriTask.run();
             }
         }
 
-        List<FutureTask<DocumentInfo>> docTasks =
-             new ArrayList<>(providers.size() << 1);
+        // Load and XML parse all documents to which the URLs that we collected above point to
+        
+        List<FutureTask<DocumentInfo>> docTasks = new ArrayList<>(providers.size() << 1);
 
-        for (FutureTask<Collection<URI>> t : urlTasks) {
+        for (FutureTask<Collection<URI>> uriTask : uriTasks) {
             try {
-                Collection<URI> l = t.get();
-                for (URI u : l) {
-                    FutureTask<DocumentInfo> d =
-                         new FutureTask<>(new ParseTask(sc, validating, u));
-                    docTasks.add(d);
+                for (URI uri : uriTask.get()) {
+                    FutureTask<DocumentInfo> docTask = new FutureTask<>(new ParseTask(servletContext, validating, uri));
+                    docTasks.add(docTask);
+                    
                     if (executor != null) {
-                        executor.execute(d);
+                        executor.execute(docTask);
                     } else {
-                        d.run();
+                        docTask.run();
                     }
                 }
             } catch (InterruptedException ignored) {
@@ -770,17 +859,19 @@ public class ConfigManager {
             }
         }
 
+        // Collect the results of the documents we parsed above 
+        
         List<DocumentInfo> docs = new ArrayList<>(docTasks.size());
-        for (FutureTask<DocumentInfo> t : docTasks) {
+        for (FutureTask<DocumentInfo> docTask : docTasks) {
             try {
-                docs.add(t.get());
+                docs.add(docTask.get());
             } catch (ExecutionException e) {
                 throw new ConfigurationException(e);
-            } catch (InterruptedException ignored) { }
+            } catch (InterruptedException ignored) {
+            }
         }
 
         return docs.toArray(new DocumentInfo[docs.size()]);
-
     }
 
 
@@ -794,28 +885,15 @@ public class ConfigManager {
         if (tc > NUMBER_OF_TASK_THREADS) {
             tc = NUMBER_OF_TASK_THREADS;
         }
+        
+        try {
+            return (ExecutorService) new InitialContext().lookup("java:comp/env/concurrent/ThreadPool");
+        } catch (NamingException e) {
+            // Ignore
+        }
+        
         return Executors.newFixedThreadPool(tc);
-
     }
-
-
-//    /**
-//     * @param throwable Throwable
-//     * @return the root cause of this error
-//     */
-//    private Throwable unwind(Throwable throwable) {
-//
-//          Throwable t = null;
-//          if (throwable != null) {
-//              t =  unwind(throwable.getCause());
-//              if (t == null) {
-//                  t = throwable;
-//              }
-//          }
-//          return t;
-//
-//    }
-
 
     /**
      * Calls through to {@link javax.faces.FactoryFinder#releaseFactories()}
@@ -825,11 +903,7 @@ public class ConfigManager {
         try {
             FactoryFinder.releaseFactories();
         } catch (FacesException ignored) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           "Exception thrown from FactoryFinder.releaseFactories()",
-                           ignored);
-            }
+            LOGGER.log(FINE, "Exception thrown from FactoryFinder.releaseFactories()", ignored);
         }
     }
 
@@ -837,29 +911,33 @@ public class ConfigManager {
     // ----------------------------------------------------------- Inner Classes
 
     private static final class ProvideMetadataToAnnotationScanTask {
+        
         DocumentInfo [] documentInfos;
         InjectionProvider containerConnector;
-        Set<URI> uris = null;
-        Set<String> jarNames = null;
+        Set<URI> uris;
+        Set<String> jarNames;
 
-        private ProvideMetadataToAnnotationScanTask(DocumentInfo [] documentInfos,
-                InjectionProvider containerConnector) {
+        private ProvideMetadataToAnnotationScanTask(DocumentInfo [] documentInfos, InjectionProvider containerConnector) {
             this.documentInfos = documentInfos;
             this.containerConnector = containerConnector;
         }
 
         private void initializeIvars(Set<Class<?>> annotatedSet) {
-            if (null != uris || null != jarNames) {
+            if (uris != null || jarNames != null) {
                 assert(null != uris && null != jarNames);
                 return;
             }
+            
             uris = new HashSet<>(documentInfos.length);
             jarNames = new HashSet<>(documentInfos.length);
+            
             for (DocumentInfo docInfo : documentInfos) {
+                
                 URI sourceURI = docInfo.getSourceURI();
-                Matcher m = JAR_PATTERN.matcher(sourceURI.toString());
-                if (m.matches()) {
-                    String jarName = m.group(2);
+                Matcher jarMatcher = JAR_PATTERN.matcher(sourceURI == null ? "" : sourceURI.toString());
+                
+                if (jarMatcher.matches()) {
+                    String jarName = jarMatcher.group(2);
                     if (!jarNames.contains(jarName)) {
                         FacesConfigInfo configInfo = new FacesConfigInfo(docInfo);
                         if (!configInfo.isMetadataComplete()) {
@@ -922,20 +1000,21 @@ public class ConfigManager {
      */
     private static class AnnotationScanTask implements Callable<Map<Class<? extends Annotation>,Set<Class<?>>>> {
 
-        private ServletContext sc;
         private InitFacesContext facesContext;
         private AnnotationProvider provider;
         private ProvideMetadataToAnnotationScanTask metadataGetter;
         private Set<Class<?>> annotatedSet;
 
+        
         // -------------------------------------------------------- Constructors
 
 
-        public AnnotationScanTask(ServletContext sc, InitFacesContext facesContext, ProvideMetadataToAnnotationScanTask metadataGetter) {
+        @SuppressWarnings("unchecked")
+        public AnnotationScanTask(ServletContext servletContext, InitFacesContext facesContext, ProvideMetadataToAnnotationScanTask metadataGetter) {
             this.facesContext = facesContext;
-            this.provider = AnnotationProviderFactory.createAnnotationProvider(sc);
+            this.provider = AnnotationProviderFactory.createAnnotationProvider(servletContext);
             this.metadataGetter = metadataGetter;
-            this.annotatedSet = (Set<Class<?>>) sc.getAttribute(ANNOTATED_CLASSES);
+            this.annotatedSet = (Set<Class<?>>) servletContext.getAttribute(ANNOTATED_CLASSES);
         }
 
 
@@ -943,7 +1022,7 @@ public class ConfigManager {
 
 
         @Override
-        public Map<Class<? extends Annotation>,Set<Class<?>>> call() throws Exception {
+        public Map<Class<? extends Annotation>, Set<Class<?>>> call() throws Exception {
 
             Timer t = Timer.getInstance();
             if (t != null) {
@@ -951,27 +1030,23 @@ public class ConfigManager {
             }
 
             // We are executing on a different thread.
-            facesContext.callSetCurrentInstance();
+            facesContext.addInitContextEntryForCurrentThread();
             Set<URI> scanUris = null;
-            com.sun.faces.spi.AnnotationScanner annotationScanner =
-                    metadataGetter.getAnnotationScanner();
+            com.sun.faces.spi.AnnotationScanner annotationScanner = metadataGetter.getAnnotationScanner();
 
-            // This is where we discover what kind of InjectionProvider
-            // we have.
-            if (provider instanceof DelegatingAnnotationProvider &&
-                null != annotationScanner) {
+            // This is where we discover what kind of InjectionProvider we have.
+            if (provider instanceof DelegatingAnnotationProvider && annotationScanner != null) {
                 // This InjectionProvider is capable of annotation scanning *and*
                 // injection.
-                ((DelegatingAnnotationProvider)provider).setAnnotationScanner(annotationScanner,
-                        metadataGetter.getJarNames(annotatedSet));
-                scanUris = Collections.emptySet();
+                ((DelegatingAnnotationProvider) provider).setAnnotationScanner(annotationScanner, metadataGetter.getJarNames(annotatedSet));
+                scanUris = emptySet();
             } else {
                 // This InjectionProvider is capable of annotation scanning only
                 scanUris = metadataGetter.getAnnotationScanURIs(annotatedSet);
             }
-            //AnnotationScanner scanner = new AnnotationScanner(sc);
-            Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses =
-                  provider.getAnnotatedClasses(scanUris);
+            
+            // AnnotationScanner scanner = new AnnotationScanner(sc);
+            Map<Class<? extends Annotation>, Set<Class<?>>> annotatedClasses = provider.getAnnotatedClasses(scanUris);
 
             if (t != null) {
                 t.stopTiming();
@@ -979,9 +1054,7 @@ public class ConfigManager {
             }
 
             return annotatedClasses;
-
         }
-
 
     } // END AnnotationScanTask
 
@@ -993,12 +1066,10 @@ public class ConfigManager {
      * </p>
      */
     private static class ParseTask implements Callable<DocumentInfo> {
-        private static final String JAVAEE_SCHEMA_LEGACY_DEFAULT_NS =
-            "http://java.sun.com/xml/ns/javaee";
-        private static final String JAVAEE_SCHEMA_DEFAULT_NS =
-            "http://xmlns.jcp.org/xml/ns/javaee";
-        private static final String EMPTY_FACES_CONFIG =
-                "com/sun/faces/empty-faces-config.xml";
+        
+        private static final String JAVAEE_SCHEMA_LEGACY_DEFAULT_NS = "http://java.sun.com/xml/ns/javaee";
+        private static final String JAVAEE_SCHEMA_DEFAULT_NS = "http://xmlns.jcp.org/xml/ns/javaee";
+        private static final String EMPTY_FACES_CONFIG = "com/sun/faces/empty-faces-config.xml";
         private static final String FACES_CONFIG_TAGNAME = "faces-config";
         private static final String FACELET_TAGLIB_TAGNAME = "facelet-taglib";
         private ServletContext servletContext;
@@ -1019,12 +1090,10 @@ public class ConfigManager {
          * @param documentURI a URL to the configuration resource to be parsed
          * @throws Exception general error
          */
-        public ParseTask(ServletContext servletContext, boolean validating, URI documentURI)
-        throws Exception {
+        public ParseTask(ServletContext servletContext, boolean validating, URI documentURI) throws Exception {
             this.servletContext = servletContext;
             this.documentURI = documentURI;
             this.validating = validating;
-
         }
 
 
@@ -1044,19 +1113,18 @@ public class ConfigManager {
                     timer.startTiming();
                 }
 
-                Document d = getDocument();
+                Document document = getDocument();
 
                 if (timer != null) {
                     timer.stopTiming();
                     timer.logResult("Parse " + documentURI.toURL().toExternalForm());
                 }
 
-                return new DocumentInfo(d, documentURI);
+                return new DocumentInfo(document, documentURI);
             } catch (Exception e) {
-                throw new ConfigurationException(MessageFormat.format(
-                     "Unable to parse document ''{0}'': {1}",
-                     documentURI.toURL().toExternalForm(),
-                     e.getMessage()), e);
+                throw new ConfigurationException(
+                        format("Unable to parse document ''{0}'': {1}", documentURI.toURL().toExternalForm(), e.getMessage()),
+                        e);
             }
         }
 
@@ -1075,7 +1143,7 @@ public class ConfigManager {
             DocumentBuilder db = getNonValidatingBuilder();
             URL documentURL = documentURI.toURL();
             InputSource is = new InputSource(getInputStream(documentURL));
-                is.setSystemId(documentURI.toURL().toExternalForm());
+            is.setSystemId(documentURI.toURL().toExternalForm());
             Document doc = null;
 
             try {
@@ -1097,7 +1165,7 @@ public class ConfigManager {
                 } 
 
             }
-
+            
             String documentNS = null;
             if (null == doc) {
                 if (FacesFlowDefinitionConfigProcessor.uriIsFlowDefinition(documentURI)) {
@@ -1126,8 +1194,7 @@ public class ConfigManager {
             }
             
             if (validating && documentNS != null) {
-                DOMSource domSource
-                     = new DOMSource(doc, documentURL.toExternalForm());
+                DOMSource domSource = new DOMSource(doc, documentURL.toExternalForm());
 
                 /*
                  * If the Document in question is 1.2 (i.e. it has a namespace matching
@@ -1214,13 +1281,13 @@ public class ConfigManager {
                         DOMResult domResult = new DOMResult();
                         Transformer transformer = getTransformer(documentNS);
                         transformer.transform(domSource, domResult);
+                        
                         // copy the source document URI to the transformed result
                         // so that processes that need to build URLs relative to the
                         // document will work as expected.
-                        ((Document) domResult.getNode())
-                                .setDocumentURI(((Document) domSource
-                                        .getNode()).getDocumentURI());
+                        ((Document) domResult.getNode()).setDocumentURI(((Document) domSource.getNode()).getDocumentURI());
                         Schema schemaToApply;
+                        
                         switch (documentNS) {
                             case FACES_CONFIG_1_X_DEFAULT_NS:
                                 schemaToApply = DbfFactory.getSchema(servletContext, DbfFactory.FacesSchema.FACES_11);
@@ -1231,13 +1298,14 @@ public class ConfigManager {
                             default:
                                 throw new IllegalStateException();
                         }
+                        
                         DocumentBuilder builder = getBuilderForSchema(schemaToApply);
                         if (builder.isValidating()) {
-                        builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
-                        returnDoc = (Document) domResult.getNode();
-                    } else {
-                        returnDoc = (Document) domResult.getNode();
-                    }
+                            builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
+                            returnDoc = (Document) domResult.getNode();
+                        } else {
+                            returnDoc = (Document) domResult.getNode();
+                        }
                 }
             } else {
                 returnDoc = doc;
@@ -1251,6 +1319,7 @@ public class ConfigManager {
                 webInf.setValue("true");
                 returnDoc.getDocumentElement().getAttributes().setNamedItem(webInf);
             }
+            
             return returnDoc;
 
         }
@@ -1272,7 +1341,6 @@ public class ConfigManager {
             return isZeroLengthOrEmpty;
         }
 
-
         /**
          * Obtain a <code>Transformer</code> using the style sheet
          * referenced by the <code>XSL</code> constant.
@@ -1280,10 +1348,9 @@ public class ConfigManager {
          * @return a new Tranformer instance
          * @throws Exception if a Tranformer instance could not be created
          */
-        private static Transformer getTransformer(String documentNS)
-        throws Exception {
+        private static Transformer getTransformer(String documentNS) throws Exception {
 
-            TransformerFactory factory = Util.createTransformerFactory();
+            TransformerFactory factory = createTransformerFactory();
 
             String xslToApply;
             switch (documentNS) {
@@ -1296,10 +1363,8 @@ public class ConfigManager {
                 default:
                     throw new IllegalStateException();
             }
-            return factory
-                 .newTransformer(new StreamSource(getInputStream(ConfigManager
-                      .class.getResource(xslToApply))));
-
+            
+            return factory.newTransformer(new StreamSource(getInputStream(ConfigManager.class.getResource(xslToApply))));
         }
 
 
@@ -1310,28 +1375,24 @@ public class ConfigManager {
          * @throws IOException if an error occurs
          */
         private static InputStream getInputStream(URL url) throws IOException {
-
-            URLConnection conn = url.openConnection();
-            conn.setUseCaches(false);
-            return new BufferedInputStream(conn.getInputStream());
-
+            URLConnection connection = url.openConnection();
+            connection.setUseCaches(false);
+            
+            return new BufferedInputStream(connection.getInputStream());
         }
-
-
 
         private DocumentBuilder getNonValidatingBuilder() throws Exception {
-
             DocumentBuilderFactory tFactory = DbfFactory.getFactory();
             tFactory.setValidating(false);
+            
             DocumentBuilder tBuilder = tFactory.newDocumentBuilder();
-            tBuilder.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
-            tBuilder.setErrorHandler(DbfFactory.FACES_ERROR_HANDLER);
+            tBuilder.setEntityResolver(FACES_ENTITY_RESOLVER);
+            tBuilder.setErrorHandler(FACES_ERROR_HANDLER);
+            
             return tBuilder;
-
         }
 
-        private DocumentBuilder getBuilderForSchema(Schema schema)
-        throws Exception {
+        private DocumentBuilder getBuilderForSchema(Schema schema) throws Exception {
             this.factory = DbfFactory.getFactory();
 
             try {
@@ -1339,9 +1400,11 @@ public class ConfigManager {
             } catch (UnsupportedOperationException upe) {
                 return getNonValidatingBuilder();
             }
+            
             DocumentBuilder builder = factory.newDocumentBuilder();
-            builder.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
-            builder.setErrorHandler(DbfFactory.FACES_ERROR_HANDLER);
+            builder.setEntityResolver(FACES_ENTITY_RESOLVER);
+            builder.setErrorHandler(FACES_ERROR_HANDLER);
+            
             return builder;
         }
 
@@ -1370,8 +1433,7 @@ public class ConfigManager {
          *  which zero or more <code>URL</code>s will be returned
          * @param sc the <code>ServletContext</code> of the current application
          */
-        public URITask(ConfigurationResourceProvider provider,
-                       ServletContext sc) {
+        public URITask(ConfigurationResourceProvider provider, ServletContext sc) {
             this.provider = provider;
             this.sc = sc;
         }
@@ -1385,14 +1447,18 @@ public class ConfigManager {
          * @throws Exception if an Exception is thrown by the underlying
          *  <code>ConfigurationResourceProvider</code> 
          */
+        @SuppressWarnings("unchecked")
         @Override
         public Collection<URI> call() throws Exception {
-            Collection untypedCollection = provider.getResources(sc);
-            Iterator untypedCollectionIterator = untypedCollection.iterator();
-            Collection<URI> result = Collections.emptyList();
+            Collection<?> untypedCollection = provider.getResources(sc);
+            Iterator<?> untypedCollectionIterator = untypedCollection.iterator();
+            
+            Collection<URI> result = emptyList();
+            
             if (untypedCollectionIterator.hasNext()) {
                 Object cur = untypedCollectionIterator.next();
-                // account for older versions of the provider that return Collection<URL>.
+                
+                // Account for older versions of the provider that return Collection<URL>.
                 if (cur instanceof URL) {
                     result = new ArrayList<>(untypedCollection.size());
                     result.add(new URI(((URL)cur).toExternalForm()));

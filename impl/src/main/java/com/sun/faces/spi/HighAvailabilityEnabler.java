@@ -49,7 +49,5 @@ import javax.servlet.ServletContext;
  * @author sheetalv
  */
 public interface HighAvailabilityEnabler {
-
-    public void enableHighAvailability(ServletContext ctx);
-
+    void enableHighAvailability(ServletContext ctx);
 }

@@ -40,12 +40,15 @@
 
 package com.sun.faces.config.processor;
 
-import java.text.MessageFormat;
+import static com.sun.faces.util.MessageUtils.RENDERER_CANNOT_BE_REGISTERED_ID;
+import static com.sun.faces.util.MessageUtils.getExceptionMessageString;
+import static java.text.MessageFormat.format;
+import static java.util.logging.Level.FINE;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FactoryFinder;
@@ -66,13 +69,10 @@ import org.w3c.dom.NodeList;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
 
 /**
- * <p>
  * This <code>ConfigProcessor</code> handles all elements defined under
  * <code>/faces-config/render-kit</code>.
- * </p>
  */
 public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
@@ -148,103 +148,112 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String CLIENT_BEHAVIOR_RENDERER_CLASS = "client-behavior-renderer-class";
 
+    
     // -------------------------------------------- Methods from ConfigProcessor
 
     /**
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext servletContext, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {
 
         Map<String, Map<Document, List<Node>>> renderers = new LinkedHashMap<>();
         Map<String, Map<Document, List<Node>>> behaviorRenderers = new LinkedHashMap<>();
-        RenderKitFactory rkf = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKitFactory renderKitFactory = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        
         for (int i = 0; i < documentInfos.length; i++) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, MessageFormat.format("Processing render-kit elements for document: ''{0}''", documentInfos[i].getSourceURI()));
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, format("Processing render-kit elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
+            
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
             NodeList renderkits = document.getDocumentElement().getElementsByTagNameNS(namespace, RENDERKIT);
 
             if (renderkits != null && renderkits.getLength() > 0) {
-                addRenderKits(sc, renderkits, document, renderers, behaviorRenderers, rkf);
+                addRenderKits(servletContext, facesContext, renderkits, document, renderers, behaviorRenderers, renderKitFactory);
             }
         }
 
-        // process annotated Renderers, ClientBehaviorRenderers first as Renderers configured
+        // Process annotated Renderers, ClientBehaviorRenderers first as Renderers configured
         // via config files take precedence
-        processAnnotations(FacesRenderer.class);
-        processAnnotations(FacesBehaviorRenderer.class);
+        processAnnotations(facesContext, FacesRenderer.class);
+        processAnnotations(facesContext, FacesBehaviorRenderer.class);
 
-        // now add the accumulated renderers to the RenderKits
+        // Now add the accumulated renderers to the RenderKits
         for (Map.Entry<String, Map<Document, List<Node>>> entry : renderers.entrySet()) {
-            RenderKit rk = rkf.getRenderKit(null, entry.getKey());
-            if (rk == null) {
-                throw new ConfigurationException(MessageUtils.getExceptionMessageString(MessageUtils.RENDERER_CANNOT_BE_REGISTERED_ID, entry.getKey()));
+            RenderKit renderKit = renderKitFactory.getRenderKit(null, entry.getKey());
+            if (renderKit == null) {
+                throw new ConfigurationException(getExceptionMessageString(RENDERER_CANNOT_BE_REGISTERED_ID, entry.getKey()));
             }
 
             for (Map.Entry<Document, List<Node>> renderEntry : entry.getValue().entrySet()) {
-                addRenderers(sc, rk, renderEntry.getKey(), renderEntry.getValue());
+                addRenderers(servletContext, facesContext, renderKit, renderEntry.getKey(), renderEntry.getValue());
             }
         }
-        // now add the accumulated behavior renderers to the RenderKits
+        
+        // Now add the accumulated behavior renderers to the RenderKits
         for (Map.Entry<String, Map<Document, List<Node>>> entry : behaviorRenderers.entrySet()) {
-            RenderKit rk = rkf.getRenderKit(null, entry.getKey());
-            if (rk == null) {
-                throw new ConfigurationException(MessageUtils.getExceptionMessageString(MessageUtils.RENDERER_CANNOT_BE_REGISTERED_ID, entry.getKey()));
+            RenderKit renderKit = renderKitFactory.getRenderKit(null, entry.getKey());
+            if (renderKit == null) {
+                throw new ConfigurationException(getExceptionMessageString(RENDERER_CANNOT_BE_REGISTERED_ID, entry.getKey()));
             }
 
             for (Map.Entry<Document, List<Node>> renderEntry : entry.getValue().entrySet()) {
-                addClientBehaviorRenderers(sc, rk, renderEntry.getKey(), renderEntry.getValue());
+                addClientBehaviorRenderers(servletContext, facesContext, renderKit, renderEntry.getKey(), renderEntry.getValue());
             }
         }
-        invokeNext(sc, documentInfos);
 
     }
 
     // --------------------------------------------------------- Private Methods
 
-    private void addRenderKits(ServletContext sc, NodeList renderKits, Document owningDocument, Map<String, Map<Document, List<Node>>> renderers,
-            Map<String, Map<Document, List<Node>>> behaviorRenderers, RenderKitFactory rkf) {
+    private void addRenderKits(ServletContext sc, FacesContext facesContext, NodeList renderKits, Document owningDocument, Map<String, Map<Document, List<Node>>> renderers,
+            Map<String, Map<Document, List<Node>>> behaviorRenderers, RenderKitFactory renderKitFactory) {
 
         String namespace = owningDocument.getDocumentElement().getNamespaceURI();
         for (int i = 0, size = renderKits.getLength(); i < size; i++) {
-            Node renderKit = renderKits.item(i);
-            NodeList children = ((Element) renderKit).getElementsByTagNameNS(namespace, "*");
-            String rkId = null;
-            String rkClass = null;
+            
+            Node renderKitNode = renderKits.item(i);
+            NodeList children = ((Element) renderKitNode).getElementsByTagNameNS(namespace, "*");
+            String renderKitId = null;
+            String renderKitClass = null;
             List<Node> renderersList = new ArrayList<>(children.getLength());
             List<Node> behaviorRenderersList = new ArrayList<>(children.getLength());
+            
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 switch (n.getLocalName()) {
-                case RENDERKIT_ID:
-                    rkId = getNodeText(n);
-                    break;
-                case RENDERKIT_CLASS:
-                    rkClass = getNodeText(n);
-                    break;
-                case RENDERER:
-                    renderersList.add(n);
-                    break;
-                case CLIENT_BEHAVIOR_RENDERER:
-                    behaviorRenderersList.add(n);
-                    break;
+                    case RENDERKIT_ID:
+                        renderKitId = getNodeText(n);
+                        break;
+                    case RENDERKIT_CLASS:
+                        renderKitClass = getNodeText(n);
+                        break;
+                    case RENDERER:
+                        renderersList.add(n);
+                        break;
+                    case CLIENT_BEHAVIOR_RENDERER:
+                        behaviorRenderersList.add(n);
+                        break;
                 }
             }
 
-            rkId = ((rkId == null) ? RenderKitFactory.HTML_BASIC_RENDER_KIT : rkId);
+            renderKitId = renderKitId == null ? RenderKitFactory.HTML_BASIC_RENDER_KIT : renderKitId;
 
-            if (rkClass != null) {
-                RenderKit previous = rkf.getRenderKit(FacesContext.getCurrentInstance(), rkId);
-                RenderKit rk = (RenderKit) createInstance(sc, rkClass, RenderKit.class, previous, renderKit);
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, MessageFormat.format("Calling RenderKitFactory.addRenderKit({0}, {1})", rkId, rkClass));
+            if (renderKitClass != null) {
+                RenderKit previousRenderKit = renderKitFactory.getRenderKit(facesContext, renderKitId);
+                RenderKit renderKit = (RenderKit) 
+                        createInstance(sc, facesContext, renderKitClass, RenderKit.class, previousRenderKit, renderKitNode);
+                
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, format("Calling RenderKitFactory.addRenderKit({0}, {1})", renderKitId, renderKitClass));
                 }
-                rkf.addRenderKit(rkId, rk);
+                
+                renderKitFactory.addRenderKit(renderKitId, renderKit);
             }
-            Map<Document, List<Node>> existingRenderers = renderers.get(rkId);
+            
+            Map<Document, List<Node>> existingRenderers = renderers.get(renderKitId);
             if (existingRenderers != null) {
                 List<Node> list = existingRenderers.get(owningDocument);
                 if (list != null) {
@@ -256,9 +265,9 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 existingRenderers = new LinkedHashMap<>();
                 existingRenderers.put(owningDocument, renderersList);
             }
-            renderers.put(rkId, existingRenderers);
+            renderers.put(renderKitId, existingRenderers);
 
-            Map<Document, List<Node>> existingBehaviorRenderers = behaviorRenderers.get(rkId);
+            Map<Document, List<Node>> existingBehaviorRenderers = behaviorRenderers.get(renderKitId);
             if (existingBehaviorRenderers != null) {
                 List<Node> list = existingBehaviorRenderers.get(owningDocument);
                 if (list != null) {
@@ -270,20 +279,22 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 existingBehaviorRenderers = new LinkedHashMap<>();
                 existingBehaviorRenderers.put(owningDocument, behaviorRenderersList);
             }
-            behaviorRenderers.put(rkId, existingBehaviorRenderers);
+            behaviorRenderers.put(renderKitId, existingBehaviorRenderers);
 
         }
 
     }
 
-    private void addRenderers(ServletContext sc, RenderKit renderKit, Document owningDocument, List<Node> renderers) {
+    private void addRenderers(ServletContext sc, FacesContext facesContext, RenderKit renderKit, Document owningDocument, List<Node> renderers) {
 
         String namespace = owningDocument.getDocumentElement().getNamespaceURI();
-        for (Node renderer : renderers) {
-            NodeList children = ((Element) renderer).getElementsByTagNameNS(namespace, "*");
+        for (Node rendererNode : renderers) {
+            
+            NodeList children = ((Element) rendererNode).getElementsByTagNameNS(namespace, "*");
             String rendererFamily = null;
             String rendererType = null;
             String rendererClass = null;
+            
             for (int i = 0, size = children.getLength(); i < size; i++) {
                 Node n = children.item(i);
                 switch (n.getLocalName()) {
@@ -299,48 +310,56 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 }
             }
 
-            if ((rendererFamily != null) && (rendererType != null) && (rendererClass != null)) {
-                Renderer r = (Renderer) createInstance(sc, rendererClass, Renderer.class, null, renderer);
-                if (r != null) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE, MessageFormat.format("Calling RenderKit.addRenderer({0},{1}, {2}) for RenderKit ''{3}''", rendererFamily,
+            if (rendererFamily != null && rendererType != null && rendererClass != null) {
+                
+                Renderer renderer = (Renderer) createInstance(sc, facesContext, rendererClass, Renderer.class, null, rendererNode);
+                
+                if (renderer != null) {
+                    if (LOGGER.isLoggable(FINE)) {
+                        LOGGER.log(FINE, format("Calling RenderKit.addRenderer({0},{1}, {2}) for RenderKit ''{3}''", rendererFamily,
                                 rendererType, rendererClass, renderKit.getClass()));
                     }
-                    renderKit.addRenderer(rendererFamily, rendererType, r);
+                    
+                    renderKit.addRenderer(rendererFamily, rendererType, renderer);
                 }
             }
         }
 
     }
 
-    private void addClientBehaviorRenderers(ServletContext sc, RenderKit renderKit, Document owningDocument, List<Node> behaviorRenderers) {
+    private void addClientBehaviorRenderers(ServletContext servletContext, FacesContext facesContext, RenderKit renderKit, Document owningDocument, List<Node> behaviorRenderers) {
 
         String namespace = owningDocument.getDocumentElement().getNamespaceURI();
-        for (Node behaviorRenderer : behaviorRenderers) {
-            NodeList children = ((Element) behaviorRenderer).getElementsByTagNameNS(namespace, "*");
+        for (Node behaviorRendererNode : behaviorRenderers) {
+            
+            NodeList children = ((Element) behaviorRendererNode).getElementsByTagNameNS(namespace, "*");
             String behaviorRendererType = null;
             String behaviorRendererClass = null;
+            
             for (int i = 0, size = children.getLength(); i < size; i++) {
                 Node n = children.item(i);
                 switch (n.getLocalName()) {
-                case CLIENT_BEHAVIOR_RENDERER_TYPE:
-                    behaviorRendererType = getNodeText(n);
-                    break;
-                case CLIENT_BEHAVIOR_RENDERER_CLASS:
-                    behaviorRendererClass = getNodeText(n);
-                    break;
+                    case CLIENT_BEHAVIOR_RENDERER_TYPE:
+                        behaviorRendererType = getNodeText(n);
+                        break;
+                    case CLIENT_BEHAVIOR_RENDERER_CLASS:
+                        behaviorRendererClass = getNodeText(n);
+                        break;
                 }
             }
 
-            if ((behaviorRendererType != null) && (behaviorRendererClass != null)) {
-                ClientBehaviorRenderer r = (ClientBehaviorRenderer) createInstance(sc, behaviorRendererClass, ClientBehaviorRenderer.class, null,
-                        behaviorRenderer);
-                if (r != null) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE, MessageFormat.format("Calling RenderKit.addClientBehaviorRenderer({0},{1}, {2}) for RenderKit ''{2}''",
+            if (behaviorRendererType != null && behaviorRendererClass != null) {
+                ClientBehaviorRenderer behaviorRenderer = (ClientBehaviorRenderer) 
+                    createInstance(
+                        servletContext, facesContext, behaviorRendererClass, ClientBehaviorRenderer.class, null, behaviorRendererNode);
+                
+                if (behaviorRenderer != null) {
+                    if (LOGGER.isLoggable(FINE)) {
+                        LOGGER.log(FINE, format("Calling RenderKit.addClientBehaviorRenderer({0},{1}, {2}) for RenderKit ''{2}''",
                                 behaviorRendererType, behaviorRendererClass, renderKit.getClass()));
                     }
-                    renderKit.addClientBehaviorRenderer(behaviorRendererType, r);
+                    
+                    renderKit.addClientBehaviorRenderer(behaviorRendererType, behaviorRenderer);
                 }
             }
         }

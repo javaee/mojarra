@@ -249,13 +249,11 @@ public final class FactoryFinder {
      */
     public static final String SEARCH_EXPRESSION_CONTEXT_FACTORY = "javax.faces.component.search.SearchExpressionContextFactory";
 
+    
     // ------------------------------------------------------- Static Variables
 
-    static final CurrentThreadToServletContext FACTORIES_CACHE;
+    static final CurrentThreadToServletContext FACTORIES_CACHE = new CurrentThreadToServletContext();
 
-    static {
-        FACTORIES_CACHE = new CurrentThreadToServletContext();
-    }
 
     // --------------------------------------------------------- Public Methods
 
@@ -291,18 +289,18 @@ public final class FactoryFinder {
      */
     public static Object getFactory(String factoryName) throws FacesException {
 
-        FactoryFinderInstance manager;
+        FactoryFinderInstance factoryFinder;
         
         // Bug 20458755: If the factory being requested is the special
         // SERVLET_CONTEXT_FINDER, do not lazily create the FactoryFinderInstance.
         if (SERVLET_CONTEXT_FINDER_NAME.equals(factoryName)) {
-            manager = FACTORIES_CACHE.getApplicationFactoryManager(false);
+            factoryFinder = FACTORIES_CACHE.getFactoryFinder(false);
         } else {
-            manager = FACTORIES_CACHE.getApplicationFactoryManager();
+            factoryFinder = FACTORIES_CACHE.getFactoryFinder();
         }
         
-        if (manager != null) {
-            return manager.getFactory(factoryName);
+        if (factoryFinder != null) {
+            return factoryFinder.getFactory(factoryName);
         }
         
         return null;
@@ -334,7 +332,7 @@ public final class FactoryFinder {
      *            {@code factoryName}.
      */
     public static void setFactory(String factoryName, String implName) {
-        FACTORIES_CACHE.getApplicationFactoryManager().addFactory(factoryName, implName);
+        FACTORIES_CACHE.getFactoryFinder().addFactory(factoryName, implName);
     }
 
     /**
@@ -350,11 +348,11 @@ public final class FactoryFinder {
     public static void releaseFactories() throws FacesException {
         synchronized (FACTORIES_CACHE) {
 
-            if (!FACTORIES_CACHE.applicationMap.isEmpty()) {
-                FACTORIES_CACHE.getApplicationFactoryManager().releaseFactories();
+            if (!FACTORIES_CACHE.factoryFinderMap.isEmpty()) {
+                FACTORIES_CACHE.getFactoryFinder().releaseFactories();
             }
 
-            FACTORIES_CACHE.removeApplicationFactoryManager();
+            FACTORIES_CACHE.removeFactoryFinder();
         }
     }
 

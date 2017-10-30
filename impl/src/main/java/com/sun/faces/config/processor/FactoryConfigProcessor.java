@@ -40,12 +40,20 @@
 
 package com.sun.faces.config.processor;
 
+import static java.text.MessageFormat.format;
+import static java.util.Arrays.asList;
+import static java.util.logging.Level.FINE;
+
 import java.text.MessageFormat;
+import java.util.Deque;
+import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FactoryFinder;
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 import org.w3c.dom.Document;
@@ -56,6 +64,7 @@ import org.w3c.dom.NodeList;
 import com.sun.faces.application.InjectionApplicationFactory;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.config.InitFacesContext;
 import com.sun.faces.context.InjectionFacesContextFactory;
 import com.sun.faces.util.FacesLogger;
 
@@ -152,12 +161,24 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     /**
      * <code>Array of Factory names for post-configuration validation.</code>
      */
-    private static final String[] FACTORY_NAMES = { FactoryFinder.APPLICATION_FACTORY, FactoryFinder.CLIENT_WINDOW_FACTORY,
-            FactoryFinder.EXCEPTION_HANDLER_FACTORY, FactoryFinder.EXTERNAL_CONTEXT_FACTORY, FactoryFinder.FACES_CONTEXT_FACTORY, FactoryFinder.FLASH_FACTORY,
-            FactoryFinder.LIFECYCLE_FACTORY, FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY, FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
-            FactoryFinder.RENDER_KIT_FACTORY, FactoryFinder.VISIT_CONTEXT_FACTORY, FactoryFinder.FACELET_CACHE_FACTORY,
-            FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY, FactoryFinder.FLOW_HANDLER_FACTORY, FactoryFinder.SEARCH_EXPRESSION_CONTEXT_FACTORY };
-
+    private final List<String> factoryNames = asList(
+            FactoryFinder.APPLICATION_FACTORY, 
+            FactoryFinder.CLIENT_WINDOW_FACTORY,
+            FactoryFinder.EXCEPTION_HANDLER_FACTORY, 
+            FactoryFinder.EXTERNAL_CONTEXT_FACTORY, 
+            FactoryFinder.FACES_CONTEXT_FACTORY, 
+            FactoryFinder.FLASH_FACTORY,
+            FactoryFinder.LIFECYCLE_FACTORY, 
+            FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY, 
+            FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
+            FactoryFinder.RENDER_KIT_FACTORY, 
+            FactoryFinder.VISIT_CONTEXT_FACTORY, 
+            FactoryFinder.FACELET_CACHE_FACTORY,
+            FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY, 
+            FactoryFinder.FLOW_HANDLER_FACTORY, 
+            FactoryFinder.SEARCH_EXPRESSION_CONTEXT_FACTORY); 
+    
+    
     private boolean validateFactories = true;
 
     // ------------------------------------------------------------ Constructors
@@ -167,9 +188,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
 
     // Only called by the cactus test code
     public FactoryConfigProcessor(boolean validateFactories) {
-
         this.validateFactories = validateFactories;
-
     }
 
     // -------------------------------------------- Methods from ConfigProcessor
@@ -178,7 +197,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext servletContext, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {
 
         // track how many FacesContextFactory instances are being added
         // for this application
@@ -189,9 +208,10 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         AtomicInteger applicationFactoryCount = new AtomicInteger(0);
 
         for (int i = 0; i < documentInfos.length; i++) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, MessageFormat.format("Processing factory elements for document: ''{0}''", documentInfos[i].getSourceURI()));
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, format("Processing factory elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
+            
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
             NodeList factories = document.getDocumentElement().getElementsByTagNameNS(namespace, FACTORY);
@@ -211,12 +231,8 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         // chain.
         wrapFactories(applicationFactoryCount.get(), facesContextFactoryCount.get());
 
-        // validate that we actually have factories at this point.
-        verifyFactoriesExist();
-
-        // invoke the next config processor
-        invokeNext(sc, documentInfos);
-
+        // Validate that we actually have factories at this point.
+        verifyFactoriesExist(servletContext);
     }
 
     // --------------------------------------------------------- Private Methods
@@ -227,55 +243,55 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
             Node factory = factories.item(i);
             NodeList children = ((Element) factory).getElementsByTagNameNS(namespace, "*");
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
-                Node n = children.item(c);
-                switch (n.getLocalName()) {
-                case APPLICATION_FACTORY:
-                    appCount.incrementAndGet();
-                    setFactory(FactoryFinder.APPLICATION_FACTORY, getNodeText(n));
-                    break;
-                case EXCEPTION_HANDLER_FACTORY:
-                    setFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY, getNodeText(n));
-                    break;
-                case VISIT_CONTEXT_FACTORY:
-                    setFactory(FactoryFinder.VISIT_CONTEXT_FACTORY, getNodeText(n));
-                    break;
-                case LIFECYCLE_FACTORY:
-                    setFactory(FactoryFinder.LIFECYCLE_FACTORY, getNodeText(n));
-                    break;
-                case FLASH_FACTORY:
-                    setFactory(FactoryFinder.FLASH_FACTORY, getNodeText(n));
-                    break;
-                case CLIENT_WINDOW_FACTORY:
-                    setFactory(FactoryFinder.CLIENT_WINDOW_FACTORY, getNodeText(n));
-                    break;
-                case FACES_CONTEXT_FACTORY:
-                    fcCount.incrementAndGet();
-                    setFactory(FactoryFinder.FACES_CONTEXT_FACTORY, getNodeText(n));
-                    break;
-                case RENDER_KIT_FACTORY:
-                    setFactory(FactoryFinder.RENDER_KIT_FACTORY, getNodeText(n));
-                    break;
-                case VIEW_DECLARATION_LANGUAGE_FACTORY:
-                    setFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY, getNodeText(n));
-                    break;
-                case TAG_HANDLER_DELEGATE_FACTORY:
-                    setFactory(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY, getNodeText(n));
-                    break;
-                case FACELET_CACHE_FACTORY:
-                    setFactory(FactoryFinder.FACELET_CACHE_FACTORY, getNodeText(n));
-                    break;
-                case EXTERNAL_CONTEXT_FACTORY:
-                    setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY, getNodeText(n));
-                    break;
-                case PARTIAL_VIEW_CONTEXT_FACTORY:
-                    setFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY, getNodeText(n));
-                    break;
-                case FLOW_HANDLER_FACTORY:
-                    setFactory(FactoryFinder.FLOW_HANDLER_FACTORY, getNodeText(n));
-                    break;
-                case SEARCH_EXPRESSION_CONTEXT_FACTORY:
-                    setFactory(FactoryFinder.SEARCH_EXPRESSION_CONTEXT_FACTORY, getNodeText(n));
-                    break;
+                Node childNode = children.item(c);
+                switch (childNode.getLocalName()) {
+                    case APPLICATION_FACTORY:
+                        int cnt = appCount.incrementAndGet();
+                        setFactory(FactoryFinder.APPLICATION_FACTORY, getNodeText(childNode));
+                        break;
+                    case EXCEPTION_HANDLER_FACTORY:
+                        setFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY, getNodeText(childNode));
+                        break;
+                    case VISIT_CONTEXT_FACTORY:
+                        setFactory(FactoryFinder.VISIT_CONTEXT_FACTORY, getNodeText(childNode));
+                        break;
+                    case LIFECYCLE_FACTORY:
+                        setFactory(FactoryFinder.LIFECYCLE_FACTORY, getNodeText(childNode));
+                        break;
+                    case FLASH_FACTORY:
+                        setFactory(FactoryFinder.FLASH_FACTORY, getNodeText(childNode));
+                        break;
+                    case CLIENT_WINDOW_FACTORY:
+                        setFactory(FactoryFinder.CLIENT_WINDOW_FACTORY, getNodeText(childNode));
+                        break;
+                    case FACES_CONTEXT_FACTORY:
+                        fcCount.incrementAndGet();
+                        setFactory(FactoryFinder.FACES_CONTEXT_FACTORY, getNodeText(childNode));
+                        break;
+                    case RENDER_KIT_FACTORY:
+                        setFactory(FactoryFinder.RENDER_KIT_FACTORY, getNodeText(childNode));
+                        break;
+                    case VIEW_DECLARATION_LANGUAGE_FACTORY:
+                        setFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY, getNodeText(childNode));
+                        break;
+                    case TAG_HANDLER_DELEGATE_FACTORY:
+                        setFactory(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY, getNodeText(childNode));
+                        break;
+                    case FACELET_CACHE_FACTORY:
+                        setFactory(FactoryFinder.FACELET_CACHE_FACTORY, getNodeText(childNode));
+                        break;
+                    case EXTERNAL_CONTEXT_FACTORY:
+                        setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY, getNodeText(childNode));
+                        break;
+                    case PARTIAL_VIEW_CONTEXT_FACTORY:
+                        setFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY, getNodeText(childNode));
+                        break;
+                    case FLOW_HANDLER_FACTORY:
+                        setFactory(FactoryFinder.FLOW_HANDLER_FACTORY, getNodeText(childNode));
+                        break;
+                    case SEARCH_EXPRESSION_CONTEXT_FACTORY:
+                        setFactory(FactoryFinder.SEARCH_EXPRESSION_CONTEXT_FACTORY, getNodeText(childNode));
+                        break;
                 }
             }
         }
@@ -284,26 +300,44 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static void setFactory(String factoryName, String factoryImpl) {
 
         if (factoryName != null && factoryImpl != null) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, MessageFormat.format("Calling FactoryFinder.setFactory({0}, {1})", factoryName, factoryImpl));
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO, MessageFormat.format("Calling FactoryFinder.setFactory({0}, {1})", factoryName, factoryImpl));
             }
             FactoryFinder.setFactory(factoryName, factoryImpl);
         }
 
     }
 
-    private void verifyFactoriesExist() {
+    private void verifyFactoriesExist(ServletContext servletContext) {
 
         if (validateFactories) {
-            for (int i = 0, len = FACTORY_NAMES.length; i < len; i++) {
-                try {
-                    FactoryFinder.getFactory(FACTORY_NAMES[i]);
-                } catch (Exception e) {
-                    throw new ConfigurationException(MessageFormat.format("Factory ''{0}'' was not configured properly.", FACTORY_NAMES[i]), e);
-                }
+            
+            Deque<Exception> exceptions = new ConcurrentLinkedDeque<>();
+            
+            
+            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+            
+            try {
+                factoryNames.stream().forEach(e -> {
+                    
+                    Thread.currentThread().setContextClassLoader(contextClassLoader);
+                    InitFacesContext.getInstance(servletContext);
+                   
+                    try {
+                        FactoryFinder.getFactory(e);
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                        exceptions.add(new ConfigurationException(format("Factory ''{0}'' was not configured properly.", e), exception));
+                    } finally {
+                        Thread.currentThread().setContextClassLoader(null);
+                    }
+                    
+                });
+            } finally {
+                Thread.currentThread().setContextClassLoader(contextClassLoader);
             }
+            
         }
-
     }
 
     private void wrapFactories(int appCount, int fcCount) {
@@ -311,6 +345,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         if (appCount > 1) {
             addInjectionApplicationFactory();
         }
+        
         if (fcCount > 1) {
             addInjectionFacesContextFactory();
         }
@@ -324,9 +359,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      * InjectionFacesContextFactory's delegate).
      */
     private void addInjectionApplicationFactory() {
-
         FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY, InjectionApplicationFactory.class.getName());
-
     }
 
     /**
@@ -336,9 +369,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      * InjectionFacesContextFactory's delegate).
      */
     private void addInjectionFacesContextFactory() {
-
         FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY, InjectionFacesContextFactory.class.getName());
-
     }
 
 }

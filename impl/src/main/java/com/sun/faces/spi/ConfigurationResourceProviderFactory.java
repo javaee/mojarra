@@ -42,6 +42,10 @@ package com.sun.faces.spi;
 
 
 import java.util.List;
+
+import static com.sun.faces.spi.ServiceFactoryUtils.getProviderFromEntry;
+import static com.sun.faces.spi.ServiceFactoryUtils.getServiceEntries;
+
 import java.util.ArrayList;
 
 /**
@@ -54,14 +58,12 @@ public class ConfigurationResourceProviderFactory {
     public enum ProviderType {
 
         /**
-         * ConfigurationResourceProvider type for configuration resources
-         * that follow the faces-config DTD/Schema.
+         * ConfigurationResourceProvider type for configuration resources that follow the faces-config DTD/Schema.
          */
         FacesConfig(FacesConfigResourceProvider.SERVICES_KEY),
 
         /**
-         * ConfigurationResourceProvider type for configuration resources
-         * that follow the Facelet taglib DTD/Schema.
+         * ConfigurationResourceProvider type for configuration resources that follow the Facelet taglib DTD/Schema.
          */
         FaceletConfig(FaceletConfigResourceProvider.SERVICES_KEY);
 
@@ -70,7 +72,7 @@ public class ConfigurationResourceProviderFactory {
         ProviderType(String servicesKey) {
             this.servicesKey = servicesKey;
         }
-        
+
     }
 
 
@@ -85,13 +87,14 @@ public class ConfigurationResourceProviderFactory {
      */
     public static ConfigurationResourceProvider[] createProviders(ProviderType providerType) {
 
-        String[] serviceEntries = ServiceFactoryUtils.getServiceEntries(providerType.servicesKey);
+        String[] serviceEntries = getServiceEntries(providerType.servicesKey);
         List<ConfigurationResourceProvider> providers = new ArrayList<>();
+        
         if (serviceEntries.length > 0) {
             for (String serviceEntry : serviceEntries) {
                 try {
-                    ConfigurationResourceProvider provider = (ConfigurationResourceProvider)
-                          ServiceFactoryUtils.getProviderFromEntry(serviceEntry, null, null);
+                    ConfigurationResourceProvider provider = (ConfigurationResourceProvider) getProviderFromEntry(serviceEntry, null, null);
+                    
                     if (provider != null) {
                         if (ProviderType.FacesConfig == providerType) {
                             if (!(provider instanceof FacesConfigResourceProvider)) {
@@ -104,13 +107,14 @@ public class ConfigurationResourceProviderFactory {
                         }
                         providers.add(provider);
                     }
-                } catch(ClassCastException cce) {
+                } catch (ClassCastException cce) {
                     // we are going to ignore these for now.
                 }
             }
+            
             return providers.toArray(new ConfigurationResourceProvider[providers.size()]);
-        } else {
-            return new ConfigurationResourceProvider[0];
-        }        
+        } 
+            
+        return new ConfigurationResourceProvider[0];
     }
 }

@@ -139,7 +139,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
 
         // invoke the FactoryConfigProcessor
         FactoryConfigProcessor fcp = new FactoryConfigProcessor(false);
-        fcp.process((ServletContext) getFacesContext().getExternalContext().getContext(),
+        fcp.process((ServletContext) getFacesContext().getExternalContext().getContext(), getFacesContext(),
                     new DocumentInfo[] { new DocumentInfo(d, null) });
 
         // now get an Application instance from the Factory and ensure
@@ -166,7 +166,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         // process the document.  This should cause the the InjectionApplicationFactory
         // to be put into play since there is more than one ApplicationFactory
         // being configured
-        fcp.process((ServletContext) getFacesContext().getExternalContext().getContext(),
+        fcp.process((ServletContext) getFacesContext().getExternalContext().getContext(), getFacesContext(),
                     new DocumentInfo[] { new DocumentInfo(d, null) });
 
         // get the ApplicationFactory instance.  The top-level factory should
@@ -240,7 +240,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         // invoke the FactoryConfigProcessor
         FactoryConfigProcessor fcp = new FactoryConfigProcessor(false);
         InitFacesContext initContext = new InitFacesContext(sc);
-        fcp.process(sc, new DocumentInfo[]{new DocumentInfo(d, null)});
+        fcp.process(sc, initContext, new DocumentInfo[]{new DocumentInfo(d, null)});
         initContext.release();
         FacesContext.getCurrentInstance().release();
 
@@ -272,7 +272,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         // to be put into play since there is more than one FacesContextFactory
         // being configured
         initContext = new InitFacesContext(sc);
-        fcp.process(sc, new DocumentInfo[]{new DocumentInfo(d, null)});
+        fcp.process(sc, initContext, new DocumentInfo[]{new DocumentInfo(d, null)});
         initContext.release();
 
         // get the FacesContextFactory instance.  The top-level factory should

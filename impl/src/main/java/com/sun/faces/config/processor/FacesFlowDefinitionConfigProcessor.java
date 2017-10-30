@@ -40,6 +40,8 @@
  */
 package com.sun.faces.config.processor;
 
+import static com.sun.faces.util.Util.notNull;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.text.MessageFormat;
@@ -96,7 +98,6 @@ import com.sun.faces.flow.FlowImpl;
 import com.sun.faces.flow.ParameterImpl;
 import com.sun.faces.flow.builder.FlowBuilderImpl;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 
 /**
  * <p>
@@ -112,6 +113,8 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
      * <code>/faces-config/flow-definition</code>
      */
     private static final String FACES_FLOW_DEFINITION = "flow-definition";
+    
+    private static final String flowDefinitionListKey = RIConstants.FACES_PREFIX + "FacesFlowDefinitions";
 
     public FacesFlowDefinitionConfigProcessor() {
     }
@@ -177,10 +180,9 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
     }
 
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext sc, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {
 
         WebConfiguration config = WebConfiguration.getInstance(sc);
-        FacesContext context = FacesContext.getCurrentInstance();
 
         for (int i = 0; i < documentInfos.length; i++) {
             URI definingDocumentURI = documentInfos[i].getSourceURI();
@@ -193,7 +195,7 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             if (flowDefinitions != null && flowDefinitions.getLength() > 0) {
                 config.setHasFlows(true);
 
-                saveFlowDefinition(context, definingDocumentURI, document);
+                saveFlowDefinition(facesContext, definingDocumentURI, document);
             }
         }
 
@@ -211,15 +213,13 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
                 config.setOptionValue(WebConfiguration.WebContextInitParameter.ClientWindowMode, "url");
             }
 
-            context.getApplication().subscribeToEvent(PostConstructApplicationEvent.class, Application.class, new PerformDeferredFlowProcessing());
+            facesContext.getApplication().subscribeToEvent(PostConstructApplicationEvent.class, Application.class, new PerformDeferredFlowProcessing());
         }
 
-        invokeNext(sc, documentInfos);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Enable deferred processing of flow definitions">
 
-    private static final String flowDefinitionListKey = RIConstants.FACES_PREFIX + "FacesFlowDefinitions";
+    
 
     private void saveFlowDefinition(FacesContext context, URI definingDocumentURI, Document flowDefinitions) {
         Map<String, Object> appMap = context.getExternalContext().getApplicationMap();
@@ -274,34 +274,37 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
 
         @Override
         public void processEvent(SystemEvent event) throws AbortProcessingException {
-            FacesContext context = FacesContext.getCurrentInstance();
-            List<FlowDefinitionDocument> flowDefinitions = FacesFlowDefinitionConfigProcessor.this.getSavedFlowDefinitions(context);
-            for (FlowDefinitionDocument cur : flowDefinitions) {
+            FacesContext facesContext = event.getFacesContext();
+            
+            for (FlowDefinitionDocument flowDefinition : FacesFlowDefinitionConfigProcessor.this.getSavedFlowDefinitions(facesContext)) {
                 try {
-                    FacesFlowDefinitionConfigProcessor.this.processFacesFlowDefinitions(cur.definingDocumentURI, cur.flowDefinitions);
+                    FacesFlowDefinitionConfigProcessor.this.processFacesFlowDefinitions(
+                        facesContext,
+                        flowDefinition.definingDocumentURI, 
+                        flowDefinition.flowDefinitions);
                 } catch (XPathExpressionException ex) {
                     throw new FacesException(ex);
                 }
             }
-            FacesFlowDefinitionConfigProcessor.this.clearSavedFlowDefinitions(context);
+            
+            FacesFlowDefinitionConfigProcessor.this.clearSavedFlowDefinitions(facesContext);
         }
     }
 
-    // </editor-fold>
-
-    private void processFacesFlowDefinitions(URI definingDocumentURI, Document document) throws XPathExpressionException {
+    private void processFacesFlowDefinitions(FacesContext context, URI definingDocumentURI, Document document) throws XPathExpressionException {
         String namespace = document.getDocumentElement().getNamespaceURI();
         NodeList flowDefinitions = document.getDocumentElement().getElementsByTagNameNS(namespace, FACES_FLOW_DEFINITION);
 
-        if (0 == flowDefinitions.getLength()) {
+        if (flowDefinitions.getLength() == 0) {
             return;
         }
-        FacesContext context = FacesContext.getCurrentInstance();
-        Application app = context.getApplication();
-        FlowHandler flowHandler = app.getFlowHandler();
-        if (null == flowHandler) {
+        
+        Application application = context.getApplication();
+        FlowHandler flowHandler = application.getFlowHandler();
+        
+        if (flowHandler == null) {
             FlowHandlerFactory flowHandlerFactory = (FlowHandlerFactory) FactoryFinder.getFactory(FactoryFinder.FLOW_HANDLER_FACTORY);
-            app.setFlowHandler(flowHandler = flowHandlerFactory.createFlowHandler(context));
+            application.setFlowHandler(flowHandler = flowHandlerFactory.createFlowHandler(context));
         }
 
         XPath xpath = XPathFactory.newInstance().newXPath();
@@ -312,6 +315,7 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
         if (null != nameList && 1 < nameList.getLength()) {
             throw new XPathExpressionException("<faces-config> must have at most one <name> element.");
         }
+        
         if (null != nameList && 1 == nameList.getLength()) {
             nameStr = nameList.item(0).getNodeValue().trim();
             if (0 < nameStr.length()) {
@@ -460,7 +464,6 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
     }
 
     private void processViews(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
-        // <editor-fold defaultstate="collapsed">
         NodeList views = (NodeList) xpath.evaluate(".//ns1:view", flowDefinition, XPathConstants.NODESET);
         for (int i_view = 0; i_view < views.getLength(); i_view++) {
             Node viewNode = views.item(i_view);
@@ -472,11 +475,9 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             String vdlDocumentStr = vdlDocumentList.item(0).getNodeValue().trim();
             flowBuilder.viewNode(viewNodeId, vdlDocumentStr);
         }
-        // </editor-fold>
     }
 
     private void processReturns(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
-        // <editor-fold defaultstate="collapsed">
 
         NodeList returns = (NodeList) xpath.evaluate(".//ns1:flow-return", flowDefinition, XPathConstants.NODESET);
         for (int i_return = 0; i_return < returns.getLength(); i_return++) {
@@ -492,11 +493,9 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             }
 
         }
-        // </editor-fold>
     }
 
     private void processInboundParameters(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
-        // <editor-fold defaultstate="collapsed">
         NodeList inboundParameters = (NodeList) xpath.evaluate(".//ns1:inbound-parameter", flowDefinition, XPathConstants.NODESET);
         for (int i_inbound = 0; i_inbound < inboundParameters.getLength(); i_inbound++) {
             Node inboundParamNode = inboundParameters.item(i_inbound);
@@ -513,11 +512,9 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             String valueStr = valueList.item(0).getNodeValue().trim();
             flowBuilder.inboundParameter(nameStr, valueStr);
         }
-        // </editor-fold>
     }
 
     private void processFlowCalls(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
-        // <editor-fold defaultstate="collapsed">
         NodeList flowCalls = (NodeList) xpath.evaluate(".//ns1:flow-call", flowDefinition, XPathConstants.NODESET);
         for (int i_flowCall = 0; i_flowCall < flowCalls.getLength(); i_flowCall++) {
             Node flowCallNode = flowCalls.item(i_flowCall);
@@ -568,11 +565,9 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             }
 
         }
-        // </editor-fold>
     }
 
     private void processSwitches(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
-        // <editor-fold defaultstate="collapsed">
         NodeList switches = (NodeList) xpath.evaluate(".//ns1:switch", flowDefinition, XPathConstants.NODESET);
         if (null == switches) {
             return;
@@ -614,11 +609,9 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             }
         }
 
-        // </editor-fold>
     }
 
     private void processMethodCalls(FacesContext context, XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
-        // <editor-fold defaultstate="collapsed">
         NodeList methodCalls = (NodeList) xpath.evaluate(".//ns1:method-call", flowDefinition, XPathConstants.NODESET);
         if (null == methodCalls) {
             return;
@@ -692,11 +685,9 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
 
         }
 
-        // </editor-fold>
     }
 
     private void processInitializerFinalizer(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
-        // <editor-fold defaultstate="collapsed">
         NodeList initializerNodeList = (NodeList) xpath.evaluate(".//ns1:initializer/text()", flowDefinition, XPathConstants.NODESET);
         if (1 < initializerNodeList.getLength()) {
             throw new XPathExpressionException("At most one <initializer> is allowed.");
@@ -717,12 +708,9 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
             flowBuilder.finalizer(finalizerStr);
         }
 
-        // </editor-fold>
-
     }
 
     private String processStartNode(XPath xpath, Node flowDefinition, FlowBuilder flowBuilder) throws XPathExpressionException {
-        // <editor-fold defaultstate="collapsed">
         String startNodeId = null;
         NodeList startNodeList = (NodeList) xpath.evaluate(".//ns1:start-node/text()", flowDefinition, XPathConstants.NODESET);
         if (1 < startNodeList.getLength()) {
@@ -733,12 +721,11 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
         }
 
         return startNodeId;
-        // </editor-fold>
     }
 
     protected String getAttribute(Node node, String attrName) {
-        // <editor-fold defaultstate="collapsed">
-        Util.notNull("flow definition element", node);
+        notNull("flow definition element", node);
+        
         String result = null;
         NamedNodeMap attrs = node.getAttributes();
 
@@ -750,13 +737,11 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
         }
 
         return result;
-        // </editor-fold>
     }
 
     protected String getIdAttribute(Node node) throws XPathExpressionException {
-        // <editor-fold defaultstate="collapsed">
-
-        Util.notNull("flow definition element", node);
+        notNull("flow definition element", node);
+        
         String result = null;
         NamedNodeMap attrs = node.getAttributes();
         String localName = "";
@@ -785,7 +770,6 @@ public class FacesFlowDefinitionConfigProcessor extends AbstractConfigProcessor 
         }
 
         return result;
-        // </editor-fold>
     }
 
 }

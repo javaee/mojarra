@@ -204,6 +204,20 @@ public class Util {
         return context.getExternalContext().getRequestMap().get("javax.portlet.faces.phase") != null;
     }
     
+    public static String generateCreatedBy(FacesContext facesContext) {
+        String applicationContextPath = "unitTest";
+        try {
+            applicationContextPath = facesContext.getExternalContext().getApplicationContextPath();
+        } catch (Throwable e) {
+            // ignore
+        }
+        
+        return applicationContextPath + " " +  
+               Thread.currentThread().toString() + " " +
+               System.currentTimeMillis();
+               
+    }
+    
 
     /**
      * <p>Factory method for creating the varius JSF listener

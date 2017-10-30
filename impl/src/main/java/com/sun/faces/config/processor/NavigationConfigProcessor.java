@@ -40,6 +40,9 @@
 
 package com.sun.faces.config.processor;
 
+import static java.text.MessageFormat.format;
+import static java.util.logging.Level.FINE;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -53,6 +56,7 @@ import java.util.logging.Logger;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.NavigationHandler;
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -199,13 +203,14 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext sc, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {
 
         NavigationHandler handler = getApplication().getNavigationHandler();
         for (DocumentInfo documentInfo : documentInfos) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, MessageFormat.format("Processing navigation-rule elements for document: ''{0}''", documentInfo.getSourceURI()));
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, format("Processing navigation-rule elements for document: ''{0}''", documentInfo.getSourceURI()));
             }
+            
             Document document = documentInfo.getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
             NodeList navigationRules = document.getDocumentElement().getElementsByTagNameNS(namespace, NAVIGATION_RULE);
@@ -214,7 +219,6 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
             }
 
         }
-        invokeNext(sc, documentInfos);
 
     }
 
