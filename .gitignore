@@ -34,6 +34,3 @@ api/src/**
 glassfish-8.0/
 nbactions.xml
 /test/javaee8/passthrough/nb-configuration.xml
-catalog.xml
-test/javaee8/commandScript/nb-configuration.xml
-test/quality/src/main/
