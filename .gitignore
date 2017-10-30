@@ -10,3 +10,5 @@ impl/src/main/resources/com/
 impl/src/main/resources/javax/
 impl/yuicompressor.jar
 changebundle.txt
+dependencies
+build.properties
