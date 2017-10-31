@@ -27,9 +27,6 @@
     <name>JSF API ${project.version}</name>
     
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
         <mojarra.version>2.4.0-m01-SNAPSHOT</mojarra.version>
     </properties>
     
@@ -200,6 +197,7 @@
                     </artifactItems>
                 </configuration>
             </plugin>
+
             
             <!-- 
                For the final artifact jar we only include the javax.* classes and resources that we compiled from
@@ -285,6 +283,14 @@
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- For the @PreParseFacesConfig annotation -->
+        <dependency>
+            <groupId>com.sun.faces.build</groupId>
+            <artifactId>jsf-tools</artifactId>
+            <version>2.4.0-m01-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         

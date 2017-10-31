@@ -40,6 +40,9 @@
 
 package com.sun.faces.config.processor;
 
+import static java.text.MessageFormat.format;
+import static java.util.logging.Level.FINE;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +53,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 import org.w3c.dom.Document;
@@ -241,30 +245,30 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext servletContext, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {
 
-        // process annotated managed beans first as managed beans configured
+        // Process annotated managed beans first as managed beans configured
         // via config files take precedence
-        processAnnotations(ManagedBean.class);
+        processAnnotations(facesContext, ManagedBean.class);
 
-        BeanManager beanManager = ApplicationAssociate.getInstance(sc).getBeanManager();
+        BeanManager beanManager = ApplicationAssociate.getInstance(servletContext).getBeanManager();
         for (int i = 0; i < documentInfos.length; i++) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, MessageFormat.format("Processing managed-bean elements for document: ''{0}''", documentInfos[i].getSourceURI()));
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, format("Processing managed-bean elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
+            
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
             NodeList managedBeans = document.getDocumentElement().getElementsByTagNameNS(namespace, MANAGED_BEAN);
+            
             if (managedBeans != null && managedBeans.getLength() > 0) {
                 for (int m = 0, size = managedBeans.getLength(); m < size; m++) {
                     addManagedBean(beanManager, managedBeans.item(m));
                 }
-
             }
         }
+        
         beanManager.preProcessesBeans();
-        invokeNext(sc, documentInfos);
-
     }
 
     // --------------------------------------------------------- Private Methods

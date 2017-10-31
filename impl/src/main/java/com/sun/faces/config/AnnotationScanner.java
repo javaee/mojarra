@@ -84,22 +84,11 @@ import javax.servlet.ServletContext;
  */
 public abstract class AnnotationScanner extends AnnotationProvider {
 
-
-    // <editor-fold defaultstate="collapsed" desc="data">
-
-    // <editor-fold defaultstate="collapsed" desc="private class vars">
-
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
     private static final String WILDCARD = "*";
-    
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="protected class vars">
 
     protected static final Set<String> FACES_ANNOTATIONS;
     protected static final Set<Class<? extends Annotation>> FACES_ANNOTATION_TYPE;
-
-    // </editor-fold>
 
     static {
         HashSet<String> annotations = new HashSet<>(8, 1.0f);
@@ -145,10 +134,6 @@ public abstract class AnnotationScanner extends AnnotationProvider {
     private Map<String,String[]> classpathPackages;
 
 
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="constructors">
-
     /**
      * Creates a new <code>AnnotationScanner</code> instance.
      *
@@ -162,10 +147,6 @@ public abstract class AnnotationScanner extends AnnotationProvider {
 	initializeAnnotationScanPackages(sc, webConfig);
 
     }
-
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="implementation details">
 
     private void initializeAnnotationScanPackages(ServletContext sc, WebConfiguration webConfig) {
         if (!webConfig.isSet(AnnotationScanPackages)) {
@@ -237,21 +218,13 @@ public abstract class AnnotationScanner extends AnnotationProvider {
 
     }
 
-    // </editor-fold>
-
 
     // --------------------------------------------------------- Protected Methods
 
     protected boolean processJar(String entry) {
-
-	// <editor-fold defaultstate="collapsed">
-
         return (classpathPackages == null
                   || (classpathPackages.containsKey(entry)
                          || classpathPackages.containsKey(WILDCARD)));
-
-	// </editor-fold>
-
     }
 
     /**
@@ -260,17 +233,10 @@ public abstract class AnnotationScanner extends AnnotationProvider {
      *  otherwise, <code>false</code>
      */
     protected boolean processClass(String candidate) {
-
-	// <editor-fold defaultstate="collapsed">
-
         return processClass(candidate, webInfClassesPackages);
-
-	// </editor-fold>
     }
 
     protected boolean processClass(String candidate, String [] packages) {
-
-	// <editor-fold defaultstate="collapsed">
 
         if (packages == null) {
             return true;
@@ -281,15 +247,12 @@ public abstract class AnnotationScanner extends AnnotationProvider {
                 return true;
             }
         }
+        
         return false;
-
-	// </editor-fold>
     }
 
 
     protected Map<Class<? extends Annotation>,Set<Class<?>>> processClassList(Set<String> classList) {
-
-	// <editor-fold defaultstate="collapsed">
 
         Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses = null;
         if (classList.size() > 0) {
@@ -332,9 +295,6 @@ public abstract class AnnotationScanner extends AnnotationProvider {
         return ((annotatedClasses != null)
                 ? annotatedClasses
                 : Collections.<Class<? extends Annotation>, Set<Class<?>>>emptyMap());
-
-	// </editor-fold>
-
     }
 
     protected boolean isAnnotationScanPackagesSet() {

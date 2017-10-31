@@ -39,31 +39,23 @@
  */
 package com.sun.faces.config;
 
-import com.sun.faces.RIConstants;
 import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.WebappLifecycleListener;
+import static com.sun.faces.RIConstants.ERROR_PAGE_PRESENT_KEY_NAME;
+import static com.sun.faces.RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableWebsocketEndpoint;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceLoadFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.VerifyFacesConfigObjects;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
-import com.sun.faces.el.ChainTypeCompositeELResolver;
-import com.sun.faces.el.ELContextImpl;
-import com.sun.faces.el.ELContextListenerImpl;
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.el.FacesCompositeELResolver;
-import com.sun.faces.mgbean.BeanBuilder;
-import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.push.WebsocketEndpoint;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.MojarraThreadFactory;
-import com.sun.faces.util.ReflectionUtils;
-import com.sun.faces.util.Timer;
-import com.sun.faces.util.Util;
+import static com.sun.faces.el.ELUtils.getDefaultExpressionFactory;
+import static com.sun.faces.push.WebsocketEndpoint.URI_TEMPLATE;
+import static java.lang.Boolean.TRUE;
+import static java.text.MessageFormat.format;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.SEVERE;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -82,6 +74,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.FactoryFinder;
@@ -111,23 +104,36 @@ import javax.websocket.server.ServerEndpointConfig;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.WebappLifecycleListener;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.el.ChainTypeCompositeELResolver;
+import com.sun.faces.el.ELContextImpl;
+import com.sun.faces.el.ELContextListenerImpl;
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.mgbean.BeanBuilder;
+import com.sun.faces.mgbean.BeanManager;
+import com.sun.faces.push.WebsocketEndpoint;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.MojarraThreadFactory;
+import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Timer;
+import com.sun.faces.util.Util;
 
 /**
  * <p>Parse all relevant JavaServer Faces configuration resources, and
  * configure the Reference Implementation runtime environment.</p>
  * <p/>
  */
-public class ConfigureListener implements ServletRequestListener,
-        HttpSessionListener,
-        ServletRequestAttributeListener,
-        HttpSessionAttributeListener,
-        ServletContextAttributeListener,
-        ServletContextListener {
-
+public class ConfigureListener implements ServletRequestListener, HttpSessionListener, ServletRequestAttributeListener, HttpSessionAttributeListener, ServletContextAttributeListener, ServletContextListener {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
@@ -143,27 +149,27 @@ public class ConfigureListener implements ServletRequestListener,
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
-
+        
         Timer timer = Timer.getInstance();
         if (timer != null) {
             timer.startTiming();
         }
         
         ConfigManager configManager = ConfigManager.getInstance(context);
-        if (null == configManager) {
+        if (configManager == null) {
             configManager = ConfigManager.createInstance(context);
         }
+        
         if (configManager.hasBeenInitialized(context)) {
             return;
         }
 
         InitFacesContext initContext = new InitFacesContext(context);
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE,
-                    MessageFormat.format(
-                            "ConfigureListener.contextInitialized({0})",
-                            getServletContextIdentifier(context)));
+        if (LOGGER.isLoggable(FINE)) {
+            LOGGER.log(FINE, format(
+                    "ConfigureListener.contextInitialized({0})",
+                    getServletContextIdentifier(context)));
         }
 
         webConfig = WebConfiguration.getInstance(context);
@@ -171,40 +177,35 @@ public class ConfigureListener implements ServletRequestListener,
         // Check to see if the FacesServlet is present in the
         // web.xml.   If it is, perform faces configuration as normal,
         // otherwise, simply return.
-        Object mappingsAdded = context.getAttribute(RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED);
+        Object mappingsAdded = context.getAttribute(FACES_INITIALIZER_MAPPINGS_ADDED);
         if (mappingsAdded != null) {
-            context.removeAttribute(RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED);
+            context.removeAttribute(FACES_INITIALIZER_MAPPINGS_ADDED);
         }
 
         WebXmlProcessor webXmlProcessor = new WebXmlProcessor(context);
         if (mappingsAdded == null) {
             if (!webXmlProcessor.isFacesServletPresent()) {
                 if (!webConfig.isOptionEnabled(ForceLoadFacesConfigFiles)) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                "No FacesServlet found in deployment descriptor - bypassing configuration");
-                    }
+                    LOGGER.log(FINE, "No FacesServlet found in deployment descriptor - bypassing configuration");
+                    
                     WebConfiguration.clear(context);
-                    configManager.destroy(context);
+                    configManager.destroy(context, initContext);
                     ConfigManager.removeInstance(context);
                     InitFacesContext.cleanupInitMaps(context);
+                    
                     return;
                 }
             } else {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                            "FacesServlet found in deployment descriptor - processing configuration.");
-                }
+                LOGGER.log(FINE, "FacesServlet found in deployment descriptor - processing configuration.");
             }
         }
         
         if (webXmlProcessor.isDistributablePresent()) {
             webConfig.setOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.EnableDistributable, true);
-            context.setAttribute(WebConfiguration.BooleanWebContextInitParameter.EnableDistributable.getQualifiedName(), Boolean.TRUE);
+            context.setAttribute(WebConfiguration.BooleanWebContextInitParameter.EnableDistributable.getQualifiedName(), TRUE);
         }
 
-
-        // bootstrap of faces required
+        // Bootstrap of faces required
         webAppListener = new WebappLifecycleListener(context);
         webAppListener.contextInitialized(sce);
         ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
@@ -212,46 +213,47 @@ public class ConfigureListener implements ServletRequestListener,
 
         try {
 
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO,
-                        "jsf.config.listener.version",
-                        getServletContextIdentifier(context));
+            if (LOGGER.isLoggable(INFO)) {
+                LOGGER.log(INFO, "jsf.config.listener.version", getServletContextIdentifier(context));
             }
 
             if (webConfig.isOptionEnabled(VerifyFacesConfigObjects)) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.warning("jsf.config.verifyobjects.development_only");
-                }
-                // if we're verifying, force bean validation to occur at startup as well
+                LOGGER.warning("jsf.config.verifyobjects.development_only");
+                
+                // If we're verifying, force bean validation to occur at startup as well
                 webConfig.overrideContextInitParameter(EnableLazyBeanValidation, false);
                 Verifier.setCurrentInstance(new Verifier());
             }
-            configManager.initialize(context);
+            
+            configManager.initialize(context, initContext);
+            
             if (shouldInitConfigMonitoring()) {
                 initConfigMonitoring(context);
             }
 
             // Step 7, verify that all the configured factories are available
-            // and optionall that configured objects can be created. 
-            Verifier v = Verifier.getCurrentInstance();
-            if (v != null && !v.isApplicationValid() && LOGGER.isLoggable(Level.SEVERE)) {
+            // and optionally that configured objects can be created. 
+            Verifier verifier = Verifier.getCurrentInstance();
+            if (verifier != null && !verifier.isApplicationValid() && LOGGER.isLoggable(SEVERE)) {
                 LOGGER.severe("jsf.config.verifyobjects.failures_detected");
                 StringBuilder sb = new StringBuilder(128);
-                for (String m : v.getMessages()) {
-                    sb.append(m).append('\n');
+                for (String msg : verifier.getMessages()) {
+                    sb.append(msg).append('\n');
                 }
                 LOGGER.severe(sb.toString());
             }
+            
             registerELResolverAndListenerWithJsp(context, false);
-            ApplicationAssociate associate =
-                    ApplicationAssociate.getInstance(context);
-            ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
-            elctx.putContext(FacesContext.class, initContext);
-            ExpressionFactory exFactory = ELUtils.getDefaultExpressionFactory(associate, initContext);
-            if (null != exFactory) {
-                elctx.putContext(ExpressionFactory.class, exFactory);
+            ApplicationAssociate associate = ApplicationAssociate.getInstance(context);
+            ELContext elContext = new ELContextImpl(initContext.getApplication().getELResolver());
+            elContext.putContext(FacesContext.class, initContext);
+            ExpressionFactory exFactory = getDefaultExpressionFactory(associate, initContext);
+            if (exFactory != null) {
+                elContext.putContext(ExpressionFactory.class, exFactory);
             }
-            initContext.setELContext(elctx);
+            
+            initContext.setELContext(elContext);
+            
             if (associate != null) {
                 associate.setContextName(getServletContextIdentifier(context));
                 BeanManager manager = associate.getBeanManager();
@@ -261,11 +263,10 @@ public class ConfigureListener implements ServletRequestListener,
                         manager.create(name, initContext);
                     }
                 }
+                
                 boolean isErrorPagePresent = webXmlProcessor.isErrorPagePresent();
                 associate.setErrorPagePresent(isErrorPagePresent);
-                context.setAttribute(RIConstants.ERROR_PAGE_PRESENT_KEY_NAME,
-                        isErrorPagePresent);
-
+                context.setAttribute(ERROR_PAGE_PRESENT_KEY_NAME, isErrorPagePresent);
             }
 
             // Register websocket endpoint if explicitly enabled.
@@ -274,42 +275,41 @@ public class ConfigureListener implements ServletRequestListener,
                 ServerContainer serverContainer = (ServerContainer) context.getAttribute(ServerContainer.class.getName());
 
                 if (serverContainer == null) {
-                    throw new UnsupportedOperationException("Cannot enable f:websocket."
-                        + " The current websocket container implementation does not support programmatically registering a container-provided endpoint.");
+                    throw new UnsupportedOperationException(
+                            "Cannot enable f:websocket." + 
+                            " The current websocket container implementation does not support programmatically registering a container-provided endpoint.");
                 }
 
-                serverContainer.addEndpoint(ServerEndpointConfig.Builder.create(WebsocketEndpoint.class, WebsocketEndpoint.URI_TEMPLATE).build());
+                serverContainer.addEndpoint(ServerEndpointConfig.Builder.create(WebsocketEndpoint.class, URI_TEMPLATE).build());
             }
 
             webConfig.doPostBringupActions();
             configManager.publishPostConfigEvent();
 
         } catch (Throwable t) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "Critical error during deployment: ", t);
-            }
+            LOGGER.log(SEVERE, "Critical error during deployment: ", t);
             caughtThrowable = t;
 
         } finally {
             sce.getServletContext().removeAttribute(ANNOTATED_CLASSES);
             
             Verifier.setCurrentInstance(null);
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                        "jsf.config.listener.version.complete");
-            }
+            
+            LOGGER.log(FINE, "jsf.config.listener.version.complete");
+            
             if (timer != null) {
                 timer.stopTiming();
-                timer.logResult("Initialization of context " +
-                        getServletContextIdentifier(context));
+                timer.logResult("Initialization of context " + getServletContextIdentifier(context));
             }
-            if (null != caughtThrowable) {
+            
+            if (caughtThrowable != null) {
                 throw new RuntimeException(caughtThrowable);
             }
+            
             // Bug 20458755: The InitFacesContext was not being cleaned up, resulting in
             // a partially constructed FacesContext being made available
             // to other code that re-uses this Thread at init time.
-            initContext.removeInitContextEntryForCurrentThread();
+            initContext.releaseCurrentInstance();
         }
     }
 
@@ -319,21 +319,22 @@ public class ConfigureListener implements ServletRequestListener,
         ServletContext context = sce.getServletContext();
         
         ConfigManager configManager = ConfigManager.getInstance(context);
+        
         // The additional check for a WebConfiguration instance was added at the request of JBoss
-        if ((null == configManager) && (WebConfiguration.getInstanceWithoutCreating(context) != null)) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "Unexpected state during contextDestroyed: no ConfigManager instance in current ServletContext but one is expected to exist.");
+        if (configManager == null && WebConfiguration.getInstanceWithoutCreating(context) != null) {
+            if (LOGGER.isLoggable(SEVERE)) {
+                LOGGER.log(SEVERE, "Unexpected state during contextDestroyed: no ConfigManager instance in current ServletContext but one is expected to exist.");
             }
         }
 
-        if (null == configManager || !configManager.hasBeenInitialized(context)) {
+        if (configManager == null || !configManager.hasBeenInitialized(context)) {
             return;
         }
 
         InitFacesContext initContext = null;
         try {
             initContext = getInitFacesContext(context);
-            if (null == initContext) {
+            if (initContext == null) {
                 initContext = new InitFacesContext(context);
             } else {
                 InitFacesContext.getThreadInitContextMap().put(Thread.currentThread(), initContext);
@@ -343,40 +344,41 @@ public class ConfigureListener implements ServletRequestListener,
                 webAppListener.contextDestroyed(sce);
                 webAppListener = null;
             }
+            
             if (webResourcePool != null) {
                 webResourcePool.shutdownNow();
             }
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
+            
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE,
                            "ConfigureListener.contextDestroyed({0})",
                            context.getServletContextName());
             }
             
-            ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
-            elctx.putContext(FacesContext.class, initContext);
+            ELContext elContext = new ELContextImpl(initContext.getApplication().getELResolver());
+            elContext.putContext(FacesContext.class, initContext);
             ExpressionFactory exFactory = ELUtils.getDefaultExpressionFactory(initContext);
             if (null != exFactory) {
-                elctx.putContext(ExpressionFactory.class, exFactory);
+                elContext.putContext(ExpressionFactory.class, exFactory);
             }
             
-            initContext.setELContext(elctx);
-            Application app = initContext.getApplication();
-            app.publishEvent(initContext,
-                    PreDestroyApplicationEvent.class,
-                    Application.class,
-                    app);
+            initContext.setELContext(elContext);
+            Application application = initContext.getApplication();
+            
+            application.publishEvent(
+                initContext,
+                PreDestroyApplicationEvent.class,
+                Application.class,
+                application);
 
         } catch (Exception e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                        "Unexpected exception when attempting to tear down the Mojarra runtime",
-                        e);
-            }
+            LOGGER.log(Level.SEVERE, "Unexpected exception when attempting to tear down the Mojarra runtime", e);
         } finally {
             ApplicationAssociate.clearInstance(context);
             ApplicationAssociate.setCurrentInstance(null);
+            
             // Release the initialization mark on this web application
-            configManager.destroy(context);
+            configManager.destroy(context, initContext);
             ConfigManager.removeInstance(context);
             FactoryFinder.releaseFactories();
             ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
@@ -504,50 +506,43 @@ public class ConfigureListener implements ServletRequestListener,
 
         boolean development = isDevModeEnabled();
         boolean threadingOptionSpecified = webConfig.isSet(EnableThreading);
+        
         if (development && !threadingOptionSpecified) {
             return true;
         }
-        boolean threadingOption = webConfig.isOptionEnabled(EnableThreading);
-        return (development && threadingOptionSpecified && threadingOption);
-
+        
+        return development && threadingOptionSpecified && webConfig.isOptionEnabled(EnableThreading);
     }
 
     private void initConfigMonitoring(ServletContext context) {
 
-        //noinspection unchecked
-        Collection<URI> webURIs =
-                (Collection<URI>) context.getAttribute("com.sun.faces.webresources");
+        @SuppressWarnings("unchecked")
+        Collection<URI> webURIs = (Collection<URI>) context.getAttribute("com.sun.faces.webresources");
+        
         if (isDevModeEnabled() && webURIs != null && !webURIs.isEmpty()) {
             webResourcePool = new ScheduledThreadPoolExecutor(1, new MojarraThreadFactory("WebResourceMonitor"));
-            webResourcePool.scheduleAtFixedRate(new WebConfigResourceMonitor(context, webURIs),
-                    2000,
-                    2000,
-                    TimeUnit.MILLISECONDS);
+            webResourcePool.scheduleAtFixedRate(new WebConfigResourceMonitor(context, webURIs), 2000, 2000, TimeUnit.MILLISECONDS);
         }
-        context.removeAttribute("com.sun.faces.webresources");
 
+        context.removeAttribute("com.sun.faces.webresources");
     }
 
     private boolean isDevModeEnabled() {
-
         // interrogate the init parameter directly vs looking up the application
         return "Development".equals(webConfig.getOptionValue(JavaxFacesProjectStage));
-
     }
-
 
     /**
      * This method will be invoked {@link WebConfigResourceMonitor} when
      * changes to any of the faces-config.xml files included in WEB-INF
      * are modified.
      */
-    private void reload(ServletContext sc) {
+    private void reload(ServletContext servletContext) {
 
-        if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.log(Level.INFO,
-                    "Reloading JSF configuration for context {0}",
-                    getServletContextIdentifier(sc));
+        if (LOGGER.isLoggable(INFO)) {
+            LOGGER.log(INFO, "Reloading JSF configuration for context {0}", getServletContextIdentifier(servletContext));
         }
+        
         // tear down the application
         try {
             // this will only be true in the automated test usage scenario
@@ -564,7 +559,7 @@ public class ConfigureListener implements ServletRequestListener,
                     }
                 }
             }
-            ApplicationAssociate associate = ApplicationAssociate.getInstance(sc);
+            ApplicationAssociate associate = ApplicationAssociate.getInstance(servletContext);
             if (associate != null) {
                 BeanManager manager = associate.getBeanManager();
                 for (Map.Entry<String, BeanBuilder> entry : manager.getRegisteredBeans().entrySet()) {
@@ -576,7 +571,7 @@ public class ConfigureListener implements ServletRequestListener,
                                     "Removing application scoped managed bean: {0}",
                                     name);
                         }
-                        sc.removeAttribute(name);
+                        servletContext.removeAttribute(name);
                     }
 
                 }
@@ -586,55 +581,55 @@ public class ConfigureListener implements ServletRequestListener,
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            FacesContext initContext = new InitFacesContext(sc);
-            ApplicationAssociate
-                    .clearInstance(initContext.getExternalContext());
+            FacesContext initContext = new InitFacesContext(servletContext);
+            ApplicationAssociate.clearInstance(initContext.getExternalContext());
             ApplicationAssociate.setCurrentInstance(null);
+            
             // Release the initialization mark on this web application
-            ConfigManager configManager = ConfigManager.getInstance(sc);
-            if (null != configManager) {
-                configManager.destroy(sc);
-                ConfigManager.removeInstance(sc);
+            ConfigManager configManager = ConfigManager.getInstance(servletContext);
+            
+            if (configManager != null) {
+                configManager.destroy(servletContext, initContext);
+                ConfigManager.removeInstance(servletContext);
             } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "Unexpected state during reload: no ConfigManager instance in current ServletContext but one is expected to exist.");
+                if (LOGGER.isLoggable(SEVERE)) {
+                    LOGGER.log(SEVERE,
+                            "Unexpected state during reload: no ConfigManager instance in current ServletContext but one is expected to exist.");
                 }
             }
+            
             initContext.release();
             ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
-            WebConfiguration.clear(sc);
+            WebConfiguration.clear(servletContext);
         }
 
-        // bring the application back up, avoid re-registration of certain JSP
+        // Bring the application back up, avoid re-registration of certain JSP
         // artifacts.  No verification will be performed either to make this
         // light weight.
 
         // init a new WebAppLifecycleListener so that the cached ApplicationAssociate
         // is removed.
-        webAppListener = new WebappLifecycleListener(sc);
+        webAppListener = new WebappLifecycleListener(servletContext);
 
-        FacesContext initContext = new InitFacesContext(sc);
-        ReflectionUtils
-                .initCache(Thread.currentThread().getContextClassLoader());
+        InitFacesContext initContext = new InitFacesContext(servletContext);
+        ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
 
         try {
-            ConfigManager configManager = ConfigManager.createInstance(sc);
+            ConfigManager configManager = ConfigManager.createInstance(servletContext);
             if (null != configManager) {
-                configManager.initialize(sc);
+                configManager.initialize(servletContext, initContext);
             } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "Unexpected state during reload: no ConfigManager instance in current ServletContext but one is expected to exist.");
-                }
+                LOGGER.log(SEVERE, "Unexpected state during reload: no ConfigManager instance in current ServletContext but one is expected to exist.");
             }
 
-            registerELResolverAndListenerWithJsp(sc, true);
-            ApplicationAssociate associate =
-                    ApplicationAssociate.getInstance(sc);
+            registerELResolverAndListenerWithJsp(servletContext, true);
+            ApplicationAssociate associate = ApplicationAssociate.getInstance(servletContext);
+            
             if (associate != null) {
-                Boolean errorPagePresent = (Boolean) sc.getAttribute(RIConstants.ERROR_PAGE_PRESENT_KEY_NAME);
-                if (null != errorPagePresent) {
+                Boolean errorPagePresent = (Boolean) servletContext.getAttribute(ERROR_PAGE_PRESENT_KEY_NAME);
+                if (errorPagePresent != null) {
                     associate.setErrorPagePresent(errorPagePresent);
-                    associate.setContextName(getServletContextIdentifier(sc));
+                    associate.setContextName(getServletContextIdentifier(servletContext));
                 }
             }
         } catch (Exception e) {
@@ -646,7 +641,7 @@ public class ConfigureListener implements ServletRequestListener,
         if (LOGGER.isLoggable(Level.INFO)) {
             LOGGER.log(Level.INFO,
                     "Reload complete.",
-                    getServletContextIdentifier(sc));
+                    getServletContextIdentifier(servletContext));
         }
 
     }

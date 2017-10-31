@@ -51,8 +51,13 @@ import org.w3c.dom.Document;
 import javax.faces.application.Application;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.component.behavior.FacesBehavior;
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.xml.xpath.XPathExpressionException;
+
+import static java.text.MessageFormat.format;
+import static java.util.logging.Level.FINE;
+
 import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,15 +99,15 @@ public class BehaviorConfigProcessor extends AbstractConfigProcessor {
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext sc, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {
 
         // process annotated Behaviors first as Behaviors configured
         // via config files take precedence
-        processAnnotations(FacesBehavior.class);
+        processAnnotations(facesContext, FacesBehavior.class);
 
         for (int i = 0; i < documentInfos.length; i++) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, MessageFormat.format("Processing behavior elements for document: ''{0}''", documentInfos[i].getSourceURI()));
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, format("Processing behavior elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
@@ -111,7 +116,6 @@ public class BehaviorConfigProcessor extends AbstractConfigProcessor {
                 addBehaviors(behaviors, namespace);
             }
         }
-        invokeNext(sc, documentInfos);
 
     }
 

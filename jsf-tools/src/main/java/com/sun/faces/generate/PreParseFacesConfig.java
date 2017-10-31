@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,36 +37,15 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.generate;
 
-package com.sun.faces.config;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-import java.net.URI;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-import org.w3c.dom.Document;
-
-/**
- * Associates a Document with a source URL.
- */
-public class DocumentInfo {
-
-    private final Document document;
-    private final URI sourceURI;
-
-    // ------------------------------------------------------------ Constructors
-
-    public DocumentInfo(Document document, URI sourceURL) {
-        this.document = document;
-        this.sourceURI = sourceURL;
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-    public Document getDocument() {
-        return document;
-    }
-
-    public URI getSourceURI() {
-        return sourceURI;
-    }
-
+@Retention(SOURCE)
+@Target(TYPE)
+public @interface PreParseFacesConfig {
 }

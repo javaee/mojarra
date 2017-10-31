@@ -44,7 +44,9 @@ package com.sun.faces.config;
 import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
 import static com.sun.faces.config.AnnotationScanner.FACES_ANNOTATION_TYPE;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.AnnotationScanPackages;
-import com.sun.faces.spi.AnnotationProvider;
+import static com.sun.faces.util.Util.isEmpty;
+import static java.util.Arrays.stream;
+
 import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.util.HashMap;
@@ -52,9 +54,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
 import javax.servlet.ServletContext;
 
-
+import com.sun.faces.spi.AnnotationProvider;
 
 /*
  * This class is the default implementation of AnnotationProvider
@@ -76,33 +79,37 @@ public class DelegatingAnnotationProvider extends AnnotationProvider {
     public DelegatingAnnotationProvider(ServletContext sc) {
         super(sc);
     }
-
-    /*
-     * Called during annotation scanning.  If we already have a scanner
-     * reference, use it.  If not, create a
-     * JavaClassScanningAnnotationScanner and use it as the scanner.
-     */
-
-    @Override
-    public Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClasses(Set<URI> urls) {
-        HashMap<Class<? extends Annotation>, Set<Class<?>>> annotatedMap = new HashMap<>();
-        createAnnotatedMap(annotatedMap, (Set<Class<?>>) sc.getAttribute(ANNOTATED_CLASSES));
-        return annotatedMap;
-        }
+    
+    
+    // ---------------------------------------------------------- Public Methods
     
     /*
-     * This will only be called if the InjectionProvider offered by the
-     * container implements com.sun.faces.spi.AnnotationScanner.  In
-     * this case, we know that we can safely use
+     * This will only be called if the InjectionProvider offered by the container implements
+     * com.sun.faces.spi.AnnotationScanner. In this case, we know that we can safely use
      * DelegateToGlassFishAnnotationScanner as our scanner reference.
      */
     public void setAnnotationScanner(com.sun.faces.spi.AnnotationScanner containerConnector, Set<String> jarNamesWithoutMetadataComplete) {
-        assert(null == scanner);
-        DelegateToGlassFishAnnotationScanner impl =
-                new DelegateToGlassFishAnnotationScanner(sc);
+        DelegateToGlassFishAnnotationScanner impl = new DelegateToGlassFishAnnotationScanner(servletContext);
         impl.setAnnotationScanner(containerConnector, jarNamesWithoutMetadataComplete);
         scanner = impl;
     }
+
+    /*
+     * Called during annotation scanning. If we already have a scanner reference, use it. If not, create a
+     * JavaClassScanningAnnotationScanner and use it as the scanner.
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClasses(Set<URI> urls) {
+        HashMap<Class<? extends Annotation>, Set<Class<?>>> annotatedMap = new HashMap<>();
+        createAnnotatedMap(annotatedMap, (Set<Class<?>>) servletContext.getAttribute(ANNOTATED_CLASSES));
+        
+        return annotatedMap;
+    }
+  
+    
+    
+    // ---------------------------------------------------------- Private Methods
 
     /**
      * Go over the annotated set and converter it to a hash map.
@@ -111,28 +118,25 @@ public class DelegatingAnnotationProvider extends AnnotationProvider {
      * @param annotatedSet
      */
     private void createAnnotatedMap(HashMap<Class<? extends Annotation>, Set<Class<?>>> annotatedMap, Set<Class<?>> annotatedSet) {
-        if (annotatedSet != null && !annotatedSet.isEmpty()) {
-            Iterator<Class<?>> iterator = annotatedSet.iterator();
-            
+        if (!isEmpty(annotatedSet)) {
+
             WebConfiguration webConfig = WebConfiguration.getInstance();
             boolean annotationScanPackagesSet = webConfig.isSet(AnnotationScanPackages);
-            String[] annotationScanPackages = null;
-            if (annotationScanPackagesSet) {
-                annotationScanPackages = webConfig.getOptionValue(AnnotationScanPackages).split("\\s+");
-            }
             
+            String[] annotationScanPackages = annotationScanPackagesSet? webConfig.getOptionValue(AnnotationScanPackages).split("\\s+") : null;
+
+            Iterator<Class<?>> iterator = annotatedSet.iterator();
             while (iterator.hasNext()) {
                 try {
                     Class<?> clazz = iterator.next();
-                    Annotation[] annotations = clazz.getAnnotations();
-                    for (Annotation annotation : annotations) {
-                        Class<? extends Annotation> annoType = annotation.annotationType();
-                        if (FACES_ANNOTATION_TYPE.contains(annoType)) {
-                            Set<Class<?>> classes = annotatedMap.get(annoType);
-                            if (classes == null) {
-                                classes = new HashSet<>();
-                                annotatedMap.put(annoType, classes);
-                            }
+                    
+                    stream(clazz.getAnnotations())
+                        .map(annotation -> annotation.annotationType())
+                        .filter(annotationType -> FACES_ANNOTATION_TYPE.contains(annotationType))
+                        .forEach(annotationType -> {
+                            
+                            Set<Class<?>> classes = annotatedMap.computeIfAbsent(annotationType, e -> new HashSet<>());
+                            
                             if (annotationScanPackagesSet) {
                                 if (matchesAnnotationScanPackages(clazz, annotationScanPackages)) {
                                     classes.add(clazz);
@@ -140,21 +144,24 @@ public class DelegatingAnnotationProvider extends AnnotationProvider {
                             } else {
                                 classes.add(clazz);
                             }
-                        }
-                    }
+                            
+                        });
+                    
                 } catch (NoClassDefFoundError ncdfe) {
                 }
             }
         }
     }
-    
-    private boolean matchesAnnotationScanPackages(Class clazz, String[] annotationScanPackages) {
+
+    private boolean matchesAnnotationScanPackages(Class<?> clazz, String[] annotationScanPackages) {
         boolean result = false;
-        for(int i=0; i<annotationScanPackages.length; i++) {
+        
+        for (int i = 0; i < annotationScanPackages.length; i++) {
+            
             String classUrlString = clazz.getProtectionDomain().getCodeSource().getLocation().toString();
             String classPackageName = clazz.getPackage().getName();
-            if (classUrlString.contains("WEB-INF/classes")
-                    && annotationScanPackages[i].equals("*")) {
+            
+            if (classUrlString.contains("WEB-INF/classes") && annotationScanPackages[i].equals("*")) {
                 result = true;
             } else if (classPackageName.equals(annotationScanPackages[i])) {
                 result = true;
@@ -162,7 +169,7 @@ public class DelegatingAnnotationProvider extends AnnotationProvider {
                 String jarName = annotationScanPackages[i].substring(4, annotationScanPackages[i].indexOf(":", 5));
                 String jarPackageName = annotationScanPackages[i].substring(annotationScanPackages[i].lastIndexOf(":") + 1);
                 if (jarName.equals("*")) {
-                    if  (jarPackageName.equals("*")) {
+                    if (jarPackageName.equals("*")) {
                         result = true;
                     } else if (jarPackageName.equals(classPackageName)) {
                         result = true;
@@ -174,6 +181,7 @@ public class DelegatingAnnotationProvider extends AnnotationProvider {
                 }
             }
         }
+        
         return result;
     }
 }

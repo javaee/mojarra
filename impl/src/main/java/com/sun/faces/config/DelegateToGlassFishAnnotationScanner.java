@@ -169,7 +169,7 @@ class DelegateToGlassFishAnnotationScanner extends AnnotationScanner {
         try {
             String archiveName = getCurrentWebModulePrefix(FacesContext.getCurrentInstance().getExternalContext());
             Map<String, List<ScannedAnnotation>> classesByAnnotation =
-                    annotationScanner.getAnnotatedClassesInCurrentModule(this.sc);
+                    annotationScanner.getAnnotatedClassesInCurrentModule(this.servletContext);
 
             for (String curAnnotationName : classesByAnnotation.keySet()) {
                 if (FACES_ANNOTATIONS.contains(curAnnotationName)) {

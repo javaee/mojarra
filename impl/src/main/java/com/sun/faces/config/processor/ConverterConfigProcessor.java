@@ -40,24 +40,27 @@
 
 package com.sun.faces.config.processor;
 
-import com.sun.faces.config.ConfigurationException;
-import com.sun.faces.config.Verifier;
-import com.sun.faces.config.DocumentInfo;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Document;
+import static java.text.MessageFormat.format;
+import static java.util.logging.Level.FINE;
+
+import java.util.logging.Logger;
 
 import javax.faces.application.Application;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.servlet.ServletContext;
 
-import java.text.MessageFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.sun.faces.config.ConfigurationException;
+import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.config.Verifier;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 /**
  * <p>
@@ -97,15 +100,15 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext sc, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {
 
-        // process annotated converters first as converters configured
+        // Process annotated converters first as converters configured
         // via config files take precedence
-        processAnnotations(FacesConverter.class);
+        processAnnotations(facesContext, FacesConverter.class);
 
         for (int i = 0; i < documentInfos.length; i++) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, MessageFormat.format("Processing converter elements for document: ''{0}''", documentInfos[i].getSourceURI()));
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, format("Processing converter elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
@@ -114,7 +117,6 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
                 addConverters(nodes, namespace);
             }
         }
-        invokeNext(sc, documentInfos);
 
     }
 
@@ -146,8 +148,8 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
             }
 
             if (converterId != null && converterClass != null) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, MessageFormat.format("[Converter by ID] Calling Application.addConverter({0}, {1}", converterId, converterClass));
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, format("[Converter by ID] Calling Application.addConverter({0}, {1}", converterId, converterClass));
                 }
                 if (verifier != null) {
                     verifier.validateObject(Verifier.ObjectType.CONVERTER, converterClass, Converter.class);
@@ -155,10 +157,10 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
                 application.addConverter(converterId, converterClass);
             } else if (converterClass != null && converterForClass != null) {
                 try {
-                    Class cfcClass = Util.loadClass(converterForClass, this.getClass());
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                MessageFormat.format("[Converter for Class] Calling Application.addConverter({0}, {1}", converterForClass, converterClass));
+                    Class<?> cfcClass = Util.loadClass(converterForClass, this.getClass());
+                    if (LOGGER.isLoggable(FINE)) {
+                        LOGGER.log(FINE,
+                                format("[Converter for Class] Calling Application.addConverter({0}, {1}", converterForClass, converterClass));
                     }
                     if (verifier != null) {
                         verifier.validateObject(Verifier.ObjectType.CONVERTER, converterClass, Converter.class);

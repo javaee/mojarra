@@ -37,6 +37,8 @@
     
     <build>
         <plugins>
+        
+            <!-- Use ANT to drive much of our custom build steps -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -623,6 +625,39 @@
                 </dependencies>
             </plugin>
             
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                
+                <executions>
+                    <execution>
+                        <id>process-annotations</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <annotationProcessors>com.sun.faces.generate.PreParseFacesConfigProcessor</annotationProcessors>
+                            <generatedSourcesDirectory>${project.build.directory}/generated-sources/antrun</generatedSourcesDirectory>
+                            <proc>only</proc>
+                        </configuration>
+                    </execution>
+                    
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        
+                        <configuration>
+                            <proc>none</proc>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
             <!-- Tell Maven we want a Javadoc jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -640,6 +675,7 @@
                     </execution>
                 </executions>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
@@ -678,6 +714,7 @@
                 </executions>
             </plugin>
             
+            <!-- Add the OSGi generated MANIFEST.MF to the jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -815,11 +852,29 @@
             <version>4.0.0</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+                <groupId>javax.el</groupId>
+                <artifactId>javax.el-api</artifactId>
+                <version>3.0.1-b04</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.el</artifactId>
+                <version>3.0.1-b04</version>
+            </dependency>
     
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.sun.faces.build</groupId>
+            <artifactId>jsf-tools</artifactId>
+            <version>2.4.0-m01-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         
@@ -856,7 +911,6 @@
             <version>1.8.3</version>
             <scope>test</scope>
         </dependency>
-        
         <dependency>
             <groupId>commons-digester</groupId>
             <artifactId>commons-digester</artifactId>

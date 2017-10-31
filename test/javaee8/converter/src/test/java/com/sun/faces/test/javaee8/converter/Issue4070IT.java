@@ -58,6 +58,7 @@ public class Issue4070IT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
+        webClient.getOptions().setTimeout(900_000);
     }
 
     @After

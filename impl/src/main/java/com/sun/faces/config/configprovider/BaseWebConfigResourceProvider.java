@@ -40,33 +40,32 @@
 
 package com.sun.faces.config.configprovider;
 
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
-import java.util.LinkedHashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.servlet.ServletContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesConfigFiles;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.spi.ConfigurationResourceProvider;
+import static com.sun.faces.util.Util.split;
+import static java.util.Arrays.binarySearch;
+import static java.util.logging.Level.WARNING;
+
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.logging.Logger;
+
+import javax.faces.FacesException;
+import javax.servlet.ServletContext;
+
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.spi.ConfigurationResourceProvider;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * 
  */
-public abstract class BaseWebConfigResourceProvider implements
-      ConfigurationResourceProvider {
-
+public abstract class BaseWebConfigResourceProvider implements ConfigurationResourceProvider {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
@@ -80,18 +79,19 @@ public abstract class BaseWebConfigResourceProvider implements
         WebConfiguration webConfig = WebConfiguration.getInstance(context);
         String paths = webConfig.getOptionValue(getParameter());
         Set<URI> urls = new LinkedHashSet<>(6);
+        
         if (paths != null) {
-            for (String token : Util.split(context, paths.trim(), getSeparatorRegex())) {
+            for (String token : split(context, paths.trim(), getSeparatorRegex())) {
                 String path = token.trim();
                 if (!isExcluded(path) && path.length() != 0) {
                     URI u = getContextURLForPath(context, path);
                     if (u != null) {
                         urls.add(u);
                     } else {
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.config.web_resource_not_found",
-                                       new Object[] { path, JavaxFacesConfigFiles.getQualifiedName() });
+                        if (LOGGER.isLoggable(WARNING)) {
+                            LOGGER.log(WARNING, 
+                                    "jsf.config.web_resource_not_found",
+                                    new Object[] { path, JavaxFacesConfigFiles.getQualifiedName() });
                         }
                     }
                 }
@@ -100,7 +100,6 @@ public abstract class BaseWebConfigResourceProvider implements
         }
 
         return urls;
-        
     }
 
 
@@ -115,27 +114,20 @@ public abstract class BaseWebConfigResourceProvider implements
 
 
     protected URI getContextURLForPath(ServletContext context, String path) {
-
-        URI result = null;
         try {
             URL url = context.getResource(path);
-            if (null != url) {
-                String urlString = url.toExternalForm();
-                urlString = urlString.replaceAll(" ", "%20");
-                result = new URI(urlString);            
+            if (url != null) {
+                return new URI(url.toExternalForm().replaceAll(" ", "%20"));            
             }
         } catch (MalformedURLException | URISyntaxException mue) {
             throw new FacesException(mue);
         }
-        return result;
-
+        
+        return null;
     }
 
-
     protected boolean isExcluded(String path) {
-
-        return (Arrays.binarySearch(getExcludedResources(), path) >= 0);
-
+        return binarySearch(getExcludedResources(), path) >= 0;
     }
 
 }

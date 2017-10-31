@@ -165,7 +165,7 @@ public class ApplicationAssociate {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
-    private ApplicationImpl app;
+    private ApplicationImpl applicationImpl;
 
     /**
      * Overall Map containing <code>from-view-id</code> key and <code>Set</code> of
@@ -251,28 +251,31 @@ public class ApplicationAssociate {
     
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
-        app = appImpl;
+        applicationImpl = appImpl;
 
         propertyEditorHelper = new PropertyEditorHelper(appImpl);
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        if (ctx == null) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (facesContext == null) {
             throw new IllegalStateException("ApplicationAssociate ctor not called in same callstack as ConfigureListener.contextInitialized()");
         }
-        ExternalContext externalContext = ctx.getExternalContext();
+        
+        ExternalContext externalContext = facesContext.getExternalContext();
         if (externalContext.getApplicationMap().get(ASSOCIATE_KEY) != null) {
             throw new IllegalStateException(getExceptionMessageString(APPLICATION_ASSOCIATE_EXISTS_ID));
         }
-        Map<String, Object> appMap = externalContext.getApplicationMap();
-        appMap.put(ASSOCIATE_KEY, this);
+        
+        Map<String, Object> applicationMap = externalContext.getApplicationMap();
+        applicationMap.put(ASSOCIATE_KEY, this);
 
         navigationMap = new ConcurrentHashMap<>();
-        injectionProvider = (InjectionProvider) ctx.getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
+        injectionProvider = (InjectionProvider) facesContext.getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
         webConfig = WebConfiguration.getInstance(externalContext);
         beanManager = new BeanManager(injectionProvider, webConfig.isOptionEnabled(EnableLazyBeanValidation));
-        // install the bean manager as a system event listener for custom
+        
+        // Install the bean manager as a system event listener for custom
         // scopes being destoryed.
-        app.subscribeToEvent(PreDestroyCustomScopeEvent.class, ScopeContext.class, beanManager);
+        applicationImpl.subscribeToEvent(PreDestroyCustomScopeEvent.class, ScopeContext.class, beanManager);
         annotationManager = new AnnotationManager();
 
         devModeEnabled = appImpl.getProjectStage() == Development;
@@ -282,7 +285,7 @@ public class ApplicationAssociate {
             resourceCache = new ResourceCache();
         }
 
-        resourceManager = new ResourceManager(appMap, resourceCache);
+        resourceManager = new ResourceManager(applicationMap, resourceCache);
         namedEventManager = new NamedEventManager();
         applicationStateInfo = new ApplicationStateInfo();
 
@@ -301,7 +304,7 @@ public class ApplicationAssociate {
     }
 
     public Application getApplication() {
-        return app;
+        return applicationImpl;
     }
 
     public void setResourceLibraryContracts(Map<String, List<String>> map) {
@@ -485,10 +488,10 @@ public class ApplicationAssociate {
 
     public void initializeELResolverChains() {
         // 1. initialize the chains with default values
-        if (app.getCompositeELResolver() == null) {
-            app.setCompositeELResolver(new DemuxCompositeELResolver(Faces));
-            buildFacesResolver(app.getCompositeELResolver(), this);
-            populateFacesELResolverForJsp(app, this);
+        if (applicationImpl.getCompositeELResolver() == null) {
+            applicationImpl.setCompositeELResolver(new DemuxCompositeELResolver(Faces));
+            buildFacesResolver(applicationImpl.getCompositeELResolver(), this);
+            populateFacesELResolverForJsp(applicationImpl, this);
         }
     }
 
@@ -615,7 +618,7 @@ public class ApplicationAssociate {
     }
 
     public CompositeELResolver getApplicationELResolvers() {
-        return app.getApplicationELResolvers();
+        return applicationImpl.getApplicationELResolvers();
     }
 
     public InjectionProvider getInjectionProvider() {
@@ -813,7 +816,7 @@ public class ApplicationAssociate {
     protected DefaultFaceletFactory createFaceletFactory(FacesContext ctx, Compiler compiler, WebConfiguration webConfig) {
 
         // refresh period
-        boolean isProduction = app.getProjectStage() == Production;
+        boolean isProduction = applicationImpl.getProjectStage() == Production;
         String refreshPeriod;
         if (webConfig.isSet(FaceletsDefaultRefreshPeriod) || webConfig.isSet(FaceletsDefaultRefreshPeriodDeprecated)) {
             refreshPeriod = webConfig.getOptionValue(FaceletsDefaultRefreshPeriod);
@@ -826,7 +829,7 @@ public class ApplicationAssociate {
         long period = parseLong(refreshPeriod);
 
         // resource resolver
-        ResourceResolver defaultResourceResolver = new DefaultResourceResolver(app.getResourceHandler());
+        ResourceResolver defaultResourceResolver = new DefaultResourceResolver(applicationImpl.getResourceHandler());
         ResourceResolver resolver = defaultResourceResolver;
 
         String resolverName = webConfig.getOptionValue(FaceletsResourceResolver);

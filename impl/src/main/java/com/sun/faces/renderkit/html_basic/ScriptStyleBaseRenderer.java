@@ -43,7 +43,6 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.application.FacesMessage;
@@ -176,9 +175,7 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
         } else if (0 < childCount) {
             // If we have a "name" and also have child content, ignore
             // the child content and log a message.
-            if (logger.isLoggable(Level.INFO)) {
-                logger.info("outputScript or outputStylesheet with name attribute and nested content. Ignoring nested content.");
-            }
+            logger.info("outputScript or outputStylesheet with name attribute and nested content. Ignoring nested content.");
             renderChildren = false;
         }
 

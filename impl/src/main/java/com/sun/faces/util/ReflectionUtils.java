@@ -40,26 +40,28 @@
 
 package com.sun.faces.util;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.WeakHashMap;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.beans.PropertyDescriptor;
-import java.beans.Introspector;
+import static java.beans.Introspector.getBeanInfo;
+import static java.beans.PropertyEditorManager.findEditor;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
-import static java.beans.Introspector.getBeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
-import static java.beans.PropertyEditorManager.findEditor;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  * <p>A set of utility methods to make working with
@@ -291,19 +293,13 @@ public final class ReflectionUtils {
      *  should be cleared
      */
     public static synchronized void clearCache(ClassLoader loader) {
-
-            REFLECTION_CACHE.remove(loader);
-
+        REFLECTION_CACHE.remove(loader);
     }
 
-
     public static synchronized void initCache(ClassLoader loader) {
-
         if (REFLECTION_CACHE.get(loader) == null) {
-            REFLECTION_CACHE.put(loader,
-                                 new ConcurrentHashMap<>());
+            REFLECTION_CACHE.put(loader, new ConcurrentHashMap<>());
         }
-
     }
 
 
@@ -314,7 +310,7 @@ public final class ReflectionUtils {
      * @param params the parameters for the constructor of the provided Class
      * @return a Constructor that can be invoked with the specified parameters
      */
-    public static Constructor lookupConstructor(Class<?> clazz, Class<?>... params) {
+    public static Constructor<?> lookupConstructor(Class<?> clazz, Class<?>... params) {
 
         ClassLoader loader = Util.getCurrentLoader(clazz);
         if (loader == null) {
@@ -322,7 +318,6 @@ public final class ReflectionUtils {
         }
 
         return getMetaData(loader, clazz).lookupConstructor(params);
-
     }
     
     /**
@@ -593,10 +588,8 @@ public final class ReflectionUtils {
          * @return the <code>Constructor</code> appropriate to the specified 
          *  parameters or <code>null</code>
          */
-        public Constructor lookupConstructor(Class<?>... params) {
-
+        public Constructor<?> lookupConstructor(Class<?>... params) {
             return constructors.get(getKey(params));
-
         }
 
 

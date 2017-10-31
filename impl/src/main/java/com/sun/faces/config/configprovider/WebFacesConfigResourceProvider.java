@@ -53,13 +53,12 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.Java
  */
 public class WebFacesConfigResourceProvider extends BaseWebConfigResourceProvider {
 
-
     /**
-     * <p>The resource path for the faces configuration in the
-     * <code>WEB-INF</code> directory of an application.</p>
+     * <p>
+     * The resource path for the faces configuration in the <code>WEB-INF</code> directory of an application.
+     * </p>
      */
-    private static final String WEB_INF_RESOURCE =
-         "/WEB-INF/faces-config.xml";
+    private static final String WEB_INF_RESOURCE = "/WEB-INF/faces-config.xml";
 
     private static final String[] EXCLUDES = { WEB_INF_RESOURCE };
     private static final String SEPARATORS = ",|;";
@@ -87,7 +86,6 @@ public class WebFacesConfigResourceProvider extends BaseWebConfigResourceProvide
         context.setAttribute("com.sun.faces.webresources", urls);
 
         return urls;
-        
     }
 
 
@@ -96,17 +94,12 @@ public class WebFacesConfigResourceProvider extends BaseWebConfigResourceProvide
 
     @Override
     protected WebContextInitParameter getParameter() {
-
         return JavaxFacesConfigFiles;
-
     }
-
     
     @Override
     protected String[] getExcludedResources() {
-
         return EXCLUDES;
-
     }
 
     @Override

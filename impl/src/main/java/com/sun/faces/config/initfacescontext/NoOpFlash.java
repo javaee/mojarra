@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,36 +37,118 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.config.initfacescontext;
 
-package com.sun.faces.config.configprovider;
+import static java.util.Collections.emptyList;
 
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsLibraries;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
-/**
- *
- */
-public class WebFaceletTaglibResourceProvider extends BaseWebConfigResourceProvider {
+import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
-    private static final String SEPARATOR = ";";
-    private static final String[] EXCLUDES = {};
-
-
-    // ------------------------------ Methods from BaseWebConfigResourceProvider
-
+public class NoOpFlash extends Flash {
 
     @Override
-    protected WebContextInitParameter getParameter() {
-        return FaceletsLibraries;
+    public void doPostPhaseActions(FacesContext ctx) {
+
     }
 
     @Override
-    protected String[] getExcludedResources() {
-        return EXCLUDES;
+    public void doPrePhaseActions(FacesContext ctx) {
+
     }
 
     @Override
-    protected String getSeparatorRegex() {
-        return SEPARATOR;
+    public boolean isKeepMessages() {
+        return false;
     }
+
+    @Override
+    public boolean isRedirect() {
+        return false;
+    }
+
+    @Override
+    public void keep(String key) {
+
+    }
+
+    @Override
+    public void putNow(String key, Object value) {
+
+    }
+
+    @Override
+    public void setKeepMessages(boolean newValue) {
+
+    }
+
+    @Override
+    public void setRedirect(boolean newValue) {
+
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return false;
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return false;
+    }
+
+    @Override
+    public Set<Entry<String, Object>> entrySet() {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public Object get(Object key) {
+        return null;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return true;
+    }
+
+    @Override
+    public Set<String> keySet() {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public Object put(String key, Object value) {
+        return null;
+    }
+
+    @Override
+    public void putAll(Map<? extends String, ? extends Object> m) {
+
+    }
+
+    @Override
+    public Object remove(Object key) {
+        return null;
+    }
+
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public Collection<Object> values() {
+        return emptyList();
+    }
+
 }

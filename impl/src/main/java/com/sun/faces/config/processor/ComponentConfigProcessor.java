@@ -40,22 +40,28 @@
 
 package com.sun.faces.config.processor;
 
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.config.Verifier;
-import com.sun.faces.config.DocumentInfo;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
-import org.w3c.dom.Document;
+import static java.text.MessageFormat.format;
+import static java.util.logging.Level.FINE;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.FacesComponent;
-import javax.servlet.ServletContext;
-import javax.xml.xpath.XPathExpressionException;
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
+
+import javax.faces.application.Application;
+import javax.faces.component.FacesComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.config.Verifier;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>
@@ -96,16 +102,17 @@ public class ComponentConfigProcessor extends AbstractConfigProcessor {
      * @param documentInfos
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext sc, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {
 
-        // process annotated components first as components configured
+        // Process annotated components first as components configured
         // via config files take precedence
-        processAnnotations(FacesComponent.class);
+        processAnnotations(facesContext, FacesComponent.class);
 
         for (int i = 0; i < documentInfos.length; i++) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, MessageFormat.format("Processing component elements for document: ''{0}''", documentInfos[i].getSourceURI()));
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, format("Processing component elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
+            
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
             NodeList components = document.getDocumentElement().getElementsByTagNameNS(namespace, COMPONENT);
@@ -113,7 +120,6 @@ public class ComponentConfigProcessor extends AbstractConfigProcessor {
                 addComponents(components, namespace);
             }
         }
-        invokeNext(sc, documentInfos);
 
     }
 

@@ -41,12 +41,13 @@
 
 package javax.faces;
 
+import static com.sun.faces.util.Util.generateCreatedBy;
 import static com.sun.faces.util.Util.getContextClassLoader2;
 import static com.sun.faces.util.Util.isAnyNull;
 import static com.sun.faces.util.Util.isOneOf;
 import static java.text.MessageFormat.format;
-import static java.util.Arrays.binarySearch;
-import static java.util.Arrays.sort;
+import static java.util.Collections.binarySearch;
+import static java.util.Collections.unmodifiableMap;
 import static java.util.logging.Level.SEVERE;
 import static javax.faces.FactoryFinder.APPLICATION_FACTORY;
 import static javax.faces.FactoryFinder.CLIENT_WINDOW_FACTORY;
@@ -76,6 +77,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -83,23 +85,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 
+import com.sun.faces.config.ConfigManager;
 import com.sun.faces.spi.InjectionProvider;
 
 final class FactoryFinderInstance {
     
+    private static final Logger LOGGER = Logger.getLogger("javax.faces", "javax.faces.LogStrings");
+    
     private static final String INJECTION_PROVIDER_KEY = FactoryFinder.class.getPackage().getName() + "INJECTION_PROVIDER_KEY";
     
-    private final Map<String, Object> factories;
-    private final Map<String, List<String>> savedFactoryNames;
-    private final ReentrantReadWriteLock lock;
+    private final Map<String, Object> factories = new ConcurrentHashMap<>();
+    private final Map<String, List<String>> savedFactoryNames = new ConcurrentHashMap<>();
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
+    private final String createdBy;
     
-    private ServletContextFacesContextFactory servletContextFinder;
-   
+    private ServletContextFacesContextFactory servletContextFinder = new ServletContextFacesContextFactory();
 
     /**
      * <p>
@@ -108,134 +114,69 @@ final class FactoryFinderInstance {
      * string of the *value* of each of the literals, not just the last part of the literal!
      * </p>
      */
-    private static final String[] FACTORY_NAMES;
+    private final List<String> factoryNames = asSortedList(
+            APPLICATION_FACTORY, 
+            VISIT_CONTEXT_FACTORY, 
+            EXCEPTION_HANDLER_FACTORY,
+            EXTERNAL_CONTEXT_FACTORY, 
+            FACES_CONTEXT_FACTORY, 
+            FLASH_FACTORY,
+            FLOW_HANDLER_FACTORY,
+            PARTIAL_VIEW_CONTEXT_FACTORY, 
+            CLIENT_WINDOW_FACTORY, 
+            LIFECYCLE_FACTORY,
+            RENDER_KIT_FACTORY, 
+            VIEW_DECLARATION_LANGUAGE_FACTORY, 
+            FACELET_CACHE_FACTORY,
+            TAG_HANDLER_DELEGATE_FACTORY, 
+            SEARCH_EXPRESSION_CONTEXT_FACTORY);
 
     /**
      * <p>
-     * Map of Class instances for the our factory names.
+     * Map of Class instances for our factory names.
      * </p>
      */
-    private final static Map<String, Class<?>> FACTORY_CLASSES;
-
-    private static final Logger LOGGER;
-
-    static {
-
-        Map<String, Class<?>> buildUpFactoryClasses;
-        
-        buildUpFactoryClasses = new HashMap<>();
-        buildUpFactoryClasses.put(APPLICATION_FACTORY, javax.faces.application.ApplicationFactory.class);
-        buildUpFactoryClasses.put(VISIT_CONTEXT_FACTORY, javax.faces.component.visit.VisitContextFactory.class);
-        buildUpFactoryClasses.put(EXCEPTION_HANDLER_FACTORY, javax.faces.context.ExceptionHandlerFactory.class);
-        buildUpFactoryClasses.put(EXTERNAL_CONTEXT_FACTORY, javax.faces.context.ExternalContextFactory.class);
-        buildUpFactoryClasses.put(FACES_CONTEXT_FACTORY, javax.faces.context.FacesContextFactory.class);
-        buildUpFactoryClasses.put(FLASH_FACTORY, javax.faces.context.FlashFactory.class);
-        buildUpFactoryClasses.put(PARTIAL_VIEW_CONTEXT_FACTORY, javax.faces.context.PartialViewContextFactory.class);
-        buildUpFactoryClasses.put(LIFECYCLE_FACTORY, javax.faces.lifecycle.LifecycleFactory.class);
-        buildUpFactoryClasses.put(CLIENT_WINDOW_FACTORY, javax.faces.lifecycle.ClientWindowFactory.class);
-        buildUpFactoryClasses.put(RENDER_KIT_FACTORY, javax.faces.render.RenderKitFactory.class);
-        buildUpFactoryClasses.put(VIEW_DECLARATION_LANGUAGE_FACTORY, javax.faces.view.ViewDeclarationLanguageFactory.class);
-        buildUpFactoryClasses.put(FACELET_CACHE_FACTORY, javax.faces.view.facelets.FaceletCacheFactory.class);
-        buildUpFactoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY, javax.faces.view.facelets.TagHandlerDelegateFactory.class);
-        buildUpFactoryClasses.put(FLOW_HANDLER_FACTORY, javax.faces.flow.FlowHandlerFactory.class);
-        buildUpFactoryClasses.put(SEARCH_EXPRESSION_CONTEXT_FACTORY, javax.faces.component.search.SearchExpressionContextFactory.class);
-        
-        FACTORY_CLASSES = Collections.unmodifiableMap(buildUpFactoryClasses);
-
-        FACTORY_NAMES = new String[] { APPLICATION_FACTORY, VISIT_CONTEXT_FACTORY, EXCEPTION_HANDLER_FACTORY,
-                EXTERNAL_CONTEXT_FACTORY, FACES_CONTEXT_FACTORY, FLASH_FACTORY, FLOW_HANDLER_FACTORY,
-                PARTIAL_VIEW_CONTEXT_FACTORY, CLIENT_WINDOW_FACTORY, LIFECYCLE_FACTORY,
-                RENDER_KIT_FACTORY, VIEW_DECLARATION_LANGUAGE_FACTORY, FACELET_CACHE_FACTORY,
-                TAG_HANDLER_DELEGATE_FACTORY, SEARCH_EXPRESSION_CONTEXT_FACTORY };
-
-        // Optimize performance of validateFactoryName
-        sort(FACTORY_NAMES);
-
-        LOGGER = Logger.getLogger("javax.faces", "javax.faces.LogStrings");
-    }
-
+    private final Map<String, Class<?>> factoryClasses = buildFactoryClassesMap();
+  
     
     // -------------------------------------------------------- Constructors
     
-    FactoryFinderInstance() {
-        lock = new ReentrantReadWriteLock(true);
-        factories = new HashMap<>();
-        savedFactoryNames = new HashMap<>();
-        for (String name : FACTORY_NAMES) {
+    FactoryFinderInstance(FacesContext facesContext) {
+        for (String name : factoryNames) {
             factories.put(name, new ArrayList<>(4)); // NOPMD
         }
-        copyInjectionProviderFromFacesContext();
-        servletContextFinder = new ServletContextFacesContextFactory();
+        copyInjectionProviderFromFacesContext(facesContext);
+        createdBy = generateCreatedBy(facesContext);
     }
 
-    FactoryFinderInstance(FactoryFinderInstance toCopy) {
-        lock = new ReentrantReadWriteLock(true);
-        factories = new HashMap<>();
-        savedFactoryNames = new HashMap<>();
+    FactoryFinderInstance(FacesContext facesContext, FactoryFinderInstance toCopy) {
         factories.putAll(toCopy.savedFactoryNames);
-        copyInjectionProviderFromFacesContext();
-        servletContextFinder = new ServletContextFacesContextFactory();
+        copyInjectionProviderFromFacesContext(facesContext);
+        createdBy = generateCreatedBy(facesContext);
     }
   
+    @Override
+    public String toString() {
+        return super.toString() + " created by" + createdBy;
+    }
+    
     
 
     // ------------------------------------------------------ Package Private Methods
     
-    Collection<Object> getFactories() {
-        return factories.values();
-    }
 
-    void addFactory(String factoryName, String implementation) {
+    void addFactory(String factoryName, String implementationClassName) {
         validateFactoryName(factoryName);
 
         Object result = factories.get(factoryName);
         lock.writeLock().lock();
         try {
             if (result instanceof List) {
-                TypedCollections.dynamicallyCastList((List<?>) result, String.class).add(0, implementation);
+                TypedCollections.dynamicallyCastList((List<?>) result, String.class).add(0, implementationClassName);
             }
         } finally {
             lock.writeLock().unlock();
         }
-    }
-
-    void releaseFactories() {
-        InjectionProvider provider = getInjectionProvider();
-        
-        if (provider != null) {
-            lock.writeLock().lock();
-            try {
-                for (Entry<String, Object> entry : factories.entrySet()) {
-                    Object curFactory = entry.getValue();
-                    
-                    // If the current entry is not the injectionProvider itself
-                    // and the current entry has a non-null value
-                    // and the value is not a string...
-                    if (!INJECTION_PROVIDER_KEY.equals(entry.getKey()) && curFactory != null && !(curFactory instanceof String)) {
-                        try {
-                            provider.invokePreDestroy(curFactory);
-                        } catch (Exception ex) {
-                            logPreDestroyFail(entry.getValue(), ex);
-                        }
-                    }
-                }
-            } finally {
-                factories.clear();
-                lock.writeLock().unlock();
-            }
-
-        } else {
-            LOGGER.log(SEVERE,
-                "Unable to call @PreDestroy annotated methods because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
-        }
-    }
-
-    InjectionProvider getInjectionProvider() {
-        return (InjectionProvider) factories.get(INJECTION_PROVIDER_KEY);
-    }
-
-    void clearInjectionProvider() {
-        factories.remove(INJECTION_PROVIDER_KEY);
     }
 
     @SuppressWarnings("unchecked")
@@ -270,6 +211,7 @@ final class FactoryFinderInstance {
         // Factory hasn't been constructed
         lock.writeLock().lock();
         try {
+            
             // Double check the current value. Another thread
             // may have completed the initialization by the time
             // this thread entered this block
@@ -281,6 +223,7 @@ final class FactoryFinderInstance {
             savedFactoryNames.put(factoryName, new ArrayList<String>((List<String>) factoryOrList));
 
             Object factory = getImplementationInstance(getContextClassLoader2(), factoryName, (List<String>) factoryOrList);
+            
             if (factory == null) {
                 logNoFactory(factoryName);
                 
@@ -298,14 +241,57 @@ final class FactoryFinderInstance {
         }
     }
     
+    InjectionProvider getInjectionProvider() {
+        return (InjectionProvider) factories.get(INJECTION_PROVIDER_KEY);
+    }
+
+    void clearInjectionProvider() {
+        factories.remove(INJECTION_PROVIDER_KEY);
+    }
+    
+    void releaseFactories() {
+        InjectionProvider provider = getInjectionProvider();
+        
+        if (provider != null) {
+            lock.writeLock().lock();
+            try {
+                for (Entry<String, Object> entry : factories.entrySet()) {
+                    Object curFactory = entry.getValue();
+                    
+                    // If the current entry is not the injectionProvider itself
+                    // and the current entry has a non-null value
+                    // and the value is not a string...
+                    if (!INJECTION_PROVIDER_KEY.equals(entry.getKey()) && curFactory != null && !(curFactory instanceof String)) {
+                        try {
+                            provider.invokePreDestroy(curFactory);
+                        } catch (Exception ex) {
+                            logPreDestroyFail(entry.getValue(), ex);
+                        }
+                    }
+                }
+            } finally {
+                factories.clear();
+                lock.writeLock().unlock();
+            }
+
+        } else {
+            LOGGER.log(SEVERE,
+                "Unable to call @PreDestroy annotated methods because no InjectionProvider can be found. Does this container implement the Mojarra Injection SPI?");
+        }
+    }
+
+    
+    Collection<Object> getFactories() {
+        return factories.values();
+    }
+    
     
     //   -------------------------------------------------------- Private methods
 
-    private void copyInjectionProviderFromFacesContext() {
+    private void copyInjectionProviderFromFacesContext(FacesContext facesContext) {
         InjectionProvider injectionProvider = null;
-        FacesContext context = FacesContext.getCurrentInstance();
-        if (context != null) {
-            injectionProvider = (InjectionProvider) context.getAttributes().get("com.sun.faces.config.ConfigManager_INJECTION_PROVIDER_TASK");
+        if (facesContext != null) {
+            injectionProvider = (InjectionProvider) facesContext.getAttributes().get(ConfigManager.INJECTION_PROVIDER_KEY);
         }
         
         if (injectionProvider != null) {
@@ -457,60 +443,60 @@ final class FactoryFinderInstance {
      *
      * @param classLoader the ClassLoader from which to load the class
      * @param factoryName the fully qualified class name of the factory.
-     * @param implName the fully qualified class name of a class that implements the factory.
-     * @param previousImpl if non-<code>null</code>, the factory instance to be passed to the
+     * @param factoryImplClassName the fully qualified class name of a class that implements the factory.
+     * @param previousFactoryImplementation if non-<code>null</code>, the factory instance to be passed to the
      *            constructor of the new factory.
      */
-    private Object getImplGivenPreviousImpl(ClassLoader classLoader, String factoryName, String implName, Object previousImpl) {
+    private Object getImplGivenPreviousImpl(ClassLoader classLoader, String factoryName, String factoryImplClassName, Object previousFactoryImplementation) {
         
-        Object implementation = null;
+        Object factoryImplementation = null;
         
         Class<?> factoryClass = getFactoryClass(factoryName);
         
-        if (!isAnyNull(previousImpl, factoryClass)) {
+        if (!isAnyNull(previousFactoryImplementation, factoryClass)) {
             
-            // We have a previousImpl AND the appropriate one argument ctor.
+            // We have a previous factory implementation AND the appropriate one argument ctor.
             
             try {
-                implementation = Class.forName(implName, false, classLoader)
-                                      .getConstructor(factoryClass)
-                                      .newInstance(previousImpl);
+                factoryImplementation = Class.forName(factoryImplClassName, false, classLoader)
+                                             .getConstructor(factoryClass)
+                                             .newInstance(previousFactoryImplementation);
                 
             } catch (NoSuchMethodException nsme) {
                 // fall through to "zero-arg-ctor" case
                 factoryClass = null;
             } catch (ClassNotFoundException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                throw new FacesException(implName, e);
+                throw new FacesException(factoryImplClassName, e);
             }
         }
         
-        if (isAnyNull(previousImpl, factoryClass)) {
+        if (isAnyNull(previousFactoryImplementation, factoryClass)) {
             
-            // We have either no previousImpl or no appropriate one argument ctor.
+            // We have either no previous factory implementation or no appropriate one argument ctor.
             
             try {
                 
                 // Since this is the hard coded implementation default, there is no preceding implementation, 
                 // so don't bother with a non-zero-argument ctor.
                 
-                implementation = Class.forName(implName, false, classLoader)
-                                      .newInstance();
+                factoryImplementation = Class.forName(factoryImplClassName, false, classLoader)
+                                             .newInstance();
                 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                throw new FacesException(implName, e);
+                throw new FacesException(factoryImplClassName, e);
             }
         }
 
-        injectImplementation(implName, implementation);
+        injectImplementation(factoryImplClassName, factoryImplementation);
 
-        return implementation;
+        return factoryImplementation;
     }
 
     /**
      * @return the <code>java.lang.Class</code> for the argument factory.
      */
     private Class<?> getFactoryClass(String factoryClassName) {
-        return FACTORY_CLASSES.get(factoryClassName);
+        return factoryClasses.get(factoryClassName);
     }
     
     private String readLineFromStream(InputStream stream) throws IOException {
@@ -574,9 +560,39 @@ final class FactoryFinderInstance {
             return;
         }
 
-        if (binarySearch(FACTORY_NAMES, factoryName) < 0) {
+        if (binarySearch(factoryNames, factoryName) < 0) {
             throw new IllegalArgumentException(factoryName);
         }
+    }
+    
+    private Map<String, Class<?>> buildFactoryClassesMap() {
+        Map<String, Class<?>> buildUpFactoryClasses;
+        
+        buildUpFactoryClasses = new HashMap<>();
+        buildUpFactoryClasses.put(APPLICATION_FACTORY, javax.faces.application.ApplicationFactory.class);
+        buildUpFactoryClasses.put(VISIT_CONTEXT_FACTORY, javax.faces.component.visit.VisitContextFactory.class);
+        buildUpFactoryClasses.put(EXCEPTION_HANDLER_FACTORY, javax.faces.context.ExceptionHandlerFactory.class);
+        buildUpFactoryClasses.put(EXTERNAL_CONTEXT_FACTORY, javax.faces.context.ExternalContextFactory.class);
+        buildUpFactoryClasses.put(FACES_CONTEXT_FACTORY, javax.faces.context.FacesContextFactory.class);
+        buildUpFactoryClasses.put(FLASH_FACTORY, javax.faces.context.FlashFactory.class);
+        buildUpFactoryClasses.put(PARTIAL_VIEW_CONTEXT_FACTORY, javax.faces.context.PartialViewContextFactory.class);
+        buildUpFactoryClasses.put(LIFECYCLE_FACTORY, javax.faces.lifecycle.LifecycleFactory.class);
+        buildUpFactoryClasses.put(CLIENT_WINDOW_FACTORY, javax.faces.lifecycle.ClientWindowFactory.class);
+        buildUpFactoryClasses.put(RENDER_KIT_FACTORY, javax.faces.render.RenderKitFactory.class);
+        buildUpFactoryClasses.put(VIEW_DECLARATION_LANGUAGE_FACTORY, javax.faces.view.ViewDeclarationLanguageFactory.class);
+        buildUpFactoryClasses.put(FACELET_CACHE_FACTORY, javax.faces.view.facelets.FaceletCacheFactory.class);
+        buildUpFactoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY, javax.faces.view.facelets.TagHandlerDelegateFactory.class);
+        buildUpFactoryClasses.put(FLOW_HANDLER_FACTORY, javax.faces.flow.FlowHandlerFactory.class);
+        buildUpFactoryClasses.put(SEARCH_EXPRESSION_CONTEXT_FACTORY, javax.faces.component.search.SearchExpressionContextFactory.class);
+        
+        return unmodifiableMap(buildUpFactoryClasses);
+    }
+    
+    private List<String> asSortedList(String...names) {
+        List<String> list = Arrays.asList(names);
+        Collections.sort(list);
+        
+        return list;
     }
 
 }

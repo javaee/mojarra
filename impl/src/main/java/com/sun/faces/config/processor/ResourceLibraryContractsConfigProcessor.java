@@ -39,13 +39,17 @@
  */
 package com.sun.faces.config.processor;
 
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.FINEST;
+import static java.util.logging.Level.INFO;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -85,13 +89,14 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
      * @throws Exception when an error occurs.
      */
     @Override
-    public void process(ServletContext servletContext, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext servletContext, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {
 
         HashMap<String, List<String>> map = new HashMap<>();
         for (int i = 0; i < documentInfos.length; i++) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, MessageFormat.format("Processing factory elements for document: ''{0}''", documentInfos[i].getSourceURI()));
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, MessageFormat.format("Processing factory elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
+            
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
             NodeList resourceLibraryContracts = document.getDocumentElement().getElementsByTagNameNS(namespace, RESOURCE_LIBRARY_CONTRACTS);
@@ -106,7 +111,6 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
             associate.setResourceLibraryContracts(map);
         }
 
-        invokeNext(servletContext, documentInfos);
     }
 
     /**
@@ -130,8 +134,8 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
                             for (int p = 0; p < urlPatterns.getLength(); p++) {
                                 String urlPattern = urlPatterns.item(p).getNodeValue().trim();
 
-                                if (LOGGER.isLoggable(Level.INFO)) {
-                                    LOGGER.log(Level.INFO, "Processing resource library contract mapping for url-pattern: {0}", urlPattern);
+                                if (LOGGER.isLoggable(INFO)) {
+                                    LOGGER.log(INFO, "Processing resource library contract mapping for url-pattern: {0}", urlPattern);
                                 }
 
                                 if (!map.containsKey(urlPattern)) {
@@ -145,8 +149,8 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
                                             String[] contractStrings = contracts.item(j).getNodeValue().trim().split(",");
                                             for (int k = 0; k < contractStrings.length; k++) {
                                                 if (!list.contains(contractStrings[k])) {
-                                                    if (LOGGER.isLoggable(Level.INFO)) {
-                                                        LOGGER.log(Level.INFO, "Added contract: {0} for url-pattern: {1}",
+                                                    if (LOGGER.isLoggable(INFO)) {
+                                                        LOGGER.log(INFO, "Added contract: {0} for url-pattern: {1}",
                                                                 new Object[] { contractStrings[k], urlPattern });
                                                     }
                                                     list.add(contractStrings[k]);
@@ -155,8 +159,8 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
                                                      * We found the contract again in the list for
                                                      * the specified url-pattern.
                                                      */
-                                                    if (LOGGER.isLoggable(Level.INFO)) {
-                                                        LOGGER.log(Level.INFO, "Duplicate contract: {0} found for url-pattern: {1}",
+                                                    if (LOGGER.isLoggable(INFO)) {
+                                                        LOGGER.log(INFO, "Duplicate contract: {0} found for url-pattern: {1}",
                                                                 new Object[] { contractStrings[k], urlPattern });
                                                     }
                                                 }
@@ -174,17 +178,13 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
                                          * The list was empty, log there were no contracts
                                          * specified.
                                          */
-                                        if (LOGGER.isLoggable(Level.INFO)) {
-                                            LOGGER.log(Level.INFO, "No contracts found for url-pattern: {0}", urlPattern);
-                                        }
+                                         LOGGER.log(INFO, "No contracts found for url-pattern: {0}", urlPattern);
                                     }
                                 } else {
                                     /*
                                      * Otherwise log there is a duplicate url-pattern found.
                                      */
-                                    if (LOGGER.isLoggable(Level.INFO)) {
-                                        LOGGER.log(Level.INFO, "Duplicate url-patern found: {0}, ignoring it", urlPattern);
-                                    }
+                                     LOGGER.log(INFO, "Duplicate url-patern found: {0}, ignoring it", urlPattern);
                                 }
                             }
                         }
@@ -196,9 +196,7 @@ public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProce
                  * expressions never change, but the XPath runtime defines it as a checked exception
                  * so we have to deal with it.
                  */
-                if (LOGGER.isLoggable(Level.FINEST)) {
-                    LOGGER.log(Level.FINEST, "Unable to parse XPath expression", exception);
-                }
+                 LOGGER.log(FINEST, "Unable to parse XPath expression", exception);
             }
         }
     }

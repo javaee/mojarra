@@ -40,11 +40,12 @@
 
 package com.sun.faces.spi;
 
-import javax.servlet.ServletContext;
 import java.lang.annotation.Annotation;
 import java.net.URI;
-import java.util.Set;
 import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.ServletContext;
 
 /**
  * <p>
@@ -52,82 +53,81 @@ import java.util.Map;
  * </p>
  *
  * <p>
- * <em>All</em> <code>AnnotationProvider</code> implementations <em>must</em>
- * scan for the following annotations:
+ * <em>All</em> <code>AnnotationProvider</code> implementations <em>must</em> scan for the following annotations:
  * </p>
  * <ul>
- *  <li>FacesComponent</li>
- *  <li>FacesConverter</li>
- *  <li>FacesRenderer</li>
- *  <li>FacesValidator</li>
- *  <li>ManagedBean</li>
- *  <li>NamedEvent</li>
- *  <li>FacesBehavior</li>
- *  <li>FacesBehaviorRenderer</li>
+ * <li>FacesComponent</li>
+ * <li>FacesConverter</li>
+ * <li>FacesRenderer</li>
+ * <li>FacesValidator</li>
+ * <li>ManagedBean</li>
+ * <li>NamedEvent</li>
+ * <li>FacesBehavior</li>
+ * <li>FacesBehaviorRenderer</li>
  * </ul>
  *
  * <p>
- * The <code>AnnotationProvider</code> instance will be wrapped as a {@link java.util.concurrent.Future} and
- * executed during the environment initialization.  The result of the future can be obtained
- * by calling {@link com.sun.faces.config.ConfigManager#getAnnotatedClasses(javax.faces.context.FacesContext)}.
+ * The <code>AnnotationProvider</code> instance will be wrapped as a {@link java.util.concurrent.Future} and executed
+ * during the environment initialization. The result of the future can be obtained by calling
+ * {@link com.sun.faces.config.ConfigManager#getAnnotatedClasses(javax.faces.context.FacesContext)}.
  * </p>
  *
  * <p>
- * The {@link java.util.concurrent.Future} itself can be obtained from the
- * application map using the key <code>com.sun.faces.config.ConfigManager__ANNOTATION_SCAN_TASK</code>.
+ * The {@link java.util.concurrent.Future} itself can be obtained from the application map using the key
+ * <code>com.sun.faces.config.ConfigManager__ANNOTATION_SCAN_TASK</code>.
  * </p>
  *
  * <p>
- * It's important to note that the value returned by either method described above
- * is only available while the application is being initialized and will be removed
- * before the application is put into service.
+ * It's important to note that the value returned by either method described above is only available while the
+ * application is being initialized and will be removed before the application is put into service.
  * </p>
  *
  * <p>
- * To register a custom AnnotationProvider with the runtime, place a file named
- * com.sun.faces.spi.annotationprovider within META-INF/services of a JAR file,
- * with a single line referencing the fully qualified class name of the AnnotationProvider
- * implementation.  Custom AnnotationProviders can be used to decorate the default
- * AnnotationProvider by providing a constructor that takes an AnnotationProvider as the
- * second parameter:</p>
+ * To register a custom AnnotationProvider with the runtime, place a file named com.sun.faces.spi.annotationprovider
+ * within META-INF/services of a JAR file, with a single line referencing the fully qualified class name of the
+ * AnnotationProvider implementation. Custom AnnotationProviders can be used to decorate the default AnnotationProvider
+ * by providing a constructor that takes an AnnotationProvider as the second parameter:
+ * </p>
  *
- * <p><code>public AnnotationProvider(ServletContext sc, AnnotationProvider parent)</code></p>
+ * <p>
+ * <code>public AnnotationProvider(ServletContext sc, AnnotationProvider parent)</code>
+ * </p>
  * 
- * <p>If decoration is not desired, then the custom provider must have a constructor
- * that takes one paramer, a <code>ServletContext</code>:
+ * <p>
+ * If decoration is not desired, then the custom provider must have a constructor that takes one paramer, a
+ * <code>ServletContext</code>:
  *
- * <p><code>public AnnotationProvider(ServletContext sc)</code></p>
+ * <p>
+ * <code>public AnnotationProvider(ServletContext sc)</code>
+ * </p>
  *
- * <p>All customer providers must extend this class.</p>
+ * <p>
+ * All customer providers must extend this class.
+ * </p>
  * 
  */
 public abstract class AnnotationProvider {
 
+    protected ServletContext servletContext;
 
-    protected ServletContext sc;
-
-
+    
     // ------------------------------------------------------------ Constructors
 
-
-    public AnnotationProvider(ServletContext sc) {
-
-        this.sc = sc;
-
+    public AnnotationProvider(ServletContext servletContext) {
+        this.servletContext = servletContext;
     }
-
+    
 
     // ---------------------------------------------------------- Public Methods
 
-
     /**
-     * @param urls a <code>Set</code> of URLs that refer to specific faces-config.xml
-     *  documents on the classpath.  The information returned by the map may
-     *  return annotation information from sources outside of those defined by the
-     *  urls.
-     * @return a <code>Map</code> of classes mapped to a specific annotation type.
-     *  If no annotations are present, this method returns an empty <code>Map</code>.
+     * @param urls
+     *            a <code>Set</code> of URLs that refer to specific faces-config.xml documents on the classpath. The
+     *            information returned by the map may return annotation information from sources outside of those defined by
+     *            the urls.
+     * @return a <code>Map</code> of classes mapped to a specific annotation type. If no annotations are present, this
+     *         method returns an empty <code>Map</code>.
      */
-    public abstract Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(Set<URI> urls);
+    public abstract Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClasses(Set<URI> urls);
 
-} // END AnnotationProvider
+}

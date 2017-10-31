@@ -51,6 +51,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
+import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.spi.CDI;
 import javax.faces.annotation.FacesConfig;
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
@@ -80,6 +82,8 @@ import javax.websocket.server.ServerApplicationConfig;
 import javax.websocket.server.ServerContainer;
 import javax.websocket.server.ServerEndpoint;
 
+import com.sun.faces.cdi.CdiExtension;
+
 /**
  * Adds mappings <em>*.xhtml</em>, <em>/faces</em>, <em>*.jsf</em>, and <em>*.faces</em> for the
  * FacesServlet (if it hasn't already been mapped) if the following conditions
@@ -98,30 +102,29 @@ import javax.websocket.server.ServerEndpoint;
  *    </li>
  * </ul>
  */
-@SuppressWarnings({"UnusedDeclaration"})
 @HandlesTypes({
-      Converter.class,
-      Endpoint.class,
-      FaceletsResourceResolver.class,
-      FacesBehavior.class,
-      FacesBehaviorRenderer.class,
-      FacesComponent.class,
-      FacesConverter.class,
-      FacesConfig.class, // Should actually be check for enabled bean, but difficult to guarantee, see SERVLET_SPEC-79
-      FacesValidator.class,
-      ListenerFor.class,
-      ListenersFor.class,
-      ManagedBean.class,
-      NamedEvent.class,
-      PhaseListener.class,
-      Renderer.class,
-      Resource.class,
-      ResourceDependencies.class,
-      ResourceDependency.class,
-      ServerApplicationConfig.class,
-      ServerEndpoint.class,
-      UIComponent.class,
-      Validator.class
+    Converter.class,
+    Endpoint.class,
+    FaceletsResourceResolver.class,
+    FacesBehavior.class,
+    FacesBehaviorRenderer.class,
+    FacesComponent.class,
+    FacesConverter.class,
+    FacesConfig.class, // Should actually be check for enabled bean, but difficult to guarantee, see SERVLET_SPEC-79
+    FacesValidator.class,
+    ListenerFor.class,
+    ListenersFor.class,
+    ManagedBean.class,
+    NamedEvent.class,
+    PhaseListener.class,
+    Renderer.class,
+    Resource.class,
+    ResourceDependencies.class,
+    ResourceDependency.class,
+    ServerApplicationConfig.class,
+    ServerEndpoint.class,
+    UIComponent.class,
+    Validator.class
 })
 public class FacesInitializer implements ServletContainerInitializer {
 
@@ -179,6 +182,32 @@ public class FacesInitializer implements ServletContainerInitializer {
             }
         } catch (MalformedURLException mue) {
 
+        }
+        
+        try {
+            
+            CDI<Object> cdi = null;
+            try {
+                cdi = CDI.current();
+                
+                // System.out.println("Initializing JSF {0} for context " + context.getContextPath());
+                
+            } catch (IllegalStateException e) {
+                // On GlassFish 4.1.1/Payara 4.1.1.161 CDI is not initialized (org.jboss.weld.Container#initialize is not called), 
+                // and calling CDI.current() will throw an exception. It's no use to continue then.
+                // TODO: Do we need to find out *why* the default module does not have CDI initialized?
+                // System.out.println("CDI not available for app context id: " + context.getContextPath());
+            }
+            
+            Instance<CdiExtension> extension = cdi.select(CdiExtension.class);
+            
+            if (!extension.isAmbiguous() && !extension.isUnsatisfied()) {
+                System.out.println("Checking CDI extension ");
+                return extension.get().isAddBeansForJSFImplicitObjects();
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // tmp
         }
 
         return false;

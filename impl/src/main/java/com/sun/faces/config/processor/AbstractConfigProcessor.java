@@ -40,6 +40,18 @@
 
 package com.sun.faces.config.processor;
 
+import static com.sun.faces.application.ApplicationResourceBundle.DEFAULT_KEY;
+import static com.sun.faces.config.ConfigManager.INJECTION_PROVIDER_KEY;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
+import static com.sun.faces.util.ReflectionUtils.lookupConstructor;
+import static java.text.MessageFormat.format;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.SEVERE;
+import static javax.faces.FactoryFinder.APPLICATION_FACTORY;
+import static javax.faces.application.ProjectStage.Development;
+import static javax.faces.application.ProjectStage.Production;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -48,7 +60,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FacesException;
@@ -65,94 +76,55 @@ import org.w3c.dom.Node;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationInstanceFactoryMetadataMap;
 import com.sun.faces.application.ApplicationResourceBundle;
-import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.ConfigurationException;
-import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
 
 /**
  * <p>
- * This is the base <code>ConfigProcessor</code> that all concrete <code>ConfigProcessor</code>
- * implementations should extend.
+ * This is the base <code>ConfigProcessor</code> that all concrete <code>ConfigProcessor</code> implementations should
+ * extend.
  * </p>
  */
 public abstract class AbstractConfigProcessor implements ConfigProcessor {
 
-    private ConfigProcessor nextProcessor;
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
+    private static final String CLASS_METADATA_MAP_KEY_SUFFIX = ".METADATA";
+    
+   
 
     // -------------------------------------------- Methods from ConfigProcessor
 
-    public AbstractConfigProcessor() {
-    }
 
-    private ApplicationInstanceFactoryMetadataMap<String, Object> getClassMetadataMap(ServletContext sc) {
-        ApplicationInstanceFactoryMetadataMap<String, Object> classMetadataMap = (ApplicationInstanceFactoryMetadataMap<String, Object>) sc
+    private ApplicationInstanceFactoryMetadataMap<String, Object> getClassMetadataMap(ServletContext servletContext) {
+        ApplicationInstanceFactoryMetadataMap<String, Object> classMetadataMap = (ApplicationInstanceFactoryMetadataMap<String, Object>) servletContext
                 .getAttribute(getClassMetadataMapKey());
-        if (null == classMetadataMap) {
+        
+        if (classMetadataMap == null) {
             classMetadataMap = new ApplicationInstanceFactoryMetadataMap(new ConcurrentHashMap<>());
-            sc.setAttribute(getClassMetadataMapKey(), classMetadataMap);
+            servletContext.setAttribute(getClassMetadataMapKey(), classMetadataMap);
         }
 
         return classMetadataMap;
     }
 
     @Override
-    public void initializeClassMetadataMap(ServletContext sc) {
-        getClassMetadataMap(sc);
+    public void initializeClassMetadataMap(ServletContext servletContext, FacesContext facesContext) {
+        getClassMetadataMap(servletContext);
     }
 
     protected String getClassMetadataMapKey() {
-        return this.getClass().getName() + CLASS_METADATA_MAP_KEY_SUFFIX;
-    }
-
-    private static final String CLASS_METADATA_MAP_KEY_SUFFIX = ".METADATA";
-
-    /**
-     * @see ConfigProcessor#setNext(ConfigProcessor)
-     */
-    @Override
-    public void setNext(ConfigProcessor nextProcessor) {
-
-        this.nextProcessor = nextProcessor;
-
+        return getClass().getName() + CLASS_METADATA_MAP_KEY_SUFFIX;
     }
 
     @Override
-    public ConfigProcessor getNext() {
-        return this.nextProcessor;
+    public void destroy(ServletContext sc, FacesContext facesContext) {
     }
-
-    /**
-     * @see ConfigProcessor#invokeNext(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
-     */
-    @Override
-    public void invokeNext(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
-
-        if (nextProcessor != null) {
-            nextProcessor.process(sc, documentInfos);
-        }
-
-    }
-
-    @Override
-    public void destroyNext(ServletContext sc) {
-        if (nextProcessor != null) {
-            nextProcessor.destroy(sc);
-        }
-    }
-
-    @Override
-    public void destroy(ServletContext sc) {
-        destroyNext(sc);
-    }
+    
 
     // ------------------------------------------------------- Protected Methods
 
@@ -160,9 +132,9 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
      * @return return the Application instance for this context.
      */
     protected Application getApplication() {
-
-        ApplicationFactory afactory = (ApplicationFactory) FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        return afactory.getApplication();
+        return ((ApplicationFactory) 
+            FactoryFinder.getFactory(APPLICATION_FACTORY))
+                         .getApplication();
 
     }
 
@@ -170,12 +142,12 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
      * <p>
      * Return the text of the specified <code>Node</code>, if any.
      * 
-     * @param node the <code>Node</code>
-     * @return the text of the <code>Node</code> If the length of the text is zero, this method will
-     *         return <code>null</code>
+     * @param node
+     *            the <code>Node</code>
+     * @return the text of the <code>Node</code> If the length of the text is zero, this method will return
+     *         <code>null</code>
      */
     protected String getNodeText(Node node) {
-
         String res = null;
         if (node != null) {
             res = node.getTextContent();
@@ -184,16 +156,15 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
             }
         }
 
-        return ((res != null && res.length() != 0) ? res : null);
-
+        return res != null && res.length() != 0 ? res : null;
     }
 
     /**
-     * @return a <code>Map</code> of of textual values keyed off the values of any lang or xml:lang
-     *         attributes specified on an attribute. If no such attribute exists, then the key
-     *         {@link ApplicationResourceBundle#DEFAULT_KEY} will be used (i.e. this represents the
-     *         default Locale).
-     * @param list a list of nodes representing textual elements such as description or display-name
+     * @return a <code>Map</code> of of textual values keyed off the values of any lang or xml:lang attributes specified on
+     *         an attribute. If no such attribute exists, then the key {@link ApplicationResourceBundle#DEFAULT_KEY} will be
+     *         used (i.e. this represents the default Locale).
+     * @param list
+     *            a list of nodes representing textual elements such as description or display-name
      */
     protected Map<String, String> getTextMap(List<Node> list) {
 
@@ -213,10 +184,10 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                         if (lang != null) {
                             names.put(lang, textValue);
                         } else {
-                            names.put(ApplicationResourceBundle.DEFAULT_KEY, textValue);
+                            names.put(DEFAULT_KEY, textValue);
                         }
                     } else {
-                        names.put(ApplicationResourceBundle.DEFAULT_KEY, textValue);
+                        names.put(DEFAULT_KEY, textValue);
                     }
                 }
             }
@@ -225,53 +196,52 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         }
 
         return null;
-
     }
 
-    protected Class<?> findRootType(ServletContext sc, String source, Node sourceNode, Class<?>[] ctorArguments) {
+    protected Class<?> findRootType(ServletContext sc, FacesContext facesContext, String source, Node sourceNode, Class<?>[] ctorArguments) {
 
         try {
-            Class<?> sourceClass = loadClass(sc, source, this, null);
+            Class<?> sourceClass = loadClass(sc, facesContext, source, this, null);
             for (Class<?> ctorArg : ctorArguments) {
-                if (ReflectionUtils.lookupConstructor(sourceClass, ctorArg) != null) {
+                if (lookupConstructor(sourceClass, ctorArg) != null) {
                     return ctorArg;
                 }
             }
         } catch (ClassNotFoundException cnfe) {
-            throw new ConfigurationException(buildMessage(MessageFormat.format("Unable to find class ''{0}''", source), sourceNode), cnfe);
+            throw new ConfigurationException(buildMessage(format("Unable to find class ''{0}''", source), sourceNode), cnfe);
         }
 
         return null;
     }
 
-    protected Object createInstance(ServletContext sc, String className, Node source) {
-        return createInstance(sc, className, null, null, source);
+    protected Object createInstance(ServletContext sc, FacesContext facesContext, String className, Node source) {
+        return createInstance(sc, facesContext, className, null, null, source);
     }
 
-    protected Object createInstance(ServletContext sc, String className, Class rootType, Object root, Node source) {
+    protected Object createInstance(ServletContext sc, FacesContext facesContext, String className, Class<?> rootType, Object root, Node source) {
         boolean[] didPerformInjection = { false };
-        Object result = createInstance(sc, className, rootType, root, source, true, didPerformInjection);
+        Object result = createInstance(sc, facesContext, className, rootType, root, source, true, didPerformInjection);
         return result;
     }
 
-    protected Object createInstance(ServletContext sc, String className, Class rootType, Object root, Node source, boolean performInjection,
-            boolean[] didPerformInjection) {
-        Class clazz;
+    protected Object createInstance(ServletContext sc, FacesContext facesContext, String className, Class<?> rootType, Object root, Node source, boolean performInjection, boolean[] didPerformInjection) {
+        Class<?> clazz;
         Object returnObject = null;
         if (className != null) {
             try {
-                clazz = loadClass(sc, className, returnObject, null);
+                clazz = loadClass(sc, facesContext, className, returnObject, null);
                 if (clazz != null) {
                     if (returnObject == null) {
                         // Look for an adapter constructor if we've got
                         // an object to adapt
-                        if ((rootType != null) && (root != null)) {
-                            Constructor construct = ReflectionUtils.lookupConstructor(clazz, rootType);
+                        if (rootType != null && root != null) {
+                            Constructor<?> construct = lookupConstructor(clazz, rootType);
                             if (construct != null) {
                                 returnObject = construct.newInstance(root);
                             }
                         }
                     }
+                    
                     if (clazz != null && returnObject == null) {
                         returnObject = clazz.newInstance();
                     }
@@ -279,20 +249,21 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                     ApplicationInstanceFactoryMetadataMap<String, Object> classMetadataMap = getClassMetadataMap(sc);
 
                     if (classMetadataMap.hasAnnotations(className) && performInjection) {
-                        InjectionProvider injectionProvider = (InjectionProvider) FacesContext.getCurrentInstance().getAttributes()
-                                .get(ConfigManager.INJECTION_PROVIDER_KEY);
+                        InjectionProvider injectionProvider = (InjectionProvider) 
+                                facesContext.getAttributes()
+                                            .get(INJECTION_PROVIDER_KEY);
 
                         try {
                             injectionProvider.inject(returnObject);
                         } catch (InjectionProviderException ex) {
-                            LOGGER.log(Level.SEVERE, "Unable to inject instance" + className, ex);
+                            LOGGER.log(SEVERE, "Unable to inject instance" + className, ex);
                             throw new FacesException(ex);
                         }
 
                         try {
                             injectionProvider.invokePostConstruct(returnObject);
                         } catch (InjectionProviderException ex) {
-                            LOGGER.log(Level.SEVERE, "Unable to invoke @PostConstruct annotated method on instance " + className, ex);
+                            LOGGER.log(SEVERE, "Unable to invoke @PostConstruct annotated method on instance " + className, ex);
                             throw new FacesException(ex);
                         }
 
@@ -302,36 +273,40 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                 }
 
             } catch (ClassNotFoundException cnfe) {
-                throw new ConfigurationException(buildMessage(MessageFormat.format("Unable to find class ''{0}''", className), source), cnfe);
+                throw new ConfigurationException(buildMessage(format("Unable to find class ''{0}''", className), source),
+                        cnfe);
             } catch (NoClassDefFoundError ncdfe) {
-                throw new ConfigurationException(
-                        buildMessage(MessageFormat.format("Class ''{0}'' is missing a runtime dependency: {1}", className, ncdfe.toString()), source), ncdfe);
+                throw new ConfigurationException(buildMessage(
+                        format("Class ''{0}'' is missing a runtime dependency: {1}", className, ncdfe.toString()), source),
+                        ncdfe);
             } catch (ClassCastException cce) {
-                throw new ConfigurationException(buildMessage(MessageFormat.format("Class ''{0}'' is not an instance of ''{1}''", className, rootType), source),
-                        cce);
-            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | FacesException e) {
                 throw new ConfigurationException(
-                        buildMessage(MessageFormat.format("Unable to create a new instance of ''{0}'': {1}", className, e.toString()), source), e);
+                        buildMessage(format("Class ''{0}'' is not an instance of ''{1}''", className, rootType), source),
+                        cce);
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                    | FacesException e) {
+                throw new ConfigurationException(buildMessage(
+                        format("Unable to create a new instance of ''{0}'': {1}", className, e.toString()), source), e);
             }
         }
 
         return returnObject;
-
     }
 
-    protected void destroyInstance(ServletContext sc, String className, Object instance) {
-        if (null != instance) {
+    protected void destroyInstance(ServletContext sc, FacesContext facesContext, String className, Object instance) {
+        if (instance != null) {
             ApplicationInstanceFactoryMetadataMap<String, Object> classMetadataMap = getClassMetadataMap(sc);
 
             if (classMetadataMap.hasAnnotations(className)) {
-                InjectionProvider injectionProvider = (InjectionProvider) FacesContext.getCurrentInstance().getAttributes()
-                        .get(ConfigManager.INJECTION_PROVIDER_KEY);
+                InjectionProvider injectionProvider = (InjectionProvider) 
+                        facesContext.getAttributes()
+                                    .get(INJECTION_PROVIDER_KEY);
 
-                if (null != injectionProvider) {
+                if (injectionProvider != null) {
                     try {
                         injectionProvider.invokePreDestroy(instance);
                     } catch (InjectionProviderException ex) {
-                        LOGGER.log(Level.SEVERE, "Unable to invoke @PreDestroy annotated method on instance " + className, ex);
+                        LOGGER.log(SEVERE, "Unable to invoke @PreDestroy annotated method on instance " + className, ex);
                         throw new FacesException(ex);
                     }
                 }
@@ -339,88 +314,88 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         }
     }
 
-    protected Class<?> loadClass(ServletContext sc, String className, Object fallback, Class<?> expectedType) throws ClassNotFoundException {
+    protected Class<?> loadClass(ServletContext sc, FacesContext facesContext, String className, Object fallback, Class<?> expectedType) throws ClassNotFoundException {
         ApplicationInstanceFactoryMetadataMap<String, Object> classMetadataMap = getClassMetadataMap(sc);
 
         Class<?> clazz = (Class<?>) classMetadataMap.get(className);
-        if (null == clazz) {
+        if (clazz == null) {
             try {
                 clazz = Util.loadClass(className, fallback);
-                if (!this.isDevModeEnabled(sc)) {
+                if (!isDevModeEnabled(sc, facesContext)) {
                     classMetadataMap.put(className, clazz);
                 } else {
                     classMetadataMap.scanForAnnotations(className, clazz);
                 }
-                assert (clazz != null);
             } catch (Exception e) {
                 throw new FacesException(e.getMessage(), e);
             }
 
         }
+        
         if (expectedType != null && !expectedType.isAssignableFrom(clazz)) {
             throw new ClassCastException();
         }
+        
         return clazz;
-
     }
 
-    protected void processAnnotations(Class<? extends Annotation> annotationType) {
-
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
-        AnnotationManager manager = associate.getAnnotationManager();
-        manager.applyConfigAnnotations(ctx, annotationType, ConfigManager.getAnnotatedClasses(ctx).get(annotationType));
-
+    protected void processAnnotations(FacesContext ctx, Class<? extends Annotation> annotationType) {
+        ApplicationAssociate.getInstance(ctx.getExternalContext())
+                            .getAnnotationManager()
+                            .applyConfigAnnotations(
+                                ctx, annotationType, ConfigManager.getAnnotatedClasses(ctx).get(annotationType));
     }
+    
 
     // --------------------------------------------------------- Private Methods
 
     private String buildMessage(String cause, Node source) {
-
         return MessageFormat.format("\n  Source Document: {0}\n  Cause: {1}", source.getOwnerDocument().getDocumentURI(), cause);
-
     }
 
-    private boolean isDevModeEnabled(ServletContext sc) {
-        return getProjectStage(sc).equals(ProjectStage.Development);
+    private boolean isDevModeEnabled(ServletContext sc, FacesContext facesContext) {
+        return getProjectStage(sc, facesContext).equals(Development);
     }
 
-    private ProjectStage getProjectStage(ServletContext sc) {
-        ProjectStage projectStage = null;
+    private ProjectStage getProjectStage(ServletContext sc, FacesContext facesContext) {
         final String projectStageKey = AbstractConfigProcessor.class.getName() + ".PROJECTSTAGE";
-        projectStage = (ProjectStage) sc.getAttribute(projectStageKey);
+        ProjectStage projectStage = (ProjectStage) sc.getAttribute(projectStageKey);
 
         if (projectStage == null) {
-            WebConfiguration webConfig = WebConfiguration.getInstance(FacesContext.getCurrentInstance().getExternalContext());
+            WebConfiguration webConfig = WebConfiguration.getInstance(facesContext.getExternalContext());
             String value = webConfig.getEnvironmentEntry(WebConfiguration.WebEnvironmentEntry.ProjectStage);
+            
             if (value != null) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, "ProjectStage configured via JNDI: {0}", value);
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, "ProjectStage configured via JNDI: {0}", value);
                 }
             } else {
-                value = webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage);
+                value = webConfig.getOptionValue(JavaxFacesProjectStage);
                 if (value != null) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE, "ProjectStage configured via servlet context init parameter: {0}", value);
+                    if (LOGGER.isLoggable(FINE)) {
+                        LOGGER.log(FINE, "ProjectStage configured via servlet context init parameter: {0}", value);
                     }
                 }
             }
+            
             if (value != null) {
                 try {
                     projectStage = ProjectStage.valueOf(value);
                 } catch (IllegalArgumentException iae) {
-                    if (LOGGER.isLoggable(Level.INFO)) {
-                        LOGGER.log(Level.INFO, "Unable to discern ProjectStage for value {0}.", value);
+                    if (LOGGER.isLoggable(INFO)) {
+                        LOGGER.log(INFO, "Unable to discern ProjectStage for value {0}.", value);
                     }
                 }
             }
+            
             if (projectStage == null) {
-                projectStage = ProjectStage.Production;
+                projectStage = Production;
             }
+            
             sc.setAttribute(projectStageKey, projectStage);
         }
+        
         return projectStage;
-
     }
 
 }

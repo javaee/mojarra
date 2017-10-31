@@ -40,13 +40,15 @@
 
 package com.sun.faces.config.processor;
 
-import java.text.MessageFormat;
+import static java.text.MessageFormat.format;
+import static java.util.logging.Level.FINE;
+
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.application.Application;
+import javax.faces.context.FacesContext;
 import javax.faces.validator.BeanValidator;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
@@ -100,27 +102,27 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
      * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
     @Override
-    public void process(ServletContext sc, DocumentInfo[] documentInfos) throws Exception {
+    public void process(ServletContext servletContext, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {
 
-        // process annotated Validators first as Validators configured
+        // Process annotated Validators first as Validators configured
         // via config files take precedence
-        processAnnotations(FacesValidator.class);
+        processAnnotations(facesContext, FacesValidator.class);
 
         for (int i = 0; i < documentInfos.length; i++) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, MessageFormat.format("Processing validator elements for document: ''{0}''", documentInfos[i].getSourceURI()));
+            if (LOGGER.isLoggable(FINE)) {
+                LOGGER.log(FINE, format("Processing validator elements for document: ''{0}''", documentInfos[i].getSourceURI()));
             }
+            
             Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement().getNamespaceURI();
             NodeList validators = document.getDocumentElement().getElementsByTagNameNS(namespace, VALIDATOR);
+            
             if (validators != null && validators.getLength() > 0) {
-                addValidators(validators, namespace);
+                addValidators(facesContext, validators, namespace);
             }
         }
+        
         processDefaultValidatorIds();
-
-        invokeNext(sc, documentInfos);
-
     }
 
     // --------------------------------------------------------- Private Methods
@@ -138,17 +140,17 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
                     break;
                 }
             }
+            
             if (!found) {
-                String msg = MessageFormat.format("Default validator ''{0}'' does not reference a registered validator.", defaultValidatorId);
-                throw new ConfigurationException(msg);
+                throw new ConfigurationException(format("Default validator ''{0}'' does not reference a registered validator.", defaultValidatorId));
             }
         }
 
     }
 
-    private void addValidators(NodeList validators, String namespace) throws XPathExpressionException {
+    private void addValidators(FacesContext facesContext, NodeList validators, String namespace) throws XPathExpressionException {
 
-        Application app = getApplication();
+        Application application = getApplication();
         Verifier verifier = Verifier.getCurrentInstance();
         for (int i = 0, size = validators.getLength(); i < size; i++) {
             Node validator = validators.item(i);
@@ -156,6 +158,7 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
             NodeList children = ((Element) validator).getElementsByTagNameNS(namespace, "*");
             String validatorId = null;
             String validatorClass = null;
+            
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -171,20 +174,20 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
             }
 
             if (validatorId != null && validatorClass != null) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, MessageFormat.format("Calling Application.addValidator({0},{1})", validatorId, validatorClass));
+                if (LOGGER.isLoggable(FINE)) {
+                    LOGGER.log(FINE, format("Calling Application.addValidator({0},{1})", validatorId, validatorClass));
                 }
 
                 boolean doAdd = true;
                 if (validatorId.equals(BeanValidator.VALIDATOR_ID)) {
-                    doAdd = ApplicationConfigProcessor.isBeanValidatorAvailable();
+                    doAdd = ApplicationConfigProcessor.isBeanValidatorAvailable(facesContext);
                 }
 
                 if (doAdd) {
                     if (verifier != null) {
                         verifier.validateObject(Verifier.ObjectType.VALIDATOR, validatorClass, Validator.class);
                     }
-                    app.addValidator(validatorId, validatorClass);
+                    application.addValidator(validatorId, validatorClass);
                 }
             }
 

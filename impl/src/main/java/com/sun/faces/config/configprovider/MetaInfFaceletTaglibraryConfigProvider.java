@@ -40,91 +40,86 @@
 
 package com.sun.faces.config.configprovider;
 
+import static com.sun.faces.util.Util.getCurrentLoader;
+import static java.lang.System.arraycopy;
+import static java.util.Collections.emptyList;
+
+import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Set;
-import java.io.IOException;
 
-import javax.servlet.ServletContext;
 import javax.faces.FacesException;
+import javax.servlet.ServletContext;
 
 import com.sun.faces.facelets.util.Classpath;
-import com.sun.faces.util.Util;
 import com.sun.faces.spi.ConfigurationResourceProvider;
-import java.net.URI;
 
 /**
  *
  */
-public class MetaInfFaceletTaglibraryConfigProvider implements
-      ConfigurationResourceProvider {
+public class MetaInfFaceletTaglibraryConfigProvider implements ConfigurationResourceProvider {
 
     private static final String SUFFIX = ".taglib.xml";
-    private static final String WEB_INF_CLASSES =
-          "/WEB-INF/classes/META-INF";
+    private static final String WEB_INF_CLASSES = "/WEB-INF/classes/META-INF";
 
     /**
-     * Array of taglib.xml files included with Facelets 1.1.x.  If they are
-     * on the classpath, we don't want to process them.
+     * Array of taglib.xml files included with Facelets 1.1.x. If they are on the classpath, we don't want to process them.
      */
-    private static final String[] FACELET_CONFIG_FILES = {
-        "META-INF/jsf-core.taglib.xml",
-        "META-INF/jsf-html.taglib.xml",
-        "META-INF/jsf-ui.taglib.xml",
-        "META-INF/jstl-core.taglib.xml",
-        "META-INF/jstl-fn.taglib.xml"
-    };
+    private static final String[] FACELET_CONFIG_FILES = { 
+            "META-INF/jsf-core.taglib.xml", 
+            "META-INF/jsf-html.taglib.xml",
+            "META-INF/jsf-ui.taglib.xml", 
+            "META-INF/jstl-core.taglib.xml", 
+            "META-INF/jstl-fn.taglib.xml" };
 
-    private static final String[] BUILT_IN_TAGLIB_XML_FILES = {
-        "META-INF/mojarra_ext.taglib.xml"
-        
+    private static final String[] BUILT_IN_TAGLIB_XML_FILES = { "META-INF/mojarra_ext.taglib.xml"
+
     };
 
     // -------------------------------------------- Methods from ConfigProcessor
-
 
     @Override
     public Collection<URI> getResources(ServletContext context) {
 
         try {
-            URL[] externalTaglibUrls = Classpath.search(Util.getCurrentLoader(this),
-                                          "META-INF/",
-                                          SUFFIX);
+            URL[] externalTaglibUrls = Classpath.search(getCurrentLoader(this), "META-INF/", SUFFIX);
             URL[] builtInTaglibUrls = new URL[BUILT_IN_TAGLIB_XML_FILES.length];
             ClassLoader runtimeClassLoader = this.getClass().getClassLoader();
+            
             for (int i = 0; i < BUILT_IN_TAGLIB_XML_FILES.length; i++) {
                 builtInTaglibUrls[i] = runtimeClassLoader.getResource(BUILT_IN_TAGLIB_XML_FILES[i]);
             }
+            
             URL[] urls = new URL[externalTaglibUrls.length + builtInTaglibUrls.length];
-            System.arraycopy(externalTaglibUrls, 0, urls, 0, externalTaglibUrls.length);
-            System.arraycopy(builtInTaglibUrls, 0, urls, externalTaglibUrls.length, builtInTaglibUrls.length);
-            // perform some 'correctness' checking.  If the user has
+            arraycopy(externalTaglibUrls, 0, urls, 0, externalTaglibUrls.length);
+            arraycopy(builtInTaglibUrls, 0, urls, externalTaglibUrls.length, builtInTaglibUrls.length);
+
+            // Perform some 'correctness' checking. If the user has
             // removed the FaceletViewHandler from their configuration,
             // but has left the jsf-facelets.jar in the classpath, we
             // need to ignore the default configuration resouces from
             // that JAR.
             List<URI> urlsList = pruneURLs(urls);
 
-            // special case for finding taglib files in WEB-INF/classes/META-INF
-            Set paths = context.getResourcePaths(WEB_INF_CLASSES);
+            // Special case for finding taglib files in WEB-INF/classes/META-INF
+            Set<String> paths = context.getResourcePaths(WEB_INF_CLASSES);
             if (paths != null) {
-                for (Object path : paths) {
-                    String p = path.toString();
-                    if (p.endsWith(".taglib.xml")) {
-                        String urlString = context.getResource(p).toExternalForm();
-                        urlString = urlString.replaceAll(" ", "%20");
+                for (String path : paths) {
+                    if (path.endsWith(".taglib.xml")) {
                         try {
-                            urlsList.add(new URI(urlString));
+                            urlsList.add(new URI(context.getResource(path).toExternalForm().replaceAll(" ", "%20")));
                         } catch (URISyntaxException ex) {
                             throw new FacesException(ex);
                         }
                     }
                 }
             }
+            
             return urlsList;
         } catch (IOException ioe) {
             throw new FacesException("Error searching classpath from facelet-taglib documents", ioe);
@@ -132,9 +127,7 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
 
     }
 
-
     // --------------------------------------------------------- Private Methods
-
 
     private List<URI> pruneURLs(URL[] urls) {
 
@@ -149,14 +142,14 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
                         break;
                     }
                 }
+                
                 if (!found) {
                     if (ret == null) {
                         ret = new ArrayList<>();
                     }
+                    
                     try {
-                        String urlString = url.toExternalForm();
-                        urlString = urlString.replaceAll(" ", "%20");
-                        ret.add(new URI(urlString));
+                        ret.add(new URI(url.toExternalForm().replaceAll(" ", "%20")));
                     } catch (URISyntaxException ex) {
                         throw new FacesException(ex);
                     }
@@ -165,11 +158,10 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
         }
 
         if (ret == null) {
-            ret = Collections.emptyList();
+            ret = emptyList();
         }
+        
         return ret;
-
     }
-
 
 }
