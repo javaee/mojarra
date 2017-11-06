@@ -51,6 +51,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.config.manager.DbfFactory;
+import com.sun.faces.config.manager.FacesConfigInfo;
+import com.sun.faces.config.manager.documents.DocumentInfo;
+import com.sun.faces.config.manager.documents.DocumentOrderingWrapper;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Attr;
@@ -600,7 +605,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
     private Document parseDocumentAsWebInfFacesConfig(FacesContext ctx, String path) throws Exception {
 
         Document d = parseDocument(ctx, path);
-        Attr webInf = d.createAttribute(ConfigManager.WEB_INF_MARKER);
+        Attr webInf = d.createAttribute("com.sun.faces.webinf");
         webInf.setValue("true");
         d.getDocumentElement().getAttributes().setNamedItem(webInf);
         return d;

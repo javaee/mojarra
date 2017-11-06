@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.config;
+package com.sun.faces.config.manager;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,6 +70,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 

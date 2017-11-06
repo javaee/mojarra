@@ -63,8 +63,8 @@ import org.w3c.dom.NodeList;
 
 import com.sun.faces.application.InjectionApplicationFactory;
 import com.sun.faces.config.ConfigurationException;
-import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.config.InitFacesContext;
+import com.sun.faces.config.manager.documents.DocumentInfo;
 import com.sun.faces.context.InjectionFacesContextFactory;
 import com.sun.faces.util.FacesLogger;
 
@@ -194,7 +194,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     // -------------------------------------------- Methods from ConfigProcessor
 
     /**
-     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.manager.documents.DocumentInfo[])
      */
     @Override
     public void process(ServletContext servletContext, FacesContext facesContext, DocumentInfo[] documentInfos) throws Exception {

@@ -43,7 +43,7 @@ package com.sun.faces.config.processor;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
-import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.config.manager.documents.DocumentInfo;
 
 /**
  * <p>

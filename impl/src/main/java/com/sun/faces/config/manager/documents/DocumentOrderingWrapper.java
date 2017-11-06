@@ -37,9 +37,9 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.config.manager.documents;
 
-package com.sun.faces.config;
-
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -52,20 +52,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Logger;
 import java.util.logging.Level;
-import java.text.MessageFormat;
+import java.util.logging.Logger;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
 
 /**
- * This class is used by the config system to order <code>faces-config</code>
- * documents found on the classpath or configured explicitly via the
- * <code>javax.faces.CONFIG_FILES</code> context init parameter.
+ * This class is used by the config system to order <code>faces-config</code> documents found on the classpath or
+ * configured explicitly via the <code>javax.faces.CONFIG_FILES</code> context init parameter.
  */
 public class DocumentOrderingWrapper {
 
@@ -75,15 +75,13 @@ public class DocumentOrderingWrapper {
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     /**
-     * {@link Comparator} implementation to aid in sorting <code>faces-config</code>
-     * documents.
+     * {@link Comparator} implementation to aid in sorting <code>faces-config</code> documents.
      */
-    private static Comparator<DocumentOrderingWrapper> COMPARATOR =
-          new DocumentOrderingComparator();
+    private static Comparator<DocumentOrderingWrapper> COMPARATOR = new DocumentOrderingComparator();
 
     /**
-     * This is the limit on the number of attempts made to sort the documents.
-     * Any attempt to exceed this limit will result in an Exception being thrown.
+     * This is the limit on the number of attempts made to sort the documents. Any attempt to exceed this limit will result
+     * in an Exception being thrown.
      */
     private static final int MAX_SORT_PASSED = 1000;
 
@@ -118,14 +116,12 @@ public class DocumentOrderingWrapper {
     private static final String OTHERS_KEY = DocumentOrderingWrapper.class.getName() + ".OTHERS_KEY";
 
     /**
-     * Return code indicating that element <code>n</code> is to be swapped
-     * with <code>n + 1</code>
+     * Return code indicating that element <code>n</code> is to be swapped with <code>n + 1</code>
      */
     private static final int SWAP = -1;
 
     /**
-     * Return code indicating that no swap needs to occur for the elements
-     * being compared.
+     * Return code indicating that no swap needs to occur for the elements being compared.
      */
     private static final int DO_NOT_SWAP = 0;
 
@@ -151,156 +147,109 @@ public class DocumentOrderingWrapper {
 
     // -------------------------------------------------------- Constructors
 
-
     /**
-     * Constructs a new <code>DocumentOrderingWrapper</code> for the specified
-     * <code>Document<code>.
+     * Constructs a new <code>DocumentOrderingWrapper</code> for the specified <code>Document<code>.
      */
     public DocumentOrderingWrapper(DocumentInfo document) {
-
         this.documentInfo = document;
         init();
-
     }
 
-
     // ------------------------------------------------------ Public Methods
-
 
     /**
      * @return the wrapped <code>Document</code>
      */
     public DocumentInfo getDocument() {
-
         return documentInfo;
-
     }
-
 
     /**
      * @return this <code>Document</code>'s ID, if any
      */
     public String getDocumentId() {
-
         return id;
-
     }
-
 
     /**
      * @return this <code>Document<code>'s before IDs, if any
      */
     public String[] getBeforeIds() {
-
         return beforeIds;
-
     }
-
 
     /**
      * @return this <code>Document</code>'s after IDs, if any
      */
     public String[] getAfterIds() {
-
         return afterIds;
-
     }
 
-
     /**
-     * @return <code>true</code> if any before IDs are present, otherwise
-     *  <code>false</code>
+     * @return <code>true</code> if any before IDs are present, otherwise <code>false</code>
      */
     public boolean isBeforeOrdered() {
         return beforeIds.length != 0;
     }
 
-
     /**
-     * @return <code>true</code> if any after IDs are present, otherwise,
-     *  <code>false</code>
+     * @return <code>true</code> if any after IDs are present, otherwise, <code>false</code>
      */
     public boolean isAfterOrdered() {
         return afterIds.length != 0;
     }
 
-
     /**
-     * @return <code>true</code> if this document has any before or after IDs,
-     *  otherwise <code>false</code>
+     * @return <code>true</code> if this document has any before or after IDs, otherwise <code>false</code>
      */
     public boolean isOrdered() {
-        return (isBeforeOrdered() || isAfterOrdered());
+        return isBeforeOrdered() || isAfterOrdered();
     }
 
-
     /**
-     * @return <code>true</code> if this document is before the specified
-     *  <code>id</code>, otherwise <code>false</code>
+     * @return <code>true</code> if this document is before the specified <code>id</code>, otherwise <code>false</code>
      */
     public boolean isBefore(String id) {
-
-        return (search(beforeIds, id));
-
+        return search(beforeIds, id);
     }
 
-
     /**
-     * @return <code>true</code> if this document is after the specified
-     *  <code>id</code>, otherwise <code>false</code>
+     * @return <code>true</code> if this document is after the specified <code>id</code>, otherwise <code>false</code>
      */
     public boolean isAfter(String id) {
-
-        return (search(afterIds, id));
+        return search(afterIds, id);
     }
 
-
     /**
-     * @return <code>true</code> if this document is after others, otherwise
-     *  <code>false</code>
+     * @return <code>true</code> if this document is after others, otherwise <code>false</code>
      */
     public boolean isAfterOthers() {
-
-        return (search(afterIds, OTHERS_KEY));
-
+        return search(afterIds, OTHERS_KEY);
     }
-
 
     /**
-     * @return <code>true</code> if this document is before others, otherwise
-     *  <code>false</code>
+     * @return <code>true</code> if this document is before others, otherwise <code>false</code>
      */
     public boolean isBeforeOthers() {
-
-         return (search(beforeIds, OTHERS_KEY));
-
+        return search(beforeIds, OTHERS_KEY);
     }
-
 
     @Override
     public String toString() {
-        return "Document{" +
-               "id='" + id + '\'' +
-               ", beforeIds="
-               + (beforeIds == null ? null : Arrays.asList(beforeIds))
-               +
-               ", afterIds="
-               + (afterIds == null ? null : Arrays.asList(afterIds))
-               +
-               '}';
+        return "Document{" + "id='" + id + '\'' + ", beforeIds=" + (beforeIds == null ? null : Arrays.asList(beforeIds)) + ", afterIds="
+                + (afterIds == null ? null : Arrays.asList(afterIds)) + '}';
     }
 
-
     /**
-     * Sort the provided array of <code>Document</code>s per the order specified
-     * in the List represented by absoluteOrder.
-     * @param documents Documents to sort
-     * @param absoluteOrder the absolute order as specified in the /WEB-INF/faces-config.xml
-     * @return an array of DocumentOrderingWrappers that may be smaller than the
-     *  input array of wrappers.
+     * Sort the provided array of <code>Document</code>s per the order specified in the List represented by absoluteOrder.
+     * 
+     * @param documents
+     *            Documents to sort
+     * @param absoluteOrder
+     *            the absolute order as specified in the /WEB-INF/faces-config.xml
+     * @return an array of DocumentOrderingWrappers that may be smaller than the input array of wrappers.
      */
-    public static DocumentOrderingWrapper[] sort(DocumentOrderingWrapper[] documents,
-                                                 List<String> absoluteOrder) {
+    public static DocumentOrderingWrapper[] sort(DocumentOrderingWrapper[] documents, List<String> absoluteOrder) {
 
         List<DocumentOrderingWrapper> sourceList = new CopyOnWriteArrayList<>();
         sourceList.addAll(Arrays.asList(documents));
@@ -316,21 +265,17 @@ public class DocumentOrderingWrapper {
                     found = true;
                     targetList.add(wrapper);
                     sourceList.remove(wrapper);
-                } else if (found && name.equals(wrapper.getDocumentId())){
+                } else if (found && name.equals(wrapper.getDocumentId())) {
                     // we've already processed a document with this name
                     if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING,
-                                   "jsf.configuration.absolute.order.duplicate.document",
-                                   new Object[] { name });
+                        LOGGER.log(Level.WARNING, "jsf.configuration.absolute.order.duplicate.document", new Object[] { name });
                     }
                     // only log this once
                     break;
                 }
             }
             if (!found && LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
-                    "jsf.configuration.absolute.order.missing.document",
-                    new Object[] { name });
+                LOGGER.log(Level.WARNING, "jsf.configuration.absolute.order.missing.document", new Object[] { name });
             }
         }
 
@@ -344,14 +289,12 @@ public class DocumentOrderingWrapper {
         }
 
         return targetList.toArray(new DocumentOrderingWrapper[targetList.size()]);
-        
+
     }
 
-
     /**
-     * Sort the provided array of <code>Document</code>s per the requirements
-     * of the 2.0 specification.  Note, that this method only provides partial
-     * ordering and not absolute ordering.
+     * Sort the provided array of <code>Document</code>s per the requirements of the 2.0 specification. Note, that this
+     * method only provides partial ordering and not absolute ordering.
      */
     public static void sort(DocumentOrderingWrapper[] documents) {
 
@@ -371,23 +314,23 @@ public class DocumentOrderingWrapper {
 
         // Sort the documents such that specified ordering will be considered.
         //
-        // It turns out that some of the specified ordering, if it was not discovered by the sort routine 
+        // It turns out that some of the specified ordering, if it was not discovered by the sort routine
         // until later in its processing, was not being considered correctly in the ordering algorithm.
         //
         // This preSort method puts all of the documents with specified ordering as early on in the
-        // list of documents as possible for Mojarra to consider it quickly, and be 
+        // list of documents as possible for Mojarra to consider it quickly, and be
         // able to use its ordering algorithm to the best of its ability.
         preSort(documents);
 
         // original inner sort algorithm
         int numberOfPasses = innerSort(documents);
-        
+
         // final sort
         for (int i = 0; i < documents.length; i++) {
-        	LinkedList<String> ids = getIds(documents);
-        	if (done(documents, ids)) {
-        		break;
-        	}
+            LinkedList<String> ids = getIds(documents);
+            if (done(documents, ids)) {
+                break;
+            }
         }
 
         if (t != null) {
@@ -396,59 +339,60 @@ public class DocumentOrderingWrapper {
         }
 
     }
-    
+
     // Check to see if the sort is complete, and if not, finish it, if possible.
     public static boolean done(DocumentOrderingWrapper[] documents, LinkedList<String> ids) {
-    	
-    	for (int i = 0; i < documents.length; i++) {
-    		int ii = 0;
-    		for(String documentId : ids) {
-    			if (documents[i].getDocumentId().equals(documentId)) {
-    				break;
-    			}
-    			if (documents[i].isBefore(documentId)) {
-    				if (LOGGER.isLoggable(Level.FINE)) {
-    	                LOGGER.log(Level.FINE, "done: " + documentId + " should be after " + documents[i].getDocumentId() + 
-    	                		" given that it should be before: " + Arrays.asList(documents[i].getBeforeIds()));
-    	            }
-    				
-    				// we have a document that is out of order, and his index is ii, he belongs at index i, and all the documents in between need to be shifted left.
-    				DocumentOrderingWrapper temp = null;
-    				for (int j = 0; j < documents.length; j++) {
-    					// This is one that is out of order and needs to be moved.
-    					if (j==ii) {
-    						temp = documents[j];
-    					}
-    					// this is one in between that needs to be shifted left.
-    					if (temp != null && j != i) {
-    						documents[j] = documents[j+1];
-    					}
-    					// this is where the one that is out of order needs to be moved to.
-    					if (j==i) {
-    						documents[j] = temp;
-    						return false;
-    					}
-    				}
-    			}
-    			ii = ii + 1;
-    		}
-    	}
-    	
-    	return true;
+
+        for (int i = 0; i < documents.length; i++) {
+            int ii = 0;
+            for (String documentId : ids) {
+                if (documents[i].getDocumentId().equals(documentId)) {
+                    break;
+                }
+                if (documents[i].isBefore(documentId)) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE, "done: " + documentId + " should be after " + documents[i].getDocumentId()
+                                + " given that it should be before: " + Arrays.asList(documents[i].getBeforeIds()));
+                    }
+
+                    // we have a document that is out of order, and his index is ii, he belongs at index i, and all the documents in between
+                    // need to be shifted left.
+                    DocumentOrderingWrapper temp = null;
+                    for (int j = 0; j < documents.length; j++) {
+                        // This is one that is out of order and needs to be moved.
+                        if (j == ii) {
+                            temp = documents[j];
+                        }
+                        // this is one in between that needs to be shifted left.
+                        if (temp != null && j != i) {
+                            documents[j] = documents[j + 1];
+                        }
+                        // this is where the one that is out of order needs to be moved to.
+                        if (j == i) {
+                            documents[j] = temp;
+                            return false;
+                        }
+                    }
+                }
+                ii = ii + 1;
+            }
+        }
+
+        return true;
     }
-    
+
     public static LinkedList<String> getIds(DocumentOrderingWrapper[] documents) {
-    	LinkedList<String> ids = new LinkedList<String>();
-    	for (int i = 0; i < documents.length; i++) {
-    		ids.add(documents[i].getDocumentId());
-    	}
-    	return ids;
+        LinkedList<String> ids = new LinkedList<String>();
+        for (int i = 0; i < documents.length; i++) {
+            ids.add(documents[i].getDocumentId());
+        }
+        return ids;
     }
-    
+
     public static int innerSort(DocumentOrderingWrapper[] documents) {
-    	
-    	int numberOfPasses = 0;
-    	boolean doMore = true;
+
+        int numberOfPasses = 0;
+        boolean doMore = true;
 
         while (doMore) {
             numberOfPasses++;
@@ -458,27 +402,21 @@ public class DocumentOrderingWrapper {
                     for (DocumentOrderingWrapper w : documents) {
                         msg += ("  " + w.toString() + '\n');
                     }
-                    LOGGER.severe(msg);                    
+                    LOGGER.severe(msg);
                 }
                 throw new ConfigurationException("Exceeded maximum number of attempts to sort the faces-config documents.");
             }
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           "Starting sort pass number {0}...",
-                           numberOfPasses);
+                LOGGER.log(Level.FINE, "Starting sort pass number {0}...", numberOfPasses);
             }
             doMore = false;
             for (int i = 0; i < documents.length - 1; i++) {
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               "Comparing {0}, {1}",
-                               new Object[] { documents[i].id, documents[i + 1].id });
+                    LOGGER.log(Level.FINE, "Comparing {0}, {1}", new Object[] { documents[i].id, documents[i + 1].id });
                 }
                 if (COMPARATOR.compare(documents[i], documents[i + 1]) != DO_NOT_SWAP) {
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   "Swapping {0} with {1}",
-                                   new Object[] { documents[i].id, documents[i + 1].id });
+                        LOGGER.log(Level.FINE, "Swapping {0} with {1}", new Object[] { documents[i].id, documents[i + 1].id });
                     }
                     DocumentOrderingWrapper temp = documents[i];
                     documents[i] = documents[i + 1];
@@ -489,15 +427,11 @@ public class DocumentOrderingWrapper {
 
             // compare first and last elements
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           "Comparing {0}, {1}",
-                           new Object[]{documents[0].id, documents[documents.length - 1].id});
+                LOGGER.log(Level.FINE, "Comparing {0}, {1}", new Object[] { documents[0].id, documents[documents.length - 1].id });
             }
             if (COMPARATOR.compare(documents[0], documents[documents.length - 1]) != DO_NOT_SWAP) {
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               "Swapping {0} with {1}",
-                               new Object[]{documents[0].id, documents[documents.length - 1].id});
+                    LOGGER.log(Level.FINE, "Swapping {0} with {1}", new Object[] { documents[0].id, documents[documents.length - 1].id });
                 }
                 DocumentOrderingWrapper temp = documents[0];
                 documents[0] = documents[documents.length - 1];
@@ -505,39 +439,26 @@ public class DocumentOrderingWrapper {
                 doMore = true;
             }
         }
-        
+
         return numberOfPasses;
     }
 
     // ----------------------------------------------------- Private Methods
 
-
     /**
-     * Update before/after knowledge of all nodes in the array.
-     * Consider the case of A after B, B after C, C after D, and D
-     * with no ordering characteristics.
-     * When the code below executes, the before/after of specific nodes
-     * will be updated so that in the case of the example above we'd
-     * have:
+     * Update before/after knowledge of all nodes in the array. Consider the case of A after B, B after C, C after D, and D
+     * with no ordering characteristics. When the code below executes, the before/after of specific nodes will be updated so
+     * that in the case of the example above we'd have:
      *
-     *  A -> after B
-     *  B -> before A, after C
-     *  C -> before B, A after D
-     *  D -> before C, B, A
+     * A -> after B B -> before A, after C C -> before B, A after D D -> before C, B, A
      *
-     * So when an attempt is made to sort [A, B, C, D] the end
-     * result is [D, C, B, A]
-     * No extra enhancement of after ID information is necessary outside
-     * of the single node information due to the way the algorithm processes
-     * the array.
+     * So when an attempt is made to sort [A, B, C, D] the end result is [D, C, B, A] No extra enhancement of after ID
+     * information is necessary outside of the single node information due to the way the algorithm processes the array.
      *
-     * This method also performs cyclic detection.  If, after updating the
-     * before/after information, the before/after information contains a
-     * reference to the document ID we're currently processing, throw an
-     * exception.
+     * This method also performs cyclic detection. If, after updating the before/after information, the before/after
+     * information contains a reference to the document ID we're currently processing, throw an exception.
      */
-    private static void enhanceOrderingData(DocumentOrderingWrapper[] wrappers)
-    throws CircularDependencyException {
+    private static void enhanceOrderingData(DocumentOrderingWrapper[] wrappers) throws CircularDependencyException {
 
         for (int i = 0; i < wrappers.length; i++) {
             DocumentOrderingWrapper w = wrappers[i];
@@ -555,8 +476,7 @@ public class DocumentOrderingWrapper {
                             Set<String> newAfterIds = new HashSet<>(afterIds.length + 1);
                             newAfterIds.addAll(Arrays.asList(afterIds));
                             newAfterIds.add(w.id);
-                            other.afterIds = newAfterIds
-                                  .toArray(new String[newAfterIds.size()]);
+                            other.afterIds = newAfterIds.toArray(new String[newAfterIds.size()]);
                             Arrays.sort(other.afterIds);
                         }
 
@@ -594,12 +514,10 @@ public class DocumentOrderingWrapper {
                     if (id.equals(other.id)) {
                         String[] beforeIds = other.getBeforeIds();
                         if (Arrays.binarySearch(beforeIds, w.id) < 0) {
-                            Set<String> newBeforeIds =
-                                  new HashSet<>(beforeIds.length + 1);
+                            Set<String> newBeforeIds = new HashSet<>(beforeIds.length + 1);
                             newBeforeIds.addAll(Arrays.asList(beforeIds));
                             newBeforeIds.add(w.id);
-                            other.beforeIds = newBeforeIds
-                                  .toArray(new String[newBeforeIds.size()]);
+                            other.beforeIds = newBeforeIds.toArray(new String[newBeforeIds.size()]);
                             Arrays.sort(other.beforeIds);
                         }
                         String[] otherAfterIds = other.getAfterIds();
@@ -626,11 +544,13 @@ public class DocumentOrderingWrapper {
         }
     }
 
-
     /**
      * Simple helper method around <code>Arrays.binarySearch()</code>.
-     * @param ids an array of IDs
-     * @param id the ID to search for
+     * 
+     * @param ids
+     *            an array of IDs
+     * @param id
+     *            the ID to search for
      * @return true if <code>ids</code> contains <code>id</code>
      */
     private static boolean search(String[] ids, String id) {
@@ -639,11 +559,9 @@ public class DocumentOrderingWrapper {
 
     }
 
-
     /**
      * <p>
-     * Performs the initialization necessary to allow sorting of
-     * <code>faces-config</code> documents.
+     * Performs the initialization necessary to allow sorting of <code>faces-config</code> documents.
      * </p>
      */
     private void init() {
@@ -651,8 +569,7 @@ public class DocumentOrderingWrapper {
         Element documentElement = documentInfo.getDocument().getDocumentElement();
         String namespace = documentElement.getNamespaceURI();
         id = getDocumentName(documentElement);
-        NodeList orderingElements =
-              documentElement.getElementsByTagNameNS(namespace, ORDERING);
+        NodeList orderingElements = documentElement.getElementsByTagNameNS(namespace, ORDERING);
 
         Set<String> beforeIds = null;
         Set<String> afterIds = null;
@@ -672,12 +589,8 @@ public class DocumentOrderingWrapper {
                 }
             }
         }
-        this.beforeIds = ((beforeIds != null)
-                          ? beforeIds.toArray(new String[beforeIds.size()])
-                          : new String[0]);
-        this.afterIds = ((afterIds != null)
-                         ? afterIds.toArray(new String[afterIds.size()])
-                         : new String[0]);
+        this.beforeIds = ((beforeIds != null) ? beforeIds.toArray(new String[beforeIds.size()]) : new String[0]);
+        this.afterIds = ((afterIds != null) ? afterIds.toArray(new String[afterIds.size()]) : new String[0]);
         Arrays.sort(this.beforeIds);
         Arrays.sort(this.afterIds);
 
@@ -688,7 +601,6 @@ public class DocumentOrderingWrapper {
         checkDuplicates(this.afterIds, this.beforeIds);
 
     }
-
 
     private String getDocumentName(Element documentElement) {
 
@@ -707,7 +619,6 @@ public class DocumentOrderingWrapper {
 
     }
 
-
     /**
      * Ensure the IDs in <code>source</code> aren't present in <code>searchTarget</code>.
      */
@@ -716,18 +627,15 @@ public class DocumentOrderingWrapper {
         for (String id : source) {
             if (search(searchTarget, id)) {
                 String msg = MessageFormat.format("Document {0} is specified to come before and after {1}.",
-                                                  documentInfo.getDocument().getDocumentURI(),
-                                                  id);
+                        documentInfo.getDocument().getDocumentURI(), id);
                 throw new ConfigurationException(msg);
             }
         }
 
     }
 
-
     /**
-     * Extract and return a <code>Set</code> of IDs contained within the provided
-     * <code>Node</code>.
+     * Extract and return a <code>Set</code> of IDs contained within the provided <code>Node</code>.
      */
     private Set<String> extractIds(Node n, String nodeName) {
 
@@ -742,7 +650,8 @@ public class DocumentOrderingWrapper {
                     if (id != null) {
                         idsList.add(id);
                     }
-                } if (OTHERS.equals(idNode.getLocalName())) {
+                }
+                if (OTHERS.equals(idNode.getLocalName())) {
                     if (id != null) {
                         idsList.add(OTHERS_KEY);
                     }
@@ -752,7 +661,6 @@ public class DocumentOrderingWrapper {
         return idsList;
 
     }
-
 
     /**
      * Return the textual content, if any, of the provided <code>Node</code>.
@@ -773,39 +681,39 @@ public class DocumentOrderingWrapper {
 
     public static HashMap<String, DocumentOrderingWrapper> getDocumentHashMap(DocumentOrderingWrapper[] documents) {
         HashMap<String, DocumentOrderingWrapper> configMap = new HashMap<String, DocumentOrderingWrapper>();
-    
+
         for (DocumentOrderingWrapper document : documents) {
             String name = document.id;
             if (name != null && !"".equals(name)) {
                 configMap.put(name, document);
             }
         }
-    
+
         return configMap;
     }
 
     public static void preSort(DocumentOrderingWrapper[] documents) {
         List<DocumentOrderingWrapper> anonymousAndUnorderedList = new ArrayList<DocumentOrderingWrapper>();
         Map<Integer, Integer> linkedMap = new LinkedHashMap<Integer, Integer>();
-        
+
         DocumentOrderingWrapper[] copyOfDocuments = new DocumentOrderingWrapper[documents.length];
-        System.arraycopy( documents, 0, copyOfDocuments, 0, documents.length );
+        System.arraycopy(documents, 0, copyOfDocuments, 0, documents.length);
 
         int i = 0;
         for (DocumentOrderingWrapper w : documents) {
-        	
+
             String[] bfs = w.getBeforeIds();
             String[] afs = w.getAfterIds();
             int knowledge = bfs.length + afs.length;
 
             if ((w.id == null || "".equals(w.id)) && (!w.isOrdered())) {
-            	anonymousAndUnorderedList.add(w);
+                anonymousAndUnorderedList.add(w);
             } else {
                 linkedMap.put(i, knowledge);
             }
             i++;
         }
-        
+
         linkedMap = descendingByValue(linkedMap);
 
         i = 0;
@@ -820,7 +728,7 @@ public class DocumentOrderingWrapper {
         }
 
     }
-    
+
     public static <K, V extends Comparable<? super V>> Map<K, V> descendingByValue(Map<K, V> map) {
         List<Map.Entry<K, V>> list = new LinkedList<Map.Entry<K, V>>(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
@@ -839,17 +747,12 @@ public class DocumentOrderingWrapper {
 
     // ---------------------------------------------------------- Nested Classes
 
-
-    @SuppressWarnings({"ComparatorNotSerializable"})
     private static final class DocumentOrderingComparator implements Comparator<DocumentOrderingWrapper> {
-
 
         // --------------------------------------------- Methods from Comparator
 
-
         @Override
-        public int compare(DocumentOrderingWrapper wrapper1,
-                           DocumentOrderingWrapper wrapper2) {
+        public int compare(DocumentOrderingWrapper wrapper1, DocumentOrderingWrapper wrapper2) {
 
             String w1Id = wrapper1.id;
             String w2Id = wrapper2.id;
@@ -868,7 +771,7 @@ public class DocumentOrderingWrapper {
                 return SWAP; // move w2 before w1
             }
 
-            // no explicit ID ordering.  Check others ordering
+            // no explicit ID ordering. Check others ordering
             boolean w1IsAfterOthers = wrapper1.isAfterOthers();
             if (w1IsAfterOthers && !wrapper1.isBefore(w2Id) && !(wrapper1.isAfterOthers() && wrapper2.isAfterOthers())) {
                 return SWAP;
@@ -884,39 +787,13 @@ public class DocumentOrderingWrapper {
 
     } // END FacesConfigComparator
 
-    
-    @SuppressWarnings({"serial"})
+    @SuppressWarnings({ "serial" })
     private static final class CircularDependencyException extends Exception {
-
 
         // -------------------------------------------------------- Constructors
 
-
         public CircularDependencyException() {
-
             super();
-
-        }
-
-
-        public CircularDependencyException(String message) {
-
-            super(message);
-
-        }
-
-
-        public CircularDependencyException(String message, Throwable cause) {
-
-            super(message, cause);
-
-        }
-
-
-        public CircularDependencyException(Throwable cause) {
-
-            super(cause);
-
         }
 
     } // END CircularDependencyException

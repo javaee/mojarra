@@ -17,8 +17,8 @@ import junit.framework.TestSuite;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.sun.faces.config.DocumentInfo;
-import com.sun.faces.config.DocumentOrderingWrapper;
+import com.sun.faces.config.manager.documents.DocumentInfo;
+import com.sun.faces.config.manager.documents.DocumentOrderingWrapper;
 
 public class FacesConfigOrderingTestCase extends TestCase {
 

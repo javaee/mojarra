@@ -91,8 +91,8 @@ import org.w3c.dom.NodeList;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.manager.documents.DocumentInfo;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.flow.FlowImpl;
 import com.sun.faces.flow.ParameterImpl;

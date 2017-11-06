@@ -61,7 +61,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.DocumentInfo;
+import com.sun.faces.config.manager.documents.DocumentInfo;
 import com.sun.faces.util.FacesLogger;
 
 public class ResourceLibraryContractsConfigProcessor extends AbstractConfigProcessor {

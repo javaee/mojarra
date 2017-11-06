@@ -37,8 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.config;
+package com.sun.faces.config.manager.documents;
 
 import java.net.URI;
 

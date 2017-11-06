@@ -40,9 +40,10 @@
 
 package com.sun.faces.spi;
 
-import com.sun.faces.config.DelegatingAnnotationProvider;
-
 import javax.servlet.ServletContext;
+
+import com.sun.faces.config.manager.spi.FilterClassesFromFacesInitializerAnnotationProvider;
+
 import javax.faces.FacesException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -53,7 +54,7 @@ import java.lang.reflect.InvocationTargetException;
 public class AnnotationProviderFactory {
 
     private static final Class<? extends AnnotationProvider> DEFAULT_ANNOTATION_PROVIDER =
-       DelegatingAnnotationProvider.class;
+       FilterClassesFromFacesInitializerAnnotationProvider.class;
 
     private static final String ANNOTATION_PROVIDER_SERVICE_KEY =
          "com.sun.faces.spi.annotationprovider";

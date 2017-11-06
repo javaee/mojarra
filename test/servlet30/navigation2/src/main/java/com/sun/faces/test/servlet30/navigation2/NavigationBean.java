@@ -42,7 +42,7 @@ package com.sun.faces.test.servlet30.navigation2;
 
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.NavigationHandlerImpl;
-import com.sun.faces.config.DbfFactory;
+import com.sun.faces.config.manager.DbfFactory;
 import com.sun.faces.util.Util;
 
 import java.util.ArrayList;
@@ -80,7 +80,6 @@ import org.w3c.dom.NamedNodeMap;
 
 @ManagedBean
 @SessionScoped
-
 public class NavigationBean {
 
     private List testResultList = null;

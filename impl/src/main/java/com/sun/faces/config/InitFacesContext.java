@@ -176,11 +176,11 @@ public class InitFacesContext extends NoOpFacesContext {
         setCurrentInstance(null);
     }
 
-    void addInitContextEntryForCurrentThread() {
+    public void addInitContextEntryForCurrentThread() {
         getThreadInitContextMap().put(Thread.currentThread(), this);
     }
     
-    void removeInitContextEntryForCurrentThread() {
+    public void removeInitContextEntryForCurrentThread() {
         getThreadInitContextMap().remove(Thread.currentThread());
     }
     

@@ -88,6 +88,7 @@ import com.sun.faces.application.ApplicationFactoryImpl;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.config.manager.documents.DocumentInfo;
 import com.sun.faces.config.processor.FactoryConfigProcessor;
 import com.sun.faces.context.FacesContextFactoryImpl;
 import com.sun.faces.context.FacesContextImpl;

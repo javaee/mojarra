@@ -37,10 +37,8 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.sun.faces.config.manager;
 
-package com.sun.faces.config;
-
-import static com.sun.faces.config.ConfigManager.WEB_INF_MARKER;
 import static com.sun.faces.util.Util.isEmpty;
 import static java.util.Collections.unmodifiableList;
 
@@ -53,6 +51,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.sun.faces.config.manager.documents.DocumentInfo;
+import com.sun.faces.config.manager.tasks.ParseConfigResourceToDOMTask;
 import com.sun.faces.util.FacesLogger;
 
 /**
@@ -163,7 +163,7 @@ public class FacesConfigInfo {
      * @return <code>true</code> if the document represents the <code>/WEB-INF/faces-config.xml</code>
      */
     private boolean isWebinfFacesConfig(Document document) {
-        return !isEmpty(document.getDocumentElement().getAttribute(WEB_INF_MARKER));
+        return !isEmpty(document.getDocumentElement().getAttribute(ParseConfigResourceToDOMTask.WEB_INF_MARKER));
     }
 
     private boolean isMetadataComplete(Document document) {

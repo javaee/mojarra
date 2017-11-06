@@ -37,10 +37,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-package com.sun.faces.config;
+package com.sun.faces.config.manager.spi;
 
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.AnnotationScanPackages;
+
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.spi.AnnotationProvider;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
