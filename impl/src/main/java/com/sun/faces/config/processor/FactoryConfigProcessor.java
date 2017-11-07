@@ -300,8 +300,8 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static void setFactory(String factoryName, String factoryImpl) {
 
         if (factoryName != null && factoryImpl != null) {
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO, MessageFormat.format("Calling FactoryFinder.setFactory({0}, {1})", factoryName, factoryImpl));
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, MessageFormat.format("Calling FactoryFinder.setFactory({0}, {1})", factoryName, factoryImpl));
             }
             FactoryFinder.setFactory(factoryName, factoryImpl);
         }

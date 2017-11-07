@@ -621,8 +621,8 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                         if (didPerformInjection[0]) {
                             elResolvers.add(elRes);
                         }
-                        if (LOGGER.isLoggable(Level.INFO)) {
-                            LOGGER.log(Level.INFO, format("Adding ''{0}'' to ELResolver chain", elResolverClass));
+                        if (LOGGER.isLoggable(FINE)) {
+                            LOGGER.log(FINE, format("Adding ''{0}'' to ELResolver chain", elResolverClass));
                         }
                         
                         resolvers.add(elRes);
