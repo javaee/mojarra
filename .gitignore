@@ -52,3 +52,4 @@ Mojarra.iml
 /impl/src/main/resources/META-INF/facelet*.xml
 /impl/src/main/resources/META-INF/LICENSE.txt
 /impl/src/main/resources/META-INF/error-include.xhtml
+*~
