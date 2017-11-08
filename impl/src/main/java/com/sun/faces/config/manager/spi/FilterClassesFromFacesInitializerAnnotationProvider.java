@@ -1,15 +1,14 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -39,11 +38,11 @@
  * holder.
  */
 
-package com.sun.faces.config;
+package com.sun.faces.config.manager.spi;
 
 import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
-import static com.sun.faces.config.AnnotationScanner.FACES_ANNOTATION_TYPE;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.AnnotationScanPackages;
+import static com.sun.faces.config.manager.spi.AnnotationScanner.FACES_ANNOTATION_TYPE;
 import static com.sun.faces.util.Util.isEmpty;
 import static java.util.Arrays.stream;
 
@@ -57,27 +56,24 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.spi.AnnotationProvider;
 
-/*
- * This class is the default implementation of AnnotationProvider
- * referenced by the AnnotationProviderFactory.  Unless someone
- * manualy provides one via in META-INF/services, this is the one
- * that will actually be instantiated and installed into Mojarra.
-
- * This class actually delegates the real work to one of two kinds of
- * com.sun.faces.config.AnnotationScanner subclasses.
- * JavaClassScanningAnnotationScanner or
- * DelegateToGlassFishAnnotationScanner.
+/**
+ * This class is the default implementation of AnnotationProvider referenced by the AnnotationProviderFactory.  
+ * Unless someone manually provides one via in META-INF/services, this is the one that will actually be instantiated and installed
+ * into Mojarra.
+ *
+ * <p>
+ * This class just further filters the classes that have already been obtained by the ServletContainerInitializer 
+ * and stored in the ServletContext using the key <code>RIConstants.ANNOTATED_CLASSES</code>
  *
  */
+public class FilterClassesFromFacesInitializerAnnotationProvider extends AnnotationProvider {
 
-public class DelegatingAnnotationProvider extends AnnotationProvider {
 
-    private AnnotationScanner scanner = null;
-
-    public DelegatingAnnotationProvider(ServletContext sc) {
-        super(sc);
+    public FilterClassesFromFacesInitializerAnnotationProvider(ServletContext servletContext) {
+        super(servletContext);
     }
     
     
@@ -85,26 +81,16 @@ public class DelegatingAnnotationProvider extends AnnotationProvider {
     
     /*
      * This will only be called if the InjectionProvider offered by the container implements
-     * com.sun.faces.spi.AnnotationScanner. In this case, we know that we can safely use
-     * DelegateToGlassFishAnnotationScanner as our scanner reference.
+     * com.sun.faces.spi.AnnotationScanner.
      */
     public void setAnnotationScanner(com.sun.faces.spi.AnnotationScanner containerConnector, Set<String> jarNamesWithoutMetadataComplete) {
-        DelegateToGlassFishAnnotationScanner impl = new DelegateToGlassFishAnnotationScanner(servletContext);
-        impl.setAnnotationScanner(containerConnector, jarNamesWithoutMetadataComplete);
-        scanner = impl;
     }
 
-    /*
-     * Called during annotation scanning. If we already have a scanner reference, use it. If not, create a
-     * JavaClassScanningAnnotationScanner and use it as the scanner.
-     */
+ 
     @SuppressWarnings("unchecked")
     @Override
     public Map<Class<? extends Annotation>, Set<Class<?>>> getAnnotatedClasses(Set<URI> urls) {
-        HashMap<Class<? extends Annotation>, Set<Class<?>>> annotatedMap = new HashMap<>();
-        createAnnotatedMap(annotatedMap, (Set<Class<?>>) servletContext.getAttribute(ANNOTATED_CLASSES));
-        
-        return annotatedMap;
+        return createAnnotatedMap((Set<Class<?>>) servletContext.getAttribute(ANNOTATED_CLASSES));
     }
   
     
@@ -117,40 +103,46 @@ public class DelegatingAnnotationProvider extends AnnotationProvider {
      * @param annotatedMap
      * @param annotatedSet
      */
-    private void createAnnotatedMap(HashMap<Class<? extends Annotation>, Set<Class<?>>> annotatedMap, Set<Class<?>> annotatedSet) {
-        if (!isEmpty(annotatedSet)) {
+    private Map<Class<? extends Annotation>, Set<Class<?>>> createAnnotatedMap(Set<Class<?>> annotatedSet) {
+        
+        HashMap<Class<? extends Annotation>, Set<Class<?>>> annotatedMap = new HashMap<>();
+        
+        if (isEmpty(annotatedSet)) {
+            return annotatedMap;
+        }
 
-            WebConfiguration webConfig = WebConfiguration.getInstance();
-            boolean annotationScanPackagesSet = webConfig.isSet(AnnotationScanPackages);
-            
-            String[] annotationScanPackages = annotationScanPackagesSet? webConfig.getOptionValue(AnnotationScanPackages).split("\\s+") : null;
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        boolean annotationScanPackagesSet = webConfig.isSet(AnnotationScanPackages);
+        
+        String[] annotationScanPackages = annotationScanPackagesSet? webConfig.getOptionValue(AnnotationScanPackages).split("\\s+") : null;
 
-            Iterator<Class<?>> iterator = annotatedSet.iterator();
-            while (iterator.hasNext()) {
-                try {
-                    Class<?> clazz = iterator.next();
-                    
-                    stream(clazz.getAnnotations())
-                        .map(annotation -> annotation.annotationType())
-                        .filter(annotationType -> FACES_ANNOTATION_TYPE.contains(annotationType))
-                        .forEach(annotationType -> {
-                            
-                            Set<Class<?>> classes = annotatedMap.computeIfAbsent(annotationType, e -> new HashSet<>());
-                            
-                            if (annotationScanPackagesSet) {
-                                if (matchesAnnotationScanPackages(clazz, annotationScanPackages)) {
-                                    classes.add(clazz);
-                                }
-                            } else {
+        Iterator<Class<?>> iterator = annotatedSet.iterator();
+        while (iterator.hasNext()) {
+            try {
+                Class<?> clazz = iterator.next();
+                
+                stream(clazz.getAnnotations())
+                    .map(annotation -> annotation.annotationType())
+                    .filter(annotationType -> FACES_ANNOTATION_TYPE.contains(annotationType))
+                    .forEach(annotationType -> {
+                        
+                        Set<Class<?>> classes = annotatedMap.computeIfAbsent(annotationType, e -> new HashSet<>());
+                        
+                        if (annotationScanPackagesSet) {
+                            if (matchesAnnotationScanPackages(clazz, annotationScanPackages)) {
                                 classes.add(clazz);
                             }
-                            
-                        });
-                    
-                } catch (NoClassDefFoundError ncdfe) {
-                }
+                        } else {
+                            classes.add(clazz);
+                        }
+                        
+                    });
+                
+            } catch (NoClassDefFoundError ncdfe) {
             }
         }
+        
+        return annotatedMap;
     }
 
     private boolean matchesAnnotationScanPackages(Class<?> clazz, String[] annotationScanPackages) {

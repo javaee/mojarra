@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2009-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2009-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -43,6 +43,7 @@ package com.sun.faces.config;
 
 import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
 import static com.sun.faces.RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED;
+import static com.sun.faces.util.Util.isEmpty;
 import static java.lang.Boolean.TRUE;
 
 import java.net.MalformedURLException;
@@ -171,7 +172,7 @@ public class FacesInitializer implements ServletContainerInitializer {
     
     private boolean appMayHaveSomeJsfContent(Set<Class<?>> classes, ServletContext context) {
 
-        if (classes != null && !classes.isEmpty()) {
+        if (!isEmpty(classes)) {
             return true;
         }
 
@@ -184,30 +185,28 @@ public class FacesInitializer implements ServletContainerInitializer {
 
         }
         
+        // In the future remove FacesConfig.class from the @HandlesTypes annotation
+        // and only check via CDI
         try {
-            
             CDI<Object> cdi = null;
             try {
                 cdi = CDI.current();
                 
-                // System.out.println("Initializing JSF {0} for context " + context.getContextPath());
+                if (cdi != null) {
+                
+                    Instance<CdiExtension> extension = cdi.select(CdiExtension.class);
+                    
+                    if (!extension.isAmbiguous() && !extension.isUnsatisfied()) {
+                        return extension.get().isAddBeansForJSFImplicitObjects();
+                    }
+                }
                 
             } catch (IllegalStateException e) {
-                // On GlassFish 4.1.1/Payara 4.1.1.161 CDI is not initialized (org.jboss.weld.Container#initialize is not called), 
-                // and calling CDI.current() will throw an exception. It's no use to continue then.
-                // TODO: Do we need to find out *why* the default module does not have CDI initialized?
-                // System.out.println("CDI not available for app context id: " + context.getContextPath());
-            }
-            
-            Instance<CdiExtension> extension = cdi.select(CdiExtension.class);
-            
-            if (!extension.isAmbiguous() && !extension.isUnsatisfied()) {
-                System.out.println("Checking CDI extension ");
-                return extension.get().isAddBeansForJSFImplicitObjects();
+                // Ignore, CDI not active for this module
             }
             
         } catch (Exception e) {
-            e.printStackTrace(); // tmp
+            // Any other exception; Ignore too
         }
 
         return false;

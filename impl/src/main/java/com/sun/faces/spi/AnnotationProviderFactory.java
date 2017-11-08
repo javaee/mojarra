@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -40,9 +40,10 @@
 
 package com.sun.faces.spi;
 
-import com.sun.faces.config.DelegatingAnnotationProvider;
-
 import javax.servlet.ServletContext;
+
+import com.sun.faces.config.manager.spi.FilterClassesFromFacesInitializerAnnotationProvider;
+
 import javax.faces.FacesException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -53,7 +54,7 @@ import java.lang.reflect.InvocationTargetException;
 public class AnnotationProviderFactory {
 
     private static final Class<? extends AnnotationProvider> DEFAULT_ANNOTATION_PROVIDER =
-       DelegatingAnnotationProvider.class;
+       FilterClassesFromFacesInitializerAnnotationProvider.class;
 
     private static final String ANNOTATION_PROVIDER_SERVICE_KEY =
          "com.sun.faces.spi.annotationprovider";

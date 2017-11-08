@@ -1,14 +1,14 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -51,6 +51,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.config.manager.DbfFactory;
+import com.sun.faces.config.manager.FacesConfigInfo;
+import com.sun.faces.config.manager.documents.DocumentInfo;
+import com.sun.faces.config.manager.documents.DocumentOrderingWrapper;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Attr;
@@ -600,7 +605,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
     private Document parseDocumentAsWebInfFacesConfig(FacesContext ctx, String path) throws Exception {
 
         Document d = parseDocument(ctx, path);
-        Attr webInf = d.createAttribute(ConfigManager.WEB_INF_MARKER);
+        Attr webInf = d.createAttribute("com.sun.faces.webinf");
         webInf.setValue("true");
         d.getDocumentElement().getAttributes().setNamedItem(webInf);
         return d;
