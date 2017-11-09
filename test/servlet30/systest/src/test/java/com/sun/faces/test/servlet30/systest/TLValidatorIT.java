@@ -141,7 +141,7 @@ public class TLValidatorIT {
      * 
      * 20140903 - edburns, mriem
      */
-    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
+    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4, WEBLOGIC_12_2_1, WEBLOGIC_12_3_1})
     @Test
     public void testElValidatorActionRefFail() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
@@ -157,7 +157,7 @@ public class TLValidatorIT {
      * 
      * 20140903 - edburns, mriem
      */
-    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
+    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4, WEBLOGIC_12_2_1, WEBLOGIC_12_3_1})
     @Test
     public void testElValidatorComponentFail() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);

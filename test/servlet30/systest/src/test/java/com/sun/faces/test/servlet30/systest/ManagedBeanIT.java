@@ -97,7 +97,7 @@ public class ManagedBeanIT {
      * 
      * 20140903 - edburns, mriem
      */
-    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
+    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4, WEBLOGIC_12_2_1, WEBLOGIC_12_3_1})
     @Test
     public void testManagedBean3() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
@@ -113,7 +113,7 @@ public class ManagedBeanIT {
      * 
      * 20140903 - edburns, mriem
      */
-    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
+    @JsfTest(value=JSF_2_2_0, excludes = {WEBLOGIC_12_1_3, WEBLOGIC_12_1_4, WEBLOGIC_12_2_1, WEBLOGIC_12_3_1})
     @Test
     public void testManagedBean7() throws Exception {
         webClient.setThrowExceptionOnFailingStatusCode(false);
