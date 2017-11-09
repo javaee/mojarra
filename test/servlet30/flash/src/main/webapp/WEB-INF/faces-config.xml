@@ -51,13 +51,6 @@
         <managed-bean-class>com.sun.faces.test.servlet30.flash.ResultSetBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
-    <managed-bean>
-        <managed-bean-name>ResetUniqueRequestIdBean</managed-bean-name>
-        <managed-bean-class>
-            com.sun.faces.application.ResetUniqueRequestIdBean
-        </managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
     <navigation-rule>
         <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
