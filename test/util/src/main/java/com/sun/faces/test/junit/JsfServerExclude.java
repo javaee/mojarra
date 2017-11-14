@@ -50,7 +50,7 @@ public enum JsfServerExclude {
     WEBLOGIC_12_1_4("Weblogic", "12.1.4.0"),
     WEBLOGIC_12_1_3("Weblogic", "12.1.3.0"),
     WEBLOGIC_12_1_2("Weblogic", "12.1.2.0"),
-    WEBLOGIC_12_1_1("Weblogic", "12.1.1.0");
+    WEBLOGIC_12_1_1("Weblogic", "12.1.1.0"),
     WEBLOGIC_12_3_1("Weblogic", "12.3.1");
 
     /**
