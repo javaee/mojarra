@@ -67,6 +67,6 @@ public class Glassfish15985IT {
     public void testOSGi() throws Exception {
         HtmlPage page = webClient.getPage(webUrl);
         String text = page.asText();
-        assertTrue(text.matches("(?s).*Hello\\s*from\\s*CDI.*Hello\\s*from\\s*JSF.*"));
+        assertTrue(text.matches("(?s).*Hello\\s*Bob\\s*from\\s*CDI.*Hello\\s*Bob\\s*from\\s*JSF.*"));
     }
 }

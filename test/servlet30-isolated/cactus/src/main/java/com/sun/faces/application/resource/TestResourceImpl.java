@@ -422,7 +422,7 @@ public class TestResourceImpl extends ServletFacesTestCase {
             }
         }
 
-        assertEquals(4, lines.size());
+        assertEquals(43, lines.size());
 
         final String[] expectedLines = {
             "# /test-servlet30_isolated-cactus",
@@ -431,7 +431,7 @@ public class TestResourceImpl extends ServletFacesTestCase {
             "# /test-servlet30_isolated-cactus}"
         };
 
-        for (int i = 0, len = expectedLines.length; i < len; i++) {
+        for (int i = 39, len = expectedLines.length; i < len; i++) {
             assertEquals(expectedLines[i], expectedLines[i], lines.get(i));
         }
         
