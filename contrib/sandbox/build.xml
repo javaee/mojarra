@@ -150,8 +150,8 @@
         <jsf.javac srcdir="${source.dir}"
                    destdir="${build.classes.dir}"
                    excludes="${exclude.path}"
-                   source="1.5"
-                   target="1.5">
+                   source="1.6"
+                   target="1.6">
             <classpath>
                 <path refid="sandbox.compile.classpath"/>
                 <path refid="impl.compile.classpath"/>
