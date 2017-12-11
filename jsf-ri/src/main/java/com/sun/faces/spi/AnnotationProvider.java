@@ -106,16 +106,40 @@ public abstract class AnnotationProvider {
 
     protected ServletContext sc;
 
+    /**
+     * The wrapped annotation provider. May be null if this class is not loaded via {@link ServiceLoader} (from a file
+     * named com.sun.faces.spi.AnnotationProvider) and is instead loaded via Mojarra's {@link ServiceFactory} (from a
+     * file named com.sun.faces.spi.annotationprovider).
+     */
+    protected AnnotationProvider wrappedAnnotationProvider;
+
 
     // ------------------------------------------------------------ Constructors
 
 
+    public AnnotationProvider() {
+    }
+
+
     public AnnotationProvider(ServletContext sc) {
 
-        this.sc = sc;
+        initialize(sc, null);
 
     }
 
+    // ---------------------------------------------------------- Package Methods
+
+    final void initialize(ServletContext sc, AnnotationProvider wrappedAnnotationProvider) {
+
+        if (this.sc == null) {
+            this.sc = sc;
+        }
+
+        if (this.wrappedAnnotationProvider == null) {
+            this.wrappedAnnotationProvider = wrappedAnnotationProvider;
+        }
+
+    }
 
     // ---------------------------------------------------------- Public Methods
 

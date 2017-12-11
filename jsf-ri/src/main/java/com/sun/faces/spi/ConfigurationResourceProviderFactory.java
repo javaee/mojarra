@@ -43,6 +43,8 @@ package com.sun.faces.spi;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 /**
  * Factory class for creating <code>ConfigurationResourceProvider</code> instances
@@ -108,9 +110,29 @@ public class ConfigurationResourceProviderFactory {
                     // we are going to ignore these for now.
                 }
             }
-            return providers.toArray(new ConfigurationResourceProvider[providers.size()]);
         } else {
-            return new ConfigurationResourceProvider[0];
-        }        
+
+            ServiceLoader serviceLoader;
+
+            switch (providerType) {
+                case FacesConfig:
+                    serviceLoader = ServiceLoader.load(FacesConfigResourceProvider.class);
+                break;
+                case FaceletConfig:
+                    serviceLoader = ServiceLoader.load(FaceletConfigResourceProvider.class);
+                break;
+                default:
+                    throw new UnsupportedOperationException(providerType.servicesKey +
+                        " cannot be loaded via ServiceLoader API.");
+            }
+
+            Iterator iterator = serviceLoader.iterator();
+
+            while (iterator.hasNext()) {
+                providers.add((ConfigurationResourceProvider) iterator.next());
+            }
+        }
+
+        return providers.toArray(new ConfigurationResourceProvider[providers.size()]);
     }
 }
