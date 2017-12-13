@@ -188,7 +188,7 @@
                 </not>
             </and>
             <then>
-                <get src="http://pilotfiber.dl.sourceforge.net/project/htmlunit/htmlunit/${htmlunit.version}/htmlunit-${htmlunit.version}.zip"
+                <get src="https://downloads.sourceforge.net/project/htmlunit/htmlunit/${htmlunit.version}/htmlunit-${htmlunit.version}.zip"
                      dest="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
                      usetimestamp="true"/>
                 <unzip
