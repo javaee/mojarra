@@ -379,6 +379,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                 }
                 
                 this.frame.parentNode.replaceChild(clone, this.frame);
+                this.context.form.removeAttribute("target"); 
                 for (var i=0; i<this.requestParams.length; i++) {
                     var elements = this.context.form.childNodes;
                     for (var j=0; j<elements.length; j++) {
