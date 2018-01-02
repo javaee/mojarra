@@ -153,16 +153,6 @@
                                     </fileset>
                                 </copy>
                                 
-                                <!--
-                                
-                                    Copy jsf-ri resource into src/main/resources
-                                    
-                                -->
-                                <copy todir="src/main/resources" overwrite="true">
-                                    <fileset dir="${jsf-ri-dir}/src/main/resources" 
-                                             includes="**/*.properties,**/*.js,**/*.xsd"
-                                             excludes="**/LogStrings*.properties"/>
-                                </copy>
                                 
                                 <!--
                                 

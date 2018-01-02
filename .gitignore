@@ -47,7 +47,6 @@ nbactions.xml
 .idea/
 Mojarra.iml
 /impl/src/main/doc/
-/impl/src/main/resources/com/
 /impl/src/main/resources/javax/
 /impl/src/main/resources/META-INF/facelet*.xml
 /impl/src/main/resources/META-INF/LICENSE.txt
