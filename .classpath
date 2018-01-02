@@ -5,6 +5,7 @@
         <classpathentry kind="src" path="jsf-api/build/generate"/>
         <classpathentry kind="src" path="jsf-ri/build/generate"/>
         <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+        <classpathentry kind="lib" path="dependencies/jars/javax.servlet-api-4.0.0-b05.jar"/>
         <classpathentry kind="lib" path="dependencies/jars/javaee-api-7.0.jar"/>
         <classpathentry kind="lib" path="dependencies/jars/groovy-all-1.6.9.jar"/>
         <classpathentry kind="output" path="bin"/>
