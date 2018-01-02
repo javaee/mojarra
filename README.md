@@ -272,6 +272,26 @@ In case you want to checkout this repository and manually build from source your
 5. The binary is now available as `jsf-ri/build/mvn/target/javax.faces-2.2.x-SNAPSHOT.jar`.
 
 
+## Editing source code with IDE
+
+In case you want to checkout to edit the source code of Mojarra with full IDE support, here are the instructions. Note that this only allows you to *edit* the code. Actually building the Mojarra artefacts still has to be done using the instructions provided above.
+
+### Eclipse
+
+#### JSF 2.4 (JSF.next)
+
+1. Checkout branch [`master`][28] using File -> import -> Git
+2. Right click the Mojarra project after checkout, choose Configure -> Convert to Maven Project
+
+#### JSF 2.3
+
+1. Checkout branch [`master`][28] using File -> import -> Git
+2. Switch to 2.3 rolling branch using Team -> Switch to -> Other -> Remote Tracking -> origin/MOJARRA_2_3X_ROLLING -> New Branch
+3. Go to the commandline and cd into the directory where Mojarra was checked-out.
+4. Follow the instructions for build JSF **2.2** from the build instructions above from step 3 (copy/edit properties, run ant)
+5. Go back to Eclipse and refresh the Eclipse project
+
+
 ## Pull Requests
 
 Pull requests are accepted on following branches:
