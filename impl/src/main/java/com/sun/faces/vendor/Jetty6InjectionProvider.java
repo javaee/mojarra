@@ -42,94 +42,101 @@ package com.sun.faces.vendor;
 
 import com.sun.faces.spi.DiscoverableInjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
-
-import javax.servlet.ServletContext;
-
-import org.apache.AnnotationProcessor;
+import org.mortbay.jetty.plus.annotation.InjectionCollection;
+import org.mortbay.jetty.plus.annotation.LifeCycleCallbackCollection;
+import org.mortbay.jetty.annotations.AnnotationParser;
+import org.mortbay.jetty.webapp.WebAppContext;
 
 /**
- *
+ * <p>
+ * See http://docs.codehaus.org/display/JETTY/Annotations for details on Jetty's supported Annotations.
+ * </p>
  */
-public class Tomcat6InjectionProvider extends DiscoverableInjectionProvider {
+public class Jetty6InjectionProvider extends DiscoverableInjectionProvider {
 
-    private ServletContext servletContext;
-    
+    private InjectionCollection injections;
+    private LifeCycleCallbackCollection callbacks;
 
     // ------------------------------------------------------------ Constructors
 
+    /**
+     * <p>
+     * Construct a new Jetty6InjectionProvider instance.
+     * </p>
+     */
+    public Jetty6InjectionProvider() {
 
-    public Tomcat6InjectionProvider(ServletContext servletContext) {
-        this.servletContext = servletContext;
+        injections = new InjectionCollection();
+        callbacks = new LifeCycleCallbackCollection();
+
     }
 
-    // ------------------------------------------ Methods from InjectionProvider
-
+    // ------------------------------ Methods from DiscoverableInjectionProvider
 
     /**
-     * <p>The implementation of this method must perform the following
-     * steps:
+     * <p>
+     * The implementation of this method must perform the following steps:
      * <ul>
-     * <li>Inject the supported resources per the Servlet 2.5
-     * specification into the provided object</li>
+     * <li>Inject the supported resources per the Servlet 2.5 specification into the provided object</li>
      * </ul>
      * </p>
-     * <p>This method <em>must not</em> invoke any methods
-     * annotated with <code>@PostConstruct</code>
+     * <p>
+     * This method <em>must not</em> invoke any methods annotated with <code>@PostConstruct</code>
      *
-     * @param managedBean the target managed bean
+     * @param managedBean
+     *            the target managed bean
      * @throws com.sun.faces.spi.InjectionProviderException
-     *          if an error occurs during
-     *          resource injection
+     *             if an error occurs during resource injection
      */
     public void inject(Object managedBean) throws InjectionProviderException {
+
+        AnnotationParser.parseAnnotations((WebAppContext) WebAppContext.getCurrentWebAppContext(), managedBean.getClass(), null, injections,
+                callbacks);
         try {
-            getProcessor().processAnnotations(managedBean);
+            injections.inject(managedBean);
         } catch (Exception e) {
             throw new InjectionProviderException(e);
         }
+
     }
 
     /**
-     * <p>The implemenation of this method must invoke any
-     * method marked with the <code>@PreDestroy</code> annotation
-     * (per the Common Annotations Specification).
+     * <p>
+     * The implemenation of this method must invoke any method marked with the <code>@PreDestroy</code> annotation (per the
+     * Common Annotations Specification).
      *
-     * @param managedBean the target managed bean
+     * @param managedBean
+     *            the target managed bean
      * @throws com.sun.faces.spi.InjectionProviderException
-     *          if an error occurs when invoking
-     *          the method annotated by the <code>@PreDestroy</code> annotation
+     *             if an error occurs when invoking the method annotated by the <code>@PreDestroy</code> annotation
      */
     public void invokePreDestroy(Object managedBean) throws InjectionProviderException {
+
         try {
-            getProcessor().preDestroy(managedBean);
+            callbacks.callPreDestroyCallback(managedBean);
         } catch (Exception e) {
             throw new InjectionProviderException(e);
         }
+
     }
 
     /**
-     * <p>The implemenation of this method must invoke any
-     * method marked with the <code>@PostConstruct</code> annotation
-     * (per the Common Annotations Specification).
+     * <p>
+     * The implemenation of this method must invoke any method marked with the <code>@PostConstruct</code> annotation (per
+     * the Common Annotations Specification).
      *
-     * @param managedBean the target managed bean
+     * @param managedBean
+     *            the target managed bean
      * @throws com.sun.faces.spi.InjectionProviderException
-     *          if an error occurs when invoking
-     *          the method annotated by the <code>@PostConstruct</code> annotation
+     *             if an error occurs when invoking the method annotated by the <code>@PostConstruct</code> annotation
      */
     public void invokePostConstruct(Object managedBean) throws InjectionProviderException {
+
         try {
-            getProcessor().postConstruct(managedBean);
+            callbacks.callPostConstructCallback(managedBean);
         } catch (Exception e) {
             throw new InjectionProviderException(e);
         }
-    }
 
-
-    // --------------------------------------------------------- Private Methods
-
-
-    private AnnotationProcessor getProcessor() {
-        return ((AnnotationProcessor) servletContext.getAttribute(AnnotationProcessor.class.getName()));
     }
 }

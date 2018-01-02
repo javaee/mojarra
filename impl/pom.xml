@@ -578,17 +578,6 @@
                                 <java jar="yuicompressor.jar" fork="true" failonerror="true"
                                     args="-o ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf.js ${project.build.directory}/generated-resources/antrun/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
                                 
-                                <!--
-                                
-                                    Unzip injectionproviders.jar
-                                
-                                -->
-                                <unzip src="${jsf-api-dir}/../lib/injectionproviders.jar"
-                                    dest="${project.build.directory}/generated-resources/antrun">
-                                    <patternset>
-                                        <exclude name="META-INF/MANIFEST.MF" />
-                                    </patternset>
-                                </unzip>
                                 
                                 <!--
                                 
@@ -887,24 +876,29 @@
     </build>
     
     <dependencies>
+        <!-- Java EE Dependencies -->
+        
+        <!-- Servlet 4 dependency overriding Java EE 7 main dependency -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.0</version>
             <scope>provided</scope>
         </dependency>
-        
+
+        <!-- Expression Language 3.0.1 overriding Java EE 7 main dependency  -->
         <dependency>
-                <groupId>javax.el</groupId>
-                <artifactId>javax.el-api</artifactId>
-                <version>3.0.1-b04</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish</groupId>
-                <artifactId>javax.el</artifactId>
-                <version>3.0.1-b04</version>
-            </dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>3.0.1-b04</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.1-b04</version>
+        </dependency>
     
+        <!-- The main dependency against which Mojarra 2.3 is created: Java EE 7 -->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -918,6 +912,39 @@
             <version>2.4.0-m01-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        
+        <!-- 
+            For the vendor SPI implementations shipped with Mojarra.
+            See package com.sun.faces.vendor
+            TODO: Is this really needed still? These are extremely old
+         -->
+         
+         <!-- Jetty 6 -->
+        <dependency>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty-plus</artifactId>
+            <version>6.1.26</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty-annotations</artifactId>
+            <version>6.1.26</version>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Tomcat 6 -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>catalina</artifactId>
+            <version>6.0.51</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        
+        
+        
+        <!-- TEST DEPENDENCIES -->
         
         <dependency>
             <groupId>org.glassfish.web</groupId>
@@ -946,12 +973,14 @@
             <version>1.4.11</version>
             <scope>test</scope>
         </dependency>
+        
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.8.3</version>
             <scope>test</scope>
         </dependency>
+        
         <dependency>
             <groupId>commons-digester</groupId>
             <artifactId>commons-digester</artifactId>

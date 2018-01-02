@@ -40,79 +40,69 @@
 
 package com.sun.faces.vendor;
 
+import static java.util.logging.Level.WARNING;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.FacesLogger;
 
-import javax.annotation.PreDestroy;
-import javax.annotation.PostConstruct;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
 /**
- * <p>This <code>InjectionProvider</code> will be used if the
- * <code>PostConstruct</code> and <code>PreDestroy</code> annotations
- * are present, but no specific <code>InjectionProvider</code> has
- * been configured.</p>.
+ * <p>
+ * This <code>InjectionProvider</code> will be used if the <code>PostConstruct</code> and <code>PreDestroy</code>
+ * annotations are present, but no specific <code>InjectionProvider</code> has been configured.
+ * </p>
  *
- * <p>It's important to note that this will not provide resource injection.</p>
+ * <p>
+ * It's important to note that this will not provide resource injection.
+ * </p>
  */
 public class WebContainerInjectionProvider implements InjectionProvider {
 
-
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
-
+    
+    private static Map<Class<?>, ConcurrentHashMap<Class<? extends Annotation>, MethodHolder>> methodsPerClazz = new ConcurrentHashMap<>();
+    
 
     // ------------------------------------------ Methods from InjectionProvider
 
-
     @Override
     public void inject(Object managedBean) throws InjectionProviderException {
-
         // no-op
-
     }
 
     @Override
-    public void invokePreDestroy(Object managedBean)
-    throws InjectionProviderException {
-
+    public void invokePreDestroy(Object managedBean) throws InjectionProviderException {
         if (managedBean != null) {
-            invokeAnnotatedMethod(getAnnotatedMethod(managedBean,
-                                                     PreDestroy.class),
-                                  managedBean);
+            invokeAnnotatedMethod(getAnnotatedMethod(managedBean, PreDestroy.class), managedBean);
         }
-
     }
 
     @Override
-    public void invokePostConstruct(Object managedBean)
-    throws InjectionProviderException {
-
-
+    public void invokePostConstruct(Object managedBean) throws InjectionProviderException {
         if (managedBean != null) {
-            invokeAnnotatedMethod(getAnnotatedMethod(managedBean,
-                                                     PostConstruct.class),
-                                  managedBean);
+            invokeAnnotatedMethod(getAnnotatedMethod(managedBean, PostConstruct.class), managedBean);
         }
-
     }
 
-
+    
     // --------------------------------------------------------- Private Methods
 
-
-    private static void invokeAnnotatedMethod(Method method, Object managedBean)
-    throws InjectionProviderException {
-
+    private static void invokeAnnotatedMethod(Method method, Object managedBean) throws InjectionProviderException {
         if (method != null) {
             boolean accessible = method.isAccessible();
             method.setAccessible(true);
+            
             try {
                 method.invoke(managedBean);
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -123,12 +113,12 @@ public class WebContainerInjectionProvider implements InjectionProvider {
         }
 
     }
-    
+
     private static class MethodHolder {
-        
+
         private final Method method;
 
-        public MethodHolder(Method method){
+        public MethodHolder(Method method) {
             this.method = method;
         }
 
@@ -136,47 +126,41 @@ public class WebContainerInjectionProvider implements InjectionProvider {
             return method;
         }
     }
-    
-    private static ConcurrentHashMap<Class, ConcurrentHashMap<Class<? extends Annotation>, MethodHolder>> methodsPerClazz =
-            new ConcurrentHashMap<>();
 
-
-    private static Method getAnnotatedMethod(Object managedBean,
-                                             Class<? extends Annotation> annotation) {
+    private static Method getAnnotatedMethod(Object managedBean, Class<? extends Annotation> annotation) {
 
         Class<?> clazz = managedBean.getClass();
         while (!Object.class.equals(clazz)) {
-            
+
             ConcurrentHashMap<Class<? extends Annotation>, MethodHolder> methodsMap = methodsPerClazz.get(clazz);
-            
-            if(methodsMap==null) {
-                
-                ConcurrentHashMap<Class<? extends Annotation>, MethodHolder> newMethodsMap = 
-                        new ConcurrentHashMap<>();
-                
+
+            if (methodsMap == null) {
+
+                ConcurrentHashMap<Class<? extends Annotation>, MethodHolder> newMethodsMap = new ConcurrentHashMap<>();
+
                 methodsMap = methodsPerClazz.putIfAbsent(clazz, newMethodsMap);
-                
-                if(methodsMap==null) {
+
+                if (methodsMap == null) {
                     methodsMap = newMethodsMap;
-                }                           
+                }
             }
-            
+
             MethodHolder methodHolder = methodsMap.get(annotation);
-            
-            if(methodHolder==null) {
+
+            if (methodHolder == null) {
                 Method[] methods = clazz.getDeclaredMethods();
                 Method method = getAnnotatedMethodForMethodArr(methods, annotation);
-                
+
                 MethodHolder newMethodHolder = new MethodHolder(method);
-                
+
                 methodHolder = methodsMap.putIfAbsent(annotation, newMethodHolder);
 
-                if(methodHolder==null) {
+                if (methodHolder == null) {
                     methodHolder = newMethodHolder;
                 }
             }
 
-            if(methodHolder.getMethod()!=null) {
+            if (methodHolder.getMethod() != null) {
                 return methodHolder.getMethod();
             }
 
@@ -189,34 +173,32 @@ public class WebContainerInjectionProvider implements InjectionProvider {
     private static Method getAnnotatedMethodForMethodArr(Method[] methods, Class<? extends Annotation> annotation) {
         for (Method method : methods) {
             if (method.isAnnotationPresent(annotation)) {
+                
                 // validate method
                 if (Modifier.isStatic(method.getModifiers())) {
-                    if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING,
-                                   "jsf.core.web.injection.method_not_static",
-                                   new Object[] { method.toString(),
-                                                  annotation.getName() });
+                    if (LOGGER.isLoggable(WARNING)) {
+                        LOGGER.log(WARNING, "jsf.core.web.injection.method_not_static",
+                                new Object[] { method.toString(), annotation.getName() });
                     }
                     continue;
                 }
+                
                 if (!Void.TYPE.equals(method.getReturnType())) {
-                    if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING,
-                                   "jsf.core.web.injection.method_return_not_void",
-                                   new Object[] { method.toString(),
-                                                  annotation.getName() });
+                    if (LOGGER.isLoggable(WARNING)) {
+                        LOGGER.log(WARNING, "jsf.core.web.injection.method_return_not_void",
+                                new Object[] { method.toString(), annotation.getName() });
                     }
                     continue;
                 }
+                
                 if (method.getParameterTypes().length != 0) {
-                    if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING,
-                                   "jsf.core.web.injection.method_no_params",
-                                   new Object[] { method.toString(),
-                                                  annotation.getName() });
+                    if (LOGGER.isLoggable(WARNING)) {
+                        LOGGER.log(WARNING, "jsf.core.web.injection.method_no_params",
+                                new Object[] { method.toString(), annotation.getName() });
                     }
                     continue;
                 }
+                
                 Class<?>[] exceptions = method.getExceptionTypes();
                 if (method.getExceptionTypes().length != 0) {
                     boolean hasChecked = false;
@@ -227,15 +209,14 @@ public class WebContainerInjectionProvider implements InjectionProvider {
                         }
                     }
                     if (hasChecked) {
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                 "jsf.core.web.injection.method_no_checked_exceptions",
-                                 new Object[]{method.toString(),
-                                      annotation.getName()});
+                        if (LOGGER.isLoggable(WARNING)) {
+                            LOGGER.log(WARNING, "jsf.core.web.injection.method_no_checked_exceptions",
+                                    new Object[] { method.toString(), annotation.getName() });
                         }
                         continue;
                     }
                 }
+                
                 // we found a match.
                 return method;
             }
@@ -243,6 +224,5 @@ public class WebContainerInjectionProvider implements InjectionProvider {
 
         return null;
     }
-
 
 }

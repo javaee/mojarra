@@ -42,38 +42,28 @@ package com.sun.faces.vendor;
 
 import com.sun.faces.spi.DiscoverableInjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
-import org.mortbay.jetty.plus.annotation.InjectionCollection;
-import org.mortbay.jetty.plus.annotation.LifeCycleCallbackCollection;
-import org.mortbay.jetty.annotations.AnnotationParser;
-import org.mortbay.jetty.webapp.WebAppContext;
 
+import javax.servlet.ServletContext;
 
+import org.apache.AnnotationProcessor;
 
 /**
- * <p>See http://docs.codehaus.org/display/JETTY/Annotations for details on
- * Jetty's supported Annotations.</p>
+ *
  */
-public class Jetty6InjectionProvider extends DiscoverableInjectionProvider {
+public class Tomcat6InjectionProvider extends DiscoverableInjectionProvider {
 
-    private InjectionCollection injections;
-    private LifeCycleCallbackCollection callbacks;
-
+    private ServletContext servletContext;
+    
 
     // ------------------------------------------------------------ Constructors
 
 
-    /**
-     * <p>Construct a new Jetty6InjectionProvider instance.</p>
-     */
-    public Jetty6InjectionProvider() {
-
-        injections = new InjectionCollection();
-        callbacks = new LifeCycleCallbackCollection();
-
+    public Tomcat6InjectionProvider(ServletContext servletContext) {
+        this.servletContext = servletContext;
     }
+    
 
-
-    // ------------------------------ Methods from DiscoverableInjectionProvider
+    // ------------------------------------------ Methods from InjectionProvider
 
 
     /**
@@ -93,18 +83,11 @@ public class Jetty6InjectionProvider extends DiscoverableInjectionProvider {
      *          resource injection
      */
     public void inject(Object managedBean) throws InjectionProviderException {
-
-        AnnotationParser.parseAnnotations((WebAppContext) WebAppContext.getCurrentWebAppContext(),
-                                          managedBean.getClass(),
-                                          null,
-                                          injections,
-                                          callbacks);
         try {
-            injections.inject(managedBean);
+            getProcessor().processAnnotations(managedBean);
         } catch (Exception e) {
             throw new InjectionProviderException(e);
         }
-        
     }
 
     /**
@@ -117,15 +100,12 @@ public class Jetty6InjectionProvider extends DiscoverableInjectionProvider {
      *          if an error occurs when invoking
      *          the method annotated by the <code>@PreDestroy</code> annotation
      */
-    public void invokePreDestroy(Object managedBean)
-    throws InjectionProviderException {
-
+    public void invokePreDestroy(Object managedBean) throws InjectionProviderException {
         try {
-            callbacks.callPreDestroyCallback(managedBean);
+            getProcessor().preDestroy(managedBean);
         } catch (Exception e) {
             throw new InjectionProviderException(e);
         }
-
     }
 
     /**
@@ -136,17 +116,21 @@ public class Jetty6InjectionProvider extends DiscoverableInjectionProvider {
      * @param managedBean the target managed bean
      * @throws com.sun.faces.spi.InjectionProviderException
      *          if an error occurs when invoking
-     *          the method annotated by the <code>@PostConstruct</code>
-     *          annotation
+     *          the method annotated by the <code>@PostConstruct</code> annotation
      */
-    public void invokePostConstruct(Object managedBean)
-    throws InjectionProviderException {
-
+    public void invokePostConstruct(Object managedBean) throws InjectionProviderException {
         try {
-            callbacks.callPostConstructCallback(managedBean);       
+            getProcessor().postConstruct(managedBean);
         } catch (Exception e) {
             throw new InjectionProviderException(e);
         }
+    }
 
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private AnnotationProcessor getProcessor() {
+        return ((AnnotationProcessor) servletContext.getAttribute(AnnotationProcessor.class.getName()));
     }
 }
