@@ -138,21 +138,6 @@
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 
-                                                                
-                                <!--
-                                
-                                    Copy other static resources to src/main/resources
-                                    
-                                -->
-                                
-                                <copy todir="src/main/resources/com/sun/faces">
-                                    <fileset dir="${jsf-api-dir}/doc">
-                                        <include name="*.dtd"/>
-                                        <include name="standard-html-renderkit.xml"/>
-                                        <include name="*.xsd"/>
-                                    </fileset>
-                                </copy>
-                                
                                 
                                 <!--
                                 
