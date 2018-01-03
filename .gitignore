@@ -3,7 +3,6 @@ api/src/main/java/
 api/src/main/resources/
 impl/bnd.bnd
 impl/src/main/doc/
-impl/src/main/resources/META-INF/LICENSE.txt
 impl/yuicompressor.jar
 changebundle.txt
 dependencies
@@ -43,6 +42,5 @@ nbactions.xml
 .idea/
 Mojarra.iml
 /impl/src/main/doc/
-/impl/src/main/resources/META-INF/LICENSE.txt
 /impl/src/main/resources/META-INF/error-include.xhtml
 *~

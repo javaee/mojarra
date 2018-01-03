@@ -102,7 +102,7 @@
                                 -->
                                 <delete>
                                     <fileset dir="src/main/resources/META-INF" 
-                                             excludes="facelet-dev-debug.xml,facelet-dev-error.xml,mojarra-jsf-api-probe-provider.xml,jsf_core.tld,mojarra_ext.taglib.xml,mojarra_ext.tld,error-include.xhtml"
+                                             excludes="LICENSE.txt,facelet-dev-debug.xml,facelet-dev-error.xml,mojarra-jsf-api-probe-provider.xml,jsf_core.tld,mojarra_ext.taglib.xml,mojarra_ext.tld,error-include.xhtml"
                                              includes="*"/>
                                 </delete>
                                 <delete dir="src/main/doc"/>
@@ -138,14 +138,6 @@
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 
-                                
-                                <!--
-                                
-                                    Copy LICENSE.txt from main project directory
-                                
-                                -->
-                                <copy todir="src/main/resources/META-INF" 
-                                    file="${jsf-api-dir}/../legal/jsf-cddl/LICENSE.txt" />
                                 
                                 <!--
                                 
