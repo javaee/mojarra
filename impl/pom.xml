@@ -167,8 +167,6 @@
                                     </fileset>
                                 </copy>
                                 
-                                <copy file="${jsf-ri-dir}/resources/empty-faces-config.xml"
-                                    todir="src/main/resources/com/sun/faces" />
                                 
                                 <!--
                                 
