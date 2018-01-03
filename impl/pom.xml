@@ -158,11 +158,6 @@
                                     Copy other static resources to src/main/resources
                                     
                                 -->
-                                <copy todir="src/main/resources/META-INF">
-                                    <fileset dir="${jsf-ri-dir}/conf/share">
-                                        <include name="facelet-dev*.xml"/>
-                                    </fileset>
-                                </copy>
                                 
                                 <copy file="${jsf-ri-dir}/conf/xslt/jsf1_0-1_1toSchema.xsl"
                                     toDir="src/main/resources/com/sun/faces"/>
