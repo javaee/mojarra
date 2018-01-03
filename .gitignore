@@ -4,7 +4,6 @@ api/src/main/resources/
 impl/bnd.bnd
 impl/src/main/doc/
 impl/src/main/resources/META-INF/LICENSE.txt
-impl/src/main/resources/javax/
 impl/yuicompressor.jar
 changebundle.txt
 dependencies

@@ -100,7 +100,6 @@
                                     to delete any src/main directory anymore
                                 
                                 -->
-                                <delete dir="src/main/resources/javax"/>
                                 <delete>
                                     <fileset dir="src/main/resources/META-INF" 
                                              excludes="facelet-dev-debug.xml,facelet-dev-error.xml,mojarra-jsf-api-probe-provider.xml,jsf_core.tld,mojarra_ext.taglib.xml,mojarra_ext.tld,error-include.xhtml"
@@ -138,19 +137,6 @@
                                 <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
-                                
-                                <!--
-
-                                    Copy jsf-api resources into src/main/resources
-                                                                
-                                -->
-                                <copy todir="src/main/resources" includeEmptyDirs="false">
-                                    <fileset dir="${jsf-api-dir}/src/main/java">
-                                        <exclude name="**/*.java"/>
-                                        <exclude name="**/*.html"/>
-                                        <exclude name="**/*.jpg"/>
-                                    </fileset>
-                                </copy>
                                 
                                                                 
                                 <!--
