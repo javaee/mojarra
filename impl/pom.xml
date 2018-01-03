@@ -152,17 +152,6 @@
                                     </fileset>
                                 </copy>
                                 
-                                
-                                <!--
-                                
-                                    Copy *.taglib.xml to src/main/resources
-                                
-                                -->
-                                <copy todir="src/main/resources/com/sun/faces/metadata/taglib">
-                                    <fileset dir="${jsf-ri-dir}/conf/share">
-                                        <include name="*.taglib.xml" /> 
-                                    </fileset>
-                                </copy>
                                                                 
                                 <!--
                                 

@@ -6,7 +6,6 @@ impl/src/main/doc/
 impl/src/main/resources/META-INF/LICENSE.txt
 impl/src/main/resources/META-INF/facelet-dev-debug.xml
 impl/src/main/resources/META-INF/facelet-dev-error.xml
-impl/src/main/resources/com/
 impl/src/main/resources/javax/
 impl/yuicompressor.jar
 changebundle.txt
@@ -47,7 +46,6 @@ nbactions.xml
 .idea/
 Mojarra.iml
 /impl/src/main/doc/
-/impl/src/main/resources/javax/
 /impl/src/main/resources/META-INF/facelet*.xml
 /impl/src/main/resources/META-INF/LICENSE.txt
 /impl/src/main/resources/META-INF/error-include.xhtml
