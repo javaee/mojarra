@@ -103,7 +103,7 @@
                                 <delete dir="src/main/resources/javax"/>
                                 <delete>
                                     <fileset dir="src/main/resources/META-INF" 
-                                             excludes="mojarra-jsf-api-probe-provider.xml,jsf_core.tld,mojarra_ext.taglib.xml,mojarra_ext.tld,error-include.xhtml"
+                                             excludes="facelet-dev-debug.xml,facelet-dev-error.xml,mojarra-jsf-api-probe-provider.xml,jsf_core.tld,mojarra_ext.taglib.xml,mojarra_ext.tld,error-include.xhtml"
                                              includes="*"/>
                                 </delete>
                                 <delete dir="src/main/doc"/>
@@ -163,10 +163,13 @@
                                         <include name="facelet-dev*.xml"/>
                                     </fileset>
                                 </copy>
+                                
                                 <copy file="${jsf-ri-dir}/conf/xslt/jsf1_0-1_1toSchema.xsl"
                                     toDir="src/main/resources/com/sun/faces"/>
+                                
                                 <copy file="${jsf-ri-dir}/conf/xslt/facelets1_0-2_0toSchema.xsl"
                                     toDir="src/main/resources/com/sun/faces"/>
+                                
                                 <copy todir="src/main/resources/com/sun/faces">
                                     <fileset dir="${jsf-api-dir}/doc">
                                         <include name="*.dtd"/>
