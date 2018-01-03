@@ -100,7 +100,6 @@
                                     to delete any src/main directory anymore
                                 
                                 -->
-                                <delete dir="src/main/resources/com"/>
                                 <delete dir="src/main/resources/javax"/>
                                 <delete>
                                     <fileset dir="src/main/resources/META-INF" 
