@@ -2,7 +2,6 @@
 /datatypes.dtd
 /empty-faces-config.xml
 /facelet-taglib_1_0.dtd
-/facelets1_0-2_0toSchema.xsl
 /javaee_5.xsd
 /javaee_6.xsd
 /javaee_7.xsd
@@ -11,7 +10,6 @@
 /javaee_web_services_client_1_2.xsd
 /javaee_web_services_client_1_3.xsd
 /javaee_web_services_client_1_4.xsd
-/jsf1_0-1_1toSchema.xsl
 /standard-html-renderkit.xml
 /web-facelettaglibrary_2_0.xsd
 /web-facelettaglibrary_2_2.xsd

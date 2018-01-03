@@ -159,12 +159,6 @@
                                     
                                 -->
                                 
-                                <copy file="${jsf-ri-dir}/conf/xslt/jsf1_0-1_1toSchema.xsl"
-                                    toDir="src/main/resources/com/sun/faces"/>
-                                
-                                <copy file="${jsf-ri-dir}/conf/xslt/facelets1_0-2_0toSchema.xsl"
-                                    toDir="src/main/resources/com/sun/faces"/>
-                                
                                 <copy todir="src/main/resources/com/sun/faces">
                                     <fileset dir="${jsf-api-dir}/doc">
                                         <include name="*.dtd"/>
