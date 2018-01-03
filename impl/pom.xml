@@ -105,7 +105,7 @@
                                              excludes="LICENSE.txt,facelet-dev-debug.xml,facelet-dev-error.xml,mojarra-jsf-api-probe-provider.xml,jsf_core.tld,mojarra_ext.taglib.xml,mojarra_ext.tld,error-include.xhtml"
                                              includes="*"/>
                                 </delete>
-                                <delete dir="src/main/doc"/>
+                                
                                 <!--
                                 
                                     Once migration is completely we should not need to
@@ -134,9 +134,7 @@
                                     Once migration is completely done this should disappear
                                 
                                 -->
-                                <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
                                 <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
-                                <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 
                                 
                                 <!--
@@ -167,22 +165,6 @@
                                 <copy tofile="${project.project.build.directory}/../bnd.bnd" 
                                       file="${project.build.directory}/tmp.bnd"/>
                                 
-                                <!--
-                                
-                                    Copy the API doc directory.
-                                    
-                                -->
-                                <copy todir="src/main/doc">
-                                    <fileset dir="${jsf-api-dir}/doc"/>
-                                </copy>
-                                
-                                <!--
-                                
-                                    Copy standard-html-renderkit-impl.xml
-                                    
-                                -->
-                                <copy todir="src/main/doc" 
-                                      file="${jsf-ri-dir}/src/main/resources/com/sun/faces/standard-html-renderkit-impl.xml"/>
                             </target>
                         </configuration>
                         <goals>
@@ -446,6 +428,7 @@
                                     <include name="**/LogStrings*.properties"/>
                                 </replace>
                                 
+                                
                                 <!--
                                 
                                     Generate META-INF/html_basic.tld
@@ -456,17 +439,17 @@
                                         <include name="TAG-*"/>
                                     </fileset>
                                 </copy>
+                                
                                 <copy todir="${jsf-tools-dir}/build/classes">
                                     <fileset dir="${jsf-ri-dir}/src/main/resources"
                                              includes="**/LogStrings.properties"/>
                                 </copy>
-                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
-                                      flatten="true">
-                                    <fileset dir="${jsf-api-dir}/doc"
-                                             includes="*.dtd,*.xsd"/>
+                                
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" flatten="true">
+                                    <fileset dir="src/main/doc" includes="*.dtd,*.xsd" />
                                 </copy>
-                                <taskdef name="generateTaglib"
-                                         classname="com.sun.faces.ant.TaglibGenTask">
+                                
+                                <taskdef name="generateTaglib" classname="com.sun.faces.ant.TaglibGenTask">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
                                     </classpath>
@@ -481,10 +464,13 @@
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateTaglib>
+                                
                                 <copy file="build/generate/conf/share/html_basic.tld"
                                       toDir="${project.build.directory}/generated-resources/antrun/META-INF"/>
+                                      
                                 <delete dir="build"/>
                                 <delete dir="${jsf-tools-dir}/build"/>
+                                
                                 
                                 <!--
                                 
