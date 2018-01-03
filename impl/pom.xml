@@ -166,12 +166,7 @@
                                         <include name="*.xsd"/>
                                     </fileset>
                                 </copy>
-                                <copy todir="src/main/resources/com/sun/faces/xhtml">
-                                    <fileset dir="${jsf-ri-dir}/conf/share/xhtml">
-                                        <include name="*.dtd"/>
-                                        <include name="*.ent"/>
-                                    </fileset>
-                                </copy>
+                                
                                 <copy file="${jsf-ri-dir}/resources/empty-faces-config.xml"
                                     todir="src/main/resources/com/sun/faces" />
                                 
