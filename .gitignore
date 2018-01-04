@@ -1,7 +1,6 @@
 target/
 api/src/main/java/
 api/src/main/resources/
-impl/bnd.bnd
 impl/yuicompressor.jar
 changebundle.txt
 dependencies

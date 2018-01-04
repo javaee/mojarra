@@ -67,10 +67,6 @@
     
     <name>Mojarra ${project.version}</name>
     
-    <prerequisites>
-        <maven>3.1.1</maven>
-    </prerequisites>
-    
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -83,94 +79,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
+                <version>1.8</version>
                 <executions>
-                    
-                    
-                    <!-- ###  C L E A N  ### -->
-                    
-                    <execution>
-                        <id>clean</id>
-                        <phase>clean</phase>
-                        <configuration>
-                            <target>
-                                <!--
-                                
-                                    Once migration is completely done we should not have
-                                    to delete any src/main directory anymore
-                                
-                                -->
-                                <delete>
-                                    <fileset dir="src/main/resources/META-INF" 
-                                             excludes="LICENSE.txt,facelet-dev-debug.xml,facelet-dev-error.xml,mojarra-jsf-api-probe-provider.xml,jsf_core.tld,mojarra_ext.taglib.xml,mojarra_ext.tld,error-include.xhtml"
-                                             includes="*"/>
-                                </delete>
-                                
-                                <!--
-                                
-                                    Once migration is completely we should not need to
-                                    delete the bnd.bnd file anymore.
-                                
-                                -->
-                                <delete file="bnd.bnd"/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    
-                    
-                    <!-- ###  I N I T I A L I Z E  ### -->
-                    
-                    <execution>
-                        <id>initialize</id>
-                        <phase>initialize</phase>
-                        <configuration>
-                            <target>
-                               
-                                <!--
-                                
-                                    Once migration is completely done this should disappear
-                                
-                                -->
-                                <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
-                                
-                                
-                                <!--
-                                
-                                    Copy and generate BND configuration
-                                    
-                                -->
-                                <copy file="${jsf-ri-dir}/mojarra-jsf-impl.bnd" 
-                                      tofile="${project.build.directory}/tmp.bnd"/>
-                                <replace file="${project.build.directory}/tmp.bnd"
-                                    token="@spec.version@"
-                                    value="2.3"/>
-                                <replace file="${project.build.directory}/tmp.bnd"
-                                    token="@impl.name@"
-                                    value="Mojarra"/>
-                                <replace file="${project.build.directory}/tmp.bnd"
-                                    token="@impl.version@"
-                                    value="${project.version}"/>
-                                <replace file="${project.build.directory}/tmp.bnd"
-                                    token="@full.impl.version@"
-                                    value="${project.version}"/>
-                                <replace file="${project.build.directory}/tmp.bnd"
-                                    token="@osgi.version@"
-                                    value="${project.version}"/>
-                                <replace file="${project.build.directory}/tmp.bnd"
-                                    token="@extension.name@"
-                                    value="javax.faces"/>
-                                <copy tofile="${project.project.build.directory}/../bnd.bnd" 
-                                      file="${project.build.directory}/tmp.bnd"/>
-                                
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
                     
                     
                     <!-- ###  G E N E R A T E   S O U R C E S  ### -->
@@ -536,7 +446,8 @@
                         </goals>
                     </execution>
                 </executions>
-                                
+                
+                <!-- Ant plug-in dependencies -->
                 <dependencies>
                     <dependency>
                         <groupId>ant-contrib</groupId>
@@ -567,111 +478,11 @@
                 </dependencies>
             </plugin>
             
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                
-                <executions>
-                    <execution>
-                        <id>process-annotations</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <annotationProcessors>com.sun.faces.generate.PreParseFacesConfigProcessor</annotationProcessors>
-                            <generatedSourcesDirectory>${project.build.directory}/generated-sources/antrun</generatedSourcesDirectory>
-                            <proc>only</proc>
-                        </configuration>
-                    </execution>
-                    
-                    <execution>
-                        <id>default-compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        
-                        <configuration>
-                            <proc>none</proc>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <!-- Tell Maven we want a Javadoc jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <configuration>
-                            <excludePackageNames>com</excludePackageNames>
-                        </configuration>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.2</version>
-                <configuration>
-                    <targetJdk>1.8</targetJdk>
-                    <excludes>
-                        <exclude>com/sun/faces/taglib/html_basic/**/*.java</exclude>
-                        <exclude>javax/faces/component/html/**/*.java</exclude>
-                    </excludes>
-                    <rulesets>
-                        <ruleset>${project.build.directory}/../src/main/pmd/ruleset.xml</ruleset>
-                    </rulesets>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.sourceforge.pmd</groupId>
-                        <artifactId>pmd</artifactId>
-                        <version>5.1.2</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-                 
-            <!-- Tell Maven we want a source jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.4</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <!-- Add the OSGi generated MANIFEST.MF to the jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <archive>
-                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-                    </archive>
-                </configuration>
-            </plugin>
-            
+            <!-- Adds the paths where the source and resources generated above was stored -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.9.1</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>generate-sources</id>
@@ -702,21 +513,172 @@
                 </executions>
             </plugin>
             
-            <!-- This plugin is reponsible for packaging artifacts as OSGi bundles.  
-                 It effectively puts a MANIFEST.MF in the jar artifact that is understood by OSGi.
-            -->
+            
+            
+            <!-- ###  C O M P I L E  ### --> 
+            
             <plugin>
-                <groupId>biz.aQute.bnd</groupId>
-                <artifactId>bnd-maven-plugin</artifactId>
-                <version>2.4.1</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                
+                <executions>
+                    
+                    <!-- Process annotation - generate code based on them  -->
+                    <execution>
+                        <id>process-annotations</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <annotationProcessors>com.sun.faces.generate.PreParseFacesConfigProcessor</annotationProcessors>
+                            <generatedSourcesDirectory>${project.build.directory}/generated-sources/antrun</generatedSourcesDirectory>
+                            <proc>only</proc>
+                        </configuration>
+                    </execution>
+                    
+                    <!-- Compile all Java code, including the code generated above -->
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        
+                        <configuration>
+                            <proc>none</proc>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            
+            <!-- ###  C R E A T E    J A V A D O C   ### --> 
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
+                        <id>attach-javadocs</id>
+                        <configuration>
+                            <excludePackageNames>com</excludePackageNames>
+                        </configuration>
                         <goals>
-                            <goal>bnd-process</goal>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+          
+                 
+            <!-- ###  C R E A T E    S O U R C E  ### --> 
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- Generate the META-INF/MANIFEST.MF file for OSGi use -->
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>3.4.0</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>bundle</id>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <instructions>
+                    
+                        <Bundle-SymbolicName>org.glassfish.javax.faces</Bundle-SymbolicName>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <Bundle-Name>Mojarra JSF Implementation ${project.version}</Bundle-Name>
+                        <Bundle-Description>Mojarra JSF Implementation (javax.faces/2.3) ${project.version}</Bundle-Description>                        
+                        
+                        <Specification-Title>JavaServer Faces</Specification-Title>
+                        <Specification-Version>2.3</Specification-Version>
+                        
+                        <Implementation-Title>Mojarra</Implementation-Title> 
+                        <Implementation-Version>${project.version}</Implementation-Version>
+                        <Implementation-Vendor>Oracle America, Inc.</Implementation-Vendor> 
+                        <Implementation-Vendor-Id>com.sun</Implementation-Vendor-Id>
+                        
+                        <!--  
+                        <Include-Resource>META-INF=build/classes/META-INF,build/classes</Include-Resource> 
+                        -->
+                        <Extension-Name>javax.faces</Extension-Name>
+                        
+                        <Export-Package>
+                            javax.faces.*;version=2.3,
+                            com.sun.faces.*;version=2.3
+                        </Export-Package>
+                        
+                        <Import-Package>
+                            javax.faces.*,
+                            com.sun.faces.*,
+                            javax.servlet.annotation.*;resolution:=optional,
+                            javax.servlet.*,javax.el.*,javax.inject.*,javax.enterprise.inject.*,javax.enterprise.util.*,javax.enterprise.context.*,javax.annotation.*,javax.crypto.*,
+                            javax.websocket.*;resolution:=optional, 
+                            javax.json.*;resolution:=optional, 
+                            javax.validation.*;resolution:=optional, 
+                            javax.enterprise.event;resolution:=optional, 
+                            javax.ejb.*;resolution:=optional, 
+                            javax.persistence.*;resolution:=optional,
+                            javax.xml.*,org.w3c.dom.*, 
+                            com.sun.enterprise.*;resolution:=optional, 
+                            org.mortbay.jetty.annotations;resolution:=optional, 
+                            org.mortbay.jetty.plus.annotation;resolution:=optional, 
+                            org.apache.*;resolution:=optional, 
+                            org.jboss.weld.*;resolution:=optional, 
+                            org.xml.sax.*,javax.naming.*
+                        </Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+            
+            
+            <!-- ###  V A L I D A T I O N  ### --> 
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <targetJdk>1.8</targetJdk>
+                    <excludes>
+                        <exclude>com/sun/faces/taglib/html_basic/**/*.java</exclude>
+                        <exclude>javax/faces/component/html/**/*.java</exclude>
+                    </excludes>
+                    <rulesets>
+                        <ruleset>${project.build.directory}/../src/main/pmd/ruleset.xml</ruleset>
+                    </rulesets>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sourceforge.pmd</groupId>
+                        <artifactId>pmd</artifactId>
+                        <version>5.1.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>clirr-maven-plugin</artifactId>
@@ -729,6 +691,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
@@ -764,6 +727,7 @@
                     </validationSets>
                 </configuration>
             </plugin>
+            
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -786,6 +750,9 @@
             </plugin>
         </plugins>
     </build>
+    
+    
+    <!-- ###  D E P E N D E N C I E S  ### --> 
     
     <dependencies>
         <!-- Java EE Dependencies -->
@@ -852,8 +819,6 @@
             <version>6.0.51</version>
             <scope>provided</scope>
         </dependency>
-        
-        
         
         
         <!-- TEST DEPENDENCIES -->
@@ -973,8 +938,5 @@
             </plugin>
         </plugins>
     </reporting>
-    <scm>
-        <url>http://java.net/projects/mojarra/sources</url>
-        <connection>scm:git:git://java.net/mojarra~git</connection>
-    </scm>
+    
 </project>
