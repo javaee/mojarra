@@ -45,6 +45,7 @@
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd" version="2.2">
   <!-- Generic User Interface Components -->
+
   <component>
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
@@ -5495,7 +5496,9 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Websocket</renderer-type>
     </component-extension>
   </component>
+
   <!-- Concrete HTML Components -->
+
   <component>
     <description><![CDATA[<p>Represents a column that will be rendered 
       in an HTML <code>table</code> element.</p>]]></description>
@@ -22739,10 +22742,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
-  <!--
-         the following components are here merely for AttributeManager
-         generation.
-    -->
   <component>
     <description>NONE</description>
     <display-name>doctype</display-name>
@@ -23133,8 +23132,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Body</renderer-type>
     </component-extension>
   </component>
+
   <!-- Standard HTML Renderkit -->
-  <render-kit>
+
+  <render-kit xmlns:xi="http://www.w3.org/2001/XInclude">
     <description><![CDATA[ <span class="changed_modified_2_2">The</span>
             standard HTML RenderKit.  Please see the spec for additional
             details for the standard render-kit.
@@ -30376,25 +30377,25 @@ this application, and passing the result through the
 
   <ul>
 
-	  <li><p>Let <em>params</em> be the <code>Map&lt;String,
-	  List&lt;String&gt;&gt;</code> to be passed to
-	  <code>ViewHandler.getBookmarkableURL()</code>.  Build this map up first
-	  from any child <code>UIParameter</code> components.  These children must
-	  be processed in the order in which they appear as children.  If multiple
-	  children with the same name are encountered, their values must appear in
-	  the <code>List&lt;String&gt;</code> in the <code>Map</code> entry with
-	  the same name, and appear in the list in the same order as their child
-	  order.</p></li>
+      <li><p>Let <em>params</em> be the <code>Map&lt;String,
+      List&lt;String&gt;&gt;</code> to be passed to
+      <code>ViewHandler.getBookmarkableURL()</code>.  Build this map up first
+      from any child <code>UIParameter</code> components.  These children must
+      be processed in the order in which they appear as children.  If multiple
+      children with the same name are encountered, their values must appear in
+      the <code>List&lt;String&gt;</code> in the <code>Map</code> entry with
+      the same name, and appear in the list in the same order as their child
+      order.</p></li>
 
-	  <li><p>Obtain any parameters included within the
-	  navigation case.  Call <code>getParameters()</code> on
-	  <em>navCase</em>.  The result will be a <code>Map&lt;String,
-	  List&lt;String&gt;&gt;</code>.  If the result is
-	  non-<code>null</code> and non-empty, iterate over the entries
-	  from the result <code>Map</code> and, if no entry with the
-	  same name exists in <em>params</em>, set the value from the
-	  current entry as the value in the <em>params</em>
-	  <code>Map</code>.</p></li>
+      <li><p>Obtain any parameters included within the
+      navigation case.  Call <code>getParameters()</code> on
+      <em>navCase</em>.  The result will be a <code>Map&lt;String,
+      List&lt;String&gt;&gt;</code>.  If the result is
+      non-<code>null</code> and non-empty, iterate over the entries
+      from the result <code>Map</code> and, if no entry with the
+      same name exists in <em>params</em>, set the value from the
+      current entry as the value in the <em>params</em>
+      <code>Map</code>.</p></li>
 
           <li class="changed_added_2_2"><p>If the navigation case has a
           non-null <code>toFlowDocumentId</code> property, add two
@@ -30425,19 +30426,19 @@ this application, and passing the result through the
 
           </li>
 
-	  <li><p>Let <em>includeViewParams</em> be the result of a
-	  logical OR of the results from calling
-	  <code>isIncludeViewParams()</code> on the argument
-	  <code>UIOutcomeTarget</code> component and calling
-	  <code>isIncludeViewParams</code> on <em>navCase</em>.</p></li>
+      <li><p>Let <em>includeViewParams</em> be the result of a
+      logical OR of the results from calling
+      <code>isIncludeViewParams()</code> on the argument
+      <code>UIOutcomeTarget</code> component and calling
+      <code>isIncludeViewParams</code> on <em>navCase</em>.</p></li>
 
 
-	  <li><p>Call <code>getBookmarkableURL()</code> on the
-	  <code>ViewHandler</code>, passing the current
-	  <code>FacesContext</code> as the first argument, the return
-	  from calling <code>getToViewId()</code> as the second
-	  argument, <em>params</em> as the third argument, and
-	  <em>includeViewParams</em> as the last argument.</p></li>
+      <li><p>Call <code>getBookmarkableURL()</code> on the
+      <code>ViewHandler</code>, passing the current
+      <code>FacesContext</code> as the first argument, the return
+      from calling <code>getToViewId()</code> as the second
+      argument, <em>params</em> as the third argument, and
+      <em>includeViewParams</em> as the last argument.</p></li>
 
   </ul>
 
@@ -35264,14 +35265,14 @@ this application, and passing the result through the
 
       <p>Encode Behavior</p>
 
-	<ul>
+    <ul>
 
            <p>Ask the argument <code>UIComponent</code> for its facet
            under the key <code>UIComponent.COMPOSITE_FACET_NAME</code>.
            Such a facet must exist.  Call the <code>encodeAll()</code>
            method on this facet.</p>
 
-	</ul>
+    </ul>
 
 
 
@@ -35381,19 +35382,19 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
 
           <ul>
 
-	  <li><p>Look in the component attribute <code>Map</code> for a
-	  value under the key <em>name</em>.</p></li>
+      <li><p>Look in the component attribute <code>Map</code> for a
+      value under the key <em>name</em>.</p></li>
 
-	  <li><p>Look in the component attribute <code>Map</code> for a
-	  value under the key <em>library</em>.  This attribute is
-	  optional, therefore, <em>library</em> may be
-	  <code>null</code>.</p></li>
+      <li><p>Look in the component attribute <code>Map</code> for a
+      value under the key <em>library</em>.  This attribute is
+      optional, therefore, <em>library</em> may be
+      <code>null</code>.</p></li>
 
-	  <li><p>Create the resource by calling
-	  <code>Application.getResourceHandler.createResource(<em>name</em>,
-	  <em>library</em>);</code>.</p></li>
+      <li><p>Create the resource by calling
+      <code>Application.getResourceHandler.createResource(<em>name</em>,
+      <em>library</em>);</code>.</p></li>
 
-	  </p></li>
+      </p></li>
 
           </ul>
 
@@ -35412,35 +35413,35 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
         <code>getRendersChildren()</code>, the <code>encodeChildren()
         method must take the following action.</code></p>
 
-        	<ul>
+            <ul>
 
-	  <li><p>If there is no <em>name</em> attribute, and the
-	  argument <code>component</code> has no children, and
-	  <code>ProjectStage</code> is not
-	  <code>ProjectStage.Production</code>, add a
-	  <code>FacesMessage</code> for this component's clientId to the
-	  <code>FacesContext</code> stating that if no name attribute is
-	  present, and no body content is present either, then the user
-	  should take action to correct this problem.  In this case,
-	  <code>encodeChildren()</code> must take no further
-	  action.</p></li>
+      <li><p>If there is no <em>name</em> attribute, and the
+      argument <code>component</code> has no children, and
+      <code>ProjectStage</code> is not
+      <code>ProjectStage.Production</code>, add a
+      <code>FacesMessage</code> for this component's clientId to the
+      <code>FacesContext</code> stating that if no name attribute is
+      present, and no body content is present either, then the user
+      should take action to correct this problem.  In this case,
+      <code>encodeChildren()</code> must take no further
+      action.</p></li>
 
-	  <li><p>If there is no <em>name</em> attribute and the argument
-	  <code>component</code> <b>does</b> have children, the renderer
-	  must ensure that those children are encoded as usual.</p></li>
+      <li><p>If there is no <em>name</em> attribute and the argument
+      <code>component</code> <b>does</b> have children, the renderer
+      must ensure that those children are encoded as usual.</p></li>
 
-	  <li><p>If there <b>is</b> a <em>name</em> attribute and the
-	  argument <code>component</code> <b>does</b> have children, the
-	  renderer must log a descriptive localized message stating that
-	  the child content will be ignored.  The resource referenced by
-	  the <em>name</em> attribute will be rendered in
-	  <code>encodeEnd()</code>.</p></li>
+      <li><p>If there <b>is</b> a <em>name</em> attribute and the
+      argument <code>component</code> <b>does</b> have children, the
+      renderer must log a descriptive localized message stating that
+      the child content will be ignored.  The resource referenced by
+      the <em>name</em> attribute will be rendered in
+      <code>encodeEnd()</code>.</p></li>
 
-	  <li><p>If there <b>is</b> a <em>name attribute</em> and the
-	  argument <code>component</code> <b>does not</b> have children,
-	  <code>encodeChildren()</code> must take no action.</p></li>
+      <li><p>If there <b>is</b> a <em>name attribute</em> and the
+      argument <code>component</code> <b>does not</b> have children,
+      <code>encodeChildren()</code> must take no action.</p></li>
 
-	</ul>
+    </ul>
 
        <p><code>encodeEnd()</code> must take specific action based on
        the specific kind of resource being rendered.</p>
@@ -36237,4 +36238,5 @@ unmodified to the rendered output.</p>
       </renderer-extension>
     </renderer>
   </render-kit>
+
 </faces-config>

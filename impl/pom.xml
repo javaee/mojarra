@@ -124,8 +124,9 @@
                                         <!-- 
                                             Copy a lot of -props.xml files to -attrs.xml.
                                             
-                                            For some reason, source files are kept as -props.xml, but some
-                                            (and curiously not all) are xi included as -attrs.xml)
+                                            This is done because by convention the properties of
+                                            components are often mirrored as attributes on their
+                                            associated default renderers.
                                          -->
                                         <copy todir="src/main/doc" overwrite="true">
                                             <mapper type="glob"
@@ -177,6 +178,10 @@
 
 <!-- DO NOT EDIT     DO NOT EDIT    DO NOT EDIT    DO NOT EDIT    DO NOT EDIT -->]]>
                                             </replacevalue>
+                                        </replace>
+                                        <replace file="src/main/doc/standard-html-renderkit.xml">
+                                            <replacetoken><![CDATA[<component xmlns:xi="http://www.w3.org/2001/XInclude">]]></replacetoken>
+                                            <replacevalue><![CDATA[<component>]]></replacevalue>
                                         </replace>
                                         <delete>
                                             <fileset dir="src/main/doc" includes="*-attrs.xml"/>
@@ -271,7 +276,7 @@
                                 
                                     Generate API components
                                     
-                                    -->
+                                -->
                                 <copy todir="${jsf-tools-dir}/build/classes">
                                     <fileset dir="${jsf-ri-dir}/src/main/resources"
                                         includes="**/LogStrings.properties"/>
@@ -281,6 +286,7 @@
                                     <fileset dir="src/main/resources/com/sun/faces"
                                         includes="*.dtd,*.xsd"/>
                                 </copy>
+                                
                                 <taskdef name="generateComponents"
                                     classname="com.sun.faces.ant.ComponentGenTask">
                                     <classpath>
@@ -297,6 +303,7 @@
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateComponents>
+                                
                                 <copy todir="${project.build.directory}/generated-sources/antrun/javax">
                                     <fileset dir="build/generate/javax"/>
                                 </copy>
