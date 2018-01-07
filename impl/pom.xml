@@ -90,9 +90,7 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <target>
-                                <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
-                                
                                 
                                 
                                 <echo message="Generating source code files" />
@@ -327,8 +325,6 @@
                         <phase>generate-resources</phase>
                         <configuration>
                             <target>
-                                <property name="jsf-api-dir" value="${project.build.directory}/../../jsf-api"/>
-                                <property name="jsf-ri-dir" value="${project.build.directory}/../../jsf-ri"/>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 
                                 <!--
@@ -415,7 +411,7 @@
                                 -->
                                 <xslt in="src/main/resources/com/sun/faces/standard-html-renderkit.xml" 
                                       out="merged.xml"
-                                      style="${jsf-ri-dir}/conf/xslt/merge-config.xsl">
+                                      style="${jsf-tools-dir}/src/main/xsl/merge-config.xsl">
                                 </xslt>
                                 <replace file="${basedir}/merged.xml">
                                     <replacetoken><![CDATA[xmlns:jsf="http://xmlns.jcp.org/xml/ns/javaee"]]></replacetoken>
@@ -427,7 +423,7 @@
                                 </replace>
                                 <xslt in="${basedir}/merged.xml"
                                       out="${project.build.directory}/generated-resources/antrun/com/sun/faces/jsf-ri-runtime.xml"
-                                      style="${jsf-ri-dir}/conf/xslt/prune-tool-data.xsl">
+                                      style="${jsf-tools-dir}/src/main/xsl/prune-tool-data.xsl">
                                 </xslt>
                                 <replace file="${project.build.directory}/generated-resources/antrun/com/sun/faces/jsf-ri-runtime.xml">
                                     <replacetoken><![CDATA[xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"]]></replacetoken>
