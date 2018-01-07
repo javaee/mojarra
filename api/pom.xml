@@ -101,12 +101,13 @@
                                     Generate RenderkitDocs
                                 
                                 -->
-                                <copy todir="${jsf-tools-dir}/build/classes">
-                                    <fileset dir="${jsf-ri-dir}/src/main/resources" includes="**/LogStrings.properties"/>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces">
+                                    <fileset dir="src/main/resources/com/sun/faces" includes="LogStrings.properties"/>
                                 </copy>
                                 <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" flatten="true">
                                     <fileset dir="src/main/resources/com/sun/faces" includes="*.dtd,*.xsd"/>
                                 </copy>
+                                
                                 <taskdef name="generateRenderkitDocs" classname="com.sun.faces.ant.RenderkitDocGenTask">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${mojarra.version}.jar"/>
@@ -121,7 +122,8 @@
                                         <pathelement location="${jsf-tools-dir}/build/classes"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
-                                </generateRenderkitDocs>                                
+                                </generateRenderkitDocs>
+                                                           
                                 <copy todir="${project.build.directory}/renderkitdocs">
                                     <fileset dir="build/generate/facesdoc"/>
                                 </copy>

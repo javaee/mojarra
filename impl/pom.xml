@@ -193,6 +193,7 @@
                           
                                     
                                
+                               
                                 <!--
                                 
                                     Generate AttributeManager
@@ -203,12 +204,16 @@
                                     This is used in the generating of several UI components based on their taglib descriptions
                                 
                                     -->
-                                <copy todir="${jsf-tools-dir}/build/classes">
-                                    <fileset dir="${jsf-ri-dir}/src/main/resources" includes="**/LogStrings.properties"/>
+                                <echo message="Copying LogStrings.properties" />
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" verbose="true">
+                                    <fileset dir="src/main/resources/com/sun/faces" includes="LogStrings.properties"/>
                                 </copy>
-                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" flatten="true">
+                                
+                                <echo message="Copying *.dtd,*.xsd" />
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" flatten="true" verbose="true">
                                     <fileset dir="src/main/resources/com/sun/faces" includes="*.dtd,*.xsd"/>
                                 </copy>
+                                
                                 <taskdef name="generateAttrManager" classname="com.sun.faces.ant.AttributeManagerGenTask">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
@@ -224,6 +229,7 @@
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateAttrManager>
+                                
                                 <copy todir="${project.build.directory}/generated-sources/antrun">
                                     <fileset dir="build/generate"/>
                                 </copy>
@@ -236,20 +242,18 @@
                                     Generate com.sun.faces.renderkit.html_basic sources
                                     
                                     -->
-                                <copy todir="${jsf-tools-dir}/build/classes">
-                                    <fileset dir="${jsf-ri-dir}/src/main/resources"
-                                        includes="**/LogStrings.properties"/>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" verbose="true">
+                                    <fileset dir="src/main/resources/com/sun/faces" includes="LogStrings.properties"/>
                                 </copy>
-                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
-                                    flatten="true">
-                                    <fileset dir="src/main/resources/com/sun/faces"
-                                        includes="*.dtd,*.xsd"/>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" flatten="true">
+                                    <fileset dir="src/main/resources/com/sun/faces" includes="*.dtd,*.xsd"/>
                                 </copy>
                                 <copy todir="build">
                                     <fileset dir="${jsf-tools-dir}/conf">
                                         <include name="TAG-*"/>
                                     </fileset>
                                 </copy>
+                                
                                 <taskdef name="generateTaglib"
                                          classname="com.sun.faces.ant.TaglibGenTask">
                                     <classpath>
@@ -266,6 +270,7 @@
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateTaglib>
+                                
                                 <copy todir="${project.build.directory}/generated-sources/antrun/com">
                                     <fileset dir="build/generate/com"/>
                                 </copy>
@@ -277,14 +282,11 @@
                                     Generate API components
                                     
                                 -->
-                                <copy todir="${jsf-tools-dir}/build/classes">
-                                    <fileset dir="${jsf-ri-dir}/src/main/resources"
-                                        includes="**/LogStrings.properties"/>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" verbose="true">
+                                    <fileset dir="src/main/resources/com/sun/faces" includes="LogStrings.properties"/>
                                 </copy>
-                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces"
-                                    flatten="true">
-                                    <fileset dir="src/main/resources/com/sun/faces"
-                                        includes="*.dtd,*.xsd"/>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" flatten="true">
+                                    <fileset dir="src/main/resources/com/sun/faces" includes="*.dtd,*.xsd"/>
                                 </copy>
                                 
                                 <taskdef name="generateComponents"
@@ -335,9 +337,8 @@
                                 
                                 -->
                                 <mkdir dir="${project.build.directory}/generated-resources/antrun"/>
-                                <copy todir="${project.build.directory}/generated-resources/antrun" overwrite="true">
-                                    <fileset dir="${jsf-ri-dir}/src/main/resources"
-                                             includes="**/LogStrings*.properties"/>
+                                <copy todir="${project.build.directory}/generated-resources/antrun/com/sun/faces" overwrite="true" verbose="true">
+                                    <fileset dir="src/main/resources/com/sun/faces" includes="LogStrings*.properties"/>
                                 </copy>
                                 <replace dir="${project.build.directory}/generated-resources/antrun"
                                     token="|version.string|"
@@ -357,9 +358,8 @@
                                     </fileset>
                                 </copy>
                                 
-                                <copy todir="${jsf-tools-dir}/build/classes">
-                                    <fileset dir="${jsf-ri-dir}/src/main/resources"
-                                             includes="**/LogStrings.properties"/>
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" verbose="true">
+                                    <fileset dir="src/main/resources/com/sun/faces" includes="LogStrings.properties"/>
                                 </copy>
                                 
                                 <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" flatten="true">
