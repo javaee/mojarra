@@ -141,7 +141,7 @@
 							<documentTitle>${doctitle}</documentTitle>
 							<srcDirectory>${project.basedir}/../jsf-ri/conf/share/</srcDirectory>
 							<includes>
-								<param>composite.taglib.xml</param>
+							    <param>composite.taglib.xml</param>
                                 <param>facelets_jsf_core.taglib.xml</param>
                                 <param>facelets_passthrough_attributes.taglib.xml</param>
                                 <param>facelets_passthrough_elements.taglib.xml</param>
