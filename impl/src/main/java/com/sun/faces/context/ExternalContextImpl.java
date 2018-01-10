@@ -686,7 +686,7 @@ public class ExternalContextImpl extends ExternalContext {
         try {
             URL requestURL = new URL(request.getRequestURL().toString());
 
-            if (port <= 0 && port != 80) {
+            if (port <= 0) {
                 port = requestURL.getPort();
             }
 

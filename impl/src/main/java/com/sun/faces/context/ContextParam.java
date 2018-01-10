@@ -56,9 +56,9 @@ public enum ContextParam {
      */
     SendPoweredByHeader("com.sun.faces.sendPoweredByHeader", Boolean.class, false),
     /**
-     * The websocket endpoint port (default is the same as the HTTP port 80).
+     * The websocket endpoint port (default 0 means the code will take the port from the request)
      */
-    WebsocketEndpointPort(PushContext.WEBSOCKET_ENDPOINT_PORT_PARAM_NAME, Integer.class, 80);
+    WebsocketEndpointPort(PushContext.WEBSOCKET_ENDPOINT_PORT_PARAM_NAME, Integer.class, 0);
 
     /**
      * Stores the default value.

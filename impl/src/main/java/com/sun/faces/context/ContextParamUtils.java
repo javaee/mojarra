@@ -65,9 +65,9 @@ public class ContextParamUtils {
         Object result = contextParam.getDefaultValue();
         if (servletContext.getInitParameter(contextParam.getName()) != null) {
             if (contextParam.getType().equals(Boolean.class)) {
-                result = Boolean.getBoolean(servletContext.getInitParameter(contextParam.getName()));
+                result = Boolean.valueOf(servletContext.getInitParameter(contextParam.getName()));
             } else if (contextParam.getType().equals(Integer.class)) {
-                result = Integer.getInteger(servletContext.getInitParameter(contextParam.getName()));
+                result = Integer.valueOf(servletContext.getInitParameter(contextParam.getName()));
             }
         }
         return result;

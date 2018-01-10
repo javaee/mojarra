@@ -98,7 +98,7 @@ public class Spec1396IT {
         page = button.click();
         webClient.waitForBackgroundJavaScript(60000);
        
-        for (int i=0; i<6; i++) {
+        for (int i=0; i<10; i++) {
             try {
                 System.out.println("Wait until WS push - iteration #" + i);
                 Thread.sleep(1000); // waitForBackgroundJavaScript doesn't wait until the WS push is arrived.
@@ -107,11 +107,13 @@ public class Spec1396IT {
                 assertTrue(page.getHtmlElementById("user").asText().equals("pushed!"));
                 assertTrue(page.getHtmlElementById("ajaxOutput").asText().equals("pushed!"));
                 
-                break;
+                return;
             } catch (Error e) {
                 e.printStackTrace();
             }
         }
+        
+        assertTrue("Failed to establish connection with websocket with 10 seconds.", false);
         
     }
 
