@@ -53,10 +53,6 @@
 
     <name>Mojarra ${project.version} - Test</name>
     
-    <prerequisites>
-        <maven>3.0</maven>
-    </prerequisites>
-    
     <properties>
         <jsf.artifactId>javax.faces</jsf.artifactId>
         <jsf.groupId>org.glassfish</jsf.groupId>
