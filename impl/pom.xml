@@ -92,8 +92,7 @@
                             <target>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 
-                                
-                                <echo message="Generating source code files" />
+                                 <echo message="${line.separator}${line.separator}${line.separator}${line.separator} * * *  G E N E R A T E   S O U R C E S${line.separator}${line.separator}${line.separator}${line.separator}" />
                                 
                                 <!--
                                 
@@ -235,6 +234,7 @@
                                 <delete dir="${jsf-tools-dir}/build"/>
                                 
                                 
+                                <echo message="${line.separator}${line.separator}Generate com.sun.faces.renderkit.html_basic sources${line.separator}${line.separator}" />
                                 <!--
                                 
                                     Generate com.sun.faces.renderkit.html_basic sources
@@ -243,19 +243,28 @@
                                 <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" verbose="true">
                                     <fileset dir="src/main/resources/com/sun/faces" includes="LogStrings.properties"/>
                                 </copy>
-                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" flatten="true">
+                                
+                                <echo message="Copying *.dtd,*.xsd" />
+                                
+                                <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" flatten="true" verbose="true">
                                     <fileset dir="src/main/resources/com/sun/faces" includes="*.dtd,*.xsd"/>
                                 </copy>
-                                <copy todir="build">
+                                
+                                <echo message="Copying TAG-*" />
+                                
+                                <copy todir="build" verbose="true">
                                     <fileset dir="${jsf-tools-dir}/conf">
                                         <include name="TAG-*"/>
                                     </fileset>
                                 </copy>
                                 
+                                <echo message="generateTaglib" />
+                                
                                 <taskdef name="generateTaglib"
                                          classname="com.sun.faces.ant.TaglibGenTask">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
+                                        <pathelement location="${jsf-tools-dir}/build/classes/"/>
                                     </classpath>
                                 </taskdef>
                                 <generateTaglib
@@ -264,17 +273,22 @@
                                     fork="true">
                                     <classpath>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
-                                        <pathelement location="${jsf-tools-dir}/build/classes"/>
+                                        <pathelement location="${jsf-tools-dir}/build/classes/"/>
                                         <path refid="maven.plugin.classpath"/>
                                     </classpath>
                                 </generateTaglib>
                                 
-                                <copy todir="${project.build.directory}/generated-sources/antrun/com">
+                                <copy todir="${project.build.directory}/generated-sources/antrun/com" verbose="true">
                                     <fileset dir="build/generate/com"/>
                                 </copy>
+                                
+                                <echo message="deleting build" />
+                                
                                 <delete dir="build"/>
                                 <delete dir="${jsf-tools-dir}/build"/>
                                 
+                                
+                                <echo message="${line.separator}${line.separator}${line.separator}${line.separator}Generate API components${line.separator}${line.separator}${line.separator}${line.separator}" />
                                 <!--
                                 
                                     Generate API components
@@ -327,6 +341,9 @@
                             <target>
                                 <property name="jsf-tools-dir" value="${project.build.directory}/../../jsf-tools"/>
                                 
+                                 <echo message="${line.separator}${line.separator}${line.separator}${line.separator} * * *  G E N E R A T E   R E S O U R C E S${line.separator}${line.separator}${line.separator}${line.separator}" />
+                                
+                                
                                 <!--
                                 
                                     Copy LogStrings
@@ -357,13 +374,13 @@
                                 <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" verbose="true">
                                     <fileset dir="src/main/resources/com/sun/faces" includes="LogStrings.properties"/>
                                 </copy>
-                                
                                 <copy todir="${jsf-tools-dir}/build/classes/com/sun/faces" flatten="true">
-                                    <fileset dir="src/main/doc" includes="*.dtd,*.xsd" />
+                                    <fileset dir="src/main/resources/com/sun/faces" includes="*.dtd,*.xsd"/>
                                 </copy>
                                 
                                 <taskdef name="generateTaglib" classname="com.sun.faces.ant.TaglibGenTask">
                                     <classpath>
+                                        <pathelement location="${jsf-tools-dir}/build/classes"/>
                                         <pathelement location="${jsf-tools-dir}/target/jsf-tools-${project.version}.jar"/>
                                     </classpath>
                                 </taskdef>
