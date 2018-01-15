@@ -29,7 +29,6 @@ impl/**/.project
 impl/bnd.bnd
 api/**/.classpath
 api/**/.project
-api/src/**
 /nbproject/private/
 /dependencies
 glassfish-8.0/
