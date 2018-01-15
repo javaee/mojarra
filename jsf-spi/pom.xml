@@ -107,7 +107,7 @@
     <build>
         <defaultGoal>install</defaultGoal>
 
-        <sourceDirectory>${project.basedir}/../jsf-ri/src/main/java</sourceDirectory>
+        <sourceDirectory>${project.basedir}/../impl/src/main/java</sourceDirectory>
 
         <plugins>
             <plugin>
