@@ -13,7 +13,6 @@ target/
 /dist/
 /dependencies/
 /jsf-demo/dist/
-/jsf-ri/build/
 /jsf-tools/build/
 /jsf-tools/target/
 /build.properties
