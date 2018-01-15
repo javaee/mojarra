@@ -115,46 +115,6 @@
                 </dependency>
             </dependencies>
         </profile>
-        
-        <profile>
-            <id>vdldoc</id>
-            <build>
-               	<plugins>
-					<plugin>
-						<groupId>com.github.matinh.vdldoc</groupId>
-						<artifactId>vdldoc-maven-plugin</artifactId>
-						<version>1.0</version>
-						<executions>
-							<execution>
-								<id>generate-vdldoc</id>
-								<phase>prepare-package</phase>
-								<goals>
-									<goal>vdldoc</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<hideGeneratedBy>true</hideGeneratedBy>
-							<css>jsf-api.css</css>
-							<destDir>vdldoc</destDir>
-							<browserTitle>${doctitle}</browserTitle>
-							<documentTitle>${doctitle}</documentTitle>
-							<srcDirectory>${project.basedir}/../jsf-ri/conf/share/</srcDirectory>
-							<includes>
-							    <param>composite.taglib.xml</param>
-                                <param>facelets_jsf_core.taglib.xml</param>
-                                <param>facelets_passthrough_attributes.taglib.xml</param>
-                                <param>facelets_passthrough_elements.taglib.xml</param>
-                                <param>ui.taglib.xml</param>
-							</includes>
-						</configuration>
-					</plugin>
-				</plugins>
-            </build>
-            <properties>
-                <doctitle>JSF ${spec.version} VDL Documentation</doctitle>
-            </properties>
-        </profile>
     </profiles>
 
 </project>
