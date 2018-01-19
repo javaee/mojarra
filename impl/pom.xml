@@ -678,6 +678,25 @@
                             org.xml.sax.*,
                             javax.naming.*
                         </Import-Package>
+                        <!--
+                            Allow Mojarra to load alternative AnnotationProvider, FaceletConfigResourceProvider,
+                            FacesConfigResourceProvider, CDIUtil, and ApplicationConfigurationPopulator SPI
+                            implementations. Mojarra provides default implementations, so each capability is marked as
+                            optional.
+                        -->
+                        <Require-Capability>
+                            osgi.serviceloader;filter:="(osgi.serviceloader=com.sun.faces.spi.AnnotationProvider)";
+                            resolution:=optional;cardinality:=multiple,
+                            osgi.serviceloader;filter:="(osgi.serviceloader=com.sun.faces.spi.FaceletConfigResourceProvider)";
+                            resolution:=optional;cardinality:=multiple,
+                            osgi.serviceloader;filter:="(osgi.serviceloader=com.sun.faces.spi.FacesConfigResourceProvider)";
+                            resolution:=optional;cardinality:=multiple,
+                            osgi.serviceloader;filter:="(osgi.serviceloader=com.sun.faces.util.cdi11.CDIUtil)";
+                            resolution:=optional;cardinality:=multiple,
+                            osgi.serviceloader;filter:="(osgi.serviceloader=javax.faces.application.ApplicationConfigurationPopulator)";
+                            resolution:=optional;cardinality:=multiple,
+                            osgi.extender;filter:="(osgi.extender=osgi.serviceloader.processor)";resolution:=optional
+                        </Require-Capability>
                     </instructions>
                 </configuration>
             </plugin>
