@@ -45,6 +45,8 @@ import com.sun.faces.config.DelegatingAnnotationProvider;
 import javax.servlet.ServletContext;
 import javax.faces.FacesException;
 import java.lang.reflect.Constructor;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 /**
  * 
@@ -78,6 +80,18 @@ public class AnnotationProviderFactory {
                     throw new FacesException("Class " + provider.getClass().getName() + " is not an instance of com.sun.faces.spi.AnnotationProvider");
                 }
                 annotationProvider = (AnnotationProvider)provider;
+            }
+        }
+        else {
+
+            ServiceLoader<AnnotationProvider> serviceLoader = ServiceLoader.load(AnnotationProvider.class);
+            Iterator iterator = serviceLoader.iterator();
+
+            if (iterator.hasNext()) {
+
+                AnnotationProvider defaultAnnotationProvider = annotationProvider;
+                annotationProvider = (AnnotationProvider) iterator.next();
+                annotationProvider.initialize(sc, defaultAnnotationProvider);
             }
         }
 

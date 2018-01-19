@@ -189,8 +189,8 @@
         <attribute name="destdir"/>
         <attribute name="includes" default=""/>
         <attribute name="excludes" default=""/>
-        <attribute name="source" default="1.5"/>
-        <attribute name="target" default="1.5"/>
+        <attribute name="source" default="1.6"/>
+        <attribute name="target" default="1.6"/>
         <element name="classpath" implicit="true" optional="yes"/>
         <sequential>           
             <javac srcdir="@{srcdir}"
