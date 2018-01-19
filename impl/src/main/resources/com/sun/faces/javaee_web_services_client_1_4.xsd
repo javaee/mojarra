@@ -50,13 +50,7 @@
     </xsd:documentation>
   </xsd:annotation>
 
-  <xsd:annotation>
-    <xsd:documentation>
 
-      (C) Copyright International Business Machines Corporation 2002
-      
-    </xsd:documentation>
-  </xsd:annotation>
 
 
 <!-- **************************************************** -->
