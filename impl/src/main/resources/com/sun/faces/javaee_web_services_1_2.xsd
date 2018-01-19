@@ -100,14 +100,6 @@
 
   <xsd:annotation>
     <xsd:documentation>
-
-      (C) Copyright International Business Machines Corporation 2002
-
-    </xsd:documentation>
-  </xsd:annotation>
-
-  <xsd:annotation>
-    <xsd:documentation>
       <![CDATA[
 
 	The webservices element is the root element for the web services
