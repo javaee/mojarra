@@ -748,7 +748,7 @@ javax.faces.level=ALL
                  protected="${javadoc.protected}"
                  windowtitle="${DocName} (${spec.version})"
                  stylesheetfile="${resources.dir}/jsf-api.css"
-                 source="1.5"
+                 source="1.6"
                  doctitle="${DocName} (${spec.version} SNAPSHOT ${build.number})">
             <bottom><![CDATA[<a href="http://www.oracle.com">Oracle</a> and/or its affiliates. All Rights Reserved. Use is subject to <a href="{@docRoot}/doc-files/speclicense.html" target="_top">license terms</a>]]></bottom>
            <link offline="true"
@@ -780,7 +780,7 @@ javax.faces.level=ALL
                  protected="${javadoc.protected}"
                  windowtitle="Faces Managed Bean Annotation Specification (${spec.version})"
                  stylesheetfile="${resources.dir}/jsf-api.css"
-                 source="1.5"
+                 source="1.6"
                  doctitle="Faces Managed Bean Annotation Specification (${spec.version})"
                  bottom="Copyright &#169; 2002-2009 Sun Microsystems, Inc. All Rights Reserved.">
            <link offline="true"
