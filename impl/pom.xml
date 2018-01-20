@@ -70,6 +70,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <mojarra.logstrings.version>${project.version}</mojarra.logstrings.version>
     </properties>
     
     <build>
@@ -353,9 +354,13 @@
                                 <copy todir="${project.build.directory}/generated-resources/antrun/com/sun/faces" overwrite="true" verbose="true">
                                     <fileset dir="src/main/resources/com/sun/faces" includes="LogStrings*.properties"/>
                                 </copy>
+                                <!-- 
+                                    Replace the version placeholder in the LogStrings, so that the right
+                                    project version is used to print to log at startup                                
+                                 -->
                                 <replace dir="${project.build.directory}/generated-resources/antrun"
                                     token="|version.string|"
-                                    value="${project.version}">
+                                    value="${mojarra.logstrings.version}">
                                     <include name="**/LogStrings*.properties"/>
                                 </replace>
                                 
