@@ -665,6 +665,7 @@
                             javax.enterprise.inject.*,
                             javax.enterprise.util.*,
                             javax.enterprise.context.*,
+                            javax.annotation.processing.*,
                             javax.annotation.*;version="[1.0.0,2.0.0)",
                             javax.crypto.*,
                             javax.websocket.*;resolution:=optional,
