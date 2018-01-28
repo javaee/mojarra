@@ -140,6 +140,11 @@ public class UIValidateWholeBean extends UIInput implements PartialStateHolder {
         
         super.validate(context);
     }
+    
+    @Override
+    public void updateModel(FacesContext context) {
+    	// Don't update the model. #4313
+    }
 
     @Override
     public void encodeBegin(FacesContext context) throws IOException {
