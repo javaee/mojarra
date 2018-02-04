@@ -805,25 +805,16 @@ public class AjaxBehavior extends ClientBehaviorBase {
         if (value.charAt(0) == '@') {
             // These are very common, so we use shared copies
             // of these collections instead of re-creating.
-            List<String> list;
-
-            if (ALL.equals(value)) {
-                list = ALL_LIST;
-            } else if (FORM.equals(value)){
-                list = FORM_LIST;
-            } else if (THIS.equals(value)) {
-                list = THIS_LIST; 
-            } else if (NONE.equals(value)) {
-                list = NONE_LIST;
-            } else {
-                // RELEASE_PENDING i18n ;
-                throw new FacesException(value
-                                     + " : Invalid id keyword specified for '"
-                                     + propertyName
-                                     + "' attribute");
-            }
             
-            return list;
+            if (ALL.equals(value)) {
+                return ALL_LIST;
+            } else if (FORM.equals(value)){
+                return FORM_LIST;
+            } else if (THIS.equals(value)) {
+                return THIS_LIST; 
+            } else if (NONE.equals(value)) {
+                return NONE_LIST;
+            }
         }
          
         return Collections.singletonList(value);
