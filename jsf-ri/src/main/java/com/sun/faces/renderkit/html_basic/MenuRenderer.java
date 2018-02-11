@@ -65,6 +65,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -223,6 +224,19 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             if (requestParameterValuesMap.containsKey(clientId)) {
                 String newValues[] = requestParameterValuesMap.
                       get(clientId);
+
+                if (newValues != null && newValues.length > 0) {
+                	Set<String> disabledSelectItemValues = getDisabledSelectItemValues(context, component);
+
+                	if (!disabledSelectItemValues.isEmpty()) {
+                		List<String> newValuesList = new ArrayList<>(Arrays.asList(newValues));
+                		
+                		if (newValuesList.removeAll(disabledSelectItemValues)) {
+                			newValues = newValuesList.toArray(new String[newValuesList.size()]);
+                		}
+                	}
+                }
+                
                 setSubmittedValue(component, newValues);
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("submitted values for UISelectMany component "
@@ -247,14 +261,23 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                         getRequestParameterMap();
             if (requestParameterMap.containsKey(clientId)) {
                 String newValue = requestParameterMap.get(clientId);
-                setSubmittedValue(component, newValue);
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("submitted value for UISelectOne component "
-                                +
-                                component.getId()
-                                + " after decoding "
-                                + newValue);
+                
+                if (newValue != null && !newValue.isEmpty()) {
+                	Set<String> disabledSelectItemValues = getDisabledSelectItemValues(context, component);
+
+                	if (disabledSelectItemValues.contains(newValue)) {
+                		newValue = RIConstants.NO_VALUE;
+                	}
                 }
+
+            	setSubmittedValue(component, newValue);
+            	if (logger.isLoggable(Level.FINE)) {
+            		logger.fine("submitted value for UISelectOne component "
+            				+
+            				component.getId()
+            				+ " after decoding "
+            				+ newValue);
+            	}
 
             } else {
                 // there is no value, but this is different from a null
@@ -265,6 +288,15 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     }
 
+    private Set<String> getDisabledSelectItemValues(FacesContext context, UIComponent component) {
+    	Set<String> disabledSelectItemValues = new HashSet<>(2);
+        RenderKitUtils.getSelectItems(context, component).forEachRemaining(selectItem -> {
+        	if (selectItem.isDisabled()) {
+        		disabledSelectItemValues.add(getFormattedValue(context, component, selectItem.getValue()));
+        	}
+        });
+    	return disabledSelectItemValues;
+    }
 
     @Override
     public void encodeBegin(FacesContext context, UIComponent component)
