@@ -41,21 +41,43 @@
 package com.sun.faces.application;
 
 
-import java.beans.*;
+import static com.sun.faces.cdi.CdiUtils.getBeanReference;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.RegisterConverterPropertyEditors;
+import static com.sun.faces.util.Util.getCdiBeanManager;
+import static com.sun.faces.util.Util.getWebXmlVersion;
+
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.beans.PropertyEditor;
+import java.beans.PropertyEditorManager;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,16 +87,21 @@ import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
+import javax.el.ValueExpression;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ProjectStage;
+import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
-import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.component.search.SearchExpressionHandler;
+import javax.faces.component.search.SearchKeywordResolver;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
@@ -85,8 +112,23 @@ import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionListener;
+import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
+import javax.faces.event.PostAddToViewEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
+import javax.faces.event.SystemEventListenerHolder;
 import javax.faces.flow.FlowHandler;
+import javax.faces.render.RenderKit;
+import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.xml.sax.InputSource;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.cdi.CdiExtension;
@@ -106,14 +148,6 @@ import com.sun.faces.component.search.SearchKeywordResolverImplRoot;
 import com.sun.faces.component.search.SearchKeywordResolverImplThis;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-
-import static com.sun.faces.cdi.CdiUtils.getBeanReference;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.RegisterConverterPropertyEditors;
-import static com.sun.faces.util.Util.getCdiBeanManager;
-import static com.sun.faces.util.Util.getFacesConfigXmlVersion;
-import static com.sun.faces.util.Util.getWebXmlVersion;
-
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
@@ -124,39 +158,6 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashSet;
-
-import java.util.LinkedHashSet;
-
-import javax.faces.event.ExceptionQueuedEvent;
-import javax.faces.event.PostAddToViewEvent;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
-import javax.faces.event.SystemEventListenerHolder;
-import javax.faces.event.ExceptionQueuedEventContext;
-
-import java.util.List;
-import java.util.TimeZone;
-import java.util.LinkedHashMap;
-
-import javax.el.ValueExpression;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.faces.application.Resource;
-import javax.faces.component.search.SearchExpressionHandler;
-import javax.faces.component.search.SearchKeywordResolver;
-import javax.faces.render.RenderKit;
-import javax.faces.render.Renderer;
-import javax.faces.view.ViewDeclarationLanguage;
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import org.xml.sax.InputSource;
 
 
 /**
@@ -269,11 +270,6 @@ public class ApplicationImpl extends Application {
         searchKeywordResolvers.add(new SearchKeywordResolverImplId());
         searchKeywordResolvers.add(new SearchKeywordResolverImplChild());
         searchKeywordResolvers.add(new SearchKeywordResolverImplAll());
-        if (associate.getSearchKeywordResolversFromFacesConfig() != null) {
-            for (SearchKeywordResolver resolver : associate.getSearchKeywordResolversFromFacesConfig()) {
-                searchKeywordResolvers.add(resolver);
-            }
-        }
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         WebConfiguration webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
