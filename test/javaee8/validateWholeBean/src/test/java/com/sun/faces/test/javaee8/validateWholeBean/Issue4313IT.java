@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2018 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,40 +40,56 @@
 
 package com.sun.faces.test.javaee8.validateWholeBean;
 
-import java.io.Serializable;
+import static org.junit.Assert.assertEquals;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-@Named
-@RequestScoped
-@Password(groups = PasswordValidationGroup.class)
-public class BackingBean implements Serializable {
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
-    private static final long serialVersionUID = 1544275452223321526L;
-    
-    private String password1;
-    private String password2;
-    
-    private User user = new User();
+public class Issue4313IT {
 
-    public String getPassword1() {
-        return password1;
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public void setPassword1(String password1) {
-        this.password1 = password1;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    public String getPassword2() {
-        return password2;
+    @BeforeClass
+    public static void setUpClass() {
     }
 
-    public void setPassword2(String password2) {
-        this.password2 = password2;
+    @AfterClass
+    public static void tearDownClass() {
     }
-    
-    public User getUser() {
-		return user;
-	}
+
+    @Test
+    public void testValidateWholeBean() throws Exception {        
+        HtmlPage page = webClient.getPage(webUrl + "faces/Issue4313.xhtml");
+
+        HtmlPasswordInput password1 = (HtmlPasswordInput) page.getHtmlElementById("form:password1");
+        password1.setValueAttribute("mike@!2016GO");
+
+        HtmlPasswordInput password2 = (HtmlPasswordInput) page.getHtmlElementById("form:password2");
+        password2.setValueAttribute("mike@!2015G0");
+
+        HtmlSubmitInput submit = (HtmlSubmitInput) page.getHtmlElementById("form:submit");
+        HtmlPage page1 = submit.click();
+
+        assertEquals("Password fields must match", page1.getElementById("form:err").getElementsByTagName("li").get(0).asText());
+    }
 }

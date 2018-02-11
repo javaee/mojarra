@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2018 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,26 +37,18 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.test.javaee8.validateWholeBean;
 
 import java.io.Serializable;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+@UserPassword
+public class User implements Serializable {
 
-@Named
-@RequestScoped
-@Password(groups = PasswordValidationGroup.class)
-public class BackingBean implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    private static final long serialVersionUID = 1544275452223321526L;
-    
-    private String password1;
+	private String password1;
     private String password2;
     
-    private User user = new User();
-
     public String getPassword1() {
         return password1;
     }
@@ -72,8 +64,4 @@ public class BackingBean implements Serializable {
     public void setPassword2(String password2) {
         this.password2 = password2;
     }
-    
-    public User getUser() {
-		return user;
-	}
 }

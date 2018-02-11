@@ -1,7 +1,8 @@
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2018 Oracle and/or its affiliates. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,40 +41,23 @@
 
 package com.sun.faces.test.javaee8.validateWholeBean;
 
-import java.io.Serializable;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-@Named
-@RequestScoped
-@Password(groups = PasswordValidationGroup.class)
-public class BackingBean implements Serializable {
+import javax.validation.Constraint;
+import javax.validation.Payload;
 
-    private static final long serialVersionUID = 1544275452223321526L;
-    
-    private String password1;
-    private String password2;
-    
-    private User user = new User();
+@Constraint(validatedBy = {UserPasswordValidator.class})
+@Documented
+@Target(TYPE)
+@Retention(RUNTIME)
+public @interface UserPassword {
 
-    public String getPassword1() {
-        return password1;
-    }
-
-    public void setPassword1(String password1) {
-        this.password1 = password1;
-    }
-
-    public String getPassword2() {
-        return password2;
-    }
-
-    public void setPassword2(String password2) {
-        this.password2 = password2;
-    }
-    
-    public User getUser() {
-		return user;
-	}
+    String message() default "Password fields must match";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }
