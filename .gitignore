@@ -4,6 +4,11 @@
 target/
 /bin/
 /dist/
+/test/quality/src/main/java/com/
+/test/quality/src/main/java/javax/
+/test/quality/src/main/resources/com/
+/test/quality/src/main/resources/javax/
+/test/quality/src/main/resources/META-INF/
 /test/unit/src/main/java/com/
 /test/unit/src/main/java/javax/
 /test/unit/src/main/resources/com/
