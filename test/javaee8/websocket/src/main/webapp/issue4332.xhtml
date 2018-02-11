@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+    <h:head>
+        <title>Issue4332IT - websocket with sync post</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <h:commandButton id="postback" value="postback" />
+            <h:commandButton id="button" value="push" action="#{issue4332.send}"><f:ajax /></h:commandButton>
+        </h:form>
+
+        <f:websocket channel="push" onmessage="onmessageFunction" />
+
+        <script>
+            function onmessageFunction(message) {
+                document.getElementById("form:button").value = message;
+            }
+        </script>
+    </h:body>
+</html>
