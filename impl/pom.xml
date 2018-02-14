@@ -703,6 +703,12 @@
                             resolution:=optional;cardinality:=multiple,
                             osgi.extender;filter:="(osgi.extender=osgi.serviceloader.processor)";resolution:=optional
                         </Require-Capability>
+                        <Provide-Capability>
+                            osgi.extender;osgi.extender="jsp.taglib";uri="http://java.sun.com/jsf/html";
+                                version:Version="2.3",
+                            osgi.extender;osgi.extender="jsp.taglib";uri="http://java.sun.com/jsf/core";
+                                version:Version="2.3"
+                        </Provide-Capability>
                     </instructions>
                 </configuration>
             </plugin>
