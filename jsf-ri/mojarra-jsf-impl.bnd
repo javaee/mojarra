@@ -99,3 +99,6 @@ Require-Capability: \
 	osgi.serviceloader;filter:="(osgi.serviceloader=javax.faces.application.ApplicationConfigurationPopulator)";\
 	resolution:=optional;cardinality:=multiple,\
 	osgi.extender;filter:="(osgi.extender=osgi.serviceloader.processor)";resolution:=optional
+Provide-Capability:\
+	osgi.extender;osgi.extender="jsp.taglib";uri="http://java.sun.com/jsf/html";version:Version="@spec.version@",\
+	osgi.extender;osgi.extender="jsp.taglib";uri="http://java.sun.com/jsf/core";version:Version="@spec.version@"
