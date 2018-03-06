@@ -608,7 +608,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
 
             if (!!src && src[1]) {
                 // if this is a file, load it
-                var url = src[1];
+                var url = unescapeHTML(src[1]);
                 // if this is already loaded, don't load it
                 // it's never necessary, and can make debugging difficult
                 if (loadedScriptUrls.indexOf(url) < 0) {
@@ -690,7 +690,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                         }
                     }
 
-                    var url = href[1];
+                    var url = unescapeHTML(href[1]);
 
                     if (loadedStylesheetUrls.indexOf(url) < 0) {
                         // create stylesheet node
@@ -2081,6 +2081,15 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 20000 ) &&
                     eventListeners[i].call(null, data);
                 }
             }
+        };
+
+        var unescapeHTML = function unescapeHTML(escapedHTML) {
+            return escapedHTML
+                .replace(/&apos;/g, "'")
+                .replace(/&quot;/g, '"')
+                .replace(/&gt;/g, '>')
+                .replace(/&lt;/g, '<')
+                .replace(/&amp;/g, '&');
         };
 
         // Use module pattern to return the functions we actually expose
