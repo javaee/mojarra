@@ -608,7 +608,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          * @returns {array} of script text
          * @ignore
          */
-        var stripScripts = function stripScripts(str) {
+        var getScripts = function getScripts(str) {
             // Regex to find all scripts in a string
             var findscripts = /<script[^>]*>([\S\s]*?)<\/script>/igm;
             // Regex to find one script, to isolate it's content [2] and attributes [1]
@@ -632,6 +632,10 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                 scripts.push(scriptStr);
             }
             return scripts;
+        };
+
+        var removeScripts = function removeScripts(str) {
+            return str.replace(/<script[^>]*type="text\/javascript"[^>]*>([\S\s]*?)<\/script>/igm,"");
         };
 
         /**
@@ -730,7 +734,7 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
          * @param str
          * @ignore
          */
-        var stripAndRunStylesheets = function stripAndRunStylesheets(str) {
+        var runStylesheets = function runStylesheets(str) {
             // Regex to find all links in a string
             var findlinks = /<link[^>]*\/>/igm;
             // Regex to find one link, to isolate its attributes [1]
@@ -813,9 +817,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                     temp.innerHTML = src;
                 } else {
                     // Get scripts from text
-                    scripts = stripScripts(src);
+                    scripts = getScripts(src);
                     // Remove scripts from text
-                    src = src.replace(/<script[^>]*type="text\/javascript"[^>]*>([\S\s]*?)<\/script>/igm,"");
+                    src = removeScripts(src);
                     temp.innerHTML = src;
                 }
             }
@@ -1489,11 +1493,11 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                 if (bodyStart !== null) { // replace body tag
                     // First, try with XML manipulation
                     try {
-                        stripAndRunStylesheets(src);
+                        runStylesheets(src);
                         // Get scripts from text
-                        scripts = stripScripts(src);
+                        scripts = getScripts(src);
                         // Remove scripts from text
-                        newsrc = src.replace(/<script[^>]*type="text\/javascript"[^>]*>([\S\s]*?)<\/script>/igm, "");
+                        newsrc = removeScripts(src);
                         elementReplace(getBodyElement(newsrc), docBody);
                         runScripts(scripts);
                     } catch (e) {
@@ -1517,8 +1521,8 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
             } else if (id === "javax.faces.ViewHead") {
                 throw new Error("javax.faces.ViewHead not supported - browsers cannot reliably replace the head's contents");
             } else if (id === "javax.faces.Resource") {
-                stripAndRunStylesheets(src);
-                scripts = stripScripts(src);
+                runStylesheets(src);
+                scripts = getScripts(src);
                 runScripts(scripts);
             } else {
                 var element = $(id);
@@ -1554,9 +1558,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                         parserElement.innerHTML = '<table>' + html + '</table>';
                     } else {
                         // Get the scripts from the text
-                        scripts = stripScripts(html);
+                        scripts = getScripts(html);
                         // Remove scripts from text
-                        html = html.replace(/<script[^>]*type="text\/javascript"[^>]*>([\S\s]*?)<\/script>/igm,"");
+                        html = removeScripts(html);
                         parserElement.innerHTML = '<table>' + html + '</table>';
                     }
                     var newElement = parserElement.firstChild;
@@ -1582,9 +1586,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
                         parserElement.innerHTML = html;
                     } else {
                         // Get the scripts from the text
-                        scripts = stripScripts(html);
+                        scripts = getScripts(html);
                         // Remove scripts from text
-                        html = html.replace(/<script[^>]*type="text\/javascript"[^>]*>([\S\s]*?)<\/script>/igm,"");
+                        html = removeScripts(html);
                         parserElement.innerHTML = html;
                     }
                     replaceNode(parserElement.firstChild, element);
@@ -1620,9 +1624,9 @@ if (!((jsf && jsf.specversion && jsf.specversion >= 23000 ) &&
 
             if (!isAutoExec())  {
                 // Get the scripts from the text
-                scripts = stripScripts(html);
+                scripts = getScripts(html);
                 // Remove scripts from text
-                html = html.replace(/<script[^>]*type="text\/javascript"[^>]*>([\S\s]*?)<\/script>/igm,"");
+                html = removeScripts(html);
             }
             var tempElement = document.createElement('div');
             var newElement = null;
