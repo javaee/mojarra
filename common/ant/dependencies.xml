@@ -133,7 +133,7 @@
                 <available file="${htmlunit.home}" property="ignored"/>
             </not>
             <then>
-                <get src="http://easynews.dl.sourceforge.net/sourceforge/htmlunit/htmlunit-${htmlunit.version}.zip"
+                <get src="https://master.dl.sourceforge.net/project/htmlunit/htmlunit/${htmlunit.version}/htmlunit-${htmlunit.version}.zip"
                      dest="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
                      usetimestamp="true"/>
                 <unzip
@@ -177,7 +177,7 @@
                 <available file="${maven.repository.importer.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/com.sun.wts.tools.mri/jars/maven-repository-importer-${maven.repository.importer.version}.jar"
+                <get src="http://central.maven.org/maven2/com/sun/wts/tools/mri/maven-repository-importer/${maven.repository.importer.version}/maven-repository-importer-${maven.repository.importer.version}.jar"
                      dest="${maven.repository.importer.jar}"
                      usetimestamp="true"/>
 
@@ -190,7 +190,7 @@
                 <available file="${servlet.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.servlet/jars/servlet-api-${servlet.api.version}.jar"
+                <get src="http://central.maven.org/maven2/javax/servlet/servlet-api/${servlet.api.version}/servlet-api-${servlet.api.version}.jar"
                      dest="${servlet.jar}"
                      usetimestamp="true"/>
 
@@ -203,7 +203,7 @@
                 <available file="${jsp.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.servlet.jsp/jars/jsp-api-${jsp.api.version}.jar"
+                <get src="http://central.maven.org/maven2/javax/servlet/jsp/jsp-api/${jsp.api.version}/jsp-api-${jsp.api.version}.jar"
                      dest="${jsp.jar}"
                      usetimestamp="true"/>
 
@@ -217,7 +217,7 @@
                 <available file="${jstl.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/jstl/jars/jstl-${jstl.api.version}.jar"
+                <get src="http://central.maven.org/maven2/javax/servlet/jstl/${jstl.api.version}/jstl-${jstl.api.version}.jar"
                      dest="${jstl.jar}"
                      usetimestamp="true"/>
 
@@ -230,7 +230,7 @@
                 <available file="${annotation.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
+                <get src="http://central.maven.org/maven2/javax/annotation/jsr250-api/${annotation.api.version}/jsr250-api-${annotation.api.version}.jar"
                      dest="${annotation.jar}"
                      usetimestamp="true"/>
 
@@ -255,7 +255,7 @@
                 <available file="${groovy.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${codehaus.maven}/org/codehaus/groovy/groovy-all/${groovy.version}/groovy-all-${groovy.version}.jar"
+                <get src="http://central.maven.org/maven2/org/codehaus/groovy/groovy-all/${groovy.version}/groovy-all-${groovy.version}.jar"
                      dest="${groovy.jar}"
                      usetimestamp="true"/>
             </then>
@@ -407,17 +407,47 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
                       dest="${dependency.base.dir}"/>
             </then>
         </if>
+        <mkdir dir="${jetty.home}/lib"/>
+        <mkdir dir="${jetty.home}/lib/annotations"/>
+        <mkdir dir="${jetty.home}/lib/plus"/>
         <if>
             <not>
-                <available file="${dependency.base.dir}/jetty-${jetty.version}.zip" property="ignored"/>
+                <available file="${jetty.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="http://dist.codehaus.org/jetty/jetty-${jetty.version.dir}/jetty-${jetty.version}.zip"
-                     dest="${dependency.base.dir}/jetty-${jetty.version}.zip"
+                <get src="http://central.maven.org/maven2/org/mortbay/jetty/jetty/${jetty.version}/jetty-${jetty.version}.jar" 
+                     dest="${jetty.jar}"
                      usetimestamp="true"/>
-                <unzip
-                    src="${dependency.base.dir}/jetty-${jetty.version}.zip"
-                    dest="${dependency.base.dir}"/>
+            </then>
+        </if>
+        <if>
+            <not>
+                <available file="${jetty.util.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://central.maven.org/maven2/org/mortbay/jetty/jetty-util/${jetty.version}/jetty-util-${jetty.version}.jar"
+                     dest="${jetty.util.jar}"
+                     usetimestamp="true"/>
+            </then>
+        </if>
+        <if>
+            <not>
+                <available file="${jetty.annotations.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://central.maven.org/maven2/org/mortbay/jetty/jetty-annotations/${jetty.version}/jetty-annotations-${jetty.version}.jar"
+                     dest="${jetty.annotations.jar}"
+                     usetimestamp="true"/>
+            </then>
+        </if>
+        <if>
+            <not>
+                <available file="${jetty.plus.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://central.maven.org/maven2/org/mortbay/jetty/jetty-plus/${jetty.version}/jetty-plus-${jetty.version}.jar"
+                     dest="${jetty.plus.jar}"
+                     usetimestamp="true"/>
             </then>
         </if>
     </target>

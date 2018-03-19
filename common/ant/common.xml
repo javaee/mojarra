@@ -87,8 +87,8 @@
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="SNAPSHOT"/>
-    <property name="impl.version.number" value="1.2_15-06” />
-    <property name="osgi.version" value="1.2.15-06” />
+    <property name="impl.version.number" value="1.2_15-06" />
+    <property name="osgi.version" value="1.2.15-06" />
     <property name="impl.version" value="${impl.version.number}-${build.number}-${build.type}"/>
     <property name="snapshot.version" value="${impl.version.number}-${build.type}"/>
 

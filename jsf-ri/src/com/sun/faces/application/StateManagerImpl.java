@@ -50,7 +50,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
+import java.security.SecureRandom;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.GZIPInputStream;
@@ -106,7 +106,7 @@ public class StateManagerImpl extends StateManager {
     private boolean compressViewState;
     private Map<String,Class<?>> classMap = 
           new ConcurrentHashMap<String,Class<?>>(32);
-    private Random random;
+    private SecureRandom random;
     private boolean generateUniqueStateIds;
 
     // ------------------------------------------------------------ Constructors
@@ -123,7 +123,12 @@ public class StateManagerImpl extends StateManager {
         generateUniqueStateIds =
               webConfig.isOptionEnabled(GenerateUniqueServerStateIds);
         if (generateUniqueStateIds) {
-            random = new Random(System.nanoTime() + webConfig.getServletContext().hashCode());
+            // Construct secure RNG.
+            random = new SecureRandom();
+
+            // Make sure SecureRandom will seed itself safely by generating a random byte. This assures that an 
+            // accidental invocation of setSeed will not break security.
+            random.nextBytes(new byte[1]);
         } else {
             random = null;
         }
