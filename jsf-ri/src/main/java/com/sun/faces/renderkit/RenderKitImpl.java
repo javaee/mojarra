@@ -84,14 +84,6 @@ public class RenderKitImpl extends RenderKit {
 
     private static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
 
-    private static final String[] SUPPORTED_CONTENT_TYPES_ARRAY =
-         new String[]{
-              RIConstants.HTML_CONTENT_TYPE,
-              RIConstants.XHTML_CONTENT_TYPE,
-              RIConstants.APPLICATION_XML_CONTENT_TYPE,
-              RIConstants.TEXT_XML_CONTENT_TYPE
-         };
-
     private static final String SUPPORTED_CONTENT_TYPES =
          RIConstants.HTML_CONTENT_TYPE + ','
               + RIConstants.XHTML_CONTENT_TYPE + ','
@@ -225,9 +217,7 @@ public class RenderKitImpl extends RenderKit {
 
         // Step 1: Check the content type passed into this method 
         if (null != desiredContentTypeList) {
-            contentType = findMatch(
-                 desiredContentTypeList,
-                 SUPPORTED_CONTENT_TYPES_ARRAY);
+            contentType = getSupportedContentType(desiredContentTypeList);
         }
 
         // Step 2: Check the response content type
@@ -235,14 +225,14 @@ public class RenderKitImpl extends RenderKit {
             desiredContentTypeList =
                  context.getExternalContext().getResponseContentType();
             if (null != desiredContentTypeList) {
-                contentType = findMatch(
-                     desiredContentTypeList,
-                     SUPPORTED_CONTENT_TYPES_ARRAY);
+                contentType = getSupportedContentType(desiredContentTypeList);
                 if (null == contentType) {
                     contentTypeNullFromResponse = true;
                 }
             }
         }
+
+        boolean isPartial = context.getPartialViewContext().isPartialRequest();
 
         // Step 3: Check the Accept Header content type
         // Evaluate the accept header in accordance with HTTP specification - 
@@ -267,27 +257,23 @@ public class RenderKitImpl extends RenderKit {
                 desiredContentTypeList =
                       RenderKitUtils.determineContentType(desiredContentTypeList,
                                                           SUPPORTED_CONTENT_TYPES,
-                                                          ((preferXhtml())
-                                                              ? RIConstants.XHTML_CONTENT_TYPE
-                                                              : null));
+                                                          getDefaultContentType(isPartial, null));
                 if (null != desiredContentTypeList) {
-                    contentType = findMatch(
-                         desiredContentTypeList,
-                         SUPPORTED_CONTENT_TYPES_ARRAY);
+                    contentType = getSupportedContentType(desiredContentTypeList);
                 }
             }
         }
 
-        // Step 4: Default to text/html
+        // Step 4: Default to text/html (or text/xml during Ajax)
         if (contentType == null) {
             if (null == desiredContentTypeList) {
-                contentType = getDefaultContentType();
+                contentType = getDefaultContentType(isPartial, RIConstants.HTML_CONTENT_TYPE);
             } else {
                 String[] desiredContentTypes =
                       contentTypeSplit(desiredContentTypeList);
                 for (String desiredContentType : desiredContentTypes) {
                     if (RIConstants.ALL_MEDIA.equals(desiredContentType.trim())) {
-                        contentType = getDefaultContentType();
+                        contentType = getDefaultContentType(isPartial, RIConstants.HTML_CONTENT_TYPE);
                     }
                 }
             }
@@ -307,7 +293,6 @@ public class RenderKitImpl extends RenderKit {
         WebConfiguration.DisableUnicodeEscaping escaping =
               WebConfiguration.DisableUnicodeEscaping.getByValue(
                     webConfig.getOptionValue(DisableUnicodeEscaping));
-        boolean isPartial = context.getPartialViewContext().isPartialRequest();
         return new HtmlResponseWriter(writer,
                                       contentType,
                                       characterEncoding,
@@ -325,12 +310,16 @@ public class RenderKitImpl extends RenderKit {
     }
 
 
-    private String getDefaultContentType() {
-
-        return ((preferXhtml())
-                ? RIConstants.XHTML_CONTENT_TYPE
-                : RIConstants.HTML_CONTENT_TYPE);
-
+    private String getDefaultContentType(boolean isPartial, String defaultContentType) {
+        if (isPartial) {
+            return RIConstants.TEXT_XML_CONTENT_TYPE;
+        }
+        else if (preferXhtml()) {
+            return RIConstants.XHTML_CONTENT_TYPE;
+        }
+        else {
+            return defaultContentType;
+        }
     }
 
 
@@ -349,34 +338,30 @@ public class RenderKitImpl extends RenderKit {
     // Helper method that returns the content type if the desired content type is found in the
     // array of supported types. 
 
-    private String findMatch(String desiredContentTypeList,
-                             String[] supportedTypes) {
+    private String getSupportedContentType(String desiredContentTypeList) {
 
         String contentType = null;
         String[] desiredTypes = contentTypeSplit(desiredContentTypeList);
 
-        // For each entry in the desiredTypes array, look for a match in
-        // the supportedTypes array
+        // For each entry in the desiredTypes array, check if it's a supported content type
         for (int i = 0, ilen = desiredTypes.length; i < ilen; i++) {
             String curDesiredType = desiredTypes[i];
-            for (int j = 0, jlen = supportedTypes.length; j < jlen; j++) {
-                String curContentType = supportedTypes[j].trim();
-                if (curDesiredType.contains(curContentType)) {
-                    if (curContentType.contains(RIConstants.HTML_CONTENT_TYPE)) {
-                        contentType = RIConstants.HTML_CONTENT_TYPE;
-                    } else
-                    if (curContentType.contains(RIConstants.XHTML_CONTENT_TYPE) ||
-                         curContentType.contains(RIConstants.APPLICATION_XML_CONTENT_TYPE) ||
-                         curContentType.contains(RIConstants.TEXT_XML_CONTENT_TYPE)) {
-                        contentType = RIConstants.XHTML_CONTENT_TYPE;
-                    }
-                    break;
-                }
+            if (curDesiredType.contains(RIConstants.HTML_CONTENT_TYPE)) {
+                contentType = RIConstants.HTML_CONTENT_TYPE;
             }
+            else if (curDesiredType.contains(RIConstants.XHTML_CONTENT_TYPE) ||
+                curDesiredType.contains(RIConstants.APPLICATION_XML_CONTENT_TYPE)) {
+                contentType = RIConstants.XHTML_CONTENT_TYPE;
+            }
+            else if (curDesiredType.contains(RIConstants.TEXT_XML_CONTENT_TYPE)) {
+                contentType = RIConstants.TEXT_XML_CONTENT_TYPE;
+            }
+
             if (null != contentType) {
                 break;
             }
         }
+
         return contentType;
     }
 
