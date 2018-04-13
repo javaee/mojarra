@@ -48,10 +48,10 @@
     <parent>
         <groupId>com.sun.faces.test.javaee7</groupId>
         <artifactId>pom</artifactId>
-        <version>2.4.0-m01-SNAPSHOT</version>
+        <version>2.3.3.99</version>
     </parent>
     <artifactId>cdiBeanValidator</artifactId>
-    <version>2.4.0-m01-SNAPSHOT</version>
+    <version>2.3.3.99</version>
     <packaging>war</packaging>
     <name>Mojarra ${project.version} - Test - JavaEE 7 - CDI BeanValidator</name>  
     <build>
