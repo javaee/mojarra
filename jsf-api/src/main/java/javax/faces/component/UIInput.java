@@ -1032,6 +1032,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         catch (ConverterException ce) {
             addConversionErrorMessage(context, ce);
             setValid(false);
+            if (submittedValue == null) {
+                setSubmittedValue("");
+            }
         }
 
         validateValue(context, newValue);
@@ -1044,6 +1047,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             setSubmittedValue(null);
             if (compareValues(previous, newValue)) {
                 queueEvent(new ValueChangeEvent(context, this, previous, newValue));
+            }
+        } else {
+            if (submittedValue == null) {
+                setSubmittedValue("");
             }
         }
 
