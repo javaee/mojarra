@@ -281,7 +281,7 @@ final class CurrentThreadToServletContext {
                     if (null != matchingCL) {
                         // If the match was found on a previous iteration...
                         if (null != matchingKey) {
-                            LOGGER.log(Level.WARNING, "Multiple JSF Applications found on same ClassLoader.  Unable to safely determine which FactoryManager instance to use. Defaulting to first match.");
+//                            LOGGER.log(Level.WARNING, "Multiple JSF Applications found on same ClassLoader.  Unable to safely determine which FactoryManager instance to use. Defaulting to first match.");
                             break;
                         }
                         matchingKey = currentKey;
