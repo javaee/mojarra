@@ -568,10 +568,16 @@ public class HtmlResponseWriter extends ResponseWriter {
                 }
             }
         }
-        isScript = false;
-        isStyle = false;
-        
-        dontEscape = false;
+
+        if ( !withinScript || isScript ) {
+            isScript = false;
+        }  else if ( !withinStyle || isStyle) {
+            isStyle = false;
+        }
+
+        if ( !withinScript && !withinScript ) {
+           dontEscape = false;
+        }
         
         if ("cdata".equalsIgnoreCase(name)) {
             endCDATA();
