@@ -2062,6 +2062,11 @@ private void doFind(FacesContext context, String clientId) {
         throw new NullPointerException();
       }
 
+      Map<Object, Object> contextAttributes = context.getAttributes();
+      
+      ArrayDeque<UIComponent> componentELStack = _getComponentELStack(_CURRENT_COMPONENT_STACK_KEY,
+                                                             contextAttributes);
+
       // detect cases where the stack has become unbalanced.  Due to how UIComponentBase
       // implemented pushing and pooping of components from the ELContext, components that
       // overrode just one of encodeBegin or encodeEnd, or only called super in one case
@@ -2069,14 +2074,11 @@ private void doFind(FacesContext context, String clientId) {
  
       // detect case where push was never called.  In that case, pop should be a no-op
       if (_isPushedAsCurrentRefCount < 1) {
-          return;
+          if(componentELStack.peek() != this) return;
+          LOGGER.log(Level.SEVERE, "the component(" + this + 
+              ") is the head component of the stack, but it's _isPushedAsCurrentRefCount < 1");
       }
            
-      Map<Object, Object> contextAttributes = context.getAttributes();
-      
-      ArrayDeque<UIComponent> componentELStack = _getComponentELStack(_CURRENT_COMPONENT_STACK_KEY,
-                                                             contextAttributes);
-      
       // check for the other unbalanced case, a component was pushed but never popped.  Keep
       // popping those components until we get to our component
       for (UIComponent topComponent = componentELStack.peek();
@@ -2090,12 +2092,12 @@ private void doFind(FacesContext context, String clientId) {
       componentELStack.pop();
       _isPushedAsCurrentRefCount--;
 
-        boolean setCurrentComponent = isSetCurrentComponent(context);
+      boolean setCurrentComponent = isSetCurrentComponent(context);
       
       // update the current component with the new top of stack.  We only do this because of the spec
-        if (setCurrentComponent) {
-            contextAttributes.put(UIComponent.CURRENT_COMPONENT, componentELStack.peek());
-        }
+      if (setCurrentComponent) {
+          contextAttributes.put(UIComponent.CURRENT_COMPONENT, componentELStack.peek());
+      }
       
       // if we're a composite component, we also have to pop ourselves off of the
       // composite stack
