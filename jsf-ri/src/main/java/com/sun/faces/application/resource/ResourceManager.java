@@ -589,7 +589,7 @@ public class ResourceManager {
         
         localePrefix = context.getExternalContext().getRequestParameterMap().get("loc");
         
-        if(localePrefix != null){
+        if(localePrefix != null && !nameContainsForbiddenSequence(localePrefix)){
             return localePrefix;
         }
         
