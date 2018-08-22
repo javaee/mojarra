@@ -248,7 +248,7 @@
             <then>
                 <get src="http://downloads.sourceforge.net/project/xs3p/xs3p-${xs3p.version}.zip"
                      dest="${dependency.base.dir}/downloads/xs3p-${xs3p.version}.zip"
-                     usetimestamp="true"/>
+                     usetimestamp="true" skipexisting="true" />
                 <mkdir dir="${xs3p.home}" />
                 <unzip
                         src="${dependency.base.dir}/downloads/xs3p-${xs3p.version}.zip"
@@ -285,7 +285,7 @@
             <then>
                 <get src="https://github.com/yui/yuicompressor/releases/download/v${yuicompressor.version}/yuicompressor-${yuicompressor.version}.zip"
                      dest="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
-                     usetimestamp="true"/>
+                     usetimestamp="true" skipexisting="true" />
                 <unzip
                         src="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
                         dest="${dependency.base.dir}"/>
@@ -308,7 +308,7 @@
             <then>
                 <get src="http://archive.apache.org/dist/jakarta/cactus/binaries/jakarta-cactus-${cactus.version}.zip"
                      dest="${dependency.base.dir}/downloads/jakarta-cactus-${cactus.version}.zip"
-                     usetimestamp="true"/>
+                     usetimestamp="true" skipexisting="true" />
                 <unzip
                         src="${dependency.base.dir}/downloads/jakarta-cactus-${cactus.version}.zip"
                         dest="${dependency.base.dir}"/>
@@ -365,7 +365,7 @@
             <then>
                 <get src="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jsdoc-toolkit/jsdoc_toolkit-${jsdoc.version}.zip"
                      dest="${dependency.base.dir}/downloads/jsdoc_toolkit-${jsdoc.version}.zip"
-                     usetimestamp="true"/>
+                     usetimestamp="true" skipexisting="true" />
                 <unzip
                         src="${dependency.base.dir}/downloads/jsdoc_toolkit-${jsdoc.version}.zip"
                         dest="${dependency.base.dir}"/>
