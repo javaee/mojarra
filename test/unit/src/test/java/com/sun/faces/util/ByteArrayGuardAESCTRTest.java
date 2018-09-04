@@ -54,7 +54,8 @@ public class ByteArrayGuardAESCTRTest {
 	// simulated flash value
         String value = "1fX_2vX";
         String encrypted = guard.encrypt(value);
-        assertTrue(encrypted.length() < 15);
+        System.out.println("Ruolin::" + encrypted);
+        assertTrue(encrypted.length() < 33);
         
         String decryptedValue = guard.decrypt(encrypted);
         assertEquals(decryptedValue, value);
