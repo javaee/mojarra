@@ -228,7 +228,7 @@
             <then>
                 <get src="http://downloads.sourceforge.net/htmlunit/htmlunit-${htmlunit.version}.zip"
                      dest="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
-                     usetimestamp="true"/>
+                     skipexisting="true" usetimestamp="true"/>
                 <unzip
                         src="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
                         dest="${dependency.base.dir}"/>
@@ -248,7 +248,7 @@
             <then>
                 <get src="http://downloads.sourceforge.net/project/xs3p/xs3p-${xs3p.version}.zip"
                      dest="${dependency.base.dir}/downloads/xs3p-${xs3p.version}.zip"
-                     usetimestamp="true"/>
+                     skipexisting="true" usetimestamp="true"/>
                 <mkdir dir="${xs3p.home}" />
                 <unzip
                         src="${dependency.base.dir}/downloads/xs3p-${xs3p.version}.zip"
@@ -285,7 +285,7 @@
             <then>
                 <get src="https://github.com/yui/yuicompressor/releases/download/v${yuicompressor.version}/yuicompressor-${yuicompressor.version}.zip"
                      dest="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
-                     usetimestamp="true"/>
+                     skipexisting="true" usetimestamp="true"/>
                 <unzip
                         src="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
                         dest="${dependency.base.dir}"/>
