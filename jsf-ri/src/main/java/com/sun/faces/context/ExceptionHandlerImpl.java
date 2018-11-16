@@ -45,6 +45,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.io.IOException;
 
 import javax.faces.FacesException;
 import javax.faces.application.ProjectStage;
@@ -261,7 +262,10 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
         try {
             extContext.responseReset();
         } catch (Exception e) {
-            if (LOGGER.isLoggable(Level.INFO)) {
+            if (wrapped instanceof IOException && wrapped.getMessage() != null && 
+                wrapped.getMessage().contains("Broken pipe")) {
+                // do nothing to emilinate the impact of "Broken pipe"
+            } else if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO, "Exception when handling error trying to reset the response.", wrapped);
             }
         }
