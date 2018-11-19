@@ -89,7 +89,6 @@ public class RenderKitImpl extends RenderKit {
               + RIConstants.XHTML_CONTENT_TYPE + ','
               + RIConstants.APPLICATION_XML_CONTENT_TYPE + ','
               + RIConstants.TEXT_XML_CONTENT_TYPE;
-    private static final String SUPPORTED_PARTIAL_CONTENT_TYPES = RIConstants.TEXT_XML_CONTENT_TYPE;
 
 
     /**
@@ -208,11 +207,10 @@ public class RenderKitImpl extends RenderKit {
         String contentType = null;
         boolean contentTypeNullFromResponse = false;
         FacesContext context = FacesContext.getCurrentInstance();
-        boolean isPartial = context.getPartialViewContext().isPartialRequest();
 
         // Step 1: Check the content type passed into this method 
         if (null != desiredContentTypeList) {
-            contentType = getSupportedContentType(desiredContentTypeList, isPartial);
+            contentType = getSupportedContentType(desiredContentTypeList);
         }
 
         // Step 2: Check the response content type
@@ -220,12 +218,14 @@ public class RenderKitImpl extends RenderKit {
             desiredContentTypeList =
                  context.getExternalContext().getResponseContentType();
             if (null != desiredContentTypeList) {
-                contentType = getSupportedContentType(desiredContentTypeList, isPartial);
+                contentType = getSupportedContentType(desiredContentTypeList);
                 if (null == contentType) {
                     contentTypeNullFromResponse = true;
                 }
             }
         }
+
+        boolean isPartial = context.getPartialViewContext().isPartialRequest();
 
         // Step 3: Check the Accept Header content type
         // Evaluate the accept header in accordance with HTTP specification - 
@@ -248,11 +248,11 @@ public class RenderKitImpl extends RenderKit {
 
             if (null != desiredContentTypeList) {
                 desiredContentTypeList =
-                    RenderKitUtils.determineContentType(desiredContentTypeList,
-                        (isPartial ? SUPPORTED_PARTIAL_CONTENT_TYPES : SUPPORTED_CONTENT_TYPES),
-                        getDefaultContentType(isPartial, null));
+                      RenderKitUtils.determineContentType(desiredContentTypeList,
+                                                          SUPPORTED_CONTENT_TYPES,
+                                                          getDefaultContentType(isPartial, null));
                 if (null != desiredContentTypeList) {
-                    contentType = getSupportedContentType(desiredContentTypeList, isPartial);
+                    contentType = getSupportedContentType(desiredContentTypeList);
                 }
             }
         }
@@ -331,7 +331,7 @@ public class RenderKitImpl extends RenderKit {
     // Helper method that returns the content type if the desired content type is found in the
     // array of supported types. 
 
-    private String getSupportedContentType(String desiredContentTypeList, boolean isPartial) {
+    private String getSupportedContentType(String desiredContentTypeList) {
 
         String contentType = null;
         String[] desiredTypes = contentTypeSplit(desiredContentTypeList);
@@ -339,15 +339,14 @@ public class RenderKitImpl extends RenderKit {
         // For each entry in the desiredTypes array, check if it's a supported content type
         for (int i = 0, ilen = desiredTypes.length; i < ilen; i++) {
             String curDesiredType = desiredTypes[i];
-            if (!isPartial && curDesiredType.contains(RIConstants.HTML_CONTENT_TYPE)) {
+            if (curDesiredType.contains(RIConstants.HTML_CONTENT_TYPE)) {
                 contentType = RIConstants.HTML_CONTENT_TYPE;
             }
-            else if (!isPartial && (curDesiredType.contains(RIConstants.XHTML_CONTENT_TYPE) ||
-                    curDesiredType.contains(RIConstants.APPLICATION_XML_CONTENT_TYPE) ||
-                    curDesiredType.contains(RIConstants.TEXT_XML_CONTENT_TYPE))) {
+            else if (curDesiredType.contains(RIConstants.XHTML_CONTENT_TYPE) ||
+                curDesiredType.contains(RIConstants.APPLICATION_XML_CONTENT_TYPE)) {
                 contentType = RIConstants.XHTML_CONTENT_TYPE;
             }
-            else if (isPartial && curDesiredType.contains(RIConstants.TEXT_XML_CONTENT_TYPE)) {
+            else if (curDesiredType.contains(RIConstants.TEXT_XML_CONTENT_TYPE)) {
                 contentType = RIConstants.TEXT_XML_CONTENT_TYPE;
             }
 
