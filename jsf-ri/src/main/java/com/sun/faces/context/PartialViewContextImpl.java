@@ -40,7 +40,6 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.component.visit.PartialVisitContext;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -296,7 +295,7 @@ import javax.faces.render.RenderKitFactory;
                 ctx.setResponseWriter(writer);
 
                 ExternalContext exContext = ctx.getExternalContext();
-                exContext.setResponseContentType(RIConstants.TEXT_XML_CONTENT_TYPE);
+                exContext.setResponseContentType("text/xml");
                 exContext.addResponseHeader("Cache-Control", "no-cache");
                 
 //                String encoding = writer.getCharacterEncoding( );
@@ -516,12 +515,12 @@ import javax.faces.render.RenderKitFactory;
             if (viewRoot != null) {
                 responseWriter =
                     ctx.getRenderKit().createResponseWriter(out,
-                    RIConstants.TEXT_XML_CONTENT_TYPE, encoding);
+                    "text/xml", encoding);
             } else {
                 RenderKitFactory factory = (RenderKitFactory)
                     FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
                 RenderKit renderKit = factory.getRenderKit(ctx, RenderKitFactory.HTML_BASIC_RENDER_KIT);
-                responseWriter = renderKit.createResponseWriter(out, RIConstants.TEXT_XML_CONTENT_TYPE, encoding);
+                responseWriter = renderKit.createResponseWriter(out, "text/xml", encoding);
             }
         }
         if (responseWriter instanceof PartialResponseWriter)  {
@@ -627,7 +626,7 @@ import javax.faces.render.RenderKitFactory;
             super(null);
             this.ctx = ctx;
             ExternalContext extCtx = ctx.ctx.getExternalContext();
-            extCtx.setResponseContentType(RIConstants.TEXT_XML_CONTENT_TYPE);
+            extCtx.setResponseContentType("text/xml");
             extCtx.setResponseCharacterEncoding(extCtx.getRequestCharacterEncoding());
 
         }
