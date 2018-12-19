@@ -40,15 +40,23 @@
 package com.sun.faces.test.javaee8.cdi;
 
 import static org.junit.Assert.assertEquals;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
+
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 
+@RunWith(JsfTestRunner.class)
 public class Issue4324IT {
 
     private String webUrl;
@@ -66,6 +74,8 @@ public class Issue4324IT {
     }
 
     @Test
+    @JsfTest(value = JsfVersion.JSF_2_3_0_M01,
+            excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testManagedFacesConverterOnAbstractClass() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "faces/issue4324.xhtml");
         HtmlSpan output = page.getHtmlElementById("output");
