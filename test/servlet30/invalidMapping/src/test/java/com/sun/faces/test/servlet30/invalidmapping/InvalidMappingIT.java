@@ -46,6 +46,15 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_4;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_3_1;
+import com.sun.faces.test.junit.JsfTest;
+import com.sun.faces.test.junit.JsfTestRunner;
+import com.sun.faces.test.junit.JsfVersion;
+import org.junit.runner.RunWith;
+
+@RunWith(JsfTestRunner.class)
 public class InvalidMappingIT {
 
     private String webUrl;
@@ -63,6 +72,8 @@ public class InvalidMappingIT {
     }
 
     @Test
+    @JsfTest(value = JsfVersion.JSF_2_3_0_M01,
+             excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1, WEBLOGIC_12_3_1})
     public void testInvalidMapping() throws Exception {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         webClient.getOptions().setPrintContentOnFailingStatusCode(false);
