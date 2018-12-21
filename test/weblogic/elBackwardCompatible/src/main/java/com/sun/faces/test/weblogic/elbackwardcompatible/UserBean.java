@@ -84,7 +84,7 @@ public class UserBean implements Serializable {
                 .getJspApplicationContext(sc);
         ExpressionFactory ef = jspAppContext.getExpressionFactory();
         
-        Class weldExpFactory = Class.forName("org.jboss.weld.el.WeldExpressionFactory");
+        Class weldExpFactory = Class.forName("org.jboss.weld.module.web.el.WeldExpressionFactory");
         Field delegateField = weldExpFactory.getDeclaredField("delegate");
         delegateField.setAccessible(true);
         Object delegateInstance = delegateField.get(ef);
