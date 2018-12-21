@@ -74,7 +74,8 @@ public class Issue3454IT {
     @JsfTest(value = JSF_2_3_0_M01, excludes = { 
         WEBLOGIC_12_1_1,
         WEBLOGIC_12_1_2,
-        WEBLOGIC_12_1_3
+        WEBLOGIC_12_1_3,
+        WEBLOGIC_12_2_1
     })
     public void testBackwardCompatibleFlag() throws Exception {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(true);
