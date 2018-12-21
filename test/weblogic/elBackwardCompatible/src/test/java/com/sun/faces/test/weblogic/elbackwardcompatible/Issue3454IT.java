@@ -47,6 +47,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_1;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_2;
 import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_1_3;
+import static com.sun.faces.test.junit.JsfServerExclude.WEBLOGIC_12_2_1;
 import static org.junit.Assert.assertTrue;
 import static com.sun.faces.test.junit.JsfVersion.JSF_2_3_0_M01;
 import com.sun.faces.test.junit.JsfTest;
