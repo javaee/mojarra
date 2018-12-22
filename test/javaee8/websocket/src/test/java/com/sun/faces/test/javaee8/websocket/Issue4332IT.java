@@ -71,7 +71,7 @@ public class Issue4332IT {
     }
 
     @Test
-    @JsfTest(value=JSF_2_3_0_M08, excludes={WEBLOGIC_12_2_1, WEBLOGIC_12_3_1})
+    @JsfTest(value=JSF_2_3_0_M08, excludes={WEBLOGIC_12_2_1})
     public void test() throws Exception {
         webClient.setIncorrectnessListener(new IgnoringIncorrectnessListener());
 
