@@ -73,7 +73,7 @@ public class ResourceHandlerUnitIT {
     }
 
     @Test
-    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1, WEBLOGIC_12_3_1})
+    @JsfTest(value = JSF_2_3_0_M10, excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
     public void testResourceHandlerImplAll() throws Exception {
         TextPage page = webClient.getPage(webUrl + "testHandleResourceRequest");
         
