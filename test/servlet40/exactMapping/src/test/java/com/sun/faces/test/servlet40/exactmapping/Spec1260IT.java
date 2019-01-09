@@ -116,7 +116,7 @@ public class Spec1260IT {
         
         String path = page.getUrl().getPath();
         
-        assertTrue(path.endsWith("/bar.jsf") || path.endsWith("/faces/bar"));
+        assertTrue(path.endsWith("/bar.jsf") || (path.contains("/faces/") && path.contains("/bar")));
     }
     
     @Test
@@ -133,7 +133,7 @@ public class Spec1260IT {
         
         // Check we're indeed on bar.jsf or faces/bar
         String path = page.getUrl().getPath();
-        assertTrue(path.endsWith("/bar.jsf") || path.endsWith("/faces/bar"));
+        assertTrue(path.endsWith("/bar.jsf") || (path.contains("/faces/") && path.contains("/bar")));
     }
     
     
@@ -147,7 +147,7 @@ public class Spec1260IT {
         
         // Runtime must have found out the mappings of the FacesServlet and used one of the prefix or suffix
         // mappings to render the reference to "jsf.js", which is not exactly mapped.
-        assertTrue(content.contains("javax.faces.resource/jsf.js.jsf") || content.contains("javax.faces.resource/faces/jsf.js") );
+        assertTrue(content.contains("javax.faces.resource/jsf.js.jsf") || (content.contains("/faces/") && content.contains("/javax.faces.resource/jsf.js")));
     }
     
     @Test
