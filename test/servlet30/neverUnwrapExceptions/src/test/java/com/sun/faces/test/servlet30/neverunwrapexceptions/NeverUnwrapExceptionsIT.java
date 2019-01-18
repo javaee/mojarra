@@ -70,8 +70,17 @@ public class NeverUnwrapExceptionsIT {
         webClient.closeAllWindows();
     }
 
+    /**
+     * This case is not suitable for WebLogic, because:. 
+     * 1) WebLogic has different *.jsp processing method from GlassFish.
+     *    the header is returned before the error page is constructed. 
+     * 2) This test case is to verify the exception is not unwrapped by JSF,
+     *    although WebLogic does not return the error page, 
+     *    the wrapped exceptions are recorded by WebLogic to log files.
+     *  So, commented out this case.
+     */
     @JsfTest(value = JsfVersion.JSF_2_2_0_M02,
-            excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1})
+            excludes = {WEBLOGIC_12_1_4, WEBLOGIC_12_2_1, WEBLOGIC_12_3_1})
     @Test
     public void testNeverUnwrapExceptions() throws Exception {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
