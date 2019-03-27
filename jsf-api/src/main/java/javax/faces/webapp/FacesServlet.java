@@ -51,6 +51,7 @@ import java.util.logging.Logger;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -639,6 +640,19 @@ public final class FacesServlet implements Servlet {
                 || pathInfo.contains("/META-INF/")
                 || pathInfo.contains("/META-INF")) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+        }
+
+        // reject the requests that have <script></script> in queryString.
+        String queryString = request.getQueryString();
+        if (queryString != null) {
+            // to match Strings between two "&" characters, like ...
+            //    "... <script>     ...     </script> ..."
+            // or "... <abc:script> ... </abc:script> ..."
+            Pattern safePattern = Pattern.compile(".*%3[Cc](.*:script|script).*%3[Ee][^&]*%3[Cc]/\\s*\\1\\s*%3[Ee].*");
+            if (safePattern.matcher(queryString).matches()) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
         }
