@@ -40,7 +40,6 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.RIConstants;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -196,7 +195,7 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
          try {
 
              ExternalContext extContext = context.getExternalContext();
-             extContext.setResponseContentType(RIConstants.TEXT_XML_CONTENT_TYPE);
+             extContext.setResponseContentType("text/xml");
              extContext.addResponseHeader("Cache-Control", "no-cache");
              PartialResponseWriter writer = context.getPartialViewContext().getPartialResponseWriter();
 
