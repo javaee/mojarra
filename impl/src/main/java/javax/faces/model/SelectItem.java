@@ -368,7 +368,11 @@ public class SelectItem implements Serializable {
     public void setNoSelectionOption(boolean noSelectionOption) {
         this.noSelectionOption = noSelectionOption;
     }
-
+    
+    @Override
+    public boolean equals(Object obj) {
+        return this.getValue().equals(obj.getValue());
+    }
 
 
 }
