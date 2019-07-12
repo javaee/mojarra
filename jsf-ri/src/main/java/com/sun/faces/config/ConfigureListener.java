@@ -334,10 +334,6 @@ public class ConfigureListener implements ServletRequestListener,
             }
         }
 
-        if (null == configManager || !configManager.hasBeenInitialized(context)) {
-            return;
-        }
-
         InitFacesContext initContext = null;
         try {
             initContext = getInitFacesContext(context);
@@ -353,6 +349,9 @@ public class ConfigureListener implements ServletRequestListener,
             }
             if (webResourcePool != null) {
                 webResourcePool.shutdownNow();
+            }
+            if (null == configManager || !configManager.hasBeenInitialized(context)) {
+                return;
             }
             GroovyHelper helper = GroovyHelper.getCurrentInstance(context);
             if (helper != null) {
@@ -388,8 +387,14 @@ public class ConfigureListener implements ServletRequestListener,
             ApplicationAssociate.clearInstance(context);
             ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
-            configManager.destroy(context);
-            ConfigManager.removeInstance(context);
+            if( configManager != null ) {
+              configManager.destroy(context);
+              ConfigManager.removeInstance(context);
+            } else {
+              if (LOGGER.isLoggable(Level.SEVERE)) {
+                  LOGGER.log(Level.SEVERE, "Unexpected state during contextDestroyed: no ConfigManager instance in current ServletContext but one is expected to exist.");
+              }
+            }
             FactoryFinder.releaseFactories();
             ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
             WebConfiguration.clear(context);
