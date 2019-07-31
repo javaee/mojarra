@@ -329,8 +329,8 @@ public class ConfigureListener implements ServletRequestListener,
         ConfigManager configManager = ConfigManager.getInstance(context);
         // The additional check for a WebConfiguration instance was added at the request of JBoss
         if ((null == configManager) && (WebConfiguration.getInstanceWithoutCreating(context) != null)) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "Unexpected state during contextDestroyed: no ConfigManager instance in current ServletContext but one is expected to exist.");
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING, "Unexpected state during contextDestroyed: no ConfigManager instance in current ServletContext but one is expected to exist.");
             }
         }
 
@@ -391,8 +391,8 @@ public class ConfigureListener implements ServletRequestListener,
               configManager.destroy(context);
               ConfigManager.removeInstance(context);
             } else {
-              if (LOGGER.isLoggable(Level.SEVERE)) {
-                  LOGGER.log(Level.SEVERE, "Unexpected state during contextDestroyed: no ConfigManager instance in current ServletContext but one is expected to exist.");
+              if (LOGGER.isLoggable(Level.WARNING)) {
+                  LOGGER.log(Level.WARNING, "Unexpected state during contextDestroyed: no ConfigManager instance in current ServletContext but one is expected to exist.");
               }
             }
             FactoryFinder.releaseFactories();
