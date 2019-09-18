@@ -232,7 +232,7 @@ public class ApplicationImpl extends Application {
 
     private List<ELContextListener> elContextListeners = null;
     CompositeELResolver elResolvers = null;
-    FacesCompositeELResolver compositeELResolver = null;
+    volatile FacesCompositeELResolver compositeELResolver = null;
     private final SystemEventHelper systemEventHelper = new SystemEventHelper();
     private final ComponentSystemEventHelper compSysEventHelper = new ComponentSystemEventHelper();
     private boolean passDefaultTimeZone;
@@ -526,7 +526,11 @@ public class ApplicationImpl extends Application {
     public ELResolver getELResolver() {
 
         if (compositeELResolver == null) {
-            performOneTimeELInitialization();
+            synchronized(this) {
+                if (compositeELResolver == null) {
+                    performOneTimeELInitialization();
+                }
+            }
         }
 
         return compositeELResolver;
