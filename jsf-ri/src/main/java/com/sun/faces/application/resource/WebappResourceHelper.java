@@ -334,7 +334,7 @@ public class WebappResourceHelper extends ResourceHelper {
         } else if (root == null) {
             String contractName = ctx.getExternalContext().getRequestParameterMap()
                   .get("con");
-            if (null != contractName && 0 < contractName.length()) {
+            if (null != contractName && 0 < contractName.length() && !ResourceManager.nameContainsForbiddenSequence(contractName)) {
                 contracts = new ArrayList<String>();
                 contracts.add(contractName);
             } else {

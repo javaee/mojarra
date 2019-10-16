@@ -374,7 +374,7 @@ public class ResourceManager {
 
     }
     
-    private static boolean nameContainsForbiddenSequence(String name) {
+    static boolean nameContainsForbiddenSequence(String name) {
         boolean result = false;
         if (name != null) {
         name = name.toLowerCase();
