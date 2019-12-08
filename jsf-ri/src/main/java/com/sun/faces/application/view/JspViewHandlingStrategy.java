@@ -171,57 +171,63 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
         ResponseWriter oldWriter = context.getResponseWriter();
 
-        WriteBehindStateWriter stateWriter =
-              new WriteBehindStateWriter(extContext.getResponseOutputWriter(),
-                                         context,
-                                         responseBufferSize);
-        ResponseWriter newWriter;
-        if (null != oldWriter) {
-            newWriter = oldWriter.cloneWithWriter(stateWriter);
-        } else {
-            newWriter = renderKit.createResponseWriter(stateWriter,
-                                                       null,
-                                                       extContext.getRequestCharacterEncoding());
-        }
-        context.setResponseWriter(newWriter);
+        WriteBehindStateWriter existingStateWriter = WriteBehindStateWriter.getCurrentInstance();
+        try {
+            WriteBehindStateWriter stateWriter =
+                    new WriteBehindStateWriter(extContext.getResponseOutputWriter(),
+                                               context,
+                                               responseBufferSize);
+              ResponseWriter newWriter;
+              if (null != oldWriter) {
+                  newWriter = oldWriter.cloneWithWriter(stateWriter);
+              } else {
+                  newWriter = renderKit.createResponseWriter(stateWriter,
+                                                             null,
+                                                             extContext.getRequestCharacterEncoding());
+              }
+              context.setResponseWriter(newWriter);
 
-        //  Don't call startDoc and endDoc on a partial response
-        if (context.getPartialViewContext().isPartialRequest()) {
-            doRenderView(context, view);
-            try {
-                extContext.getFlash().doPostPhaseActions(context);
-            } catch (UnsupportedOperationException uoe) {
-                if (LOGGER.isLoggable(FINE)) {
-                    LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
-                }
+              //  Don't call startDoc and endDoc on a partial response
+              if (context.getPartialViewContext().isPartialRequest()) {
+                  doRenderView(context, view);
+                  try {
+                      extContext.getFlash().doPostPhaseActions(context);
+                  } catch (UnsupportedOperationException uoe) {
+                      if (LOGGER.isLoggable(FINE)) {
+                          LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
+                      }
+                  }
+              } else {
+                  // render the view to the response
+                  newWriter.startDocument();
+                  doRenderView(context, view);
+                  try {
+                      extContext.getFlash().doPostPhaseActions(context);
+                  } catch (UnsupportedOperationException uoe) {
+                      if (LOGGER.isLoggable(FINE)) {
+                          LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
+                      }
+                  }
+                  newWriter.endDocument();
+              }
+
+
+              // replace markers in the body content and write it to response.
+
+              // flush directly to the response
+              if (stateWriter.stateWritten()) {
+                  stateWriter.flushToWriter();
+              }
+
+              // clear the ThreadLocal reference.
+              stateWriter.release();
+        } finally {
+            if (null != oldWriter) {
+                context.setResponseWriter(oldWriter);
             }
-        } else {
-            // render the view to the response
-            newWriter.startDocument();
-            doRenderView(context, view);
-            try {
-                extContext.getFlash().doPostPhaseActions(context);
-            } catch (UnsupportedOperationException uoe) {
-                if (LOGGER.isLoggable(FINE)) {
-                    LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
-                }
+            if (existingStateWriter != null) {
+                WriteBehindStateWriter.setCurrentInstance(existingStateWriter);
             }
-            newWriter.endDocument();
-        }
-
-
-        // replace markers in the body content and write it to response.
-
-        // flush directly to the response
-        if (stateWriter.stateWritten()) {
-            stateWriter.flushToWriter();
-        }
-
-        // clear the ThreadLocal reference.
-        stateWriter.release();
-
-        if (null != oldWriter) {
-            context.setResponseWriter(oldWriter);
         }
 
         // write any AFTER_VIEW_CONTENT to the response

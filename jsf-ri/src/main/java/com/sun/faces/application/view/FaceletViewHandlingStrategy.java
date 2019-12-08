@@ -424,6 +424,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             LOGGER.fine("Rendering View: " + viewToRender.getViewId());
         }
 
+        WriteBehindStateWriter existingStateWriter = WriteBehindStateWriter.getCurrentInstance();
         WriteBehindStateWriter stateWriter = null;
         try {
             // Only build the view if this view has not yet been built.
@@ -514,6 +515,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         } finally {
             if (stateWriter != null) {
                 stateWriter.release();
+            }
+            if (existingStateWriter != null) {
+                WriteBehindStateWriter.setCurrentInstance(existingStateWriter);
             }
         }
     }
