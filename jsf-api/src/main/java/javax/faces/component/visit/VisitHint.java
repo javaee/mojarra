@@ -66,10 +66,19 @@ public enum VisitHint {
   /** 
    * <p class="changed_added_2_1">Hint that indicates that components
    * that normally visit children multiple times (eg. <code>UIData</code>)
-   * in an iterative fashion should instead visit each child only one time.</p>
+   * in an iterative fashion should instead visit each child only one time.
+   * in some cases, this hint can still be ignored (e.g. in case of some 
+   * ajax-requests with event source inside a <code>UIRepeat</code>)</p>
    * @since 2.1
    */
   SKIP_ITERATION,
+
+  /** 
+   * <p class="changed_added_2_3">Same as SKIP_ITERATION, but must not 
+   * be ignored.</p>
+   * @since 2.3
+   */  
+  SKIP_ITERATION_STRICT,
 
   /**
    * <p class="changed_added_2_0 changed_modified_2_3">
