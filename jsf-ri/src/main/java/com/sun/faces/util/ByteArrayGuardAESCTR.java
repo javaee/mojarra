@@ -149,11 +149,16 @@ public final class ByteArrayGuardAESCTR {
     }
 
     public String decrypt(String value) throws InvalidKeyException {
-        
-        byte[] bytes = DatatypeConverter.parseBase64Binary(value);;
-        
+
+        byte[] bytes = DatatypeConverter.parseBase64Binary(value);
+
         try {
             byte[] iv = new byte[16];
+
+            if (bytes.length < iv.length) {
+                throw new InvalidKeyException("Invalid characters in decrypted value");
+            }
+
             System.arraycopy(bytes, 0, iv, 0, iv.length);
             IvParameterSpec ivspec = new IvParameterSpec(iv);
 
